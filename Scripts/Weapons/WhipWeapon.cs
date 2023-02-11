@@ -1,50 +1,100 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class WhipWeapon : WeaponBase
 {
-    [SerializeField] GameObject[] weapons;
+    [SerializeField] GameObject weapon;
+    BoxCollider2D boxCol;
     Player player;
+    bool canMultiStrike;
+    bool multiStrikeDone;
 
-    [SerializeField] Vector2 attackSize = new Vector2(6f, 2f);
+    [Header("Sounds")]
+    [SerializeField] AudioClip punch;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        boxCol = GetComponent<BoxCollider2D>();
+        anim = GetComponent<Animator>();
         player = GetComponentInParent<Player>();
+        weapon.SetActive(false);
     }
 
-    private void ApplyDamage(Collider2D[] enemies)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        for (int i = 0; i < enemies.Length; i++)
+        Idamageable enemy = collision.transform.GetComponent<Idamageable>();
+
+        if (enemy != null)
         {
-            Idamageable hit = enemies[i].GetComponent<Idamageable>();
-            if (hit != null) 
-            {
-                PostMessage(weaponStats.damage, enemies[i].transform.position);
-                hit.TakeDamage(weaponStats.damage);
-            }
+            int damage = GetDamage();
+            PostMessage(damage, collision.transform.position);
+            Debug.Log("Damage = " + damage);
+            enemy.TakeDamage(damage);
         }
     }
 
     protected override void Attack()
     {
-        base.Attack();
-        if (player.FacingDir < 0)
+        weapon.SetActive(true);
+        multiStrikeDone = false;
+
+        if (weaponStats.numberOfAttacks < 2)
         {
-            weapons[0].SetActive(true);
-            Collider2D[] enemies =
-            Physics2D.OverlapBoxAll(weapons[0].transform.position, attackSize, 0f);
-            ApplyDamage(enemies);
+            canMultiStrike = false;
         }
         else
         {
-            weapons[1].SetActive(true);
-            Collider2D[] enemies =
-            Physics2D.OverlapBoxAll(weapons[1].transform.position, attackSize, 0f);
-            ApplyDamage(enemies);
+            canMultiStrike = true;
+        }
+
+        if (player.FacingDir < 0)
+        {
+            anim.SetTrigger("PunchL");
+        }
+        else
+        {
+            anim.SetTrigger("PunchR");
+        }
+        SoundManager.instance.Play(punch);
+    }
+
+
+    IEnumerator AttackCo(float firstAttackDirection)
+    {
+        yield return new WaitForSeconds(.1f);
+
+        if (firstAttackDirection < 0)
+        {
+            anim.SetTrigger("PunchR");
+        }
+        else
+        {
+            anim.SetTrigger("PunchL");
+        }
+
+        SoundManager.instance.Play(punch);
+
+        multiStrikeDone = true;
+    }
+
+    protected override void FlipWeaponTools()
+    {
+        Debug.Log("Whip");
+    }
+
+    // animation events
+    void BoxColOn() => boxCol.enabled = true;
+    void BoxColOff() => boxCol.enabled = false;
+    void MultiAttack(float firstAttackDirection)
+    {
+        if (multiStrikeDone)
+            return;
+        if (canMultiStrike)
+        {
+            StartCoroutine(AttackCo(firstAttackDirection));
         }
     }
 }

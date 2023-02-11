@@ -1,5 +1,4 @@
 public interface IPickUpObject
 {
-    public void OnPickUp(Character character);
-
+    void OnPickUp(Character character);
 }

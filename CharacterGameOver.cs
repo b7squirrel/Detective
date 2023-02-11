@@ -12,5 +12,7 @@ public class CharacterGameOver : MonoBehaviour
         Debug.Log("Game Over");
         gameOverPanel.SetActive(true);
         weaponsGroup.SetActive(false);
+
+        // GameManager.instance.joystick.SetActive(false);
     }
 }

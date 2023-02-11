@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: LightningBolt
+  m_EditorClassIdentifier: 
+  Name: 
+  weaponPrefab: {fileID: 6822868710250514242, guid: cced79b0b48cc454d829e8729681e188, type: 3}
+  stats:
+    damage: 100
+    timeToAttack: 5
+    numberOfAttacks: 1
+    sizeOfArea: 2
+  weaponBasePrefab: {fileID: 7295769312407643447, guid: 9bf37590165248942857e426c05c8c91, type: 3}
+  animatorController: {fileID: 9100000, guid: 1ecb6fa94f9ad5942ab83e6eb5cf08ec, type: 2}
+  upgrades:
+  - {fileID: 11400000, guid: e45f13441d1692e4fb0344d311271caf, type: 2}
+  - {fileID: 11400000, guid: fa552bfe211a7c0488b18bbb63445995, type: 2}
+  - {fileID: 11400000, guid: 5bd88076b2b50994eb22d44e877759e4, type: 2}
+  - {fileID: 11400000, guid: ed70f57f821b76a4da06be85cc133e17, type: 2}
+  - {fileID: 11400000, guid: b1e6d7857ca6bea4b90fd388fe2fca33, type: 2}
+  - {fileID: 11400000, guid: 7dc0dbdf95f923f4da7230f241e3c787, type: 2}
+  - {fileID: 11400000, guid: 39fe2a59ba7c0b0488e02ff952194671, type: 2}
+  - {fileID: 11400000, guid: bac824b7abc5572469dddef52524d87e, type: 2}
+  - {fileID: 11400000, guid: a25fce03ddf0b5a4b9c8fd4a81e69d97, type: 2}
+  - {fileID: 11400000, guid: ac39a9c1d7b252e438e2d68830d10df1, type: 2}
+  - {fileID: 11400000, guid: 1e35b834d10d34f4780bd88c3b2a4eec, type: 2}
+  - {fileID: 11400000, guid: ad9ab7cded069cc4da584f4c0d957747, type: 2}

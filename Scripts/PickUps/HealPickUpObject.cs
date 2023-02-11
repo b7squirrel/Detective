@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HealPickUpObject : MonoBehaviour, IPickUpObject
+public class HealPickUpObject : Collectable, IPickUpObject
 {
     [SerializeField] int healAmount;
 

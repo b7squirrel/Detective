@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public Player player;
     public PoolManager poolManager;
 
+    public GameObject joystick;
+
     public bool IsPlayerDead { get; set; }
 
     public float gameTime;
@@ -17,7 +19,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        SubscribeOnDie();
     }
 
     void Update()
@@ -31,12 +32,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    void SubscribeOnDie()
-    {
-        Character character = player.GetComponent<Character>();
-        character.OnDie += SetPlayerDead;
-    }
-    void SetPlayerDead()
+    public void SetPlayerDead()
     {
         IsPlayerDead = true;
     }

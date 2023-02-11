@@ -4,28 +4,18 @@ using UnityEngine;
 
 public class FireBallProjectile : MonoBehaviour
 {
-    Vector3 direction;
+    public Vector3 Direction { get; set; }
     [SerializeField] float speed;
-    [SerializeField] int damage = 5;
     bool hitDetected = false;
+    public int Damage { get; set; } = 5;
 
-    public void SetDireciotn(float dir_x, float dir_y)
-    {
-        direction = new Vector2(dir_x, dir_y);
-
-        if (dir_x < 0)
-        {
-            Vector2 scale = transform.localScale;
-            scale.x = scale.x * -1;
-            transform.localScale = scale;
-        }
-    }
+    float timeToLive = 6f;
 
     void Update()
     {
-        transform.position += direction * speed * Time.deltaTime;
+        transform.position += speed * Time.deltaTime * Direction.normalized;
 
-        if (Time.frameCount % 6 == 0)
+        if (Time.frameCount % 3 == 0)
         {
             Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, .7f);
             foreach (var item in hit)
@@ -33,7 +23,8 @@ public class FireBallProjectile : MonoBehaviour
                 Enemy enmey = item.GetComponent<Enemy>();
                 if (enmey != null)
                 {
-                    enmey.TakeDamage(damage);
+                    PostMessage(Damage, enmey.transform.position);
+                    enmey.TakeDamage(Damage);
                     hitDetected = true;
                     break;
                 }
@@ -43,5 +34,16 @@ public class FireBallProjectile : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
+        timeToLive -= Time.deltaTime;
+        if (timeToLive < 0f)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void PostMessage(int damage, Vector3 targetPosition)
+    {
+        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition);
     }
 }

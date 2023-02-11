@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DropOnDestroy : MonoBehaviour
 {
-    [SerializeField] GameObject dropItemPrefab;
+    [SerializeField] List<GameObject> dropItemPrefab;
     [SerializeField][Range(0f, 1f)] float chance = 1f;
 
     bool isQuiting;
@@ -18,8 +19,8 @@ public class DropOnDestroy : MonoBehaviour
 
         if (Random.value < chance)
         {
-            Transform pickUP = Instantiate(dropItemPrefab).transform;
-            pickUP.position = transform.position;
+            GameObject toDrop = dropItemPrefab[Random.Range(0, dropItemPrefab.Count)];
+            SpawnManager.instance.SpawnObject(transform.position, toDrop);
         }
     }
 }

@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject panelMainMenu;
     PauseManager pauseManager;
     bool isPaused;
+    public Action<bool> OnPauseButtonPressed;
 
 
     void Awake()
@@ -24,9 +25,12 @@ public class MainMenu : MonoBehaviour
             UnPause();
             return;
         }
+        isPaused= true;
+        OnPauseButtonPressed?.Invoke(isPaused);
+        
         pauseManager.PauseGame();
         panelPause.SetActive(true);
-        isPaused= true;
+
     }
 
     public void UnPause()
@@ -34,6 +38,8 @@ public class MainMenu : MonoBehaviour
         pauseManager.UnPauseGame();
         panelPause.SetActive(false);
         isPaused = false;
+
+        OnPauseButtonPressed?.Invoke(isPaused);
     }
 
     public void GoToMainMenu()

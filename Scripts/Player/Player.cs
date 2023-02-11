@@ -1,24 +1,25 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     public Vector2 InputVec { get; private set; }
+    Vector2 pastInputVec;
     [SerializeField] float speed;
     Rigidbody2D rb;
-    SpriteRenderer sr;
+    [SerializeField] SpriteRenderer sr;
     Animator anim;
 
-    [field : SerializeField]
+    [field: SerializeField]
     public float FacingDir { get; private set; } = 1f;
+
+    [Header("Joystic")]
+    public FloatingJoystick joy;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        SubscribeOnDie();
     }
 
     void LateUpdate()
@@ -38,13 +39,21 @@ public class Player : MonoBehaviour
 
     public void OnMovement(InputAction.CallbackContext context)
     {
-        InputVec= context.ReadValue<Vector2>();
+        InputVec = context.ReadValue<Vector2>();
     }
 
     void ApplyMovement()
     {
-        Vector2 nextVec = InputVec.normalized * speed * Time.fixedDeltaTime;
+        // Vector2 nextVec = InputVec.normalized * speed * Time.fixedDeltaTime;
+
+        InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
+        // if(InputVec == Vector2.zero)
+        // {
+        //     InputVec = pastInputVec;
+        // }
+        Vector2 nextVec = InputVec * speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
+        // pastInputVec = InputVec;
     }
     void Flip()
     {
@@ -59,13 +68,15 @@ public class Player : MonoBehaviour
         anim.SetFloat("Speed", InputVec.magnitude);
     }
 
-    #region OnDead Event
-    void SubscribeOnDie()
+    public bool IsPlayerMoving()
     {
-        Character character = GetComponent<Character>();
-        character.OnDie += Die;
+        if (InputVec == Vector2.zero)
+            return false;
+        return true;
     }
-    void Die()
+
+    #region OnDead Event
+    public void Die()
     {
         anim.SetTrigger("Dead");
         rb.mass = 10000f;
