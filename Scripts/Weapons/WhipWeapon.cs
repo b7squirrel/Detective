@@ -82,7 +82,7 @@ public class WhipWeapon : WeaponBase
 
     protected override void FlipWeaponTools()
     {
-        Debug.Log("Whip");
+        // Debug.Log("Whip");
     }
 
     // animation events

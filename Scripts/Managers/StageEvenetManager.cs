@@ -24,11 +24,14 @@ public class StageEvenetManager : MonoBehaviour
 
     void Update()
     {
+        // Debug.Log("stage time = " + stageTime.time + " stageData Time = " + stageData.stageEvents[eventIndexer].time);
+        Debug.Log(Time.time);
         if (eventIndexer >= stageData.stageEvents.Count)
             return;
 
         if (stageTime.time > stageData.stageEvents[eventIndexer].time)
         {
+            
             switch (stageData.stageEvents[eventIndexer].eventType)
             {
                 case StageEventType.SpawnEnemy:
@@ -63,6 +66,6 @@ public class StageEvenetManager : MonoBehaviour
     void SpawnEnemyBoss()
     {
         spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, 1);
-        Debug.Log("Boss Spawned");
+        
     }
 }
