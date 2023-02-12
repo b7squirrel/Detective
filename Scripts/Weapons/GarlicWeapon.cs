@@ -6,9 +6,23 @@ using UnityEngine;
 
 public class GarlicWeapon : WeaponBase
 {
+    [SerializeField] GameObject shootEffect;
+    Animator animEffect; // 자식으로 있는 Garlic Effect의 animator
+    float effectRadius;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        animEffect = shootEffect.GetComponent<Animator>();
+    }
     protected override void Attack()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, weaponStats.sizeOfArea);
+
+        effectRadius = weaponStats.sizeOfArea;
+        shootEffect.transform.localScale = new Vector3(effectRadius, effectRadius, 1);
+        animEffect.SetTrigger("Shoot");
+
         ApplyDamage(colliders);
     }
 
@@ -28,6 +42,8 @@ public class GarlicWeapon : WeaponBase
 
     protected override void FlipWeaponTools()
     {
-        Debug.Log("Garlic");
+        // Debug.Log("Garlic");
     }
+
+
 }

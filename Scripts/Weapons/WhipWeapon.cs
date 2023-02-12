@@ -31,7 +31,6 @@ public class WhipWeapon : WeaponBase
         {
             int damage = GetDamage();
             PostMessage(damage, collision.transform.position);
-            Debug.Log("Damage = " + damage);
             enemy.TakeDamage(damage);
         }
     }

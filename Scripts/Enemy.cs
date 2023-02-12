@@ -133,6 +133,7 @@ public class Enemy : MonoBehaviour, Idamageable
     public void TakeDamage(int damage)
     {
         stats.hp -= damage;
+        Debug.Log("Current HP = " + stats.hp);
         EffectManager.instance.GenerateEffect(0, this.transform);
         SoundManager.instance.Play(hit);
         KnockBack();

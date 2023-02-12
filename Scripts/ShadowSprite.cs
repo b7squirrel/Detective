@@ -30,6 +30,10 @@ public class ShadowSprite : MonoBehaviour
 
     void LateUpdate()
     {
+        // 캐스터의 sprite renderer가 disabled라면 shadow의 sprite renderer도 disabled
+        sprRndshadow.enabled = true;
+        if(sprRndCaster.enabled == false) sprRndshadow.enabled = false; 
+
         transShadow.position = new Vector2(transCaster.position.x + offset.x,
             transCaster.position.y + offset.y);
 

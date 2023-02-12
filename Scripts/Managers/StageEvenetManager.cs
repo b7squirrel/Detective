@@ -24,8 +24,6 @@ public class StageEvenetManager : MonoBehaviour
 
     void Update()
     {
-        // Debug.Log("stage time = " + stageTime.time + " stageData Time = " + stageData.stageEvents[eventIndexer].time);
-        Debug.Log(Time.time);
         if (eventIndexer >= stageData.stageEvents.Count)
             return;
 

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7200239369209826793}
   - component: {fileID: 7200239369209826795}
   - component: {fileID: 7200239369209826792}
+  - component: {fileID: 5294316221282124509}
   m_Layer: 6
   m_Name: Boss_Slime_LV1
   m_TagString: Enemy
@@ -182,3 +183,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.3, y: -0.17}
+--- !u!114 &5294316221282124509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200239369209826798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItemPrefab:
+  - {fileID: 3089954493006562425, guid: e966530f6cd20b6438cacecd2eed29b0, type: 3}
+  chance: 1
