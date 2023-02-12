@@ -34,7 +34,7 @@ public class StageEvenetManager : MonoBehaviour
                 case StageEventType.SpawnEnemy:
                     for (int i = 0; i < stageData.stageEvents[eventIndexer].count; i++)
                     {
-                        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn);
+                        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, 0);
                     }
                     break;
 
@@ -44,6 +44,10 @@ public class StageEvenetManager : MonoBehaviour
 
                 case StageEventType.WinStage:
                     WinStage();
+                    break;
+
+                case StageEventType.SpawnEnemyBoss:
+                    SpawnEnemyBoss();
                     break;
                 default:
                     break;
@@ -55,5 +59,10 @@ public class StageEvenetManager : MonoBehaviour
     void WinStage()
     {
         winManager.Win();
+    }
+    void SpawnEnemyBoss()
+    {
+        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, 1);
+        Debug.Log("Boss Spawned");
     }
 }

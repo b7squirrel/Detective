@@ -22,11 +22,11 @@ public class Spawner : MonoBehaviour
             return;
     }
 
-    public void Spawn(EnemyData enemyToSpawn)
+    public void Spawn(EnemyData enemyToSpawn, int index)
     {
         GetAvailablePoints();
 
-        GameObject enemy = GameManager.instance.poolManager.Get(0);
+        GameObject enemy = GameManager.instance.poolManager.Get(index);
         enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
     }

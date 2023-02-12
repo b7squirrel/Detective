@@ -44,7 +44,16 @@ public class WeaponContainer : MonoBehaviour
                 container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
         }
         weaponContainers.Add(container);
+        SetSortingOrder();
 
         return container;
+    }
+
+    void SetSortingOrder()
+    {
+        for (int i = weaponContainers.Count - 1; i > 0; i--)
+        {
+            weaponContainers[i].GetComponent<SpriteRenderer>().sortingOrder = -i;
+        }
     }
 }
