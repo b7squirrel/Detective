@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6a0918ebdbda16c4785f91d08fe80785
+guid: e2e3b88baafd88541ab40345d0c25620
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -128,12 +128,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player_Walk_0
+      name: Player_Walk_Hurt_0
       rect:
         serializedVersion: 2
         x: 0
         y: 40
-        width: 36
+        width: 60
         height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -142,19 +142,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c47cc7189456a44494151868c8fb21d
-      internalID: -459096832
+      spriteID: 825f319d44548b845a47bb6d2dac6cc8
+      internalID: 761481335
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Walk_1
+      name: Player_Walk_Hurt_1
       rect:
         serializedVersion: 2
-        x: 36
+        x: 60
         y: 40
-        width: 36
+        width: 60
         height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -163,19 +163,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3385f8c9170daa84e94ed7a2a1c717b1
-      internalID: 2063082986
+      spriteID: a08d20fe8950dde4cb7ef5dd536367dc
+      internalID: -177249245
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Walk_2
+      name: Player_Walk_Hurt_2
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 36
+        width: 60
         height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -184,8 +184,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e3d0e9a1e24624044937adc735ba9ff9
-      internalID: 134651807
+      spriteID: 5e7b4ef1844dbfb46b58f16414ed3fb5
+      internalID: -323327802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Walk_Hurt_3
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 60
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03d7867cbd34b1d42b9ca2090e19df0f
+      internalID: 299303577
       vertices: []
       indices: 
       edges: []
@@ -201,9 +222,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player_Walk_1: 2063082986
-      Player_Walk_0: -459096832
-      Player_Walk_2: 134651807
+      Player_Walk_Hurt_0: 761481335
+      Player_Walk_Hurt_2: -323327802
+      Player_Walk_Hurt_1: -177249245
+      Player_Walk_Hurt_3: 299303577
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

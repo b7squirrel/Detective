@@ -18,15 +18,20 @@ public class Character : MonoBehaviour
 
     [SerializeField] DataContainer dataContainer;
 
+    [SerializeField] AudioClip hurtSound;
+
     [field: SerializeField] public float DamageBonus { get; set; }
 
     // public event Action OnDie;
     public UnityEvent OnDie;
+    Animator anim;
 
     void Awake()
     {
         level = GetComponent<Level>();
         coin = GetComponent<Coins>();
+
+        anim = GetComponent<Animator>();
     }
 
     void Start()
@@ -64,6 +69,9 @@ public class Character : MonoBehaviour
         if (GameManager.instance.IsPlayerDead)
             return;
         ApplyArmor(ref damage);
+
+        anim.SetTrigger("Hurt");
+        SoundManager.instance.PlaySingle(hurtSound);
 
         currentHealth -= damage;
         if (currentHealth < 0)

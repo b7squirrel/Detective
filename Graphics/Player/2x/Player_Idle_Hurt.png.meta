@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6a0918ebdbda16c4785f91d08fe80785
+guid: b16daa9e05243c64abc7209e9926a3f7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -66,7 +66,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 128
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -128,12 +128,75 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player_Walk_0
+      name: Player_Idle_Hurt_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 60
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0a8e9a8af2a3ec46b46029b6e928528
+      internalID: -352359842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Idle_Hurt_1
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 80
+        width: 60
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae8701ff2d686d847bc701b454587b48
+      internalID: -816788514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Idle_Hurt_2
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 80
+        width: 60
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bea647f0f276c724f85f300c9d135c4f
+      internalID: -251995174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Idle_Hurt_3
       rect:
         serializedVersion: 2
         x: 0
         y: 40
-        width: 36
+        width: 60
         height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -142,19 +205,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c47cc7189456a44494151868c8fb21d
-      internalID: -459096832
+      spriteID: 4cea5629fbf84ea42ae28ea7374f4347
+      internalID: 1642533882
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Walk_1
+      name: Player_Idle_Hurt_4
       rect:
         serializedVersion: 2
-        x: 36
+        x: 60
         y: 40
-        width: 36
+        width: 60
         height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -163,19 +226,40 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3385f8c9170daa84e94ed7a2a1c717b1
-      internalID: 2063082986
+      spriteID: 9e411b6db938ae44ebcb33771c399355
+      internalID: -1210509079
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player_Walk_2
+      name: Player_Idle_Hurt_5
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 40
+        width: 60
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49c8255785635044f984eed7be0f114b
+      internalID: -1400885892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Idle_Hurt_6
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 36
+        width: 60
         height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -184,8 +268,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e3d0e9a1e24624044937adc735ba9ff9
-      internalID: 134651807
+      spriteID: 2398c64f4e1b9d24ea21957d9ee85775
+      internalID: 1278165809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player_Idle_Hurt_7
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 0
+        width: 60
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28f5c05b9a22c0f45a53905b5b37f605
+      internalID: -227924033
       vertices: []
       indices: 
       edges: []
@@ -201,9 +306,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player_Walk_1: 2063082986
-      Player_Walk_0: -459096832
-      Player_Walk_2: 134651807
+      Player_Idle_Hurt_7: -227924033
+      Player_Idle_Hurt_0: -352359842
+      Player_Idle_Hurt_2: -251995174
+      Player_Idle_Hurt_4: -1210509079
+      Player_Idle_Hurt_1: -816788514
+      Player_Idle_Hurt_5: -1400885892
+      Player_Idle_Hurt_6: 1278165809
+      Player_Idle_Hurt_3: 1642533882
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

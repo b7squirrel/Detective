@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageEvents:
   - eventType: 0
+    time: 1
+    message: win
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    objectToSpawn: {fileID: 0}
+    count: 0
+  - eventType: 0
     time: 5
     message: 1st wave
     enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
@@ -110,6 +116,12 @@ MonoBehaviour:
     objectToSpawn: {fileID: 0}
     count: 20
   - eventType: 0
+    time: 125
+    message: dash enemy
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    objectToSpawn: {fileID: 0}
+    count: 10
+  - eventType: 0
     time: 135
     message: 6th wave
     enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
@@ -166,7 +178,7 @@ MonoBehaviour:
   - eventType: 0
     time: 172
     message: mon
-    enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
     objectToSpawn: {fileID: 0}
     count: 20
   - eventType: 0
@@ -202,9 +214,9 @@ MonoBehaviour:
   - eventType: 0
     time: 185
     message: win
-    enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
     objectToSpawn: {fileID: 0}
-    count: 10
+    count: 40
   - eventType: 0
     time: 190
     message: win
@@ -241,6 +253,12 @@ MonoBehaviour:
     enemyToSpawn: {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
     objectToSpawn: {fileID: 0}
     count: 25
+  - eventType: 0
+    time: 220
+    message: dash enemy
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    objectToSpawn: {fileID: 0}
+    count: 20
   - eventType: 0
     time: 225
     message: win
@@ -290,6 +308,12 @@ MonoBehaviour:
     objectToSpawn: {fileID: 0}
     count: 20
   - eventType: 0
+    time: 260
+    message: dash enemy
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    objectToSpawn: {fileID: 0}
+    count: 20
+  - eventType: 0
     time: 265
     message: win
     enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
@@ -304,9 +328,9 @@ MonoBehaviour:
   - eventType: 0
     time: 275
     message: win
-    enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
     objectToSpawn: {fileID: 0}
-    count: 10
+    count: 20
   - eventType: 0
     time: 280
     message: win
@@ -316,7 +340,7 @@ MonoBehaviour:
   - eventType: 0
     time: 285
     message: win
-    enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
     objectToSpawn: {fileID: 0}
     count: 50
   - eventType: 0
@@ -325,7 +349,7 @@ MonoBehaviour:
     enemyToSpawn: {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
     objectToSpawn: {fileID: 0}
     count: 60
-  - eventType: 2
+  - eventType: 3
     time: 300
     message: win
     enemyToSpawn: {fileID: 0}

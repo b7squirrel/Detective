@@ -10,15 +10,23 @@ public class SoundManager : MonoBehaviour
     [SerializeField] int audioSourceCount;
     [SerializeField] float reductionRate;
     List<AudioSource> audioSources;
+    AudioClip singleSound; // 한 번만 재생되는 사운드를 리스트에서 빼기 위해
 
     void Awake()
     {
-        instance= this;
+        instance = this;
     }
 
     private void Start()
     {
         Init();
+    }
+
+    void Update()
+    {
+        if (singleSound == null)
+            return;
+        RemoveSingleAudio(singleSound);
     }
 
     void Init()
@@ -37,8 +45,23 @@ public class SoundManager : MonoBehaviour
     {
         AudioSource audioSource = GetAudio();
         audioSource.clip = audioClip;
-        
+
         audioSource.Play();
+    }
+    public void PlaySingle(AudioClip audioClip)
+    {
+        foreach (AudioSource item in audioSources)
+        {
+            if (item.clip == null)
+                continue;
+            if (item.clip.name == audioClip.name)
+            {
+                return;
+            }
+        }
+
+        Play(audioClip);
+        singleSound = audioClip;
     }
 
     AudioSource GetAudio()
@@ -54,5 +77,28 @@ public class SoundManager : MonoBehaviour
         }
 
         return audioSources[0];
+    }
+
+    void RemoveSingleAudio(AudioClip audioClip)
+    {
+        int index = GetIndex(audioClip);
+        if (index == -1) return;
+
+        if (audioSources[index].isPlaying) return;
+
+        audioSources[index].clip = null;
+        singleSound = null;
+    }
+
+    int GetIndex(AudioClip audioClip)
+    {
+        if (audioClip == null) return -1;
+        for (int i = 0; i < audioSources.Count; i++)
+        {
+            if(audioSources[i].clip == null) continue;
+            if (audioSources[i].clip.name == audioClip.name)
+                return i;
+        }
+        return -1;
     }
 }

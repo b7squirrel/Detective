@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 게임 매니져에서 끌어다 쓸 것
-/// </summary>
 public class PoolManager : MonoBehaviour
 {
     [SerializeField] GameObject[] prefabs;
@@ -32,7 +29,7 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        if (!select) // 풀이 비었다면 새로 만들어서 풀에 넣기
+        if (!select) 
         {
             select = Instantiate(prefabs[index], transform);
             pools[index].Add(select);
