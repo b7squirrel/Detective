@@ -11,6 +11,11 @@ public class Character : MonoBehaviour
     [field: SerializeField] public float HpRegenerationRate { get; set; }
     [field: SerializeField] public float HpRegenerationTimer { get; set; }
     [field: SerializeField] public float MagnetSize { get; set; }
+    [field: SerializeField] public float Cooldown { get; set; }
+    [field: SerializeField] public float MoveSpeed { get; set; } = 6f;
+    [field: SerializeField] public float ProjectileAmount { get; set; }
+    [field: SerializeField] public float ProjectileSpeed { get; set; }
+    [field: SerializeField] public float Area { get; set; }
 
     [SerializeField] StatusBar hpBar;
     [HideInInspector] public Level level;
@@ -55,13 +60,32 @@ public class Character : MonoBehaviour
     void ApplyPersistantUpgrade()
     {
         int hpUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.HP);
-
         maxHealth += maxHealth / 10 * hpUpgradeLevel;
         currentHealth = maxHealth;
 
         int damageUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.DAMAGE);
-
         DamageBonus = 1f + 0.1f * damageUpgradeLevel;
+
+        int ArmorUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.Armor);
+        Armor += ArmorUpgradeLevel;
+
+        int ProjSpeedUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.ProjectileSpeed);
+        ProjectileSpeed = ProjSpeedUpgradeLevel;
+
+        int ProJAmountUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.ProjectileAmount);
+        ProjectileAmount += ProJAmountUpgradeLevel;
+        
+        int MagneticArea = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.MagnetRange);
+        MagnetSize += 0.25f * MagneticArea * MagnetSize; // 레벨업 당 25% 증가
+
+        int MoveSpeedUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.MoveSpeed);
+        MoveSpeed += 0.05f * MoveSpeedUpgradeLevel * MoveSpeed; // 레벱업 당 5% 증가
+
+        int CooldownUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.CoolDown);
+        Cooldown -= 0.025f * CooldownUpgradeLevel * Cooldown; // 레벨업 당 2.5% 감소
+
+        int AreaUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.Area);
+        this.Area += 0.05f * AreaUpgradeLevel * this.Area; // 레벱업 당 5% 증가
     }
 
     public void TakeDamage(int damage)

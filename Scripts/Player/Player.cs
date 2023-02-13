@@ -5,10 +5,10 @@ public class Player : MonoBehaviour
 {
     public Vector2 InputVec { get; private set; }
     Vector2 pastInputVec;
-    [SerializeField] float speed;
     Rigidbody2D rb;
     [SerializeField] SpriteRenderer sr;
     Animator anim;
+    Character character;
 
     [field: SerializeField]
     public float FacingDir { get; private set; } = 1f;
@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        character = GetComponent<Character>();
     }
 
     void LateUpdate()
@@ -51,7 +52,7 @@ public class Player : MonoBehaviour
         // {
         //     InputVec = pastInputVec;
         // }
-        Vector2 nextVec = InputVec * speed * Time.fixedDeltaTime;
+        Vector2 nextVec = InputVec * character.MoveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
         // pastInputVec = InputVec;
     }

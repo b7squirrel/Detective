@@ -5,8 +5,15 @@ using System;
 
 public enum PlayerPersistentUpgrades
 {
-    HP,
-    DAMAGE
+    HP, //최대체력
+    DAMAGE, // 공격력
+    Armor, // 방어력
+    ProjectileSpeed, // 투사체 속도
+    ProjectileAmount, // 투사체 양
+    MagnetRange, // 자석 범위
+    MoveSpeed, // 이동 속도
+    CoolDown, // 쿨타임
+    Area // 공격 범위
 }
 
 [Serializable]

@@ -30,6 +30,10 @@ public class LightningWeapon : WeaponBase
             return;
         }
 
+        Transform effect = Instantiate(strikeEffect, ShootPoint.position, Quaternion.identity);
+        effect.transform.SetParent(ShootPoint);
+
+
         for (int i = 0; i < targets.Count; i++)
         {
             endPosition = targets[i];
