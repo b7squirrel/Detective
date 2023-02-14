@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    public static Spawner instance;
     Transform[] spawnPoints;
     List<Transform> availableSpawnPoints;
 
@@ -13,6 +14,7 @@ public class Spawner : MonoBehaviour
 
     void Awake()
     {
+        instance = this;
         spawnPoints = GetComponentsInChildren<Transform>();
     }
 
@@ -33,7 +35,8 @@ public class Spawner : MonoBehaviour
 
     public void SpawnObject(Vector2 worldPosition, GameObject toSpawn)
     {
-        
+        Transform pickUP = Instantiate(toSpawn).transform;
+        pickUP.position = worldPosition;
     }
 
     void GetAvailablePoints()
