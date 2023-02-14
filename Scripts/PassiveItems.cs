@@ -21,7 +21,7 @@ public class PassiveItems : MonoBehaviour
             items = new List<Item>();
         }
 
-        Item newItemInstance = new Item();
+        Item newItemInstance = ScriptableObject.CreateInstance<Item>();
         newItemInstance.Init(itemToEquip.Name);
         newItemInstance.stats.Sum(itemToEquip.stats);
 

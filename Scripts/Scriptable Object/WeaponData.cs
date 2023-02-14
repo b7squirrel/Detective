@@ -17,7 +17,6 @@ public class WeaponStats
         this.numberOfAttacks = numberOfAttacks;
         this.sizeOfArea = sizeOfArea;
     }
-
     internal void Sum(WeaponStats weaponUpgradeStats)
     {
         this.damage += weaponUpgradeStats.damage;

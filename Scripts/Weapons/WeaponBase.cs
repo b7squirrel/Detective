@@ -67,7 +67,6 @@ public class WeaponBase : MonoBehaviour
     public virtual void SetData(WeaponData wd)
     {
         this.weaponData = wd;
-
         weaponStats =
             new WeaponStats(wd.stats.damage, wd.stats.timeToAttack, wd.stats.numberOfAttacks, wd.stats.sizeOfArea);
     }
