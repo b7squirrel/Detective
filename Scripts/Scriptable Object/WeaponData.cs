@@ -29,6 +29,7 @@ public class WeaponStats
 [CreateAssetMenu]
 public class WeaponData : ScriptableObject
 {
+    public int id;
     public string Name;
     public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;

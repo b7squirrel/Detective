@@ -11,12 +11,6 @@ public class PlayerWinManager : MonoBehaviour
     {
         pauseManager = GetComponent<PauseManager>();
     }
-
-    void Update()
-    {
-        
-    }
-
     public void Win() {
         {
             winMessagePanel.SetActive(true);

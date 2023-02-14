@@ -95,8 +95,22 @@ public class Level : MonoBehaviour
         upgrades.Remove(upgradeData);
     }
 
+    public void ShuffleUpgrades()
+    {
+        // 업그레이드 목록을 뒤섞고 나서 GetUpgrads에서 차례로 빼냄.
+        // GetUpgrades에서 섞으면 목록이 중복될 수 있음.
+        for (int i = upgrades.Count - 1; i > 0; i--)
+        {
+            int x = Random.Range(0, i + 1);
+            UpgradeData shuffleElement = upgrades[i];
+            upgrades[i] = upgrades[x];
+            upgrades[x] = shuffleElement;
+        }
+    }
+
     public List<UpgradeData> GetUpgrades(int count)
     {
+        ShuffleUpgrades();
         List<UpgradeData> upgradeList = new List<UpgradeData>();
 
         if (count > upgrades.Count)
@@ -106,7 +120,7 @@ public class Level : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            upgradeList.Add(upgrades[Random.Range(0, upgrades.Count)]);
+            upgradeList.Add(upgrades[i]);
         }
 
         return upgradeList;
