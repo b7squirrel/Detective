@@ -30,6 +30,12 @@ public class Spawner : MonoBehaviour
         enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
     }
+
+    public void SpawnObject(Vector2 worldPosition, GameObject toSpawn)
+    {
+        
+    }
+
     void GetAvailablePoints()
     {
         if (availableSpawnPoints == null)
