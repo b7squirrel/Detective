@@ -108,9 +108,46 @@ public class Level : MonoBehaviour
         }
     }
 
+    List<UpgradeData> CheckID()
+    {
+        ShuffleUpgrades();
+
+        List<int> ids = new List<int>();
+        List<UpgradeData> pick = new List<UpgradeData>();
+        int index = upgrades.Count - 1;
+        pick.Add(upgrades[index]);
+        index--;
+
+        // id 별로 upgrades에서 count만틈 추출
+        while (pick.Count < 3) // 원하는 count 갯수만큼 pick이 차면 끝냄
+        {
+
+            for (int i = pick.Count - 1; i > 0; i--)// 지금까지 골라진 pick에 같은 id가 있는지 검사
+            {
+                if (upgrades[index].id != pick[i].id) // 같은 id가 아니라면
+                {
+                    pick.Add(upgrades[index]); // pick에 추가
+                }
+            }
+
+            // foreach (UpgradeData item in pick) 
+            // {
+            //     if (upgrades[index].id != item.id) // 같은 id가 아니라면
+            //     {
+            //         pick.Add(upgrades[index]); // pick에 추가
+            //     }
+            // }
+
+            index--;
+        }
+
+        Debug.Log("Pick Count = " + pick.Count);
+        return pick;
+    }
     public List<UpgradeData> GetUpgrades(int count)
     {
         ShuffleUpgrades();
+
         List<UpgradeData> upgradeList = new List<UpgradeData>();
 
         if (count > upgrades.Count)
@@ -125,6 +162,7 @@ public class Level : MonoBehaviour
 
         return upgradeList;
     }
+
 
     internal void AddUpgradesIntoTheListOfAvailableUpgrades(List<UpgradeData> upgradesToAdd)
     {
