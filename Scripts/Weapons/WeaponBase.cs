@@ -111,32 +111,32 @@ public class WeaponBase : MonoBehaviour
     {
         Collider2D[] hits =
             Physics2D.OverlapBoxAll(transform.position, size, 0f, enemy);
-        List<Enemy> allEnemies = new List<Enemy>();
+        List<Transform> allAttackables = new List<Transform>();
         foreach (var item in hits)
         {
-            Enemy enemy = item.GetComponent<Enemy>();
-            if (enemy != null)
+            Idamageable Idamage = item.GetComponent<Idamageable>();
+            if (Idamage != null)
             {
-                allEnemies.Add(enemy);
+                allAttackables.Add(item.GetComponent<Transform>());
             }
         }
 
         float distanceToclosestEnemy = 20f;
-        Enemy closestEnemy = null;
+        Transform closestEnemy = null;
 
-        foreach (var enemy in allEnemies)
+        foreach (Transform item in allAttackables)
         {
             float distanceToEnmey =
-            Vector3.Distance(enemy.transform.position, transform.position);
+            Vector3.Distance(item.position, transform.position);
 
             if (distanceToEnmey < distanceToclosestEnemy)
             {
                 distanceToclosestEnemy = distanceToEnmey;
-                closestEnemy = enemy;
+                closestEnemy = item;
             }
         }
 
-        allEnemies.Clear();
+        allAttackables.Clear();
 
         if (closestEnemy == null)
         {
