@@ -26,4 +26,8 @@ public class CameraController : MonoBehaviour
                 transform.position.z);
         }
     }
+    private void OnDrawGizmos() {
+        Gizmos.color = new Color(1,0,0,.3f);
+        Gizmos.DrawCube(transform.position, new Vector2(halfWidth * 2f, halfHeight * 2f));
+    }
 }

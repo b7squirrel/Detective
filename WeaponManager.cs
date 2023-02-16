@@ -44,7 +44,8 @@ public class WeaponManager : MonoBehaviour
 
             //값을 weaponFire등에서 가져갈 수 있도록 weaponBase로 옮겨놓음
             weaponBase.weaponTools = weaponTool.GetComponent<Weapon>();
-            weaponBase.ShootPoint = weaponTool.GetComponent<Weapon>().shootPoint;
+            weaponBase.ShootPoint = weaponBase.weaponTools.shootPoint;
+            weaponBase.EffectPoint = weaponBase.weaponTools.effectPoint;
             weaponBase.anim = weaponTool.GetComponent<Animator>();
         }
 

@@ -31,14 +31,14 @@ public class FireBallWeapon : WeaponBase
         {
             AnimShoot();
             SoundManager.instance.Play(shoot);
-
-            Transform muzzleEffect = Instantiate(muzzleFlash, ShootPoint.position, Quaternion.identity);
+            Transform muzzleEffect =
+                Instantiate(muzzleFlash, EffectPoint.position, Quaternion.identity);
             GameObject fireBall = Instantiate(weapon);
             fireBall.transform.position = ShootPoint.position;
 
-            FireBallProjectile fireBallProjectile = fireBall.GetComponent<FireBallProjectile>();
-            fireBallProjectile.Direction = dir;
-            fireBallProjectile.Damage = GetDamage();
+            ProjectileBase projectile = fireBall.GetComponent<ProjectileBase>();
+            projectile.Direction = dir;
+            projectile.Damage = GetDamage();
 
             yield return new WaitForSeconds(.3f);
         }

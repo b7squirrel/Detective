@@ -15,6 +15,7 @@ public class WeaponBase : MonoBehaviour
 
     public Animator anim;
     public Transform ShootPoint;
+    public Transform EffectPoint;
     public Weapon weaponTools;
     protected float angle;
 
@@ -27,6 +28,7 @@ public class WeaponBase : MonoBehaviour
     protected Vector2 dir; // 가장 가까운 적으로의 방향
     protected Vector2 direction;
     protected bool flip;
+    public bool IsDirectional {get; set;}
     
     #endregion
 
@@ -111,20 +113,20 @@ public class WeaponBase : MonoBehaviour
     {
         Collider2D[] hits =
             Physics2D.OverlapBoxAll(transform.position, size, 0f, enemy);
-        List<Transform> allAttackables = new List<Transform>();
+        List<Transform> allEnemies = new List<Transform>();
         foreach (var item in hits)
         {
             Idamageable Idamage = item.GetComponent<Idamageable>();
             if (Idamage != null)
             {
-                allAttackables.Add(item.GetComponent<Transform>());
+                allEnemies.Add(item.GetComponent<Transform>());
             }
         }
 
         float distanceToclosestEnemy = 20f;
         Transform closestEnemy = null;
 
-        foreach (Transform item in allAttackables)
+        foreach (Transform item in allEnemies)
         {
             float distanceToEnmey =
             Vector3.Distance(item.position, transform.position);
@@ -136,7 +138,7 @@ public class WeaponBase : MonoBehaviour
             }
         }
 
-        allAttackables.Clear();
+        allEnemies.Clear();
 
         if (closestEnemy == null)
         {
@@ -181,6 +183,7 @@ public class WeaponBase : MonoBehaviour
     {
         // flip
         if (weaponTools != null)
-            weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = flip;
+        weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = flip;
+        
     }
 }
