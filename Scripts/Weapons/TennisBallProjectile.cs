@@ -5,10 +5,14 @@ using UnityEngine;
 public class TennisBallProjectile : ProjectileBase
 {
     [SerializeField] int deflection;
+    [SerializeField] AudioClip hitSound;
     Rigidbody2D rb;
+    Animator anim;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        
     }
     
     // private void OnEnable() {
@@ -27,7 +31,6 @@ public class TennisBallProjectile : ProjectileBase
             // other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage);
             // PostMessage(Damage, other.transform.position);
         // }
-
 
         if (other.gameObject.CompareTag("Enemy"))
         {
@@ -48,9 +51,12 @@ public class TennisBallProjectile : ProjectileBase
             Direction = deflectionVector;
             rb.velocity = Vector2.zero;
             rb.AddForce(Direction * Speed, ForceMode2D.Impulse);
+
+            anim.SetTrigger("Hit");
+            SoundManager.instance.Play(hitSound);
         }
 
-        if (other.gameObject.CompareTag("Wall"))
+        if (other.gameObject.CompareTag("MainCamera") || other.gameObject.CompareTag("Wall") )
         {
             // 입사벡터
             Vector2 incomingVector = Direction;
@@ -66,14 +72,19 @@ public class TennisBallProjectile : ProjectileBase
             Direction = deflectionVector;
             rb.velocity = Vector2.zero;
             rb.AddForce(Direction * Speed, ForceMode2D.Impulse);
+
+            anim.SetTrigger("Hit");
+            SoundManager.instance.Play(hitSound);
         }
     }
     protected override void ApplyMovement()
     {
-        if(rb.velocity.magnitude > Speed)
-        {
-            rb.velocity = Vector2.ClampMagnitude(rb.velocity, Speed);
-        }
+        // if(rb.velocity.magnitude > Speed)
+        // {
+        //     rb.velocity = Vector2.ClampMagnitude(rb.velocity, Speed);
+        // }
+        rb.velocity = Direction * Speed;
+        Debug.Log("Velocity = " + rb.velocity);
     }
     protected override void CastDamage()
     {

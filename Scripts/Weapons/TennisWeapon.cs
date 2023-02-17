@@ -38,6 +38,8 @@ public class TennisWeapon : WeaponBase
             projectile.GetComponent<Rigidbody2D>().AddForce(projectile.Direction * weaponStats.projectileSpeed, ForceMode2D.Impulse);
             projectile.Damage = GetDamage();
 
+            Debug.Log("Projectile Speed = " + weaponStats.projectileSpeed);
+
             yield return new WaitForSeconds(.3f);
         }
     }

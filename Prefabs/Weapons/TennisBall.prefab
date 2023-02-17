@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -4719561508395579489}
   - component: {fileID: 6509680528379666173}
   - component: {fileID: -4627942805687613649}
+  - component: {fileID: 3210122540067763685}
   m_Layer: 9
   m_Name: TennisBall
   m_TagString: Untagged
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_Size: {x: 0.8888889, y: 0.8888889}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &-1887791383055838095
@@ -115,8 +116,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Direction>k__BackingField: {x: 0, y: 0, z: 0}
   <Speed>k__BackingField: 16
-  <TimeToLive>k__BackingField: 6
+  <TimeToLive>k__BackingField: 2.5
   deflection: 0
+  hitSound: {fileID: 8300000, guid: 2d3151fb217f9e74e93f004b8ce50fa6, type: 3}
 --- !u!50 &6509680528379666173
 Rigidbody2D:
   serializedVersion: 4
@@ -154,3 +156,23 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.44444445
+--- !u!95 &3210122540067763685
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4735011119696522333}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 56f92ded923c7a448b1420391899dcb1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
