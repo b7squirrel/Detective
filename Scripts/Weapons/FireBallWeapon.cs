@@ -38,6 +38,7 @@ public class FireBallWeapon : WeaponBase
 
             ProjectileBase projectile = fireBall.GetComponent<ProjectileBase>();
             projectile.Direction = dir;
+            projectile.Speed = weaponStats.projectileSpeed;
             projectile.Damage = GetDamage();
 
             yield return new WaitForSeconds(.3f);

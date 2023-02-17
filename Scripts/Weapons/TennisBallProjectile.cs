@@ -50,7 +50,7 @@ public class TennisBallProjectile : ProjectileBase
 
             Direction = deflectionVector;
             rb.velocity = Vector2.zero;
-            rb.AddForce(Direction * Speed, ForceMode2D.Impulse);
+            // rb.AddForce(Direction * Speed, ForceMode2D.Impulse);
 
             anim.SetTrigger("Hit");
             SoundManager.instance.Play(hitSound);
@@ -71,21 +71,21 @@ public class TennisBallProjectile : ProjectileBase
 
             Direction = deflectionVector;
             rb.velocity = Vector2.zero;
-            rb.AddForce(Direction * Speed, ForceMode2D.Impulse);
+            // rb.AddForce(Direction * Speed, ForceMode2D.Impulse);
 
             anim.SetTrigger("Hit");
             SoundManager.instance.Play(hitSound);
         }
     }
-    protected override void ApplyMovement()
-    {
-        // if(rb.velocity.magnitude > Speed)
-        // {
-        //     rb.velocity = Vector2.ClampMagnitude(rb.velocity, Speed);
-        // }
-        rb.velocity = Direction * Speed;
-        Debug.Log("Velocity = " + rb.velocity);
-    }
+    // protected override void ApplyMovement()
+    // {
+    //     // if(rb.velocity.magnitude > Speed)
+    //     // {
+    //     //     rb.velocity = Vector2.ClampMagnitude(rb.velocity, Speed);
+    //     // }
+    //     rb.velocity = Direction * Speed;
+    //     Debug.Log("Velocity = " + rb.velocity);
+    // }
     protected override void CastDamage()
     {
         // do nothing in tennis projectile

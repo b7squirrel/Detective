@@ -5,8 +5,8 @@ using UnityEngine;
 public class ProjectileBase : MonoBehaviour
 {
     
-    [field : SerializeField] public Vector3 Direction { get; set; }
-    [field : SerializeField] public float Speed {get; private set;}
+    [field : SerializeField]public Vector3 Direction { get; set; }
+    [field : SerializeField] public float Speed {get; set;}
     protected bool hitDetected = false;
     public int Damage { get; set; } = 5;
     [field : SerializeField] public float TimeToLive {get; set;} = 6f;
