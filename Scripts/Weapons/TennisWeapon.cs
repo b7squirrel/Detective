@@ -35,7 +35,7 @@ public class TennisWeapon : WeaponBase
 
             ProjectileBase projectile = tennisBall.GetComponent<ProjectileBase>();
             projectile.Direction = dir;
-            projectile.GetComponent<Rigidbody2D>().AddForce(projectile.Direction * projectile.GetComponent<ProjectileBase>().Speed, ForceMode2D.Impulse);
+            projectile.GetComponent<Rigidbody2D>().AddForce(projectile.Direction * weaponStats.projectileSpeed, ForceMode2D.Impulse);
             projectile.Damage = GetDamage();
 
             yield return new WaitForSeconds(.3f);

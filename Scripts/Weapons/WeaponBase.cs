@@ -70,7 +70,7 @@ public class WeaponBase : MonoBehaviour
     {
         this.weaponData = wd;
         weaponStats =
-            new WeaponStats(wd.stats.damage, wd.stats.timeToAttack, wd.stats.numberOfAttacks, wd.stats.sizeOfArea);
+            new WeaponStats(wd.stats.damage, wd.stats.timeToAttack, wd.stats.numberOfAttacks, wd.stats.sizeOfArea, wd.stats.projectileSpeed);
     }
 
     protected virtual void Attack()
