@@ -140,6 +140,7 @@ public class Enemy : MonoBehaviour, Idamageable
 
     void KnockBack()
     {
+        anim.SetTrigger("Hit");
         Vector2 playerPos = target.transform.position;
         isKncokBack = true;
         targetDir = (rb.position - target.position).normalized;

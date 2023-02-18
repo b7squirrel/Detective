@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf90a9f90ceec5489381a9b162b5d31, type: 3}
   m_Name: LightningBolt_Upgrade_LessCoolTime_1
   m_EditorClassIdentifier: 
+  id: 0
   upgradeType: 0
   Name: 
   icon: {fileID: 1325007513, guid: d341faf5dd179544cacd547457277c26, type: 3}
   weaponData: {fileID: 11400000, guid: 7d43842f4a716fa448918d6869cd3057, type: 2}
   weaponUpgradeStats:
     damage: 0
-    timeToAttack: -1
+    timeToAttack: -1.5
     numberOfAttacks: 0
     sizeOfArea: 0
+    projectileSpeed: 0
   item: {fileID: 0}
   itemStats:
     armor: 0
