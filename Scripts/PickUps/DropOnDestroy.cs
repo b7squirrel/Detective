@@ -5,6 +5,7 @@ public class DropOnDestroy : MonoBehaviour
 {
     [SerializeField] List<GameObject> dropItemPrefab;
     [SerializeField][Range(0f, 1f)] float chance = 1f;
+    [SerializeField] bool isGem;
 
     bool isQuiting;
 
