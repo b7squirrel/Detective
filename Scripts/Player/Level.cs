@@ -10,6 +10,7 @@ public class Level : MonoBehaviour
     [SerializeField] UpgradePanelManager upgradeManager;
 
     [SerializeField] List<UpgradeData> upgrades;
+    [SerializeField] List<UpgradeData> randomPool = new List<UpgradeData>();
     List<UpgradeData> selectedUpgrads;
 
     [SerializeField] List<UpgradeData> acquiredUpgrades;
@@ -123,7 +124,7 @@ public class Level : MonoBehaviour
 
     List<UpgradeData> GetRandomUpgrades()
     {
-        List<UpgradeData> randomPool = new List<UpgradeData>();
+        randomPool.Clear();
         List<UpgradeData> upgradeList = new List<UpgradeData>();
 
         for (int i = 0; i < upgrades.Count; i++)
@@ -138,12 +139,14 @@ public class Level : MonoBehaviour
             upgradeList.Add(randomPool[index]);
             for (int i = randomPool.Count - 1; i > index; i--)
             {
-                if (randomPool[i].weaponData == randomPool[0].weaponData)
+                if (randomPool[i].weaponData == randomPool[index].weaponData)
                 {
                     randomPool.Remove(randomPool[i]);
                 }
             }
         }
+
+        
         return upgradeList;
     }
 
