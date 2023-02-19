@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GemPickUpObject : Collectable, IPickUpObject
 {
-    [SerializeField] private int expAmount;
+    [field: SerializeField] public int ExpAmount { get; set; }
     public void OnPickUp(Character character)
     {
-        character.level.AddExperience(expAmount);
+        character.level.AddExperience(ExpAmount);
     }
 
     private void OnDrawGizmos() {

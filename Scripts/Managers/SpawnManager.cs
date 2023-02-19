@@ -11,9 +11,10 @@ public class SpawnManager : MonoBehaviour
     {
         instance= this;
     }
-    public void SpawnObject(Vector3 worldPosition, GameObject toSpawn)
+    public void SpawnObject(Vector3 worldPosition, GameObject toSpawn, bool isGem, int experience)
     {
         Transform pickUP = Instantiate(toSpawn).transform;
+        pickUP.GetComponent<GemPickUpObject>().ExpAmount = experience;
         pickUP.position = worldPosition;
     }
 }

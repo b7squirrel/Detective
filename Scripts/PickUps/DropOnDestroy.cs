@@ -32,7 +32,13 @@ public class DropOnDestroy : MonoBehaviour
                 Debug.LogWarning("DropOnDestroy, dropItemPrefab이 null입니다.");
                 return;
             }
-            SpawnManager.instance.SpawnObject(transform.position, toDrop);
+
+            int experienceToGive = 0;
+            if(GetComponent<Enemy>() != null)
+            {
+                experienceToGive = GetComponent<Enemy>().ExperienceReward;
+            }
+            SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, experienceToGive);
         }
     }
 }

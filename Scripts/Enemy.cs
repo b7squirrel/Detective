@@ -9,7 +9,7 @@ public class EnemyStats
     public int hp = 999;
     public float speed = 5;
     public int damage = 1;
-    public int experience_reward = 400;
+    public int experience_reward = 0;
 
     public EnemyStats(EnemyStats stats)
     {
@@ -23,7 +23,7 @@ public class EnemyStats
 
 public class Enemy : MonoBehaviour, Idamageable
 {
-    public int experienceReward = 400;
+    public int ExperienceReward {get; private set;}
     [SerializeField] Rigidbody2D target;
 
     [Header("Effect")]
@@ -109,6 +109,7 @@ public class Enemy : MonoBehaviour, Idamageable
     {
         anim.runtimeAnimatorController = data.animController;
         this.stats = new EnemyStats(data.stats);
+        ExperienceReward = this.stats.experience_reward;
     }
 
     void OnCollisionStay2D(Collision2D collision)
