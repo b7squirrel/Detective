@@ -29,8 +29,8 @@ public class Level : MonoBehaviour
 
     void Awake()
     {
-        weaponManager= GetComponent<WeaponManager>();
-        passiveItems= GetComponent<PassiveItems>();
+        weaponManager = GetComponent<WeaponManager>();
+        passiveItems = GetComponent<PassiveItems>();
     }
 
     void Start()
@@ -62,7 +62,7 @@ public class Level : MonoBehaviour
             selectedUpgrads = new List<UpgradeData>();
         }
         selectedUpgrads.Clear();
-        selectedUpgrads.AddRange(GetUpgrades(3));
+        selectedUpgrads.AddRange(GetRandomUpgrades());
         upgradeManager.OpenPanel(selectedUpgrads);
         experience -= To_Level_Up;
         level++;
@@ -72,7 +72,7 @@ public class Level : MonoBehaviour
     {
         UpgradeData upgradeData = selectedUpgrads[selectedUpgradeID];
 
-        if (acquiredUpgrades == null) { acquiredUpgrades= new List<UpgradeData>(); }
+        if (acquiredUpgrades == null) { acquiredUpgrades = new List<UpgradeData>(); }
 
         switch (upgradeData.upgradeType)
         {
@@ -108,42 +108,45 @@ public class Level : MonoBehaviour
         }
     }
 
-    List<UpgradeData> CheckID()
+    void ShuffleRandomPool(List<UpgradeData> randomPool)
     {
-        ShuffleUpgrades();
-
-        List<int> ids = new List<int>();
-        List<UpgradeData> pick = new List<UpgradeData>();
-        int index = upgrades.Count - 1;
-        pick.Add(upgrades[index]);
-        index--;
-
-        // id 별로 upgrades에서 count만틈 추출
-        while (pick.Count < 3) // 원하는 count 갯수만큼 pick이 차면 끝냄
+        // 업그레이드 목록을 뒤섞고 나서 GetUpgrads에서 차례로 빼냄.
+        // GetUpgrades에서 섞으면 목록이 중복될 수 있음.
+        for (int i = randomPool.Count - 1; i > 0; i--)
         {
+            int x = Random.Range(0, i + 1);
+            UpgradeData shuffleElement = randomPool[i];
+            randomPool[i] = randomPool[x];
+            randomPool[x] = shuffleElement;
+        }
+    }
 
-            for (int i = pick.Count - 1; i > 0; i--)// 지금까지 골라진 pick에 같은 id가 있는지 검사
-            {
-                if (upgrades[index].id != pick[i].id) // 같은 id가 아니라면
-                {
-                    pick.Add(upgrades[index]); // pick에 추가
-                }
-            }
+    List<UpgradeData> GetRandomUpgrades()
+    {
+        List<UpgradeData> randomPool = new List<UpgradeData>();
+        List<UpgradeData> upgradeList = new List<UpgradeData>();
 
-            // foreach (UpgradeData item in pick) 
-            // {
-            //     if (upgrades[index].id != item.id) // 같은 id가 아니라면
-            //     {
-            //         pick.Add(upgrades[index]); // pick에 추가
-            //     }
-            // }
-
-            index--;
+        for (int i = 0; i < upgrades.Count; i++)
+        {
+            randomPool.Add(upgrades[i]);
         }
 
-        Debug.Log("Pick Count = " + pick.Count);
-        return pick;
+        ShuffleRandomPool(randomPool);
+
+        for (int index = 0; index < 3; index++)
+        {
+            upgradeList.Add(randomPool[index]);
+            for (int i = randomPool.Count - 1; i > index; i--)
+            {
+                if (randomPool[i].weaponData == randomPool[0].weaponData)
+                {
+                    randomPool.Remove(randomPool[i]);
+                }
+            }
+        }
+        return upgradeList;
     }
+
     public List<UpgradeData> GetUpgrades(int count)
     {
         ShuffleUpgrades();
