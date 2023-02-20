@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class EggPanelManager : MonoBehaviour
 {
+    [SerializeField] GameObject eggPanel;
     [SerializeField] GameObject eggImage;
     [SerializeField] GameObject kidImage;
     [SerializeField] PauseManager pauseManager;
-    public RuntimeAnimatorController KidAnim { get; set; }
+    RuntimeAnimatorController kidAnim;
 
-    private void OnEnable()
+    private void Awake()
     {
-        EggImageUp(true);
+        pauseManager = GetComponent<PauseManager>();
     }
+    public void EggPanelUP(RuntimeAnimatorController anim)
+    {
+        pauseManager.PauseGame();
+        eggPanel.SetActive(true);
+        EggImageUp(true);
+        kidAnim = anim;
+    }
+
     public void EggImageUp(bool isActive)
     {
         eggImage.SetActive(isActive);
@@ -20,7 +29,7 @@ public class EggPanelManager : MonoBehaviour
     void KidImageUp(bool isActive)
     {
         kidImage.SetActive(isActive);
-        if(isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = KidAnim;
+        if(isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = kidAnim;
     }
     public void EggAnimFinished()
     {
@@ -30,6 +39,7 @@ public class EggPanelManager : MonoBehaviour
     {
         EggImageUp(false);
         KidImageUp(false);
-        gameObject.SetActive(false);
+        pauseManager.UnPauseGame();
+        eggPanel.SetActive(false);
     }
 }

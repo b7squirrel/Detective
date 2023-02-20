@@ -26,7 +26,7 @@ public class Collectable : MonoBehaviour
 
     [SerializeField] float acc;
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
         IsFlying = false;
         IsHit = false;
