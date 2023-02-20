@@ -138,7 +138,7 @@ public class Level : MonoBehaviour
         // 무조건 업그레이드가 3개가 나와야 함
         // 지금은 무기 종류가 다양하지 않아서 빈 슬롯이 생기면 
         // 빈 이미지를 보여주게 된다
-        for (int index = 0; index < 3; index++)
+        for (int index = 0; index < randomPool.Count; index++)
         {
             upgradeList.Add(randomPool[index]);
             for (int i = randomPool.Count - 1; i > index; i--)

@@ -47,6 +47,7 @@ public class UpgradePanelManager : MonoBehaviour
         }
     }
 
+    // Skip 버튼을 누르면 한 번 더 물어보기
     public void ClosePanel()
     {
         HideButtons();
