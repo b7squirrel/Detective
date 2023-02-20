@@ -7,6 +7,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject eggPanel;
     [SerializeField] GameObject eggImage;
     [SerializeField] GameObject kidImage;
+    [SerializeField] GameObject closeButton;
     [SerializeField] PauseManager pauseManager;
     RuntimeAnimatorController kidAnim;
 
@@ -30,6 +31,7 @@ public class EggPanelManager : MonoBehaviour
     {
         kidImage.SetActive(isActive);
         if(isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = kidAnim;
+        closeButton.SetActive(true);
     }
     public void EggAnimFinished()
     {
@@ -40,6 +42,7 @@ public class EggPanelManager : MonoBehaviour
         EggImageUp(false);
         KidImageUp(false);
         pauseManager.UnPauseGame();
+        closeButton.SetActive(false);
         eggPanel.SetActive(false);
     }
 }

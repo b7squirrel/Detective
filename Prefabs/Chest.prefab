@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1519986380285838772}
   - component: {fileID: 1519986380285838773}
   - component: {fileID: 8155687002099685990}
+  - component: {fileID: 8632583786111441943}
   m_Layer: 7
   m_Name: Chest
   m_TagString: Untagged
@@ -73,9 +74,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -556371709
+  m_SortingLayer: 2
+  m_SortingOrder: -100
   m_Sprite: {fileID: -46422378, guid: d33227a9e2ae33a479b0c49b3011180d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -141,4 +142,18 @@ MonoBehaviour:
   - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
   - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
   - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-  chance: 0.151
+  chance: 1
+  isGem: 0
+--- !u!114 &8632583786111441943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519986380285838769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.3, y: -0.17}
