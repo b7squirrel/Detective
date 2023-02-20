@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class HealPickUpObject : Collectable, IPickUpObject
 {
-    [SerializeField] int healAmount;
+    [field: SerializeField] public int HealAmount { get; set; }
 
     public void OnPickUp(Character character)
     {
-        character.GetComponent<Character>().Heal(healAmount);
+        character.GetComponent<Character>().Heal(HealAmount);
     }
 }

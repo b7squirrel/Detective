@@ -5,6 +5,8 @@ public class DropOnDestroy : MonoBehaviour
 {
     [SerializeField] List<GameObject> dropItemPrefab;
     [SerializeField][Range(0f, 1f)] float chance = 1f;
+    [SerializeField] int exp;
+    [SerializeField] int hp;
     [SerializeField] bool isGem;
 
     bool isQuiting;
@@ -33,12 +35,11 @@ public class DropOnDestroy : MonoBehaviour
                 return;
             }
 
-            int experienceToGive = 0;
             if(GetComponent<Enemy>() != null)
             {
-                experienceToGive = GetComponent<Enemy>().ExperienceReward;
+                exp = GetComponent<Enemy>().ExperienceReward;
             }
-            SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, experienceToGive);
+            SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
         }
     }
 }

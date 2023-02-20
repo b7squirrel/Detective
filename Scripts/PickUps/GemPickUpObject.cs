@@ -9,6 +9,5 @@ public class GemPickUpObject : Collectable, IPickUpObject
     {
         if(ExpAmount == 0) ExpAmount = 400;
         character.level.AddExperience(ExpAmount);
-        Debug.Log("Gem Exp = " + ExpAmount);
     }
 }

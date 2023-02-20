@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Collectable : MonoBehaviour
 {
-    public float moveSpeed;
-    public float knockBackForce;
+    public float moveSpeed = 10f;
+    public float knockBackForce = 12f;
     public bool IsFlying { get; private set; }
 
     public Transform pickupEffect;
@@ -16,7 +16,7 @@ public class Collectable : MonoBehaviour
     Rigidbody2D rb;
 
     public Vector2 dir;
-    public float delay;
+    public float delay = 0.05f;
 
     [Header("Effect")]
     [SerializeField] Material whiteMaterial;
@@ -34,7 +34,7 @@ public class Collectable : MonoBehaviour
     protected void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         initialMat = sr.material;
     }
     protected void Update()
