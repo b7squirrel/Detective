@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf90a9f90ceec5489381a9b162b5d31, type: 3}
   m_Name: LightningBolt_Acquire_Upgrade
   m_EditorClassIdentifier: 
+  id: 0
   upgradeType: 2
   Name: 
   icon: {fileID: -1949875927, guid: d341faf5dd179544cacd547457277c26, type: 3}
@@ -21,6 +22,8 @@ MonoBehaviour:
     timeToAttack: 0
     numberOfAttacks: 0
     sizeOfArea: 0
+    projectileSpeed: 0
+  newKidAnim: {fileID: 9100000, guid: d918c88e9863a28439c3c9ff446babcb, type: 2}
   item: {fileID: 0}
   itemStats:
     armor: 0

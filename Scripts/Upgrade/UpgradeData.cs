@@ -21,6 +21,9 @@ public class UpgradeData : ScriptableObject
     [Header("Weapons")]
     public WeaponData weaponData;
     public WeaponStats weaponUpgradeStats;
+    
+    [Header("Required only for Acquire Weapon Upgrade")]
+    public RuntimeAnimatorController newKidAnim;
 
     [Header("Items")]
     public Item item;

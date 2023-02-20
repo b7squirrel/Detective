@@ -6,7 +6,6 @@ using UnityEngine.Events;
 public class EggPickUpObject : Collectable, IPickUpObject
 {
     [SerializeField] List<UpgradeData> upgradeToPick;
-    [SerializeField] RuntimeAnimatorController temp;
     int index;
 
     public void OnPickUp(Character character)
@@ -15,6 +14,6 @@ public class EggPickUpObject : Collectable, IPickUpObject
         index = Random.Range(0, upgradeToPick.Count);
         character.GetComponent<Level>().GetWeapon(upgradeToPick[index]);
         
-        GameManager.instance.eggPanelManager.EggPanelUP(temp);
+        GameManager.instance.eggPanelManager.EggPanelUP(upgradeToPick[index].newKidAnim);
     }
 }
