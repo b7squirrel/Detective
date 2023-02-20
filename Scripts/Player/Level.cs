@@ -20,6 +20,8 @@ public class Level : MonoBehaviour
 
     [SerializeField] List<UpgradeData> upgradesAvailableOnStart;
 
+    [SerializeField] List<UpgradeData> instantUpgrade = new List<UpgradeData>();
+
     int To_Level_Up
     {
         get
@@ -104,6 +106,13 @@ public class Level : MonoBehaviour
                 passiveItems.Equip(upgradeData.item);
                 AddUpgradesIntoTheListOfAvailableUpgrades(upgradeData.item.upgrades);
                 break;
+            case UpgradeType.Heal:
+                GetComponent<Character>().Heal(upgradeData.itemStats.hp);
+                break;
+            case UpgradeType.Coin:
+                GetComponent<Coins>().Add(upgradeData.itemStats.coins);
+                break;
+
         }
 
         acquiredUpgrades.Add(upgradeData);
@@ -135,9 +144,7 @@ public class Level : MonoBehaviour
 
         ShuffleRandomPool(randomPool);
 
-        // 무조건 업그레이드가 3개가 나와야 함
-        // 지금은 무기 종류가 다양하지 않아서 빈 슬롯이 생기면 
-        // 빈 이미지를 보여주게 된다
+        
         for (int index = 0; index < randomPool.Count; index++)
         {
             upgradeList.Add(randomPool[index]);
@@ -150,6 +157,15 @@ public class Level : MonoBehaviour
             }
         }
         
+        // 부족한 슬롯만큼 달콤우유나 동전을 추가
+        List<UpgradeData> lacks = new List<UpgradeData>();
+        for (int i = 0; i < 3 - randomPool.Count; i++)
+        {
+            lacks.Add(instantUpgrade[Random.Range(0, instantUpgrade.Count)]);
+        }
+        upgradeList.AddRange(lacks);
+
+
         return upgradeList;
     }
 

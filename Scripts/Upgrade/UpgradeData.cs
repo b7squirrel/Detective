@@ -7,7 +7,9 @@ public enum UpgradeType
     WeaponUpgrade,
     ItemUpgrade,
     WeaponGet,
-    ItemGet
+    ItemGet,
+    Heal,
+    Coin
 }
 
 [CreateAssetMenu]
