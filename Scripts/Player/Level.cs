@@ -69,6 +69,20 @@ public class Level : MonoBehaviour
         level++;
         experienceBar.SetLevelText(level);
     }
+
+    // 알을 통해 무기를 얻을 경우
+    public void GetWeapon(UpgradeData data)
+    {
+        if (selectedUpgrads == null)
+        {
+            selectedUpgrads = new List<UpgradeData>();
+        }
+        selectedUpgrads.Clear();
+        selectedUpgrads.Add(data);
+        Upgrade(0);
+    }
+
+    // LevelUp()을 통해 무기를 얻거나 업그레이드 하는 경우
     public void Upgrade(int selectedUpgradeID)
     {
         UpgradeData upgradeData = selectedUpgrads[selectedUpgradeID];
@@ -94,19 +108,6 @@ public class Level : MonoBehaviour
 
         acquiredUpgrades.Add(upgradeData);
         upgrades.Remove(upgradeData);
-    }
-
-    public void ShuffleUpgrades()
-    {
-        // 업그레이드 목록을 뒤섞고 나서 GetUpgrads에서 차례로 빼냄.
-        // GetUpgrades에서 섞으면 목록이 중복될 수 있음.
-        for (int i = upgrades.Count - 1; i > 0; i--)
-        {
-            int x = Random.Range(0, i + 1);
-            UpgradeData shuffleElement = upgrades[i];
-            upgrades[i] = upgrades[x];
-            upgrades[x] = shuffleElement;
-        }
     }
 
     void ShuffleRandomPool(List<UpgradeData> randomPool)
@@ -145,30 +146,9 @@ public class Level : MonoBehaviour
                 }
             }
         }
-
         
         return upgradeList;
     }
-
-    public List<UpgradeData> GetUpgrades(int count)
-    {
-        ShuffleUpgrades();
-
-        List<UpgradeData> upgradeList = new List<UpgradeData>();
-
-        if (count > upgrades.Count)
-        {
-            count = upgrades.Count;
-        }
-
-        for (int i = 0; i < count; i++)
-        {
-            upgradeList.Add(upgrades[i]);
-        }
-
-        return upgradeList;
-    }
-
 
     internal void AddUpgradesIntoTheListOfAvailableUpgrades(List<UpgradeData> upgradesToAdd)
     {

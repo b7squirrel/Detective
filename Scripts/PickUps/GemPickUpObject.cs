@@ -9,10 +9,6 @@ public class GemPickUpObject : Collectable, IPickUpObject
     {
         if(ExpAmount == 0) ExpAmount = 400;
         character.level.AddExperience(ExpAmount);
-    }
-
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, (Vector2)transform.position + (dir * 6f));
+        Debug.Log("Gem Exp = " + ExpAmount);
     }
 }

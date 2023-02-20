@@ -22,7 +22,7 @@ public class Magnetic : MonoBehaviour
                 Collectable collectable = item.GetComponent<Collectable>();
                 if(collectable != null && collectable.IsHit == false)
                 {
-                    Vector2 dir = collectable.transform.position - GameManager.instance.player.transform.position;
+                    Vector2 dir = collectable.transform.position - transform.position;
                     collectable.OnHitMagnetField(dir.normalized);
                 }
             }

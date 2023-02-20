@@ -3,14 +3,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.Events;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject panelPause;
     [SerializeField] GameObject panelMainMenu;
+    public UnityEvent<bool> OnPauseButtonPressed;
     PauseManager pauseManager;
     bool isPaused;
-    public Action<bool> OnPauseButtonPressed;
+    // public Action<bool> OnPauseButtonPressed;
 
 
     void Awake()

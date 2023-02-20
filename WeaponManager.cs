@@ -64,7 +64,7 @@ public class WeaponManager : MonoBehaviour
 
     internal void UpgradeWeapon(UpgradeData upgradeData)
     {
-        WeaponBase weaponUpgrade = weapons.Find(wd => wd.weaponData == upgradeData.weaponData);
+        WeaponBase weaponUpgrade = weapons.Find(wb => wb.weaponData == upgradeData.weaponData);
         weaponUpgrade.Upgrade(upgradeData);
     }
 }

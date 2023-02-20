@@ -10,12 +10,7 @@ public class ButtonAnimation : MonoBehaviour
     {
         anim = GetComponent<Animator>();
     }
-    void Start()
-    {
-        mainMenu.OnPauseButtonPressed = PlayButtonAnim;
-    }
-
-    void PlayButtonAnim(bool isPaused)
+    public void PlayButtonAnim(bool isPaused)
     {
         if (isPaused)
         {

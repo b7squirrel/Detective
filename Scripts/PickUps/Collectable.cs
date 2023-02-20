@@ -47,7 +47,6 @@ public class Collectable : MonoBehaviour
         if (!IsFlying)
             return;
 
-
         transform.position =
                             Vector2.Lerp(transform.position,
                             GameManager.instance.player.transform.position,
@@ -66,10 +65,8 @@ public class Collectable : MonoBehaviour
     public IEnumerator Reset()
     {
         yield return new WaitForSeconds(.08f);
-        Debug.Log("Flash");
         sr.material = whiteMaterial;
         yield return new WaitForSeconds(.08f);
-        Debug.Log("Flash");
 
         sr.material = initialMat;
 
