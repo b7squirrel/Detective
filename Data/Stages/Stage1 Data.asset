@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: Stage1 Data
   m_EditorClassIdentifier: 
   stageEvents:
+  - eventType: 2
+    time: 1
+    message: Boss
+    enemyToSpawn: {fileID: 0}
+    objectToSpawn: {fileID: 1519986380285838769, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
+    count: 25
   - eventType: 0
     time: 5
     message: 1st wave

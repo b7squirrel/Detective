@@ -8,6 +8,8 @@ public class Spawner : MonoBehaviour
     Transform[] spawnPoints;
     List<Transform> availableSpawnPoints;
 
+    [SerializeField] Transform[] spawnObjectPoint;
+
     int level;
     float timer;
 
@@ -29,14 +31,16 @@ public class Spawner : MonoBehaviour
         GetAvailablePoints();
 
         GameObject enemy = GameManager.instance.poolManager.Get(index);
-        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
+        // getcomponentChildren으로 받아왔으므로 0부터 하면 Player의 위치까지 포함하게 되므로
+        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position; 
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
     }
 
-    public void SpawnObject(Vector2 worldPosition, GameObject toSpawn)
+    public void SpawnObject(GameObject toSpawn)
     {
+        Debug.Log("Spawn object");
         Transform pickUP = Instantiate(toSpawn).transform;
-        pickUP.position = worldPosition;
+        pickUP.position = spawnObjectPoint[Random.Range(0, spawnObjectPoint.Length)].position;
     }
 
     void GetAvailablePoints()

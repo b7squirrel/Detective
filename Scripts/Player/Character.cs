@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -126,6 +126,20 @@ public class Character : MonoBehaviour
             currentHealth = maxHealth;
         }
         hpBar.SetStatus(currentHealth, maxHealth);
+    }
+
+    public void SizeUpMagnetSize(Character character)
+    {
+        StartCoroutine(SizeUpMagnetSizeCo(character));
+    }
+
+    IEnumerator SizeUpMagnetSizeCo(Character character)
+    {
+        float originalMagnetSize = MagnetSize;
+        MagnetSize = 40f;
+        yield return null;
+        Debug.Log("HERE");
+        MagnetSize = originalMagnetSize;
     }
 
     void Die()
