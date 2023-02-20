@@ -28,4 +28,30 @@ public class Magnetic : MonoBehaviour
             }
         }
     }
+
+    public void MagneticField(float size)
+    {
+        StartCoroutine(MagneticFieldCo(size));
+    }
+
+    IEnumerator MagneticFieldCo(float size)
+    {
+        for (int i = 1; i < size; i++)
+        {
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, i);
+            foreach (var item in hits)
+            {
+                Collectable collectable = item.GetComponent<Collectable>();
+                if (collectable != null && collectable.IsHit == false)
+                {
+                    Vector2 dir = collectable.transform.position - transform.position;
+                    collectable.OnHitMagnetField(dir.normalized);
+                }
+            }
+
+            yield return null;
+        }
+
+        
+    }
 }

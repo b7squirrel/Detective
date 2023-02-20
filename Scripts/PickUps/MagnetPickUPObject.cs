@@ -6,6 +6,6 @@ public class MagnetPickUPObject : Collectable, IPickUpObject
 {
     public void OnPickUp(Character character)
     {
-        character.SizeUpMagnetSize(character);
+        character.GetComponentInChildren<Magnetic>().MagneticField(60f);
     }
 }

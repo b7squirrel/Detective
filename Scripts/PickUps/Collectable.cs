@@ -42,7 +42,7 @@ public class Collectable : MonoBehaviour
         MoveToPlayer();
     }
 
-    protected void MoveToPlayer()
+    protected virtual void MoveToPlayer()
     {
         if (!IsFlying)
             return;
@@ -52,6 +52,7 @@ public class Collectable : MonoBehaviour
                             GameManager.instance.player.transform.position,
                             moveSpeed * Time.deltaTime + acc * Time.deltaTime);
                             acc += acc * Time.deltaTime;
+        if(acc > 5f) acc = 5f; // 가속도가 일정 이상을 넘지 않도록. 멀리서 오는 젬이 너무 빨라지므로
     }
     public void OnHitMagnetField(Vector2 direction)
     {

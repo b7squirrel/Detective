@@ -128,20 +128,6 @@ public class Character : MonoBehaviour
         hpBar.SetStatus(currentHealth, maxHealth);
     }
 
-    public void SizeUpMagnetSize(Character character)
-    {
-        StartCoroutine(SizeUpMagnetSizeCo(character));
-    }
-
-    IEnumerator SizeUpMagnetSizeCo(Character character)
-    {
-        float originalMagnetSize = MagnetSize;
-        MagnetSize = 40f;
-        yield return null;
-        Debug.Log("HERE");
-        MagnetSize = originalMagnetSize;
-    }
-
     void Die()
     {
         hpBar.gameObject.SetActive(false);
