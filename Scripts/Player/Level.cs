@@ -144,17 +144,19 @@ public class Level : MonoBehaviour
 
         ShuffleRandomPool(randomPool);
 
-        
         for (int index = 0; index < randomPool.Count; index++)
         {
             upgradeList.Add(randomPool[index]);
+
             for (int i = randomPool.Count - 1; i > index; i--)
             {
-                if (randomPool[i].weaponData == randomPool[index].weaponData)
+                if (randomPool[i].id == randomPool[index].id)
                 {
                     randomPool.Remove(randomPool[i]);
                 }
             }
+
+            if(upgradeList.Count == 3) return upgradeList;
         }
         
         // 부족한 슬롯만큼 달콤우유나 동전을 추가
@@ -165,8 +167,17 @@ public class Level : MonoBehaviour
         }
         upgradeList.AddRange(lacks);
 
-
         return upgradeList;
+    }
+
+    public bool HavingWeapon(UpgradeData item)
+    {
+        for (int i = acquiredUpgrades.Count - 1; i > 0; i--)
+        {
+            if(acquiredUpgrades[i].id == item.id)
+            return true;
+        }
+        return false;
     }
 
     internal void AddUpgradesIntoTheListOfAvailableUpgrades(List<UpgradeData> upgradesToAdd)

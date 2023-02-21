@@ -31,8 +31,14 @@ MonoBehaviour:
     enemyToSpawn: {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
     objectToSpawn: {fileID: 0}
     count: 3
-  - eventType: 0
+  - eventType: 2
     time: 25
+    message: Garlic New Kid
+    enemyToSpawn: {fileID: 0}
+    objectToSpawn: {fileID: 3118075186976557793, guid: 888a697b849a5854b8bc0378b66bceec, type: 3}
+    count: 1
+  - eventType: 0
+    time: 26
     message: 3rd wave
     enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
     objectToSpawn: {fileID: 0}
@@ -211,6 +217,12 @@ MonoBehaviour:
     enemyToSpawn: {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
     objectToSpawn: {fileID: 0}
     count: 10
+  - eventType: 2
+    time: 180
+    message: Lightning New Kid
+    enemyToSpawn: {fileID: 0}
+    objectToSpawn: {fileID: 3118075186976557793, guid: 148a89bee04dc6443bbf820bec038b6f, type: 3}
+    count: 1
   - eventType: 0
     time: 185
     message: win

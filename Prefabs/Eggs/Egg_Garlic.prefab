@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 3118075186976557803}
   - component: {fileID: 3118075186976557807}
   - component: {fileID: 3118075186976557800}
+  - component: {fileID: 1148094452508298381}
   m_Layer: 0
-  m_Name: Egg
+  m_Name: Egg_Garlic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,9 +75,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -556371709
+  m_SortingLayer: 2
+  m_SortingOrder: -100
   m_Sprite: {fileID: 21300000, guid: 7cd0c75855a2b2845a07dc6b9f0d2966, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -159,4 +160,18 @@ MonoBehaviour:
   whiteFlashDuration: 0
   acc: 5
   upgradeToPick:
-  - {fileID: 11400000, guid: 66ed483b4bfd29243bd38c55ae767291, type: 2}
+  - {fileID: 11400000, guid: 8307db7aea388e2449fe997c04c6a129, type: 2}
+  - {fileID: 11400000, guid: 5d6217358e5570e46a3d56823a332495, type: 2}
+--- !u!114 &1148094452508298381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3118075186976557793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.3, y: -0.17}
