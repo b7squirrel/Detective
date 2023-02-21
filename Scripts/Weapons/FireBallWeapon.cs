@@ -41,6 +41,7 @@ public class FireBallWeapon : WeaponBase
             projectile.Direction = dir;
             projectile.Speed = weaponStats.projectileSpeed;
             projectile.Damage = GetDamage();
+            projectile.KnockBackChance = Wielder.knockBackChance;
 
             yield return new WaitForSeconds(.3f);
         }

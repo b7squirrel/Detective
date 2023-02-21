@@ -131,11 +131,24 @@ public class Enemy : MonoBehaviour, Idamageable
     }
 
     #region Take Damage
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, float knockBackChance)
     {
         stats.hp -= damage;
         EffectManager.instance.GenerateEffect(0, this.transform);
         SoundManager.instance.Play(hit);
+        float chance = UnityEngine.Random.Range(0, 100);
+        
+        Debug.Log("KnockBack Chance = " + knockBackChance);
+        Debug.Log("Chance is " + chance);
+
+        WhiteFlash(whiteFlashDuration);
+        if (chance > knockBackChance || knockBackChance == 0)
+        {
+            isKncokBack = false;
+            Debug.Log("No KnockBack");
+            return;
+        }
+        Debug.Log("KnockBack");
         KnockBack();
     }
 
@@ -145,7 +158,7 @@ public class Enemy : MonoBehaviour, Idamageable
         Vector2 playerPos = target.transform.position;
         isKncokBack = true;
         targetDir = (rb.position - target.position).normalized;
-        WhiteFlash(whiteFlashDuration);
+        
     }
     public void WhiteFlash(float delayTime)
     {

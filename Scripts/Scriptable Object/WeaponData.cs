@@ -10,14 +10,16 @@ public class WeaponStats
     public int numberOfAttacks;
     public float sizeOfArea;
     public float projectileSpeed;
+    public float knockBackChance;
 
-    public WeaponStats(int damage, float timeToAttack, int numberOfAttacks, float sizeOfArea, float projectileSpeed)
+    public WeaponStats(int damage, float timeToAttack, int numberOfAttacks, float sizeOfArea, float projectileSpeed, float knockBackChance)
     {
         this.damage = damage;
         this.timeToAttack = timeToAttack;
         this.numberOfAttacks = numberOfAttacks;
         this.sizeOfArea = sizeOfArea;
         this.projectileSpeed = projectileSpeed;
+        this.knockBackChance = knockBackChance;
     }
     internal void Sum(WeaponStats weaponUpgradeStats)
     {
@@ -26,6 +28,7 @@ public class WeaponStats
         this.numberOfAttacks += weaponUpgradeStats.numberOfAttacks;
         this.sizeOfArea += weaponUpgradeStats.sizeOfArea;
         this.projectileSpeed += weaponUpgradeStats.projectileSpeed;
+        this.knockBackChance += weaponUpgradeStats.knockBackChance;
     }
 }
 

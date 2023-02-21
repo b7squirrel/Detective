@@ -13,7 +13,8 @@ public enum PlayerPersistentUpgrades
     MagnetRange, // 자석 범위
     MoveSpeed, // 이동 속도
     CoolDown, // 쿨타임
-    Area // 공격 범위
+    Area, // 공격 범위
+    knockBackChance // 낙백 확률
 }
 
 [Serializable]

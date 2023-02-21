@@ -10,6 +10,7 @@ public class ProjectileBase : MonoBehaviour
     protected bool hitDetected = false;
     public int Damage { get; set; } = 5;
     [field : SerializeField] public float TimeToLive {get; set;} = 6f;
+    public float KnockBackChance {get; set;}
 
 
     protected virtual void Update()
@@ -40,7 +41,7 @@ public class ProjectileBase : MonoBehaviour
                 if (enmey.GetComponent<Idamageable>() != null)
                 {
                     PostMessage(Damage, enmey.transform.position);
-                    enmey.GetComponent<Idamageable>().TakeDamage(Damage);
+                    enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance);
                     hitDetected = true;
                     break;
                 }

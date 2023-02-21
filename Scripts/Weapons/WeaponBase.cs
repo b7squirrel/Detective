@@ -11,7 +11,7 @@ public class WeaponBase : MonoBehaviour
 
     protected float timer;
 
-    Character wielder;
+    public Character Wielder {get; private set;}
 
     public Animator anim;
     public Transform ShootPoint;
@@ -70,7 +70,7 @@ public class WeaponBase : MonoBehaviour
     {
         this.weaponData = wd;
         weaponStats =
-            new WeaponStats(wd.stats.damage, wd.stats.timeToAttack, wd.stats.numberOfAttacks, wd.stats.sizeOfArea, wd.stats.projectileSpeed);
+            new WeaponStats(wd.stats.damage, wd.stats.timeToAttack, wd.stats.numberOfAttacks, wd.stats.sizeOfArea, wd.stats.projectileSpeed, wd.stats.knockBackChance);
     }
 
     protected virtual void Attack()
@@ -81,7 +81,7 @@ public class WeaponBase : MonoBehaviour
     public int GetDamage()
     {
         // int damage = (int)(weaponData.stats.damage * wielder.DamageBonus);
-        int damage = (int)(weaponStats.damage * wielder.DamageBonus);
+        int damage = (int)(weaponStats.damage * Wielder.DamageBonus);
         return damage;
     }
 
@@ -97,7 +97,7 @@ public class WeaponBase : MonoBehaviour
 
     public void AddOwnerCharacter(Character character)
     {
-        wielder = character;
+        Wielder = character;
     }
 
     protected void AnimShoot()

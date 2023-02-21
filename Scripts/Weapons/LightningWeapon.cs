@@ -61,7 +61,7 @@ public class LightningWeapon : WeaponBase
             if (enemy != null && enemyObject.activeSelf)
             {
                 PostMessage(weaponStats.damage, item.transform.position);
-                enemy.TakeDamage(weaponStats.damage);
+                enemy.TakeDamage(weaponStats.damage, Wielder.knockBackChance);
             }
         }
     }

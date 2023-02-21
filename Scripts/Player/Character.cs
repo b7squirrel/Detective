@@ -16,6 +16,7 @@ public class Character : MonoBehaviour
     [field: SerializeField] public float ProjectileAmount { get; set; }
     [field: SerializeField] public float ProjectileSpeed { get; set; }
     [field: SerializeField] public float Area { get; set; }
+    [field: SerializeField] public float knockBackChance { get; set; }
 
     [SerializeField] StatusBar hpBar;
     [HideInInspector] public Level level;
@@ -86,6 +87,9 @@ public class Character : MonoBehaviour
 
         int AreaUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.Area);
         this.Area += 0.05f * AreaUpgradeLevel * this.Area; // 레벱업 당 5% 증가
+        
+        int KnockBackChanceLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.knockBackChance);
+        this.knockBackChance += 0.1f * KnockBackChanceLevel * this.knockBackChance; // 레벱업 당 10% 증가
     }
 
     public void TakeDamage(int damage)
