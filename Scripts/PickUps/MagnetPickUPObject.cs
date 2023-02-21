@@ -8,4 +8,9 @@ public class MagnetPickUPObject : Collectable, IPickUpObject
     {
         character.GetComponentInChildren<Magnetic>().MagneticField(60f);
     }
+
+    protected override void MoveToPlayer()
+    {
+        // 자력으로 끌려오지 않는다. 
+    }
 }
