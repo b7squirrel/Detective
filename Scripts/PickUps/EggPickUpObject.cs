@@ -17,7 +17,11 @@ public class EggPickUpObject : Collectable, IPickUpObject
     public void OnPickUp(Character character)
     {
         // 항목을 플레이어가 이미 가지고 있는지 체크
-        foreach(UpgradeData item in upgradeToPick)
+        // upgradeToPick을 remove하면서 탐색하면 에러가 생기므로 똑같은 리스트를 만들어서 반복탐색
+        List<UpgradeData> checks = new List<UpgradeData>();
+        checks.AddRange(upgradeToPick);
+
+        foreach(UpgradeData item in checks)
         {
             if(character.GetComponent<Level>().HavingWeapon(item))
             upgradeToPick.Remove(item);

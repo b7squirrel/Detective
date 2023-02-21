@@ -95,6 +95,7 @@ public class Character : MonoBehaviour
         ApplyArmor(ref damage);
 
         SoundManager.instance.PlaySingle(hurtSound);
+        anim.SetTrigger("Hurt");
 
         currentHealth -= damage;
         if (currentHealth < 0)
