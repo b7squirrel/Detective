@@ -137,18 +137,13 @@ public class Enemy : MonoBehaviour, Idamageable
         EffectManager.instance.GenerateEffect(0, this.transform);
         SoundManager.instance.Play(hit);
         float chance = UnityEngine.Random.Range(0, 100);
-        
-        Debug.Log("KnockBack Chance = " + knockBackChance);
-        Debug.Log("Chance is " + chance);
 
         WhiteFlash(whiteFlashDuration);
         if (chance > knockBackChance || knockBackChance == 0)
         {
             isKncokBack = false;
-            Debug.Log("No KnockBack");
             return;
         }
-        Debug.Log("KnockBack");
         KnockBack();
     }
 

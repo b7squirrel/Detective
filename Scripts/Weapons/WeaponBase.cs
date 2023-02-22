@@ -85,6 +85,13 @@ public class WeaponBase : MonoBehaviour
         return damage;
     }
 
+    public float GetKnockBackChance()
+    {
+        float knockBackChance = weaponStats.knockBackChance + Wielder.knockBackChance;
+        Debug.Log("Total KnockBack Chance = " + knockBackChance);
+        return knockBackChance;
+    }
+
     public virtual void PostMessage(int damage, Vector3 targetPosition)
     {
         MessageSystem.instance.PostMessage(damage.ToString(), targetPosition);

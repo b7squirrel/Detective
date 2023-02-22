@@ -34,10 +34,10 @@ public class GarlicWeapon : WeaponBase
 
             if (enemy != null)
             {
-                PostMessage(weaponStats.damage, item.transform.position);
-                enemy.TakeDamage(weaponStats.damage, Wielder.knockBackChance);
-                Debug.Log("Wielder knockBack chance = " + Wielder.knockBackChance);
-                // Debug.Log("Total knockBack chance = " + Wielder.knockBackChance + )
+                int damage = GetDamage();
+                float knockBack = GetKnockBackChance();
+                PostMessage(damage, item.transform.position);
+                enemy.TakeDamage(damage, knockBack);
             }
         }
     }

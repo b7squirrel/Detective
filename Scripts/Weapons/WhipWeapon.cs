@@ -30,8 +30,10 @@ public class WhipWeapon : WeaponBase
         if (enemy != null)
         {
             int damage = GetDamage();
+            float knockBack = GetKnockBackChance();
+
             PostMessage(damage, collision.transform.position);
-            enemy.TakeDamage(damage, Wielder.knockBackChance);
+            enemy.TakeDamage(damage, knockBack);
         }
     }
 
