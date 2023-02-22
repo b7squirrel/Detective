@@ -13,4 +13,8 @@ public class MagnetPickUPObject : Collectable, IPickUpObject
     {
         // 자력으로 끌려오지 않는다. 
     }
+    public override void OnHitMagnetField(Vector2 direction)
+    {
+        // 자력에 영향을 받지 않는다
+    }
 }

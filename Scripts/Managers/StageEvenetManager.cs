@@ -50,9 +50,14 @@ public class StageEvenetManager : MonoBehaviour
                     WinStage();
                     break;
 
+                case StageEventType.SpawnSubBoss:
+                    SpawnSubBoss();
+                    break;
+
                 case StageEventType.SpawnEnemyBoss:
                     SpawnEnemyBoss();
                     break;
+                    
                 default:
                     break;
             }
@@ -64,9 +69,12 @@ public class StageEvenetManager : MonoBehaviour
     {
         winManager.Win();
     }
+    void SpawnSubBoss()
+    {
+        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, 2);
+    }
     void SpawnEnemyBoss()
     {
         spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, 1);
-        
     }
 }

@@ -53,7 +53,7 @@ public class Collectable : MonoBehaviour
             moveSpeed * Time.deltaTime);
         acc += acc * Time.deltaTime;
     }
-    public void OnHitMagnetField(Vector2 direction)
+    public virtual void OnHitMagnetField(Vector2 direction)
     {
         IsHit = true;
         Instantiate(pickupEffect, transform.position, Quaternion.identity);
