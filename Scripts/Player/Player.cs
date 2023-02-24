@@ -45,16 +45,10 @@ public class Player : MonoBehaviour
 
     void ApplyMovement()
     {
-        // Vector2 nextVec = InputVec.normalized * speed * Time.fixedDeltaTime;
-
         InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
-        // if(InputVec == Vector2.zero)
-        // {
-        //     InputVec = pastInputVec;
-        // }
+        
         Vector2 nextVec = InputVec * character.MoveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
-        // pastInputVec = InputVec;
     }
     void Flip()
     {

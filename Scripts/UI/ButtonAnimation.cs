@@ -4,7 +4,7 @@ public class ButtonAnimation : MonoBehaviour
 {
     Animator anim;
     [SerializeField] MainMenu mainMenu;
-    [SerializeField] AudioClip pressed, released;
+    [SerializeField] AudioClip pressed;
 
     void Awake()
     {
@@ -12,15 +12,10 @@ public class ButtonAnimation : MonoBehaviour
     }
     public void PlayButtonAnim(bool isPaused)
     {
-        if (isPaused)
+        if (isPaused == false)
         {
             anim.SetTrigger("Pressed");
             SoundManager.instance.Play(pressed);
-        }
-        else
-        {
-            anim.SetTrigger("Released");
-            SoundManager.instance.Play(released);
         }
     }
 }

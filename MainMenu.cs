@@ -22,11 +22,6 @@ public class MainMenu : MonoBehaviour
 
     public void PauseButtonDown()
     {
-        if (isPaused)
-        { 
-            UnPause();
-            return;
-        }
         isPaused= true;
         OnPauseButtonPressed?.Invoke(isPaused);
         
@@ -40,8 +35,6 @@ public class MainMenu : MonoBehaviour
         pauseManager.UnPauseGame();
         panelPause.SetActive(false);
         isPaused = false;
-
-        OnPauseButtonPressed?.Invoke(isPaused);
     }
 
     public void GoToMainMenu()
