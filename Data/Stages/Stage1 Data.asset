@@ -26,17 +26,11 @@ MonoBehaviour:
     objectToSpawn: {fileID: 0}
     count: 10
   - eventType: 0
-    time: 15
+    time: 12
     message: 
     enemyToSpawn: {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
     objectToSpawn: {fileID: 0}
     count: 10
-  - eventType: 1
-    time: 25
-    message: Sub Boss
-    enemyToSpawn: {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
-    objectToSpawn: {fileID: 0}
-    count: 1
   - eventType: 0
     time: 26
     message: 
@@ -58,9 +52,15 @@ MonoBehaviour:
   - eventType: 0
     time: 50
     message: 
-    enemyToSpawn: {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    enemyToSpawn: {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
     objectToSpawn: {fileID: 0}
-    count: 4
+    count: 15
+  - eventType: 1
+    time: 60
+    message: Sub Boss
+    enemyToSpawn: {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    objectToSpawn: {fileID: 0}
+    count: 1
   - eventType: 0
     time: 65
     message: 
@@ -358,7 +358,7 @@ MonoBehaviour:
   - eventType: 0
     time: 290
     message: 
-    enemyToSpawn: {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    enemyToSpawn: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
     objectToSpawn: {fileID: 0}
     count: 60
   - eventType: 1
