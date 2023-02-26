@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour
 {
     [field : SerializeField] public string Name {get; private set;}
-    public bool IsKnockBack{get; set;}
-    public Rigidbody2D Target{get; set;}
+    [HideInInspector] public bool IsKnockBack{get; set;}
+    [HideInInspector] public Rigidbody2D Target{get; set;}
     public EnemyStats Stats {get; set;}
 
     #region Component Variables
@@ -20,7 +20,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected Material whiteMaterial;
     protected float whiteFlashDuration = 0.08f;
     protected Material initialMat;
-    public Vector2 targetDir;
+    [HideInInspector] public Vector2 targetDir;
     protected float knockBackSpeed = 8f;
 
     [Header("Sounds")]
@@ -38,6 +38,33 @@ public class EnemyBase : MonoBehaviour
         initialMat = sr.material;
         IsKnockBack = false;
     }
+
+    #region Movement Functions
+    public void Flip()
+    {
+        if (Target.position.x < rb.position.x)
+        {
+            transform.eulerAngles = new Vector3(0, 180f, 0);
+        }
+        else
+        {
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+    }
+
+    public void ApplyMovement()
+    {
+        if (IsKnockBack)
+        {
+            rb.velocity = knockBackSpeed * targetDir;
+            return;
+        }
+        Vector2 dirVec = Target.position - rb.position;
+        Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
+        rb.MovePosition(rb.position + nextVec);
+        rb.velocity = Vector2.zero;
+    }
+    #endregion
 
     #region 닿으면 player HP 감소
     protected void OnCollisionStay2D(Collision2D collision)

@@ -49,31 +49,6 @@ public class Enemy : EnemyBase, Idamageable
         Flip();
     }
 
-    void Flip()
-    {
-        if (Target.position.x < rb.position.x)
-        {
-            transform.eulerAngles = new Vector3(0, 180f, 0);
-        }
-        else
-        {
-            transform.eulerAngles = new Vector3(0, 0, 0);
-        }
-    }
-
-    void ApplyMovement()
-    {
-        if (IsKnockBack)
-        {
-            rb.velocity = knockBackSpeed * targetDir;
-            return;
-        }
-        Vector2 dirVec = Target.position - rb.position;
-        Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + nextVec);
-        rb.velocity = Vector2.zero;
-    }
-
     public void Init(EnemyData data)
     {
         anim.runtimeAnimatorController = data.animController;
