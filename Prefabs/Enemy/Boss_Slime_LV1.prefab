@@ -168,9 +168,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 2.8, y: 3.03}
-  m_Direction: 0
+  m_Offset: {x: 0, y: -1.13}
+  m_Size: {x: 4.09, y: 3.65}
+  m_Direction: 1
 --- !u!50 &7200239369209826793
 Rigidbody2D:
   serializedVersion: 4
@@ -227,4 +227,9 @@ MonoBehaviour:
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
+  projectiles:
+  - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+  - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+  - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+  numberOfProjectile: 10
   timeToAttack: 5

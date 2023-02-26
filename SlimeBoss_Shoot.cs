@@ -7,12 +7,16 @@ public class SlimeBoss_Shoot : StateMachineBehaviour
     Rigidbody2D rb;
     bool isKnockBack;
     EnemyBase enemyBase;
+    EnemyBoss enemyBoss;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         rb = animator.GetComponent<Rigidbody2D>();
         enemyBase = animator.GetComponent<EnemyBase>();
+        enemyBoss = animator.GetComponent<EnemyBoss>();
         isKnockBack = enemyBase.IsKnockBack;
+
+        enemyBoss.ShootProjectile();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -22,6 +26,6 @@ public class SlimeBoss_Shoot : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       
+       enemyBoss.StopShooting();
     }
 }

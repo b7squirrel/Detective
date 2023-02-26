@@ -36,6 +36,14 @@ public class Spawner : MonoBehaviour
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
     }
 
+    public void SpawnEnemiesToShoot(EnemyData enemyToSpawn, int index, Vector2 targetPosition)
+    {
+        GameObject enemy = GameManager.instance.poolManager.Get(index);
+        enemy.transform.position = targetPosition;
+        enemy.GetComponent<Enemy>().Init(enemyToSpawn);
+        Debug.Log("Shoot Enemy Name = " + enemy.GetComponent<Enemy>().name);
+    }
+
     public void SpawnBoss(EnemyData enemyToSpawn)
     {
         GetAvailablePoints();
