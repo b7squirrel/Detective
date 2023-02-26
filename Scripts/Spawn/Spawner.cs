@@ -36,6 +36,16 @@ public class Spawner : MonoBehaviour
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
     }
 
+    public void SpawnBoss(EnemyData enemyToSpawn)
+    {
+        GetAvailablePoints();
+        
+        GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform) ;
+        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
+        Debug.Log("Spawn Boss = " + enemy.GetComponent<EnemyBoss>().BossName);
+        enemy.GetComponent<EnemyBoss>().Init(enemyToSpawn);
+    }
+
     public void SpawnObject(GameObject toSpawn)
     {
         Debug.Log("Spawn object");

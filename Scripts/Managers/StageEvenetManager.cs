@@ -58,7 +58,7 @@ public class StageEvenetManager : MonoBehaviour
                     break;
 
                 case StageEventType.SpawnEnemyBoss:
-                    SpawnEnemyBoss();
+                    spawner.SpawnBoss(stageData.stageEvents[eventIndexer].enemyToSpawn);
                     break;
                     
                 default:

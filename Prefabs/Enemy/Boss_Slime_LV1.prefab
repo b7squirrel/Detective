@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7200239369209826798
+--- !u!1 &2085975787
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,43 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7200239369209826797}
-  - component: {fileID: 7200239369209826796}
-  - component: {fileID: 7200239369209826799}
-  - component: {fileID: 7200239369209826774}
-  - component: {fileID: 7200239369209826793}
-  - component: {fileID: 7200239369209826795}
-  - component: {fileID: 7200239369209826792}
-  - component: {fileID: 5294316221282124509}
+  - component: {fileID: 2085975788}
+  - component: {fileID: 2085975789}
+  - component: {fileID: 8161714110709107082}
   m_Layer: 6
-  m_Name: Boss_Slime_LV1
-  m_TagString: Enemy
+  m_Name: Sprite
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7200239369209826797
+--- !u!4 &2085975788
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200239369209826798}
+  m_GameObject: {fileID: 2085975787}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.2852054, y: 0.23202237, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 7200239369209826797}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7200239369209826796
+--- !u!212 &2085975789
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200239369209826798}
+  m_GameObject: {fileID: 2085975787}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -77,19 +72,69 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 662622765, guid: 11714cbd0cb8d774398e7c687958e64b, type: 3}
+  m_Sprite: {fileID: 1232070395, guid: 4611f4243626da848a999715b24b495e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.8888888, y: 3.8888888}
+  m_Size: {x: 5.7777777, y: 6.6666665}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8161714110709107082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085975787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.3, y: -0.17}
+--- !u!1 &7200239369209826798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7200239369209826797}
+  - component: {fileID: 7200239369209826799}
+  - component: {fileID: 7200239369209826774}
+  - component: {fileID: 7200239369209826793}
+  - component: {fileID: 5294316221282124509}
+  - component: {fileID: 271258211328832522}
+  m_Layer: 6
+  m_Name: Boss_Slime_LV1
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7200239369209826797
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200239369209826798}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2085975788}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7200239369209826799
 Animator:
   serializedVersion: 4
@@ -147,41 +192,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &7200239369209826795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200239369209826798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 032acafbac5acd447820d60bfd5b1efd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
-  whiteFlashDuration: 0.05
-  hit: {fileID: 8300000, guid: 273e1e8cc38172841bd2be105e49d2c4, type: 3}
-  die: {fileID: 8300000, guid: 5446932e36cf65d4da450ec2cb28b476, type: 3}
-  stats:
-    hp: 0
-    speed: 0
-    damage: 0
-    experience_reward: 0
---- !u!114 &7200239369209826792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200239369209826798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offset: {x: 0.3, y: -0.17}
 --- !u!114 &5294316221282124509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,3 +210,21 @@ MonoBehaviour:
   exp: 0
   hp: 0
   isGem: 0
+--- !u!114 &271258211328832522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200239369209826798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c4f22a33138b6a41ba09b201c9678aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <BossName>k__BackingField: SlimeBossV1
+  stats:
+    hp: 4000
+    speed: 3
+    damage: 20
+    experience_reward: 0

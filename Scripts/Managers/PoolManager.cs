@@ -4,6 +4,7 @@ using UnityEngine;
 public class PoolManager : MonoBehaviour
 {
     [SerializeField] GameObject[] prefabs;
+    [SerializeField] List<GameObject> bossPrefabs;
     List<GameObject>[] pools;
 
     void Awake()
@@ -36,5 +37,13 @@ public class PoolManager : MonoBehaviour
         }
 
         return select;
+    }
+
+    public GameObject GetBoss(EnemyData enemyData)
+    {
+        GameObject boss = null;
+        boss = bossPrefabs.Find(x => x.GetComponent<EnemyBoss>().BossName == enemyData.Name);
+        Debug.Log("Boss Name = " + boss.GetComponent<EnemyBoss>().BossName);
+        return boss;
     }
 }
