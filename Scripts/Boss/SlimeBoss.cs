@@ -1,17 +1,17 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [Serializable]
-public class EnemyStats
+public class BossStats
 {
     public int hp = 999;
     public float speed = 5;
     public int damage = 1;
     public int experience_reward = 0;
 
-    public EnemyStats(EnemyStats stats)
+    public BossStats(EnemyStats stats)
     {
         this.hp = stats.hp;
         this.speed = stats.speed;
@@ -21,11 +21,11 @@ public class EnemyStats
     }
 }
 
-public class Enemy : MonoBehaviour, Idamageable
+public class SlimeBoss : MonoBehaviour, Idamageable
 {
-    public int ExperienceReward {get; private set;}
-    [SerializeField] Rigidbody2D target;
+    Rigidbody2D target;
 
+    #region FeedBack Variables
     [Header("Effect")]
     [SerializeField] Material whiteMaterial;
     [SerializeField] float whiteFlashDuration;
@@ -37,19 +37,19 @@ public class Enemy : MonoBehaviour, Idamageable
     [Header("Sounds")]
     [SerializeField] AudioClip hit;
     [SerializeField] AudioClip die;
+    #endregion
 
-    bool isLive;
-
-    public EnemyStats stats;
-
+    #region Components Variables
     Rigidbody2D rb;
-    SpriteRenderer sr;
     Animator anim;
+    SpriteRenderer sr;
+    BossStats stats;
+    #endregion
 
+    #region Unity CallBack Functions
     void OnEnable()
     {
         target = GameManager.instance.player.GetComponent<Rigidbody2D>();
-        isLive = true;
         isKncokBack= false;
     }
 
@@ -61,58 +61,18 @@ public class Enemy : MonoBehaviour, Idamageable
 
         initialMat = sr.material;
     }
-
-    void FixedUpdate()
+    void Start()
     {
-        if (!isLive)
-            return;
-        if (GameManager.instance.player == null)
-            return;
-        ApplyMovement();
+        anim = GetComponent<Animator>();
     }
 
-    private void LateUpdate()
+    void Update()
     {
-        if (!isLive)
-            return;
-        if (GameManager.instance.player == null)
-            return;
-        Flip();
+        
     }
+    #endregion
 
-    void Flip()
-    {
-        if (target.position.x < rb.position.x)
-        {
-            transform.eulerAngles = new Vector3(0, 180f, 0);
-        }
-        else
-        {
-            transform.eulerAngles = new Vector3(0, 0, 0);
-        }
-    }
-
-    protected virtual void ApplyMovement()
-    {
-        if (isKncokBack)
-        {
-            rb.velocity = knockBackSpeed * targetDir;
-            return;
-        }
-        Vector2 dirVec = target.position - rb.position;
-        Vector2 nextVec = dirVec.normalized * stats.speed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + nextVec);
-        rb.velocity = Vector2.zero;
-    }
-
-    public void Init(EnemyData data)
-    {
-        anim.runtimeAnimatorController = data.animController;
-        this.stats = new EnemyStats(data.stats);
-        ExperienceReward = this.stats.experience_reward;
-    }
-
-    #region 닿으면 player HP 감소
+    #region 닿으면 플레이어의 HP 감소
     void OnCollisionStay2D(Collision2D collision)
     {
         if (GameManager.instance.player == null)

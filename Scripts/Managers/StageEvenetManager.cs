@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SpawnItem {enemy, subBoss, bossSlime}
+
 public class StageEvenetManager : MonoBehaviour
 {
     [SerializeField] StageData stageData;
     Spawner spawner;
+    SpawnItem spawnItem;
 
     StageTime stageTime;
     int eventIndexer;
@@ -35,7 +38,7 @@ public class StageEvenetManager : MonoBehaviour
                 case StageEventType.SpawnEnemy:
                     for (int i = 0; i < stageData.stageEvents[eventIndexer].count; i++)
                     {
-                        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, 0);
+                        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy);
                     }
                     break;
 
@@ -71,10 +74,10 @@ public class StageEvenetManager : MonoBehaviour
     }
     void SpawnSubBoss()
     {
-        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, 2);
+        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss);
     }
     void SpawnEnemyBoss()
     {
-        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, 1);
+        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.bossSlime);
     }
 }
