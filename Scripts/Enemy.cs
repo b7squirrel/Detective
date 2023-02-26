@@ -21,47 +21,16 @@ public class EnemyStats
     }
 }
 
-public class Enemy : MonoBehaviour, Idamageable
+public class Enemy : EnemyBase, Idamageable
 {
     public int ExperienceReward {get; private set;}
-    [SerializeField] Rigidbody2D target;
-
-    [Header("Effect")]
-    [SerializeField] Material whiteMaterial;
-    [SerializeField] float whiteFlashDuration;
-    Material initialMat;
-    bool isKncokBack;
-    Vector2 targetDir;
-    float knockBackSpeed = 8f;
-
-    [Header("Sounds")]
-    [SerializeField] AudioClip hit;
-    [SerializeField] AudioClip die;
-
     bool isLive;
 
-    public EnemyStats stats;
-
-    Rigidbody2D rb;
-    SpriteRenderer sr;
-    Animator anim;
-
-    void OnEnable()
+    protected override void OnEnable()
     {
-        target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+        base.OnEnable();
         isLive = true;
-        isKncokBack= false;
     }
-
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
-        anim = GetComponent<Animator>();
-
-        initialMat = sr.material;
-    }
-
     void FixedUpdate()
     {
         if (!isLive)
@@ -82,7 +51,7 @@ public class Enemy : MonoBehaviour, Idamageable
 
     void Flip()
     {
-        if (target.position.x < rb.position.x)
+        if (Target.position.x < rb.position.x)
         {
             transform.eulerAngles = new Vector3(0, 180f, 0);
         }
@@ -94,13 +63,13 @@ public class Enemy : MonoBehaviour, Idamageable
 
     protected virtual void ApplyMovement()
     {
-        if (isKncokBack)
+        if (IsKnockBack)
         {
             rb.velocity = knockBackSpeed * targetDir;
             return;
         }
-        Vector2 dirVec = target.position - rb.position;
-        Vector2 nextVec = dirVec.normalized * stats.speed * Time.fixedDeltaTime;
+        Vector2 dirVec = Target.position - rb.position;
+        Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
         rb.velocity = Vector2.zero;
     }
@@ -108,74 +77,7 @@ public class Enemy : MonoBehaviour, Idamageable
     public void Init(EnemyData data)
     {
         anim.runtimeAnimatorController = data.animController;
-        this.stats = new EnemyStats(data.stats);
-        ExperienceReward = this.stats.experience_reward;
+        this.Stats = new EnemyStats(data.stats);
+        ExperienceReward = this.Stats.experience_reward;
     }
-
-    #region 닿으면 player HP 감소
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        if (GameManager.instance.player == null)
-            return;
-        if (collision.gameObject == target.gameObject)
-        {
-            Attack();
-        }
-    }
-
-    void Attack()
-    {
-        if (target.gameObject == null)
-            return;
-
-        target.gameObject.GetComponent<Character>().TakeDamage(stats.damage);
-    }
-    #endregion
-
-    #region Take Damage
-    public void TakeDamage(int damage, float knockBackChance)
-    {
-        stats.hp -= damage;
-        EffectManager.instance.GenerateEffect(0, this.transform);
-        SoundManager.instance.Play(hit);
-        float chance = UnityEngine.Random.Range(0, 100);
-
-        WhiteFlash(whiteFlashDuration);
-        if (chance > knockBackChance || knockBackChance == 0)
-        {
-            isKncokBack = false;
-            return;
-        }
-        KnockBack();
-    }
-
-    void KnockBack()
-    {
-        anim.SetTrigger("Hit");
-        Vector2 playerPos = target.transform.position;
-        isKncokBack = true;
-        targetDir = (rb.position - target.position).normalized;
-        
-    }
-    public void WhiteFlash(float delayTime)
-    {
-        StartCoroutine(WhiteFlashCo(delayTime));
-    }
-
-    IEnumerator WhiteFlashCo(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-        sr.material = whiteMaterial;
-        yield return new WaitForSeconds(.05f);
-        sr.material = initialMat;
-
-        isKncokBack = false;
-        if (stats.hp < 1)
-        {
-            //target.GetComponent<Level>().AddExperience(experienceReward);
-            GetComponent<DropOnDestroy>().CheckDrop();
-            gameObject.SetActive(false);
-        }
-    }
-    #endregion
 }

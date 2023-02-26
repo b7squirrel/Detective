@@ -48,7 +48,6 @@ public class Spawner : MonoBehaviour
 
     public void SpawnObject(GameObject toSpawn)
     {
-        Debug.Log("Spawn object");
         Transform pickUP = Instantiate(toSpawn).transform;
         pickUP.position = spawnObjectPoint[Random.Range(0, spawnObjectPoint.Length)].position;
     }

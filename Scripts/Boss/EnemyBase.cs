@@ -27,6 +27,17 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected AudioClip die;
     #endregion
 
+    protected virtual void OnEnable()
+    {
+        Target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        sr = GetComponentInChildren<SpriteRenderer>();
+
+        initialMat = sr.material;
+        IsKnockBack = false;
+    }
+
     #region 닿으면 player HP 감소
     protected void OnCollisionStay2D(Collision2D collision)
     {
