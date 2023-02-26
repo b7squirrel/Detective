@@ -60,7 +60,7 @@ public class EnemyBase : MonoBehaviour
     #endregion
 
     #region Take Damage
-    public void TakeDamage(int damage, float knockBackChance)
+    public virtual void TakeDamage(int damage, float knockBackChance)
     {
         Stats.hp -= damage;
         EffectManager.instance.GenerateEffect(0, this.transform);

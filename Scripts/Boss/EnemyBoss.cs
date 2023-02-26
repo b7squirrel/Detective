@@ -9,10 +9,12 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         this.Stats = new EnemyStats(data.stats);
     }
-    protected override void KnockBack()
+    public override void TakeDamage(int damage, float knockBackChance)
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        {
             anim.SetTrigger("Hit");
-        base.KnockBack();
+        }
+        base.TakeDamage(damage, knockBackChance);
     }
 }
