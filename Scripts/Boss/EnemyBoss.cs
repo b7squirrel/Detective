@@ -5,9 +5,14 @@ using System;
 
 public class EnemyBoss : EnemyBase, Idamageable
 {
-    public string BossName {get; private set;}
     public void Init(EnemyData data)
     {
         this.Stats = new EnemyStats(data.stats);
+    }
+    protected override void KnockBack()
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+            anim.SetTrigger("Hit");
+        base.KnockBack();
     }
 }

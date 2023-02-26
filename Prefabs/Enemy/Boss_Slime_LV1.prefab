@@ -191,7 +191,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &5294316221282124509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,14 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4f22a33138b6a41ba09b201c9678aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <BossName>k__BackingField: SlimeBossV1
-  stats:
-    hp: 4000
-    speed: 3
-    damage: 20
-    experience_reward: 0
-  isKncokBack: 0
+  <Name>k__BackingField: SlimeBossV1
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
-  whiteFlashDuration: 0.05
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}

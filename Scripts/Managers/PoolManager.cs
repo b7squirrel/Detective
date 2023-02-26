@@ -42,8 +42,7 @@ public class PoolManager : MonoBehaviour
     public GameObject GetBoss(EnemyData enemyData)
     {
         GameObject boss = null;
-        boss = bossPrefabs.Find(x => x.GetComponent<EnemyBoss>().BossName == enemyData.Name);
-        Debug.Log("Boss Name = " + boss.GetComponent<EnemyBoss>().BossName);
+        boss = bossPrefabs.Find(x => x.GetComponent<EnemyBase>().Name == enemyData.Name);
         return boss;
     }
 }

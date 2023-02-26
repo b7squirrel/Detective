@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyBase : MonoBehaviour
 {
+    [field : SerializeField] public string Name {get; private set;}
     public bool IsKnockBack{get; set;}
     public Rigidbody2D Target{get; set;}
     public EnemyStats Stats {get; set;}
@@ -75,9 +76,8 @@ public class EnemyBase : MonoBehaviour
         KnockBack();
     }
 
-    protected void KnockBack()
+    protected virtual void KnockBack()
     {
-        anim.SetTrigger("Hit");
         Vector2 playerPos = Target.transform.position;
         IsKnockBack = true;
         targetDir = (rb.position - Target.position).normalized;

@@ -80,4 +80,9 @@ public class Enemy : EnemyBase, Idamageable
         this.Stats = new EnemyStats(data.stats);
         ExperienceReward = this.Stats.experience_reward;
     }
+    protected override void KnockBack()
+    {
+        anim.SetTrigger("Hit");
+        base.KnockBack();
+    }
 }
