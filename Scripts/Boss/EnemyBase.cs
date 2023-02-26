@@ -20,7 +20,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected Material whiteMaterial;
     protected float whiteFlashDuration = 0.08f;
     protected Material initialMat;
-    protected Vector2 targetDir;
+    public Vector2 targetDir;
     protected float knockBackSpeed = 8f;
 
     [Header("Sounds")]

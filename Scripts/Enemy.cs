@@ -61,7 +61,7 @@ public class Enemy : EnemyBase, Idamageable
         }
     }
 
-    protected virtual void ApplyMovement()
+    void ApplyMovement()
     {
         if (IsKnockBack)
         {
