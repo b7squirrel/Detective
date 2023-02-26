@@ -40,7 +40,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         for (int i = 0; i < numberOfProjectile; i++)
         {
             int randomNum = UnityEngine.Random.Range(0, projectiles.Length);
-            spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, Target.position);
+            spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, transform.position, Target.position);
             yield return new WaitForSeconds(.1f);
         }
     }

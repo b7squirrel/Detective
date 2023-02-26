@@ -78,7 +78,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 1701237861, guid: 651699adca044ee4daaa7d7cf3de9852, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -160,16 +160,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 032acafbac5acd447820d60bfd5b1efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  <Name>k__BackingField: 
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
-  whiteFlashDuration: 0.05
+  targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
-  stats:
-    hp: 999
-    speed: 0
-    damage: 1
-    experience_reward: 400
+  flyingSpeed: 10
 --- !u!114 &5297514985837409471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,6 +193,8 @@ MonoBehaviour:
   dropItemPrefab:
   - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
   chance: 1
+  exp: 0
+  hp: 0
   isGem: 1
 --- !u!114 &-6002105131184055401
 MonoBehaviour:

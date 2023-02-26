@@ -52,7 +52,7 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    public void ApplyMovement()
+    public virtual void ApplyMovement()
     {
         if (IsKnockBack)
         {

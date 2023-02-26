@@ -26,6 +26,11 @@ public class Enemy : EnemyBase, Idamageable
     public int ExperienceReward {get; private set;}
     bool isLive;
 
+
+    public bool IsFlying{get; set;}
+    public Vector2 LandingTarget{get; set;}
+    [SerializeField] float flyingSpeed;
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -55,6 +60,32 @@ public class Enemy : EnemyBase, Idamageable
         this.Stats = new EnemyStats(data.stats);
         ExperienceReward = this.Stats.experience_reward;
     }
+    public void SetFlying(Vector2 target)
+    {
+        IsFlying = true;
+        LandingTarget = target;
+        gameObject.layer = LayerMask.NameToLayer("InAir");
+    }
+    void SetWalking()
+    {
+        IsFlying = false;
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
+    }
+
+    public override void ApplyMovement()
+    {
+        if(IsFlying)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, LandingTarget, flyingSpeed * Time.deltaTime);
+            if (Vector2.Distance((Vector2)transform.position, LandingTarget) < 0.1f)
+            {
+                SetWalking();
+            }
+            return;
+        }
+        base.ApplyMovement();
+    }
+
     public override void TakeDamage(int damage, float knockBackChance)
     {
         anim.SetTrigger("Hit");
