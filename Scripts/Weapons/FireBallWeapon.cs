@@ -34,7 +34,7 @@ public class FireBallWeapon : WeaponBase
             Transform muzzleEffect =
                 Instantiate(muzzleFlash, EffectPoint.position, Quaternion.identity);
             GameObject fireBall = Instantiate(weapon);
-            fireBall.transform.position = ShootPoint.position;
+            fireBall.transform.position = transform.position;
             fireBall.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
 
             ProjectileBase projectile = fireBall.GetComponent<ProjectileBase>();

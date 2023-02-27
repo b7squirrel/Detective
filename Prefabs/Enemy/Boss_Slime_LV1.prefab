@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2085975788}
   - component: {fileID: 2085975789}
   - component: {fileID: 8161714110709107082}
+  - component: {fileID: 5489282720295142908}
   m_Layer: 6
   m_Name: Sprite
   m_TagString: Untagged
@@ -98,6 +99,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.3, y: -0.17}
+--- !u!114 &5489282720295142908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085975787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fcea990c27906141b93a9183d506f98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &844434545832104619
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +159,6 @@ GameObject:
   - component: {fileID: 5294316221282124509}
   - component: {fileID: 271258211328832522}
   - component: {fileID: -5815168290195017058}
-  - component: {fileID: -954811049806036546}
   m_Layer: 6
   m_Name: Boss_Slime_LV1
   m_TagString: Enemy
@@ -268,7 +280,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
   - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
   numberOfProjectile: 10
-  maxProjectile: 70
+  maxProjectile: 120
   timeToAttack: 5
   ShootPoint: {fileID: 487513323129266538}
   dustPoint: {fileID: 1199690674249790336}
@@ -286,18 +298,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brickPrefab: {fileID: 914172831033088714, guid: f33f1628a5cd8c84bb10351e49f9e0de, type: 3}
---- !u!114 &-954811049806036546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200239369209826798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fcea990c27906141b93a9183d506f98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7694664301936465618
 GameObject:
   m_ObjectHideFlags: 0

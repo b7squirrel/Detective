@@ -26,8 +26,20 @@ public class EnemyBoss : EnemyBase, Idamageable
         spawner = FindObjectOfType<Spawner>();
         generateWalls = GetComponent<GenerateWalls>();
 
-        float randomX = UnityEngine.Random.Range(Target.position.x - 5f, Target.position.x + 5f);
-        float randomY = UnityEngine.Random.Range(Target.position.y - 10f, Target.position.y + 10f);
+        // 플레이어 중심으로 X(-3, 3) Y(-10, 10) 가장자리에 보스 생성
+        float f = UnityEngine.Random.value > .5f ? -1f : 1f;
+        float randomX = 0f;
+        float randomY = 0f;
+        if (UnityEngine.Random.value > .5f)
+        {
+            randomX = UnityEngine.Random.Range(Target.position.x - 3f, Target.position.x + 3f);
+            randomY = Target.position.y + (f * 10f);
+        }
+        else
+        {
+            randomY = UnityEngine.Random.Range(Target.position.y - 5f, Target.position.y + 5f);
+            randomX = Target.position.x + (f * 3f);
+        }
         transform.position = new Vector2(randomX, randomY);
     }
     public void ShootTimer()
@@ -52,7 +64,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         for (int i = 0; i < numberOfProjectile; i++)
         {
             int randomNum = UnityEngine.Random.Range(0, projectiles.Length);
-            spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, ShootPoint.position, Target.position);
+            Vector2 offsetPos = Target.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
+            spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, ShootPoint.position, offsetPos);
             yield return new WaitForSeconds(.1f);
         }
 
