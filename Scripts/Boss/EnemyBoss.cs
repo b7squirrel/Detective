@@ -10,6 +10,11 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int numberOfProjectile;
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
+
+    [SerializeField] Transform ShootPoint;
+    [SerializeField] Transform dustPoint;
+    [SerializeField] GameObject dustEffect;
+    GenerateWalls generateWalls;
     float timer;
 
     public Coroutine shootCoroutine;
@@ -19,6 +24,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         this.Stats = new EnemyStats(data.stats);
         spawner = FindObjectOfType<Spawner>();
+        generateWalls = GetComponent<GenerateWalls>();
 
         float randomX = UnityEngine.Random.Range(Target.position.x - 5f, Target.position.x + 5f);
         float randomY = UnityEngine.Random.Range(Target.position.y - 10f, Target.position.y + 10f);
@@ -43,11 +49,10 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     IEnumerator ShootProjectileCo()
     {
-        Debug.Log("Here");
         for (int i = 0; i < numberOfProjectile; i++)
         {
             int randomNum = UnityEngine.Random.Range(0, projectiles.Length);
-            spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, transform.position, Target.position);
+            spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, ShootPoint.position, Target.position);
             yield return new WaitForSeconds(.1f);
         }
 
@@ -80,5 +85,14 @@ public class EnemyBoss : EnemyBase, Idamageable
             anim.SetTrigger("Hit");
         }
         base.TakeDamage(damage, knockBackChance);
+    }
+    //animation events
+    public void GenerateSpawnDust()
+    {
+        Instantiate(dustEffect, dustPoint.position, Quaternion.identity);
+    }
+    public void TriggerWallGenerator()
+    {
+        generateWalls.GenWalls();
     }
 }

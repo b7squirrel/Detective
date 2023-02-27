@@ -65,11 +65,13 @@ public class Enemy : EnemyBase, Idamageable
         IsFlying = true;
         LandingTarget = target;
         gameObject.layer = LayerMask.NameToLayer("InAir");
+        sr.sortingLayerName = "InAir";
     }
     void SetWalking()
     {
         IsFlying = false;
         gameObject.layer = LayerMask.NameToLayer("Enemy");
+        sr.sortingLayerName = "Enemy";
     }
 
     public override void ApplyMovement()
