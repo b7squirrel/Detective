@@ -8,17 +8,21 @@ public class EnemyBoss : EnemyBase, Idamageable
     Spawner spawner;
     [SerializeField] EnemyData[] projectiles;
     [SerializeField] int numberOfProjectile;
+    [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
     float timer;
 
     public Coroutine shootCoroutine;
-
     bool wallCreated;
 
     public void Init(EnemyData data)
     {
         this.Stats = new EnemyStats(data.stats);
         spawner = FindObjectOfType<Spawner>();
+
+        float randomX = UnityEngine.Random.Range(Target.position.x - 5f, Target.position.x + 5f);
+        float randomY = UnityEngine.Random.Range(Target.position.y - 10f, Target.position.y + 10f);
+        transform.position = new Vector2(randomX, randomY);
     }
     public void ShootTimer()
     {
@@ -28,6 +32,7 @@ public class EnemyBoss : EnemyBase, Idamageable
             return;
         }
         timer = 0f;
+        anim.SetBool("ShootFinished", false);
         anim.SetTrigger("Shoot");
     }
 
@@ -45,6 +50,20 @@ public class EnemyBoss : EnemyBase, Idamageable
             spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, transform.position, Target.position);
             yield return new WaitForSeconds(.1f);
         }
+
+        numberOfProjectile += 5;
+        if (numberOfProjectile > maxProjectile)
+        {
+            numberOfProjectile = maxProjectile;
+        }
+
+        StartCoroutine(ShootFinishedCo());
+    }
+
+    IEnumerator ShootFinishedCo()
+    {
+        yield return new WaitForSeconds(.5f);
+        anim.SetBool("ShootFinished", true);
     }
     public void StopShooting()
     {

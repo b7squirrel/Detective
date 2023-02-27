@@ -49,7 +49,6 @@ public class Spawner : MonoBehaviour
         GetAvailablePoints();
         
         GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform) ;
-        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
         enemy.GetComponent<EnemyBoss>().Init(enemyToSpawn);
     }
 
