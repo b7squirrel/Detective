@@ -41,4 +41,5 @@ public class WeaponData : ScriptableObject
     public GameObject weaponBasePrefab;
     public RuntimeAnimatorController animatorController;
     public List<UpgradeData> upgrades;
+    public string description;
 }

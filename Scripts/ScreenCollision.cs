@@ -10,6 +10,7 @@ public class ScreenCollision : MonoBehaviour
     {
         halfHeight = Camera.main.orthographicSize;
         halfWidth = Camera.main.aspect * halfHeight;
+        Debug.Log("Half Width = " + halfWidth + "Half Height = " + halfHeight);
 
         edgeCollder = this.GetComponent<EdgeCollider2D>();
         CreateEdgeCollider();

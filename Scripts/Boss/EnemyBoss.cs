@@ -13,6 +13,8 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     public Coroutine shootCoroutine;
 
+    bool wallCreated;
+
     public void Init(EnemyData data)
     {
         this.Stats = new EnemyStats(data.stats);
