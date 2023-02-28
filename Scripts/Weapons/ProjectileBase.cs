@@ -32,9 +32,7 @@ public class ProjectileBase : MonoBehaviour
 
     protected virtual void CastDamage()
     {
-        if (Time.frameCount % 3 == 0)
-        {
-            Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, .7f);
+        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, .7f);
             foreach (var item in hit)
             {
                 Transform enmey = item.GetComponent<Transform>(); 
@@ -50,7 +48,6 @@ public class ProjectileBase : MonoBehaviour
             {
                 HitObject();
             }
-        }
     }
 
     protected virtual void HitObject()
