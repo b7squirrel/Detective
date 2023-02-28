@@ -35,6 +35,7 @@ public class Enemy : EnemyBase, Idamageable
     {
         base.OnEnable();
         isLive = true;
+        SetWalking(); // 날으는 상태로 소환되지 않도록
     }
     void FixedUpdate()
     {

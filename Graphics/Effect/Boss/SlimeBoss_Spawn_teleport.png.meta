@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 482c399615c39ad47b57574e6823da18
+guid: 3a51f95b57bd7d646a9ae863464116b9
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -66,7 +66,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -128,13 +128,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SlimeBoss_Spawn_Dust_0
+      name: SlimeBoss_Spawn_teleport_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 50
-        width: 200
-        height: 50
+        y: 3
+        width: 70
+        height: 3
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,20 +142,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 95d65335fea92914497eae892ac609f2
-      internalID: 2076664412
+      spriteID: 901519959d609e840bf974f941819aec
+      internalID: 1974563848
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SlimeBoss_Spawn_Dust_1
+      name: SlimeBoss_Spawn_teleport_1
       rect:
         serializedVersion: 2
-        x: 200
-        y: 50
-        width: 200
-        height: 50
+        x: 70
+        y: 3
+        width: 70
+        height: 3
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -163,20 +163,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f2841dc2b54c8e4896637544270d874
-      internalID: -580743757
+      spriteID: 0960076f0924f7a449bdf2d1feb1dcc5
+      internalID: -1061505365
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SlimeBoss_Spawn_Dust_2
+      name: SlimeBoss_Spawn_teleport_2
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 200
-        height: 50
+        width: 70
+        height: 3
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +184,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d5e0514e80a9e2f4b9f27b8ecb7e2fc1
-      internalID: -1835994734
+      spriteID: 85c68d1399133ce439ed214271b3a7c3
+      internalID: 1574125937
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SlimeBoss_Spawn_Dust_3
+      name: SlimeBoss_Spawn_teleport_3
       rect:
         serializedVersion: 2
-        x: 200
+        x: 70
         y: 0
-        width: 200
-        height: 50
+        width: 70
+        height: 3
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -205,8 +205,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: edf4632f36ed0134f8043c715ba3be97
-      internalID: 1319098787
+      spriteID: 915d9e83e2e998e4a894c46cbec8127e
+      internalID: 854181834
       vertices: []
       indices: 
       edges: []
@@ -222,10 +222,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      SlimeBoss_Spawn_Dust_3: 1319098787
-      SlimeBoss_Spawn_Dust_1: -580743757
-      SlimeBoss_Spawn_Dust_2: -1835994734
-      SlimeBoss_Spawn_Dust_0: 2076664412
+      SlimeBoss_Spawn_teleport_1: -1061505365
+      SlimeBoss_Spawn_teleport_0: 1974563848
+      SlimeBoss_Spawn_teleport_2: 1574125937
+      SlimeBoss_Spawn_teleport_3: 854181834
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

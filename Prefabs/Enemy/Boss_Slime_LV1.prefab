@@ -158,7 +158,6 @@ GameObject:
   - component: {fileID: 7200239369209826793}
   - component: {fileID: 5294316221282124509}
   - component: {fileID: 271258211328832522}
-  - component: {fileID: -5815168290195017058}
   m_Layer: 6
   m_Name: Boss_Slime_LV1
   m_TagString: Enemy
@@ -216,7 +215,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1.13}
+  m_Offset: {x: 0, y: 1.94}
   m_Size: {x: 4.09, y: 3.65}
   m_Direction: 1
 --- !u!50 &7200239369209826793
@@ -253,7 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropItemPrefab:
-  - {fileID: 3118075186976557793, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
+  - {fileID: 0}
   chance: 1
   exp: 0
   hp: 0
@@ -284,20 +283,8 @@ MonoBehaviour:
   timeToAttack: 5
   ShootPoint: {fileID: 487513323129266538}
   dustPoint: {fileID: 1199690674249790336}
-  dustEffect: {fileID: 1346585066259924971, guid: 657ced3a5d4bbc34c848d968d64d0ad0, type: 3}
---- !u!114 &-5815168290195017058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200239369209826798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79605bcd6385dfc4abd13a96ace1674b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brickPrefab: {fileID: 914172831033088714, guid: f33f1628a5cd8c84bb10351e49f9e0de, type: 3}
+  dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
+  teleportEffect: {fileID: 3660852464054620627, guid: 91f1402b450da31478c225bdbf64610e, type: 3}
 --- !u!1 &7694664301936465618
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +309,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7694664301936465618}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.32, z: 0}
+  m_LocalPosition: {x: 0, y: 2.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -353,7 +340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9044653757724008968}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.96, z: 0}
+  m_LocalPosition: {x: 0, y: -0.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

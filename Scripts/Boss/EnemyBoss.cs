@@ -14,6 +14,8 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] Transform ShootPoint;
     [SerializeField] Transform dustPoint;
     [SerializeField] GameObject dustEffect;
+    GameObject dust;
+    [SerializeField] GameObject teleportEffect;
     GenerateWalls generateWalls;
     float timer;
 
@@ -102,10 +104,16 @@ public class EnemyBoss : EnemyBase, Idamageable
     //animation events
     public void GenerateSpawnDust()
     {
-        Instantiate(dustEffect, dustPoint.position, Quaternion.identity);
+        dust = Instantiate(dustEffect, dustPoint.position, Quaternion.identity);
+    }
+    public void DestroySpawnDust()
+    {
+        Destroy(dust);
     }
     public void TriggerWallGenerator()
     {
+        if(generateWalls == null)
+            return;
         generateWalls.GenWalls();
     }
 }

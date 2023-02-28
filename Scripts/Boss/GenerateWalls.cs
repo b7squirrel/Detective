@@ -19,11 +19,11 @@ public class GenerateWalls : MonoBehaviour
         float halfHeight = Camera.main.orthographicSize;
         float halfWidth = Camera.main.aspect * halfHeight;
 
-        for (int x = (int)(center.x - halfHeight); x < (int)(center.x + halfHeight); x++)
+        for (int x = (int)(center.x - halfHeight); x < (int)(center.x + halfHeight); x += 2)
         {
-            for (int y = (int)(center.y - halfHeight - 2); y < (int)(center.y + halfHeight + 2); y++)
+            for (int y = (int)(center.y - halfHeight - 2); y < (int)(center.y + halfHeight + 2); y += 2)
             {
-                if (x == (int)(center.x - halfHeight) || x == (int)(center.x + halfHeight - 1) || y == (int)(center.y - halfHeight - 2) || y == (int)(center.y + halfHeight + 1))
+                if (x == (int)(center.x - halfHeight) || x == (int)(center.x + halfHeight - 2) || y == (int)(center.y - halfHeight - 2) || y == (int)(center.y + halfHeight))
                 {
                     GameObject b = Instantiate(brickPrefab, new Vector2(x, y), Quaternion.identity);
                     bricks.Add(b);
@@ -41,19 +41,19 @@ public class GenerateWalls : MonoBehaviour
             int maxY = (int)(center.y + halfHeight + 1);
             if (itemTransform.position.x == minX && itemTransform.position.y != minY && itemTransform.position.y != maxY)
             {
-                itemTransform.localEulerAngles = new Vector3(0, 0, -90f);
+                // itemTransform.localEulerAngles = new Vector3(0, 0, -90f);
                 bouncer.BouncingDir = Vector2.right;
                 continue;
             }
             if (itemTransform.position.x == maxX && itemTransform.position.y != minY && itemTransform.position.y != maxY)
             {
-                itemTransform.localEulerAngles = new Vector3(0, 0, 90f);
+                // itemTransform.localEulerAngles = new Vector3(0, 0, 90f);
                 bouncer.BouncingDir = Vector2.left;
                 continue;
             }
             if (itemTransform.position.y == maxY && itemTransform.position.x != minX && itemTransform.position.x != maxX)
             {
-                itemTransform.localEulerAngles = new Vector3(0, 0, 180f);
+                // itemTransform.localEulerAngles = new Vector3(0, 0, 180f);
                 bouncer.BouncingDir = Vector2.down;
                 continue;
             }
