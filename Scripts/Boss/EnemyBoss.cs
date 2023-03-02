@@ -6,6 +6,7 @@ using System;
 public class EnemyBoss : EnemyBase, Idamageable
 {
     Spawner spawner;
+    [field : SerializeField] public float moveSpeedInAir {get; private set;}
     [SerializeField] EnemyData[] projectiles;
     [SerializeField] int numberOfProjectile;
     [SerializeField] int maxProjectile;
@@ -19,6 +20,8 @@ public class EnemyBoss : EnemyBase, Idamageable
     GenerateWalls generateWalls;
     float timer;
 
+    [SerializeField] Collider2D col;
+
     public Coroutine shootCoroutine;
     bool wallCreated;
 
@@ -27,6 +30,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         this.Stats = new EnemyStats(data.stats);
         spawner = FindObjectOfType<Spawner>();
         generateWalls = GetComponent<GenerateWalls>();
+        col = GetComponent<Collider2D>();
 
         // 플레이어 중심으로 X(-3, 3) Y(-10, 10) 가장자리에 보스 생성
         float f = UnityEngine.Random.value > .5f ? -1f : 1f;
@@ -115,5 +119,25 @@ public class EnemyBoss : EnemyBase, Idamageable
         if(generateWalls == null)
             return;
         generateWalls.GenWalls();
+    }
+    public void SetLayer(string layer)
+    {
+        gameObject.layer = LayerMask.NameToLayer(layer);
+    }
+    public void EnableCollider()
+    {
+        col.enabled = true;
+    }
+    public void DisableCollier()
+    {
+        col.enabled = false;
+    }
+    public void CamShake()
+    {
+        CameraShake.insstance.Shake();
+    }
+    public void StartLanding()
+    {
+        anim.SetTrigger("Land");
     }
 }

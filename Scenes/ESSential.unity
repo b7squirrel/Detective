@@ -14790,6 +14790,7 @@ GameObject:
   - component: {fileID: 1834188286}
   - component: {fileID: 1834188288}
   - component: {fileID: 1834188289}
+  - component: {fileID: 1834188290}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -14815,6 +14816,7 @@ MonoBehaviour:
   joystick: {fileID: 277539638}
   gameTime: 0
   maxGameTime: 20
+  currentCamera: {fileID: 0}
 --- !u!4 &1834188281
 Transform:
   m_ObjectHideFlags: 0
@@ -14931,6 +14933,21 @@ MonoBehaviour:
   kidImage: {fileID: 2035636582}
   closeButton: {fileID: 1242654581}
   pauseManager: {fileID: 0}
+--- !u!114 &1834188290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84ac5ed0322472547b1c98896ca697de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 519420031}
+  shakeRange: 0.84
+  duration: 0.397
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0

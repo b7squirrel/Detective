@@ -88,7 +88,6 @@ public class WeaponBase : MonoBehaviour
     public float GetKnockBackChance()
     {
         float knockBackChance = weaponStats.knockBackChance + Wielder.knockBackChance;
-        Debug.Log("Total KnockBack Chance = " + knockBackChance);
         return knockBackChance;
     }
 

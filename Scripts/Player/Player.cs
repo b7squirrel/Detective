@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour, IBouncable
 {
+    public static Player instance;
     public Vector2 InputVec { get; private set; }
     Vector2 pastInputVec;
     Rigidbody2D rb;
@@ -23,6 +24,7 @@ public class Player : MonoBehaviour, IBouncable
 
     void Awake()
     {
+        instance = this;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         character = GetComponent<Character>();
