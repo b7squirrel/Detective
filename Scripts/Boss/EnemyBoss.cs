@@ -25,6 +25,11 @@ public class EnemyBoss : EnemyBase, Idamageable
     public Coroutine shootCoroutine;
     bool wallCreated;
 
+    [SerializeField] float landingImpactSize;
+    [SerializeField] float landingImpactForce;
+    [SerializeField] LayerMask landingHit;
+    [SerializeField] GameObject landingEffect;
+
     public void Init(EnemyData data)
     {
         this.Stats = new EnemyStats(data.stats);
@@ -97,13 +102,13 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     #endregion
 
-    public override void TakeDamage(int damage, float knockBackChance)
+    public override void TakeDamage(int damage, float knockBackChance, Vector2 target)
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             anim.SetTrigger("Hit");
         }
-        base.TakeDamage(damage, knockBackChance);
+        base.TakeDamage(damage, knockBackChance, target);
     }
     //animation events
     public void GenerateSpawnDust()
@@ -139,5 +144,30 @@ public class EnemyBoss : EnemyBase, Idamageable
     public void StartLanding()
     {
         anim.SetTrigger("Land");
+    }
+    public void LandingImpact()
+    {
+        GameObject effect = Instantiate(landingEffect);
+        effect.transform.position = transform.position;
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, landingImpactSize, landingHit);
+        foreach (Collider2D item in hits)
+        {
+            Idamageable hit = item.GetComponent<Idamageable>();
+
+            if (hit != null)
+            {
+                if (item.CompareTag("Enemy"))
+                {
+                    hit.TakeDamage(Stats.damage, 100, transform.position);
+                }
+                else if(item.CompareTag("Player"))
+                {
+                    item.GetComponent<Character>().TakeDamage(Stats.damage);
+                }
+            }
+        }
+    }
+    private void OnDrawGizmos() {
+        Gizmos.DrawWireSphere(transform.position, landingImpactSize);
     }
 }

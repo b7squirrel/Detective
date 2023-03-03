@@ -39,7 +39,7 @@ public class ProjectileBase : MonoBehaviour
                 if (enmey.GetComponent<Idamageable>() != null)
                 {
                     PostMessage(Damage, enmey.transform.position);
-                    enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance);
+                    enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position);
                     hitDetected = true;
                     break;
                 }

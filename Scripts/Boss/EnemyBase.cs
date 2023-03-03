@@ -6,6 +6,7 @@ public class EnemyBase : MonoBehaviour
 {
     [field : SerializeField] public string Name {get; private set;}
     [HideInInspector] public bool IsKnockBack{get; set;}
+    [HideInInspector] public bool IsStunned{get; set;}
     [HideInInspector] public Rigidbody2D Target{get; set;}
     public EnemyStats Stats {get; set;}
 
@@ -54,11 +55,12 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void ApplyMovement()
     {
-        if (IsKnockBack)
+        if (IsKnockBack || IsStunned)
         {
             rb.velocity = knockBackSpeed * targetDir;
             return;
         }
+        
         Vector2 dirVec = Target.position - rb.position;
         Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
@@ -87,7 +89,7 @@ public class EnemyBase : MonoBehaviour
     #endregion
 
     #region Take Damage
-    public virtual void TakeDamage(int damage, float knockBackChance)
+    public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target)
     {
         Stats.hp -= damage;
         EffectManager.instance.GenerateEffect(0, this.transform);
@@ -108,8 +110,14 @@ public class EnemyBase : MonoBehaviour
         Vector2 playerPos = Target.transform.position;
         IsKnockBack = true;
         targetDir = (rb.position - Target.position).normalized;
-        
     }
+
+    public virtual void Stunned(Vector2 target)
+    {
+        IsStunned = true;
+        targetDir = (rb.position - target).normalized;
+    }
+
     public void WhiteFlash(float delayTime)
     {
         StartCoroutine(WhiteFlashCo(delayTime));

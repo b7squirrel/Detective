@@ -37,7 +37,7 @@ public class GarlicWeapon : WeaponBase
                 int damage = GetDamage();
                 float knockBack = GetKnockBackChance();
                 PostMessage(damage, item.transform.position);
-                enemy.TakeDamage(damage, knockBack);
+                enemy.TakeDamage(damage, knockBack, transform.position);
             }
         }
     }

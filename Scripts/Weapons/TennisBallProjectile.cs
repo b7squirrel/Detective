@@ -22,7 +22,7 @@ public class TennisBallProjectile : ProjectileBase
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance);
+            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position);
             PostMessage(Damage, other.transform.position);
 
             // 입사벡터

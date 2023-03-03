@@ -372,6 +372,12 @@ MonoBehaviour:
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
   teleportEffect: {fileID: 3660852464054620627, guid: 91f1402b450da31478c225bdbf64610e, type: 3}
   col: {fileID: 0}
+  landingImpactSize: 5
+  landingImpactForce: 2000
+  landingHit:
+    serializedVersion: 2
+    m_Bits: 64
+  landingEffect: {fileID: 1103442776217505441, guid: 0c2268cb369424d40a09601e680f80d5, type: 3}
 --- !u!1 &7694664301936465618
 GameObject:
   m_ObjectHideFlags: 0

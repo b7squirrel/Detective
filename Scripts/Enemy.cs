@@ -89,9 +89,9 @@ public class Enemy : EnemyBase, Idamageable
         base.ApplyMovement();
     }
 
-    public override void TakeDamage(int damage, float knockBackChance)
+    public override void TakeDamage(int damage, float knockBackChance, Vector2 target)
     {
         anim.SetTrigger("Hit");
-        base.TakeDamage(damage, knockBackChance);
+        base.TakeDamage(damage, knockBackChance, target);
     }
 }
