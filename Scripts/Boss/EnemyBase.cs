@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour
+public class EnemyBase : MonoBehaviour, Idamageable
 {
     [field : SerializeField] public string Name {get; private set;}
     [HideInInspector] public bool IsKnockBack{get; set;}
@@ -20,9 +20,11 @@ public class EnemyBase : MonoBehaviour
     [Header("Effect")]
     [SerializeField] protected Material whiteMaterial;
     protected float whiteFlashDuration = 0.08f;
+    protected float stunnedDuration = .2f;
     protected Material initialMat;
     [HideInInspector] public Vector2 targetDir;
     protected float knockBackSpeed = 8f;
+    protected float stunnedSpeed = 14f;
 
     [Header("Sounds")]
     [SerializeField] protected AudioClip hit;
@@ -38,6 +40,7 @@ public class EnemyBase : MonoBehaviour
 
         initialMat = sr.material;
         IsKnockBack = false;
+        IsStunned = false;
     }
 
     #region Movement Functions
@@ -55,11 +58,17 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void ApplyMovement()
     {
-        if (IsKnockBack || IsStunned)
+        if (IsKnockBack)
         {
             rb.velocity = knockBackSpeed * targetDir;
             return;
         }
+        if (IsStunned)
+        {
+            rb.velocity = stunnedSpeed * targetDir;
+            return;
+        }
+
         
         Vector2 dirVec = Target.position - rb.position;
         Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
@@ -91,6 +100,8 @@ public class EnemyBase : MonoBehaviour
     #region Take Damage
     public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target)
     {
+        anim.SetTrigger("Hit");
+
         Stats.hp -= damage;
         EffectManager.instance.GenerateEffect(0, this.transform);
         SoundManager.instance.Play(hit);
@@ -116,6 +127,13 @@ public class EnemyBase : MonoBehaviour
     {
         IsStunned = true;
         targetDir = (rb.position - target).normalized;
+        anim.SetTrigger("Hit");
+        StartCoroutine(StunnedCo());
+    }
+    IEnumerator StunnedCo()
+    {
+        yield return new WaitForSeconds(stunnedDuration);
+        IsStunned = false;
     }
 
     public void WhiteFlash(float delayTime)

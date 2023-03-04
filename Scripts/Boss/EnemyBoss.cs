@@ -152,17 +152,13 @@ public class EnemyBoss : EnemyBase, Idamageable
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, landingImpactSize, landingHit);
         foreach (Collider2D item in hits)
         {
-            Idamageable hit = item.GetComponent<Idamageable>();
+            EnemyBase hit = item.GetComponent<EnemyBase>();
 
             if (hit != null)
             {
                 if (item.CompareTag("Enemy"))
                 {
-                    hit.TakeDamage(Stats.damage, 100, transform.position);
-                }
-                else if(item.CompareTag("Player"))
-                {
-                    item.GetComponent<Character>().TakeDamage(Stats.damage);
+                    hit.Stunned(transform.position);
                 }
             }
         }

@@ -21,7 +21,7 @@ public class EnemyStats
     }
 }
 
-public class Enemy : EnemyBase, Idamageable
+public class Enemy : EnemyBase
 {
     public int ExperienceReward {get; private set;}
     bool isLive;
@@ -87,11 +87,5 @@ public class Enemy : EnemyBase, Idamageable
             return;
         }
         base.ApplyMovement();
-    }
-
-    public override void TakeDamage(int damage, float knockBackChance, Vector2 target)
-    {
-        anim.SetTrigger("Hit");
-        base.TakeDamage(damage, knockBackChance, target);
     }
 }
