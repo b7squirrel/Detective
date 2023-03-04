@@ -12,6 +12,8 @@ public class ShadowSprite : MonoBehaviour
     Transform transCaster;
     Transform transShadow;
 
+    public bool InAir{get; set;} // shadowHeight에서 껐다가 켰다가.
+
     void Start()
     {
         transCaster = transform;
@@ -30,6 +32,8 @@ public class ShadowSprite : MonoBehaviour
 
     void LateUpdate()
     {
+        if (InAir)
+            return;
         // 캐스터의 sprite renderer가 disabled라면 shadow의 sprite renderer도 disabled
         if(sprRndCaster == null) return;
 
