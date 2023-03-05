@@ -49,7 +49,9 @@ public class Spawner : MonoBehaviour
         GetAvailablePoints();
         
         GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform) ;
+        GameManager.instance.GetComponent<BossHealthBarManager>().ActivateBossHealthBar(); // Init에서 bossHealth바를 참조하므로 Init보다 앞에 위치
         enemy.GetComponent<EnemyBoss>().Init(enemyToSpawn);
+        
     }
 
     public void SpawnObject(GameObject toSpawn)

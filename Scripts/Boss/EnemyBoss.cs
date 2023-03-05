@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class EnemyBoss : EnemyBase, Idamageable
@@ -26,6 +27,8 @@ public class EnemyBoss : EnemyBase, Idamageable
     public Coroutine shootCoroutine;
     bool wallCreated;
 
+    [SerializeField] BossHealthBar bossHealthBar;
+
     [SerializeField] float landingImpactSize;
     [SerializeField] float landingImpactForce;
     [SerializeField] LayerMask landingHit;
@@ -43,6 +46,9 @@ public class EnemyBoss : EnemyBase, Idamageable
         spawner = FindObjectOfType<Spawner>();
         generateWalls = GetComponent<GenerateWalls>();
         col = GetComponent<Collider2D>();
+
+        bossHealthBar = FindObjectOfType<BossHealthBar>();
+        bossHealthBar.InitHealthBar(Stats.hp, Name);
 
         // 플레이어 중심으로 X(-3, 3) Y(-10, 10) 가장자리에 보스 생성
         float f = UnityEngine.Random.value > .5f ? -1f : 1f;
@@ -123,6 +129,14 @@ public class EnemyBoss : EnemyBase, Idamageable
         StopCoroutine(shootCoroutine);
     }
     #endregion
+
+    public override void TakeDamage(int damage, float knockBackChance, Vector2 target)
+    {
+        base.TakeDamage(damage, knockBackChance, target);
+        bossHealthBar.UpdateBossHealthSlider(Stats.hp);
+        if(Stats.hp < 0)
+        GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
+    }
 
     //animation events
     public void GenerateSpawnDust()

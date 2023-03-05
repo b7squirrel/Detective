@@ -354,16 +354,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4f22a33138b6a41ba09b201c9678aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: SlimeBossV1
+  <Name>k__BackingField: Slime Queen
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   <moveSpeedInAir>k__BackingField: 16
   projectiles:
-  - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
-  - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
-  - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+  - {fileID: 11400000, guid: 90f06bf610826bf448080ea909f77b4d, type: 2}
+  - {fileID: 11400000, guid: 41e40d421b77bbc4282b92af34e4c6c0, type: 2}
+  - {fileID: 11400000, guid: a10b6d55aed95a949aa2fef0440a0d12, type: 2}
   projectileSFX:
   - {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
   - {fileID: 8300000, guid: b2847e7a689436843802ca6ca60536fb, type: 3}
@@ -376,6 +376,7 @@ MonoBehaviour:
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
   teleportEffect: {fileID: 3660852464054620627, guid: 91f1402b450da31478c225bdbf64610e, type: 3}
   col: {fileID: 0}
+  bossHealthBar: {fileID: 0}
   landingImpactSize: 5
   landingImpactForce: 2000
   landingHit:
