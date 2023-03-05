@@ -9,6 +9,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [HideInInspector] public bool IsStunned{get; set;}
     [HideInInspector] public Rigidbody2D Target{get; set;}
     public EnemyStats Stats {get; set;}
+    public bool IsBoss{get; set;}
 
     #region Component Variables
     protected Rigidbody2D rb;

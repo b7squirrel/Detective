@@ -364,6 +364,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
   - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
   - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+  projectileSFX:
+  - {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
+  - {fileID: 8300000, guid: b2847e7a689436843802ca6ca60536fb, type: 3}
+  - {fileID: 8300000, guid: 220425e348b6f454f94046ff3c09f704, type: 3}
   numberOfProjectile: 10
   maxProjectile: 120
   timeToAttack: 5
@@ -378,6 +382,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   landingEffect: {fileID: 1103442776217505441, guid: 0c2268cb369424d40a09601e680f80d5, type: 3}
+  spawnSFX: {fileID: 8300000, guid: ce6f6a6e8f75e9f46b9f87093a89d730, type: 3}
+  landingSFX: {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
+  shootAnticSFX: {fileID: 8300000, guid: a1af138c927954c44a2210880a230bfb, type: 3}
+  jumpupSFX: {fileID: 8300000, guid: 73ebcf72e51b0b74c8f039502ab32a96, type: 3}
+  fallDownSFX: {fileID: 8300000, guid: 65c88103c5dfa4d4a942bfc6a70e604c, type: 3}
 --- !u!1 &7694664301936465618
 GameObject:
   m_ObjectHideFlags: 0

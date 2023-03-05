@@ -23,11 +23,11 @@ AnimationClip:
       value: {fileID: -1856294904, guid: 4611f4243626da848a999715b24b495e, type: 3}
     - time: 0.033333335
       value: {fileID: -544954211, guid: 4611f4243626da848a999715b24b495e, type: 3}
-    - time: 0.083333336
+    - time: 0.6666667
       value: {fileID: -100469122, guid: 4611f4243626da848a999715b24b495e, type: 3}
-    - time: 0.13333334
+    - time: 0.71666664
       value: {fileID: 1232070395, guid: 4611f4243626da848a999715b24b495e, type: 3}
-    - time: 0.21666667
+    - time: 0.8
       value: {fileID: 1232070395, guid: 4611f4243626da848a999715b24b495e, type: 3}
     attribute: m_Sprite
     path: Sprite
@@ -58,7 +58,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.23333333
+    m_StopTime: 0.81666666
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -78,7 +78,14 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.033333335
+  - time: 0
+    functionName: PlayFallDownSound
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.016666668
     functionName: LandingImpact
     data: 
     objectReferenceParameter: {fileID: 0}

@@ -13,6 +13,7 @@ public class SlimeBoss_ShootAntic : StateMachineBehaviour
         rb = animator.GetComponent<Rigidbody2D>();
         enemyBase = animator.GetComponent<EnemyBase>();
         isKnockBack = enemyBase.IsKnockBack;
+        animator.GetComponent<EnemyBoss>().PlayShootAnticSound();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

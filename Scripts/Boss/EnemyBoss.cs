@@ -8,6 +8,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     Spawner spawner;
     [field : SerializeField] public float moveSpeedInAir {get; private set;}
     [SerializeField] EnemyData[] projectiles;
+    [SerializeField] AudioClip[] projectileSFX;
     [SerializeField] int numberOfProjectile;
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
@@ -29,9 +30,15 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] float landingImpactForce;
     [SerializeField] LayerMask landingHit;
     [SerializeField] GameObject landingEffect;
+    [SerializeField] AudioClip spawnSFX;
+    [SerializeField] AudioClip landingSFX;
+    [SerializeField] AudioClip shootAnticSFX;
+    [SerializeField] AudioClip jumpupSFX;
+    [SerializeField] AudioClip fallDownSFX;
 
     public void Init(EnemyData data)
     {
+        IsBoss = true;
         this.Stats = new EnemyStats(data.stats);
         spawner = FindObjectOfType<Spawner>();
         generateWalls = GetComponent<GenerateWalls>();
@@ -52,6 +59,8 @@ public class EnemyBoss : EnemyBase, Idamageable
             randomX = Target.position.x + (f * 3f);
         }
         transform.position = new Vector2(randomX, randomY);
+
+        SoundManager.instance.Play(spawnSFX);
     }
     public void ShootTimer()
     {
@@ -66,6 +75,18 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
 
     #region Shooting Functions
+    public void PlayShootAnticSound()
+    {
+        SoundManager.instance.Play(shootAnticSFX);
+    }
+    public void PlayJumpUpSound()
+    {
+        SoundManager.instance.Play(jumpupSFX);
+    }
+    public void PlayFallDownSound()
+    {
+        SoundManager.instance.Play(fallDownSFX);
+    }
     public void ShootProjectile()
     {
         StartCoroutine(ShootProjectileCo());
@@ -77,6 +98,7 @@ public class EnemyBoss : EnemyBase, Idamageable
             int randomNum = UnityEngine.Random.Range(0, projectiles.Length);
             Vector2 offsetPos = Target.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
             spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, ShootPoint.position, offsetPos);
+            SoundManager.instance.Play(projectileSFX[randomNum]);
             yield return new WaitForSeconds(.1f);
         }
 
@@ -148,13 +170,15 @@ public class EnemyBoss : EnemyBase, Idamageable
     public void LandingImpact()
     {
         GameObject effect = Instantiate(landingEffect);
+        SoundManager.instance.Play(landingSFX);
         effect.transform.position = transform.position;
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, landingImpactSize, landingHit);
+        
         foreach (Collider2D item in hits)
         {
             EnemyBase hit = item.GetComponent<EnemyBase>();
 
-            if (hit != null)
+            if (hit != null && !hit.IsBoss) // 보스 랜딩 공격에 자신까지 포함시키지 않기
             {
                 if (item.CompareTag("Enemy"))
                 {
