@@ -124,14 +124,6 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     #endregion
 
-    public override void TakeDamage(int damage, float knockBackChance, Vector2 target)
-    {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            anim.SetTrigger("Hit");
-        }
-        base.TakeDamage(damage, knockBackChance, target);
-    }
     //animation events
     public void GenerateSpawnDust()
     {
