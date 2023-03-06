@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] Slider tabSlider;
+    [SerializeField] Slider tabSliderShadow;
     [SerializeField] GameObject[] tabPanels;
     [SerializeField] RectTransform[] BtnRect;
     [SerializeField] RectTransform[] BtnImageRect;
@@ -56,6 +57,7 @@ public class MainMenuManager : MonoBehaviour
     public void SetTabPos(int pressBtnID)
     {
         tabSlider.value = pos[pressBtnID];
+        tabSliderShadow.value = pos[pressBtnID];
         targetIndex = pressBtnID;
     }
 }
