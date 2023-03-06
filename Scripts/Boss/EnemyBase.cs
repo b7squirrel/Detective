@@ -132,6 +132,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         GetComponent<DropOnDestroy>().CheckDrop();
         if (whiteFlashCoroutine != null)
             StopCoroutine(whiteFlashCoroutine);
+
+        sr.material = initialMat;
         gameObject.SetActive(false);
     }
 

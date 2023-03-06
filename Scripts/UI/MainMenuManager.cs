@@ -45,8 +45,8 @@ public class MainMenuManager : MonoBehaviour
                 textActive = true;
             }
 
-            BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, .25f);
-            BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .25f);
+            BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, .5f);
+            BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .5f);
             BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(textActive);
             tabPanels[i].SetActive(i == targetIndex);
 
