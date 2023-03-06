@@ -41,7 +41,7 @@ public class MainMenuManager : MonoBehaviour
             if (i == targetIndex)
             {
                 BtnTargetPos.y = -23f;
-                BtnTargetScale = new Vector3(1.2f, 1.2f, 1);
+                BtnTargetScale = new Vector3(1.7f, 1.7f, 1);
                 textActive = true;
             }
 
