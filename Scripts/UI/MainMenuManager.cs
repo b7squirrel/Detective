@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] Slider tabSlider;
+    [SerializeField] GameObject[] tabPanels;
     [SerializeField] RectTransform[] BtnRect;
     [SerializeField] RectTransform[] BtnImageRect;
     float[] pos = new float[SIZE];
@@ -36,6 +37,7 @@ public class MainMenuManager : MonoBehaviour
             Vector3 BtnTargetScale = Vector3.one;
             bool textActive = false;
 
+
             if (i == targetIndex)
             {
                 BtnTargetPos.y = -23f;
@@ -46,6 +48,8 @@ public class MainMenuManager : MonoBehaviour
             BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, .25f);
             BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .25f);
             BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(textActive);
+            tabPanels[i].SetActive(i == targetIndex);
+
         }
     }
 
@@ -54,5 +58,4 @@ public class MainMenuManager : MonoBehaviour
         tabSlider.value = pos[pressBtnID];
         targetIndex = pressBtnID;
     }
-
 }
