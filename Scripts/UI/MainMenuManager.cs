@@ -27,10 +27,25 @@ public class MainMenuManager : MonoBehaviour
         {
             BtnRect[i].sizeDelta = new Vector2(i == targetIndex ? 266.666f : 133.33f, BtnRect[i].sizeDelta.y);
         }
-        for(int i=0;i<SIZE;i++)
+
+        if (Time.time < 0.1f) return;
+
+        for (int i = 0; i < SIZE; i++)
         {
             Vector3 BtnTargetPos = BtnRect[i].anchoredPosition3D;
+            Vector3 BtnTargetScale = Vector3.one;
+            bool textActive = false;
+
+            if (i == targetIndex)
+            {
+                BtnTargetPos.y = -23f;
+                BtnTargetScale = new Vector3(1.2f, 1.2f, 1);
+                textActive = true;
+            }
+
             BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, .25f);
+            BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .25f);
+            BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(textActive);
         }
     }
 
