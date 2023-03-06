@@ -134,8 +134,14 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         base.TakeDamage(damage, knockBackChance, target);
         bossHealthBar.UpdateBossHealthSlider(Stats.hp);
-        if(Stats.hp < 0)
+    }
+    protected override void Die()
+    {
         GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
+        GameManager.instance.GetComponent<WinStage>().OpenPanel();                                                                           
+
+        GetComponent<DropOnDestroy>().CheckDrop();
+        gameObject.SetActive(false);
     }
 
     //animation events

@@ -26,6 +26,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [HideInInspector] public Vector2 targetDir;
     protected float knockBackSpeed = 8f;
     protected float stunnedSpeed = 14f;
+    Coroutine whiteFlashCoroutine;
 
     [Header("Sounds")]
     [SerializeField] protected AudioClip hit;
@@ -111,6 +112,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         SoundManager.instance.Play(hit);
         float chance = UnityEngine.Random.Range(0, 100);
 
+        if (Stats.hp < 1)
+        {
+            Die();
+            return;
+        }
+
         WhiteFlash(whiteFlashDuration);
         if (chance > knockBackChance || knockBackChance == 0)
         {
@@ -118,6 +125,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return;
         }
         KnockBack();
+    }
+    protected virtual void Die()
+    {
+        //target.GetComponent<Level>().AddExperience(experienceReward);
+        GetComponent<DropOnDestroy>().CheckDrop();
+        if (whiteFlashCoroutine != null)
+            StopCoroutine(whiteFlashCoroutine);
+        gameObject.SetActive(false);
     }
 
     protected virtual void KnockBack()
@@ -142,7 +157,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public void WhiteFlash(float delayTime)
     {
-        StartCoroutine(WhiteFlashCo(delayTime));
+        whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
     }
 
     protected IEnumerator WhiteFlashCo(float delayTime)
@@ -153,12 +168,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         sr.material = initialMat;
 
         IsKnockBack = false;
-        if (Stats.hp < 1)
-        {
-            //target.GetComponent<Level>().AddExperience(experienceReward);
-            GetComponent<DropOnDestroy>().CheckDrop();
-            gameObject.SetActive(false);
-        }
+        
     }
     #endregion
 }
