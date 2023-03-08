@@ -10,14 +10,14 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] RectTransform[] BtnRect;
     [SerializeField] RectTransform[] BtnImageRect;
     float[] pos = new float[SIZE];
-    const int SIZE = 4;
+    const int SIZE = 5;
     int targetIndex;
 
     void Start()
     {
         for (int i = 0; i < SIZE; i++)
         {
-            pos[i] = (1f/3f) * i;
+            pos[i] = (1f/4f) * i;
         }
         SetTabPos(2);
     }
