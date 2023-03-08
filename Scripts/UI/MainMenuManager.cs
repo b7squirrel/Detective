@@ -17,7 +17,7 @@ public class MainMenuManager : MonoBehaviour
     {
         for (int i = 0; i < SIZE; i++)
         {
-            pos[i] = (1f/4f) * i;
+            pos[i] = (1f / 4f) * i;
         }
         SetTabPos(2);
     }
