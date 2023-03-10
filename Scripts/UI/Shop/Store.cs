@@ -8,6 +8,8 @@ public class Store : MonoBehaviour
     [SerializeField] Transform slotRoot;
     List<Slot> slots;
 
+    public System.Action<ItemProperty> onSlotClick;
+
     void Start() // 상점에 아이템을 배치하는 부분. 나중에 다시 셋업 해야함
     {
         slots = new List<Slot>();
@@ -28,5 +30,10 @@ public class Store : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void OnClickSlot(Slot slot)
+    {
+        onSlotClick?.Invoke(slot.item);
     }
 }

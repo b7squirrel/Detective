@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Slot : MonoBehaviour
 {
-    ItemProperty item;
+    [HideInInspector] public ItemProperty item;
     [SerializeField] UnityEngine.UI.Image image;
     [SerializeField] TMPro.TextMeshProUGUI itemName;
     [SerializeField] TMPro.TextMeshProUGUI price;
@@ -25,7 +25,6 @@ public class Slot : MonoBehaviour
             image.sprite = item.sprite;
             itemName.text = item.name;
             price.text = item.price.ToString();
-
         }
     }
 }
