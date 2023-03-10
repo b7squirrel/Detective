@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 public class Slot : MonoBehaviour
 {
     ItemProperty item;
-    [SerializeField] Image image;
+    [SerializeField] UnityEngine.UI.Image image;
+    [SerializeField] TMPro.TextMeshProUGUI itemName;
+    [SerializeField] TMPro.TextMeshProUGUI price;
 
     public void SetItem(ItemProperty item)
     {
@@ -14,6 +15,7 @@ public class Slot : MonoBehaviour
         {
             image.enabled = false;
             gameObject.name = "Empty";
+            itemName.text = "Empty";
         }
         else
         {
@@ -21,6 +23,9 @@ public class Slot : MonoBehaviour
 
             gameObject.name = item.name;
             image.sprite = item.sprite;
+            itemName.text = item.name;
+            price.text = item.price.ToString();
+
         }
     }
 }
