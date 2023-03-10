@@ -6,7 +6,10 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField] Transform rootSlot;
     [SerializeField] Store store;
+    [SerializeField] GameObject itemInfoPanel;
     List<Slot> slots;
+
+    public System.Action<ItemProperty> onInvenSlot;
 
     void Start()
     {
@@ -31,5 +34,16 @@ public class Inventory : MonoBehaviour
         return;
         
         emptySlot.SetItem(item);
+    }
+    public void OpenItemInfo(Slot slot)
+    {
+        if(slot.IsEmpty)
+            return;
+        itemInfoPanel.SetActive(true);
+        itemInfoPanel.GetComponent<ItemInfo>().SetInfo(slot.item);
+    }
+    public void CloseItemInfo()
+    {
+        itemInfoPanel.SetActive(false);
     }
 }

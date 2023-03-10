@@ -8,6 +8,8 @@ public class Slot : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI itemName;
     [SerializeField] TMPro.TextMeshProUGUI price;
 
+    public bool IsEmpty {get; private set;}
+
     public void SetItem(ItemProperty item)
     {
         this.item = item;
@@ -16,6 +18,7 @@ public class Slot : MonoBehaviour
             image.enabled = false;
             gameObject.name = "Empty";
             itemName.text = "Empty";
+            IsEmpty = true;
         }
         else
         {
@@ -25,6 +28,7 @@ public class Slot : MonoBehaviour
             image.sprite = item.sprite;
             itemName.text = item.name;
             price.text = item.price.ToString();
+            IsEmpty = false;
         }
     }
 }
