@@ -6,7 +6,9 @@ public class Store : MonoBehaviour
 {
     [SerializeField] ItemBuffer itemBuffer;
     [SerializeField] Transform slotRoot;
+    [SerializeField] GameObject itemInfoPanel;
     List<Slot> slots;
+    Slot currentSlot;
 
     public System.Action<ItemProperty> onSlotClick;
 
@@ -26,6 +28,8 @@ public class Store : MonoBehaviour
 
             slots.Add(slot);
         }
+
+        itemInfoPanel.SetActive(false);
     }
     void Update()
     {
@@ -34,6 +38,23 @@ public class Store : MonoBehaviour
 
     public void OnClickSlot(Slot slot)
     {
-        onSlotClick?.Invoke(slot.item);
+        currentSlot = slot.GetComponent<Slot>();
+        OpenStoreItemInfo(currentSlot);
+    }
+    public void OnClickPrice()
+    {
+        onSlotClick?.Invoke(currentSlot.item);
+        CloseStoreItemInfo();
+    }
+    public void OpenStoreItemInfo(Slot slot)
+    {
+        if(slot.IsEmpty)
+            return;
+        itemInfoPanel.SetActive(true);
+        itemInfoPanel.GetComponent<StoreItemInfo>().SetInfo(slot.item);
+    }
+    public void CloseStoreItemInfo()
+    {
+        itemInfoPanel.SetActive(false);
     }
 }

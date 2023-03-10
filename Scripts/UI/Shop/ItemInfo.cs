@@ -7,8 +7,11 @@ public class ItemInfo : MonoBehaviour
     [SerializeField] UnityEngine.UI.Image itemImage;
     [SerializeField] TMPro.TextMeshProUGUI itemName;
 
-    public void SetInfo(ItemProperty itemProperty)
+    public virtual void SetInfo(ItemProperty itemProperty)
     {
+        if(itemProperty == null)
+            return;
+
         itemImage.sprite = itemProperty.sprite;
         itemName.text = itemProperty.name;
     }
