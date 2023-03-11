@@ -31,6 +31,7 @@ public class DataContainer : ScriptableObject
 {
     public int coins;
     public int gold;
+    public int lightning;
     public List<PlayerUpgrades> upgrades;
     public List<bool> stageCompletion;
     
