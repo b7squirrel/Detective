@@ -1,11 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemInfo : MonoBehaviour
 {
     [SerializeField] UnityEngine.UI.Image itemImage;
     [SerializeField] TMPro.TextMeshProUGUI itemName;
+    [SerializeField] UnityEngine.UI.Image itemClassImage;
+    [SerializeField] TMPro.TextMeshProUGUI itemClass;
+    
+    
 
     public virtual void SetInfo(ItemProperty itemProperty)
     {
@@ -14,5 +16,8 @@ public class ItemInfo : MonoBehaviour
 
         itemImage.sprite = itemProperty.sprite;
         itemName.text = itemProperty.name;
+
+        itemClassImage.sprite = IconLists.instance.GetClassIcon(itemProperty.classType);
+        itemClass.text = itemProperty.classType.ToString();
     }
 }

@@ -12,7 +12,7 @@ public class MainMenuManager : MonoBehaviour
     float[] pos = new float[SIZE];
     const int SIZE = 5;
     int targetIndex;
-
+    
     void Start()
     {
         for (int i = 0; i < SIZE; i++)
@@ -20,6 +20,11 @@ public class MainMenuManager : MonoBehaviour
             pos[i] = (1f / 4f) * i;
         }
         SetTabPos(2);
+
+        for (int i = 0; i < tabPanels.Length; i++)
+        {
+            tabPanels[i].SetActive(false);
+        }
     }
 
     void Update()

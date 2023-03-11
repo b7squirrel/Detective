@@ -10,7 +10,7 @@ public class Store : MonoBehaviour
     List<Slot> slots;
     Slot currentSlot;
 
-    public System.Action<ItemProperty> onSlotClick;
+    public System.Action<ItemProperty> onPriceClick;
 
     void Start() // 상점에 아이템을 배치하는 부분. 나중에 다시 셋업 해야함
     {
@@ -43,7 +43,7 @@ public class Store : MonoBehaviour
     }
     public void OnClickPrice()
     {
-        onSlotClick?.Invoke(currentSlot.item);
+        onPriceClick?.Invoke(currentSlot.item);
         CloseStoreItemInfo();
     }
     public void OpenStoreItemInfo(Slot slot)

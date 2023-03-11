@@ -23,11 +23,13 @@ public class Inventory : MonoBehaviour
             slots.Add(slot);
         }
 
-        store.onSlotClick += BuyItem;
+        store.onPriceClick += BuyItem;
+        itemInfoPanel.SetActive(false);
     }
 
     void BuyItem(ItemProperty item)
     {
+        Debug.Log("Buy Item");
         Slot emptySlot = slots.Find(t => t.item == null || t.item.name == string.Empty);
 
         if(emptySlot == null)
