@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject panelPause;
     [SerializeField] GameObject panelMainMenu;
+    [SerializeField] GameObject panelAreYouSure;
     public UnityEvent<bool> OnPauseButtonPressed;
     PauseManager pauseManager;
     bool isPaused;
@@ -35,6 +36,11 @@ public class MainMenu : MonoBehaviour
         pauseManager.UnPauseGame();
         panelPause.SetActive(false);
         isPaused = false;
+    }
+
+    public void AreYouSure()
+    {
+        panelAreYouSure.gameObject.SetActive(true);
     }
 
     public void GoToMainMenu()
