@@ -5,6 +5,7 @@ using UnityEngine;
 public class GenerateWalls : MonoBehaviour
 {
     [SerializeField] GameObject brickPrefab;
+    [SerializeField] GameObject bossBorders;
     List<GameObject> bricks;
 
     public void GenWalls()
@@ -33,34 +34,39 @@ public class GenerateWalls : MonoBehaviour
             }
         }
 
+        int minX = (int)(center.x - halfHeight);
+        int maxX = (int)(center.x + halfHeight - 2);
+        int minY = (int)(center.y - halfHeight - 2);
+        int maxY = (int)(center.y + halfHeight);
+
         foreach (GameObject item in bricks)
         {
             Transform itemTransform = item.transform;
             Bouncer bouncer = item.GetComponent<Bouncer>();
-            int minX = (int)(center.x - halfHeight);
-            int maxX = (int)(center.x + halfHeight - 2);
-            int minY = (int)(center.y - halfHeight - 2);
-            int maxY = (int)(center.y + halfHeight);
+            
             if (itemTransform.position.x == minX)
             {
-                // itemTransform.localEulerAngles = new Vector3(0, 0, -90f);
                 bouncer.BouncingDir = Vector2.right;
             }
             if (itemTransform.position.x == maxX)
             {
-                // itemTransform.localEulerAngles = new Vector3(0, 0, 90f);
                 bouncer.BouncingDir = Vector2.left;
             }
             if (itemTransform.position.y == maxY)
             {
-                // itemTransform.localEulerAngles = new Vector3(0, 0, 180f);
                 bouncer.BouncingDir = Vector2.down;
             }
             if (itemTransform.position.y == minY)
             {
-                // itemTransform.localEulerAngles = new Vector3(0, 0, 180f);
                 bouncer.BouncingDir = Vector2.up;
             }
         }
+
+        // 경계선 밖에 콜라이더를 배치해서 밖으로 빠져나가지 않게 하기
+        GameObject borders = Instantiate(bossBorders);
+        borders.transform.GetChild(0).transform.position = new Vector2(center.x, maxY);
+        borders.transform.GetChild(1).transform.position = new Vector2(center.x, minY);
+        borders.transform.GetChild(2).transform.position = new Vector2(minX, center.y);
+        borders.transform.GetChild(3).transform.position = new Vector2(maxX, center.y);
     }
 }
