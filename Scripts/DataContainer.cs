@@ -30,6 +30,7 @@ public class PlayerUpgrades
 public class DataContainer : ScriptableObject
 {
     public int coins;
+    public int gems;
     public List<PlayerUpgrades> upgrades;
     public List<bool> stageCompletion;
     
