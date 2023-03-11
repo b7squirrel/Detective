@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 914172830528678927}
   - component: {fileID: 914172830528678928}
+  - component: {fileID: 1577855224444947385}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -70,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -556371709
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 992142193, guid: 45312cf36560e2b4590a4c637867a9e1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -84,6 +85,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1577855224444947385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914172830528678926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.3, y: -0.17}
 --- !u!1 &914172831033088714
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,6 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca9dc0c649d958546abe5c3e355c6e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <BouncingDir>k__BackingField: {x: 0, y: 0}
   bouncingForce: 15
   bouncingTime: 0.2
 --- !u!95 &914172831033088715

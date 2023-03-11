@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Bouncer : MonoBehaviour
 {
-    public Vector2 BouncingDir { get; set; }
+    [field : SerializeField] public Vector2 BouncingDir { get; set; }
     [SerializeField] float bouncingForce;
     [SerializeField] float bouncingTime;
     Animator anim;

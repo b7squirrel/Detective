@@ -155,7 +155,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public void TriggerWallGenerator()
     {
-        if(generateWalls == null)
+        if (generateWalls == null)
             return;
         generateWalls.GenWalls();
     }

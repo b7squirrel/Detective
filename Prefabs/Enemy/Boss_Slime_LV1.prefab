@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 7200239369209826793}
   - component: {fileID: 5294316221282124509}
   - component: {fileID: 271258211328832522}
+  - component: {fileID: 588927070903608866}
   m_Layer: 6
   m_Name: Boss_Slime_LV1
   m_TagString: Enemy
@@ -388,6 +389,19 @@ MonoBehaviour:
   shootAnticSFX: {fileID: 8300000, guid: a1af138c927954c44a2210880a230bfb, type: 3}
   jumpupSFX: {fileID: 8300000, guid: 73ebcf72e51b0b74c8f039502ab32a96, type: 3}
   fallDownSFX: {fileID: 8300000, guid: 65c88103c5dfa4d4a942bfc6a70e604c, type: 3}
+--- !u!114 &588927070903608866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7200239369209826798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79605bcd6385dfc4abd13a96ace1674b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brickPrefab: {fileID: 914172831033088714, guid: f33f1628a5cd8c84bb10351e49f9e0de, type: 3}
 --- !u!1 &7694664301936465618
 GameObject:
   m_ObjectHideFlags: 0
