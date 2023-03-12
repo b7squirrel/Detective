@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3065ae417acb77a438a053f711052e9a, type: 3}
-  m_Name: Stage Data Temp
+  m_Script: {fileID: 11500000, guid: 608ab2ae7154af4429ee6ffc8873925f, type: 3}
+  m_Name: Slime LV4
   m_EditorClassIdentifier: 
-  stageEvents:
-  - eventType: 0
-    time: 1
-    message: 
-    enemyToSpawn: {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
-    objectToSpawn: {fileID: 0}
-    count: 25
+  Name: Slime LV4
+  animController: {fileID: 22100000, guid: 704b18454902bd74b86cb0a9cb9e0370, type: 2}
+  stats:
+    hp: 300
+    speed: 10
+    damage: 6
+    experience_reward: 500
