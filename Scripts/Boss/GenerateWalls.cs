@@ -8,7 +8,7 @@ public class GenerateWalls : MonoBehaviour
     [SerializeField] GameObject bossBorders;
     List<GameObject> bricks;
 
-    public void GenWalls()
+    public void GenWalls(int halfBouncerNumber)
     {
         if (bricks == null)
         {
@@ -21,12 +21,26 @@ public class GenerateWalls : MonoBehaviour
         float halfWidth = Camera.main.aspect * halfHeight;
 
         // 핸드폰의 세로축 길이에 맞춰서 정사각형을 만들기
-        for (int x = (int)(center.x - halfHeight); x < (int)(center.x + halfHeight); x += 2)
+        // for (int x = (int)(center.x - halfHeight); x < (int)(center.x + halfHeight); x += 2)
+        // {
+        //     for (int y = (int)(center.y - halfHeight - 2); y < (int)(center.y + halfHeight + 2); y += 2)
+        //     {
+        //         // 가장자리만 검색
+        //         if (x == (int)(center.x - halfHeight) || x == (int)(center.x + halfHeight) || y == (int)(center.y - halfHeight) || y == (int)(center.y + halfHeight))
+        //         {
+        //             GameObject b = Instantiate(brickPrefab, new Vector2(x, y), Quaternion.identity);
+        //             bricks.Add(b);
+        //         }
+        //     }
+        // }
+
+        Vector2Int playerPos = new Vector2Int((int)center.x, (int)center.y);
+        for (int x = playerPos.x - halfBouncerNumber; x < playerPos.x + halfBouncerNumber + 1; x += 2)
         {
-            for (int y = (int)(center.y - halfHeight - 2); y < (int)(center.y + halfHeight + 2); y += 2)
+            for (int y = playerPos.y - halfBouncerNumber; y < playerPos.y + halfBouncerNumber + 1; y += 2)
             {
                 // 가장자리만 검색
-                if (x == (int)(center.x - halfHeight) || x == (int)(center.x + halfHeight - 2) || y == (int)(center.y - halfHeight - 2) || y == (int)(center.y + halfHeight))
+                if (x == playerPos.x - halfBouncerNumber || x == playerPos.x + halfBouncerNumber || y == playerPos.y - halfBouncerNumber || y == playerPos.y + halfBouncerNumber)
                 {
                     GameObject b = Instantiate(brickPrefab, new Vector2(x, y), Quaternion.identity);
                     bricks.Add(b);
@@ -34,10 +48,10 @@ public class GenerateWalls : MonoBehaviour
             }
         }
 
-        int minX = (int)(center.x - halfHeight);
-        int maxX = (int)(center.x + halfHeight - 2);
-        int minY = (int)(center.y - halfHeight - 2);
-        int maxY = (int)(center.y + halfHeight);
+        int minX = playerPos.x - halfBouncerNumber;
+        int maxX = playerPos.x + halfBouncerNumber;
+        int minY = playerPos.y - halfBouncerNumber;
+        int maxY = playerPos.y + halfBouncerNumber;
 
         foreach (GameObject item in bricks)
         {

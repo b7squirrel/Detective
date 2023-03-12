@@ -19,6 +19,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] GameObject dustEffect;
     GameObject dust;
     [SerializeField] GameObject teleportEffect;
+    [SerializeField] int halfWallBouncerNumber;
     GenerateWalls generateWalls;
     float timer;
 
@@ -157,7 +158,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         if (generateWalls == null)
             return;
-        generateWalls.GenWalls();
+        generateWalls.GenWalls(halfWallBouncerNumber);
     }
     public void SetLayer(string layer)
     {
