@@ -20,20 +20,8 @@ public class GenerateWalls : MonoBehaviour
         float halfHeight = Camera.main.orthographicSize;
         float halfWidth = Camera.main.aspect * halfHeight;
 
-        // 핸드폰의 세로축 길이에 맞춰서 정사각형을 만들기
-        // for (int x = (int)(center.x - halfHeight); x < (int)(center.x + halfHeight); x += 2)
-        // {
-        //     for (int y = (int)(center.y - halfHeight - 2); y < (int)(center.y + halfHeight + 2); y += 2)
-        //     {
-        //         // 가장자리만 검색
-        //         if (x == (int)(center.x - halfHeight) || x == (int)(center.x + halfHeight) || y == (int)(center.y - halfHeight) || y == (int)(center.y + halfHeight))
-        //         {
-        //             GameObject b = Instantiate(brickPrefab, new Vector2(x, y), Quaternion.identity);
-        //             bricks.Add(b);
-        //         }
-        //     }
-        // }
 
+        // 핸드폰의 세로축 길이에 맞춰서 정사각형을 만들기
         Vector2Int playerPos = new Vector2Int((int)center.x, (int)center.y);
         for (int x = playerPos.x - halfBouncerNumber; x < playerPos.x + halfBouncerNumber + 1; x += 2)
         {
@@ -57,7 +45,7 @@ public class GenerateWalls : MonoBehaviour
         {
             Transform itemTransform = item.transform;
             Bouncer bouncer = item.GetComponent<Bouncer>();
-            
+
             if (itemTransform.position.x == minX)
             {
                 bouncer.BouncingDir = Vector2.right;

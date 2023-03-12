@@ -3,6 +3,7 @@ using UnityEngine;
 public class RePosition : MonoBehaviour
 {
     Collider2D col;
+    
     private void Awake()
     {
         col = GetComponent<Collider2D>();
@@ -13,36 +14,34 @@ public class RePosition : MonoBehaviour
         if (!collision.CompareTag("Area"))
             return;
 
-        Vector3 playerPos = GameManager.instance.player.transform.position;
+        Vector3 playerPos = Player.instance.transform.position;
         Vector3 myPos = transform.position;
+        float diffx = Mathf.Abs(playerPos.x - myPos.x);
+        float diffy = Mathf.Abs(playerPos.y - myPos.y);
 
-        float dirX = playerPos.x - myPos.x;
-        float dirY = playerPos.y - myPos.y;
-
-        float diffx = Mathf.Abs(dirX);
-        float diffy = Mathf.Abs(dirY);
-
-        dirX = dirX > 0 ? 1 : -1;
-        dirY = dirY > 0 ? 1 : -1;
+        Vector3 playerDir = Player.instance.InputVec;
+        float dirX = playerDir.x < 0 ? -1 : 1;
+        float dirY = playerDir.y < 0 ? -1 : 1;
 
         switch (transform.tag)
         {
             case "Ground":
                 if (diffx > diffy)
                 {
-                    transform.Translate(Vector2.right * dirX * 40);
+                    transform.Translate(Vector3.right * dirX * 80);
                 }
                 else if (diffx < diffy)
                 {
-                    transform.Translate(Vector2.up * dirY * 40);
+                    transform.Translate(Vector3.up * dirY * 80);
                 }
                 break;
 
             case "Enemy":
                 if (col.enabled)
                 {
-                    Vector3 playerDir = new Vector2(dirX, dirY);
-                    transform.Translate(playerDir * 20 + new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0f));
+                    Enemy enemy = GetComponent<Enemy>();
+                    if(enemy != null) enemy.Timer = 8f; // 너무 멀리 떨어져 버린 후 8초가 지나면 스폰 포인트로 강제 이동시키기 위해서
+                    transform.position += new Vector3(playerDir.x * 40f, playerDir.y * 50f, transform.position.z);
                 }
                 break;
         }

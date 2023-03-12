@@ -20,10 +20,12 @@ public class CameraController : MonoBehaviour
     {
         if (player != null)
         {
-            transform.position = new Vector3(
-                Mathf.Clamp(player.transform.position.x, boxCol.bounds.min.x + halfWidth, boxCol.bounds.max.x - halfWidth),
-                Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y + halfHeight, boxCol.bounds.max.y - halfHeight),
-                transform.position.z);
+            // transform.position = new Vector3(
+            //     Mathf.Clamp(player.transform.position.x, boxCol.bounds.min.x + halfWidth, boxCol.bounds.max.x - halfWidth),
+            //     Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y + halfHeight, boxCol.bounds.max.y - halfHeight),
+            //     transform.position.z);
+
+            transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
         }
     }
     private void OnDrawGizmos() {
