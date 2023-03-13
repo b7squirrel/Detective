@@ -43,7 +43,7 @@ public class TennisBallProjectile : ProjectileBase
             SoundManager.instance.Play(hitSound);
         }
 
-        if (other.gameObject.CompareTag("MainCamera"))
+        if (other.gameObject.CompareTag("MainCamera") || other.gameObject.CompareTag("Wall"))
         {
             // 입사벡터
             Vector2 incomingVector = Direction;
@@ -63,8 +63,9 @@ public class TennisBallProjectile : ProjectileBase
             SoundManager.instance.Play(hitSound);
         }
 
-        if (other.gameObject.CompareTag("Wall"))
+        if (other.gameObject.CompareTag("Props"))
         {
+            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position);
             // 입사벡터
             Vector2 incomingVector = Direction;
             incomingVector = incomingVector.normalized;
