@@ -43,7 +43,27 @@ public class TennisBallProjectile : ProjectileBase
             SoundManager.instance.Play(hitSound);
         }
 
-        if (other.gameObject.CompareTag("MainCamera") || other.gameObject.CompareTag("Wall") )
+        if (other.gameObject.CompareTag("MainCamera"))
+        {
+            // 입사벡터
+            Vector2 incomingVector = Direction;
+            incomingVector = incomingVector.normalized;
+
+            // 접선벡터
+            Vector2 normalVector = other.contacts[0].normal;
+
+            // 반사벡터
+            Vector2 deflectionVector = Vector2.Reflect(incomingVector, normalVector);
+            deflectionVector = deflectionVector.normalized;
+
+            Direction = deflectionVector;
+            rb.velocity = Vector2.zero;
+
+            anim.SetTrigger("Hit");
+            SoundManager.instance.Play(hitSound);
+        }
+
+        if (other.gameObject.CompareTag("Wall"))
         {
             // 입사벡터
             Vector2 incomingVector = Direction;
