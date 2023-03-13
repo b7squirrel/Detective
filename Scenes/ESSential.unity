@@ -4407,7 +4407,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 21.1
+  orthographic size: 17.619047
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4487,6 +4487,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095eeb656b1dfff428156d43bca783ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  screenEdgeReference: {fileID: 1471694719}
+  debuggingDot: {fileID: 3346168019641469629, guid: a18d6881fa492ac44b1f7c71440de18e, type: 3}
 --- !u!68 &519420036
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -10794,7 +10796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b594c7764d6fa459957dc1967521e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1000
+  maxHealth: 1500
   currentHealth: 0
   <Armor>k__BackingField: 0
   <HpRegenerationRate>k__BackingField: 3
@@ -12287,6 +12289,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1470290332}
   m_CullTransparentMesh: 1
+--- !u!1 &1471694718
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1471694719}
+  m_Layer: 5
+  m_Name: Screen Edge Refernece
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1471694719
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471694718}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1777363794}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -100}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!4 &1474181141 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7070234756646545296, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
@@ -15559,7 +15597,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1471694719}
   m_Father: {fileID: 1933615683}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18579,6 +18618,7 @@ GameObject:
   - component: {fileID: 3118075186046016213}
   - component: {fileID: 3118075186046016210}
   - component: {fileID: 3118075186046016220}
+  - component: {fileID: 3118075186046016221}
   m_Layer: 0
   m_Name: Egg
   m_TagString: Untagged
@@ -18599,3 +18639,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.3, y: -0.17}
+--- !u!114 &3118075186046016221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3118075186046016219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c9b751aa4cfe7428ade22536fa0f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenCollision:
+    serializedVersion: 2
+    m_Bits: 1024
+  indicatorPrefab: {fileID: 7141555531057633907, guid: 3477d7e6cb348f844971662a0b9ba746, type: 3}
+  onSpotSFX: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}

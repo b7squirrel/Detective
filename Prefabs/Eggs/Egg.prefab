@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3118075186976557807}
   - component: {fileID: 3118075186976557800}
   - component: {fileID: 8334090507763801436}
+  - component: {fileID: 8815776592040008053}
   m_Layer: 0
   m_Name: Egg
   m_TagString: Untagged
@@ -177,3 +178,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.3, y: -0.17}
+--- !u!114 &8815776592040008053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3118075186976557793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c9b751aa4cfe7428ade22536fa0f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenCollision:
+    serializedVersion: 2
+    m_Bits: 1024
+  indicatorPrefab: {fileID: 7141555531057633907, guid: 3477d7e6cb348f844971662a0b9ba746, type: 3}
+  onSpotSFX: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}
