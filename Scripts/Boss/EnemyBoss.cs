@@ -21,7 +21,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] GameObject teleportEffect;
     [SerializeField] int halfWallBouncerNumber;
     GenerateWalls generateWalls;
-    float timer;
+    float timer; // shoot coolTime counter
 
     [SerializeField] Collider2D col;
 
@@ -136,7 +136,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         base.TakeDamage(damage, knockBackChance, target);
         bossHealthBar.UpdateBossHealthSlider(Stats.hp);
     }
-    protected override void Die()
+    public override void Die()
     {
         GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
         GameManager.instance.GetComponent<WinStage>().OpenPanel();                                                                           

@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public float maxGameTime = 20f;
 
     [SerializeField] Camera currentCamera;
-
+    public Collider2D cameraBoundary;
 
     #region Unity CallBack Functions
     private void Awake()
@@ -59,7 +59,6 @@ public class GameManager : MonoBehaviour
         }
     }
     #endregion
-
 
     public void ShakeCam(float _duration, float _magnitude)
     {

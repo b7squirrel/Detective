@@ -17,28 +17,30 @@ public class EnemyStats
         this.speed = stats.speed;
         this.damage = stats.damage;
         this.speed = stats.speed;
-        this.experience_reward= stats.experience_reward;
+        this.experience_reward = stats.experience_reward;
     }
 }
 
 public class Enemy : EnemyBase
 {
-    public int ExperienceReward {get; private set;}
+    public int ExperienceReward { get; private set; }
     bool isLive;
 
-    public bool IsFlying{get; set;}
-    public Vector2 LandingTarget{get; set;}
+    public bool IsFlying { get; set; }
+    public Vector2 LandingTarget { get; set; }
     [SerializeField] float flyingSpeed;
 
-    [HideInInspector] public float Timer {get; set;}// 플레이어의 Area바깥에서 머무는 시간을 체크
-    bool isRepositioned; // 재배치 되었음에도 불구하고 플레이어로부터 너무 멀리 떨어져 버렸는지.
+    [SerializeField] public float Timer { get; set; }// 플레이어의 Area바깥에서 머무는 시간을 체크
+    [SerializeField] LayerMask playerLayer;
+    [SerializeField] bool isDetectingPlayer;
     protected override void OnEnable()
     {
         base.OnEnable();
         isLive = true;
         SetWalking(); // 날으는 상태로 소환되지 않도록
-        isRepositioned = false;
-        Timer = 0f;
+        Timer = 8f;
+        isDetectingPlayer = false;
+
     }
     void FixedUpdate()
     {
@@ -57,12 +59,22 @@ public class Enemy : EnemyBase
             return;
         Flip();
 
-        if(Timer > 0)
+        if (Timer > 0)
         {
+            isDetectingPlayer = false;
+
+            Collider2D player = Physics2D.OverlapCircle(transform.position, 20f, playerLayer);
+            if (player != null)
+            {
+                isDetectingPlayer = true;
+                Timer = 8f;
+                return;
+            }
+
+            // 플레이어가 주변에 감지되지 않으면서 아직 타이머가 0이 아닐 떄
             Timer -= Time.deltaTime;
-            isRepositioned = true;
         }
-        else if(isRepositioned)
+        else
         {
             Die();
         }
@@ -90,7 +102,7 @@ public class Enemy : EnemyBase
 
     public override void ApplyMovement()
     {
-        if(IsFlying)
+        if (IsFlying)
         {
             transform.position = Vector2.MoveTowards(transform.position, LandingTarget, flyingSpeed * Time.deltaTime);
             if (Vector2.Distance((Vector2)transform.position, LandingTarget) < 0.1f)

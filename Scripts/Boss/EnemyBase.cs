@@ -71,7 +71,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return;
         }
 
-        
         Vector2 dirVec = Target.position - rb.position;
         Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
@@ -126,7 +125,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
         KnockBack();
     }
-    protected virtual void Die()
+    public virtual void Die()
     {
         //target.GetComponent<Level>().AddExperience(experienceReward);
         GetComponent<DropOnDestroy>().CheckDrop();
@@ -170,7 +169,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         sr.material = initialMat;
 
         IsKnockBack = false;
-        
     }
     #endregion
 }

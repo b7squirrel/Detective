@@ -6,10 +6,12 @@ public class GenerateWalls : MonoBehaviour
 {
     [SerializeField] GameObject brickPrefab;
     [SerializeField] GameObject bossBorders;
+    [SerializeField] LayerMask enemyLayer;
     List<GameObject> bricks;
 
     public void GenWalls(int halfBouncerNumber)
     {
+        
         if (bricks == null)
         {
             bricks = new List<GameObject>();
@@ -64,11 +66,45 @@ public class GenerateWalls : MonoBehaviour
             }
         }
 
+        // gameManager에 등록되어 있는 camera boundary에 접근해서 벽의 크기와 같게 만들어 줌
+        Collider2D boundary = GameManager.instance.cameraBoundary;
+        // boundary.transform.localScale = Vector3.one * 2f * halfHeight;
+        boundary.transform.localScale = new Vector3(2f * halfHeight, 5f, 1f);
+        boundary.transform.position = (Vector2)Player.instance.transform.position;
+
         // 경계선 밖에 콜라이더를 배치해서 밖으로 빠져나가지 않게 하기
         GameObject borders = Instantiate(bossBorders);
         borders.transform.GetChild(0).transform.position = new Vector2(center.x, maxY);
         borders.transform.GetChild(1).transform.position = new Vector2(center.x, minY);
         borders.transform.GetChild(2).transform.position = new Vector2(minX, center.y);
         borders.transform.GetChild(3).transform.position = new Vector2(maxX, center.y);
+
+        // 보스가 등장 할 때 보스벽의 바깥쪽에 있는 적들은 모두 DIe()처리
+        // 모든 적 검색해서 allE에 담음
+        Collider2D[] enemiesInScene = Physics2D.OverlapBoxAll(playerPos, new Vector2(200f, 200f), 0f, enemyLayer);
+        List<EnemyBase> allEnemies = new List<EnemyBase>();
+        for (int i = 0; i < enemiesInScene.Length; i++)
+        {
+            EnemyBase e = enemiesInScene[i].transform.GetComponent<EnemyBase>();
+            if (e == null)
+                continue;
+            allEnemies.Add(e);
+        }
+
+        // 벽 안의 적 검색해서 allE에서 빼냄
+        Collider2D[] enemiesInWall = 
+                Physics2D.OverlapBoxAll(playerPos, new Vector2(2 * halfBouncerNumber, 2 * halfBouncerNumber), 0f, enemyLayer);
+        
+        for (int i = 0; i < enemiesInWall.Length; i++)
+        {
+            EnemyBase e = enemiesInWall[i].transform.GetComponent<EnemyBase>();
+            if (e == null)
+                continue;
+            allEnemies.Remove(e); // 벽 밖의 적들만 남게된다
+        }
+        foreach (var item in allEnemies)
+        {
+            item.Die();
+        }
     }
 }
