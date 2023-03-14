@@ -28,5 +28,6 @@ public class StageEvent
 [CreateAssetMenu]
 public class StageData : ScriptableObject
 {
+    public AudioClip stageMusic;
     public List<StageEvent> stageEvents;
 }

@@ -5034,7 +5034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1ec6b5ba4f87b0468757b37e623cef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicOnStart: {fileID: 8300000, guid: 9fc1525dd1093534b885e6196a806fca, type: 3}
+  MusicOnStart: {fileID: 0}
   timeToSwitch: 2
 --- !u!82 &570391946
 AudioSource:
@@ -10652,6 +10652,7 @@ MonoBehaviour:
   sr: {fileID: 1732969641}
   <FacingDir>k__BackingField: 1
   joy: {fileID: 1360412901}
+  isJoystick: 1
 --- !u!114 &1277960113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18521,7 +18522,7 @@ MonoBehaviour:
   whiteFlashDuration: 0
   acc: 5
   upgradeToPick:
-  - {fileID: 11400000, guid: 66ed483b4bfd29243bd38c55ae767291, type: 2}
+  - {fileID: 11400000, guid: 5d6217358e5570e46a3d56823a332495, type: 2}
 --- !u!114 &3118075186046016213
 MonoBehaviour:
   m_ObjectHideFlags: 0

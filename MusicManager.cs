@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
-    [SerializeField] AudioClip musicOnStart;
+    public AudioClip MusicOnStart;
 
     AudioSource audioSource;
     AudioClip switchTo;
@@ -19,7 +19,7 @@ public class MusicManager : MonoBehaviour
 
     private void Start()
     {
-        Play(musicOnStart, true);
+        Play(MusicOnStart, true);
     }
 
     public void Play(AudioClip music, bool interrupt = false)

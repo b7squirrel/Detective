@@ -17,6 +17,7 @@ public class Player : MonoBehaviour, IBouncable
 
     [Header("Joystic")]
     public FloatingJoystick joy;
+    [SerializeField] bool isJoystick;
 
     bool isBouncing;
     Vector2 bouncingForce;
@@ -60,7 +61,10 @@ public class Player : MonoBehaviour, IBouncable
         if (bouncingCoroutine != null)
             StopCoroutine(bouncingCoroutine);
 
-        InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
+        if (isJoystick)
+        {
+            InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
+        }
         Vector2 nextVec = InputVec * character.MoveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
     }

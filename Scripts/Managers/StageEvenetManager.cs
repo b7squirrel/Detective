@@ -14,10 +14,14 @@ public class StageEvenetManager : MonoBehaviour
     int eventIndexer;
     PlayerWinManager winManager;
 
+    MusicManager musicManager;
+
     void Awake()
     {
         stageTime = GetComponent<StageTime>();
         spawner = FindObjectOfType<Spawner>();
+        musicManager = FindObjectOfType<MusicManager>();
+        musicManager.MusicOnStart = stageData.stageMusic; // Mucic manager.Start에서 Play하므로 this.awake에서 초기화 
     }
 
     void Start()
