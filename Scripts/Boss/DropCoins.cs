@@ -10,7 +10,7 @@ public class DropCoins : MonoBehaviour
     float startAngle = 0f, endAngle = 360f;
     Vector2 bulletMoveDirection;
 
-    void Start()
+    public void Init()
     {
         StartCoroutine(FireCo());
     }
@@ -35,7 +35,7 @@ public class DropCoins : MonoBehaviour
     }
     IEnumerator FireCo()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.2f);
         Fire();
     }
 }

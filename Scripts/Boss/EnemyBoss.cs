@@ -25,6 +25,7 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     [SerializeField] Collider2D col;
     [SerializeField] GameObject rewards;
+    [SerializeField] GameObject defeatedBossPrefab;
 
     public Coroutine shootCoroutine;
     bool wallCreated;
@@ -139,10 +140,14 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public override void Die()
     {
-        GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
-        GameManager.instance.GetComponent<WinStage>().OpenPanel();                                                                           
-
+        GameObject body = Instantiate(defeatedBossPrefab,transform.position, transform.rotation);
+        GameObject reward = Instantiate(rewards, transform.position, Quaternion.identity);
+        reward.GetComponent<DropCoins>().Init();
         GetComponent<DropOnDestroy>().CheckDrop();
+
+        // GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
+        // GameManager.instance.GetComponent<WinStage>().OpenPanel();                                                                           
+
         gameObject.SetActive(false);
     }
 

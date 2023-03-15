@@ -13,4 +13,10 @@ MonoBehaviour:
   m_Name: Stage Data Temp
   m_EditorClassIdentifier: 
   stageMusic: {fileID: 0}
-  stageEvents: []
+  stageEvents:
+  - eventType: 2
+    time: 1
+    message: 
+    enemyToSpawn: {fileID: 11400000, guid: e9f90cbfc83163b438ea3d0e73bd4332, type: 2}
+    objectToSpawn: {fileID: 0}
+    count: 1
