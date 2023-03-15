@@ -24,6 +24,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     float timer; // shoot coolTime counter
 
     [SerializeField] Collider2D col;
+    [SerializeField] GameObject rewards;
 
     public Coroutine shootCoroutine;
     bool wallCreated;
