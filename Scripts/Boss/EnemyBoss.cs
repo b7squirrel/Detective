@@ -41,6 +41,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] AudioClip shootAnticSFX;
     [SerializeField] AudioClip jumpupSFX;
     [SerializeField] AudioClip fallDownSFX;
+    [SerializeField] AudioClip dieSFX;
 
     public void Init(EnemyData data)
     {
@@ -140,15 +141,17 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public override void Die()
     {
-        GameObject body = Instantiate(defeatedBossPrefab,transform.position, transform.rotation);
+        
         GameObject reward = Instantiate(rewards, transform.position, Quaternion.identity);
         reward.GetComponent<DropCoins>().Init();
         GetComponent<DropOnDestroy>().CheckDrop();
 
-        // GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
-        // GameManager.instance.GetComponent<WinStage>().OpenPanel();                                                                           
+        SoundManager.instance.Play(dieSFX);
+        anim.SetTrigger("Die");
 
+        Instantiate(defeatedBossPrefab,transform.position, transform.rotation);
         gameObject.SetActive(false);
+                                                                                  
     }
 
     //animation events

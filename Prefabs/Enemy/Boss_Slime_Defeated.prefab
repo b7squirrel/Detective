@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 3057631842700324658}
   - component: {fileID: 7029333621210336778}
   - component: {fileID: 4341959714499879758}
+  - component: {fileID: 2807199921248774646}
+  - component: {fileID: 8448406123450849019}
+  - component: {fileID: 1215942250466802135}
   m_Layer: 0
   m_Name: Boss_Slime_Defeated
   m_TagString: Untagged
@@ -102,6 +105,51 @@ CapsuleCollider2D:
   m_Offset: {x: -0.68, y: 1.84}
   m_Size: {x: 7.55, y: 4}
   m_Direction: 1
+--- !u!95 &2807199921248774646
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432597800540744455}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 43b5f7e8d0bec514fa770e84b39196ca, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8448406123450849019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432597800540744455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.3, y: -0.17}
+--- !u!114 &1215942250466802135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432597800540744455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b824849d48c14b64a955ab2edcde704b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2765205544507570892
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,6 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5438113335555787711}
   - component: {fileID: 8630625443797579315}
+  - component: {fileID: 5259820951363120826}
   m_Layer: 0
   m_Name: Boss_Slime_LV1_Crown
   m_TagString: Untagged
@@ -186,3 +235,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5259820951363120826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2765205544507570892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.3, y: -0.17}

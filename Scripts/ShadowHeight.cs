@@ -99,7 +99,6 @@ public class ShadowHeight : MonoBehaviour
     {
         if (trnsBody.position.y < trnsObject.position.y && !isGrounded)
         {
-            Debug.Log("HERE");
             trnsBody.position = trnsObject.position;
             isGrounded = true;
             GroundHit();

@@ -19,4 +19,14 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale= 1;
     }
+    public void SetTimeScale(float timeScale, float waitingTime)
+    {
+        StartCoroutine(SlowMotion(timeScale, waitingTime));
+    }
+    IEnumerator SlowMotion(float desiredTimeScale, float waitingTime)
+    {
+        Time.timeScale = desiredTimeScale;
+        yield return new WaitForSecondsRealtime(waitingTime);
+        UnPauseGame();
+    }
 }
