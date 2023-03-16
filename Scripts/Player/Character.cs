@@ -96,6 +96,10 @@ public class Character : MonoBehaviour
     {
         if (GameManager.instance.IsPlayerDead)
             return;
+            
+        // 슬로우 모션 상태에서 TakeDamage가 일어나지 않게 하기
+        if (BossDieManager.instance.IsBossDead) 
+            return;
         ApplyArmor(ref damage);
 
         SoundManager.instance.PlaySingle(hurtSound);

@@ -4,6 +4,7 @@ using UnityEngine;
 public class BossDieManager : MonoBehaviour
 {
     public static BossDieManager instance;
+    public bool IsBossDead { get; private set; }
     GameObject deadBody;
     int amountOfCoins;
     Animator anim;
@@ -12,9 +13,11 @@ public class BossDieManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+        IsBossDead = false;
     }
     public void Init(GameObject deadBody, Transform boss, int amountOfCoins)
     {
+        IsBossDead = true;
         this.deadBody = Instantiate(deadBody, boss.position, boss.rotation);
         anim = this.deadBody.GetComponent<Animator>();
         this.amountOfCoins = amountOfCoins;
