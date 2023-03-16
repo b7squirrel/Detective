@@ -150,6 +150,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         anim.SetTrigger("Die");
 
         Instantiate(defeatedBossPrefab,transform.position, transform.rotation);
+        MusicManager.instance.Stop();
+        GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
         gameObject.SetActive(false);
                                                                                   
     }

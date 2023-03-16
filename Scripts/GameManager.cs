@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Camera currentCamera;
     public Collider2D cameraBoundary;
 
+    public RectTransform CoinUIPosition;
+
     #region Unity CallBack Functions
     private void Awake()
     {

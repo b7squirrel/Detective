@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
+    public static MusicManager instance;
     public AudioClip MusicOnStart;
 
     AudioSource audioSource;
@@ -14,6 +15,7 @@ public class MusicManager : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -36,6 +38,10 @@ public class MusicManager : MonoBehaviour
             switchTo = music;
             StartCoroutine(SmoothSwitchMusic());
         }
+    }
+    public void Stop()
+    {
+        audioSource.Stop();
     }
 
     IEnumerator SmoothSwitchMusic()

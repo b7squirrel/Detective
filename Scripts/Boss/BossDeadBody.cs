@@ -21,7 +21,11 @@ public class BossDeadBody : MonoBehaviour
         yield return new WaitForSecondsRealtime(waitingTime);
         FindObjectOfType<PauseManager>().UnPauseGame();
 
-        // GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
-        // GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
+        StartCoroutine(WinMessage());
+    }
+    IEnumerator WinMessage()
+    {
+        yield return new WaitForSeconds(5f);
+        GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
     }
 }

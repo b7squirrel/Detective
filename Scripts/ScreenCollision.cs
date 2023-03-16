@@ -35,7 +35,7 @@ public class ScreenCollision : MonoBehaviour
         List<Vector2> edges = new List<Vector2>();
         edges.Add(Camera.main.ScreenToWorldPoint(Vector2.zero));
         edges.Add(Camera.main.ScreenToWorldPoint(new Vector2(Screen.width,0)));
-        edges.Add(Camera.main.ScreenToWorldPoint(new Vector2(Screen.width,Screen.height - offsetY)));
+        edges.Add(Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height - offsetY)));
         edges.Add(Camera.main.ScreenToWorldPoint(new Vector2(0,Screen.height - offsetY)));
         edges.Add(Camera.main.ScreenToWorldPoint(Vector2.zero));
         edgeCollder.SetPoints(edges);
