@@ -5,9 +5,9 @@ public class ShadowHeight : MonoBehaviour
 {
     [SerializeField] Vector2 offset = new Vector2(.3f, -.17f);
     [SerializeField] int bouncingNumbers;
-    [SerializeField] GameObject moveToUIPrefab;
     public bool IsDone { get; private set; }
     public UnityEvent onGroundHitEvent;
+
     Transform trnsObject; // 부모 물체
     Transform trnsBody; // 공중에 뜨는 스프라이트 오브젝트
     Transform trnsShadow; // 그림자 스프라이트 오브젝트
@@ -29,9 +29,7 @@ public class ShadowHeight : MonoBehaviour
         UpdatePosition();
         UpdateShadow();
         CheckGroundHit();
-        MoveToUI();
     }
-    
 
     public void Initialize(Vector2 groundVelocity, float verticalVelocity)
     {
@@ -95,14 +93,6 @@ public class ShadowHeight : MonoBehaviour
 
             sprRndBody.sortingLayerName = "FloatingOver";
             sprRndshadow.sortingLayerName = "ShadowOver";
-        }
-    }
-    void MoveToUI()
-    {
-        if(IsDone)
-        {
-            Instantiate(moveToUIPrefab, transform.position, Quaternion.identity);
-            Destroy(gameObject);
         }
     }
 

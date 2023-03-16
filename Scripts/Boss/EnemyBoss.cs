@@ -141,7 +141,6 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public override void Die()
     {
-        
         GameObject reward = Instantiate(rewards, transform.position, Quaternion.identity);
         reward.GetComponent<DropCoins>().Init();
         GetComponent<DropOnDestroy>().CheckDrop();
@@ -152,6 +151,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         Instantiate(defeatedBossPrefab,transform.position, transform.rotation);
         MusicManager.instance.Stop();
         GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
+        
+        
         gameObject.SetActive(false);
                                                                                   
     }

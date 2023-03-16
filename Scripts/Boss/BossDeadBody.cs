@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BossDeadBody : MonoBehaviour
 {
+    [SerializeField] AudioClip crownDropSFX;
+    [SerializeField] AudioClip squelchSFX;
+    [SerializeField] AudioClip squeackSFX;
     Animator anim;
     void OnEnable()
     {
@@ -15,11 +18,10 @@ public class BossDeadBody : MonoBehaviour
     {
         Time.timeScale = desiredTimeScale;
         yield return new WaitForSecondsRealtime(waitingTime);
-        Time.timeScale = .5f;
-        anim.SetTrigger("Die");
-
-        yield return new WaitForSecondsRealtime(waitingTime);
         FindObjectOfType<PauseManager>().UnPauseGame();
+        anim.SetTrigger("Die");
+        BossDieManager bossDieManager = new BossDieManager();
+        bossDieManager.RemoveAllEnemies();
 
         StartCoroutine(WinMessage());
     }
@@ -27,5 +29,16 @@ public class BossDeadBody : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
+    }
+
+    //animation events
+    public void PlayCrownDropSFX()
+    {
+        SoundManager.instance.Play(crownDropSFX);
+    }
+    public void PlayerSquelchSFX()
+    {
+        SoundManager.instance.Play(squelchSFX);
+        SoundManager.instance.Play(squeackSFX);
     }
 }

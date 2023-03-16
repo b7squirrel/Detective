@@ -135,6 +135,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
         sr.material = initialMat;
         gameObject.SetActive(false);
     }
+    public virtual void DieWithoutDrop()
+    {
+        if (whiteFlashCoroutine != null)
+            StopCoroutine(whiteFlashCoroutine);
+
+        sr.material = initialMat;
+        gameObject.SetActive(false);
+    }
 
     protected virtual void KnockBack()
     {
