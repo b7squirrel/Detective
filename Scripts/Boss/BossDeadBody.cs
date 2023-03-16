@@ -11,24 +11,6 @@ public class BossDeadBody : MonoBehaviour
     void OnEnable()
     {
         anim = GetComponent<Animator>();
-        StartCoroutine(DieEvent(.1f, 2f));
-    }
-
-    IEnumerator DieEvent(float desiredTimeScale, float waitingTime)
-    {
-        Time.timeScale = desiredTimeScale;
-        yield return new WaitForSecondsRealtime(waitingTime);
-        FindObjectOfType<PauseManager>().UnPauseGame();
-        anim.SetTrigger("Die");
-        BossDieManager bossDieManager = new BossDieManager();
-        bossDieManager.RemoveAllEnemies();
-
-        StartCoroutine(WinMessage());
-    }
-    IEnumerator WinMessage()
-    {
-        yield return new WaitForSeconds(5f);
-        GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
     }
 
     //animation events

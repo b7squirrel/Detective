@@ -65,7 +65,6 @@ public class Indicator : MonoBehaviour
     {
         anim.SetTrigger("onSpot");
         yield return new WaitForSeconds(.25f); // indicator on spot 애니메이션의 길이만큼
-        Debug.Log("Test");
         indicator.SetActive(false);
         SoundManager.instance.Play(onSpotSFX);
     }

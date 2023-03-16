@@ -6,12 +6,15 @@ public class DropCoins : MonoBehaviour
 {
     [SerializeField] int bulletsAmount;
     [SerializeField] GameObject bulletPrefab;
-    [SerializeField] float dropForce; 
+    [SerializeField] float dropForce = 10f; 
     float startAngle = 0f, endAngle = 360f;
     Vector2 bulletMoveDirection;
+    Vector3 initialPosition;
 
-    public void Init()
+    public void Init(int numberOfCoins, Vector2 pos)
     {
+        bulletsAmount = numberOfCoins;
+        initialPosition = pos;
         StartCoroutine(FireCo());
     }
     void Fire()
@@ -21,13 +24,13 @@ public class DropCoins : MonoBehaviour
 
         for (int i = 0; i < bulletsAmount; i++)
         {
-            float bulDirX = transform.position.x + Mathf.Sin((angle * Mathf.PI) / 180f);
-            float bulDirY = transform.position.y + Mathf.Cos((angle * Mathf.PI) / 180f);
+            float bulDirX = initialPosition.x + Mathf.Sin((angle * Mathf.PI) / 180f);
+            float bulDirY = initialPosition.y + Mathf.Cos((angle * Mathf.PI) / 180f);
 
             Vector3 bulMoveVector = new Vector3(bulDirX, bulDirY, 0f);
-            Vector2 bulDir = (bulMoveVector - transform.position).normalized;
+            Vector2 bulDir = (bulMoveVector - initialPosition).normalized;
 
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            GameObject bullet = Instantiate(bulletPrefab, initialPosition, Quaternion.identity);
             bullet.GetComponent<ShadowHeight>().Initialize(bulDir * dropForce, 50f);
 
             angle += angleStep;

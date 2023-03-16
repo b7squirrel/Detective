@@ -24,8 +24,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     float timer; // shoot coolTime counter
 
     [SerializeField] Collider2D col;
-    [SerializeField] GameObject rewards;
-    [SerializeField] GameObject defeatedBossPrefab;
+    [SerializeField] GameObject deadBody;
 
     public Coroutine shootCoroutine;
     bool wallCreated;
@@ -141,20 +140,13 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public override void Die()
     {
-        GameObject reward = Instantiate(rewards, transform.position, Quaternion.identity);
-        reward.GetComponent<DropCoins>().Init();
         GetComponent<DropOnDestroy>().CheckDrop();
 
         SoundManager.instance.Play(dieSFX);
         anim.SetTrigger("Die");
 
-        Instantiate(defeatedBossPrefab,transform.position, transform.rotation);
-        MusicManager.instance.Stop();
-        GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
-        
-        
+        BossDieManager.instance.Init(deadBody, transform, 25);
         gameObject.SetActive(false);
-                                                                                  
     }
 
     //animation events
