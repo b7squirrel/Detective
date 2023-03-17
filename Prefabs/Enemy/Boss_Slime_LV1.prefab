@@ -361,6 +361,7 @@ MonoBehaviour:
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   <moveSpeedInAir>k__BackingField: 16
+  <IsInAir>k__BackingField: 0
   projectiles:
   - {fileID: 11400000, guid: 90f06bf610826bf448080ea909f77b4d, type: 2}
   - {fileID: 11400000, guid: 41e40d421b77bbc4282b92af34e4c6c0, type: 2}
@@ -369,8 +370,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
   - {fileID: 8300000, guid: b2847e7a689436843802ca6ca60536fb, type: 3}
   - {fileID: 8300000, guid: 220425e348b6f454f94046ff3c09f704, type: 3}
-  numberOfProjectile: 10
-  maxProjectile: 120
+  numberOfProjectile: 2
+  maxProjectile: 10
   timeToAttack: 5
   ShootPoint: {fileID: 487513323129266538}
   dustPoint: {fileID: 1199690674249790336}

@@ -7,7 +7,9 @@ using System;
 public class EnemyBoss : EnemyBase, Idamageable
 {
     Spawner spawner;
-    [field : SerializeField] public float moveSpeedInAir {get; private set;}
+    [field: SerializeField] public float moveSpeedInAir { get; private set; }
+    [field: SerializeField] public bool IsInAir { get; set; }
+
     [SerializeField] EnemyData[] projectiles;
     [SerializeField] AudioClip[] projectileSFX;
     [SerializeField] int numberOfProjectile;
@@ -25,6 +27,7 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     [SerializeField] Collider2D col;
     [SerializeField] GameObject deadBody;
+
 
     public Coroutine shootCoroutine;
     bool wallCreated;
@@ -135,6 +138,8 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     public override void TakeDamage(int damage, float knockBackChance, Vector2 target)
     {
+        if (IsInAir)
+            return;
         base.TakeDamage(damage, knockBackChance, target);
         bossHealthBar.UpdateBossHealthSlider(Stats.hp);
     }

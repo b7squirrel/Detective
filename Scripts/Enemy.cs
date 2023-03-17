@@ -29,8 +29,9 @@ public class Enemy : EnemyBase
     public bool IsFlying { get; set; }
     public Vector2 LandingTarget { get; set; }
     [SerializeField] float flyingSpeed;
+    float flyingTimeThreshold = 4f;
+    float flyingTimeCounter;
 
-    [SerializeField] public float Timer { get; set; }// 플레이어의 Area바깥에서 머무는 시간을 체크
     [SerializeField] LayerMask playerLayer;
     [SerializeField] bool isDetectingPlayer;
     protected override void OnEnable()
@@ -38,7 +39,6 @@ public class Enemy : EnemyBase
         base.OnEnable();
         isLive = true;
         SetWalking(); // 날으는 상태로 소환되지 않도록
-        Timer = 8f;
         isDetectingPlayer = false;
 
     }
@@ -59,24 +59,23 @@ public class Enemy : EnemyBase
             return;
         Flip();
 
-        if (Timer > 0)
+        isDetectingPlayer = false;
+
+        Collider2D player = Physics2D.OverlapCircle(transform.position, 20f, playerLayer);
+        if (player != null)
         {
-            isDetectingPlayer = false;
-
-            Collider2D player = Physics2D.OverlapCircle(transform.position, 20f, playerLayer);
-            if (player != null)
-            {
-                isDetectingPlayer = true;
-                Timer = 8f;
-                return;
-            }
-
-            // 플레이어가 주변에 감지되지 않으면서 아직 타이머가 0이 아닐 떄
-            Timer -= Time.deltaTime;
+            isDetectingPlayer = true;
+            return;
         }
-        else
+
+        // 벽에 끼거나 해서 walking으로 돌아오지 못하면 빠져나오도록
+        if (flyingTimeCounter > 0 && IsFlying)
         {
-            Die();
+            flyingTimeCounter -= Time.deltaTime;
+        }
+        else if(flyingTimeCounter < 0 && IsFlying)
+        {
+            SetWalking();
         }
     }
 
@@ -92,6 +91,8 @@ public class Enemy : EnemyBase
         LandingTarget = target;
         gameObject.layer = LayerMask.NameToLayer("InAir");
         sr.sortingLayerName = "InAir";
+
+        flyingTimeCounter = flyingTimeThreshold;
     }
     void SetWalking()
     {
@@ -105,7 +106,7 @@ public class Enemy : EnemyBase
         if (IsFlying)
         {
             transform.position = Vector2.MoveTowards(transform.position, LandingTarget, flyingSpeed * Time.deltaTime);
-            if (Vector2.Distance((Vector2)transform.position, LandingTarget) < 0.1f)
+            if (Vector2.Distance((Vector2)transform.position, LandingTarget) < 1f)
             {
                 SetWalking();
             }

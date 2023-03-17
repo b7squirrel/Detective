@@ -32,5 +32,7 @@ public class SlimeBoss_InAirClose : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<EnemyBoss>().SetLayer("Enemy");
+        animator.GetComponent<EnemyBoss>().IsInAir = false;
+        animator.GetComponent<EnemyBoss>().transform.GetComponent<CapsuleCollider2D>().isTrigger = false;
     }
 }

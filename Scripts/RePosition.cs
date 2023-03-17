@@ -40,7 +40,6 @@ public class RePosition : MonoBehaviour
                 if (col.enabled)
                 {
                     Enemy enemy = GetComponent<Enemy>();
-                    if(enemy != null) enemy.Timer = 8f; // 너무 멀리 떨어져 버린 후 8초가 지나면 스폰 포인트로 강제 이동시키기 위해서
                     transform.position += new Vector3(playerDir.x * 40f, playerDir.y * 50f, transform.position.z);
                 }
                 break;
