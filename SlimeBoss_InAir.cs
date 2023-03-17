@@ -10,9 +10,8 @@ public class SlimeBoss_InAir : StateMachineBehaviour
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // collider는 aniamtion event로 껐음
         animator.GetComponent<EnemyBoss>().IsInAir = true;
-        animator.GetComponent<EnemyBoss>().transform.GetComponent<CapsuleCollider2D>().isTrigger = true;
-
         target = Player.instance.transform.position;
         moveSpeed = animator.GetComponent<EnemyBoss>().moveSpeedInAir;
         animator.GetComponent<EnemyBoss>().SetLayer("InAir");

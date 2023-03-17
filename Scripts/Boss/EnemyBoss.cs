@@ -51,7 +51,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         this.Stats = new EnemyStats(data.stats);
         spawner = FindObjectOfType<Spawner>();
         generateWalls = GetComponent<GenerateWalls>();
-        col = GetComponent<Collider2D>();
+        col = GetComponent<CapsuleCollider2D>();
 
         bossHealthBar = FindObjectOfType<BossHealthBar>();
         bossHealthBar.InitHealthBar(Stats.hp, Name);

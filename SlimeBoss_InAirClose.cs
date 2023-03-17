@@ -33,6 +33,6 @@ public class SlimeBoss_InAirClose : StateMachineBehaviour
     {
         animator.GetComponent<EnemyBoss>().SetLayer("Enemy");
         animator.GetComponent<EnemyBoss>().IsInAir = false;
-        animator.GetComponent<EnemyBoss>().transform.GetComponent<CapsuleCollider2D>().isTrigger = false;
+        // collider는 animation event로 켰음
     }
 }
