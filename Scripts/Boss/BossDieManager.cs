@@ -9,6 +9,7 @@ public class BossDieManager : MonoBehaviour
     int amountOfCoins;
     Animator anim;
     DropCoins dropCoins;
+    [SerializeField] LayerMask testLayer;
 
     void Awake()
     {
@@ -39,6 +40,7 @@ public class BossDieManager : MonoBehaviour
         anim.SetTrigger("Die");
 
         RemoveAllEnemies();
+        RemoveAllWalls();
         dropCoins.Init(amountOfCoins, deadBody.transform.position);
 
         StartCoroutine(WinMessage());
@@ -50,9 +52,9 @@ public class BossDieManager : MonoBehaviour
         GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
     }
     
-    public void RemoveAllEnemies()
+    void RemoveAllEnemies()
     {
-        LayerMask enemyLayer = LayerMask.NameToLayer("Enmey");
+        LayerMask enemyLayer = LayerMask.NameToLayer("Enmey"); // 이상하게 GetMask가 안됨
 
         Collider2D[] enemies = 
             Physics2D.OverlapCircleAll(Player.instance.transform.position, 1000f, enemyLayer);
@@ -63,6 +65,24 @@ public class BossDieManager : MonoBehaviour
             if(enemyBase != null)
             {
                 enemyBase.DieWithoutDrop();
+            }
+        }
+    }
+    void RemoveAllWalls()
+    {
+        LayerMask wallLayer = LayerMask.GetMask("Wall"); // 이상하게 NameToLayer가 안됨
+
+        Collider2D[] walls = 
+            Physics2D.OverlapCircleAll(Player.instance.transform.position, 1000f, wallLayer);
+
+
+        Debug.Log("number of bouncers = " + walls.Length);
+        foreach (var item in walls)
+        {
+            Bouncer bouncer = item.GetComponent<Bouncer>();
+            if(bouncer != null)
+            {
+                bouncer.DeactivateWall();
             }
         }
     }

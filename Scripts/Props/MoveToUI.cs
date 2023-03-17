@@ -49,6 +49,7 @@ public class MoveToUI : MonoBehaviour
             {
                 FindObjectOfType<Coins>().Add(1);
                 SoundManager.instance.Play(hitSound);
+                CoinUI.instance.PopCoinIcon();
                 Destroy(gameObject);
             }
         }

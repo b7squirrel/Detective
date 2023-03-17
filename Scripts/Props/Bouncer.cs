@@ -9,6 +9,7 @@ public class Bouncer : MonoBehaviour
     [SerializeField] float bouncingForce;
     [SerializeField] float bouncingTime;
     [SerializeField] AudioClip bouncerSFX;
+    [SerializeField] GameObject smoke;
     Animator anim;
 
     void OnEnable()
@@ -25,5 +26,10 @@ public class Bouncer : MonoBehaviour
             anim.SetTrigger("Push");
             SoundManager.instance.Play(bouncerSFX);
         }
+    }
+    public void DeactivateWall()
+    {
+        EffectManager.instance.GenerateEffect(0, transform);
+        Destroy(gameObject);
     }
 }
