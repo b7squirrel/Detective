@@ -113,6 +113,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (Stats.hp < 1)
         {
+            Player.instance.transform.GetComponent<Kills>().Add(1);
             Die();
             return;
         }
