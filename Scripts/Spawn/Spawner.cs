@@ -75,4 +75,10 @@ public class Spawner : MonoBehaviour
             }
         }
     }
+    public Vector2 GetRandomSpawnPoint()
+    {
+        int index = Random.Range(0, spawnPoints.Length);
+        Vector2 point = spawnPoints[index].position;
+        return point;
+    }
 }
