@@ -23,6 +23,8 @@ public class Player : MonoBehaviour, IBouncable
     Vector2 bouncingForce;
     Coroutine bouncingCoroutine;
 
+    public bool IsStill { get; set; } // 메뉴, 이벤트 등 플레이어가 움직이면 안되는 상황
+
     void Awake()
     {
         instance = this;
@@ -33,11 +35,15 @@ public class Player : MonoBehaviour, IBouncable
 
     void LateUpdate()
     {
+        if (IsStill) return;
+
         Flip();
         UpdateAniamtionState();
     }
     void FixedUpdate()
     {
+        if (IsStill) return;
+
         if (GameManager.instance.IsPlayerDead)
         {
             InputVec = Vector2.zero;

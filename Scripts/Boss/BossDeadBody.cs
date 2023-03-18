@@ -8,6 +8,7 @@ public class BossDeadBody : MonoBehaviour
     [SerializeField] AudioClip squelchSFX;
     [SerializeField] AudioClip squeackSFX;
     Animator anim;
+    public bool FinishBossCam {get; private set;}
     void OnEnable()
     {
         anim = GetComponent<Animator>();
@@ -22,5 +23,9 @@ public class BossDeadBody : MonoBehaviour
     {
         SoundManager.instance.Play(squelchSFX);
         SoundManager.instance.Play(squeackSFX);
+    }
+    public void TriggerPlayerCamera()
+    {
+        BossDieManager.instance.BossCameraOff();
     }
 }

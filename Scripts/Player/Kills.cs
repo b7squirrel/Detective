@@ -14,7 +14,7 @@ public class Kills : MonoBehaviour
 
     public void Add(int killAmount)
     {
-        dataContainer.coins += killAmount;
-        killsCountText.text = dataContainer.coins.ToString();
+        dataContainer.kills += killAmount;
+        killsCountText.text = dataContainer.kills.ToString();
     }
 }

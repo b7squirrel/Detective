@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
+using DG;
 
 public class BossDieManager : MonoBehaviour
 {
     public static BossDieManager instance;
-    public bool IsBossDead { get; private set; }
+    public bool IsBossDead { get; private set; } // 죽은 후부터는 player의 takeDamage가 작동 안하도록
     GameObject deadBody;
     int amountOfCoins;
     Animator anim;
@@ -28,6 +29,8 @@ public class BossDieManager : MonoBehaviour
         MusicManager.instance.Stop();
         GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
 
+        BossCameraOn();
+
         StartCoroutine(DieEvent(.1f, 2f));
     }
 
@@ -44,6 +47,22 @@ public class BossDieManager : MonoBehaviour
         dropCoins.Init(amountOfCoins, deadBody.transform.position);
 
         FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
+    }
+
+    public void BossCameraOn()
+    {
+        Player.instance.IsStill = true;
+        Camera.main.transform.GetComponent<CameraController>().CameraToTarget(deadBody.transform.position, true);
+    }
+    public void BossCameraOff()
+    {
+        StartCoroutine(PlayerCamera());
+    }
+    IEnumerator PlayerCamera()
+    {
+        yield return new WaitForSeconds(2f);
+        Player.instance.IsStill = false;
+        Camera.main.transform.GetComponent<CameraController>().CameraToTarget(Player.instance.transform.position, false);
     }
 
     IEnumerator WinMessage()
