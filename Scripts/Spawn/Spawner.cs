@@ -77,7 +77,7 @@ public class Spawner : MonoBehaviour
     }
     public Vector2 GetRandomSpawnPoint()
     {
-        int index = Random.Range(0, spawnPoints.Length);
+        int index = Random.Range(1, spawnPoints.Length); // 플레이어가 포함되지 않게 1부터
         Vector2 point = spawnPoints[index].position;
         return point;
     }
