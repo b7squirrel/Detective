@@ -43,7 +43,7 @@ public class BossDieManager : MonoBehaviour
         RemoveAllWalls();
         dropCoins.Init(amountOfCoins, deadBody.transform.position);
 
-        StartCoroutine(WinMessage());
+        FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
     }
 
     IEnumerator WinMessage()

@@ -12,9 +12,10 @@ public class StageEvenetManager : MonoBehaviour
 
     StageTime stageTime;
     int eventIndexer;
-    PlayerWinManager winManager;
 
     MusicManager musicManager;
+    public bool IsWinningStage {get; set;}
+    Coroutine winStageCoroutine;
 
     void Awake()
     {
@@ -22,15 +23,20 @@ public class StageEvenetManager : MonoBehaviour
         spawner = FindObjectOfType<Spawner>();
         musicManager = FindObjectOfType<MusicManager>();
         musicManager.MusicOnStart = stageData.stageMusic; // Mucic manager.Start에서 Play하므로 this.awake에서 초기화 
-    }
-
-    void Start()
-    {
-        winManager = FindObjectOfType<PlayerWinManager>();
+        IsWinningStage = false;
+        winStageCoroutine = null;
     }
 
     void Update()
     {
+        if (IsWinningStage)
+        {
+            if (winStageCoroutine == null)
+            {
+                winStageCoroutine = StartCoroutine(WinStage());
+            }
+            return;
+        }
         if (eventIndexer >= stageData.stageEvents.Count)
             return;
 
@@ -72,9 +78,10 @@ public class StageEvenetManager : MonoBehaviour
         }
     }
 
-    void WinStage()
+    IEnumerator WinStage()
     {
-        winManager.Win();
+        yield return new WaitForSeconds(7f);
+        GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
     }
     void SpawnSubBoss()
     {

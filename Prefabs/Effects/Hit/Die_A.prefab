@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8873324260527481610}
   - component: {fileID: 8245304901989950951}
   - component: {fileID: 4218734828449106767}
+  - component: {fileID: 4007394127328595771}
   m_Layer: 0
   m_Name: Die_A
   m_TagString: Untagged
@@ -120,6 +121,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDisable: 0.25
+--- !u!114 &4007394127328595771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263391957910281814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.3, y: -0.17}
 --- !u!1 &5923659403915791058
 GameObject:
   m_ObjectHideFlags: 0

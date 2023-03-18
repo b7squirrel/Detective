@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8444195534377752061}
   - component: {fileID: 8964022949090415376}
   - component: {fileID: -5440248818184929864}
+  - component: {fileID: -8144540240421236068}
   m_Layer: 0
   m_Name: Hit_A
   m_TagString: Untagged
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 327865993
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 10
   m_Sprite: {fileID: -1671684627, guid: 598f4754102769d4fb6e39c046953c07, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -120,6 +121,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDisable: 0.25
+--- !u!114 &-8144540240421236068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985285463175719073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0.3, y: -0.17}
 --- !u!1 &6646959730047826981
 GameObject:
   m_ObjectHideFlags: 0
