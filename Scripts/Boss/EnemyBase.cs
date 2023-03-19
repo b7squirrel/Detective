@@ -20,6 +20,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region FeedBack Variables
     [Header("Effect")]
     [SerializeField] protected Material whiteMaterial;
+    [SerializeField] protected Transform hitEffectPoint;
     protected float whiteFlashDuration = 0.08f;
     protected float stunnedDuration = .2f;
     protected Material initialMat;
@@ -107,7 +108,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         Stats.hp -= damage;
-        EffectManager.instance.GenerateEffect(0, this.transform);
+        EffectManager.instance.GenerateEffect(0, hitEffectPoint);
         SoundManager.instance.Play(hit);
         float chance = UnityEngine.Random.Range(0, 100);
 
