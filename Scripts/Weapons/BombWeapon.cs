@@ -26,7 +26,11 @@ public class BombWeapon : WeaponBase
         for (int i = 0; i < targets.Count; i++)
         {
             GameObject bombObject = Instantiate(bomb, transform.position, Quaternion.identity);
-            bombObject.GetComponent<BombProjectile>().SetTargetDirection(targets[i]);
+
+            BombProjectile proj = bombObject.GetComponent<BombProjectile>();
+            proj.SetTargetPos(targets[i]);
+            proj.SetStats(weaponStats, GetDamage());
+            Instantiate(testCircle, targets[i], Quaternion.identity);
         }
         targets.Clear();
     }
