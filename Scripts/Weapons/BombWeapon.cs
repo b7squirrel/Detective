@@ -5,6 +5,7 @@ using UnityEngine;
 public class BombWeapon : WeaponBase
 {
     [SerializeField] GameObject bomb;
+    [SerializeField] float verticalVelocity;
     [SerializeField] float duration = .4f;
     List<Vector2> targets; //폭탄을 던질 지점들
     [SerializeField] bool isClean;
@@ -28,8 +29,11 @@ public class BombWeapon : WeaponBase
             GameObject bombObject = Instantiate(bomb, transform.position, Quaternion.identity);
 
             BombProjectile proj = bombObject.GetComponent<BombProjectile>();
-            proj.SetTargetPos(targets[i]);
-            proj.SetStats(weaponStats, GetDamage());
+            proj.Init(targets[i], weaponStats, GetDamage());
+
+            ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
+            projHeight.Initialize(verticalVelocity);
+
             Instantiate(testCircle, targets[i], Quaternion.identity);
         }
         targets.Clear();
