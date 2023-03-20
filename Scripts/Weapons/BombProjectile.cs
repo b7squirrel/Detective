@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BombProjectile : ProjectileBase
 {
     public Vector2 GroundVelocity{get; private set;}
     float sizeOfArea;
     [SerializeField] LayerMask target; // 조준해서 던지는 것은 enemy지만 터지면 enemy, prop 둘 다 공격
+    public UnityEvent onExplode;
 
     protected override void Update()
     {
