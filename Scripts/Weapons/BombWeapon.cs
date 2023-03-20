@@ -10,9 +10,6 @@ public class BombWeapon : WeaponBase
     List<Vector2> targets; //폭탄을 던질 지점들
     [SerializeField] bool isClean;
 
-
-    [SerializeField] GameObject testCircle;
-
     #region Attack
     protected override void Attack()
     {
@@ -33,8 +30,6 @@ public class BombWeapon : WeaponBase
 
             ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
             projHeight.Initialize(verticalVelocity);
-
-            Instantiate(testCircle, targets[i], Quaternion.identity);
         }
         targets.Clear();
     }
