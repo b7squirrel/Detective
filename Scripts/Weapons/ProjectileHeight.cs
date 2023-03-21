@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ProjectileHeight : MonoBehaviour
 {
     [SerializeField] Vector2 offset = new Vector2(.3f, -.17f);
     [SerializeField] int bouncingNumbers;
     public bool IsDone { get; private set; } // 다른 클래스에서 접근해서 이후의 동작을 진행
+    public UnityEvent onHitGround;
 
     Transform trnsObject; // 부모 물체
     Transform trnsBody; // 공중에 뜨는 스프라이트 오브젝트
@@ -75,7 +77,7 @@ public class ProjectileHeight : MonoBehaviour
         {
             trnsBody.position = trnsObject.position;
             GetComponent<BombProjectile>().Explode();
-            Destroy(gameObject);
+            onHitGround?.Invoke();
         }
     }
 }

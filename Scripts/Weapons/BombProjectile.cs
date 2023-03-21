@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class BombProjectile : ProjectileBase
 {
     public Vector2 GroundVelocity{get; private set;}
     float sizeOfArea;
     [SerializeField] LayerMask target; // 조준해서 던지는 것은 enemy지만 터지면 enemy, prop 둘 다 공격
-    public UnityEvent onExplode;
+    [SerializeField] GameObject hitEffect; // 폭발 이펙트
+    [SerializeField] AudioClip hitSFX;
 
     protected override void Update()
     {
@@ -20,7 +20,10 @@ public class BombProjectile : ProjectileBase
     }
     public void Explode()
     {
+        GenerateHitEffect();
+        SoundManager.instance.Play(hitSFX);
         CastDamage();
+        Destroy(gameObject);
     }
     protected override void CastDamage()
     {
@@ -44,5 +47,10 @@ public class BombProjectile : ProjectileBase
 
         Vector2 dir = (target - (Vector2)transform.position).normalized;
         GroundVelocity = dir * Speed;
+    }
+    void GenerateHitEffect()
+    {
+        GameObject effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
+        effect.transform.localScale *= sizeOfArea;
     }
 }

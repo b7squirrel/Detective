@@ -9,6 +9,7 @@ public class BombWeapon : WeaponBase
     [SerializeField] float duration = .4f;
     List<Vector2> targets; //폭탄을 던질 지점들
     [SerializeField] bool isClean;
+    [SerializeField] AudioClip shootSFX;
 
     #region Attack
     protected override void Attack()
@@ -23,6 +24,7 @@ public class BombWeapon : WeaponBase
 
         for (int i = 0; i < targets.Count; i++)
         {
+            SoundManager.instance.Play(shootSFX);
             GameObject bombObject = Instantiate(bomb, transform.position, Quaternion.identity);
 
             BombProjectile proj = bombObject.GetComponent<BombProjectile>();
