@@ -7,7 +7,7 @@ public class BombWeapon : WeaponBase
     [SerializeField] GameObject bomb;
     [SerializeField] float verticalVelocity;
     [SerializeField] float duration = .4f;
-    List<Vector2> targets; //폭탄을 던질 지점들
+    Vector2 target; //폭탄을 던질 지점
     [SerializeField] bool isClean;
     [SerializeField] AudioClip shootSFX;
 
@@ -22,28 +22,29 @@ public class BombWeapon : WeaponBase
             return;
         }
 
-        for (int i = 0; i < targets.Count; i++)
+        for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
+            // Vector3 axisVec = new Vector3(0, 0, 90f * (float)i);
+            Vector3 axisVec = new Vector3(0,0,1).normalized;
+            Vector3 targetDir = Quaternion.AngleAxis(120 * (float)i, axisVec) * target;
+
             SoundManager.instance.Play(shootSFX);
             GameObject bombObject = Instantiate(bomb, transform.position, Quaternion.identity);
 
             BombProjectile proj = bombObject.GetComponent<BombProjectile>();
-            proj.Init(targets[i], weaponStats, GetDamage());
+            proj.Init(targetDir, weaponStats, GetDamage());
 
             ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
             projHeight.Initialize(verticalVelocity);
         }
-        targets.Clear();
+
     }
     #endregion
 
     #region Find Landing Position
     void FindLandingPositions()
     {
-        if (targets == null)
-            targets = new List<Vector2>();
-
-        Vector2 center = GameManager.instance.player.transform.position;
+        Vector2 center = Player.instance.transform.position;
 
         Collider2D[] enemies =
                 Physics2D.OverlapAreaAll(center - new Vector2(halfWidth * .8f, halfHeight * .8f),
@@ -55,19 +56,8 @@ public class BombWeapon : WeaponBase
             return;
         }
 
-        List<Vector2> candidates = new List<Vector2>();
-
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            candidates.Add((Vector2)enemies[i].transform.position);
-        }
-
-        for (int i = 0; i < weaponStats.numberOfAttacks; i++)
-        {
-            int index = Random.Range(0, candidates.Count);
-            Vector2 pick = candidates[index];
-            targets.Add(pick);
-        }
+        int index = Random.Range(0, enemies.Length);
+        target = enemies[index].transform.position;
     }
     #endregion
 }

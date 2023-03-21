@@ -77,7 +77,7 @@ public class ProjectileHeight : MonoBehaviour
         {
             trnsBody.position = trnsObject.position;
             GetComponent<BombProjectile>().Explode();
-            onHitGround?.Invoke();
+            onHitGround?.Invoke(); // Bomb projectile의 Explode함수를 끌어다 놓았음
         }
     }
 }
