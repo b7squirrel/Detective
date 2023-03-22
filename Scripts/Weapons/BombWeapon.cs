@@ -11,6 +11,10 @@ public class BombWeapon : WeaponBase
     [SerializeField] bool isClean;
     [SerializeField] AudioClip shootSFX;
 
+    Vector3[] targetDir = new Vector3[2];
+    [SerializeField] GameObject dot;
+    Vector3 enemyDir;
+
     #region Attack
     protected override void Attack()
     {
@@ -21,25 +25,35 @@ public class BombWeapon : WeaponBase
             isClean = false;
             return;
         }
+        Vector3 axisVec = Vector3.forward;
+        enemyDir = (target - (Vector2)transform.position);
+        Debug.DrawLine(transform.position, target, Color.red);
 
-        for (int i = 0; i < weaponStats.numberOfAttacks; i++)
+        for (int i = 0; i < 2; i++)
         {
-            // Vector3 axisVec = new Vector3(0, 0, 90f * (float)i);
-            Vector3 axisVec = new Vector3(0,0,1).normalized;
-            Vector3 targetDir = Quaternion.AngleAxis(120 * (float)i, axisVec) * target;
-
-            SoundManager.instance.Play(shootSFX);
-            GameObject bombObject = Instantiate(bomb, transform.position, Quaternion.identity);
-
-            BombProjectile proj = bombObject.GetComponent<BombProjectile>();
-            proj.Init(targetDir, weaponStats, GetDamage());
-
-            ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
-            projHeight.Initialize(verticalVelocity);
+            targetDir[i] = Quaternion.AngleAxis((float)(120 * (i + 1)), axisVec) * enemyDir + transform.position;
+            // Debug.DrawLine(transform.position, targetDir[i], Color.yellow);
+            Debug.DrawLine(transform.position, targetDir[i], Color.yellow);
         }
 
+        GenProjectile(target);
+        SoundManager.instance.Play(shootSFX);
+        for (int i = 0; i < weaponStats.numberOfAttacks -1; i++)
+        {
+            // targetDir[i] = Quaternion.AngleAxis((float)(120 * (i + 1)), axisVec) * enemyDir + transform.position;
+            GenProjectile(targetDir[i]);
+        }
     }
     #endregion
+
+    void GenProjectile(Vector3 targetVec)
+    {
+        GameObject bombObject = Instantiate(bomb, transform.position, Quaternion.identity);
+        BombProjectile proj = bombObject.GetComponent<BombProjectile>();
+        proj.Init(targetVec, weaponStats, GetDamage());
+        ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
+        projHeight.Initialize(verticalVelocity);
+    }
 
     #region Find Landing Position
     void FindLandingPositions()
@@ -56,8 +70,10 @@ public class BombWeapon : WeaponBase
             return;
         }
 
+        isClean = false;
         int index = Random.Range(0, enemies.Length);
         target = enemies[index].transform.position;
+        // Instantiate(dot, target, Quaternion.identity);
     }
     #endregion
 }

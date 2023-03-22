@@ -1,19 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class Test : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        transform.DOMoveY(.1f, 1f).SetEase(Ease.InOutSine);
-    }
+    Vector3 startDir = Vector3.right;
+    Vector3 vec;
+    Vector3[] targetDir = new Vector3[2];
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // void Update()
+    // {
+    //     Vector3 axisVec = Vector3.forward;
+
+    //     Debug.DrawLine(Vector3.zero, startDir, Color.red);
+
+    //     for (int i = 0; i < 2; i++)
+    //     {
+    //         targetDir[i] = Quaternion.AngleAxis((float)(120 * (i + 1)), axisVec) * vec;
+    //         Debug.DrawLine(Vector3.zero, targetDir[i], Color.blue);
+    //     }
+
+    //     Debug.DrawLine(Vector3.zero, targetDir[0], Color.blue);
+    //     Debug.DrawLine(Vector3.zero, targetDir[1], Color.yellow);
+    // }
 }

@@ -13,7 +13,7 @@ public class BombProjectile : ProjectileBase
     protected override void Update()
     {
         ApplyMovement();
-        Debug.DrawLine(transform.position, Player.instance.transform.position, Color.red);
+        // Debug.DrawLine(transform.position, Player.instance.transform.position, Color.red);
     }
     protected override void ApplyMovement()
     {
