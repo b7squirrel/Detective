@@ -6,7 +6,8 @@ public enum SpawnItem {enemy, subBoss, bossSlime}
 
 public class StageEvenetManager : MonoBehaviour
 {
-    [SerializeField] StageData stageData;
+    [SerializeField] List <StageEvent> stageEvents;
+    ReadStageData readStageData;
     Spawner spawner;
     SpawnItem spawnItem;
 
@@ -19,10 +20,15 @@ public class StageEvenetManager : MonoBehaviour
 
     void Awake()
     {
+        readStageData = GetComponent<ReadStageData>();
+        foreach (var item in readStageData.GetStageEventsList())
+        {
+            this.stageEvents.Add(item);
+        } 
         stageTime = GetComponent<StageTime>();
         spawner = FindObjectOfType<Spawner>();
         musicManager = FindObjectOfType<MusicManager>();
-        musicManager.MusicOnStart = stageData.stageMusic; // Mucic manager.Start에서 Play하므로 this.awake에서 초기화 
+        // musicManager.MusicOnStart = stageData.stageMusic; // Mucic manager.Start에서 Play하므로 this.awake에서 초기화 
         IsWinningStage = false;
         winStageCoroutine = null;
     }
@@ -37,25 +43,25 @@ public class StageEvenetManager : MonoBehaviour
             }
             return;
         }
-        if (eventIndexer >= stageData.stageEvents.Count)
+        if (eventIndexer >= stageEvents.Count)
             return;
 
-        if (stageTime.time > stageData.stageEvents[eventIndexer].time)
+        if (stageTime.time > stageEvents[eventIndexer].time)
         {
             
-            switch (stageData.stageEvents[eventIndexer].eventType)
+            switch (stageEvents[eventIndexer].eventType)
             {
                 case StageEventType.SpawnEnemy:
-                    for (int i = 0; i < stageData.stageEvents[eventIndexer].count; i++)
+                    for (int i = 0; i < stageEvents[eventIndexer].count; i++)
                     {
-                        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy);
+                        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy);
                     }
                     break;
 
                 case StageEventType.SpawnObject:
-                    for (int i = 0; i < stageData.stageEvents[eventIndexer].count; i++)
+                    for (int i = 0; i < stageEvents[eventIndexer].count; i++)
                     {
-                        spawner.SpawnObject(stageData.stageEvents[eventIndexer].objectToSpawn);
+                        spawner.SpawnObject(stageEvents[eventIndexer].objectToSpawn);
                     }
                     break;
 
@@ -68,7 +74,7 @@ public class StageEvenetManager : MonoBehaviour
                     break;
 
                 case StageEventType.SpawnEnemyBoss:
-                    spawner.SpawnBoss(stageData.stageEvents[eventIndexer].enemyToSpawn);
+                    spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
                     break;
                     
                 default:
@@ -85,10 +91,10 @@ public class StageEvenetManager : MonoBehaviour
     }
     void SpawnSubBoss()
     {
-        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss);
+        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss);
     }
     void SpawnEnemyBoss()
     {
-        spawner.Spawn(stageData.stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.bossSlime);
+        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.bossSlime);
     }
 }
