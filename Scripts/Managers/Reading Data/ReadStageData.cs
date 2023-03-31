@@ -12,9 +12,7 @@ public class ReadStageData : MonoBehaviour
 
     void Awake()
     {
-        readData = new ReadData();
-        data = readData.GetText(text);
-        stageEnemyData = GetComponent<StageEnemyData>();
+        
     }
 
     StageEventType GetStageEventType(string stageEventType)
@@ -68,7 +66,11 @@ public class ReadStageData : MonoBehaviour
 
     public List<StageEvent> GetStageEventsList()
     {
+        readData = new ReadData();
+        data = readData.GetText(text);
+        stageEnemyData = GetComponent<StageEnemyData>();
         stageEvents = new List<StageEvent>();
+        Debug.Log(data);
         int length = data.GetLength(0);
 
         for (int i = 0; i < length; i++)
