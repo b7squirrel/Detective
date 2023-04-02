@@ -25,6 +25,11 @@ public class GenerateWalls : MonoBehaviour
 
         // 핸드폰의 세로축 길이에 맞춰서 정사각형을 만들기
         Vector2Int playerPos = new Vector2Int((int)center.x, (int)center.y);
+
+        GameObject container = new GameObject();
+        container.transform.position = Vector3.zero;
+        container.gameObject.name = "WallContainer";
+
         for (int x = playerPos.x - halfBouncerNumber; x < playerPos.x + halfBouncerNumber + 1; x += 2)
         {
             for (int y = playerPos.y - halfBouncerNumber; y < playerPos.y + halfBouncerNumber + 1; y += 2)
@@ -33,6 +38,7 @@ public class GenerateWalls : MonoBehaviour
                 if (x == playerPos.x - halfBouncerNumber || x == playerPos.x + halfBouncerNumber || y == playerPos.y - halfBouncerNumber || y == playerPos.y + halfBouncerNumber)
                 {
                     GameObject b = Instantiate(brickPrefab, new Vector2(x, y), Quaternion.identity);
+                    b.transform.parent = container.transform;
                     bricks.Add(b);
                 }
             }

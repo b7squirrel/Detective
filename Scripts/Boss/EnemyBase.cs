@@ -105,6 +105,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             anim.SetTrigger("Hit");
+            Debug.Log("Hit Anim");
         }
 
         Stats.hp -= damage;

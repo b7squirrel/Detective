@@ -6,6 +6,7 @@ public class PropManager : MonoBehaviour
 {
     [SerializeField] Transform[] spawnAreas; // 4개
     [SerializeField] Transform spawnBox; // 스폰 포인트들을 가지고 있는 박스
+    [SerializeField] Transform propContainer; // 프랍을 담을 empty object. 하이어라키 정리용
     [SerializeField] GameObject PropToSpawn;
     PropPoint[] points; // 스폰 포인트들
     List<Vector2> visitedArea;
@@ -35,7 +36,8 @@ public class PropManager : MonoBehaviour
         GetSpawnBox(pos);
         foreach (var item in points)
         {
-            Instantiate(PropToSpawn, item.transform.position, Quaternion.identity);
+            GameObject go = Instantiate(PropToSpawn, item.transform.position, Quaternion.identity);
+            go.transform.parent = propContainer;
         }
 
         visitedArea.Add(pos);
