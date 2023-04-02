@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SpawnItem {enemy, subBoss, bossSlime}
+public enum SpawnItem {enemy, subBoss, enemyGroup, bossSlime}
 
 public class StageEvenetManager : MonoBehaviour
 {
@@ -48,7 +48,7 @@ public class StageEvenetManager : MonoBehaviour
 
         if (stageTime.time > stageEvents[eventIndexer].time)
         {
-            
+
             switch (stageEvents[eventIndexer].eventType)
             {
                 case StageEventType.SpawnEnemy:
@@ -56,6 +56,10 @@ public class StageEvenetManager : MonoBehaviour
                     {
                         spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy);
                     }
+                    break;
+
+                case StageEventType.SpawnEnemyGroup:
+                    SpawnEnemyGroup();
                     break;
 
                 case StageEventType.SpawnObject:
@@ -93,8 +97,8 @@ public class StageEvenetManager : MonoBehaviour
     {
         spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss);
     }
-    void SpawnEnemyBoss()
+    void SpawnEnemyGroup()
     {
-        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.bossSlime);
+        spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup);
     }
 }

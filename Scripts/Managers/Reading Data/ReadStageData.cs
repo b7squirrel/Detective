@@ -19,6 +19,8 @@ public class ReadStageData : MonoBehaviour
     {
         if (stageEventType == "Enemy")
             return StageEventType.SpawnEnemy;
+        if (stageEventType == "EnemyGroup")
+            return StageEventType.SpawnEnemyGroup;
         if (stageEventType == "SubBoss")
             return StageEventType.SpawnSubBoss;
         if (stageEventType == "Boss")

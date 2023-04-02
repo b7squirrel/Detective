@@ -26,6 +26,7 @@ public class Enemy : EnemyBase
     public int ExperienceReward { get; private set; }
     bool isLive;
 
+    
     public bool IsFlying { get; set; }
     public Vector2 LandingTarget { get; set; }
     [SerializeField] float flyingSpeed;
@@ -113,5 +114,10 @@ public class Enemy : EnemyBase
             return;
         }
         base.ApplyMovement();
+
+        if(IsGrouping)
+        {
+
+        }
     }
 }

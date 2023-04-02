@@ -34,6 +34,17 @@ public class Spawner : MonoBehaviour
         enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position; 
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
     }
+    public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index)
+    {
+        GetAvailablePoints();
+        GameObject enemy = GameManager.instance.poolManager.Get(index);
+        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position; 
+        enemy.GetComponent<Enemy>().Init(enemyToSpawn);
+
+
+        enemy.GetComponent<Enemy>().IsGrouping = true;
+        enemy.GetComponent<Enemy>().GroupDir = (Player.instance.transform.position - enemy.transform.position).normalized;
+    }
 
     public void SpawnEnemiesToShoot(EnemyData enemyToSpawn, int index, Vector2 start, Vector2 target)
     {

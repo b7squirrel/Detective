@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6414451162540868643}
   - component: {fileID: 6414451162540868667}
   m_Layer: 6
-  m_Name: EnemyGrouping
+  m_Name: EnemyGroup
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,7 +39,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6414451162540868813
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -47,7 +47,7 @@ Animator:
   m_GameObject: {fileID: 6414451162540868822}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 704b18454902bd74b86cb0a9cb9e0370, type: 2}
+  m_Controller: {fileID: 22100000, guid: 57a4830e7d017784fa5a110712f790ff, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -56,7 +56,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!70 &6414451162540868802
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -108,10 +109,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
+  hitEffectPoint: {fileID: 6414451162540868825}
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   flyingSpeed: 15
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  isDetectingPlayer: 0
 --- !u!114 &6414451162540868667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,7 +216,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.3333333, y: 2.2222223}
+  m_Size: {x: 4, y: 3.1111112}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0

@@ -10,6 +10,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [HideInInspector] public Rigidbody2D Target{get; set;}
     public EnemyStats Stats {get; set;}
     public bool IsBoss{get; set;}
+    public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
+    public Vector2 GroupDir {get; set;} // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
     #region Component Variables
     protected Rigidbody2D rb;
@@ -44,6 +46,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         initialMat = sr.material;
         IsKnockBack = false;
         IsStunned = false;
+
+        // GroupDir = (Player.instance.transform.position - transform.position).normalized;
     }
 
     #region Movement Functions
@@ -56,6 +60,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
         else
         {
             transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+
+        if(IsGrouping)
+        {
+            if(GroupDir.x > 0)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0, 180f, 0);
+            }
         }
     }
 
@@ -73,6 +89,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         Vector2 dirVec = Target.position - rb.position;
+        if(IsGrouping)
+        {
+            // dirVec = groupDir;
+            rb.velocity = Stats.speed * GroupDir;
+            Debug.DrawRay(transform.position, GroupDir * 5f);
+            return;
+        }
         Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
         rb.velocity = Vector2.zero;
@@ -136,6 +159,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             StopCoroutine(whiteFlashCoroutine);
 
         sr.material = initialMat;
+        IsGrouping = false;
         gameObject.SetActive(false);
     }
     public virtual void DieWithoutDrop()
