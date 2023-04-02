@@ -44,7 +44,7 @@ public class RePosition : MonoBehaviour
                     // 적이 계속 뒤쳐져서 방황하게 되므로 그냥 spawn 포인트로 이동시켜 버리자
                     // sub Boss는 indicator가 있으니까 reposition 되지 않도록 하자. 그냥 reposition 스크립트를 붙이지 않으면 됨
                     // transform.position += new Vector3(playerDir.x * 40f, playerDir.y * 50f, transform.position.z);
-                    transform.position = Spawner.instance.GetRandomSpawnPoint();
+                    // transform.position = Spawner.instance.GetRandomSpawnPoint();
                 }
                 break;
         }
