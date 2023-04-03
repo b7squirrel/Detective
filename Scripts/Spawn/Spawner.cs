@@ -9,6 +9,7 @@ public class Spawner : MonoBehaviour
     List<Transform> availableSpawnPoints;
 
     [SerializeField] Transform[] spawnObjectPoint;
+    [SerializeField] GameObject enemyGroupShape;
 
     int level;
     float timer;
@@ -34,16 +35,23 @@ public class Spawner : MonoBehaviour
         enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position; 
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
     }
-    public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index)
+    public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
     {
         GetAvailablePoints();
-        GameObject enemy = GameManager.instance.poolManager.Get(index);
-        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position; 
-        enemy.GetComponent<Enemy>().Init(enemyToSpawn);
+        Vector2 spawnPoint = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
+        GameObject groupShape = Instantiate(enemyGroupShape, spawnPoint, Quaternion.identity);
+        groupShape.transform.eulerAngles = new Vector3(0, 0, Random.Range(0, 360f));
+        Vector2 groupDir = ((Vector2)Player.instance.transform.position - spawnPoint).normalized;
 
-
-        enemy.GetComponent<Enemy>().IsGrouping = true;
-        enemy.GetComponent<Enemy>().GroupDir = (Player.instance.transform.position - enemy.transform.position).normalized;
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            GameObject enemy = GameManager.instance.poolManager.Get(index);
+            enemy.transform.position = groupShape.GetComponent<EnemyGroupShape>().SpawnPoints[i].position;
+            enemy.GetComponent<Enemy>().Init(enemyToSpawn);
+            enemy.GetComponent<Enemy>().IsGrouping = true;
+            enemy.GetComponent<Enemy>().GroupDir = groupDir;
+        }
+        Destroy(groupShape);
     }
 
     public void SpawnEnemiesToShoot(EnemyData enemyToSpawn, int index, Vector2 start, Vector2 target)

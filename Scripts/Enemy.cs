@@ -114,10 +114,5 @@ public class Enemy : EnemyBase
             return;
         }
         base.ApplyMovement();
-
-        if(IsGrouping)
-        {
-
-        }
     }
 }

@@ -59,7 +59,7 @@ public class StageEvenetManager : MonoBehaviour
                     break;
 
                 case StageEventType.SpawnEnemyGroup:
-                    SpawnEnemyGroup();
+                    SpawnEnemyGroup(stageEvents[eventIndexer].count);
                     break;
 
                 case StageEventType.SpawnObject:
@@ -97,8 +97,8 @@ public class StageEvenetManager : MonoBehaviour
     {
         spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss);
     }
-    void SpawnEnemyGroup()
+    void SpawnEnemyGroup(int number)
     {
-        spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup);
+        spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup, number);
     }
 }
