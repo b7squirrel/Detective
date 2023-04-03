@@ -30,6 +30,7 @@ public class Spawner : MonoBehaviour
         Enemy[] enemies = Resources.FindObjectsOfTypeAll<Enemy>();
         if (enemies == null)
             return 0;
+            Debug.Log("Enemy numbers = " + enemies.Length);
         return enemies.Length;
     }
 

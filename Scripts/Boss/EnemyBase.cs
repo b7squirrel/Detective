@@ -23,11 +23,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [Header("Effect")]
     [SerializeField] protected Material whiteMaterial;
     [SerializeField] protected Transform hitEffectPoint;
-    protected float whiteFlashDuration = 0.08f;
+    [SerializeField] protected float whiteFlashDuration = 0.08f;
+    [SerializeField] protected float knockBackSpeed = 12f;
     protected float stunnedDuration = .2f;
     protected Material initialMat;
     [HideInInspector] public Vector2 targetDir;
-    protected float knockBackSpeed = 8f;
     protected float stunnedSpeed = 14f;
     Coroutine whiteFlashCoroutine;
 
@@ -204,7 +204,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         yield return new WaitForSeconds(delayTime);
         sr.material = whiteMaterial;
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.02f);
         sr.material = initialMat;
 
         IsKnockBack = false;
