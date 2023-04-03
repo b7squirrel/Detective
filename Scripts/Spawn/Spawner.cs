@@ -25,18 +25,29 @@ public class Spawner : MonoBehaviour
         if (GameManager.instance.IsPlayerDead)
             return;
     }
+    int GetEnemyNumbers()
+    {
+        Enemy[] enemies = Resources.FindObjectsOfTypeAll<Enemy>();
+        if (enemies == null)
+            return 0;
+        return enemies.Length;
+    }
 
     public void Spawn(EnemyData enemyToSpawn, int index)
     {
+        if (GetEnemyNumbers() > 300)
+            return;
         GetAvailablePoints();
 
         GameObject enemy = GameManager.instance.poolManager.Get(index);
         // getcomponentChildren으로 받아왔으므로 0부터 하면 Player의 위치까지 포함하게 되므로
-        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position; 
+        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
     }
     public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
     {
+        if (GetEnemyNumbers() > 300)
+            return;
         GetAvailablePoints();
         Vector2 spawnPoint = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
         GameObject groupShape = Instantiate(enemyGroupShape, spawnPoint, Quaternion.identity);
@@ -45,6 +56,8 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
+            if (GetEnemyNumbers() > 300)
+            return;
             GameObject enemy = GameManager.instance.poolManager.Get(index);
             enemy.transform.position = groupShape.GetComponent<EnemyGroupShape>().SpawnPoints[i].position;
             enemy.GetComponent<Enemy>().Init(enemyToSpawn);
