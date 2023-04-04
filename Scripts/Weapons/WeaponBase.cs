@@ -33,7 +33,7 @@ public class WeaponBase : MonoBehaviour
     #endregion
 
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {
         weaponContainerAnim = GetComponentInParent<WeaponContainerAnim>();
         timer = weaponStats.timeToAttack;
