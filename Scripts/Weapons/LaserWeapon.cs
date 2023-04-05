@@ -2,22 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// duration, damage 주기를 변수로 설정하기
 public class LaserWeapon : WeaponBase
 {
     [SerializeField] GameObject test;
     LineRenderer lnRen = new LineRenderer();
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject hitEffect;
-    Vector2 target; //폭탄을 던질 지점
     [SerializeField] AudioClip shootSFX;
     [SerializeField] GameObject shootEffectPrefab;
     GameObject shootEffect;
     [SerializeField] GameObject dot;
     [SerializeField] Material laserMat;
     [SerializeField] float laserLifeTIme;
+    [SerializeField] float damageFrequency = .15f;
     float duration;
     Vector2 targetDir; // 가장 가까운 적 dir을 고정시키기 위한 변수
-    Vector2 dirToTarget; // dirToClosestEnemy 값을 고정시키기 위한 변수
     Vector2 targetPos; // 레이져가 부딪친 지점
     float initialWidth = .4f;
     Coroutine shootCoroutine;
@@ -51,6 +52,7 @@ public class LaserWeapon : WeaponBase
         shootEffect = Instantiate(shootEffectPrefab, transform);
         shootEffect.transform.position = transform.position;
         shootEffect.gameObject.SetActive(false);
+        duration = laserLifeTIme;
     }
     protected override void Update()
     {
@@ -66,7 +68,7 @@ public class LaserWeapon : WeaponBase
             {
                 isShooting = false;
                 lnRen.enabled = false;
-
+                duration = laserLifeTIme;
                 shootEffect.gameObject.SetActive(false);
             }
         }
@@ -84,7 +86,7 @@ public class LaserWeapon : WeaponBase
             else
             {
                 timer = weaponStats.timeToAttack;
-                duration = .6f;
+
                 isShooting = true;
 
                 targetPos = FindTarget();
@@ -103,6 +105,8 @@ public class LaserWeapon : WeaponBase
     IEnumerator ShootLaser()
     {
         SoundManager.instance.Play(shootSFX);
+        int count = 1;
+        float remainder = count % 3;
 
         while (isShooting)
         {
@@ -112,7 +116,11 @@ public class LaserWeapon : WeaponBase
             Debug.DrawLine(transform.position, targetDir * 20f, Color.red);
             lnRen.SetPosition(0, transform.position);
             lnRen.SetPosition(1, transform.position + (20f * (Vector3)targetDir));
-            CastDamageToTarget(rayHit.point);
+
+            if(count % 3 > 0) // 3번에 한 번만 데미지 입히기
+            {
+                CastDamageToTarget(rayHit.point);
+            }
 
             lnRen.startWidth -= (Time.deltaTime * 2f);
             if (lnRen.startWidth < .1f)
@@ -120,7 +128,7 @@ public class LaserWeapon : WeaponBase
                 lnRen.startWidth = .1f;
             }
             lnRen.endWidth = lnRen.startWidth;
-            yield return new WaitForSeconds(.01f); // 데미지를 주는 쿨타임
+            yield return null;
         }
     }
 
