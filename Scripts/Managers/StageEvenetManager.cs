@@ -7,6 +7,7 @@ public enum SpawnItem {enemy, subBoss, enemyGroup, bossSlime}
 public class StageEvenetManager : MonoBehaviour
 {
     [SerializeField] List <StageEvent> stageEvents;
+    [SerializeField] AudioClip stageMusic;
     ReadStageData readStageData;
     Spawner spawner;
     SpawnItem spawnItem;
@@ -28,7 +29,7 @@ public class StageEvenetManager : MonoBehaviour
         stageTime = GetComponent<StageTime>();
         spawner = FindObjectOfType<Spawner>();
         musicManager = FindObjectOfType<MusicManager>();
-        // musicManager.MusicOnStart = stageData.stageMusic; // Mucic manager.Start에서 Play하므로 this.awake에서 초기화 
+        musicManager.MusicOnStart = stageMusic; // Mucic manager.Start에서 Play하므로 this.awake에서 초기화 
         IsWinningStage = false;
         winStageCoroutine = null;
     }
