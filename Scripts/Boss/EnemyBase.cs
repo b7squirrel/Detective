@@ -193,7 +193,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public void WhiteFlash(float delayTime)
     {
-        whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
+        if (gameObject.activeSelf)
+        {
+            whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
+        }
     }
 
     protected IEnumerator WhiteFlashCo(float delayTime)
