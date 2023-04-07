@@ -67,11 +67,10 @@ public class Player : MonoBehaviour, IBouncable
         if (bouncingCoroutine != null)
             StopCoroutine(bouncingCoroutine);
 
-        // if (isJoystick)
-        // {
-        //     InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
-        // }
-        InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
+        if (isJoystick)
+        {
+            InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
+        }
         Vector2 nextVec = InputVec * character.MoveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
     }

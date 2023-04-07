@@ -80,7 +80,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.3333333, y: 1.9444444}
+  m_Size: {x: 2.3333333, y: 2.2222223}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -159,7 +159,7 @@ Animator:
   m_GameObject: {fileID: 4084988398905960076}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: e528fe5e406fa644a9a7f95329c2b329, type: 2}
+  m_Controller: {fileID: 9100000, guid: b78ac7cd770d00c4082c79e7c3c595c1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -222,6 +222,8 @@ MonoBehaviour:
   <Name>k__BackingField: 
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   hitEffectPoint: {fileID: 4084988398905960067}
+  whiteFlashDuration: 0.08
+  knockBackSpeed: 12
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}

@@ -123,11 +123,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region Take Damage
     public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target)
     {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
-        {
-            anim.SetTrigger("Hit");
-            Debug.Log("Hit Anim");
-        }
+        anim.SetTrigger("Hit");
 
         Stats.hp -= damage;
         EffectManager.instance.GenerateEffect(0, hitEffectPoint);
