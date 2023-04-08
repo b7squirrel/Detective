@@ -7,6 +7,7 @@ public class WeaponContainer : MonoBehaviour
     [SerializeField] float moveSpeed;
     List<Transform> weaponContainers;
     Player player;
+    GameObject weaponContainerContainer;
 
     private void Awake()
     {
@@ -16,7 +17,12 @@ public class WeaponContainer : MonoBehaviour
 
     private void Start()
     {
-
+        if (weaponContainerContainer == null)
+        {
+            weaponContainerContainer = new GameObject();
+            weaponContainerContainer.transform.position = Vector3.zero;
+            weaponContainerContainer.name = "WeaponContainers";
+        }
     }
     private void FixedUpdate()
     {
@@ -40,6 +46,8 @@ public class WeaponContainer : MonoBehaviour
         }
         else
         {
+            container.parent = weaponContainerContainer.transform;
+
             if (weaponData.animatorController != null)
                 container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
         }

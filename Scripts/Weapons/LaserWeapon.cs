@@ -30,6 +30,8 @@ public class LaserWeapon : WeaponBase
     GameObject laserObject;
     Color lrColor;
 
+    LaserTexture laserTexture;
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -43,7 +45,8 @@ public class LaserWeapon : WeaponBase
         lnRen.startWidth = initialWidth;
         lnRen.endWidth = initialWidth;
         lnRen.sortingLayerName = "FloatingOver";
-        lrColor = new Color(1, .74f, 0, 1);
+        // lrColor = new Color(1, .74f, 0, 1);
+        lrColor = new Color(1, 1, 1, 1);
 
         lnRen.startColor = lrColor;
         lnRen.endColor = lrColor;
@@ -53,6 +56,10 @@ public class LaserWeapon : WeaponBase
         shootEffect.transform.position = transform.position;
         shootEffect.gameObject.SetActive(false);
         duration = laserLifeTIme;
+
+        timer = weaponStats.timeToAttack;
+
+        laserTexture = GetComponent<LaserTexture>();
     }
     protected override void Update()
     {
@@ -90,6 +97,7 @@ public class LaserWeapon : WeaponBase
                 isShooting = true;
 
                 targetPos = FindTarget();
+                if(targetPos == Vector2.zero) return;
                 targetDir = (targetPos - (Vector2)transform.position).normalized;
 
                 lnRen.startWidth = initialWidth;
@@ -97,6 +105,7 @@ public class LaserWeapon : WeaponBase
                 lnRen.startColor = lrColor;
                 lnRen.endColor = lrColor;
 
+                laserTexture.animationStep = 0;
                 shootCoroutine = StartCoroutine(ShootLaser());
             }
         }
@@ -122,12 +131,12 @@ public class LaserWeapon : WeaponBase
                 CastDamageToTarget(rayHit.point);
             }
 
-            lnRen.startWidth -= (Time.deltaTime * 2f);
-            if (lnRen.startWidth < .1f)
-            {
-                lnRen.startWidth = .1f;
-            }
-            lnRen.endWidth = lnRen.startWidth;
+            // lnRen.startWidth -= (Time.deltaTime * 2f);
+            // if (lnRen.startWidth < .1f)
+            // {
+            //     lnRen.startWidth = .1f;
+            // }
+            // lnRen.endWidth = lnRen.startWidth;
             yield return null;
         }
     }

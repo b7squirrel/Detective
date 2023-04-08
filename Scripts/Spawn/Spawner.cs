@@ -10,6 +10,7 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] Transform[] spawnObjectPoint;
     [SerializeField] GameObject enemyGroupShape;
+    [SerializeField] int maxEnemyInScene;
 
     int level;
     float timer;
@@ -27,16 +28,24 @@ public class Spawner : MonoBehaviour
     }
     int GetEnemyNumbers()
     {
+        List<Enemy> activeEnemies = new List<Enemy>();
         Enemy[] enemies = Resources.FindObjectsOfTypeAll<Enemy>();
-        if (enemies == null)
+        foreach (var item in enemies)
+        {
+            if(item.gameObject.activeSelf)
+            {
+                activeEnemies.Add(item);
+            }
+        }
+        if (activeEnemies == null)
             return 0;
-            Debug.Log("Enemy numbers = " + enemies.Length);
-        return enemies.Length;
+            Debug.Log("Enemy numbers = " + activeEnemies.Count);
+        return activeEnemies.Count;
     }
 
     public void Spawn(EnemyData enemyToSpawn, int index)
     {
-        if (GetEnemyNumbers() > 300)
+        if (GetEnemyNumbers() > maxEnemyInScene)
             return;
         GetAvailablePoints();
 
@@ -47,7 +56,7 @@ public class Spawner : MonoBehaviour
     }
     public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
     {
-        if (GetEnemyNumbers() > 300)
+        if (GetEnemyNumbers() > maxEnemyInScene)
             return;
         GetAvailablePoints();
         Vector2 spawnPoint = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
@@ -57,8 +66,6 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
-            if (GetEnemyNumbers() > 300)
-            return;
             GameObject enemy = GameManager.instance.poolManager.Get(index);
             enemy.transform.position = groupShape.GetComponent<EnemyGroupShape>().SpawnPoints[i].position;
             enemy.GetComponent<Enemy>().Init(enemyToSpawn);
