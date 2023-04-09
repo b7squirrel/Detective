@@ -22,6 +22,8 @@ public class Level : MonoBehaviour
 
     [SerializeField] List<UpgradeData> instantUpgrade = new List<UpgradeData>();
 
+    [SerializeField] Animator fillAnim;
+
     int To_Level_Up
     {
         get
@@ -50,7 +52,7 @@ public class Level : MonoBehaviour
         experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
     }
 
-    private void CheckLevelUp()
+    void CheckLevelUp()
     {
         if (experience >= To_Level_Up)
         {
@@ -58,7 +60,7 @@ public class Level : MonoBehaviour
         }
     }
 
-    private void LevelUp()
+    void LevelUp()
     {
         if (selectedUpgrads == null)
         {
@@ -70,6 +72,12 @@ public class Level : MonoBehaviour
         experience -= To_Level_Up;
         level++;
         experienceBar.SetLevelText(level);
+        ExpBarEffect();
+    }
+    void ExpBarEffect()
+    {
+        fillAnim.gameObject.SetActive(true);
+        fillAnim.SetTrigger("Up");
     }
 
     // 알을 통해 무기를 얻을 경우
