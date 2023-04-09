@@ -8,7 +8,7 @@ public class Spawner : MonoBehaviour
     Transform[] spawnPoints;
     List<Transform> availableSpawnPoints;
 
-    [SerializeField] Transform[] spawnObjectPoint;
+    [SerializeField] Transform[] spawnObjectPoint; // 오브젝트 스폰 지점
     [SerializeField] GameObject enemyGroupShape;
     [SerializeField] int maxEnemyInScene;
 
@@ -83,13 +83,22 @@ public class Spawner : MonoBehaviour
         enemy.GetComponent<Enemy>().SetFlying(target);
     }
 
+    IEnumerator SpawnBossCo(EnemyData enemyToSpawn)
+    {
+        Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
+        GameManager.instance.poolManager.GetBossSpawnEffect(0, spawnPoint);
+        yield return new WaitForSeconds(.25f);
+
+        GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform) ;
+        enemy.transform.position = spawnPoint;
+        GameManager.instance.GetComponent<BossHealthBarManager>().ActivateBossHealthBar(); // Init에서 bossHealth바를 참조하므로 Init보다 앞에 위치
+        EnemyBoss boss = enemy.GetComponent<EnemyBoss>();
+        boss.Init(enemyToSpawn);
+    }
+
     public void SpawnBoss(EnemyData enemyToSpawn)
     {
-        GetAvailablePoints();
-        
-        GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform) ;
-        GameManager.instance.GetComponent<BossHealthBarManager>().ActivateBossHealthBar(); // Init에서 bossHealth바를 참조하므로 Init보다 앞에 위치
-        enemy.GetComponent<EnemyBoss>().Init(enemyToSpawn);
+        StartCoroutine(SpawnBossCo(enemyToSpawn));
     }
 
     public void SpawnObject(GameObject toSpawn)

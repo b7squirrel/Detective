@@ -270,7 +270,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7200239369209826799
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -287,7 +287,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!70 &7200239369209826774
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -358,11 +359,14 @@ MonoBehaviour:
   <Name>k__BackingField: Slime Queen
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   hitEffectPoint: {fileID: 487513323129266538}
+  whiteFlashDuration: 0.08
+  knockBackSpeed: 12
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   <moveSpeedInAir>k__BackingField: 16
   <IsInAir>k__BackingField: 0
+  <SpawnPoint>k__BackingField: {x: 0, y: 0}
   projectiles:
   - {fileID: 11400000, guid: 90f06bf610826bf448080ea909f77b4d, type: 2}
   - {fileID: 11400000, guid: 41e40d421b77bbc4282b92af34e4c6c0, type: 2}
@@ -387,6 +391,7 @@ MonoBehaviour:
   landingHit:
     serializedVersion: 2
     m_Bits: 64
+  SpawnTeleportEffect: {fileID: 2404059689411940086, guid: 2447cdc0fe735fb4ca925d3751119a15, type: 3}
   landingEffect: {fileID: 1103442776217505441, guid: 0c2268cb369424d40a09601e680f80d5, type: 3}
   spawnSFX: {fileID: 8300000, guid: ce6f6a6e8f75e9f46b9f87093a89d730, type: 3}
   landingSFX: {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}

@@ -5,6 +5,7 @@ public class PoolManager : MonoBehaviour
 {
     [SerializeField] GameObject[] prefabs;
     [SerializeField] List<GameObject> bossPrefabs;
+    [SerializeField] GameObject[] bossSpawnEffectPrefabs;
     List<GameObject>[] pools;
 
     void Awake()
@@ -44,5 +45,11 @@ public class PoolManager : MonoBehaviour
         GameObject boss = null;
         boss = bossPrefabs.Find(x => x.GetComponent<EnemyBase>().Name == enemyData.Name);
         return boss;
+    }
+    public GameObject GetBossSpawnEffect(int index, Vector2 spawnPos)
+    {
+        GameObject effect = Instantiate(bossSpawnEffectPrefabs[index], spawnPos, Quaternion.identity);
+        effect.transform.parent = transform;
+        return effect;
     }
 }

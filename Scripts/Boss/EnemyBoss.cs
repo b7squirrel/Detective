@@ -37,6 +37,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] float landingImpactSize;
     [SerializeField] float landingImpactForce;
     [SerializeField] LayerMask landingHit;
+    [SerializeField] GameObject SpawnTeleportEffect;
     [SerializeField] GameObject landingEffect;
     [SerializeField] AudioClip spawnSFX;
     [SerializeField] AudioClip landingSFX;
@@ -55,22 +56,6 @@ public class EnemyBoss : EnemyBase, Idamageable
 
         bossHealthBar = FindObjectOfType<BossHealthBar>();
         bossHealthBar.InitHealthBar(Stats.hp, Name);
-
-        // 플레이어 중심으로 X(-3, 3) Y(-10, 10) 가장자리에 보스 생성
-        float f = UnityEngine.Random.value > .5f ? -1f : 1f;
-        float randomX = 0f;
-        float randomY = 0f;
-        if (UnityEngine.Random.value > .5f)
-        {
-            randomX = UnityEngine.Random.Range(Target.position.x - 3f, Target.position.x + 3f);
-            randomY = Target.position.y + (f * 10f);
-        }
-        else
-        {
-            randomY = UnityEngine.Random.Range(Target.position.y - 5f, Target.position.y + 5f);
-            randomX = Target.position.x + (f * 3f);
-        }
-        transform.position = new Vector2(randomX, randomY);
 
         SoundManager.instance.Play(spawnSFX);
     }
@@ -136,6 +121,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     #endregion
 
+    #region TakeDamage Funcitons
     public override void TakeDamage(int damage, float knockBackChance, Vector2 target)
     {
         if (IsInAir)
@@ -153,8 +139,9 @@ public class EnemyBoss : EnemyBase, Idamageable
         BossDieManager.instance.Init(deadBody, transform, 25);
         gameObject.SetActive(false);
     }
+    #endregion
 
-    //animation events
+    #region Animation Events
     public void GenerateSpawnDust()
     {
         dust = Instantiate(dustEffect, dustPoint.position, Quaternion.identity);
@@ -189,6 +176,9 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         anim.SetTrigger("Land");
     }
+    #endregion
+
+    #region State Functions
     public void LandingImpact()
     {
         GameObject effect = Instantiate(landingEffect);
@@ -209,7 +199,5 @@ public class EnemyBoss : EnemyBase, Idamageable
             }
         }
     }
-    private void OnDrawGizmos() {
-        Gizmos.DrawWireSphere(transform.position, landingImpactSize);
-    }
+    #endregion
 }
