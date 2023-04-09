@@ -28,11 +28,11 @@ public class RePosition : MonoBehaviour
             case "Ground":
                 if (diffx > diffy)
                 {
-                    transform.Translate(Vector3.right * dirX * 88);
+                    transform.Translate(Vector3.right * dirX * 120);
                 }
                 else if (diffx < diffy)
                 {
-                    transform.Translate(Vector3.up * dirY * 88);
+                    transform.Translate(Vector3.up * dirY * 120);
                 }
                 break;
 
