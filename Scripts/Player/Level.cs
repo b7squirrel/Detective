@@ -22,7 +22,7 @@ public class Level : MonoBehaviour
 
     [SerializeField] List<UpgradeData> instantUpgrade = new List<UpgradeData>();
 
-    [SerializeField] Animator fillAnim;
+    [SerializeField] ExpBarAnimation expBarAnim;
 
     int To_Level_Up
     {
@@ -72,12 +72,8 @@ public class Level : MonoBehaviour
         experience -= To_Level_Up;
         level++;
         experienceBar.SetLevelText(level);
-        ExpBarEffect();
-    }
-    void ExpBarEffect()
-    {
-        fillAnim.gameObject.SetActive(true);
-        fillAnim.SetTrigger("Up");
+        
+        expBarAnim.ExpBarEffect();
     }
 
     // 알을 통해 무기를 얻을 경우

@@ -13,7 +13,6 @@ public class ExperienceBar : MonoBehaviour
     {
         slider.maxValue = target;
         slider.value = current;
-        // SetFillImage();
     }
 
     public void SetLevelText(int level)
