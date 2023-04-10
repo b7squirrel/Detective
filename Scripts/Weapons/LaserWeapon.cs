@@ -121,10 +121,10 @@ public class LaserWeapon : WeaponBase
         {
             lnRen.enabled = true;
             shootEffect.gameObject.SetActive(true);
-            RaycastHit2D rayHit = Physics2D.Raycast(transform.position, targetDir, 20f, enemy);
-            Debug.DrawLine(transform.position, targetDir * 20f, Color.red);
+            RaycastHit2D rayHit = Physics2D.Raycast(transform.position, targetDir, 120f, enemy);
+            Debug.DrawLine(transform.position, targetDir * 120f, Color.red);
             lnRen.SetPosition(0, transform.position);
-            lnRen.SetPosition(1, transform.position + (20f * (Vector3)targetDir));
+            lnRen.SetPosition(1, transform.position + (120f * (Vector3)targetDir));
 
             if(count % 3 > 0) // 3번에 한 번만 데미지 입히기
             {
