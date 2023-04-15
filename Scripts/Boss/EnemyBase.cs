@@ -113,18 +113,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         isFlipping = true;
         int index = 0;
-        while(index < 5) // 150도까지는 30도씩 5번 회전
+        while(index < 2) // 120도까지는 60도씩 2번 회전
         {
-            yield return new WaitForSeconds(.03f);
-            transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 30f, 0));
+            yield return new WaitForSeconds(.03f); // 0.03초 간격으로
+            transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 60f, 0));
             index++;
             yield return null;
         }
         index = 0;
-        while(index < 6) // 150도부터는 5도씩 6번 회전
+        while(index < 3) // 120도부터는 20도씩 3번 회전
         {
             yield return new WaitForSeconds(.03f);
-            transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 5f, 0));
+            transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 20f, 0));
             index++;
             yield return null;
         }
