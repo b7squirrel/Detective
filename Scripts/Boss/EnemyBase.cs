@@ -49,7 +49,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
 
     #region Movement Functions
-    public void Flip()
+    public virtual void Flip()
     {
         if (Target.position.x < rb.position.x)
         {

@@ -75,12 +75,12 @@ SpriteRenderer:
   m_SortingLayerID: -556371709
   m_SortingLayer: 3
   m_SortingOrder: 10
-  m_Sprite: {fileID: 1232070395, guid: 4611f4243626da848a999715b24b495e, type: 3}
+  m_Sprite: {fileID: -1491921282, guid: 0caeae6df72b7ab45b48f68fbcba220c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 5.7777777, y: 6.6666665}
+  m_Size: {x: 8.888888, y: 7.6736107}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.3, y: -0.17}
+  offset: {x: 0.5, y: -0.3}
 --- !u!114 &5489282720295142908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,8 +316,8 @@ Rigidbody2D:
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 1
-  m_Mass: 12.0694685
+  m_UseAutoMass: 0
+  m_Mass: 200
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -366,7 +366,6 @@ MonoBehaviour:
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   <moveSpeedInAir>k__BackingField: 16
   <IsInAir>k__BackingField: 0
-  <SpawnPoint>k__BackingField: {x: 0, y: 0}
   projectiles:
   - {fileID: 11400000, guid: 90f06bf610826bf448080ea909f77b4d, type: 2}
   - {fileID: 11400000, guid: 41e40d421b77bbc4282b92af34e4c6c0, type: 2}

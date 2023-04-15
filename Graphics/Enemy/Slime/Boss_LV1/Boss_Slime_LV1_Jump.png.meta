@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0caeae6df72b7ab45b48f68fbcba220c
+guid: 89c473834a1c2a041b42a8f4e61bbc93
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -42,11 +42,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 7
+  spritePivot: {x: 0.5, y: 0}
   spritePixelsToUnits: 18
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -67,7 +67,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 256
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -115,106 +115,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Boss_Slime_LV1_Walk_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 138
-        width: 160
-        height: 138
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 178cba54ee903a1488a58b2bd4582386
-      internalID: -1491921282
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Boss_Slime_LV1_Walk_1
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 138
-        width: 160
-        height: 138
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 02a4e531eb903484fb94c29276fc25a4
-      internalID: -1244749310
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Boss_Slime_LV1_Walk_2
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 160
-        height: 138
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8392da7813ad5684a96ee73f63542639
-      internalID: 556631093
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Boss_Slime_LV1_Walk_3
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 160
-        height: 138
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0a82ae1b988c5494f9802dd20c688323
-      internalID: 867713730
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Boss_Slime_LV1_Walk_0: -1491921282
-      Boss_Slime_LV1_Walk_1: -1244749310
-      Boss_Slime_LV1_Walk_2: 556631093
-      Boss_Slime_LV1_Walk_3: 867713730
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -25,6 +25,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     GenerateWalls generateWalls;
     float timer; // shoot coolTime counter
 
+    SpriteRenderer spriteRen;
     [SerializeField] Collider2D col;
     [SerializeField] GameObject deadBody;
 
@@ -53,6 +54,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         spawner = FindObjectOfType<Spawner>();
         generateWalls = GetComponent<GenerateWalls>();
         col = GetComponent<CapsuleCollider2D>();
+        spriteRen = GetComponentInChildren<SpriteRenderer>();
 
         bossHealthBar = FindObjectOfType<BossHealthBar>();
         bossHealthBar.InitHealthBar(Stats.hp, Name);
@@ -110,7 +112,7 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     IEnumerator ShootFinishedCo()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(1f);
         anim.SetBool("ShootFinished", true);
     }
     public void StopShooting()
