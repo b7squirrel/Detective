@@ -13,6 +13,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir {get; set;} // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
+    Coroutine flipCoroutine;
+    bool isFlipping; // 더 이상 flip하고 있지 않으면 코루틴을 초기화 시키기위해
+    float pastFacingDir, currentFacingDir;
+
     #region Component Variables
     protected Rigidbody2D rb;
     protected Animator anim;
@@ -46,23 +50,53 @@ public class EnemyBase : MonoBehaviour, Idamageable
         initialMat = sr.material;
         IsKnockBack = false;
         IsStunned = false;
+
+        transform.eulerAngles = Vector3.zero;
+        StopFlipCoroutine();
+        isFlipping = false;
+
+        if (Target.position.x - rb.position.x > 0) 
+        {
+            currentFacingDir = 1f;
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+        else
+        {
+            currentFacingDir = -1f;
+            transform.eulerAngles = new Vector3(0, 180f, 0);
+        }
+
+        pastFacingDir = currentFacingDir;
+    }
+
+    void StopFlipCoroutine()
+    {
+        if(flipCoroutine != null) StopCoroutine(flipCoroutine);
     }
 
     #region Movement Functions
     public virtual void Flip()
     {
-        if (Target.position.x < rb.position.x)
+        if(isFlipping == false)
         {
-            transform.eulerAngles = new Vector3(0, 180f, 0);
+            if (flipCoroutine != null) StopCoroutine(flipCoroutine);
+        }
+
+        if (Target.position.x - rb.position.x > 0) 
+        {
+            currentFacingDir = 1f;
         }
         else
         {
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            currentFacingDir = -1f;
         }
+        
+        if (currentFacingDir != pastFacingDir && isFlipping == false)
+            flipCoroutine = StartCoroutine(FlipCo());
 
-        if(IsGrouping)
+        if (IsGrouping)
         {
-            if(GroupDir.x > 0)
+            if (GroupDir.x > 0)
             {
                 transform.eulerAngles = new Vector3(0, 0, 0);
             }
@@ -71,6 +105,59 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 transform.eulerAngles = new Vector3(0, 180f, 0);
             }
         }
+
+        pastFacingDir = currentFacingDir;
+    }
+
+    IEnumerator FlipCo()
+    {
+        isFlipping = true;
+        int index = 0;
+        while(index < 5) // 150도까지는 30도씩 5번 회전
+        {
+            yield return new WaitForSeconds(.03f);
+            transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 30f, 0));
+            index++;
+            yield return null;
+        }
+        index = 0;
+        while(index < 6) // 150도부터는 5도씩 6번 회전
+        {
+            yield return new WaitForSeconds(.03f);
+            transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 5f, 0));
+            index++;
+            yield return null;
+        }
+
+        // 모르겠다. 일단 뒤집고 나서는 방향을 플레이어쪽으로 바꿔줘서 
+        // 뒤집히거나 뒤집히다 말거나 하는 현상을 없애자
+        if (Target.position.x - rb.position.x > 0) 
+        {
+            currentFacingDir = 1f;
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+        else
+        {
+            currentFacingDir = -1f;
+            transform.eulerAngles = new Vector3(0, 180f, 0);
+        }
+        isFlipping = false;
+    }
+
+    void ResetFlip()
+    {
+        StopFlipCoroutine();
+        if (Target.position.x - rb.position.x > 0) 
+        {
+            currentFacingDir = 1f;
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        }
+        else
+        {
+            currentFacingDir = -1f;
+            transform.eulerAngles = new Vector3(0, 180f, 0);
+        }
+        isFlipping = false;
     }
 
     public virtual void ApplyMovement()
@@ -154,6 +241,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         sr.material = initialMat;
         IsGrouping = false;
+        ResetFlip();
         gameObject.SetActive(false);
     }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록

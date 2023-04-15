@@ -72,7 +72,6 @@ public class ReadStageData : MonoBehaviour
         data = readData.GetText(text);
         stageEnemyData = GetComponent<StageEnemyData>();
         stageEvents = new List<StageEvent>();
-        Debug.Log(data);
         int length = data.GetLength(0);
 
         for (int i = 0; i < length; i++)
