@@ -37,9 +37,23 @@ public class BombWeapon : WeaponBase
         }
 
         GenProjectile(target);
-        SoundManager.instance.Play(shootSFX);
+        
+        StartCoroutine(AttackCo());
+
+        // for (int i = 0; i < weaponStats.numberOfAttacks -1; i++)
+        // {
+        //     // targetDir[i] = Quaternion.AngleAxis((float)(120 * (i + 1)), axisVec) * enemyDir + transform.position;
+        //     GenProjectile(targetDir[i]);
+        // }
+    }
+
+    IEnumerator AttackCo()
+    {
+        // GenProjectile(target);
+        
         for (int i = 0; i < weaponStats.numberOfAttacks -1; i++)
         {
+            yield return new WaitForSeconds(.2f);
             // targetDir[i] = Quaternion.AngleAxis((float)(120 * (i + 1)), axisVec) * enemyDir + transform.position;
             GenProjectile(targetDir[i]);
         }
@@ -53,6 +67,8 @@ public class BombWeapon : WeaponBase
         proj.Init(targetVec, weaponStats, GetDamage());
         ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
         projHeight.Initialize(verticalVelocity);
+
+        SoundManager.instance.Play(shootSFX);
     }
 
     #region Find Landing Position
