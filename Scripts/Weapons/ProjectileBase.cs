@@ -46,7 +46,9 @@ public class ProjectileBase : MonoBehaviour
             }
             if (hitDetected == true)
             {
+                Debug.Log("Hit Object");
                 HitObject();
+                hitDetected = false;
             }
     }
 

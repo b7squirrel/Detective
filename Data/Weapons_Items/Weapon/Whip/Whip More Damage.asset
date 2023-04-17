@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf90a9f90ceec5489381a9b162b5d31, type: 3}
+  m_Name: Whip More Damage
+  m_EditorClassIdentifier: 
+  id: 0
+  upgradeType: 0
+  Name: More Damage
+  icon: {fileID: 1773154201, guid: f4ae18ca6b9230a4e80ec14ef71998eb, type: 3}
+  description: "\uB370\uBBF8\uC9C0 100 \uC99D\uAC00"
+  weaponData: {fileID: 11400000, guid: bbcd61aa0c2acbb4bb44c724643d0277, type: 2}
+  weaponUpgradeStats:
+    damage: 100
+    timeToAttack: 0
+    numberOfAttacks: 0
+    sizeOfArea: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+  newKidAnim: {fileID: 0}
+  item: {fileID: 0}
+  itemStats:
+    armor: 0
+    magnetSize: 0
+    hp: 0
+    coins: 0

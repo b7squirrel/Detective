@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Hoop
+  m_EditorClassIdentifier: 
+  Name: Hoop
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 2
+    timeToAttack: 0.5
+    numberOfAttacks: 3
+    sizeOfArea: 200
+    projectileSpeed: 200
+    knockBackChance: 0
+  weaponBasePrefab: {fileID: 705506148426016751, guid: 00403f4af1a2791439d2d301e4c37c91, type: 3}
+  animatorController: {fileID: 9100000, guid: 3a9f3e1038d81bc45a24a52ea6c197ea, type: 2}
+  upgrades:
+  - {fileID: 11400000, guid: 3ffde4bad6d6b0f46808d769ef9ea8f3, type: 2}
+  - {fileID: 11400000, guid: a069d808125c0834d9843e06f1b7dba5, type: 2}
+  - {fileID: 11400000, guid: 68b09bea5f8178048b19a1c5b25500b4, type: 2}
+  - {fileID: 11400000, guid: bf52ac7a8b7b56247ad90cc08791ecf6, type: 2}
+  - {fileID: 11400000, guid: e6e743c107a33854ca81fdaf7db52277, type: 2}
+  - {fileID: 11400000, guid: 70e2363df0c565c46b6581cc79857f71, type: 2}
+  - {fileID: 11400000, guid: 2926c1663e3b0474d94a510be6806b6a, type: 2}
+  - {fileID: 11400000, guid: 195d81f597cb70b49ba9f2ee2ecbc33c, type: 2}
+  description: "\uD68C\uC804 \uACF5\uACA9"

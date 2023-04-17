@@ -39,7 +39,7 @@ public class Spawner : MonoBehaviour
         }
         if (activeEnemies == null)
             return 0;
-            Debug.Log("Enemy numbers = " + activeEnemies.Count);
+            // Debug.Log("Enemy numbers = " + activeEnemies.Count);
         return activeEnemies.Count;
     }
 
