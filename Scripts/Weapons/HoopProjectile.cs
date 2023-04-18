@@ -4,7 +4,7 @@ public class HoopProjectile : ProjectileBase
 {
     protected override void Update()
     {
-        if (Time.frameCount % 6 != 0) // 6프레임 간격으로 공격을 함
+        if (Time.frameCount % 30 != 0) // 30프레임 간격으로 공격을 함
             return;
         CastDamage();
     }

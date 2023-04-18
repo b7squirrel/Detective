@@ -24,14 +24,16 @@ public class HoopWeapon : WeaponBase
         //     // duration은 projectiles가 생성되면서 초기화 된다
         // }
 
-        // int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
 
         // 업그레이드 되면 프로젝타일을 중단시키고 다시 시작해서 갯수를 weaponStats.numberOfAttacks에 맞춰줌
-        // if (numberOfProjectilesToGen == 0)
-        //     return;
-        // if (isProjectileActive == false) // 프로젝타일이 활성화 되어 있을 때만 Destroy 실행
-        //     return;
-        // DestroyProjectiles();
+        int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
+        if (numberOfProjectilesToGen == 0)
+            return;
+        if (isProjectileActive == false) // 프로젝타일이 활성화 되어 있을 때만 Destroy 실행
+            return;
+
+        timer = 0; // 곧바로 업그레이드 된 갯수로 업데이트 하기위해
+        DestroyProjectiles();
     }
 
     protected override void Attack()
