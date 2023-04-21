@@ -26,7 +26,7 @@ public class ShadowSprite : MonoBehaviour
         sprRndshadow = transShadow.gameObject.AddComponent<SpriteRenderer>();
 
         
-        sprRndshadow.color = new Color(0, 0, 0, 1f);
+        sprRndshadow.color = new Color(0, 0, 0, .5f);
         sprRndshadow.sortingLayerName = "Shadow";
     }
 

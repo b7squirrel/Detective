@@ -7,6 +7,7 @@ using UnityEngine;
 public class LaserWeapon : WeaponBase
 {
     [SerializeField] GameObject test;
+    [SerializeField] GameObject laserBox;
     LineRenderer lnRen = new LineRenderer();
     [SerializeField] GameObject laserPrefab;
     [SerializeField] GameObject hitEffect;
