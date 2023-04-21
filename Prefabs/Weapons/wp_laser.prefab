@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2207135196431651441}
-  - component: {fileID: -2740300141154463183}
-  - component: {fileID: -5083638738625748130}
+  - component: {fileID: -3724137717237011477}
   m_Layer: 0
   m_Name: wp_laser
   m_TagString: Untagged
@@ -33,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-2740300141154463183
+--- !u!114 &-3724137717237011477
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2207135196431651454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af967c9d672810f418c65d42339bdf03, type: 3}
+  m_Script: {fileID: 11500000, guid: e02549eb0b556214ba4ad4e08e7d5416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   weaponData: {fileID: 0}
@@ -59,44 +58,6 @@ MonoBehaviour:
   weaponTools: {fileID: 0}
   enemy:
     serializedVersion: 2
-    m_Bits: 64
-  test: {fileID: 0}
-  laserPrefab: {fileID: 5461471126190601074, guid: 2264eb090b05c2045887ac80c5d9d0d8, type: 3}
-  hitEffect: {fileID: 0}
-  shootSFX: {fileID: 8300000, guid: f17375b6ee34528499b3864da9964eb1, type: 3}
-  shootEffectPrefab: {fileID: 5419914140758713295, guid: d0e34c7c88169c14ab79442059146468, type: 3}
-  dot: {fileID: 0}
-  laserMat: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
-  laserLifeTIme: 0.5
-  damageFrequency: 0.15
-  isShooting: 0
-  isWaitingToShoot: 0
---- !u!114 &-5083638738625748130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2207135196431651454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 511e1bcd0f36cc74da6b2683985359d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  idleTextures:
-  - {fileID: 2800000, guid: ee9ef87539608534ea0f83876653c3b1, type: 3}
-  - {fileID: 2800000, guid: ee9ef87539608534ea0f83876653c3b1, type: 3}
-  - {fileID: 2800000, guid: 863e06d78d278e646b22a12b92fab19d, type: 3}
-  - {fileID: 2800000, guid: 863e06d78d278e646b22a12b92fab19d, type: 3}
-  - {fileID: 2800000, guid: 003d7d7b687c773428e038ac465ecb65, type: 3}
-  - {fileID: 2800000, guid: c6d9295298fe5b44e974ea46b84663e2, type: 3}
-  - {fileID: 2800000, guid: 003d7d7b687c773428e038ac465ecb65, type: 3}
-  - {fileID: 2800000, guid: c6d9295298fe5b44e974ea46b84663e2, type: 3}
-  - {fileID: 2800000, guid: 003d7d7b687c773428e038ac465ecb65, type: 3}
-  - {fileID: 2800000, guid: c6d9295298fe5b44e974ea46b84663e2, type: 3}
-  - {fileID: 2800000, guid: 003d7d7b687c773428e038ac465ecb65, type: 3}
-  - {fileID: 2800000, guid: 5816aac27fcf4b14dba565a5fff65087, type: 3}
-  - {fileID: 2800000, guid: 8f8d00922db6aa045bb9692e7459b3ad, type: 3}
-  - {fileID: 2800000, guid: 2e65d51f92ad77849b7bd5c336bc676b, type: 3}
-  - {fileID: 2800000, guid: af39ca35c1e11bc469fb5f8b55813f32, type: 3}
-  mat: {fileID: 2100000, guid: 72e3dea4b51845245ab3be6496ad6cfd, type: 2}
+    m_Bits: 192
+  laserProjectile: {fileID: 7658975051141258168, guid: 1c2492b973d1c5a438df34c4e64c875d, type: 3}
+  projectiles: []

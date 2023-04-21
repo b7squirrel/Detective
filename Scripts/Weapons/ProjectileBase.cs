@@ -21,7 +21,7 @@ public class ProjectileBase : MonoBehaviour
         TimeToLive -= Time.deltaTime;
         if (TimeToLive < 0f)
         {
-            Destroy(gameObject);
+            DieProjectile();
         }
     }
 
@@ -60,5 +60,10 @@ public class ProjectileBase : MonoBehaviour
     protected virtual void PostMessage(int damage, Vector3 targetPosition)
     {
         MessageSystem.instance.PostMessage(damage.ToString(), targetPosition);
+    }
+
+    protected virtual void DieProjectile()
+    {
+        Destroy(gameObject);
     }
 }
