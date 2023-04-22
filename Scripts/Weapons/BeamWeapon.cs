@@ -21,6 +21,28 @@ public class BeamWeapon : WeaponBase
         base.Update();
         transform.Rotate(Vector3.forward * weaponStats.projectileSpeed * Time.deltaTime);
 
+        // 레이져가 비활성화 된 상태에서만 쿨타임이 돌아감
+        if (isProjectileActive == false)
+        {
+            timer -= Time.deltaTime;
+            if (timer < 0f)
+            {
+                Attack();
+                timer = weaponStats.timeToAttack;
+            }
+            return;
+        }
+
+        // 레이져가 활성화된 상태라면 duration이 돌아감
+        if (duration > 0)
+        {
+            duration -= Time.deltaTime;
+        }
+        else if (duration <= 0)
+        {
+            DestroyProjectiles();
+        }
+
         // 업그레이드 되면 프로젝타일을 중단시키고 다시 시작해서 갯수를 weaponStats.numberOfAttacks에 맞춰줌
         int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
         if (numberOfProjectilesToGen == 0)
@@ -29,7 +51,6 @@ public class BeamWeapon : WeaponBase
             return;
 
         timer = 0; // 곧바로 업그레이드 된 갯수로 업데이트 하기위해
-        Debug.Log("Destroy");
         DestroyProjectiles();
     }
 
@@ -63,25 +84,24 @@ public class BeamWeapon : WeaponBase
             projectiles[i].localRotation = Quaternion.identity;
 
             Vector3 rotVec = Vector3.forward * 360 * i / weaponStats.numberOfAttacks;
-            projectiles[i].Translate(projectiles[i].right * 30f, Space.World); // laser projectile 길이는 60
             projectiles[i].Rotate(rotVec);
+            // projectiles[i].Translate(projectiles[i].right * 30f, Space.World); // laser projectile 길이는 60
 
             ProjectileBase projectile = projectiles[i].GetComponent<ProjectileBase>();
             projectile.Damage = GetDamage();
             projectile.KnockBackChance = GetKnockBackChance();
-            // projectile.TimeToLive = weaponStats.sizeOfArea; // size of area를 time to live로 하기
         }
         isProjectileActive = true;
-        duration = 5f;
+        duration = .5f; // 레이져 애니메이션 길이
     }
     void DestroyProjectiles()
+    {
+        foreach (Transform proj in projectiles)
         {
-            foreach (Transform proj in projectiles)
-            {
-                proj.gameObject.SetActive(false);
-            }
-
-            isProjectileActive = false;
-            timer = weaponStats.timeToAttack;
+            proj.gameObject.SetActive(false);
         }
+
+        isProjectileActive = false;
+        timer = weaponStats.timeToAttack;
+    }
 }

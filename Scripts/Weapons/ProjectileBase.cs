@@ -18,6 +18,11 @@ public class ProjectileBase : MonoBehaviour
         ApplyMovement();
         CastDamage();
         
+        AttackCoolTimer();
+    }
+
+    protected virtual void AttackCoolTimer()
+    {
         TimeToLive -= Time.deltaTime;
         if (TimeToLive < 0f)
         {

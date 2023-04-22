@@ -5,6 +5,18 @@ using UnityEngine;
 // 재활용해서 계속 사용하는 projectile의 경우 active여부를 weapon단계에서 관리하도록 한다
 public class BeamProjectile : ProjectileBase
 {
+    Animator[] anim;
+
+    void OnEnable()
+    {
+        if(anim == null) anim = GetComponentsInChildren<Animator>();
+
+        foreach (var item in anim)
+        {
+            item.Play("LV1");
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         CastDamage(other);
@@ -27,8 +39,9 @@ public class BeamProjectile : ProjectileBase
         PostMessage(Damage, enmey.transform.position);
         enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position);
         hitDetected = true;
+        Debug.Log("Hit = " + enmey.name);
     }
-    
+
     protected override void DieProjectile()
     {
         // do nothing
