@@ -12,6 +12,7 @@ public class PickUp : MonoBehaviour
         {
             GetComponent<IPickUpObject>().OnPickUp(character);
 
+            
             SoundManager.instance.Play(pickup);
             Destroy(gameObject);
         }
