@@ -6,13 +6,18 @@ public class PoolManager : MonoBehaviour
     [SerializeField] GameObject[] enemies;
     [SerializeField] List<GameObject> bossPrefabs;
     [SerializeField] GameObject[] bossSpawnEffectPrefabs;
-    List<GameObject>[] pools;
+    List<GameObject>[] enemyPools;
 
     StageAssetManager stageAssetManager;
 
-    Dictionary<string, List <GameObject>> miscPools;
+    Dictionary<string, List<GameObject>> miscPools;
 
     void Start()
+    {
+        InitEnemyPools();
+    }
+
+    void InitEnemyPools()
     {
         stageAssetManager = FindAnyObjectByType<StageAssetManager>();
 
@@ -23,18 +28,19 @@ public class PoolManager : MonoBehaviour
             this.enemies[i] = stageAssetManager.enemies[i];
         }
 
-        pools = new List<GameObject>[this.enemies.Length];
-        for (int i = 0; i < pools.Length; i++)
+        enemyPools = new List<GameObject>[this.enemies.Length];
+        for (int i = 0; i < enemyPools.Length; i++)
         {
-            pools[i] = new List<GameObject>();
+            enemyPools[i] = new List<GameObject>();
         }
     }
 
+    #region GetEnemy
     public GameObject GetEnemy(int index)
     {
         GameObject select = null;
 
-        foreach (GameObject item in pools[index])
+        foreach (GameObject item in enemyPools[index])
         {
             if (!item.activeSelf)
             {
@@ -44,10 +50,10 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        if (!select) 
+        if (!select)
         {
             select = Instantiate(enemies[index], transform);
-            pools[index].Add(select);
+            enemyPools[index].Add(select);
         }
 
         return select;
@@ -66,7 +72,9 @@ public class PoolManager : MonoBehaviour
         effect.transform.parent = transform;
         return effect;
     }
+    #endregion
 
+    #region GetMisc
     // effects, weapons, sounds는 tag를 이용해서 pooling
     public GameObject GetMisc(GameObject prefab)
     {
@@ -104,4 +112,5 @@ public class PoolManager : MonoBehaviour
 
         return select;
     }
+    #endregion
 }
