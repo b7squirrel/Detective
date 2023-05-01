@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: -6721317060970081831}
   - component: {fileID: 1647154091}
   - component: {fileID: 1647154090}
+  - component: {fileID: -6616644622741974676}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -195,7 +196,7 @@ Rigidbody2D:
   m_Constraints: 0
 --- !u!95 &1647154091
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -212,7 +213,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1647154090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,7 +229,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0.3, y: -0.17}
   bouncingNumbers: 2
-  moveToUIPrefab: {fileID: 9163126240575236302, guid: 7ebbd8819b8dff34cbdc4b0c15561709, type: 3}
   onGroundHitEvent:
     m_PersistentCalls:
       m_Calls:
@@ -256,3 +257,16 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   isGrounded: 0
+--- !u!114 &-6616644622741974676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3089954493006562425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad10bd374ff11e34faf5438b72bd3a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Key>k__BackingField: Coin_A

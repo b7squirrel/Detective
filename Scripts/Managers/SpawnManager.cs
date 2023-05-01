@@ -13,7 +13,7 @@ public class SpawnManager : MonoBehaviour
     }
     public void SpawnObject(Vector3 worldPosition, GameObject toSpawn, bool isGem, int experience)
     {
-        Transform pickUP = Instantiate(toSpawn).transform;
+        Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
 
         if (pickUP.GetComponent<GemPickUpObject>() != null)
             pickUP.GetComponent<GemPickUpObject>().ExpAmount = experience;

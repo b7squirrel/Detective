@@ -8,14 +8,13 @@ public class TennisWeapon : WeaponBase
     [SerializeField] AudioClip shoot;
 
     [Header("Effects")]
-    [SerializeField] Transform muzzleFlash;
+    [SerializeField] GameObject muzzleFlash;
 
     protected override void Attack()
     {
           Vector2 closestEnemyPosition = FindTarget();
         if (closestEnemyPosition == Vector2.zero)
         {
-            Debug.Log("No ememies");
             return;
         }
 
@@ -29,8 +28,8 @@ public class TennisWeapon : WeaponBase
             AnimShoot();
             SoundManager.instance.Play(shoot);
             Transform muzzleEffect =
-                Instantiate(muzzleFlash, EffectPoint.position, Quaternion.identity);
-            GameObject tennisBall = Instantiate(weaponTennisBall);
+                GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
+            GameObject tennisBall = GameManager.instance.poolManager.GetMisc(weaponTennisBall);
             tennisBall.transform.position = ShootPoint.position;
 
             ProjectileBase projectile = tennisBall.GetComponent<ProjectileBase>();
@@ -57,7 +56,6 @@ public class TennisWeapon : WeaponBase
         else
         {
             weaponTools.GetComponent<Transform>().transform.eulerAngles = new Vector3(0, 0, 0);
-
         }
     }
 }

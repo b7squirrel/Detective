@@ -64,7 +64,9 @@ public class LightningWeapon : WeaponBase
                 float knockBack = GetKnockBackChance();
                 
                 PostMessage(damage, item.transform.position);
-                enemy.TakeDamage(damage, knockBack, Player.instance.transform.position);
+
+                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+                enemy.TakeDamage(damage, knockBack, Player.instance.transform.position, hitEffect);
             }
         }
     }

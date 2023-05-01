@@ -33,7 +33,9 @@ public class WhipWeapon : WeaponBase
             float knockBack = GetKnockBackChance();
 
             PostMessage(damage, collision.transform.position);
-            enemy.TakeDamage(damage, knockBack, transform.position);
+
+            GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+            enemy.TakeDamage(damage, knockBack, transform.position, hitEffect);
         }
     }
 

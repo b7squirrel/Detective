@@ -85,7 +85,6 @@ public class Enemy : EnemyBase
         anim.runtimeAnimatorController = data.animController;
         this.Stats = new EnemyStats(data.stats);
         ExperienceReward = this.Stats.experience_reward;
-        Debug.Log("Stat speed in INIt = " + this.Stats.speed);
     }
     public void SetFlying(Vector2 target)
     {

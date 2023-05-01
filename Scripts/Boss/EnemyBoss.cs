@@ -124,11 +124,11 @@ public class EnemyBoss : EnemyBase, Idamageable
     #endregion
 
     #region TakeDamage Funcitons
-    public override void TakeDamage(int damage, float knockBackChance, Vector2 target)
+    public override void TakeDamage(int damage, float knockBackChance, Vector2 target, GameObject hitEffect)
     {
         if (IsInAir)
             return;
-        base.TakeDamage(damage, knockBackChance, target);
+        base.TakeDamage(damage, knockBackChance, target, hitEffect);
         bossHealthBar.UpdateBossHealthSlider(Stats.hp);
     }
     public override void Die()

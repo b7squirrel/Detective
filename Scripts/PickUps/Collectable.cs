@@ -8,7 +8,7 @@ public class Collectable : MonoBehaviour
     public float knockBackForce = 12f;
     public bool IsFlying { get; private set; }
 
-    public Transform pickupEffect;
+    public GameObject pickupEffect;
 
     protected Vector2 target;
     protected bool isKnockBack;
@@ -56,7 +56,7 @@ public class Collectable : MonoBehaviour
     public virtual void OnHitMagnetField(Vector2 direction)
     {
         IsHit = true;
-        Instantiate(pickupEffect, transform.position, Quaternion.identity);
+        GameManager.instance.poolManager.GetMisc(pickupEffect);
 
         rb.AddForce(direction * knockBackForce, ForceMode2D.Impulse);
         StartCoroutine(Reset());

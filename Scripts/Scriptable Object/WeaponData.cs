@@ -36,10 +36,10 @@ public class WeaponStats
 public class WeaponData : ScriptableObject
 {
     public string Name;
-    public Transform weaponPrefab; // gun, staff, etc...
+    [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
     public GameObject weaponBasePrefab;
-    public RuntimeAnimatorController animatorController;
-    public List<UpgradeData> upgrades;
+    [Header("children anim")] public RuntimeAnimatorController animatorController;
     public string description;
+    public List<UpgradeData> upgrades;
 }

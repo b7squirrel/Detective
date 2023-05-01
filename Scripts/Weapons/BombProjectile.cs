@@ -35,7 +35,9 @@ public class BombProjectile : ProjectileBase
             if (enmey.GetComponent<Idamageable>() != null)
             {
                 PostMessage(Damage, enmey.transform.position);
-                enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position);
+
+                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+                enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
                 hitDetected = true;
             }
         }

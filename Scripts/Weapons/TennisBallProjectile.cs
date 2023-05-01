@@ -20,9 +20,11 @@ public class TennisBallProjectile : ProjectileBase
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
+        GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position);
+            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
             PostMessage(Damage, other.transform.position);
 
             // 입사벡터
@@ -65,7 +67,7 @@ public class TennisBallProjectile : ProjectileBase
 
         if (other.gameObject.CompareTag("Props"))
         {
-            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position);
+            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
             // 입사벡터
             Vector2 incomingVector = Direction;
             incomingVector = incomingVector.normalized;

@@ -11,7 +11,7 @@ public class FireBallWeapon : WeaponBase
     [SerializeField] AudioClip shoot;
 
     [Header("Effects")]
-    [SerializeField] Transform muzzleFlash;
+    [SerializeField] GameObject muzzleFlash;
 
     protected override void Attack()
     {
@@ -31,9 +31,11 @@ public class FireBallWeapon : WeaponBase
         {
             AnimShoot();
             SoundManager.instance.Play(shoot);
-            Transform muzzleEffect =
-                Instantiate(muzzleFlash, EffectPoint.position, Quaternion.identity);
-            GameObject fireBall = Instantiate(weapon);
+            GameObject effect = GameManager.instance.poolManager.GetMisc(muzzleFlash);
+            effect.transform.position = EffectPoint.position;
+            
+            GameObject fireBall = GameManager.instance.poolManager.GetMisc(weapon);
+            // GameObject fireBall = Instantiate(weapon, transform.position, Quaternion.identity);
             fireBall.transform.position = transform.position;
             fireBall.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
 

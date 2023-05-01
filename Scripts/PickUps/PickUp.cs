@@ -14,7 +14,7 @@ public class PickUp : MonoBehaviour
 
             
             SoundManager.instance.Play(pickup);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

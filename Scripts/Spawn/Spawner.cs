@@ -49,7 +49,7 @@ public class Spawner : MonoBehaviour
             return;
         GetAvailablePoints();
 
-        GameObject enemy = GameManager.instance.poolManager.Get(index);
+        GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         // getcomponentChildren으로 받아왔으므로 0부터 하면 Player의 위치까지 포함하게 되므로
         enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
@@ -66,7 +66,7 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
-            GameObject enemy = GameManager.instance.poolManager.Get(index);
+            GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
             enemy.transform.position = groupShape.GetComponent<EnemyGroupShape>().SpawnPoints[i].position;
             enemy.GetComponent<Enemy>().Init(enemyToSpawn);
             enemy.GetComponent<Enemy>().IsGrouping = true;
@@ -77,7 +77,7 @@ public class Spawner : MonoBehaviour
 
     public void SpawnEnemiesToShoot(EnemyData enemyToSpawn, int index, Vector2 start, Vector2 target)
     {
-        GameObject enemy = GameManager.instance.poolManager.Get(index);
+        GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         enemy.transform.position = start;
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
         enemy.GetComponent<Enemy>().SetFlying(target);
@@ -103,7 +103,7 @@ public class Spawner : MonoBehaviour
 
     public void SpawnObject(GameObject toSpawn)
     {
-        Transform pickUP = Instantiate(toSpawn).transform;
+        Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
         pickUP.position = spawnObjectPoint[Random.Range(0, spawnObjectPoint.Length)].position;
     }
 

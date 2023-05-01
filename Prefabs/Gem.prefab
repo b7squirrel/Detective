@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 980874901494317977}
   - component: {fileID: 3370111528631419383}
   - component: {fileID: 1982502359234850308}
+  - component: {fileID: 613829030602766603}
   m_Layer: 0
   m_Name: Gem
   m_TagString: Untagged
@@ -132,7 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 30
   knockBackForce: 12
-  pickupEffect: {fileID: 2101849156756093557, guid: a30259b8a80acc843b7a96a795d8db95, type: 3}
+  pickupEffect: {fileID: 7021321644947753035, guid: a30259b8a80acc843b7a96a795d8db95, type: 3}
   dir: {x: 0, y: 0}
   delay: 0.05
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
@@ -173,3 +174,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.3, y: -0.17}
+--- !u!114 &613829030602766603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895778108224746509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad10bd374ff11e34faf5438b72bd3a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Key>k__BackingField: Gem_A

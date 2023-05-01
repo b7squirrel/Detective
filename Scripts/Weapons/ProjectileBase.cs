@@ -9,9 +9,8 @@ public class ProjectileBase : MonoBehaviour
     [field : SerializeField] public float Speed {get; set;}
     protected bool hitDetected = false;
     public int Damage { get; set; } = 5;
-    [field : SerializeField] public float TimeToLive {get; set;} = 6f;
+    [field : SerializeField] public float TimeToLive {get; set;} = 3f;
     public float KnockBackChance {get; set;}
-
 
     protected virtual void Update()
     {
@@ -38,27 +37,29 @@ public class ProjectileBase : MonoBehaviour
     protected virtual void CastDamage()
     {
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, .7f);
-            foreach (var item in hit)
+        foreach (var item in hit)
+        {
+            Transform enmey = item.GetComponent<Transform>();
+            if (enmey.GetComponent<Idamageable>() != null)
             {
-                Transform enmey = item.GetComponent<Transform>(); 
-                if (enmey.GetComponent<Idamageable>() != null)
-                {
-                    PostMessage(Damage, enmey.transform.position);
-                    enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position);
-                    hitDetected = true;
-                    break;
-                }
+                PostMessage(Damage, enmey.transform.position);
+                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+                enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
+                hitDetected = true;
+                break;
             }
-            if (hitDetected == true)
-            {
-                HitObject();
-                hitDetected = false;
-            }
+        }
+        if (hitDetected == true)
+        {
+            HitObject();
+            hitDetected = false;
+        }
     }
 
     protected virtual void HitObject()
     {
-        Destroy(gameObject);
+        TimeToLive = 3f;
+        gameObject.SetActive(false);
     }
 
     protected virtual void PostMessage(int damage, Vector3 targetPosition)
@@ -68,6 +69,7 @@ public class ProjectileBase : MonoBehaviour
 
     protected virtual void DieProjectile()
     {
-        Destroy(gameObject);
+        TimeToLive = 3f;
+        gameObject.SetActive(false);
     }
 }

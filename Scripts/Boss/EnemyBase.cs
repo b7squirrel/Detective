@@ -182,7 +182,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return;
         }
 
-        Debug.Log("Stat speed = " + Stats.speed);
         Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
         rb.velocity = Vector2.zero;
@@ -210,12 +209,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #endregion
 
     #region Take Damage
-    public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target)
+    public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target, GameObject hitEffect)
     {
         anim.SetTrigger("Hit");
 
         Stats.hp -= damage;
-        EffectManager.instance.GenerateEffect(0, hitEffectPoint);
+        GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
+        effect.transform.position = target;
         SoundManager.instance.Play(hit);
         float chance = UnityEngine.Random.Range(0, 100);
 
