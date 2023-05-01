@@ -23717,7 +23717,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1749716698}
   - component: {fileID: 1749716697}
-  - component: {fileID: 1749716696}
   m_Layer: 0
   m_Name: Effect Manager
   m_TagString: Untagged
@@ -23725,23 +23724,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1749716696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1749716695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5200ecefce78ae4479ea7ecd98f686fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabs:
-  - {fileID: 263391957910281814, guid: 7d8d83f2d02989741b8c33368d313507, type: 3}
-  - {fileID: 985285463175719073, guid: 92a091687ffeddb4d9a8477edf9f1f8e, type: 3}
-  bossPrefabs: []
-  bossSpawnEffectPrefabs: []
 --- !u!114 &1749716697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23754,6 +23736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 441c4aa60afa27b44ab8b27ff9b948f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tempEffect: {fileID: 985285463175719073, guid: 92a091687ffeddb4d9a8477edf9f1f8e, type: 3}
 --- !u!4 &1749716698
 Transform:
   m_ObjectHideFlags: 0
@@ -25574,10 +25557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5200ecefce78ae4479ea7ecd98f686fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabs:
-  - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
-  - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
-  - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+  enemies: []
   bossPrefabs:
   - {fileID: 7200239369209826798, guid: b03cd8e79a0e3bd43b1e62e82649d45f, type: 3}
   bossSpawnEffectPrefabs:

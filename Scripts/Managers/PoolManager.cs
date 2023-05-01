@@ -3,14 +3,25 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
-    [SerializeField] GameObject[] prefabs;
+    [SerializeField] GameObject[] enemies;
     [SerializeField] List<GameObject> bossPrefabs;
     [SerializeField] GameObject[] bossSpawnEffectPrefabs;
     List<GameObject>[] pools;
 
-    void Awake()
+    StageAssetManager stageAssetManager;
+
+    void Start()
     {
-        pools = new List<GameObject>[prefabs.Length];
+        stageAssetManager = FindAnyObjectByType<StageAssetManager>();
+
+        this.enemies = new GameObject[stageAssetManager.enemies.Length];
+
+        for (int i = 0; i < this.enemies.Length; i++)
+        {
+            this.enemies[i] = stageAssetManager.enemies[i];
+        }
+
+        pools = new List<GameObject>[this.enemies.Length];
         for (int i = 0; i < pools.Length; i++)
         {
             pools[i] = new List<GameObject>();
@@ -33,7 +44,7 @@ public class PoolManager : MonoBehaviour
 
         if (!select) 
         {
-            select = Instantiate(prefabs[index], transform);
+            select = Instantiate(enemies[index], transform);
             pools[index].Add(select);
         }
 

@@ -181,6 +181,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
             Debug.DrawRay(transform.position, GroupDir * 5f);
             return;
         }
+
+        Debug.Log("Stat speed = " + Stats.speed);
         Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
         rb.velocity = Vector2.zero;
