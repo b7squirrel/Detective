@@ -24,6 +24,7 @@ public class PassiveItems : MonoBehaviour
         Item newItemInstance = ScriptableObject.CreateInstance<Item>();
         newItemInstance.Init(itemToEquip.Name);
         newItemInstance.stats.Sum(itemToEquip.stats);
+        newItemInstance.name = itemToEquip.Name;
 
         items.Add(newItemInstance);
         newItemInstance.Equip(character);
@@ -37,7 +38,7 @@ public class PassiveItems : MonoBehaviour
     internal void UpgradeItem(UpgradeData upgradeData)
     {
         Item itemToUpgrade = items.Find(id => id.Name == upgradeData.item.Name);
-        Debug.Log(itemToUpgrade.stats.armor);
+        // Debug.Log(itemToUpgrade.stats.armor);
         itemToUpgrade.Equip(character);
         itemToUpgrade.stats.Sum(upgradeData.itemStats);
     }

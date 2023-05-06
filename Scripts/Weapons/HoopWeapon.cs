@@ -94,7 +94,6 @@ public class HoopWeapon : WeaponBase
     }
     void DestroyProjectiles()
     {
-        Debug.Log("Destroy");
         foreach(Transform proj in projectiles)
         {
             proj.gameObject.SetActive(false);

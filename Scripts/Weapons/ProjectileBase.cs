@@ -59,6 +59,7 @@ public class ProjectileBase : MonoBehaviour
     protected virtual void HitObject()
     {
         TimeToLive = 3f;
+        transform.localScale = new Vector3(1, 1, 1);
         gameObject.SetActive(false);
     }
 
@@ -70,6 +71,7 @@ public class ProjectileBase : MonoBehaviour
     protected virtual void DieProjectile()
     {
         TimeToLive = 3f;
+        transform.localScale = new Vector3(1, 1, 1);
         gameObject.SetActive(false);
     }
 }

@@ -10,6 +10,13 @@ public class ItemStats
 {
     public int armor;
     public int magnetSize;
+    public float moveSpeed;
+    public int maxHp;
+    public int damage;
+    public int projectileAmount;
+    public int projectileSpeed;
+    public float knockBackChance;
+    public float coolTimeDown; 
 
     public int hp;
     public int coins;
@@ -33,12 +40,11 @@ public class Item : ScriptableObject
     {
         this.Name = Name;
         stats = new ItemStats();
-        upgrades = new List<UpgradeData>();
+        upgrades = new List<UpgradeData>(); // 이게 뭐지? 초기화만 시켜놓고 사용하지는 않음
     }
 
     public void Equip(Character character)
     {
-        Debug.Log("Armor added");
         character.Armor += stats.armor;
         character.MagnetSize +=stats.magnetSize;
     }
