@@ -22,10 +22,20 @@ public class ItemStats
     public int coins;
 
     // coin과 hp는 Equip 같은 것들을 거치지 않고 바로 Level에서 적용되므로 Sum에 포함되지 않는다.
+    // 최대치를 넘어서면 값을 최대치로 다시 정해준다
+    // 무기들 리스트를 받아와서 값을 없그레이드 해준다
     internal void Sum(ItemStats stats)
     {
         armor += stats.armor;
         magnetSize += stats.magnetSize;
+
+        moveSpeed += stats.moveSpeed;
+        maxHp += stats.maxHp;
+        damage += stats.damage;
+        projectileAmount += stats.projectileAmount;
+        projectileSpeed += stats.projectileSpeed;
+        knockBackChance += stats.knockBackChance;
+        coolTimeDown += stats.coolTimeDown;
     }
 }
 

@@ -165,9 +165,14 @@ public class Level : MonoBehaviour
         
         // 부족한 슬롯만큼 달콤우유나 동전을 추가
         List<UpgradeData> lacks = new List<UpgradeData>();
-        for (int i = 0; i < 3 - randomPool.Count; i++)
+
+        int numberOfInstantUp = 3 - randomPool.Count;
+        if (numberOfInstantUp > 2) numberOfInstantUp = 2; // 중복으로 하트나 동전이 나오지 않도록
+        
+        for (int i = 0; i < numberOfInstantUp; i++)
         {
-            lacks.Add(instantUpgrade[Random.Range(0, instantUpgrade.Count)]);
+            // lacks.Add(instantUpgrade[Random.Range(0, instantUpgrade.Count)]);
+            lacks.Add(instantUpgrade[i]); // 일단 순서대로 나오도록 했다. 나중에 랜덤으로 겹치지 않게 구현하기
         }
         upgradeList.AddRange(lacks);
 
