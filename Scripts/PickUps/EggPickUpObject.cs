@@ -26,12 +26,23 @@ public class EggPickUpObject : Collectable, IPickUpObject
         List<UpgradeData> checks = new List<UpgradeData>();
         checks.AddRange(upgradeToPick);
 
-        foreach(UpgradeData item in checks)
+        foreach (UpgradeData item in checks)
         {
-            if(character.GetComponent<Level>().HavingWeapon(item))
-            upgradeToPick.Remove(item);
+            if (character.GetComponent<Level>().HavingWeapon(item))
+            {
+                upgradeToPick.Remove(item);
+                Debug.Log("겹치는 무기 = " + item.Name);
+            }
         }
-            
+
+        if (upgradeToPick.Count == 0)
+        {
+            // 알에서 무기 말고 아이템을 나오게 할 생각임
+            // 해당 스테이지에서 얻을 수 있는 무기를 모두 얻은 상태라면,
+            // 아이템을 드롭하도록 구현하기
+            // 지금은 일단 아무것도 하지 않게 했음
+            return;
+        }
         index = Random.Range(0, upgradeToPick.Count);
         character.GetComponent<Level>().GetWeapon(upgradeToPick[index]);
         

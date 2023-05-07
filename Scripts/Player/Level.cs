@@ -119,6 +119,7 @@ public class Level : MonoBehaviour
 
         }
 
+        // 업그레이드를 할 목록에서 뺴고, 업그레이드를 한 목록에 추가
         acquiredUpgrades.Add(upgradeData);
         upgrades.Remove(upgradeData);
     }
@@ -179,14 +180,14 @@ public class Level : MonoBehaviour
         return upgradeList;
     }
 
+    // 알에서 중복되는 무기가 나오지 않도록 하기위한 플래그
     public bool HavingWeapon(UpgradeData item)
     {
-        for (int i = acquiredUpgrades.Count - 1; i > 0; i--)
-        {
-            if(acquiredUpgrades[i].id == item.id)
-            return true;
-        }
-        return false;
+        UpgradeData identicalWeapon = acquiredUpgrades.Find(x => x.id == item.id);
+        if (identicalWeapon == null)
+            return false;
+
+        return true;
     }
 
     internal void AddUpgradesIntoTheListOfAvailableUpgrades(List<UpgradeData> upgradesToAdd)

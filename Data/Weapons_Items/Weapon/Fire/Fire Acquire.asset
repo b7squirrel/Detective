@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   upgradeType: 2
-  Name: Unlock Fire Projectile
+  Name: Fire Projectile
   icon: {fileID: -1908560002, guid: c73ecd6d217c69f4893f1fc2458b9f9b, type: 3}
+  description: 
   weaponData: {fileID: 11400000, guid: 748bd85685be0084dba5e8bacedb4338, type: 2}
   weaponUpgradeStats:
     damage: 0
@@ -23,10 +24,18 @@ MonoBehaviour:
     numberOfAttacks: 0
     sizeOfArea: 0
     projectileSpeed: 0
+    knockBackChance: 0
   newKidAnim: {fileID: 9100000, guid: 24a57e949a2315247b265adef6aa3a09, type: 2}
   item: {fileID: 0}
   itemStats:
     armor: 0
     magnetSize: 0
+    moveSpeed: 0
+    maxHp: 0
+    damage: 0
+    projectileAmount: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    coolTimeDown: 0
     hp: 0
     coins: 0
