@@ -24,18 +24,19 @@ public class ItemStats
     // coin과 hp는 Equip 같은 것들을 거치지 않고 바로 Level에서 적용되므로 Sum에 포함되지 않는다.
     // 최대치를 넘어서면 값을 최대치로 다시 정해준다
     // 무기들 리스트를 받아와서 값을 없그레이드 해준다
-    internal void Sum(ItemStats stats)
+    // 증가분만 더해주기 위해서 stats의 값을 그대로 대입한다
+    internal void SetStats(ItemStats stats)
     {
-        armor += stats.armor;
-        magnetSize += stats.magnetSize;
+        armor = stats.armor;
+        magnetSize = stats.magnetSize;
 
-        moveSpeed += stats.moveSpeed;
-        maxHp += stats.maxHp;
-        damage += stats.damage;
-        projectileAmount += stats.projectileAmount;
-        projectileSpeed += stats.projectileSpeed;
-        knockBackChance += stats.knockBackChance;
-        coolTimeDown += stats.coolTimeDown;
+        moveSpeed = stats.moveSpeed;
+        maxHp = stats.maxHp;
+        damage = stats.damage;
+        projectileAmount = stats.projectileAmount;
+        projectileSpeed = stats.projectileSpeed;
+        knockBackChance = stats.knockBackChance;
+        coolTimeDown = stats.coolTimeDown;
     }
 }
 
@@ -48,15 +49,24 @@ public class Item : ScriptableObject
 
     public void Init(string Name)
     {
-        this.Name = Name;
+        this.Name = Name; // 위에서 선언한 Name 
+        this.name = Name; // 스크립터블 오브젝트의 이름
         stats = new ItemStats();
-        upgrades = new List<UpgradeData>(); // 이게 뭐지? 초기화만 시켜놓고 사용하지는 않음
+        upgrades = new List<UpgradeData>(); // UpgradeData들을 끌어다 놓기
     }
 
-    public void Equip(Character character)
+    public void UpdateStats(Character character)
     {
         character.Armor += stats.armor;
-        character.MagnetSize +=stats.magnetSize;
+        character.MagnetSize += stats.magnetSize;
+
+        character.MoveSpeed += stats.moveSpeed;
+        // character.maxHp += stats.maxHp;
+        // character.damage += stats.damage;
+        character.ProjectileAmount += stats.projectileAmount;
+        character.ProjectileSpeed += stats.projectileSpeed;
+        character.knockBackChance += stats.knockBackChance;
+        character.Cooldown += stats.coolTimeDown;
     }
 
     public void UnEquip(Character character)
