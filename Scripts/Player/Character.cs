@@ -17,6 +17,7 @@ public class Character : MonoBehaviour
     [field: SerializeField] public float ProjectileSpeed { get; set; }
     [field: SerializeField] public float Area { get; set; }
     [field: SerializeField] public float knockBackChance { get; set; }
+    [field: SerializeField] public float DamageBonus { get; set; }
 
     [SerializeField] StatusBar hpBar;
     [HideInInspector] public Level level;
@@ -26,7 +27,6 @@ public class Character : MonoBehaviour
 
     [SerializeField] AudioClip hurtSound;
 
-    [field: SerializeField] public float DamageBonus { get; set; }
 
     // public event Action OnDie;
     public UnityEvent OnDie;

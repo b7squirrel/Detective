@@ -28,7 +28,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected Material whiteMaterial;
     [SerializeField] protected Transform hitEffectPoint;
     [SerializeField] protected float whiteFlashDuration = 0.08f;
-    [SerializeField] protected float knockBackSpeed = 12f;
+    [SerializeField] protected float knockBackSpeed;
     protected float stunnedDuration = .2f;
     protected Material initialMat;
     [HideInInspector] public Vector2 targetDir;
@@ -227,11 +227,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         WhiteFlash(whiteFlashDuration);
-        if (chance > knockBackChance || knockBackChance == 0)
-        {
-            IsKnockBack = false;
-            return;
-        }
+        // if (chance > knockBackChance || knockBackChance == 0)
+        // {
+        //     IsKnockBack = false;
+        //     return;
+        // }
         KnockBack();
     }
     public virtual void Die()
