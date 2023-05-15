@@ -230,10 +230,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Die()
     {
-        //target.GetComponent<Level>().AddExperience(experienceReward);
         GetComponent<DropOnDestroy>().CheckDrop();
-        if (whiteFlashCoroutine != null)
-            StopCoroutine(whiteFlashCoroutine);
+        // if (whiteFlashCoroutine != null)
+        //     StopCoroutine(whiteFlashCoroutine);
+
+        StopAllCoroutines();
 
         sr.material = initialMat;
         IsGrouping = false;
