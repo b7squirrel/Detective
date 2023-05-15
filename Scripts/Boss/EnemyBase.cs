@@ -217,22 +217,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
         effect.transform.position = target;
         SoundManager.instance.Play(hit);
+
+        float knockBackDelay = 0f;
         float chance = UnityEngine.Random.Range(0, 100);
-
-        if (Stats.hp < 1)
+        Debug.Log("chance = " + chance + " knockbackChance = " + knockBackChance);
+        if (chance < knockBackChance && knockBackChance != 0)
         {
-            Player.instance.transform.GetComponent<Kills>().Add(1);
-            Die();
-            return;
+            knockBackDelay = 0.04f;
         }
-
         WhiteFlash(whiteFlashDuration);
-        // if (chance > knockBackChance || knockBackChance == 0)
-        // {
-        //     IsKnockBack = false;
-        //     return;
-        // }
-        KnockBack();
+        KnockBack(target, knockBackDelay);
     }
     public virtual void Die()
     {
@@ -261,17 +255,23 @@ public class EnemyBase : MonoBehaviour, Idamageable
         gameObject.SetActive(false);
     }
 
-    protected virtual void KnockBack()
+    protected virtual void KnockBack(Vector2 target, float knockBackDelay)
     {
         Vector2 playerPos = Target.transform.position;
         IsKnockBack = true;
-        targetDir = (rb.position - Target.position).normalized;
-        StartCoroutine(KnockBackDone());
+        targetDir = (rb.position - target).normalized;
+        StartCoroutine(KnockBackDone(knockBackDelay));
     }
-    IEnumerator KnockBackDone()
+    IEnumerator KnockBackDone(float knockBackDelay)
     {
-        yield return new WaitForSeconds(0.04f);
+        yield return new WaitForSeconds(knockBackDelay);
         IsKnockBack = false;
+
+        if (Stats.hp < 1)
+        {
+            Player.instance.transform.GetComponent<Kills>().Add(1);
+            Die();
+        }
     }
 
     public virtual void Stunned(Vector2 target)

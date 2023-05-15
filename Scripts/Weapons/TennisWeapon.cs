@@ -37,6 +37,7 @@ public class TennisWeapon : WeaponBase
             projectile.Speed = weaponStats.projectileSpeed;
             projectile.Direction = direction;
             projectile.Damage = GetDamage();
+            projectile.KnockBackChance = GetKnockBackChance();
 
             Debug.Log("Projectile Speed = " + weaponStats.projectileSpeed);
 

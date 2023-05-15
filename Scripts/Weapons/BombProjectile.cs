@@ -42,11 +42,10 @@ public class BombProjectile : ProjectileBase
             }
         }
     }
-    public void Init(Vector2 target, WeaponStats weaponStats, int damage)
+    public void Init(Vector2 target, WeaponStats weaponStats)
     {
         Speed = weaponStats.projectileSpeed;
         sizeOfArea = weaponStats.sizeOfArea;
-        Damage = damage;
 
         Vector2 dir = (target - (Vector2)transform.position).normalized;
         GroundVelocity = dir * Speed;

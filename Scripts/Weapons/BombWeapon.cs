@@ -63,8 +63,13 @@ public class BombWeapon : WeaponBase
     void GenProjectile(Vector3 targetVec)
     {
         GameObject bombObject = Instantiate(bomb, transform.position, Quaternion.identity);
+
+        ProjectileBase projectileBase = bombObject.GetComponent<ProjectileBase>();
+        projectileBase.Damage = GetDamage();
+        projectileBase.KnockBackChance = GetKnockBackChance();
+
         BombProjectile proj = bombObject.GetComponent<BombProjectile>();
-        proj.Init(targetVec, weaponStats, GetDamage());
+        proj.Init(targetVec, weaponStats);
         ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
         projHeight.Initialize(verticalVelocity);
 
