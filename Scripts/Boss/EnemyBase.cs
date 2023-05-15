@@ -266,6 +266,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Vector2 playerPos = Target.transform.position;
         IsKnockBack = true;
         targetDir = (rb.position - Target.position).normalized;
+        StartCoroutine(KnockBackDone());
+    }
+    IEnumerator KnockBackDone()
+    {
+        yield return new WaitForSeconds(0.04f);
+        IsKnockBack = false;
     }
 
     public virtual void Stunned(Vector2 target)
@@ -295,8 +301,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         sr.material = whiteMaterial;
         yield return new WaitForSeconds(.02f);
         sr.material = initialMat;
-
-        IsKnockBack = false;
     }
     #endregion
 }
