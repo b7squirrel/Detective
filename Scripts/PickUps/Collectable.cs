@@ -56,7 +56,9 @@ public class Collectable : MonoBehaviour
     public virtual void OnHitMagnetField(Vector2 direction)
     {
         IsHit = true;
-        GameManager.instance.poolManager.GetMisc(pickupEffect);
+        GameObject effect = GameManager.instance.poolManager.GetMisc(pickupEffect);
+        effect.transform.position = transform.position;
+
 
         rb.AddForce(direction * knockBackForce, ForceMode2D.Impulse);
         StartCoroutine(Reset());

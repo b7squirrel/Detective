@@ -29,6 +29,7 @@ public class TennisWeapon : WeaponBase
             SoundManager.instance.Play(shoot);
             Transform muzzleEffect =
                 GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
+            muzzleEffect.transform.position = ShootPoint.position;
             GameObject tennisBall = GameManager.instance.poolManager.GetMisc(weaponTennisBall);
             tennisBall.transform.position = ShootPoint.position;
 
