@@ -38,6 +38,7 @@ public class BeamProjectile : ProjectileBase
         Transform enmey = other.GetComponent<Transform>();
         PostMessage(Damage, enmey.transform.position);
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+        hitEffect.transform.position = enmey.position;
         enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
         hitDetected = true;
         Debug.Log("Hit = " + enmey.name);
