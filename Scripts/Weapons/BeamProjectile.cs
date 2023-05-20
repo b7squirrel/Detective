@@ -36,12 +36,11 @@ public class BeamProjectile : ProjectileBase
             return;
 
         Transform enmey = other.GetComponent<Transform>();
-        PostMessage(Damage, enmey.transform.position);
+        PostMessage(Damage, enmey.position);
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
         hitEffect.transform.position = enmey.position;
-        enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
+        enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, other.ClosestPoint(transform.position), hitEffect);
         hitDetected = true;
-        Debug.Log("Hit = " + enmey.name);
     }
 
     protected override void DieProjectile()

@@ -10,12 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6504046589753106659}
   - component: {fileID: 2895209998799442102}
-  - component: {fileID: 5334397240646726556}
   - component: {fileID: 7234880488968169207}
   - component: {fileID: -7736886897960068331}
   - component: {fileID: -8457194464894237980}
   m_Layer: 0
-  m_Name: MuzzleFlash
+  m_Name: MuzzleFlash_laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,31 +75,18 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 327865993
   m_SortingLayer: 8
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 15423ee383c1e4646a1861b1072e4551, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.1111112, y: 1.1111112}
+  m_Size: {x: 2.7777777, y: 2.7777777}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5334397240646726556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5419914140758713295}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdf9c43563a6ffc4381e8309f104bb76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToDisable: 0.083
 --- !u!95 &7234880488968169207
 Animator:
   serializedVersion: 5
@@ -147,4 +133,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad10bd374ff11e34faf5438b72bd3a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Key>k__BackingField: MuzzleFlash_A
+  <Key>k__BackingField: MuzzleFlash_butter

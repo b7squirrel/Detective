@@ -10,6 +10,9 @@ public class BeamWeapon : WeaponBase
     bool isProjectileActive;
     float duration; // projectile 지속 시간
 
+    [SerializeField] GameObject muzzleFlash;
+    GameObject muzzle; // muzzleFlash를 생성해서 담아두는 곳
+    [SerializeField] AudioClip laserShoot;
     protected override void Attack()
     {
         base.Attack();
@@ -91,8 +94,21 @@ public class BeamWeapon : WeaponBase
             projectile.Damage = GetDamage();
             projectile.KnockBackChance = GetKnockBackChance();
         }
+
+        // muzzle flash
+        if(muzzle == null)
+        {
+            muzzle = GameManager.instance.poolManager.GetMisc(muzzleFlash);
+            muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+            muzzle.transform.position = ShootPoint.position;
+        }
+        muzzle.gameObject.SetActive(true);
+
         isProjectileActive = true;
         duration = .5f; // 레이져 애니메이션 길이
+
+        // sound
+        SoundManager.instance.Play(laserShoot);
     }
     void DestroyProjectiles()
     {
@@ -103,5 +119,7 @@ public class BeamWeapon : WeaponBase
 
         isProjectileActive = false;
         timer = weaponStats.timeToAttack;
+
+        muzzle.gameObject.SetActive(false);
     }
 }
