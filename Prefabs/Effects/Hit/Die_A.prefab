@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8245304901989950951}
   - component: {fileID: 4218734828449106767}
   - component: {fileID: 4007394127328595771}
+  - component: {fileID: 2130603903273138767}
   m_Layer: 0
   m_Name: Die_A
   m_TagString: Untagged
@@ -135,6 +136,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.3, y: -0.17}
+--- !u!114 &2130603903273138767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 263391957910281814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad10bd374ff11e34faf5438b72bd3a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Key>k__BackingField: Die_A
 --- !u!1 &5923659403915791058
 GameObject:
   m_ObjectHideFlags: 0

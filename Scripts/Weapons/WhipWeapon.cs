@@ -35,7 +35,7 @@ public class WhipWeapon : WeaponBase
             PostMessage(damage, collision.transform.position);
 
             GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-            enemy.TakeDamage(damage, knockBack, boxCol.transform.position, hitEffect);
+            enemy.TakeDamage(damage, knockBack, collision.ClosestPoint(transform.position), hitEffect);
         }
     }
 
