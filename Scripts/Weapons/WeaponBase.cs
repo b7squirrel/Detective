@@ -29,6 +29,7 @@ public class WeaponBase : MonoBehaviour
     protected Vector2 direction;
     protected bool flip;
     public bool IsDirectional {get; set;}
+    public bool MaxLevel { get; private set; }
     
     #endregion
 
@@ -71,6 +72,8 @@ public class WeaponBase : MonoBehaviour
         this.weaponData = wd;
         weaponStats =
             new WeaponStats(wd.stats.damage, wd.stats.timeToAttack, wd.stats.numberOfAttacks, wd.stats.sizeOfArea, wd.stats.projectileSpeed, wd.stats.knockBackChance);
+
+        MaxLevel = false;
     }
 
     protected virtual void Attack()
@@ -99,6 +102,37 @@ public class WeaponBase : MonoBehaviour
     internal void Upgrade(UpgradeData upgradeData)
     {
         weaponStats.Sum(upgradeData.weaponUpgradeStats);
+        // 스탯 업그레이드 후
+        CheckIfMaxLevel();
+
+    }
+    void CheckIfMaxLevel()
+    {
+        if (weaponStats.currentLevel == weaponData.upgrades.Count)
+        {
+            Debug.Log(weaponData.Name + " is Max Level");
+            MaxLevel = true;
+
+            // 일단 weaponData.Synergyweapon이 제대로 넘어가는지 확인
+            if (Wielder.GetComponent<Level>().HavingSynergyCoupleItem(weaponData.SynergyWeapon))
+            {
+                Item item = Wielder.GetComponent<PassiveItems>().GetSynergyCouple(weaponData.SynergyWeapon);
+                if (item == null)
+                {
+                    Debug.Log("시너지 커플 아이템이 없습니다");
+                    return;
+                }
+
+                if (item.stats.currentLevel == item.upgrades.Count)
+                {
+                    Debug.Log("시너지 웨폰 활성화");
+                }
+                else
+                {
+                    Debug.Log("시너지 커플 아이템이 최고레벨이 아닙니다");
+                }
+            }
+        }
     }
 
     public void AddOwnerCharacter(Character character)

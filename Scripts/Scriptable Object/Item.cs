@@ -21,6 +21,8 @@ public class ItemStats
     public int hp;
     public int coins;
 
+    public int currentLevel;
+
     // coin과 hp는 Equip 같은 것들을 거치지 않고 바로 Level에서 적용되므로 Sum에 포함되지 않는다.
     // 최대치를 넘어서면 값을 최대치로 다시 정해준다
     // 무기들 리스트를 받아와서 값을 없그레이드 해준다
@@ -37,6 +39,8 @@ public class ItemStats
         projectileSpeed = stats.projectileSpeed;
         knockBackChance = stats.knockBackChance;
         coolTimeDown = stats.coolTimeDown;
+
+        currentLevel++;
     }
 }
 
@@ -44,6 +48,8 @@ public class ItemStats
 public class Item : ScriptableObject
 {
     public string Name;
+    public string SynergyWeapon;
+    int maxLevel;
     public ItemStats stats;
     public List<UpgradeData> upgrades;
 
@@ -53,8 +59,17 @@ public class Item : ScriptableObject
         this.name = Name; // 스크립터블 오브젝트의 이름
         stats = new ItemStats();
         upgrades = new List<UpgradeData>(); // UpgradeData들을 끌어다 놓기
+        foreach (var item in upgrades)
+        {
+            Debug.Log("item upgrades = " + item.Name);
+        }
+        
+
+        stats.currentLevel = 0;
     }
 
+    // SetStats와 UpdtaeStats는 항상 함께 실행된다.
+    // character에 setStats로 넘겨받은 증가분을 더해준다
     public void UpdateStats(Character character)
     {
         character.Armor += stats.armor;
@@ -67,6 +82,37 @@ public class Item : ScriptableObject
         character.ProjectileSpeed += stats.projectileSpeed;
         character.knockBackChance += stats.knockBackChance;
         character.Cooldown += stats.coolTimeDown;
+
+        CheckIfMaxLevel(character);
+    }
+
+    void CheckIfMaxLevel(Character character)
+    {
+        Debug.Log(Name + " current Level = " + stats.currentLevel);
+        Debug.Log(Name + " number of upgrades = " + upgrades.Count);
+        if (stats.currentLevel == upgrades.Count)
+        {
+            Debug.Log(Name + " is Max Level");
+
+            if (character.GetComponent<Level>().HavingSynergyCoupleWeapon(SynergyWeapon))
+            {
+                WeaponData weapon = character.GetComponent<Level>().GetSynergyCoupleWeapon(SynergyWeapon);
+                if (weapon == null)
+                {
+                    Debug.Log("시너지 커플 웨폰이 없습니다");
+                    return;
+                }
+
+                if (weapon.stats.currentLevel == weapon.upgrades.Count)
+                {
+                    Debug.Log("시너지 웨폰 활성화");
+                }
+                else
+                {
+                    Debug.Log("시너지 커플 웨폰이 최고레벨이 아닙니다");
+                }
+            }
+        }
     }
 
     public void UnEquip(Character character)

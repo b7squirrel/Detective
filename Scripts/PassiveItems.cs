@@ -25,9 +25,19 @@ public class PassiveItems : MonoBehaviour
         newItemInstance.Init(itemToEquip.Name);
         newItemInstance.stats.SetStats(itemToEquip.stats);
         // newItemInstance.name = itemToEquip.Name; // Init에서 이름을 정해주니까 필요없어 보인다
+        newItemInstance.SynergyWeapon = itemToEquip.SynergyWeapon;
+        newItemInstance.upgrades.AddRange(itemToEquip.upgrades);
 
         items.Add(newItemInstance);
         newItemInstance.UpdateStats(character);
+
+        Debug.Log(newItemInstance.SynergyWeapon);
+    }
+
+    public Item GetSynergyCouple(string synergyWeapon)
+    {
+        Item couple = items.Find(x => x.SynergyWeapon == synergyWeapon);
+        return couple;
     }
 
     public void UnEquip(Item itemToUnEquip)

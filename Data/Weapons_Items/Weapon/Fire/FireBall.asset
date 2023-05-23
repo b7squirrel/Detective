@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: FireBall
   m_EditorClassIdentifier: 
   Name: FireBall
+  SynergyWeapon: AkimboGun
   weaponPrefab: {fileID: 5831665795245939412, guid: 291aed483e7745e40b52be27fc10bc5a, type: 3}
   stats:
     damage: 80
@@ -21,6 +22,7 @@ MonoBehaviour:
     sizeOfArea: 0
     projectileSpeed: 30
     knockBackChance: 20
+    currentLevel: 0
   weaponBasePrefab: {fileID: 7295769312407643447, guid: e58fa634116417b41abc98ada74e9ffa, type: 3}
   animatorController: {fileID: 9100000, guid: 696f1de3340ac9d4b8d9bcf89966a2a2, type: 2}
   description: "\uD14C\uB2C8\uC2A4 \uACF5\uC73C\uB85C \uC801\uC744 \uACF5\uACA9\uD569\uB2C8\uB2E4."
@@ -31,5 +33,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a441a545abd9c0545886970691c877cf, type: 2}
   - {fileID: 11400000, guid: 502e1eb5601e3404d9d4c80000d958dc, type: 2}
   - {fileID: 11400000, guid: 26f9187023c2e894ba70eb5d5ec67f54, type: 2}
-  - {fileID: 11400000, guid: 204209e87c2c7f840941dd35112e610d, type: 2}
   - {fileID: 11400000, guid: 3d326c98231f6c4499bf67c6936ef3bb, type: 2}
