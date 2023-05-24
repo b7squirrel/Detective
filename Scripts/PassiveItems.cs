@@ -30,8 +30,6 @@ public class PassiveItems : MonoBehaviour
 
         items.Add(newItemInstance);
         newItemInstance.UpdateStats(character);
-
-        Debug.Log(newItemInstance.SynergyWeapon);
     }
 
     public Item GetSynergyCouple(string synergyWeapon)

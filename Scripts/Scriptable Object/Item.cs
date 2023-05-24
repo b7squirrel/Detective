@@ -49,7 +49,6 @@ public class Item : ScriptableObject
 {
     public string Name;
     public string SynergyWeapon;
-    int maxLevel;
     public ItemStats stats;
     public List<UpgradeData> upgrades;
 
@@ -59,11 +58,6 @@ public class Item : ScriptableObject
         this.name = Name; // 스크립터블 오브젝트의 이름
         stats = new ItemStats();
         upgrades = new List<UpgradeData>(); // UpgradeData들을 끌어다 놓기
-        foreach (var item in upgrades)
-        {
-            Debug.Log("item upgrades = " + item.Name);
-        }
-        
 
         stats.currentLevel = 0;
     }
@@ -88,15 +82,14 @@ public class Item : ScriptableObject
 
     void CheckIfMaxLevel(Character character)
     {
-        Debug.Log(Name + " current Level = " + stats.currentLevel);
-        Debug.Log(Name + " number of upgrades = " + upgrades.Count);
-        if (stats.currentLevel == upgrades.Count)
+        if (stats.currentLevel == upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
         {
             Debug.Log(Name + " is Max Level");
 
             if (character.GetComponent<Level>().HavingSynergyCoupleWeapon(SynergyWeapon))
             {
-                WeaponData weapon = character.GetComponent<Level>().GetSynergyCoupleWeapon(SynergyWeapon);
+                UpgradeData data = character.GetComponent<Level>().GetSynergyCoupleWeapon(SynergyWeapon);
+                WeaponData weapon = data.weaponData;
                 if (weapon == null)
                 {
                     Debug.Log("시너지 커플 웨폰이 없습니다");

@@ -193,6 +193,7 @@ public class Level : MonoBehaviour
     // 시너지 되는 아이템을 가지고 있는지 확인
     public bool HavingSynergyCoupleItem(string synergyWeapon)
     {
+        List<Item> itemUpgrades = new List<Item>();
         UpgradeData synergyCouple = acquiredUpgrades.Find(x => x.item.SynergyWeapon == synergyWeapon);
         if (synergyCouple == null)
             return false;
@@ -214,7 +215,7 @@ public class Level : MonoBehaviour
             return false;
         return true;
     }
-    public WeaponData GetSynergyCoupleWeapon(string synergyWeapon)
+    public UpgradeData GetSynergyCoupleWeapon(string synergyWeapon)
     {
         List<UpgradeData> items = new List<UpgradeData>();
         foreach (var up in acquiredUpgrades)
@@ -225,7 +226,7 @@ public class Level : MonoBehaviour
             }
         }
         // item만 골라내서 검색. x.weaponData가 null이어서 연산이 진행이 안되는 경우를 피함
-        WeaponData couple = items.Find(x => x.weaponData.SynergyWeapon == synergyWeapon).weaponData;
+        UpgradeData couple = items.Find(x => x.weaponData.SynergyWeapon == synergyWeapon);
         return couple;
     }
 
