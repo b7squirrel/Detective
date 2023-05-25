@@ -56,6 +56,33 @@ public class WeaponContainer : MonoBehaviour
 
         return container;
     }
+    public WeaponData GetCoupleWeaponData(string synergyWeapon)
+    {
+        foreach (var item in weaponContainers)
+        {
+            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            if(wb.weaponData.SynergyWeapon == synergyWeapon)
+            {
+                return wb.weaponData;
+            }
+        }
+        return null;
+    }
+    public bool IsWeaponMaxLevel(WeaponData weaponData)
+    {
+        foreach (var item in weaponContainers)
+        {
+            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            if( wb.weaponData == weaponData)
+            {
+                if(wb.weaponStats.currentLevel == wb.weaponData.upgrades.Count);
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     void SetSortingOrder()
     {

@@ -100,8 +100,8 @@ public class WeaponBase : MonoBehaviour
         weaponStats.Sum(upgradeData.weaponUpgradeStats);
         // 스탯 업그레이드 후
         CheckIfMaxLevel();
-
     }
+    
     void CheckIfMaxLevel()
     {
         // 아이템과는 다르게 알을 먹으면 무기 레벨이 0인 상태로 acquired 되니까 Count와 같음
@@ -118,7 +118,7 @@ public class WeaponBase : MonoBehaviour
 
                 if (item.stats.currentLevel == item.upgrades.Count + 1)
                 {
-                    Debug.Log("시너지 웨폰 활성화");
+                    Debug.Log("wb시너지 웨폰 활성화");
                 }
                 else
                 {
