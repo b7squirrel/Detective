@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class SynergyManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static SynergyManager instance;
 
-    // Update is called once per frame
-    void Update()
+    void Awake()
     {
-        
+        instance = this;
+    }
+    // 시너지웨폰 키워드로 무기를 찾아 시너지웨폰 활성화
+    public void ActivateSynergyWeapon(WeaponData weaponData)
+    {   
+         GetComponent<WeaponContainer>().SetSynergyWeaponActive(weaponData);
+         Debug.Log(weaponData.Name + "이 활성화 되었습니다.");
     }
 }

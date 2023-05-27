@@ -84,22 +84,23 @@ public class Item : ScriptableObject
     {
         if (stats.currentLevel == upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
         {
-            Debug.Log(Name + " is Max Level");
+            // Debug.Log(Name + " is Max Level");
 
             WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(SynergyWeapon);
             if (wd == null)
             {
-                Debug.Log("시너지 커플 웨폰이 없습니다");
+                // Debug.Log("시너지 커플 웨폰이 없습니다");
                 return;
             }
 
             if (character.GetComponent<WeaponContainer>().IsWeaponMaxLevel(wd))
             {
-                Debug.Log("it시너지 웨폰 활성화");
+                // Debug.Log("it시너지 웨폰 활성화");
+                character.GetComponent<SynergyManager>().ActivateSynergyWeapon(wd);
             }
             else
             {
-                Debug.Log("시너지 커플 웨폰이 최고레벨이 아닙니다");
+                // Debug.Log("시너지 커플 웨폰이 최고레벨이 아닙니다");
             }
         }
     }

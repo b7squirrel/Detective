@@ -12,12 +12,17 @@ public class WeaponBase : MonoBehaviour
     protected float timer;
 
     public Character Wielder {get; private set;}
+    public bool IsSynergyWeaponActivated{get; set;}
 
     public Animator anim;
     public Transform ShootPoint;
     public Transform EffectPoint;
     public Weapon weaponTools;
+    public Weapon weaponToolsExtra;
+    public Transform ShootPointExtra;
+    public Transform EffectPointExtra;
     protected float angle;
+    protected float angleExtra;
 
     #region Flip
     public bool InitialWeapon{get; set;} // weapon manager에서 설정
@@ -36,6 +41,7 @@ public class WeaponBase : MonoBehaviour
     {
         weaponContainerAnim = GetComponentInParent<WeaponContainerAnim>();
         timer = weaponStats.timeToAttack;
+        IsSynergyWeaponActivated = false;
     }
     protected virtual void Awake()
     {
@@ -46,13 +52,18 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        Vector2 closestEnemyPosition = FindTarget();
-        if (closestEnemyPosition == Vector2.zero)
+        List<Vector2> closestEnemyPosition = FindTarget(2);
+        
+        if (closestEnemyPosition[0] == Vector2.zero)
             return;
 
-        dir = GetDirection(closestEnemyPosition);
+        dir = GetDirection(closestEnemyPosition[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         RotateWeapon();
+
+        dir = GetDirection(closestEnemyPosition[1]);
+        angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        RotateExtraWeapon();
 
         FlipChild();
         FlipWeaponTools();
@@ -112,17 +123,18 @@ public class WeaponBase : MonoBehaviour
             Item item = Wielder.GetComponent<PassiveItems>().GetSynergyCouple(weaponData.SynergyWeapon);
                 if (item == null)
                 {
-                    Debug.Log("시너지 커플 아이템이 없습니다");
+                    // Debug.Log("시너지 커플 아이템이 없습니다");
                     return;
                 }
 
                 if (item.stats.currentLevel == item.upgrades.Count + 1)
                 {
-                    Debug.Log("wb시너지 웨폰 활성화");
+                    // Debug.Log("wb시너지 웨폰 활성화");
+                    Wielder.GetComponent<SynergyManager>().ActivateSynergyWeapon(weaponData);
                 }
                 else
                 {
-                    Debug.Log("시너지 커플 아이템이 최고레벨이 아닙니다");
+                    // Debug.Log("시너지 커플 아이템이 최고레벨이 아닙니다");
                 }
         }
     }
@@ -141,8 +153,9 @@ public class WeaponBase : MonoBehaviour
     }
 
     //방향 관련
-    protected virtual Vector2 FindTarget()
+    protected virtual List<Vector2> FindTarget(int numberOfTargets)
     {
+        // 화면 안에서 공격 가능한 개체들 검색
         Collider2D[] hits =
             Physics2D.OverlapBoxAll(transform.position, size, 0f, enemy);
         List<Transform> allEnemies = new List<Transform>();
@@ -155,29 +168,37 @@ public class WeaponBase : MonoBehaviour
             }
         }
 
+        // 순회하면서 원하는 갯수만큼 공격 가능한 개체들을 수집
         float distanceToclosestEnemy = 20f;
         Transform closestEnemy = null;
+        List<Vector2> pickedEnemies = new List<Vector2>();
 
-        foreach (Transform item in allEnemies)
+        for (int i = 0; i < numberOfTargets; i++)
         {
-            float distanceToEnmey =
-            Vector3.Distance(item.position, transform.position);
-
-            if (distanceToEnmey < distanceToclosestEnemy)
+            foreach (Transform item in allEnemies)
             {
-                distanceToclosestEnemy = distanceToEnmey;
-                closestEnemy = item;
+                float distanceToEnmey =
+                Vector3.Distance(item.position, transform.position);
+
+                if (distanceToEnmey < distanceToclosestEnemy)
+                {
+                    distanceToclosestEnemy = distanceToEnmey;
+                    closestEnemy = item;
+                }
+            }
+            // foreach가 다 돌고 나서 가장 가까운 적이 존재하면
+            // 반환할 pickedEnemies에 추가하고, 그 적을 제외하고 다시 순회검색 
+            if(closestEnemy != null)
+            {
+                pickedEnemies.Add(closestEnemy.position);
+                allEnemies.Remove(closestEnemy);
+            }
+            else
+            {
+                pickedEnemies.Add(Vector2.zero);
             }
         }
-
-        allEnemies.Clear();
-
-        if (closestEnemy == null)
-        {
-            return Vector2.zero;
-        }
-
-        return closestEnemy.transform.position;
+        return pickedEnemies;
     }
 
     protected Vector2 GetDirection(Vector2 closestEnemy)
@@ -194,6 +215,14 @@ public class WeaponBase : MonoBehaviour
         if (weaponTools.IsDirectional)
             weaponTools.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
+protected void RotateExtraWeapon()
+{
+    if (weaponToolsExtra == null)
+            return;
+        if (weaponToolsExtra.IsDirectional)
+            weaponToolsExtra.transform.rotation = Quaternion.Euler(0, 0, angle);
+}
+
     protected void FlipChild()
     {
         if (direction.x < 0)
@@ -216,6 +245,9 @@ public class WeaponBase : MonoBehaviour
         // flip
         if (weaponTools != null)
         weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = flip;
+
+        if (weaponToolsExtra != null)
+        weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = flip;
         
     }
 }

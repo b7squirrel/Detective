@@ -5,9 +5,9 @@ public class WeaponContainer : MonoBehaviour
 {
     [SerializeField] Transform containerPrefab;
     [SerializeField] float moveSpeed;
-    List<Transform> weaponContainers;
+    List<Transform> weaponContainers; // 각각의 아이들, weaponBase 및 무기 스크립트가 붙는 오브젝트
     Player player;
-    GameObject weaponContainerContainer;
+    GameObject weaponContainerContainer; // 아이들을 묶어주는 부모 오브젝트
 
     private void Awake()
     {
@@ -15,7 +15,7 @@ public class WeaponContainer : MonoBehaviour
         weaponContainers = new List<Transform>();
     }
 
-    private void Start()
+    void Start()
     {
         if (weaponContainerContainer == null)
         {
@@ -24,7 +24,12 @@ public class WeaponContainer : MonoBehaviour
             weaponContainerContainer.name = "WeaponContainers";
         }
     }
-    private void FixedUpdate()
+    void FixedUpdate()
+    {
+        ApplyMovements();
+    }
+
+    void ApplyMovements()
     {
         if (player.IsPlayerMoving() == false)
             return;
@@ -51,11 +56,13 @@ public class WeaponContainer : MonoBehaviour
             if (weaponData.animatorController != null)
                 container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
         }
+        container.gameObject.name = weaponData.Name;
         weaponContainers.Add(container);
         SetSortingOrder();
 
         return container;
     }
+    // 플레이어가 coupleweapon을 가지고 있는지 검색
     public WeaponData GetCoupleWeaponData(string synergyWeapon)
     {
         foreach (var item in weaponContainers)
@@ -89,6 +96,20 @@ public class WeaponContainer : MonoBehaviour
         for (int i = weaponContainers.Count - 1; i > 0; i--)
         {
             weaponContainers[i].GetComponent<SpriteRenderer>().sortingOrder = -i;
+        }
+    }
+
+    public void SetSynergyWeaponActive(WeaponData weaponData)
+    {
+        // 이 함수가 실행되는 시점에서 해당 weapon이 null일 수가 없음.
+        foreach (var item in weaponContainers)
+        {
+            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            if(wb.weaponData.Name == weaponData.Name)
+            {
+                wb.IsSynergyWeaponActivated = true;
+                Debug.Log("isSynergyWeaponActiveated value = " + wb.IsSynergyWeaponActivated);
+            }
         }
     }
 }

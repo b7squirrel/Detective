@@ -12,8 +12,8 @@ public class TennisWeapon : WeaponBase
 
     protected override void Attack()
     {
-          Vector2 closestEnemyPosition = FindTarget();
-        if (closestEnemyPosition == Vector2.zero)
+          List<Vector2> closestEnemyPosition = FindTarget(1);
+        if (closestEnemyPosition[0] == Vector2.zero)
         {
             return;
         }
