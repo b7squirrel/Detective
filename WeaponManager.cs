@@ -61,20 +61,19 @@ public class WeaponManager : MonoBehaviour
             level.AddUpgradesIntoTheListOfAvailableUpgrades(weaponData.upgrades);
         }
     }
-    public void AddExtraWeaponTool(WeaponData weaponData, Transform weaponPrefab)
+    public void AddExtraWeaponTool(WeaponData weaponData, WeaponBase weaponBase)
     {
-        WeaponBase weaponBase = weaponPrefab.GetComponent<WeaponBase>();
         // 개별 무기들 부착
         if (weaponData.weaponPrefab != null)
         {
-            Transform weaponTool = Instantiate(weaponData.weaponPrefab, weaponPrefab.transform);
-            weaponTool.position = weaponPrefab.position;
+            Transform weaponTool = Instantiate(weaponData.weaponPrefab, weaponBase.transform);
+            weaponTool.position = weaponBase.transform.position;
 
             //값을 weaponFire등에서 가져갈 수 있도록 weaponBase로 옮겨놓음
             weaponBase.weaponToolsExtra = weaponTool.GetComponent<Weapon>();
             weaponBase.ShootPointExtra = weaponBase.weaponToolsExtra.shootPoint;
             weaponBase.EffectPointExtra = weaponBase.weaponToolsExtra.effectPoint;
-            weaponBase.anim = weaponTool.GetComponent<Animator>();
+            weaponBase.animExtra = weaponTool.GetComponent<Animator>();
         }
     }
 

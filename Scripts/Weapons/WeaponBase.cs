@@ -12,9 +12,10 @@ public class WeaponBase : MonoBehaviour
     protected float timer;
 
     public Character Wielder {get; private set;}
-    public bool IsSynergyWeaponActivated{get; set;}
+    protected bool isSynergyWeaponActivated;
 
     public Animator anim;
+    public Animator animExtra;
     public Transform ShootPoint;
     public Transform EffectPoint;
     public Weapon weaponTools;
@@ -31,6 +32,7 @@ public class WeaponBase : MonoBehaviour
     [SerializeField] protected LayerMask enemy;
     protected WeaponContainerAnim weaponContainerAnim;
     protected Vector2 dir; // 가장 가까운 적으로의 방향
+    protected Vector2 dirExtra;
     protected Vector2 direction;
     protected bool flip;
     public bool IsDirectional {get; set;}
@@ -41,7 +43,7 @@ public class WeaponBase : MonoBehaviour
     {
         weaponContainerAnim = GetComponentInParent<WeaponContainerAnim>();
         timer = weaponStats.timeToAttack;
-        IsSynergyWeaponActivated = false;
+        isSynergyWeaponActivated = false;
     }
     protected virtual void Awake()
     {
@@ -61,8 +63,8 @@ public class WeaponBase : MonoBehaviour
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         RotateWeapon();
 
-        dir = GetDirection(closestEnemyPosition[1]);
-        angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        dirExtra = GetDirection(closestEnemyPosition[1]);
+        angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
         RotateExtraWeapon();
 
         FlipChild();
@@ -151,6 +153,13 @@ public class WeaponBase : MonoBehaviour
             anim.SetTrigger("Shoot");
         }
     }
+    protected void AnimShootExtra()
+    {
+        if (animExtra != null)
+        {
+            animExtra.SetTrigger("Shoot");
+        }
+    }
 
     //방향 관련
     protected virtual List<Vector2> FindTarget(int numberOfTargets)
@@ -175,6 +184,7 @@ public class WeaponBase : MonoBehaviour
 
         for (int i = 0; i < numberOfTargets; i++)
         {
+            distanceToclosestEnemy = 20f;
             foreach (Transform item in allEnemies)
             {
                 float distanceToEnmey =
@@ -215,13 +225,13 @@ public class WeaponBase : MonoBehaviour
         if (weaponTools.IsDirectional)
             weaponTools.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
-protected void RotateExtraWeapon()
-{
-    if (weaponToolsExtra == null)
+    protected void RotateExtraWeapon()
+    {
+        if (weaponToolsExtra == null)
             return;
         if (weaponToolsExtra.IsDirectional)
-            weaponToolsExtra.transform.rotation = Quaternion.Euler(0, 0, angle);
-}
+            weaponToolsExtra.transform.rotation = Quaternion.Euler(0, 0, angleExtra);
+    }
 
     protected void FlipChild()
     {
@@ -237,7 +247,6 @@ protected void RotateExtraWeapon()
         weaponContainerAnim.Flip(flip);
 
         //개별 무기 flip
-        
     }
 
     protected virtual void FlipWeaponTools()
@@ -248,6 +257,11 @@ protected void RotateExtraWeapon()
 
         if (weaponToolsExtra != null)
         weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = flip;
-        
+    }
+
+    public virtual void ActivateSynergyWeapon()
+    {
+        isSynergyWeaponActivated = true;
+        // 개별 무기들에서 각자 구현
     }
 }

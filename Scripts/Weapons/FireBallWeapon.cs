@@ -46,7 +46,33 @@ public class FireBallWeapon : WeaponBase
             projectile.Damage = GetDamage();
             projectile.KnockBackChance = GetKnockBackChance();
 
+            if (isSynergyWeaponActivated)
+            {
+                AnimShootExtra();
+                SoundManager.instance.Play(shoot);
+                // GameObject effectEx = GameManager.instance.poolManager.GetMisc(muzzleFlash);
+                // effectEx.transform.position = EffectPointExtra.position;
+
+                GameObject fireBallEx = GameManager.instance.poolManager.GetMisc(weapon);
+                // GameObject fireBall = Instantiate(weapon, transform.position, Quaternion.identity);
+                fireBallEx.transform.position = transform.position;
+                fireBallEx.transform.rotation = Quaternion.FromToRotation(Vector2.up, dirExtra);
+
+                ProjectileBase projectileEx = fireBallEx.GetComponent<ProjectileBase>();
+                projectileEx.Direction = dirExtra;
+                projectileEx.Speed = weaponStats.projectileSpeed;
+
+                projectileEx.Damage = GetDamage();
+                projectileEx.KnockBackChance = GetKnockBackChance();
+            }
+
             yield return new WaitForSeconds(.3f);
         }
+    }
+
+    public override void ActivateSynergyWeapon()
+    {
+        base.ActivateSynergyWeapon();
+        Player.instance.GetComponent<WeaponManager>().AddExtraWeaponTool(weaponData, this);
     }
 }

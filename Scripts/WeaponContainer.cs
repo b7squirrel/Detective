@@ -107,8 +107,8 @@ public class WeaponContainer : MonoBehaviour
             WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
             if(wb.weaponData.Name == weaponData.Name)
             {
-                wb.IsSynergyWeaponActivated = true;
-                Debug.Log("isSynergyWeaponActiveated value = " + wb.IsSynergyWeaponActivated);
+                wb.ActivateSynergyWeapon();
+                Debug.Log("시너지 웨폰 액티베이트 in weaponContainer");
             }
         }
     }

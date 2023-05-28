@@ -42,6 +42,8 @@ public class TennisWeapon : WeaponBase
 
             Debug.Log("Projectile Speed = " + weaponStats.projectileSpeed);
 
+            
+
             yield return new WaitForSeconds(.3f);
         }
     }
