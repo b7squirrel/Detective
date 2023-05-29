@@ -22,10 +22,11 @@ public class FireBallWeapon : WeaponBase
             return;
         }
 
-        StartCoroutine(AttackCo());
+        // StartCoroutine(AttackCo());
+        AttackCo();
     }
 
-    IEnumerator AttackCo()
+    void AttackCo()
     {
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
@@ -35,12 +36,26 @@ public class FireBallWeapon : WeaponBase
             effect.transform.position = EffectPoint.position;
             
             GameObject fireBall = GameManager.instance.poolManager.GetMisc(weapon);
+            float index = 0f;
+            if(i==0) 
+            {
+                index = -15f;
+            }
+            else if(i==1)
+            {
+                index = 0;
+            }
+            else if(i ==2)
+            {
+                index = 15f;
+            }
+            Vector3 direction = Quaternion.AngleAxis(index, Vector3.forward) * dir;
             // GameObject fireBall = Instantiate(weapon, transform.position, Quaternion.identity);
             fireBall.transform.position = transform.position;
-            fireBall.transform.rotation = Quaternion.FromToRotation(Vector2.up, dir);
+            fireBall.transform.rotation = Quaternion.FromToRotation(Vector2.up, direction);
 
             ProjectileBase projectile = fireBall.GetComponent<ProjectileBase>();
-            projectile.Direction = dir;
+            projectile.Direction = direction;
             projectile.Speed = weaponStats.projectileSpeed;
 
             projectile.Damage = GetDamage();
@@ -54,19 +69,20 @@ public class FireBallWeapon : WeaponBase
                 // effectEx.transform.position = EffectPointExtra.position;
 
                 GameObject fireBallEx = GameManager.instance.poolManager.GetMisc(weapon);
+                Vector3 directionExtra = Quaternion.AngleAxis(index, Vector3.forward) * dirExtra;
                 // GameObject fireBall = Instantiate(weapon, transform.position, Quaternion.identity);
                 fireBallEx.transform.position = transform.position;
-                fireBallEx.transform.rotation = Quaternion.FromToRotation(Vector2.up, dirExtra);
+                fireBallEx.transform.rotation = Quaternion.FromToRotation(Vector2.up, directionExtra);
 
                 ProjectileBase projectileEx = fireBallEx.GetComponent<ProjectileBase>();
-                projectileEx.Direction = dirExtra;
+                projectileEx.Direction = directionExtra;
                 projectileEx.Speed = weaponStats.projectileSpeed;
 
                 projectileEx.Damage = GetDamage();
                 projectileEx.KnockBackChance = GetKnockBackChance();
             }
 
-            yield return new WaitForSeconds(.3f);
+            // yield return new WaitForSeconds(.3f);
         }
     }
 

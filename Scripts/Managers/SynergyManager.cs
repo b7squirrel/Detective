@@ -14,6 +14,6 @@ public class SynergyManager : MonoBehaviour
     public void ActivateSynergyWeapon(WeaponData weaponData)
     {   
          GetComponent<WeaponContainer>().SetSynergyWeaponActive(weaponData);
-         Debug.Log(weaponData.Name + "이 활성화 되었습니다.");
+         Debug.Log(weaponData.SynergyWeapon + "이 활성화 되었습니다.");
     }
 }
