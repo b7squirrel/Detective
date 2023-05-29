@@ -10,7 +10,8 @@ public class Level : MonoBehaviour
     [SerializeField] UpgradePanelManager upgradeManager;
 
     [SerializeField] List<UpgradeData> upgrades;
-    [SerializeField] List<UpgradeData> randomPool = new List<UpgradeData>();
+    [SerializeField] List<UpgradeData> synergyUpgrades;
+    List<UpgradeData> randomPool = new List<UpgradeData>();
     List<UpgradeData> selectedUpgrads;
 
     [SerializeField] List<UpgradeData> acquiredUpgrades;

@@ -18,10 +18,10 @@ public class TennisWeapon : WeaponBase
             return;
         }
 
-        StartCoroutine(AttackCo());
+        AttackCo();
     }
 
-    IEnumerator AttackCo()
+    void AttackCo()
     {
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
@@ -33,18 +33,34 @@ public class TennisWeapon : WeaponBase
             GameObject tennisBall = GameManager.instance.poolManager.GetMisc(weaponTennisBall);
             tennisBall.transform.position = ShootPoint.position;
 
+            float index = 0f;
+            if(i==0) 
+            {
+                index = 0;
+            }
+            else if(i==1)
+            {
+                index = -15f;
+            }
+            else if(i ==2)
+            {
+                index = 15f;
+            }
+            else if(i ==3)
+            {
+                index = -30f;
+            }
+            else if(i==4)
+            {
+                index = 30f;
+            }
+            Vector3 direction = Quaternion.AngleAxis(index, Vector3.forward) * dir;
+
             ProjectileBase projectile = tennisBall.GetComponent<ProjectileBase>();
-            projectile.Direction = dir;
             projectile.Speed = weaponStats.projectileSpeed;
             projectile.Direction = direction;
             projectile.Damage = GetDamage();
             projectile.KnockBackChance = GetKnockBackChance();
-
-            Debug.Log("Projectile Speed = " + weaponStats.projectileSpeed);
-
-            
-
-            yield return new WaitForSeconds(.3f);
         }
     }
 

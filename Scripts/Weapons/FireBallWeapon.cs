@@ -21,8 +21,6 @@ public class FireBallWeapon : WeaponBase
             Debug.Log("No ememies");
             return;
         }
-
-        // StartCoroutine(AttackCo());
         AttackCo();
     }
 
@@ -50,7 +48,6 @@ public class FireBallWeapon : WeaponBase
                 index = 15f;
             }
             Vector3 direction = Quaternion.AngleAxis(index, Vector3.forward) * dir;
-            // GameObject fireBall = Instantiate(weapon, transform.position, Quaternion.identity);
             fireBall.transform.position = transform.position;
             fireBall.transform.rotation = Quaternion.FromToRotation(Vector2.up, direction);
 
@@ -81,8 +78,6 @@ public class FireBallWeapon : WeaponBase
                 projectileEx.Damage = GetDamage();
                 projectileEx.KnockBackChance = GetKnockBackChance();
             }
-
-            // yield return new WaitForSeconds(.3f);
         }
     }
 
