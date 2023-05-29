@@ -261,7 +261,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Vector2 playerPos = Target.transform.position;
         IsKnockBack = true;
         targetDir = (rb.position - target).normalized;
-        StartCoroutine(KnockBackDone(knockBackDelay));
+        if (this.gameObject.activeSelf)
+        {
+            StartCoroutine(KnockBackDone(knockBackDelay));
+        }
     }
     IEnumerator KnockBackDone(float knockBackDelay)
     {

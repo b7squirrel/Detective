@@ -39,11 +39,11 @@ public class FireBallWeapon : WeaponBase
             float index = 0f;
             if(i==0) 
             {
-                index = -15f;
+                index = 0;
             }
             else if(i==1)
             {
-                index = 0;
+                index = -15f;
             }
             else if(i ==2)
             {
