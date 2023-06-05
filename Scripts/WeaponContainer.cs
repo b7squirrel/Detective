@@ -62,13 +62,14 @@ public class WeaponContainer : MonoBehaviour
 
         return container;
     }
+
     // 플레이어가 coupleweapon을 가지고 있는지 검색
     public WeaponData GetCoupleWeaponData(string synergyWeapon)
     {
         foreach (var item in weaponContainers)
         {
             WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
-            if(wb.weaponData.SynergyWeapon == synergyWeapon)
+            if (wb.weaponData.SynergyWeapon == synergyWeapon)
             {
                 return wb.weaponData;
             }
@@ -80,14 +81,40 @@ public class WeaponContainer : MonoBehaviour
         foreach (var item in weaponContainers)
         {
             WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
-            if( wb.weaponData == weaponData)
+            if (wb.weaponData == weaponData)
             {
-                if(wb.weaponStats.currentLevel == wb.weaponData.upgrades.Count);
+                if (wb.weaponStats.currentLevel == wb.weaponData.upgrades.Count) ;
                 {
                     return true;
                 }
             }
         }
+        return false;
+    }
+    public void SetSynergyWeaponActive(WeaponData weaponData)
+    {
+        // 이 함수가 실행되는 시점에서 해당 weapon이 null일 수가 없음.
+        foreach (var item in weaponContainers)
+        {
+            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            if (wb.weaponData.Name == weaponData.Name)
+            {
+                wb.ActivateSynergyWeapon();
+                Debug.Log("시너지 웨폰 액티베이트 in weaponContainer");
+            }
+        }
+    }
+    public bool CheckSynergyWeaponActivated(UpgradeData synergyUpgrade)
+    {
+        foreach (var item in weaponContainers)
+        {
+            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            if (wb.weaponData.Name == synergyUpgrade.weaponData.Name)
+            {
+                return wb.IsSynergyWeaponActivated();
+            }
+        }
+        
         return false;
     }
 
@@ -96,20 +123,6 @@ public class WeaponContainer : MonoBehaviour
         for (int i = weaponContainers.Count - 1; i > 0; i--)
         {
             weaponContainers[i].GetComponent<SpriteRenderer>().sortingOrder = -i;
-        }
-    }
-
-    public void SetSynergyWeaponActive(WeaponData weaponData)
-    {
-        // 이 함수가 실행되는 시점에서 해당 weapon이 null일 수가 없음.
-        foreach (var item in weaponContainers)
-        {
-            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
-            if(wb.weaponData.Name == weaponData.Name)
-            {
-                wb.ActivateSynergyWeapon();
-                Debug.Log("시너지 웨폰 액티베이트 in weaponContainer");
-            }
         }
     }
 }

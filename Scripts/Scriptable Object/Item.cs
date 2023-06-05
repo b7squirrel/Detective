@@ -84,7 +84,7 @@ public class Item : ScriptableObject
     {
         if (stats.currentLevel == upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
         {
-            // Debug.Log(Name + " is Max Level");
+            Debug.Log(Name + " is Max Level");
 
             WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(SynergyWeapon);
             if (wd == null)
@@ -96,7 +96,7 @@ public class Item : ScriptableObject
             if (character.GetComponent<WeaponContainer>().IsWeaponMaxLevel(wd))
             {
                 // Debug.Log("it시너지 웨폰 활성화");
-                character.GetComponent<SynergyManager>().ActivateSynergyWeapon(wd);
+                character.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(wd);
             }
             else
             {

@@ -18,6 +18,7 @@ public class Level : MonoBehaviour
 
     WeaponManager weaponManager;
     PassiveItems passiveItems;
+    SynergyManager synergyManager;
 
     [SerializeField] List<UpgradeData> upgradesAvailableOnStart;
 
@@ -37,6 +38,7 @@ public class Level : MonoBehaviour
     {
         weaponManager = GetComponent<WeaponManager>();
         passiveItems = GetComponent<PassiveItems>();
+        synergyManager = GetComponent<SynergyManager>();
     }
 
     void Start()
@@ -117,7 +119,9 @@ public class Level : MonoBehaviour
             case UpgradeType.Coin:
                 GetComponent<Coins>().Add(upgradeData.itemStats.coins);
                 break;
-
+            case UpgradeType.SynergyUpgrade: 
+                synergyManager.ActivateSynergyWeapon(upgradeData);
+                break;
         }
 
         // 업그레이드를 할 목록에서 뺴고, 업그레이드를 한 목록에 추가
@@ -162,7 +166,18 @@ public class Level : MonoBehaviour
                 }
             }
 
-            if(upgradeList.Count == 3) return upgradeList;
+            if(upgradeList.Count == 3)
+            {
+                // 가능한 시너지 업그레이드가 있다면 추가
+                if(synergyManager.GetSynergyUpgrade() != null)
+                {
+                    upgradeList.Remove(upgradeList[0]);
+
+                    UpgradeData picked = synergyManager.GetSynergyUpgrade();
+                    upgradeList.Add(picked);
+                }
+                return upgradeList;
+            } 
         }
         
         // 부족한 슬롯만큼 달콤우유나 동전을 추가

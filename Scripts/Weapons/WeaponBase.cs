@@ -132,7 +132,7 @@ public class WeaponBase : MonoBehaviour
                 if (item.stats.currentLevel == item.upgrades.Count + 1)
                 {
                     // Debug.Log("wb시너지 웨폰 활성화");
-                    Wielder.GetComponent<SynergyManager>().ActivateSynergyWeapon(weaponData);
+                    Wielder.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(weaponData);
                 }
                 else
                 {
@@ -263,5 +263,9 @@ public class WeaponBase : MonoBehaviour
     {
         isSynergyWeaponActivated = true;
         // 개별 무기들에서 각자 구현
+    }
+    public bool IsSynergyWeaponActivated()
+    {
+        return isSynergyWeaponActivated;
     }
 }
