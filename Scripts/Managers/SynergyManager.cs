@@ -27,6 +27,8 @@ public class SynergyManager : MonoBehaviour
 
         int index = Random.Range(0, synergyUpgrades.Count);
         UpgradeData pickedUpgrade = synergyUpgrades[index];
+
+        // 이미 시너지무기가 활성화 되어 있다면 null 반환
         if (GetComponent<WeaponContainer>().CheckSynergyWeaponActivated(pickedUpgrade))
             return null;
         return pickedUpgrade;
