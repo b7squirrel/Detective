@@ -16,7 +16,7 @@ MonoBehaviour:
   upgradeType: 0
   Name: More Damage
   icon: {fileID: 1773154201, guid: f4ae18ca6b9230a4e80ec14ef71998eb, type: 3}
-  description: "\uB099\uBC31 \uD655\uB960 20% \uC99D\uAC00"
+  description: "\uB099\uBC31 \uD655\uB960 25% \uC99D\uAC00"
   weaponData: {fileID: 11400000, guid: bbcd61aa0c2acbb4bb44c724643d0277, type: 2}
   weaponUpgradeStats:
     damage: 0
@@ -24,7 +24,8 @@ MonoBehaviour:
     numberOfAttacks: 0
     sizeOfArea: 0
     projectileSpeed: 0
-    knockBackChance: 10
+    knockBackChance: 20
+    currentLevel: 0
   newKidAnim: {fileID: 0}
   item: {fileID: 0}
   itemStats:
@@ -39,3 +40,4 @@ MonoBehaviour:
     coolTimeDown: 0
     hp: 0
     coins: 0
+    currentLevel: 0

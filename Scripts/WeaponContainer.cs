@@ -119,7 +119,7 @@ public class WeaponContainer : MonoBehaviour
     }
     public bool CheckSynergyWeaponActivated(UpgradeData synergyUpgrade)
     {
-        if(weaponContainers.Count == 0)  return false;
+        if (weaponContainers.Count == 0) return false;
         foreach (var item in weaponContainers)
         {
             WeaponBase wb = item.GetComponentInChildren<WeaponBase>();

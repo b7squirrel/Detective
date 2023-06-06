@@ -38,30 +38,42 @@ public class PassiveItems : MonoBehaviour
         return couple;
     }
 
-    // public void CheckIfMaxLevel(Character character)
-    // {
-    //     if (stats.currentLevel == upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
-    //     {
-    //         Debug.Log(Name + " is Max Level");
+    public void CheckIfMaxLevel(Item item)
+    {
+        if (item.stats.currentLevel == item.upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
+        {
+            Debug.Log(item.Name + " is Max Level");
 
-    //         WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(SynergyWeapon);
-    //         if (wd == null)
-    //         {
-    //             // Debug.Log("시너지 커플 웨폰이 없습니다");
-    //             return;
-    //         }
+            WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(item.SynergyWeapon);
+            if (wd == null)
+            {
+                // Debug.Log("시너지 커플 웨폰이 없습니다");
+                return;
+            }
 
-    //         if (character.GetComponent<WeaponContainer>().IsWeaponMaxLevel(wd))
-    //         {
-    //             // Debug.Log("it시너지 웨폰 활성화");
-    //             character.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(wd);
-    //         }
-    //         else
-    //         {
-    //             // Debug.Log("시너지 커플 웨폰이 최고레벨이 아닙니다");
-    //         }
-    //     }
-    // }
+            if (character.GetComponent<WeaponContainer>().IsWeaponMaxLevel(wd))
+            {
+                // Debug.Log("it시너지 웨폰 활성화");
+                character.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(wd);
+            }
+            else
+            {
+                // Debug.Log("시너지 커플 웨폰이 최고레벨이 아닙니다");
+            }
+        }
+    }
+
+    public int GetItemLevel(Item item)
+    {
+        foreach (var ob in items)
+        {
+            if (ob.Name == item.Name)
+            {
+                return ob.stats.currentLevel;
+            }
+        }
+        return 0; // 가지고 있는 무기가 아니라 새로운 무기라면 레벨 0
+    }
 
     public void UnEquip(Item itemToUnEquip)
     {

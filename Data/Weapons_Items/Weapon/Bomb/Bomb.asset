@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bomb
   m_EditorClassIdentifier: 
   Name: Bomb
+  SynergyWeapon: 
   weaponPrefab: {fileID: 0}
   stats:
     damage: 150
@@ -21,13 +22,14 @@ MonoBehaviour:
     sizeOfArea: 2
     projectileSpeed: 8
     knockBackChance: 40
+    currentLevel: 0
   weaponBasePrefab: {fileID: 2462116282299986100, guid: 7e17ae1cb82dbf140b28440bf12becf6, type: 3}
   animatorController: {fileID: 9100000, guid: 3fd5a02571cc9bf408b1a92b0035517c, type: 2}
   description: "\uD3ED\uD0C4 \uACF5\uACA9\uC744 \uD569\uB2C8\uB2E4"
   upgrades:
-  - {fileID: 11400000, guid: 626a16fcc3afe8e43921e6ff3aa6bc0f, type: 2}
-  - {fileID: 11400000, guid: 48f6d0f1bffcc6f4eab597dddf800948, type: 2}
   - {fileID: 11400000, guid: 723f6da881041e346b3fb7b7765f9b9b, type: 2}
   - {fileID: 11400000, guid: c8ee7769103cbb348a3a21b2258eb022, type: 2}
+  - {fileID: 11400000, guid: e1b7a7fb82996744c98775aab92eb587, type: 2}
   - {fileID: 11400000, guid: 3cacccf799afeff478a8a5be69599de8, type: 2}
   - {fileID: 11400000, guid: 5824e3dcee509a440b1b8d6e8b1d1cfd, type: 2}
+  synergyUpgrade: {fileID: 0}

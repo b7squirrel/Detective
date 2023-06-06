@@ -10,6 +10,7 @@ using UnityEngine;
 public class SynergyManager : MonoBehaviour
 {
     [SerializeField] List<UpgradeData> synergyUpgrades;
+    UpgradeData upgradeToRemove;
 
     public void AddSynergyUpgradeToPool(WeaponData weaponData)
     {
@@ -30,7 +31,11 @@ public class SynergyManager : MonoBehaviour
 
         // 이미 시너지무기가 활성화 되어 있다면 null 반환
         if (GetComponent<WeaponContainer>().CheckSynergyWeaponActivated(pickedUpgrade))
+        {
+            upgradeToRemove = null;
             return null;
+        }
+        upgradeToRemove = pickedUpgrade;
         return pickedUpgrade;
     }
 
@@ -38,6 +43,8 @@ public class SynergyManager : MonoBehaviour
     public void ActivateSynergyWeapon(UpgradeData upgradeData)
     {
         GetComponent<WeaponContainer>().SetSynergyWeaponActive(upgradeData.weaponData);
-         Debug.Log(upgradeData.weaponData.SynergyWeapon + "이 활성화 되었습니다.");
+        //  Debug.Log(upgradeData.weaponData.SynergyWeapon + "이 활성화 되었습니다.");
+
+        synergyUpgrades.Remove(upgradeData); // 리스트에서 시너지 업그레이드 제거
     }
 }

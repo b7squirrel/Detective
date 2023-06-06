@@ -171,10 +171,10 @@ public class Level : MonoBehaviour
                 // 가능한 시너지 업그레이드가 있다면 추가
                 if(synergyManager.GetSynergyUpgrade() != null)
                 {
-                    upgradeList.Remove(upgradeList[0]);
+                    upgradeList.Remove(upgradeList[0]); // 그냥 첫번째 슬롯의 업그레이드를 빼고
 
                     UpgradeData picked = synergyManager.GetSynergyUpgrade();
-                    upgradeList.Add(picked);
+                    upgradeList.Add(picked); // 시너지 업그레이드 추가
                 }
                 return upgradeList;
             } 

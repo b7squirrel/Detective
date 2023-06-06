@@ -77,7 +77,7 @@ public class Item : ScriptableObject
         character.knockBackChance += stats.knockBackChance;
         character.Cooldown += stats.coolTimeDown;
 
-        CheckIfMaxLevel(character);
+        character.GetComponent<PassiveItems>().CheckIfMaxLevel(this);
     }
 
     void CheckIfMaxLevel(Character character)

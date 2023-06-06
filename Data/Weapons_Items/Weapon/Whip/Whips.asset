@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Whips
   m_EditorClassIdentifier: 
   Name: Whips
+  SynergyWeapon: 
   weaponPrefab: {fileID: 0}
   stats:
     damage: 100
@@ -21,16 +22,14 @@ MonoBehaviour:
     sizeOfArea: 0
     projectileSpeed: 0
     knockBackChance: 50
+    currentLevel: 0
   weaponBasePrefab: {fileID: 9130164228983271373, guid: 7bb9fb3495b4b1a4296c88faa06b1f9d, type: 3}
   animatorController: {fileID: 0}
   description: 
   upgrades:
   - {fileID: 11400000, guid: fe0980b41f7780b4d89a4a3d49a3a7c9, type: 2}
-  - {fileID: 11400000, guid: 0675b17aeb421de409fb37c0891739dd, type: 2}
-  - {fileID: 11400000, guid: d256401c82b365248952b6b3211dc21a, type: 2}
-  - {fileID: 11400000, guid: 2c0cfea4942bb07438cbb4af65464f38, type: 2}
   - {fileID: 11400000, guid: b15b4ed8e353b194692b06f62f8860ab, type: 2}
   - {fileID: 11400000, guid: 8c166191010fb8243a64f329001f4c7c, type: 2}
-  - {fileID: 11400000, guid: 6660b4ac7f1604d438560376b9348985, type: 2}
-  - {fileID: 11400000, guid: 5b2f3d3fd647a0441a9dac5c1a7347f2, type: 2}
   - {fileID: 11400000, guid: 232379f590558db47a600f1acd6c8da0, type: 2}
+  - {fileID: 11400000, guid: 66bb695bd2f925142b48a0c3e2101513, type: 2}
+  synergyUpgrade: {fileID: 0}
