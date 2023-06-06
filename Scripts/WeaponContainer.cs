@@ -91,6 +91,19 @@ public class WeaponContainer : MonoBehaviour
         }
         return false;
     }
+
+    public int GetWeaponLevel(WeaponData weaponData)
+    {
+        foreach (var item in weaponContainers)
+        {
+            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            if (wb.weaponData.Name == weaponData.Name)
+            {
+                return wb.weaponStats.currentLevel;
+            }
+        }
+        return 0; // 가지고 있는 무기가 아니라 새로운 무기라면 레벨 0
+    }
     public void SetSynergyWeaponActive(WeaponData weaponData)
     {
         // 이 함수가 실행되는 시점에서 해당 weapon이 null일 수가 없음.
