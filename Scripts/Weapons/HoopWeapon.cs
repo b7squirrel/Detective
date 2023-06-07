@@ -74,7 +74,7 @@ public class HoopWeapon : WeaponBase
             Vector3 rotVec = Vector3.forward * 360 * i / weaponStats.numberOfAttacks;
             projectiles[i].Rotate(rotVec);
             projectiles[i].Translate(projectiles[i].up * 4.5f, Space.World);
-            Debug.Log("Rot Vec = " +rotVec);
+            // Debug.Log("Rot Vec = " +rotVec);
 
             ProjectileBase projectile = projectiles[i].GetComponent<ProjectileBase>();
             projectile.Damage = GetDamage();

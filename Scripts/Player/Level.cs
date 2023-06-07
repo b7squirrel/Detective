@@ -166,24 +166,29 @@ public class Level : MonoBehaviour
                 }
             }
 
-            if(upgradeList.Count == 3)
+            if (upgradeList.Count == 3)
             {
                 // 가능한 시너지 업그레이드가 있다면 추가
-                if(synergyManager.GetSynergyUpgrade() != null)
+                if (synergyManager.GetSynergyUpgrade() != null)
                 {
                     upgradeList.Remove(upgradeList[0]); // 그냥 첫번째 슬롯의 업그레이드를 빼고
-
                     UpgradeData picked = synergyManager.GetSynergyUpgrade();
                     upgradeList.Add(picked); // 시너지 업그레이드 추가
                 }
                 return upgradeList;
-            } 
+            }
         }
+        if (synergyManager.GetSynergyUpgrade() != null)
+        {
+            upgradeList.Add(synergyManager.GetSynergyUpgrade());// 업그레이드 리스트가 3보다 부족하다면 그냥 추가
+        }
+
+        // 랜덤풀을 비교? upgradeList를 비교해야 하지 않나?
         
         // 부족한 슬롯만큼 달콤우유나 동전을 추가
         List<UpgradeData> lacks = new List<UpgradeData>();
 
-        int numberOfInstantUp = 3 - randomPool.Count;
+        int numberOfInstantUp = 3 - upgradeList.Count;
         if (numberOfInstantUp > 2) numberOfInstantUp = 2; // 중복으로 하트나 동전이 나오지 않도록
         
         for (int i = 0; i < numberOfInstantUp; i++)

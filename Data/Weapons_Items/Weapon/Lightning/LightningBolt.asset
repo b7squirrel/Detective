@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
   m_Name: LightningBolt
   m_EditorClassIdentifier: 
-  Name: 
-  SynergyWeapon: 
+  Name: LightningBolt
+  SynergyWeapon: LightningSynergy
   weaponPrefab: {fileID: 6822868710250514242, guid: cced79b0b48cc454d829e8729681e188, type: 3}
   stats:
     damage: 50
@@ -25,11 +25,11 @@ MonoBehaviour:
     currentLevel: 0
   weaponBasePrefab: {fileID: 7295769312407643447, guid: 9bf37590165248942857e426c05c8c91, type: 3}
   animatorController: {fileID: 9100000, guid: 1ecb6fa94f9ad5942ab83e6eb5cf08ec, type: 2}
-  description: 
+  description: "\uBC88\uAC1C\uB85C \uACF5\uACA9"
   upgrades:
   - {fileID: 11400000, guid: e45f13441d1692e4fb0344d311271caf, type: 2}
   - {fileID: 11400000, guid: 5bd88076b2b50994eb22d44e877759e4, type: 2}
   - {fileID: 11400000, guid: b1e6d7857ca6bea4b90fd388fe2fca33, type: 2}
   - {fileID: 11400000, guid: 7dc0dbdf95f923f4da7230f241e3c787, type: 2}
   - {fileID: 11400000, guid: c8bb3b576428de940b92ab01b7c39850, type: 2}
-  synergyUpgrade: {fileID: 0}
+  synergyUpgrade: {fileID: 11400000, guid: bed4ea6117f2e68499d6460ecf09ff91, type: 2}

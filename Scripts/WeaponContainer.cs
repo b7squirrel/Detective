@@ -83,8 +83,10 @@ public class WeaponContainer : MonoBehaviour
             WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
             if (wb.weaponData == weaponData)
             {
-                if (wb.weaponStats.currentLevel == wb.weaponData.upgrades.Count) ;
+                if (wb.weaponStats.currentLevel == wb.weaponData.upgrades.Count)
                 {
+                    Debug.Log(wb.weaponData.Name + "의 레벨은 " + wb.weaponStats.currentLevel);
+                    Debug.Log("업그레이드 갯수는 " + wb.weaponData.upgrades.Count);
                     return true;
                 }
             }

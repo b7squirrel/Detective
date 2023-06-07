@@ -53,7 +53,7 @@ public class PassiveItems : MonoBehaviour
 
             if (character.GetComponent<WeaponContainer>().IsWeaponMaxLevel(wd))
             {
-                // Debug.Log("it시너지 웨폰 활성화");
+                Debug.Log("it커플웨폰이 최대 레벨이네요");
                 character.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(wd);
             }
             else

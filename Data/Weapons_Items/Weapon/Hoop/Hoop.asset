@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Hoop
   m_EditorClassIdentifier: 
   Name: Hoop
-  SynergyWeapon: Helmet
+  SynergyWeapon: HoopSynergy
   weaponPrefab: {fileID: 0}
   stats:
     damage: 5
@@ -29,6 +29,7 @@ MonoBehaviour:
   upgrades:
   - {fileID: 11400000, guid: 3ffde4bad6d6b0f46808d769ef9ea8f3, type: 2}
   - {fileID: 11400000, guid: a069d808125c0834d9843e06f1b7dba5, type: 2}
+  - {fileID: 11400000, guid: a00cc7ba42bbcce44a7f7bb84d8efe29, type: 2}
   - {fileID: 11400000, guid: 68b09bea5f8178048b19a1c5b25500b4, type: 2}
   - {fileID: 11400000, guid: 2926c1663e3b0474d94a510be6806b6a, type: 2}
-  synergyUpgrade: {fileID: 0}
+  synergyUpgrade: {fileID: 11400000, guid: e1f8c72b6c2c4ff438a004df76ffa53f, type: 2}
