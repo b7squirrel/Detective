@@ -14,6 +14,7 @@ public class HoopWeapon : WeaponBase
 
     protected override void Update()
     {
+        //시간이 멈추면 회전을 멈추고 Damage도 입히지 않아야 한다
         base.Update();
         transform.Rotate(Vector3.forward * weaponStats.projectileSpeed * Time.deltaTime);
 
