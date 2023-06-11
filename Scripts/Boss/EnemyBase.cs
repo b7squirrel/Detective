@@ -258,9 +258,22 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     protected virtual void KnockBack(Vector2 target, float knockBackDelay)
     {
-        Vector2 playerPos = Target.transform.position;
+        Vector2 fromPlayer = target - (Vector2)Target.transform.position;
         IsKnockBack = true;
         targetDir = (rb.position - target).normalized;
+
+        // float dirX = fromPlayer.x * rb.position.x;
+        // float dirY = fromPlayer.y * rb.position.y;
+
+        // float xDir = 0;
+        // float yDir = 0;
+        // if (dirX < 0)
+        //     xDir = -1f;
+
+        // if (dirY < 0)
+        //     yDir = -1f;
+
+        // targetDir = new Vector2(xDir * targetDir.x, yDir * targetDir.y);
         if (this.gameObject.activeSelf)
         {
             StartCoroutine(KnockBackDone(knockBackDelay));

@@ -48,7 +48,39 @@ public class LightningWeapon : WeaponBase
 
             SoundManager.instance.Play(strike);
         }
+
+        List<Vector2> secondShootPoint = new List<Vector2>();
+        secondShootPoint.AddRange(targets);
         targets.Clear();
+
+        // 시너지 무기 ======================================
+        if(isSynergyWeaponActivated == false)
+            return;
+        
+        FindLandingPositions();
+
+        if (isClean)
+        {
+            isClean = false;
+            return;
+        }
+
+        for (int i = 0; i < targets.Count; i++)
+        {
+            endPosition = targets[i];
+            GameObject bolt = Instantiate(lightning);
+            LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
+            boltScript.StartObject.transform.position = secondShootPoint[i];
+            boltScript.EndObject.transform.position = endPosition;
+
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
+            ApplyDamage(colliders);
+
+            SoundManager.instance.Play(strike);
+        }
+        
+
+        
     }
 
     void ApplyDamage(Collider2D[] colliders)
@@ -95,11 +127,29 @@ public class LightningWeapon : WeaponBase
             candidates.Add((Vector2)enemies[i].transform.position);
         }
 
+        // 중복을 피하지만 화면에 적의 갯수가 부족하면 중복 허용
+        List<Vector2> recurringPool = new List<Vector2>();
+        recurringPool.AddRange(candidates);
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
-            int index = Random.Range(0, candidates.Count);
-            Vector2 pick = candidates[index];
-            targets.Add(pick);
+            if (candidates.Count == 0)
+            {
+                int recurringPoolIndex = Random.Range(0, recurringPool.Count);
+                Vector2 recurringPick = recurringPool[recurringPoolIndex];
+                targets.Add(recurringPick);
+            }
+            else
+            {
+                int index = Random.Range(0, candidates.Count);
+                Vector2 pick = candidates[index];
+                targets.Add(pick);
+                candidates.Remove(pick);
+            }
         }
+    }
+
+    void SplashAttack()
+    {
+
     }
 }
