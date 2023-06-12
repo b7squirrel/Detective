@@ -18,6 +18,8 @@ public class Collectable : MonoBehaviour
     public Vector2 dir;
     public float delay = 0.05f;
 
+    protected float timeToDisapear;
+
     [Header("Effect")]
     [SerializeField] Material whiteMaterial;
     [SerializeField] float whiteFlashDuration;
@@ -30,6 +32,7 @@ public class Collectable : MonoBehaviour
     {
         IsFlying = false;
         IsHit = false;
+        timeToDisapear = 30f;
     }
     protected void Awake()
     {
@@ -40,6 +43,7 @@ public class Collectable : MonoBehaviour
     protected void Update()
     {
         MoveToPlayer();
+        TimeUP();
     }
 
     protected virtual void MoveToPlayer()
@@ -75,5 +79,44 @@ public class Collectable : MonoBehaviour
         yield return new WaitForSeconds(.02f);
         rb.velocity = Vector2.zero;
         IsFlying = true;
+    }
+
+    protected virtual void TimeUP()
+    {
+        if (IsHit)
+            return;
+
+        if(timeToDisapear > 0)
+        {
+            timeToDisapear -= Time.deltaTime;
+        }
+        else
+        {
+            StartCoroutine(Blink());
+        }
+    }
+    IEnumerator Blink()
+    {
+        ShadowSprite shadow = GetComponent<ShadowSprite>();
+
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        shadow.Hide();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+        shadow.Show();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        shadow.Hide();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+        shadow.Show();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        shadow.Hide();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+        shadow.Show();
+        if (!IsHit)
+            gameObject.SetActive(false);
     }
 }

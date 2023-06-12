@@ -47,4 +47,13 @@ public class ShadowSprite : MonoBehaviour
         sprRndshadow.flipX = sprRndCaster.flipX;
         sprRndshadow.flipY = sprRndCaster.flipY;
     }
+
+    public void Hide()
+    {
+        sprRndshadow.color = new Color(sprRndshadow.color.r, sprRndshadow.color.g, sprRndshadow.color.b, 0f);
+    }
+    public void Show()
+    {
+        sprRndshadow.color = new Color(sprRndshadow.color.r, sprRndshadow.color.g, sprRndshadow.color.b, .5f);
+    }
 }

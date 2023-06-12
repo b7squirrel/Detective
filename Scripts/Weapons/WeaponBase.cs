@@ -38,11 +38,10 @@ public class WeaponBase : MonoBehaviour
     public bool IsDirectional {get; set;}
     #endregion
 
-
-    protected virtual void OnEnable()
+    public virtual void Init(WeaponStats stats)
     {
         weaponContainerAnim = GetComponentInParent<WeaponContainerAnim>();
-        timer = weaponStats.timeToAttack;
+        timer = stats.timeToAttack; // Init이 실행되는 시점에서 weaponStats이 초기화 되지 않아서 stats를 넘겨받아서 timer초기화
         isSynergyWeaponActivated = false;
     }
     protected virtual void Awake()

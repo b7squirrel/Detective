@@ -35,6 +35,7 @@ public class WeaponManager : MonoBehaviour
 
         WeaponBase weaponBase = weaponGameObject.GetComponent<WeaponBase>();
         weaponBase.InitialWeapon = isInitialWeapon; // 오리 탐정에게 붙는 무기인지 
+        weaponBase.Init(weaponData.stats);
 
         // 개별 무기들 부착
         if (weaponData.weaponPrefab != null)

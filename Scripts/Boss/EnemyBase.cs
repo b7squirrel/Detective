@@ -13,6 +13,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir {get; set;} // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
+    protected bool isOffScreen; // 화면 밖에 있을 때 플레이어의 공격을 받지 않기 위한 플래그
+    [SerializeField] LayerMask screenEdge;
+
     Coroutine flipCoroutine;
     bool isFlipping; // 더 이상 flip하고 있지 않으면 코루틴을 초기화 시키기위해
     float pastFacingDir, currentFacingDir;
@@ -50,6 +53,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         initialMat = sr.material;
         IsKnockBack = false;
         IsStunned = false;
+        isOffScreen = true;
 
         transform.eulerAngles = Vector3.zero;
         StopFlipCoroutine();
@@ -208,9 +212,29 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     #endregion
 
+    protected void CheckOffScreen()
+    {
+        RaycastHit2D hitEdge = Physics2D.Linecast(transform.position, Player.instance.transform.position, screenEdge);
+        if (hitEdge)
+        {
+            isOffScreen = true;
+            // Debug.DrawLine(transform.position, hitEdge.point, Color.yellow);
+            return;
+        }
+
+        isOffScreen = false;
+        // Debug.DrawLine(transform.position, hitEdge.point, Color.yellow);
+        
+    }
+
     #region Take Damage
     public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target, GameObject hitEffect)
     {
+        CheckOffScreen();
+        Debug.Log("IS offscreen = " + isOffScreen);
+        if(isOffScreen)
+            return;
+
         anim.SetTrigger("Hit");
 
         Stats.hp -= damage;
