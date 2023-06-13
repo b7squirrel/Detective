@@ -218,22 +218,19 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (hitEdge)
         {
             isOffScreen = true;
-            // Debug.DrawLine(transform.position, hitEdge.point, Color.yellow);
             return;
         }
 
         isOffScreen = false;
-        // Debug.DrawLine(transform.position, hitEdge.point, Color.yellow);
-        
     }
 
     #region Take Damage
     public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target, GameObject hitEffect)
     {
-        CheckOffScreen();
-        Debug.Log("IS offscreen = " + isOffScreen);
-        if(isOffScreen)
-            return;
+        // CheckOffScreen();
+        // Debug.Log("IS offscreen = " + isOffScreen);
+        // if(isOffScreen)
+        //     return;
 
         anim.SetTrigger("Hit");
 
