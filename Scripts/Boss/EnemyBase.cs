@@ -227,10 +227,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region Take Damage
     public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target, GameObject hitEffect)
     {
-        // CheckOffScreen();
-        // Debug.Log("IS offscreen = " + isOffScreen);
-        // if(isOffScreen)
-        //     return;
+        CheckOffScreen();
+        Debug.Log("IS offscreen = " + isOffScreen);
+        if(isOffScreen)
+            return;
 
         anim.SetTrigger("Hit");
 

@@ -37,7 +37,8 @@ public class LightningWeapon : WeaponBase
         for (int i = 0; i < targets.Count; i++)
         {
             endPosition = targets[i];
-            GameObject bolt = Instantiate(lightning);
+            // GameObject bolt = Instantiate(lightning);
+            GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
             LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
             boltScript.StartObject.transform.parent = ShootPoint;
             boltScript.StartObject.transform.position = ShootPoint.position;
@@ -68,7 +69,7 @@ public class LightningWeapon : WeaponBase
         for (int i = 0; i < targets.Count; i++)
         {
             endPosition = targets[i];
-            GameObject bolt = Instantiate(lightning);
+            GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
             LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
             boltScript.StartObject.transform.position = secondShootPoint[i];
             boltScript.EndObject.transform.position = endPosition;

@@ -86,7 +86,6 @@ public class TennisBallProjectile : ProjectileBase
             SoundManager.instance.Play(hitSound);
         }
     }
-    
     protected override void CastDamage()
     {
         // do nothing in tennis projectile

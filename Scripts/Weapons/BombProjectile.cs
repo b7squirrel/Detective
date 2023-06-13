@@ -21,10 +21,10 @@ public class BombProjectile : ProjectileBase
     }
     public void Explode()
     {
-        GenerateHitEffect();
+        // GenerateHitEffect();
         SoundManager.instance.Play(hitSFX);
         CastDamage();
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     protected override void CastDamage()
     {

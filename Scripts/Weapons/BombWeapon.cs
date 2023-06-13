@@ -62,7 +62,8 @@ public class BombWeapon : WeaponBase
 
     void GenProjectile(Vector3 targetVec)
     {
-        GameObject bombObject = Instantiate(bomb, transform.position, Quaternion.identity);
+        GameObject bombObject = GameManager.instance.poolManager.GetMisc(bomb);
+        bombObject.transform.position = transform.position;
 
         ProjectileBase projectileBase = bombObject.GetComponent<ProjectileBase>();
         projectileBase.Damage = GetDamage();
