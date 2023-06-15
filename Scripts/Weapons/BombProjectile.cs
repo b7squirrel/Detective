@@ -24,6 +24,8 @@ public class BombProjectile : ProjectileBase
         // GenerateHitEffect();
         SoundManager.instance.Play(hitSFX);
         CastDamage();
+
+        GetComponentInChildren<TrailRenderer>().enabled = false;
         gameObject.SetActive(false);
     }
     protected override void CastDamage()
