@@ -42,8 +42,6 @@ public class PassiveItems : MonoBehaviour
     {
         if (item.stats.currentLevel == item.upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
         {
-            Debug.Log(item.Name + " is Max Level");
-
             WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(item.SynergyWeapon);
             if (wd == null)
             {
@@ -53,7 +51,6 @@ public class PassiveItems : MonoBehaviour
 
             if (character.GetComponent<WeaponContainer>().IsWeaponMaxLevel(wd))
             {
-                Debug.Log("it커플웨폰이 최대 레벨이네요");
                 character.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(wd);
             }
             else

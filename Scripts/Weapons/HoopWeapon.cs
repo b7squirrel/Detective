@@ -8,23 +8,31 @@ public class HoopWeapon : WeaponBase
 {
     [SerializeField] GameObject hoopProjectile;
     [SerializeField] List<Transform> projectiles;
+    [SerializeField] List<Transform> projectilesSynergy;
+    [SerializeField] Transform projSpin;
+    [SerializeField] Transform projSpinSynergy;
     float projectileHealth;
     bool isProjectileActive;
     float duration;
 
+
+    public override void Init(WeaponStats stats)
+    {
+        base.Init(stats);
+        projSpin = new GameObject("Projectile Spin Board").transform;
+        projSpin.position = transform.position;
+        projSpin.parent = transform;
+
+        projSpinSynergy = new GameObject("Projectile Synergy Spin Board").transform;
+        projSpinSynergy.position = transform.position;
+        projSpinSynergy.parent = transform;
+
+    }
     protected override void Update()
     {
-        //시간이 멈추면 회전을 멈추고 Damage도 입히지 않아야 한다
         base.Update();
-        transform.Rotate(Vector3.forward * weaponStats.projectileSpeed * Time.deltaTime);
-
-        // duration -= Time.deltaTime;
-        // if (duration < 0 && isProjectileActive)
-        // {
-        //     DestroyProjectiles();
-        //     // duration은 projectiles가 생성되면서 초기화 된다
-        // }
-
+        projSpin.transform.Rotate(Vector3.forward * weaponStats.projectileSpeed * Time.deltaTime);
+        projSpinSynergy.transform.Rotate(Vector3.back * weaponStats.projectileSpeed * Time.deltaTime);
 
         // 업그레이드 되면 프로젝타일을 중단시키고 다시 시작해서 갯수를 weaponStats.numberOfAttacks에 맞춰줌
         int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
@@ -48,6 +56,17 @@ public class HoopWeapon : WeaponBase
         if (isProjectileActive)
             return;
 
+        Gen(projectiles, projSpin, 0f);
+        if (isSynergyWeaponActivated)
+        {
+            Gen(projectilesSynergy, projSpinSynergy, 1.5f);
+            Debug.Log("시너지 Gen");
+        }
+    }
+
+    // 어떤 스핀판에 붙일지, 회전 방향은 시게인지 반시계인지, 기본 4.5거리에서 얼마나 더 넗게 퍼지는지
+    void Gen(List<Transform> projectiles, Transform projSpin, float distanceOffset)
+    {
         // 초기화
         if (projectiles == null)
         {
@@ -55,12 +74,14 @@ public class HoopWeapon : WeaponBase
         }
 
         int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
+        if(isSynergyWeaponActivated)
+            Debug.Log("시너지 만들어낼 갯수 " + numberOfProjectilesToGen);
 
         // 생성
         for (int i = 0; i < numberOfProjectilesToGen; i++)
         {
-            Transform hoopObject = Instantiate(hoopProjectile, transform.position, Quaternion.identity).transform;
-            hoopObject.parent = transform;
+            Transform hoopObject = Instantiate(hoopProjectile, projSpin.position, Quaternion.identity).transform;
+            hoopObject.parent = projSpin;
             projectiles.Add(hoopObject);
         }
 
@@ -74,8 +95,7 @@ public class HoopWeapon : WeaponBase
 
             Vector3 rotVec = Vector3.forward * 360 * i / weaponStats.numberOfAttacks;
             projectiles[i].Rotate(rotVec);
-            projectiles[i].Translate(projectiles[i].up * 4.5f, Space.World);
-            // Debug.Log("Rot Vec = " +rotVec);
+            projectiles[i].Translate(projectiles[i].up * (distanceOffset + 4.5f), Space.World);
 
             ProjectileBase projectile = projectiles[i].GetComponent<ProjectileBase>();
             projectile.Damage = GetDamage();
@@ -99,9 +119,20 @@ public class HoopWeapon : WeaponBase
         {
             proj.gameObject.SetActive(false);
         }
+
+        foreach(Transform proj in projectilesSynergy)
+        {
+            proj.gameObject.SetActive(false);
+        }
         
         isProjectileActive = false;
         timer = weaponStats.timeToAttack;
         projectileHealth = weaponStats.sizeOfArea;
+    }
+
+    public override void ActivateSynergyWeapon()
+    {
+        base.ActivateSynergyWeapon();
+        DestroyProjectiles(); // 부셔서 isProjectileActive를 false로 해줘야 다시 생성을 하게 됨
     }
 }

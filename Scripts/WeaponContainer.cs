@@ -85,8 +85,6 @@ public class WeaponContainer : MonoBehaviour
             {
                 if (wb.weaponStats.currentLevel == wb.weaponData.upgrades.Count)
                 {
-                    Debug.Log(wb.weaponData.Name + "의 레벨은 " + wb.weaponStats.currentLevel);
-                    Debug.Log("업그레이드 갯수는 " + wb.weaponData.upgrades.Count);
                     return true;
                 }
             }
@@ -115,7 +113,6 @@ public class WeaponContainer : MonoBehaviour
             if (wb.weaponData.Name == weaponData.Name)
             {
                 wb.ActivateSynergyWeapon();
-                Debug.Log("시너지 웨폰 액티베이트 in weaponContainer");
             }
         }
     }

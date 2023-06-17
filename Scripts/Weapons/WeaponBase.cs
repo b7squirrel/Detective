@@ -119,8 +119,6 @@ public class WeaponBase : MonoBehaviour
         // 아이템과는 다르게 알을 먹으면 무기 레벨이 0인 상태로 acquired 되니까 Count와 같음
         if (weaponStats.currentLevel == weaponData.upgrades.Count) 
         {
-            Debug.Log(weaponData.Name + " is Max Level");
-
             Item item = Wielder.GetComponent<PassiveItems>().GetSynergyCouple(weaponData.SynergyWeapon);
                 if (item == null)
                 {
