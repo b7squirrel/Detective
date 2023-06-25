@@ -30,7 +30,7 @@ public class Level : MonoBehaviour
     {
         get
         {
-            return level * 1000;
+            return (int)(Mathf.Pow((level) / 3.5f, 2)) * 1000 + (100 * level);
         }
     }
 
@@ -119,7 +119,8 @@ public class Level : MonoBehaviour
             case UpgradeType.Coin:
                 GetComponent<Coins>().Add(upgradeData.itemStats.coins);
                 break;
-            case UpgradeType.SynergyUpgrade: 
+            case UpgradeType.SynergyUpgrade:
+                weaponManager.UpgradeWeapon(upgradeData);
                 synergyManager.ActivateSynergyWeapon(upgradeData);
                 break;
         }
