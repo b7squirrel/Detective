@@ -11,10 +11,20 @@ public class PoolManager : MonoBehaviour
     StageAssetManager stageAssetManager;
 
     Dictionary<string, List<GameObject>> miscPools;
+    GameObject enemyFolder;
+    List<GameObject> itemFolders;
+    GameObject temp; // 임시 폴더를 매번 생성하지 않게 하기 위해서
 
     void Start()
     {
         InitEnemyPools();
+
+        enemyFolder = new GameObject();
+        enemyFolder.name = "Enemies";
+        enemyFolder.transform.position = Vector3.zero;
+        enemyFolder.transform.parent = transform;
+        
+        itemFolders = new List<GameObject>();
     }
 
     void InitEnemyPools()
@@ -52,7 +62,7 @@ public class PoolManager : MonoBehaviour
 
         if (!select)
         {
-            select = Instantiate(enemies[index], transform);
+            select = Instantiate(enemies[index], enemyFolder.transform);
             enemyPools[index].Add(select);
         }
 
@@ -100,16 +110,30 @@ public class PoolManager : MonoBehaviour
         {
             List<GameObject> go = new List<GameObject>();
 
-            select = Instantiate(prefab, transform);
+            GameObject folder = new GameObject();
+            folder.transform.position = Vector3.zero;
+            folder.transform.parent = transform;
+            folder.name = poolingTag;
+            itemFolders.Add(folder);
+
+            select = Instantiate(prefab, folder.transform);
             go.Add(select);
             miscPools.Add(poolingTag, go);
             return select;
         }
 
         // pool안의 오브젝트가 모두 사용중이라면 
-        select = Instantiate(prefab, transform);
-        miscPools[poolingTag].Add(select);
+        // pooling 태그 이름이 같은 폴더를 찾아서 자식으로 넣어줌
 
+        for (int i = 0; i < itemFolders.Count; i++)
+        {
+            if (itemFolders[i].name == poolingTag)
+            {
+                temp = itemFolders[i];
+            }
+        }
+        select = Instantiate(prefab, temp.transform);
+        miscPools[poolingTag].Add(select);
         return select;
     }
     #endregion

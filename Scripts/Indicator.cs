@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 플레이어와 오브젝트 사이에 벽이 있는지 탐색
+// 벽이 있으면 
 public class Indicator : MonoBehaviour
 {
     RaycastHit2D hit;

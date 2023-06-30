@@ -79,9 +79,6 @@ public class LightningWeapon : WeaponBase
 
             SoundManager.instance.Play(strike);
         }
-        
-
-        
     }
 
     void ApplyDamage(Collider2D[] colliders)

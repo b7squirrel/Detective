@@ -336,7 +336,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         yield return new WaitForSeconds(delayTime);
         sr.material = whiteMaterial;
-        yield return new WaitForSeconds(.02f);
+        yield return new WaitForSeconds(.1f);
         sr.material = initialMat;
     }
     #endregion
