@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UpgradePanelManager : MonoBehaviour
 {
     [SerializeField] GameObject panel;
+    [SerializeField] GameObject greyBase;
+    [SerializeField] GameObject PanelWaitingPopUp;
     PauseManager pauseManager;
     [SerializeField] ExpBarAnimation expBarAnim;
 
     [SerializeField] List<UpgradeButton> upgradeButtons;
 
+    Animator anim;
+
     void Awake()
     {
         pauseManager = GetComponent<PauseManager>();
+        anim = panel.GetComponent<Animator>();
     }
 
     void Start()
@@ -25,6 +31,8 @@ public class UpgradePanelManager : MonoBehaviour
         // GameManager.instance.joystick.SetActive(false);
         Clean();
         pauseManager.PauseGame(); 
+
+        greyBase.SetActive(true);
         panel.SetActive(true);
 
         for (int i = 0; i < upgradeData.Count; i++)
@@ -32,6 +40,7 @@ public class UpgradePanelManager : MonoBehaviour
             upgradeButtons[i].gameObject.SetActive(true);
             upgradeButtons[i].Set(upgradeData[i]);
         }
+        StartCoroutine(PopUpPanel());
     }
     public void Upgrade(int pressButtonID)
     {
@@ -52,17 +61,32 @@ public class UpgradePanelManager : MonoBehaviour
     public void ClosePanel()
     {
         expBarAnim.DisableExpFillBar();
-
-        HideButtons();
-        pauseManager.UnPauseGame();
-        panel.SetActive(false);
+        StartCoroutine(VanishPanel());
     }
 
-    private void HideButtons()
+    void HideButtons()
     {
         for (int i = 0; i < upgradeButtons.Count; i++)
         {
             upgradeButtons[i].gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator PopUpPanel()
+    {
+        anim.SetTrigger("PopUp");
+        PanelWaitingPopUp.SetActive(true);
+        yield return new WaitForSecondsRealtime(.1f); // popup animation 길이만큼
+        PanelWaitingPopUp.SetActive(false);
+    }
+
+    IEnumerator VanishPanel()
+    {
+        anim.SetTrigger("Close");
+        yield return new WaitForSecondsRealtime(.2f); // close animation 길이만큼
+        pauseManager.UnPauseGame();
+        HideButtons();
+        greyBase.SetActive(false);
+        panel.SetActive(false);
     }
 }
