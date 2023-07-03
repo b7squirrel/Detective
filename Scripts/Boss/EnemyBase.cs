@@ -240,10 +240,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         float knockBackDelay = 0f;
         float chance = UnityEngine.Random.Range(0, 100);
-        // Debug.Log("chance = " + chance + " knockbackChance = " + knockBackChance);
+        Debug.Log("chance = " + chance + " knockbackChance = " + knockBackChance);
         if (chance < knockBackChance && knockBackChance != 0)
         {
             knockBackDelay = 0.04f;
+            
         }
         WhiteFlash(whiteFlashDuration);
         KnockBack(target, knockBackDelay);
@@ -278,9 +279,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     protected virtual void KnockBack(Vector2 target, float knockBackDelay)
     {
-        Vector2 fromPlayer = target - (Vector2)Target.transform.position;
-        IsKnockBack = true;
-        targetDir = (rb.position - target).normalized;
+        if (knockBackDelay != 0) // 낙백이 일어나지 않게. 낵백이 끝나야 kill이 진행된다
+        {
+            Vector2 fromPlayer = target - (Vector2)Target.transform.position;
+            IsKnockBack = true;
+            targetDir = (rb.position - target).normalized;
+        }
+
 
         // float dirX = fromPlayer.x * rb.position.x;
         // float dirY = fromPlayer.y * rb.position.y;
