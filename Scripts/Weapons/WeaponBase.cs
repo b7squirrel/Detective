@@ -93,6 +93,13 @@ public class WeaponBase : MonoBehaviour
     {
         // int damage = (int)(weaponData.stats.damage * wielder.DamageBonus);
         int damage = (int)(weaponStats.damage * Wielder.DamageBonus);
+
+        float chance = UnityEngine.Random.Range(0, 100);
+
+        if(chance < Wielder.CriticalDamageChance)
+        {
+            damage *= 10; // 치명타 데미지는 10배로 일단 가자
+        }
         return damage;
     }
 

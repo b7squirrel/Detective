@@ -60,7 +60,7 @@ public class HoopWeapon : WeaponBase
         if (isSynergyWeaponActivated)
         {
             Gen(projectilesSynergy, projSpinSynergy, 1.5f);
-            Debug.Log("시너지 Gen");
+            // Debug.Log("시너지 Gen");
         }
     }
 
@@ -74,8 +74,8 @@ public class HoopWeapon : WeaponBase
         }
 
         int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
-        if(isSynergyWeaponActivated)
-            Debug.Log("시너지 만들어낼 갯수 " + numberOfProjectilesToGen);
+        // if (isSynergyWeaponActivated)
+        //     Debug.Log("시너지 만들어낼 갯수 " + numberOfProjectilesToGen);
 
         // 생성
         for (int i = 0; i < numberOfProjectilesToGen; i++)

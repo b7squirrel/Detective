@@ -16,6 +16,7 @@ public class ItemStats
     public int projectileAmount;
     public int projectileSpeed;
     public float knockBackChance;
+    public float criticalDamageChance;
     public float coolTimeDown; 
 
     public int hp;
@@ -38,6 +39,7 @@ public class ItemStats
         projectileAmount = stats.projectileAmount;
         projectileSpeed = stats.projectileSpeed;
         knockBackChance = stats.knockBackChance;
+        criticalDamageChance = stats.criticalDamageChance;
         coolTimeDown = stats.coolTimeDown;
 
         currentLevel++;
@@ -75,6 +77,7 @@ public class Item : ScriptableObject
         character.ProjectileAmount += stats.projectileAmount;
         character.ProjectileSpeed += stats.projectileSpeed;
         character.knockBackChance += stats.knockBackChance;
+        character.CriticalDamageChance += stats.criticalDamageChance;
         character.Cooldown += stats.coolTimeDown;
 
         character.GetComponent<PassiveItems>().CheckIfMaxLevel(this);
