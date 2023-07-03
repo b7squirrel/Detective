@@ -54,6 +54,46 @@ public class TennisWeapon : WeaponBase
             {
                 index = 30f;
             }
+            else if(i==5)
+            {
+                index = -45f;
+            }
+            else if(i==6)
+            {
+                index = 45f;
+            }
+            else if(i==7)
+            {
+                index = -60f;
+            }
+            else if(i==8)
+            {
+                index = 60f;
+            }
+            else if(i==9)
+            {
+                index = -75f;
+            }
+            else if(i==10)
+            {
+                index = 75f;
+            }
+            else if(i==11)
+            {
+                index = -90f;
+            }
+            else if(i==12)
+            {
+                index = 90f;
+            }
+            else if(i==13)
+            {
+                index = -105f;
+            }
+            else if(i==14)
+            {
+                index = 105f;
+            }
             Vector3 direction = Quaternion.AngleAxis(index, Vector3.forward) * dir;
 
             ProjectileBase projectile = tennisBall.GetComponent<ProjectileBase>();
