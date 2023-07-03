@@ -4,9 +4,9 @@ using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] int maxHealth;
     [SerializeField] int currentHealth;
 
+    [field: SerializeField] public int MaxHealth { get; set; } = 3000;
     [field: SerializeField] public int Armor { get; set; } = 0;
     [field: SerializeField] public float HpRegenerationRate { get; set; }
     [field: SerializeField] public float HpRegenerationTimer { get; set; }
@@ -43,8 +43,8 @@ public class Character : MonoBehaviour
     void Start()
     {
         ApplyPersistantUpgrade();
-        currentHealth = maxHealth;
-        hpBar.SetStatus(currentHealth, maxHealth);
+        currentHealth = MaxHealth;
+        hpBar.SetStatus(currentHealth, MaxHealth);
     }
 
     void Update()
@@ -61,8 +61,8 @@ public class Character : MonoBehaviour
     void ApplyPersistantUpgrade()
     {
         int hpUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.HP);
-        maxHealth += maxHealth / 10 * hpUpgradeLevel;
-        currentHealth = maxHealth;
+        MaxHealth += MaxHealth / 10 * hpUpgradeLevel;
+        currentHealth = MaxHealth;
 
         int damageUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.DAMAGE);
         DamageBonus = 1f + 0.1f * damageUpgradeLevel;
@@ -112,7 +112,7 @@ public class Character : MonoBehaviour
         }
         else
         {
-            hpBar.SetStatus(currentHealth, maxHealth);
+            hpBar.SetStatus(currentHealth, MaxHealth);
         }
     }
 
@@ -130,11 +130,11 @@ public class Character : MonoBehaviour
         if (currentHealth <= 0)
             return;
         currentHealth += amount;
-        if (currentHealth > maxHealth)
+        if (currentHealth > MaxHealth)
         {
-            currentHealth = maxHealth;
+            currentHealth = MaxHealth;
         }
-        hpBar.SetStatus(currentHealth, maxHealth);
+        hpBar.SetStatus(currentHealth, MaxHealth);
     }
 
     void Die()

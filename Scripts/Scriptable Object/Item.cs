@@ -70,7 +70,7 @@ public class Item : ScriptableObject
         character.MagnetSize += stats.magnetSize;
 
         character.MoveSpeed += stats.moveSpeed;
-        // character.maxHp += stats.maxHp;
+        character.MaxHealth += stats.maxHp;
         // character.damage += stats.damage;
         character.ProjectileAmount += stats.projectileAmount;
         character.ProjectileSpeed += stats.projectileSpeed;
