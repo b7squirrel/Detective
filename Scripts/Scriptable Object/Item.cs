@@ -12,7 +12,7 @@ public class ItemStats
     public int magnetSize;
     public float moveSpeed;
     public int maxHp;
-    public int damage;
+    public float damage;
     public int projectileAmount;
     public int projectileSpeed;
     public float knockBackChance;
@@ -71,7 +71,7 @@ public class Item : ScriptableObject
 
         character.MoveSpeed += stats.moveSpeed;
         character.MaxHealth += stats.maxHp;
-        // character.damage += stats.damage;
+        character.DamageBonus += stats.damage;
         character.ProjectileAmount += stats.projectileAmount;
         character.ProjectileSpeed += stats.projectileSpeed;
         character.knockBackChance += stats.knockBackChance;

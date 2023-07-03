@@ -240,7 +240,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         float knockBackDelay = 0f;
         float chance = UnityEngine.Random.Range(0, 100);
-        Debug.Log("chance = " + chance + " knockbackChance = " + knockBackChance);
+        // Debug.Log("chance = " + chance + " knockbackChance = " + knockBackChance);
         if (chance < knockBackChance && knockBackChance != 0)
         {
             knockBackDelay = 0.04f;

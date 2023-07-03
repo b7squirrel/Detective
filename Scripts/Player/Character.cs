@@ -58,6 +58,7 @@ public class Character : MonoBehaviour
         }
     }
 
+    // 처음 시작할 때 persistant 데이터들을 가져옴.
     void ApplyPersistantUpgrade()
     {
         int hpUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.HP);
