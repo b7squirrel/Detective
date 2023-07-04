@@ -133,7 +133,8 @@ public class WeaponBase : MonoBehaviour
                     return;
                 }
 
-                if (item.stats.currentLevel == item.upgrades.Count + 1)
+                // if (item.stats.currentLevel == item.upgrades.Count + 1)
+                if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
                 {
                     // Debug.Log("wb시너지 웨폰 활성화");
                     Wielder.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(weaponData);

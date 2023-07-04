@@ -40,7 +40,8 @@ public class PassiveItems : MonoBehaviour
 
     public void CheckIfMaxLevel(Item item)
     {
-        if (item.stats.currentLevel == item.upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
+        // if (item.stats.currentLevel == item.upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
+        if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
         {
             WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(item.SynergyWeapon);
             if (wd == null)

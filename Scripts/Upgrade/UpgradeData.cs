@@ -21,6 +21,7 @@ public class UpgradeData : ScriptableObject
     public string Name;
     public Sprite icon;
     public string description;
+    public string description2;
 
     [Header("Weapons")]
     public WeaponData weaponData;

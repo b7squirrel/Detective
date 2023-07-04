@@ -18,6 +18,7 @@ public class ItemStats
     public float knockBackChance;
     public float criticalDamageChance;
     public float coolTimeDown; 
+    public float hpRegenRate;
 
     public int hp;
     public int coins;
@@ -41,6 +42,8 @@ public class ItemStats
         knockBackChance = stats.knockBackChance;
         criticalDamageChance = stats.criticalDamageChance;
         coolTimeDown = stats.coolTimeDown;
+
+        hpRegenRate = stats.hpRegenRate;
 
         currentLevel++;
     }
@@ -79,6 +82,7 @@ public class Item : ScriptableObject
         character.knockBackChance += stats.knockBackChance;
         character.CriticalDamageChance += stats.criticalDamageChance;
         character.Cooldown += stats.coolTimeDown;
+        character.HpRegenerationRate += stats.hpRegenRate;
 
         character.GetComponent<PassiveItems>().CheckIfMaxLevel(this);
     }

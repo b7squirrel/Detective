@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
+  m_Name: HpRegenRate
+  m_EditorClassIdentifier: 
+  Name: "\uCCB4\uB825 \uD68C\uBCF5"
+  SynergyWeapon: "\uC624\uB9AC \uD3ED\uD0C4 \uC624\uB9AC"
+  stats:
+    armor: 0
+    magnetSize: 0
+    moveSpeed: 0
+    maxHp: 0
+    damage: 0
+    projectileAmount: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    criticalDamageChance: 0
+    coolTimeDown: 0
+    hpRegenRate: 0
+    hp: 0
+    coins: 0
+    currentLevel: 0
+  upgrades:
+  - {fileID: 11400000, guid: 53e72b5a49a043444ba57afb0922485d, type: 2}
+  - {fileID: 11400000, guid: 86e0977253b5b3840b54ab191e0ed12e, type: 2}

@@ -46,7 +46,6 @@ public class WeaponData : ScriptableObject
     public WeaponStats stats;
     public GameObject weaponBasePrefab;
     [Header("children anim")] public RuntimeAnimatorController animatorController;
-    public string description;
     public List<UpgradeData> upgrades;
     public UpgradeData synergyUpgrade;
 }
