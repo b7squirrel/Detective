@@ -15,7 +15,9 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] GameObject panel_weapon; // 무기 패널 연두색
     [SerializeField] GameObject panel_item; // 아이템 패널, 파란색
     [SerializeField] GameObject panel_synergy; // 시너지 패널, 보라색
+    [SerializeField] GameObject panel_instant_items; // 동전, 도넛 패널, 노란색
     [SerializeField] GameObject[] stars; // 활성, 비활성 시킬 별
+    [SerializeField] GameObject unSelectionPanel; // 선택되지 않으면 카드를 어둡게 하는 역할
     [SerializeField] List<Image> levelOn;
     [SerializeField] List<Image> levelOff;
     WeaponContainer weaponContainer;
@@ -28,6 +30,7 @@ public class UpgradeButton : MonoBehaviour
 
         ClearLevelstars();
         levelBar.SetActive(false);
+        unSelectionPanel.SetActive(false);
     }
 
     public void Set(UpgradeData upgradeData)
@@ -49,6 +52,7 @@ public class UpgradeButton : MonoBehaviour
             panel_item.SetActive(false);
             panel_synergy.SetActive(false);
             panel_weapon.SetActive(true);
+            panel_instant_items.SetActive(false);
         }
         else if(upgradeData.upgradeType == UpgradeType.ItemUpgrade || upgradeData.upgradeType == UpgradeType.ItemGet)
         {
@@ -57,6 +61,7 @@ public class UpgradeButton : MonoBehaviour
             panel_item.SetActive(true);
             panel_synergy.SetActive(false);
             panel_weapon.SetActive(false);
+            panel_instant_items.SetActive(false);
         }
         else if(upgradeData.upgradeType == UpgradeType.SynergyUpgrade)
         {
@@ -65,13 +70,15 @@ public class UpgradeButton : MonoBehaviour
             panel_weapon.SetActive(false);
             panel_synergy.SetActive(true);
             levelBar.SetActive(false);
+            panel_instant_items.SetActive(false);
         }
         else if(upgradeData.upgradeType == UpgradeType.Coin || upgradeData.upgradeType == UpgradeType.Heal)
         {
-            panel_item.SetActive(true);
+            panel_item.SetActive(false);
             panel_weapon.SetActive(false);
             panel_synergy.SetActive(false);
             levelBar.SetActive(false);
+            panel_instant_items.SetActive(true);
         }
     }
 
@@ -112,6 +119,16 @@ public class UpgradeButton : MonoBehaviour
         {
             item.color = new Color(item.color.r, item.color.g, item.color.b, 0f);
         }
+    }
+
+    public void Selected()
+    {
+
+    }
+
+    public void UnSelected()
+    {
+        unSelectionPanel.SetActive(true);
     }
     
 }
