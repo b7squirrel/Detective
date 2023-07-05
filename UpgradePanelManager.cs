@@ -42,6 +42,8 @@ public class UpgradePanelManager : MonoBehaviour
         }
         StartCoroutine(PopUpPanel());
     }
+
+    // 업그레이드 버튼을 누르면 실행
     public void Upgrade(int pressButtonID)
     {
         GameManager.instance.player.GetComponent<Level>().Upgrade(pressButtonID);

@@ -40,15 +40,6 @@ public class UpgradeButton : MonoBehaviour
 
         description.text = upgradeData.description;
         description2.text = upgradeData.description2;
-        
-        // if (upgradeData.description != "")
-        // {
-        //     description.text = upgradeData.description;
-        // }
-        // if (upgradeData.description2 != "")
-        // {
-        //     description2.text = upgradeData.description2;
-        // }
 
         levelBar.SetActive(true);
         if(upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
