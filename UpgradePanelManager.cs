@@ -15,6 +15,9 @@ public class UpgradePanelManager : MonoBehaviour
 
     Animator anim;
 
+    // 사운드
+    [SerializeField] AudioClip clickSound;
+
     void Awake()
     {
         pauseManager = GetComponent<PauseManager>();
@@ -48,6 +51,7 @@ public class UpgradePanelManager : MonoBehaviour
     {
         GameManager.instance.player.GetComponent<Level>().Upgrade(pressButtonID);
         StartCoroutine(SelectionEvent(pressButtonID));
+        SoundManager.instance.Play(clickSound);
         // GameManager.instance.joystick.SetActive(true);
     }
 
