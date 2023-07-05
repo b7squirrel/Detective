@@ -23,6 +23,8 @@ public class UpgradeButton : MonoBehaviour
     WeaponContainer weaponContainer;
     PassiveItems passiveItems;
 
+    Animator anim;
+
     void Awake()
     {
         weaponContainer = Player.instance.GetComponent<WeaponContainer>();
@@ -31,10 +33,14 @@ public class UpgradeButton : MonoBehaviour
         ClearLevelstars();
         levelBar.SetActive(false);
         unSelectionPanel.SetActive(false);
+
+        anim = GetComponent<Animator>();
     }
 
     public void Set(UpgradeData upgradeData)
     {
+        anim.SetTrigger("Reset");
+
         icon.sprite = upgradeData.icon;
         if (upgradeData.Name != "")
         {
@@ -121,14 +127,20 @@ public class UpgradeButton : MonoBehaviour
         }
     }
 
+    // 업그레이드 버튼 매니져에서 참조
     public void Selected()
     {
-
+        anim.SetTrigger("Select");
     }
 
     public void UnSelected()
     {
         unSelectionPanel.SetActive(true);
+    }
+
+    public void ResetUnseletedPanel()
+    {
+        unSelectionPanel.SetActive(false);
     }
     
 }

@@ -47,7 +47,7 @@ public class UpgradePanelManager : MonoBehaviour
     public void Upgrade(int pressButtonID)
     {
         GameManager.instance.player.GetComponent<Level>().Upgrade(pressButtonID);
-        ClosePanel();
+        StartCoroutine(SelectionEvent(pressButtonID));
         // GameManager.instance.joystick.SetActive(true);
     }
 
@@ -60,16 +60,36 @@ public class UpgradePanelManager : MonoBehaviour
     }
 
     // Skip 버튼을 누르면 한 번 더 물어보기
-    public void ClosePanel()
+    void ClosePanel()
     {
         expBarAnim.DisableExpFillBar();
         StartCoroutine(VanishPanel());
+    }
+
+    IEnumerator SelectionEvent(int pressButtonID)
+    {
+        for (int i = 0; i < upgradeButtons.Count; i++)
+        {
+            if(i == pressButtonID)
+            {
+                upgradeButtons[i].Selected();
+            }
+            else
+            {
+                upgradeButtons[i].UnSelected();
+            }
+        }
+
+        yield return new WaitForSecondsRealtime(.3f); // 카드 누름 애니메이션 + 잠시 홀드 하는 시간
+
+        ClosePanel();
     }
 
     void HideButtons()
     {
         for (int i = 0; i < upgradeButtons.Count; i++)
         {
+            upgradeButtons[i].ResetUnseletedPanel();
             upgradeButtons[i].gameObject.SetActive(false);
         }
     }
