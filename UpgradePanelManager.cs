@@ -84,7 +84,7 @@ public class UpgradePanelManager : MonoBehaviour
             }
         }
 
-        yield return new WaitForSecondsRealtime(.3f); // 카드 누름 애니메이션 + 잠시 홀드 하는 시간
+        yield return new WaitForSecondsRealtime(.25f); // 카드 누름 애니메이션 + 잠시 홀드 하는 시간
 
         ClosePanel();
     }
