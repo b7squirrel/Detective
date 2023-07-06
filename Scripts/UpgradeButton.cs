@@ -20,10 +20,12 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] GameObject unSelectionPanel; // 선택되지 않으면 카드를 어둡게 하는 역할
     [SerializeField] List<Image> levelOn;
     [SerializeField] List<Image> levelOff;
+    [SerializeField] List<Animator> levelOnAnim;
     WeaponContainer weaponContainer;
     PassiveItems passiveItems;
 
     Animator anim;
+    int cardLevel;
 
     void Awake()
     {
@@ -97,6 +99,7 @@ public class UpgradeButton : MonoBehaviour
 
     void SetLevelStarAlpha(int level, int baseNumbers)
     {
+        cardLevel = level;
         // 별을 모두 비활성화 한 후
         for (int i = 0; i < stars.Length; i++)
         {
@@ -107,12 +110,16 @@ public class UpgradeButton : MonoBehaviour
         for (int i = 0; i < baseNumbers; i++)
         {
             levelOff[i].color = new Color(levelOff[i].color.r, levelOff[i].color.g, levelOff[i].color.b, 1f);
+            levelOn[i].gameObject.SetActive(false);
             stars[i].SetActive(true);
         }
-        for (int i = 0; i < level + 1; i++)
+        for (int i = 0; i < cardLevel + 1; i++)
         {
-            levelOn[i].color = new Color(levelOn[i].color.r, levelOn[i].color.g, levelOn[i].color.b, 1f);
+            // levelOn[i].color = new Color(levelOn[i].color.r, levelOn[i].color.g, levelOn[i].color.b, 1f);
+            levelOn[i].gameObject.SetActive(true);
+            levelOnAnim[i].SetTrigger("Reset");
         }
+        StarBlinking(cardLevel);
     }
 
     void ClearLevelstars()
@@ -131,6 +138,7 @@ public class UpgradeButton : MonoBehaviour
     public void Selected()
     {
         anim.SetTrigger("Select");
+        StartCoroutine(StarSelected(cardLevel));
     }
 
     public void UnSelected()
@@ -143,4 +151,14 @@ public class UpgradeButton : MonoBehaviour
         unSelectionPanel.SetActive(false);
     }
     
+    void StarBlinking(int index)
+    {
+        levelOnAnim[index].SetTrigger("Blink");
+    }
+
+    IEnumerator StarSelected(int index)
+    {
+        yield return new WaitForSecondsRealtime(.05f);
+        levelOnAnim[index].SetTrigger("Selected");
+    }
 }
