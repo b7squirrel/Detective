@@ -21,6 +21,7 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] List<Image> levelOn;
     [SerializeField] List<Image> levelOff;
     [SerializeField] List<Animator> levelOnAnim;
+    [SerializeField] List<Animator> starSelectedEffectAnim;
     WeaponContainer weaponContainer;
     PassiveItems passiveItems;
 
@@ -160,5 +161,6 @@ public class UpgradeButton : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(.05f);
         levelOnAnim[index].SetTrigger("Selected");
+        starSelectedEffectAnim[index].SetTrigger("Selected");
     }
 }
