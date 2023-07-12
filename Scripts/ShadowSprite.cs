@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShadowSprite : MonoBehaviour
 {
-    [SerializeField] Vector2 offset = new Vector2(.3f, -.17f);
+    Vector2 offset = new Vector2(.17f, -.17f);
 
     SpriteRenderer sprRndCaster;
     SpriteRenderer sprRndshadow;

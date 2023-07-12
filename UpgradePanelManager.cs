@@ -33,7 +33,7 @@ public class UpgradePanelManager : MonoBehaviour
     {
         // GameManager.instance.joystick.SetActive(false);
         Clean();
-        pauseManager.PauseGame(); 
+        pauseManager.PauseGame();
 
         greyBase.SetActive(true);
         panel.SetActive(true);
@@ -49,6 +49,14 @@ public class UpgradePanelManager : MonoBehaviour
     // 업그레이드 버튼을 누르면 실행
     public void Upgrade(int pressButtonID)
     {
+        for (int i = 0; i < upgradeButtons.Count; i++)
+        {
+            if (upgradeButtons[i].IsClicked)
+            {
+                Debug.Log("Clicked");
+                return;
+            }
+        }
         GameManager.instance.player.GetComponent<Level>().Upgrade(pressButtonID);
         StartCoroutine(SelectionEvent(pressButtonID));
         SoundManager.instance.Play(clickSound);
@@ -74,7 +82,7 @@ public class UpgradePanelManager : MonoBehaviour
     {
         for (int i = 0; i < upgradeButtons.Count; i++)
         {
-            if(i == pressButtonID)
+            if (i == pressButtonID)
             {
                 upgradeButtons[i].Selected();
             }

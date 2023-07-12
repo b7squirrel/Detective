@@ -25,6 +25,8 @@ public class UpgradeButton : MonoBehaviour
     WeaponContainer weaponContainer;
     PassiveItems passiveItems;
 
+    public bool IsClicked { get; private set; } // 여러개의 버튼이 눌러지지 않도록
+
     Animator anim;
     int cardLevel;
 
@@ -95,6 +97,7 @@ public class UpgradeButton : MonoBehaviour
     {
         icon.sprite = null;
         ClearLevelstars();
+        IsClicked = false;
         levelBar.SetActive(false);
     }
 
@@ -142,7 +145,7 @@ public class UpgradeButton : MonoBehaviour
         StartCoroutine(StarSelected(cardLevel));
     }
 
-    public void UnSelected()
+    public void UnSelected() // 선택되지 않은 카드의 행동
     {
         unSelectionPanel.SetActive(true);
     }
@@ -162,5 +165,15 @@ public class UpgradeButton : MonoBehaviour
         yield return new WaitForSecondsRealtime(.05f);
         levelOnAnim[index].SetTrigger("Selected");
         starSelectedEffectAnim[index].SetTrigger("Selected");
+    }
+
+    public void ButtonClicked()
+    {
+        IsClicked = true;
+    }
+
+    public void ResetButtonClicked()
+    {
+        IsClicked = false;
     }
 }
