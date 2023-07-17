@@ -92,7 +92,8 @@ public class Collectable : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Blink());
+            // StartCoroutine(Blink());
+            gameObject.SetActive(false);
         }
     }
     IEnumerator Blink()

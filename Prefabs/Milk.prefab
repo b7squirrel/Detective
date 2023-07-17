@@ -97,7 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.3, y: -0.17}
 --- !u!1 &8884259230644267150
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +110,6 @@ GameObject:
   - component: {fileID: 8884259230644267148}
   - component: {fileID: 8884259230644267186}
   - component: {fileID: 8884259230644267149}
-  - component: {fileID: 8884259230644267151}
   - component: {fileID: 1362534692}
   - component: {fileID: -490822388464860488}
   m_Layer: 7
@@ -218,19 +216,6 @@ MonoBehaviour:
   whiteFlashDuration: 0
   acc: 0
   <HealAmount>k__BackingField: 1200
---- !u!114 &8884259230644267151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8884259230644267150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offset: {x: 0.3, y: -0.17}
 --- !u!95 &1362534692
 Animator:
   serializedVersion: 5
