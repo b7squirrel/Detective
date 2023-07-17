@@ -49,6 +49,13 @@ public class EggPanelManager : MonoBehaviour
     public void EggAnimFinished()
     {
         KidImageUp(true);
+        StartCoroutine(CloseCo());
+    }
+
+    IEnumerator CloseCo()
+    {
+        yield return new WaitForSecondsRealtime(2.03f);
+        CloseButtonPressed();
     }
     public void CloseButtonPressed()
     {

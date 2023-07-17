@@ -27,7 +27,9 @@ public class ShadowSprite : MonoBehaviour
 
         
         sprRndshadow.color = new Color(0, 0, 0, .5f);
-        sprRndshadow.sortingLayerName = "Shadow";
+        // sprRndshadow.sortingLayerName = "Shadow";
+        sprRndshadow.sortingLayerName = sprRndCaster.sortingLayerName;
+        sprRndshadow.sortingOrder = sprRndCaster.sortingOrder - 1;
     }
 
     void LateUpdate()
@@ -46,6 +48,9 @@ public class ShadowSprite : MonoBehaviour
         sprRndshadow.sprite = sprRndCaster.sprite;
         sprRndshadow.flipX = sprRndCaster.flipX;
         sprRndshadow.flipY = sprRndCaster.flipY;
+
+        sprRndshadow.sortingLayerName = sprRndCaster.sortingLayerName;
+        sprRndshadow.sortingOrder = sprRndCaster.sortingOrder - 1;
     }
 
     public void Hide()
