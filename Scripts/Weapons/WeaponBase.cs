@@ -258,10 +258,29 @@ public class WeaponBase : MonoBehaviour
     {
         // flip
         if (weaponTools != null)
-        weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = flip;
+        {
+            if (dir.x < 0) // 타겟이 왼쪽에 있으면 y축으로 뒤집기
+            {
+                weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = true;
+            }
+            else
+            {
+                weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = false;
+            }
+        }
+
 
         if (weaponToolsExtra != null)
-        weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = flip;
+        {
+            if (dir.x < 0)
+            {
+                weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = true;
+            }
+            else
+            {
+                weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = false;
+            }
+        }
     }
 
     public virtual void ActivateSynergyWeapon()
