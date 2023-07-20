@@ -97,10 +97,8 @@ public class HoopWeapon : WeaponBase
             projectiles[i].Rotate(rotVec);
             projectiles[i].Translate(projectiles[i].up * (distanceOffset + 4.5f), Space.World);
 
-            ProjectileBase projectile = projectiles[i].GetComponent<ProjectileBase>();
-            projectile.Damage = GetDamage();
-            projectile.KnockBackChance = GetKnockBackChance();
-            projectile.IsCriticalDamageProj = isCriticalDamage;
+            HoopProjectile hoopProjectile = projectiles[i].GetComponent<HoopProjectile>();
+            hoopProjectile.Init(this);
         }
         isProjectileActive = true;
         duration = 5f;

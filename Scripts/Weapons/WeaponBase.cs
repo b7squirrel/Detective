@@ -59,7 +59,15 @@ public class WeaponBase : MonoBehaviour
         List<Vector2> closestEnemyPosition = FindTarget(2);
         
         if (closestEnemyPosition[0] == Vector2.zero)
+        {
+            angleExtra = angle + 120f;
+            RotateWeapon();
+            RotateExtraWeapon();
+            FlipChild();
+            FlipWeaponTools();
             return;
+        }
+
 
         dir = GetDirection(closestEnemyPosition[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -124,6 +132,11 @@ public class WeaponBase : MonoBehaviour
     {
         float knockBackChance = weaponStats.knockBackChance + Wielder.knockBackChance;
         return knockBackChance;
+    }
+
+    public bool CheckIsCriticalDamage()
+    {
+        return isCriticalDamage;
     }
 
     public virtual void PostMessage(int damage, Vector3 targetPosition)
@@ -244,6 +257,7 @@ public class WeaponBase : MonoBehaviour
     {
         if (weaponTools == null)
             return;
+
         if (weaponTools.IsDirectional)
             weaponTools.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
@@ -251,6 +265,7 @@ public class WeaponBase : MonoBehaviour
     {
         if (weaponToolsExtra == null)
             return;
+
         if (weaponToolsExtra.IsDirectional)
             weaponToolsExtra.transform.rotation = Quaternion.Euler(0, 0, angleExtra);
     }

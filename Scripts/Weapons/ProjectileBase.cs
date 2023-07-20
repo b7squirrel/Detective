@@ -10,8 +10,8 @@ public class ProjectileBase : MonoBehaviour
     protected bool hitDetected = false;
     public int Damage { get; set; } = 5;
     public float KnockBackChance {get; set;}
-    [field : SerializeField] public float TimeToLive {get; set;} = 3f;
     public bool IsCriticalDamageProj {get; set;}
+    [field : SerializeField] public float TimeToLive {get; set;} = 3f;
 
     protected virtual void Update()
     {
