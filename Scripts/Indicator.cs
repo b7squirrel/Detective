@@ -49,6 +49,7 @@ public class Indicator : MonoBehaviour
             {
                 indicator.SetActive(true);
                 anim.SetTrigger("onSpot");
+                SoundManager.instance.Play(onSpotSFX);
             }
 
             indicator.transform.position = hit.point;
