@@ -14,7 +14,7 @@ public class Indicator : MonoBehaviour
     SpriteRenderer sr;
     GameObject indicator;
     float angle;
-    bool isOnSpot; // 도착한 상태. 코루틴이 한 번만 실행되도록 하기 위한 플래그
+    bool isVisible; // 도착한 상태. 코루틴이 한 번만 실행되도록 하기 위한 플래그
     bool isInitiated;
 
     void Init()
@@ -36,16 +36,14 @@ public class Indicator : MonoBehaviour
     void OnEnable()
     {
         Init();
-        isOnSpot = false;
+        isVisible = false;
     }
 
 
     void Update()
     {
-        
-
         hit = Physics2D.Linecast(transform.position, Player.instance.transform.position, ScreenCollision);
-        if (hit)
+        if (hit.collider != null)
         {
             if (indicator.activeSelf == false)
             {
@@ -59,17 +57,16 @@ public class Indicator : MonoBehaviour
             indicator.transform.eulerAngles = new Vector3(0, 0, angle);
 
             float distance = Vector2.Distance(transform.position, indicator.transform.position);
-            if(distance < .1f)
-            {
-                isOnSpot = true;
-            }
+
+            isVisible = false;
         }
         else
         {
-            if (isOnSpot == true)
+            if (isVisible == false)
             {
                 indicator.SetActive(false);
                 SoundManager.instance.Play(onSpotSFX);
+                isVisible = true;
             }
         }
     }
