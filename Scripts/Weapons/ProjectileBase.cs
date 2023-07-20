@@ -9,8 +9,9 @@ public class ProjectileBase : MonoBehaviour
     [field : SerializeField] public float Speed {get; set;}
     protected bool hitDetected = false;
     public int Damage { get; set; } = 5;
-    [field : SerializeField] public float TimeToLive {get; set;} = 3f;
     public float KnockBackChance {get; set;}
+    [field : SerializeField] public float TimeToLive {get; set;} = 3f;
+    public bool IsCriticalDamageProj {get; set;}
 
     protected virtual void Update()
     {
@@ -67,7 +68,7 @@ public class ProjectileBase : MonoBehaviour
 
     protected virtual void PostMessage(int damage, Vector3 targetPosition)
     {
-        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition);
+        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, IsCriticalDamageProj);
     }
 
     protected virtual void DieProjectile()

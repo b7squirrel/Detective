@@ -107,10 +107,11 @@ public class Character : MonoBehaviour
         SoundManager.instance.PlaySingle(hurtSound);
         anim.SetTrigger("Hurt");
 
-        if(Time.timeScale != 0)
-        {
-            Handheld.Vibrate();
-        }
+        // 데미지을 입으면 진동
+        // if(Time.timeScale != 0)
+        // {
+        //     Handheld.Vibrate();
+        // }
 
         currentHealth -= damage;
         if (currentHealth < 0)

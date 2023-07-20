@@ -100,6 +100,7 @@ public class HoopWeapon : WeaponBase
             ProjectileBase projectile = projectiles[i].GetComponent<ProjectileBase>();
             projectile.Damage = GetDamage();
             projectile.KnockBackChance = GetKnockBackChance();
+            projectile.IsCriticalDamageProj = isCriticalDamage;
         }
         isProjectileActive = true;
         duration = 5f;

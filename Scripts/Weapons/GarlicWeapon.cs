@@ -17,6 +17,8 @@ public class GarlicWeapon : WeaponBase
     }
     protected override void Attack()
     {
+        base.Attack();
+
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, weaponStats.sizeOfArea);
 
         effectRadius = weaponStats.sizeOfArea;
@@ -34,12 +36,10 @@ public class GarlicWeapon : WeaponBase
 
             if (enemy != null)
             {
-                int damage = GetDamage();
-                float knockBack = GetKnockBackChance();
                 PostMessage(damage, item.transform.position);
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enemy.TakeDamage(damage, knockBack, transform.position, hitEffect);
+                enemy.TakeDamage(damage, knockback, transform.position, hitEffect);
             }
         }
     }

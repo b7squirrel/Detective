@@ -22,6 +22,8 @@ public class LightningWeapon : WeaponBase
 
     protected override void Attack()
     {
+        base.Attack();
+
         FindLandingPositions();
 
         if (isClean)
@@ -90,13 +92,10 @@ public class LightningWeapon : WeaponBase
 
             if (enemy != null && enemyObject.activeSelf)
             {
-                int damage = GetDamage();
-                float knockBack = GetKnockBackChance();
-                
                 PostMessage(damage, item.transform.position);
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enemy.TakeDamage(damage, knockBack, Player.instance.transform.position, hitEffect);
+                enemy.TakeDamage(damage, knockback, Player.instance.transform.position, hitEffect);
             }
         }
     }

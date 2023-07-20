@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÀÏÁ¤ ½Ã°£ ÈÄ¿¡ ºñÈ°¼ºÈ­
+/// ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½Ä¿ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
 /// </summary>
 public class DamageMessage : MonoBehaviour
 {
     [SerializeField] float lifeOfMessage;
     float lifeTimer;
+    Animator anim;
 
     void OnEnable()
     {
+        if (anim == null)
+        {
+            anim = GetComponentInChildren<Animator>();
+        }
         lifeTimer = lifeOfMessage;
     }
     void Update()
@@ -21,5 +26,10 @@ public class DamageMessage : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    public void PlayCriticalDamage()
+    {
+        anim.SetTrigger("IsCritical");
     }
 }

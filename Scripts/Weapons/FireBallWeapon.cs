@@ -15,6 +15,8 @@ public class FireBallWeapon : WeaponBase
 
     protected override void Attack()
     {
+        base.Attack();
+
         List<Vector2> closestEnemyPosition = FindTarget(1);
         if (closestEnemyPosition[0] == Vector2.zero)
         {
@@ -29,6 +31,9 @@ public class FireBallWeapon : WeaponBase
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
             AnimShoot();
+
+            GetAttackParameters(); // 총알마다 크리티컬 확률, 낙백 확률이 다르게 하기 위해
+
             SoundManager.instance.Play(shoot);
             GameObject effect = GameManager.instance.poolManager.GetMisc(muzzleFlash);
             effect.transform.position = EffectPoint.position;
@@ -54,9 +59,9 @@ public class FireBallWeapon : WeaponBase
             ProjectileBase projectile = fireBall.GetComponent<ProjectileBase>();
             projectile.Direction = direction;
             projectile.Speed = weaponStats.projectileSpeed;
-
             projectile.Damage = GetDamage();
             projectile.KnockBackChance = GetKnockBackChance();
+            projectile.IsCriticalDamageProj = isCriticalDamage;
 
             if (isSynergyWeaponActivated)
             {
@@ -74,9 +79,9 @@ public class FireBallWeapon : WeaponBase
                 ProjectileBase projectileEx = fireBallEx.GetComponent<ProjectileBase>();
                 projectileEx.Direction = directionExtra;
                 projectileEx.Speed = weaponStats.projectileSpeed;
-
                 projectileEx.Damage = GetDamage();
                 projectileEx.KnockBackChance = GetKnockBackChance();
+                projectileEx.IsCriticalDamageProj = isCriticalDamage;
             }
         }
     }

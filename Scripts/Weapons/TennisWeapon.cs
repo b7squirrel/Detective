@@ -100,6 +100,7 @@ public class TennisWeapon : WeaponBase
             projectile.Speed = weaponStats.projectileSpeed;
             projectile.Direction = direction;
             projectile.Damage = GetDamage();
+            projectile.IsCriticalDamageProj = isCriticalDamage;
             projectile.KnockBackChance = GetKnockBackChance();
         }
     }

@@ -11,33 +11,42 @@ public class Indicator : MonoBehaviour
     [SerializeField] GameObject indicatorPrefab;
     [SerializeField] AudioClip onSpotSFX;
     Animator anim;
+    SpriteRenderer sr;
     GameObject indicator;
     float angle;
     bool isOnSpot; // 도착한 상태. 코루틴이 한 번만 실행되도록 하기 위한 플래그
-    Coroutine disableIndicator;
+    bool isInitiated;
 
-    void OnEnable()
+    void Init()
     {
-        isOnSpot = false;
-        if(disableIndicator != null)
-        {
-            StopCoroutine(disableIndicator);
-        }
-    }
-    void Update()
-    {
+        if (isInitiated)
+            return;
+
+        sr = GetComponent<SpriteRenderer>();
         if (indicator == null)
         {
             indicator = Instantiate(indicatorPrefab, transform);
-            Transform indicatorObject = transform.GetChild(1);
-            anim = indicatorObject.GetComponentInChildren<Animator>();
+            anim = indicator.GetComponentInChildren<Animator>();
             indicator.SetActive(false);
         }
+
+        isInitiated = true;
+    }
+
+    void OnEnable()
+    {
+        Init();
+        isOnSpot = false;
+    }
+
+
+    void Update()
+    {
+        
 
         hit = Physics2D.Linecast(transform.position, Player.instance.transform.position, ScreenCollision);
         if (hit)
         {
-            // Debug.DrawLine(Player.instance.transform.position, hit.point, Color.blue);
             if (indicator.activeSelf == false)
             {
                 indicator.SetActive(true);
@@ -58,16 +67,10 @@ public class Indicator : MonoBehaviour
         else
         {
             if (isOnSpot == true)
-                disableIndicator = StartCoroutine(DisableIndicator());
-                isOnSpot = false;
+            {
+                indicator.SetActive(false);
+                SoundManager.instance.Play(onSpotSFX);
+            }
         }
-    }
-
-    IEnumerator DisableIndicator()
-    {
-        anim.SetTrigger("onSpot");
-        yield return new WaitForSeconds(.25f); // indicator on spot 애니메이션의 길이만큼
-        indicator.SetActive(false);
-        SoundManager.instance.Play(onSpotSFX);
     }
 }

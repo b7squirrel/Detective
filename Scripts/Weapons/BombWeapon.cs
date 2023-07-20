@@ -66,8 +66,9 @@ public class BombWeapon : WeaponBase
         bombObject.transform.position = transform.position;
 
         ProjectileBase projectileBase = bombObject.GetComponent<ProjectileBase>();
-        projectileBase.Damage = GetDamage();
+        projectileBase.Damage = GetDamage(); // projectile마다 각각의 critical damage나 knock back 확률을 가지도록
         projectileBase.KnockBackChance = GetKnockBackChance();
+        projectileBase.IsCriticalDamageProj = isCriticalDamage;
 
         BombProjectile proj = bombObject.GetComponent<BombProjectile>();
         proj.Init(targetVec, weaponStats);

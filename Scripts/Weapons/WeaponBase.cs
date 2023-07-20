@@ -10,9 +10,12 @@ public class WeaponBase : MonoBehaviour
     public WeaponStats weaponStats;
 
     protected float timer;
+    protected int damage; // Attack이 시작되면 GetDamage()로 얻어냄
+    protected float knockback; // Attack이 시작되면 GetKnockBackChance()로 얻어냄
 
     public Character Wielder {get; private set;}
     protected bool isSynergyWeaponActivated;
+    protected bool isCriticalDamage; // 크리티컬은 GetDamage에서 결정되고 필요하면 projectileBase에 넘겨진다
 
     public Animator anim;
     public Animator animExtra;
@@ -84,8 +87,15 @@ public class WeaponBase : MonoBehaviour
             new WeaponStats(wd.stats.damage, wd.stats.timeToAttack, wd.stats.numberOfAttacks, wd.stats.sizeOfArea, wd.stats.projectileSpeed, wd.stats.knockBackChance);
     }
 
+    protected virtual void GetAttackParameters()
+    {
+        damage = GetDamage();
+        knockback = GetKnockBackChance();
+    }
+
     protected virtual void Attack()
     {
+        GetAttackParameters();
         // Do Attack
     }
 
@@ -98,7 +108,14 @@ public class WeaponBase : MonoBehaviour
 
         if(chance < Wielder.CriticalDamageChance)
         {
-            damage *= 10; // 치명타 데미지는 10배로 일단 가자
+            int criticalCoefficient = UnityEngine.Random.Range(5, 9);
+            int criticalConstant = UnityEngine.Random.Range(1,100);
+            damage = (damage * criticalCoefficient) + criticalConstant; 
+            isCriticalDamage = true;
+        }
+        else
+        {
+            isCriticalDamage = false;
         }
         return damage;
     }
@@ -111,7 +128,7 @@ public class WeaponBase : MonoBehaviour
 
     public virtual void PostMessage(int damage, Vector3 targetPosition)
     {
-        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition);
+        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, isCriticalDamage);
     }
 
     internal void Upgrade(UpgradeData upgradeData)

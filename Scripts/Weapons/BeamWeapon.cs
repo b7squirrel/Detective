@@ -91,8 +91,9 @@ public class BeamWeapon : WeaponBase
             // projectiles[i].Translate(projectiles[i].right * 30f, Space.World); // laser projectile 길이는 60
 
             ProjectileBase projectile = projectiles[i].GetComponent<ProjectileBase>();
-            projectile.Damage = GetDamage();
-            projectile.KnockBackChance = GetKnockBackChance();
+            projectile.Damage = damage;
+            projectile.KnockBackChance = knockback;;
+            projectile.IsCriticalDamageProj = isCriticalDamage;
         }
 
         // muzzle flash

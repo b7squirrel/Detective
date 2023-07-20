@@ -29,21 +29,21 @@ public class WhipWeapon : WeaponBase
 
         if (enemy != null)
         {
-            int damage = GetDamage();
-            float knockBack = GetKnockBackChance();
 
             PostMessage(damage, collision.transform.position);
 
             GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-            enemy.TakeDamage(damage, knockBack, collision.ClosestPoint(transform.position), hitEffect);
+            enemy.TakeDamage(damage, knockback, collision.ClosestPoint(transform.position), hitEffect);
         }
     }
 
     protected override void Attack()
     {
+        base.Attack();
+
         weapon.SetActive(true);
         multiStrikeDone = false;
-
+        
         if (weaponStats.numberOfAttacks < 2)
         {
             canMultiStrike = false;
@@ -68,6 +68,8 @@ public class WhipWeapon : WeaponBase
     IEnumerator AttackCo(float firstAttackDirection)
     {
         yield return new WaitForSeconds(.1f);
+
+        GetAttackParameters();
 
         if (firstAttackDirection < 0)
         {

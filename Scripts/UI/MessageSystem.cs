@@ -33,11 +33,19 @@ public class MessageSystem : MonoBehaviour
         go.SetActive(false);
     }
 
-    public void PostMessage(string text, Vector3 worldPosition)
+    public void PostMessage(string text, Vector3 worldPosition, bool isCritical)
     {
         messagePool[count].gameObject.SetActive(true);
         messagePool[count].transform.position = worldPosition;
         messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().text = text;
+        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, 1, 1, 1);
+        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().sortingOrder = 50;
+        if (isCritical)
+        {
+            messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, .3f, .3f, 1);
+            messagePool[count].GetComponent<DamageMessage>().PlayCriticalDamage();
+            messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().sortingOrder = 51;
+        }
         count++;
 
         if (count >= objectCount)
