@@ -58,23 +58,20 @@ public class WeaponBase : MonoBehaviour
     {
         List<Vector2> closestEnemyPosition = FindTarget(2);
         
-        if (closestEnemyPosition[0] == Vector2.zero)
-        {
-            angleExtra = angle + 120f;
-            RotateWeapon();
-            RotateExtraWeapon();
-            FlipChild();
-            FlipWeaponTools();
-            return;
-        }
-
-
         dir = GetDirection(closestEnemyPosition[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         RotateWeapon();
 
-        dirExtra = GetDirection(closestEnemyPosition[1]);
-        angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
+        if (closestEnemyPosition[1] == Vector2.zero)
+        {
+            angleExtra = angle + 120f;
+        }
+        else
+        {
+            dirExtra = GetDirection(closestEnemyPosition[1]);
+            angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
+        }
+
         RotateExtraWeapon();
 
         FlipChild();

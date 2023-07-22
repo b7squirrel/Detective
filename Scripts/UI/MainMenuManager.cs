@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] Slider tabSlider;
-    [SerializeField] GameObject[] tabPanels;
+    [SerializeField] GameObject[] tabPanels; // 시작할 떄 모두 비활성화 시킴. 빌드할 때 켜놓든 꺼놓든 상관없음
     [SerializeField] RectTransform[] BtnRect;
     [SerializeField] RectTransform[] BtnImageRect;
     float[] pos = new float[SIZE];

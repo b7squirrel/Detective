@@ -65,7 +65,7 @@ public class Indicator : MonoBehaviour
         {
             if (isVisible == false)
             {
-                indicator.SetActive(false);
+                // indicator.SetActive(false);
                 SoundManager.instance.Play(onSpotSFX);
                 isVisible = true;
             }
