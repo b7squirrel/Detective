@@ -37,13 +37,14 @@ public class Indicator : MonoBehaviour
     {
         Init();
         isVisible = false;
+        anim.SetTrigger("Init");
     }
 
 
     void Update()
     {
         hit = Physics2D.Linecast(transform.position, Player.instance.transform.position, ScreenCollision);
-        if (hit.collider != null)
+        if (hit.collider != null) // 화면 바깥이라면
         {
             if (indicator.activeSelf == false)
             {
@@ -61,11 +62,11 @@ public class Indicator : MonoBehaviour
 
             isVisible = false;
         }
-        else
+        else // 화면 안쪽이라면
         {
             if (isVisible == false)
             {
-                // indicator.SetActive(false);
+                indicator.SetActive(false);
                 SoundManager.instance.Play(onSpotSFX);
                 isVisible = true;
             }
