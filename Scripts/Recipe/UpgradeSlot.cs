@@ -11,6 +11,14 @@ public class UpgradeSlot : MonoBehaviour
     Card cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
     Transform previousParentOfPointerDrag; // 업그레이드 슬롯에 올려놓은 카드가 되돌아갈 위치
 
+    void Update()
+    {
+        if (GetComponentInChildren<Card>() == null)
+        {
+            cardToUpgrade = null;
+            Debug.Log("업그레이드 슬롯 위에 카드가 없습니다.");
+        }
+    }
 
     public void AcquireCard(Card card) // 업그레이드 슬롯위에 카드를 올릴 때
     {
@@ -41,11 +49,32 @@ public class UpgradeSlot : MonoBehaviour
             return;
         }
 
+        if((int)upgradeCardGrade == 4)
+        {
+            Debug.Log("전설 등급은 더 이상 강화할 수 없습니다.");
+            return;
+        }
+
+        int newCardGrade = (int)upgradeCardGrade + 1;
+
+        Destroy(cardToUpgrade.gameObject);
+        Destroy(cardToFeed.gameObject);
+
+        GameObject newCard = Instantiate(cardPrefab, transform);
+        RectTransform newCardRec = newCard.GetComponent<RectTransform>();
+        newCardRec = GetComponent<RectTransform>();
+        newCard.GetComponent<Card>().SetCardData(cardSo[0], newCardGrade);
+
         Debug.Log("카드가 한 단께 높은 등급으로 합성되었습니다");
     }
 
     public void SetPrevParent(Transform prevParent)
     {
         previousParentOfPointerDrag = prevParent;
+    }
+
+    public Card TempGetCardOnSlot()
+    {
+        return cardToUpgrade;
     }
 }

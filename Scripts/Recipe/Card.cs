@@ -7,10 +7,13 @@ public enum CardType {weapon, item, none}
 public class Card : MonoBehaviour
 {
     CardSo cardSo;
+    ItemGrade.grade cardGrade;
     
-    public void SetCardData(CardSo cardSo)
+    public void SetCardData(CardSo cardSo, int grade)
     {
         this.cardSo = cardSo;
+        cardGrade = (ItemGrade.grade)grade;
+        Debug.Log("생성된 카드의 레벨은 " + cardGrade);
     }
 
     public CardSo GetCardSo()

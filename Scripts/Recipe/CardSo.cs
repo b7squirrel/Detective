@@ -1,14 +1,5 @@
 using UnityEngine;
 
-public enum grade
-{
-    Common,
-    Rare,
-    Epic,
-    Unique,
-    Legendary
-}
-
 [CreateAssetMenu]
 public class CardSo : ScriptableObject
 {

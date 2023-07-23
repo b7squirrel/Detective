@@ -37,14 +37,19 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         if (transform.parent == root) // 슬롯 바깥쪽에 떨어트리면
         {
-            transform.SetParent(previousParent);
-            rect.position = previousParent.GetComponent<RectTransform>().position;
+            BackToPrevParent();
         }
 
         // 업그레이드 슬롯위로 카드를 떨어트리면 draggable의 역할은 끝
         upgradeSlot.AcquireCard(GetComponent<Card>()); 
 
         canvasGroup.blocksRaycasts = true;
+    }
+
+    public void BackToPrevParent()
+    {
+        transform.SetParent(previousParent);
+        rect.position = previousParent.GetComponent<RectTransform>().position;
     }
 
     public Transform GetPreviousParent()

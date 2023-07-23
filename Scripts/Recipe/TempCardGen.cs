@@ -16,6 +16,6 @@ public class TempCardGen : MonoBehaviour
         RectTransform slot = slots[0].GetComponent<RectTransform>();
         card = slot;
 
-        newCard.GetComponent<Card>().SetCardData(cardSo);
+        newCard.GetComponent<Card>().SetCardData(cardSo, 0);
     }
 }
