@@ -9,6 +9,7 @@ public enum grade
     Legendary
 }
 
+[CreateAssetMenu]
 public class CardSo : ScriptableObject
 {
     public ItemGrade.grade grade;
