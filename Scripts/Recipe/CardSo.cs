@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CardSo : MonoBehaviour
+public enum grade
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Common,
+    Rare,
+    Epic,
+    Unique,
+    Legendary
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public class CardSo : ScriptableObject
+{
+    public ItemGrade.grade grade;
+    public WeaponData weaponData;
+    public Item itemData;
 }
