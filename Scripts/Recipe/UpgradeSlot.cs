@@ -10,6 +10,11 @@ public class UpgradeSlot : MonoBehaviour
     Card cardToUpgrade; // 업그레이드 슬롯에 올라가 있는 카드
     Card cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
     Transform previousParentOfPointerDrag; // 업그레이드 슬롯에 올려놓은 카드가 되돌아갈 위치
+    bool isAvailable; // 카드가 슬롯 위에 올라올 수 있는지 여부 (업그레이드 카드든 재료 카드든)
+
+
+    ItemGrade.grade upgradeCardGrade;
+    ItemGrade.grade feedCardGrade;
 
     void Update()
     {
@@ -38,24 +43,40 @@ public class UpgradeSlot : MonoBehaviour
         cardToFeed = card;
     }
 
-    void UpgradeCard()
+    public bool Available()
     {
-        ItemGrade.grade upgradeCardGrade = cardToUpgrade.GetCardSo().grade;
-        ItemGrade.grade feedCardGrade = cardToUpgrade.GetCardSo().grade;
+        isAvailable = true;
+        if (cardToUpgrade != null)
+        {
+            upgradeCardGrade = cardToUpgrade.GetCardGrad();
+        }
 
-        if(upgradeCardGrade != feedCardGrade)
+        if (cardToFeed != null)
+        {
+            feedCardGrade = cardToFeed.GetCardGrad();
+        }
+
+        if (upgradeCardGrade != feedCardGrade)
         {
             Debug.Log("같은 등급을 합쳐줘야 합니다");
-            return;
+            isAvailable = false;
         }
 
-        if((int)upgradeCardGrade == 4)
+        if ((int)upgradeCardGrade == 4)
         {
             Debug.Log("전설 등급은 더 이상 강화할 수 없습니다.");
-            return;
+            isAvailable = false;
         }
 
-        int newCardGrade = (int)upgradeCardGrade + 1;
+        return isAvailable;
+    }
+
+    void UpgradeCard()
+    {
+        if (isAvailable == false)
+            return;
+
+        int newCardGrade = (int)cardToUpgrade.GetCardGrad() + 1;
 
         Destroy(cardToUpgrade.gameObject);
         Destroy(cardToFeed.gameObject);

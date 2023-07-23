@@ -38,4 +38,9 @@ public class Card : MonoBehaviour
         Debug.Log("카드 타입이 정해지지 않았습니다.");
         return CardType.none;
     }
+
+    public ItemGrade.grade GetCardGrad()
+    {
+        return cardGrade;
+    }
 }

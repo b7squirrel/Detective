@@ -40,8 +40,17 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             BackToPrevParent();
         }
 
-        // 업그레이드 슬롯위로 카드를 떨어트리면 draggable의 역할은 끝
-        upgradeSlot.AcquireCard(GetComponent<Card>()); 
+        // 업그레이드 슬롯 위로 올릴 수 있는지 체크
+        if (upgradeSlot.Available())
+        {
+            // 업그레이드 슬롯위로 카드를 떨어트리면 draggable의 역할은 끝
+            upgradeSlot.AcquireCard(GetComponent<Card>());
+        }
+        else
+        {
+            // 다시 원래 위치로
+            BackToPrevParent();
+        }
 
         canvasGroup.blocksRaycasts = true;
     }
