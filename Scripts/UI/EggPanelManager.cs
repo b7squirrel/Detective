@@ -14,6 +14,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject newKidText;
     [SerializeField] GameObject blackBGPanel;
     RuntimeAnimatorController kidAnim;
+    Coroutine Close;
 
     private void Awake()
     {
@@ -49,7 +50,7 @@ public class EggPanelManager : MonoBehaviour
     public void EggAnimFinished()
     {
         KidImageUp(true);
-        StartCoroutine(CloseCo());
+        Close = StartCoroutine(CloseCo());
     }
 
     IEnumerator CloseCo()
@@ -67,5 +68,6 @@ public class EggPanelManager : MonoBehaviour
         blackBGPanel.SetActive(false);
         newKidText.SetActive(false);
         oriName.SetActive(false);
+        StopCoroutine(Close);
     }
 }

@@ -35,14 +35,22 @@ public class Player : MonoBehaviour, IBouncable
 
     void LateUpdate()
     {
-        if (IsStill) return;
-
+        if (IsStill)
+        {
+            InputVec = Vector2.zero;
+            return;
+        }
+        
         Flip();
         UpdateAniamtionState();
     }
     void FixedUpdate()
     {
-        if (IsStill) return;
+        if (IsStill)
+        {
+            InputVec = Vector2.zero;
+            return;
+        }
 
         if (GameManager.instance.IsPlayerDead)
         {
