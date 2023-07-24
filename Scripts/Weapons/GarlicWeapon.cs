@@ -40,9 +40,12 @@ public class GarlicWeapon : WeaponBase
             {
                 PostMessage(damage, item.transform.position);
 
+                Vector2 enemyDir = item.transform.position - transform.position;
+                Vector2 offsetDir = -(enemyDir.normalized);
+                Vector2 hitPoint = (Vector2)item.transform.position + (offsetDir * 2f); // 대략 적 콜라이더의 반정도
+
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                Debug.Log("hit effect name = " + hitEffect.name);
-                enemy.TakeDamage(damage, knockback, item.transform.position, hitEffect);
+                enemy.TakeDamage(damage, knockback, hitPoint, hitEffect);
             }
         }
     }
