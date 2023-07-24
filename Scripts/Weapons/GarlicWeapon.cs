@@ -6,24 +6,26 @@ using UnityEngine;
 
 public class GarlicWeapon : WeaponBase
 {
-    [SerializeField] GameObject shootEffect;
-    Animator animEffect; // 자식으로 있는 Garlic Effect의 animator
+    ParticleSystem note;
     float effectRadius;
+    [SerializeField] float[] effectArea = new float[4];
 
     protected override void Awake()
     {
         base.Awake();
-        animEffect = shootEffect.GetComponent<Animator>();
+        note = GetComponentInChildren<ParticleSystem>();
+        
     }
     protected override void Attack()
     {
         base.Attack();
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, weaponStats.sizeOfArea);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, effectArea[(int)weaponStats.sizeOfArea]);
 
         effectRadius = weaponStats.sizeOfArea;
-        shootEffect.transform.localScale = new Vector3(effectRadius, effectRadius, 1);
-        animEffect.SetTrigger("Shoot");
+
+        note.GetComponent<Animator>().SetTrigger((weaponStats.sizeOfArea).ToString());
+        note.Play();
 
         ApplyDamage(colliders);
     }
@@ -39,9 +41,15 @@ public class GarlicWeapon : WeaponBase
                 PostMessage(damage, item.transform.position);
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enemy.TakeDamage(damage, knockback, transform.position, hitEffect);
+                Debug.Log("hit effect name = " + hitEffect.name);
+                enemy.TakeDamage(damage, knockback, item.transform.position, hitEffect);
             }
         }
+    }
+
+    void SetNoteParticle()
+    {
+        
     }
 
     protected override void FlipWeaponTools()
