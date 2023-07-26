@@ -8963,7 +8963,7 @@ Transform:
   - {fileID: 1498320961}
   - {fileID: 1757420695}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &288368754 stripped
 Transform:
@@ -21750,7 +21750,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &650607415 stripped
 Transform:
@@ -32796,7 +32796,7 @@ PrefabInstance:
     - target: {fileID: 3118075186976557800, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
       propertyPath: upgradeToPick.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 8307db7aea388e2449fe997c04c6a129, type: 2}
+      objectReference: {fileID: 11400000, guid: 5836482e39c69b44b95694d14838502f, type: 2}
     - target: {fileID: 3118075186976557802, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -43459,7 +43459,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3118075186976557793, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
       propertyPath: m_Name
-      value: Egg_Fire
+      value: Egg_Garlic
       objectReference: {fileID: 0}
     - target: {fileID: 3118075186976557793, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
       propertyPath: m_IsActive
@@ -43472,10 +43472,10 @@ PrefabInstance:
     - target: {fileID: 3118075186976557800, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
       propertyPath: upgradeToPick.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 5d6217358e5570e46a3d56823a332495, type: 2}
+      objectReference: {fileID: 11400000, guid: 8307db7aea388e2449fe997c04c6a129, type: 2}
     - target: {fileID: 3118075186976557802, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3118075186976557802, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
       propertyPath: m_LocalPosition.x
@@ -52562,7 +52562,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1612177264 stripped
 Transform:
@@ -59263,6 +59263,7 @@ GameObject:
   - component: {fileID: 1834188290}
   - component: {fileID: 1834188291}
   - component: {fileID: 1834188292}
+  - component: {fileID: 1834188293}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -59442,6 +59443,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   winStage: {fileID: 1746787023}
+--- !u!114 &1834188293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12c2d4029d67d7144b349d726a91d4c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0
@@ -60591,7 +60604,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2449291611140524560, guid: 2e2042b5734bcc14ab6565793b24dacd, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2449291611140524560, guid: 2e2042b5734bcc14ab6565793b24dacd, type: 3}
       propertyPath: m_LocalScale.x

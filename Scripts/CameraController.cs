@@ -24,27 +24,28 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (target != Vector3.zero)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, target, bosscameraMoveSpeed * Time.unscaledDeltaTime);
-            float distance = Vector3.Distance(transform.position, target);
+        // if (target != Vector3.zero)
+        // {
+        //     transform.position = Vector3.MoveTowards(transform.position, target, bosscameraMoveSpeed * Time.unscaledDeltaTime);
+        //     float distance = Vector3.Distance(transform.position, target);
 
-            if (isBossCamera == false)
-            {
-                if(distance < .1f)
-                {
-                    target = Vector3.zero;
-                }
-            }
-            return;
-        }
+        //     if (isBossCamera == false)
+        //     {
+        //         if(distance < .1f)
+        //         {
+        //             target = Vector3.zero;
+        //         }
+        //     }
+        //     return;
+        // }
 
         if (player != null)
         {
-            transform.position = new Vector3(
-                Mathf.Clamp(player.transform.position.x, boxCol.bounds.min.x + halfWidth, boxCol.bounds.max.x - halfWidth),
-                Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y, boxCol.bounds.max.y),
-                transform.position.z);
+            transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+            // transform.position = new Vector3(
+            //     Mathf.Clamp(player.transform.position.x, boxCol.bounds.min.x + halfWidth, boxCol.bounds.max.x - halfWidth),
+            //     Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y, boxCol.bounds.max.y),
+            //     transform.position.z);
         }
     }
     private void OnDrawGizmos()

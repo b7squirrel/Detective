@@ -68,6 +68,8 @@ public class EggPanelManager : MonoBehaviour
         blackBGPanel.SetActive(false);
         newKidText.SetActive(false);
         oriName.SetActive(false);
-        StopCoroutine(Close);
+        // 돌아가고 있는 코루틴을 멈추지 않으면 
+        // 버튼을 누르지 않고 자동으로 창이 종료되었을 때 코루틴이 실행되어 정지된 시간을 풀어버림
+        StopCoroutine(Close); 
     }
 }

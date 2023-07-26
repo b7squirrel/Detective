@@ -59,7 +59,7 @@ public class HoopWeapon : WeaponBase
         Gen(projectiles, projSpin, 0f);
         if (isSynergyWeaponActivated)
         {
-            Gen(projectilesSynergy, projSpinSynergy, 1.5f);
+            Gen(projectilesSynergy, projSpinSynergy, 2f);
             // Debug.Log("시너지 Gen");
         }
     }
@@ -95,9 +95,9 @@ public class HoopWeapon : WeaponBase
 
             Vector3 rotVec = Vector3.forward * 360 * i / weaponStats.numberOfAttacks;
             projectiles[i].Rotate(rotVec);
-            projectiles[i].Translate(projectiles[i].up * (distanceOffset + 4.5f), Space.World);
+            projectiles[i].Translate(projectiles[i].up * (distanceOffset + 2), Space.World);
 
-            HoopProjectile hoopProjectile = projectiles[i].GetComponent<HoopProjectile>();
+            HoopProjectile hoopProjectile = projectiles[i].GetComponentInChildren<HoopProjectile>();
             hoopProjectile.Init(this);
         }
         isProjectileActive = true;

@@ -46,11 +46,11 @@ public class Player : MonoBehaviour, IBouncable
     }
     void FixedUpdate()
     {
-        if (IsStill)
-        {
-            InputVec = Vector2.zero;
-            return;
-        }
+        // if (IsStill)
+        // {
+        //     InputVec = Vector2.zero;
+        //     return;
+        // }
 
         if (GameManager.instance.IsPlayerDead)
         {
