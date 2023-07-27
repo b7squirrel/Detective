@@ -35,6 +35,11 @@ public class BeamProjectile : ProjectileBase
         if (other.GetComponent<Idamageable>() == null)
             return;
 
+        // 카메라 밖에 있으면 데미지 전달 하지 않음. 빌드에서 잘 작동함
+        // 에디터에서는 씬 뷰에서 보이면 보이는 것으로 간주하므로 테스트가 불편함
+        if (other.GetComponentInChildren<SpriteRenderer>().isVisible == false)
+            return;
+
         Transform enmey = other.GetComponent<Transform>();
         PostMessage(Damage, enmey.position);
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
