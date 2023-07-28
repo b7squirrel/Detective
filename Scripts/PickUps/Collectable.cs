@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 습득 가능한 오브젝트의 행동들 정의
 public class Collectable : MonoBehaviour
 {
     public float moveSpeed = 10f;
@@ -19,6 +20,7 @@ public class Collectable : MonoBehaviour
     public float delay = 0.05f;
 
     protected float timeToDisapear;
+    Coroutine resetCoroutine;
 
     [Header("Effect")]
     [SerializeField] Material whiteMaterial;
@@ -34,6 +36,11 @@ public class Collectable : MonoBehaviour
         IsHit = false;
         timeToDisapear = 30f;
     }
+    protected virtual void OnDisable()
+    {
+        StopCoroutine(resetCoroutine);
+        sr.material = initialMat;
+    }
     protected void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -42,8 +49,9 @@ public class Collectable : MonoBehaviour
     }
     protected void Update()
     {
+        rb.isKinematic = sr.isVisible;
         MoveToPlayer();
-        TimeUP();
+        // TimeUP();
     }
 
     protected virtual void MoveToPlayer()
@@ -65,7 +73,7 @@ public class Collectable : MonoBehaviour
 
 
         rb.AddForce(direction * knockBackForce, ForceMode2D.Impulse);
-        StartCoroutine(Reset());
+        resetCoroutine = StartCoroutine(Reset());
     }
 
     public IEnumerator Reset()
@@ -92,32 +100,7 @@ public class Collectable : MonoBehaviour
         }
         else
         {
-            // StartCoroutine(Blink());
             gameObject.SetActive(false);
         }
-    }
-    IEnumerator Blink()
-    {
-        ShadowSprite shadow = GetComponent<ShadowSprite>();
-
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
-        shadow.Hide();
-        yield return new WaitForSeconds(.1f);
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
-        shadow.Show();
-        yield return new WaitForSeconds(.1f);
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
-        shadow.Hide();
-        yield return new WaitForSeconds(.1f);
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
-        shadow.Show();
-        yield return new WaitForSeconds(.1f);
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
-        shadow.Hide();
-        yield return new WaitForSeconds(.1f);
-        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
-        shadow.Show();
-        if (!IsHit)
-            gameObject.SetActive(false);
     }
 }

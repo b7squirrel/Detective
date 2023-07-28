@@ -214,14 +214,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     protected void CheckOffScreen()
     {
-        RaycastHit2D hitEdge = Physics2D.Linecast(transform.position, Player.instance.transform.position, screenEdge);
-        if (hitEdge)
-        {
-            isOffScreen = true;
-            return;
-        }
+        // RaycastHit2D hitEdge = Physics2D.Linecast(transform.position, Player.instance.transform.position, screenEdge);
+        // if (hitEdge)
+        // {
+        //     isOffScreen = true;
+        //     return;
+        // }
 
-        isOffScreen = false;
+        // isOffScreen = false;
+
+        isOffScreen = !(sr.isVisible);
     }
 
     #region Take Damage
