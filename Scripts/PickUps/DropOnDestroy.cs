@@ -7,7 +7,6 @@ public class DropOnDestroy : MonoBehaviour
     [SerializeField][Range(0f, 1f)] float chance = 1f;
     [SerializeField] int exp;
     [SerializeField] int hp;
-    [SerializeField] bool isGem;
 
     bool isQuiting;
 
@@ -20,7 +19,7 @@ public class DropOnDestroy : MonoBehaviour
     {
         if (isQuiting) return;
 
-        if(dropItemPrefab.Count <=0)
+        if (dropItemPrefab.Count <= 0)
         {
             Debug.LogWarning("DropOnDestory, dropItemPrefab 리스트가 비어 있습니다.");
             return;
@@ -35,10 +34,12 @@ public class DropOnDestroy : MonoBehaviour
                 return;
             }
 
-            if(GetComponent<Enemy>() != null)
+            if (GetComponent<Enemy>() != null)
             {
                 exp = GetComponent<Enemy>().ExperienceReward;
             }
+
+            bool isGem = toDrop.GetComponent<Collectable>().IsGem;
             SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
         }
     }

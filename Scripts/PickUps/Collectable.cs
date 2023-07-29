@@ -8,6 +8,7 @@ public class Collectable : MonoBehaviour
     public float moveSpeed = 10f;
     public float knockBackForce = 12f;
     public bool IsFlying { get; private set; }
+    [field : SerializeField] public bool IsGem{get; private set;}
 
     public GameObject pickupEffect;
 
@@ -27,6 +28,7 @@ public class Collectable : MonoBehaviour
     [SerializeField] float whiteFlashDuration;
     Material initialMat;
     SpriteRenderer sr;
+    GemManager gemManager;
 
     [SerializeField] float acc;
 
@@ -35,11 +37,20 @@ public class Collectable : MonoBehaviour
         IsFlying = false;
         IsHit = false;
         timeToDisapear = 30f;
+        if (gemManager == null)
+        {
+            gemManager = FindAnyObjectByType<GemManager>();
+        }
     }
     protected virtual void OnDisable()
     {
-        StopCoroutine(resetCoroutine);
+        if (resetCoroutine != null)
+        {
+            StopCoroutine(resetCoroutine);
+        }
         sr.material = initialMat;
+
+        if (IsGem) gemManager.RemoveVisibleGemFromList(transform);
     }
     protected void Awake()
     {
@@ -49,7 +60,11 @@ public class Collectable : MonoBehaviour
     }
     protected void Update()
     {
-        rb.isKinematic = sr.isVisible;
+        rb.simulated = sr.isVisible;
+        if (rb.simulated && IsGem)
+        {
+            gemManager.AddVisibleGemToList(transform);
+        }
         MoveToPlayer();
         // TimeUP();
     }

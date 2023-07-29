@@ -15,6 +15,8 @@ public class PoolManager : MonoBehaviour
     List<GameObject> itemFolders;
     GameObject temp; // 임시 폴더를 매번 생성하지 않게 하기 위해서
 
+    [SerializeField] GemManager gemManager;
+
     void Start()
     {
         InitEnemyPools();
@@ -25,6 +27,8 @@ public class PoolManager : MonoBehaviour
         enemyFolder.transform.parent = transform;
         
         itemFolders = new List<GameObject>();
+
+        gemManager = FindObjectOfType<GemManager>();
     }
 
     void InitEnemyPools()
@@ -136,5 +140,66 @@ public class PoolManager : MonoBehaviour
         miscPools[poolingTag].Add(select);
         return select;
     }
+
+    public GameObject GetGem(GameObject gem)
+    {
+        GameObject select = null;
+
+        if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
+
+        string poolingTag = gem.GetComponent<PoolingKey>().Key;
+
+        if (miscPools.ContainsKey(poolingTag)) // 해당 key의 pool이 있다면
+        {
+            foreach (var item in miscPools[poolingTag])
+            {
+                if (!item.activeSelf)
+                {
+                    select = item;
+                    select.SetActive(true);
+                    return select;
+                }
+            }
+        }
+        else // 해당 key의 pool이 없다면
+        {
+            List<GameObject> go = new List<GameObject>();
+
+            GameObject folder = new GameObject();
+            folder.transform.position = Vector3.zero;
+            folder.transform.parent = transform;
+            folder.name = poolingTag;
+            itemFolders.Add(folder);
+
+            select = Instantiate(gem, folder.transform);
+            go.Add(select);
+            miscPools.Add(poolingTag, go);
+
+            // 보석이라면 gemManager에 해당 폴더 넘기기
+            // gemManager.OnPoolingGem(select.transform);
+
+            return select;
+        }
+
+        // pool안의 오브젝트가 모두 사용중이라면 
+        // pooling 태그 이름이 같은 폴더를 찾아서 자식으로 넣어줌
+
+        for (int i = 0; i < itemFolders.Count; i++)
+        {
+            if (itemFolders[i].name == poolingTag)
+            {
+                temp = itemFolders[i];
+            }
+        }
+        select = Instantiate(gem, temp.transform);
+        miscPools[poolingTag].Add(select);
+
+        // 보석이라면 gemManager에 해당 아이템 넘기기
+        // gemManager.OnPoolingGem(select.transform);
+
+        return select;
+    }
+
+    
     #endregion
 }

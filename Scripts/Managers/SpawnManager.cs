@@ -9,15 +9,25 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
-        instance= this;
+        instance = this;
     }
     public void SpawnObject(Vector3 worldPosition, GameObject toSpawn, bool isGem, int experience)
     {
-        Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
+        Transform pickup = null;
 
-        if (pickUP.GetComponent<GemPickUpObject>() != null)
-            pickUP.GetComponent<GemPickUpObject>().ExpAmount = experience;
+        if (isGem)
+        {
+            pickup = GameManager.instance.poolManager.GetGem(toSpawn).transform;
+        }
+        else
+        {
+            pickup = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
 
-        pickUP.position = worldPosition;
+        }
+
+        if (pickup.GetComponent<GemPickUpObject>() != null)
+            pickup.GetComponent<GemPickUpObject>().ExpAmount = experience;
+
+        pickup.position = worldPosition;
     }
 }
