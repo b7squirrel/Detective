@@ -32,6 +32,11 @@ public class Collectable : MonoBehaviour
 
     [SerializeField] float acc;
 
+    public void TempWhite()
+    {
+        sr.material = whiteMaterial;
+    }
+
     protected virtual void OnEnable()
     {
         IsFlying = false;
@@ -64,6 +69,10 @@ public class Collectable : MonoBehaviour
         if (rb.simulated && IsGem)
         {
             gemManager.AddVisibleGemToList(transform);
+        }
+        else if (rb.simulated == false && IsGem)
+        {
+            gemManager.RemoveVisibleGemFromList(transform);
         }
         MoveToPlayer();
         // TimeUP();

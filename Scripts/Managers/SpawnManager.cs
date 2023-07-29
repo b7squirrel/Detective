@@ -17,7 +17,7 @@ public class SpawnManager : MonoBehaviour
 
         if (isGem)
         {
-            pickup = GameManager.instance.poolManager.GetGem(toSpawn).transform;
+            pickup = GameManager.instance.poolManager.GetGem(toSpawn, experience).transform;
         }
         else
         {

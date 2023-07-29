@@ -5,8 +5,12 @@ using UnityEngine;
 // 현재 화면 안에 있는 Gem의 갯수를 세고 
 // 최대치라면 더 이상 젬을 pool에서 빼오지 않고 경험치만 기존 보석에 합쳐주기
 
-// 전체 보석은 pooling에 접근해서 얻어내고 그 중 화면에 보이는 것만 따로 관리
-// gem이 pool에서 새로 만들어질때마다 gems 리스트 업데이트
+// 보석의 collectable(GemPickupObject가 상속)의 isVisible이 참이 될때마다 
+// GemManager의 gemsVisible에 추가
+// 보석이 disable되면 GemManager의 gemsVisible에서 제거
+
+// poolManager에서 보석을 생성할 때마다 gemsVisible 갯수가 최대치인지 체크해서 
+// 최대치이면 보석을 생성하지 않고 경험치를 기존 보석에 더해주는 MergeExp를 실행 
 public class GemManager : MonoBehaviour
 {
     [SerializeField] int MaxGemNumbers;
@@ -30,7 +34,6 @@ public class GemManager : MonoBehaviour
     public void OnPoolingGem(Transform gemCreated)
     {
         gems.Add(gemCreated);
-        // GetVisibleGems();
     }
 
     public void AddVisibleGemToList(Transform gemVisible)
@@ -45,25 +48,7 @@ public class GemManager : MonoBehaviour
     {
         gemsVisible.Remove(gemVisible);
     }
-
-    void GetVisibleGems()
-    {
-        if (gems == null)
-            gems = new List<Transform>();
-
-        gemsVisible.Clear();
-
-        for (int i = 0; i < gems.Count; i++)
-        {
-            if (gems[i].gameObject.activeSelf == false)
-                continue;
-
-            if (gems[i].GetComponentInChildren<SpriteRenderer>().isVisible)
-                gemsVisible.Add(gems[i]);
-
-                Debug.Log("GetVisibleGems" + gems[i].GetComponentInChildren<SpriteRenderer>().isVisible);
-        }
-    }
+    
     public bool IsVisibleGemMax()
     {
         if (gemsVisible.Count >= MaxGemNumbers)
@@ -75,5 +60,8 @@ public class GemManager : MonoBehaviour
     {
         int index = UnityEngine.Random.Range(0, gemsVisible.Count);
         gemsVisible[index].GetComponent<GemPickUpObject>().ExpAmount += exp;
+
+        //temp
+        gemsVisible[index].GetComponent<Collectable>().TempWhite();
     }
 }

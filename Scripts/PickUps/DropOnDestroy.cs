@@ -41,6 +41,7 @@ public class DropOnDestroy : MonoBehaviour
 
             bool isGem = toDrop.GetComponent<Collectable>().IsGem;
             SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
+            Debug.Log("Spawn");
         }
     }
 }

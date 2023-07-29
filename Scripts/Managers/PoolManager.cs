@@ -141,9 +141,17 @@ public class PoolManager : MonoBehaviour
         return select;
     }
 
-    public GameObject GetGem(GameObject gem)
+    public GameObject GetGem(GameObject gem, int exp)
     {
+        Debug.Log("Get Gem Exp " + exp);
         GameObject select = null;
+
+        if(gemManager.IsVisibleGemMax())
+        {
+            gemManager.MergeExp(exp);
+            Debug.Log("Merge " + exp);
+            return null;
+        }
 
         if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
 
@@ -157,6 +165,7 @@ public class PoolManager : MonoBehaviour
                 {
                     select = item;
                     select.SetActive(true);
+                    Debug.Log("pulled gem");
                     return select;
                 }
             }
@@ -175,9 +184,7 @@ public class PoolManager : MonoBehaviour
             go.Add(select);
             miscPools.Add(poolingTag, go);
 
-            // 보석이라면 gemManager에 해당 폴더 넘기기
-            // gemManager.OnPoolingGem(select.transform);
-
+            Debug.Log("Created folder");
             return select;
         }
 
@@ -194,9 +201,7 @@ public class PoolManager : MonoBehaviour
         select = Instantiate(gem, temp.transform);
         miscPools[poolingTag].Add(select);
 
-        // 보석이라면 gemManager에 해당 아이템 넘기기
-        // gemManager.OnPoolingGem(select.transform);
-
+        Debug.Log("Created Gem and put it in Gem foler");
         return select;
     }
 
