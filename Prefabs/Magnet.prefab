@@ -108,7 +108,6 @@ GameObject:
   - component: {fileID: 7188308438288182896}
   - component: {fileID: 7188308438288182898}
   - component: {fileID: 7188308438288182909}
-  - component: {fileID: 7188308438288182908}
   - component: {fileID: 7188308438288182911}
   - component: {fileID: 1704427933973476370}
   m_Layer: 0
@@ -181,19 +180,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &7188308438288182908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7188308438288182905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5894f44e38b24ca4cb98a7c674383e1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pickup: {fileID: 8300000, guid: 9cd42e23ee116bd41a8fab82e968a48c, type: 3}
 --- !u!114 &7188308438288182911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,12 +194,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   knockBackForce: 12
+  <IsGem>k__BackingField: 0
   pickupEffect: {fileID: 985285463175719073, guid: 92a091687ffeddb4d9a8477edf9f1f8e, type: 3}
   dir: {x: 0, y: 0}
   delay: 0.05
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   whiteFlashDuration: 0
-  acc: 0
+  pickup: {fileID: 8300000, guid: 9cd42e23ee116bd41a8fab82e968a48c, type: 3}
 --- !u!114 &1704427933973476370
 MonoBehaviour:
   m_ObjectHideFlags: 0

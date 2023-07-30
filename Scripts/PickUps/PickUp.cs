@@ -6,16 +6,37 @@ using UnityEngine;
 public class PickUp : MonoBehaviour
 {
     [SerializeField] AudioClip pickup;
-    private void OnTriggerEnter2D(Collider2D collision)
+    
+    void OnDisable()
     {
-        Character character = collision.GetComponent<Character>();
-        if (character != null)
-        {
-            GetComponent<IPickUpObject>().OnPickUp(character);
+        StopAllCoroutines();
+    }
 
-            
-            SoundManager.instance.Play(pickup);
-            gameObject.SetActive(false);
+    public void PickedUp()
+    {
+        StartCoroutine(PickUpCo());
+    }
+
+    IEnumerator PickUpCo()
+    {
+        while (true)
+        {
+            if ((transform.position - Player.instance.transform.position).sqrMagnitude < .04f)
+            {
+                HitPlayerFeedback();
+                break;
+            }
+            yield return null;
         }
+    }
+
+    void HitPlayerFeedback()
+    {
+        Character character = Player.instance.GetComponent<Character>();
+
+        GetComponent<IPickUpObject>().OnPickUp(character);
+
+        SoundManager.instance.Play(pickup);
+        gameObject.SetActive(false);
     }
 }

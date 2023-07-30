@@ -6,8 +6,8 @@ using UnityEngine;
 public class Collectable : MonoBehaviour
 {
     public float moveSpeed = 10f;
-    public float knockBackForce = 12f;
-    public bool IsFlying { get; private set; }
+    public float knockBackForce = 20f;
+    public bool IsFlyingToPlayer { get; private set; }
     [field : SerializeField] public bool IsGem{get; private set;}
 
     public GameObject pickupEffect;
@@ -15,31 +15,30 @@ public class Collectable : MonoBehaviour
     protected Vector2 target;
     protected bool isKnockBack;
     public bool IsHit { get; private set; }
-    Rigidbody2D rb;
 
     public Vector2 dir;
     public float delay = 0.05f;
 
     protected float timeToDisapear;
-    Coroutine resetCoroutine;
 
     [Header("Effect")]
     [SerializeField] Material whiteMaterial;
     [SerializeField] float whiteFlashDuration;
+    [SerializeField] public AudioClip pickup;
     Material initialMat;
     SpriteRenderer sr;
     GemManager gemManager;
 
-    [SerializeField] float acc;
+    float accel = 50f;
 
     public void TempWhite()
     {
         sr.material = whiteMaterial;
     }
-
+    #region 유니티 콜백함수
     protected virtual void OnEnable()
     {
-        IsFlying = false;
+        IsFlyingToPlayer = false;
         IsHit = false;
         timeToDisapear = 30f;
         if (gemManager == null)
@@ -49,82 +48,111 @@ public class Collectable : MonoBehaviour
     }
     protected virtual void OnDisable()
     {
-        if (resetCoroutine != null)
-        {
-            StopCoroutine(resetCoroutine);
-        }
+        StopAllCoroutines();
         sr.material = initialMat;
 
         if (IsGem) gemManager.RemoveVisibleGemFromList(transform);
     }
     protected void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
         sr = GetComponentInChildren<SpriteRenderer>();
         initialMat = sr.material;
     }
     protected void Update()
     {
-        rb.simulated = sr.isVisible;
-        if (rb.simulated && IsGem)
+        if (sr.isVisible && IsGem)
         {
             gemManager.AddVisibleGemToList(transform);
         }
-        else if (rb.simulated == false && IsGem)
+        else if (sr.isVisible == false && IsGem)
         {
             gemManager.RemoveVisibleGemFromList(transform);
         }
-        MoveToPlayer();
-        // TimeUP();
     }
+    #endregion
 
-    protected virtual void MoveToPlayer()
-    {
-        if (!IsFlying)
-            return;
-
-        transform.position =
-            Vector2.MoveTowards(transform.position,
-            GameManager.instance.player.transform.position,
-            moveSpeed * Time.deltaTime);
-        acc += acc * Time.deltaTime;
-    }
+    #region 자력에 닿았을 때
     public virtual void OnHitMagnetField(Vector2 direction)
+    {
+        StartCoroutine(Antic(direction));
+        StartCoroutine(Blink()); // 반짝거리면서 antic 모션
+    }
+
+    IEnumerator Antic(Vector2 dir)
     {
         IsHit = true;
         GameObject effect = GameManager.instance.poolManager.GetMisc(pickupEffect);
         effect.transform.position = transform.position;
 
+        float anticTime = .3f;
+        float currentSpeed = 15;
+        while (true)
+        {
+            currentSpeed -= accel * Time.deltaTime;
+            transform.position += new Vector3(currentSpeed * dir.x, currentSpeed * dir.y, 0) * Time.deltaTime;
+            anticTime -= Time.deltaTime;
+            if (anticTime < 0) break;
+            yield return null;
+        }
 
-        rb.AddForce(direction * knockBackForce, ForceMode2D.Impulse);
-        resetCoroutine = StartCoroutine(Reset());
+        yield return StartCoroutine(FlyToPlayer()); // antic이 끝나면 플레이어에게 날아가기 시작
     }
-
-    public IEnumerator Reset()
+    IEnumerator Blink()
     {
         yield return new WaitForSeconds(.08f);
         sr.material = whiteMaterial;
         yield return new WaitForSeconds(.08f);
-
         sr.material = initialMat;
-
-        yield return new WaitForSeconds(.02f);
-        rb.velocity = Vector2.zero;
-        IsFlying = true;
     }
-
-    protected virtual void TimeUP()
+    
+    IEnumerator FlyToPlayer()
     {
-        if (IsHit)
-            return;
+        IsFlyingToPlayer = true;
 
-        if(timeToDisapear > 0)
+        while(true)
         {
-            timeToDisapear -= Time.deltaTime;
-        }
-        else
-        {
-            gameObject.SetActive(false);
+            transform.position =
+            Vector2.MoveTowards(transform.position,
+            GameManager.instance.player.transform.position,
+            moveSpeed * Time.deltaTime);
+
+            if((transform.position - Player.instance.transform.position).sqrMagnitude <= .04f)
+            {
+                PickedUp();
+                break;
+            }
+            yield return null;
         }
     }
+    #endregion
+
+    #region 목표물에 도달했을 때
+    public void PickedUp()
+    {
+        StartCoroutine(PickUpCo());
+    }
+
+    IEnumerator PickUpCo()
+    {
+        while (true)
+        {
+            if ((transform.position - Player.instance.transform.position).sqrMagnitude < .04f)
+            {
+                HitPlayerFeedback();
+                break;
+            }
+            yield return null;
+        }
+    }
+
+    void HitPlayerFeedback()
+    {
+        Character character = Player.instance.GetComponent<Character>();
+
+        GetComponent<IPickUpObject>().OnPickUp(character);
+
+        SoundManager.instance.Play(pickup);
+        gameObject.SetActive(false);
+    }
+    #endregion
 }

@@ -64,4 +64,11 @@ public class GemManager : MonoBehaviour
         //temp
         gemsVisible[index].GetComponent<Collectable>().TempWhite();
     }
+
+    public List<Transform> GetGemVisible()
+    {
+        if (gemsVisible == null || gemsVisible.Count == 0)
+            return null;
+        return gemsVisible;
+    }
 }

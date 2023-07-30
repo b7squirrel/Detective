@@ -8,16 +8,11 @@ public class EggPickUpObject : Collectable, IPickUpObject
     [SerializeField] List<UpgradeData> upgradeToPick;
     int index;
 
-    protected override void MoveToPlayer()
-    {
-        // 알은 자력으로 끌려오지 않는다. 끌려와 버리면 알을 얻었다는 것이 읽히지가 않음
-    }
-
     public override void OnHitMagnetField(Vector2 direction)
     {
         // 알은 자력에 영향을 받지 않는다
     }
-    
+
     // 플레이어에게 무기를 설치한 후 Egg 이벤트 화면으로 들어간다
     public void OnPickUp(Character character)
     {
@@ -45,7 +40,21 @@ public class EggPickUpObject : Collectable, IPickUpObject
         }
         index = Random.Range(0, upgradeToPick.Count);
         character.GetComponent<Level>().GetWeapon(upgradeToPick[index]);
-        
+
         GameManager.instance.eggPanelManager.EggPanelUP(upgradeToPick[index].newKidAnim, upgradeToPick[index].Name);
+    }
+
+    // 알이나 우유 등은 일단 물리를 이용해서 충돌체크
+    // 추후에 화면에 보이는 프랍들만 따로 관리해서 물리 없이 하자
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        Character character = collision.GetComponent<Character>();
+        if (character != null)
+        {
+            OnPickUp(character);
+
+            SoundManager.instance.Play(pickup);
+            gameObject.SetActive(false);
+        }
     }
 }

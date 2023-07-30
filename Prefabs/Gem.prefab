@@ -9,10 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7070234756646545296}
-  - component: {fileID: 3650811104528883129}
   - component: {fileID: 2114236243567753455}
   - component: {fileID: 980874901494317977}
-  - component: {fileID: 3370111528631419383}
   - component: {fileID: 613829030602766603}
   m_Layer: 0
   m_Name: Gem
@@ -37,22 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &3650811104528883129
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 895778108224746509}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.30555555
 --- !u!114 &2114236243567753455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,29 +68,8 @@ MonoBehaviour:
   delay: 0.05
   whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   whiteFlashDuration: 0
-  acc: 5
+  pickup: {fileID: 8300000, guid: d7ee7190494d8db498e56ab98d40efc7, type: 3}
   <ExpAmount>k__BackingField: 0
---- !u!50 &3370111528631419383
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 895778108224746509}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!114 &613829030602766603
 MonoBehaviour:
   m_ObjectHideFlags: 0

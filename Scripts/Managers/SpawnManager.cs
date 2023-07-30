@@ -19,12 +19,7 @@ public class SpawnManager : MonoBehaviour
 
         if (isGem)
         {
-            // character.level.AddExperience(experience);
-            // return;
             pickup = GameManager.instance.poolManager.GetGem(toSpawn, experience).transform;
-            pickup.position = worldPosition;
-            GemsToUI.instance.MoveGem(pickup.transform, experience);
-            return;
         }
         else
         {
