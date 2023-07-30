@@ -25,6 +25,8 @@ public class DropOnDestroy : MonoBehaviour
             return;
         }
 
+        bool isGem = false;
+
         if (Random.value < chance)
         {
             GameObject toDrop = dropItemPrefab[Random.Range(0, dropItemPrefab.Count)];
@@ -39,9 +41,12 @@ public class DropOnDestroy : MonoBehaviour
                 exp = GetComponent<Enemy>().ExperienceReward;
             }
 
-            bool isGem = toDrop.GetComponent<Collectable>().IsGem;
+            // bool isGem = toDrop.GetComponent<Collectable>().IsGem;
+            if(toDrop.GetComponent<GemUI>() != null)
+            {
+                isGem = toDrop.GetComponent<GemUI>().isGem;
+            }
             SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
-            Debug.Log("Spawn");
         }
     }
 }

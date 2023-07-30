@@ -143,7 +143,11 @@ public class PoolManager : MonoBehaviour
 
     public GameObject GetGem(GameObject gem, int exp)
     {
-        Debug.Log("Get Gem Exp " + exp);
+        
+        // GameObject gemToUI = Instantiate(gem, transform);
+        // return gemToUI;
+        
+
         GameObject select = null;
 
         if(gemManager.IsVisibleGemMax())

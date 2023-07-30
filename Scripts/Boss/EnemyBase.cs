@@ -24,6 +24,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected Rigidbody2D rb;
     protected Animator anim;
     protected SpriteRenderer sr;
+    protected Collider2D colEnemy;
     #endregion
 
     #region FeedBack Variables
@@ -49,6 +50,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponentInChildren<SpriteRenderer>();
+        colEnemy = GetComponent<Collider2D>();
 
         initialMat = sr.material;
         IsKnockBack = false;
@@ -212,21 +214,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     #endregion
 
+
+    #region Take Damage
     protected void CheckOffScreen()
     {
-        // RaycastHit2D hitEdge = Physics2D.Linecast(transform.position, Player.instance.transform.position, screenEdge);
-        // if (hitEdge)
-        // {
-        //     isOffScreen = true;
-        //     return;
-        // }
-
-        // isOffScreen = false;
-
         isOffScreen = !(sr.isVisible);
     }
 
-    #region Take Damage
     public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target, GameObject hitEffect)
     {
         CheckOffScreen();
@@ -286,19 +280,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             targetDir = (rb.position - target).normalized;
         }
 
-
-        // float dirX = fromPlayer.x * rb.position.x;
-        // float dirY = fromPlayer.y * rb.position.y;
-
-        // float xDir = 0;
-        // float yDir = 0;
-        // if (dirX < 0)
-        //     xDir = -1f;
-
-        // if (dirY < 0)
-        //     yDir = -1f;
-
-        // targetDir = new Vector2(xDir * targetDir.x, yDir * targetDir.y);
         if (this.gameObject.activeSelf)
         {
             StartCoroutine(KnockBackDone(knockBackDelay));

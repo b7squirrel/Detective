@@ -49,6 +49,9 @@ public class Enemy : EnemyBase
             return;
         if (GameManager.instance.player == null)
             return;
+
+        // col.enabled = sr.isVisible;
+
         ApplyMovement();
     }
 

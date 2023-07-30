@@ -6,10 +6,12 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public static SpawnManager instance;
+    Character character;
 
     private void Awake()
     {
         instance = this;
+        character = Player.instance.GetComponent<Character>();
     }
     public void SpawnObject(Vector3 worldPosition, GameObject toSpawn, bool isGem, int experience)
     {
@@ -17,7 +19,12 @@ public class SpawnManager : MonoBehaviour
 
         if (isGem)
         {
+            // character.level.AddExperience(experience);
+            // return;
             pickup = GameManager.instance.poolManager.GetGem(toSpawn, experience).transform;
+            pickup.position = worldPosition;
+            GemsToUI.instance.MoveGem(pickup.transform, experience);
+            return;
         }
         else
         {
