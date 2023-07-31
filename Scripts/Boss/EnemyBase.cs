@@ -61,7 +61,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         StopFlipCoroutine();
         isFlipping = false;
 
-        if (Target.position.x - rb.position.x > 0) 
+        if (Target.position.x - transform.position.x > 0) 
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -88,7 +88,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             if (flipCoroutine != null) StopCoroutine(flipCoroutine);
         }
 
-        if (Target.position.x - rb.position.x > 0) 
+        if (Target.position.x - transform.position.x > 0) 
         {
             currentFacingDir = 1f;
         }
@@ -153,7 +153,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     void ResetFlip()
     {
         StopFlipCoroutine();
-        if (Target.position.x - rb.position.x > 0) 
+        if (Target.position.x - transform.position.x > 0) 
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -179,7 +179,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return;
         }
 
-        Vector2 dirVec = Target.position - rb.position;
+        Vector2 dirVec = Target.position - (Vector2)transform.position;
         if(IsGrouping)
         {
             // dirVec = groupDir;
@@ -189,7 +189,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + nextVec);
+        rb.MovePosition((Vector2)transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
     #endregion
@@ -277,7 +277,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             Vector2 fromPlayer = target - (Vector2)Target.transform.position;
             IsKnockBack = true;
-            targetDir = (rb.position - target).normalized;
+            targetDir = ((Vector2)transform.position - target).normalized;
         }
 
         if (this.gameObject.activeSelf)
@@ -300,7 +300,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public virtual void Stunned(Vector2 target)
     {
         IsStunned = true;
-        targetDir = (rb.position - target).normalized;
+        targetDir = ((Vector2)transform.position - target).normalized;
         anim.SetTrigger("Hit");
         StartCoroutine(StunnedCo());
     }

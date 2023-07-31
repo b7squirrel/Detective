@@ -40,7 +40,7 @@ public class Collectable : MonoBehaviour
     {
         IsFlyingToPlayer = false;
         IsHit = false;
-        timeToDisapear = 30f;
+        timeToDisapear = 60f;
         if (gemManager == null)
         {
             gemManager = FindAnyObjectByType<GemManager>();
@@ -68,6 +68,8 @@ public class Collectable : MonoBehaviour
         {
             gemManager.RemoveVisibleGemFromList(transform);
         }
+
+        TimeUP();
     }
     #endregion
 
@@ -104,19 +106,19 @@ public class Collectable : MonoBehaviour
         yield return new WaitForSeconds(.08f);
         sr.material = initialMat;
     }
-    
+
     IEnumerator FlyToPlayer()
     {
         IsFlyingToPlayer = true;
 
-        while(true)
+        while (true)
         {
             transform.position =
             Vector2.MoveTowards(transform.position,
             GameManager.instance.player.transform.position,
             moveSpeed * Time.deltaTime);
 
-            if((transform.position - Player.instance.transform.position).sqrMagnitude <= .04f)
+            if ((transform.position - Player.instance.transform.position).sqrMagnitude <= .04f)
             {
                 PickedUp();
                 break;
@@ -153,6 +155,49 @@ public class Collectable : MonoBehaviour
 
         SoundManager.instance.Play(pickup);
         gameObject.SetActive(false);
+    }
+    #endregion
+
+    #region 일정 시간 이후 사라짐
+    protected virtual void TimeUP()
+    {
+        if (IsGem == false) // 보석만 사라지도록
+            return;
+        if (IsHit) // 자력에 닿아서 움직이는 도중이라면 사라짐 취소
+            return;
+        if (timeToDisapear > 0)
+        {
+            timeToDisapear -= Time.deltaTime;
+        }
+        else
+        {
+            StartCoroutine(TimesUpBlinking());
+        }
+    }
+
+    IEnumerator TimesUpBlinking()
+    {
+        ShadowSprite shadow = GetComponentInChildren<ShadowSprite>();
+
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        shadow.Hide();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+        shadow.Show();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        shadow.Hide();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+        shadow.Show();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        shadow.Hide();
+        yield return new WaitForSeconds(.1f);
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+        shadow.Show();
+        if (!IsHit)
+            gameObject.SetActive(false);
     }
     #endregion
 }

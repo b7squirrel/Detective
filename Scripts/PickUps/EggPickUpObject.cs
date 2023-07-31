@@ -26,7 +26,7 @@ public class EggPickUpObject : Collectable, IPickUpObject
             if (character.GetComponent<Level>().HavingWeapon(item))
             {
                 upgradeToPick.Remove(item);
-                Debug.Log("겹치는 무기 = " + item.Name);
+                // Debug.Log("겹치는 무기 = " + item.Name);
             }
         }
 

@@ -19,6 +19,7 @@ public class Level : MonoBehaviour
     WeaponManager weaponManager;
     PassiveItems passiveItems;
     SynergyManager synergyManager;
+    bool NoMoreUpgrade;
 
     [SerializeField] List<UpgradeData> upgradesAvailableOnStart;
 
@@ -34,11 +35,20 @@ public class Level : MonoBehaviour
         }
     }
 
+    public void ActivateNoMoreUpgrade()
+    {
+        NoMoreUpgrade = true;
+        upgradeManager.ClosePanel();
+    }
+
+
     void Awake()
     {
         weaponManager = GetComponent<WeaponManager>();
         passiveItems = GetComponent<PassiveItems>();
         synergyManager = GetComponent<SynergyManager>();
+
+        NoMoreUpgrade = false;
     }
 
     void Start()
@@ -71,11 +81,14 @@ public class Level : MonoBehaviour
         }
         selectedUpgrads.Clear();
         selectedUpgrads.AddRange(GetRandomUpgrades());
-        upgradeManager.OpenPanel(selectedUpgrads);
         experience -= To_Level_Up;
         level++;
         experienceBar.SetLevelText(level);
-        
+
+        if (NoMoreUpgrade)
+            return;
+
+        upgradeManager.OpenPanel(selectedUpgrads);
         expBarAnim.ExpBarEffect();
     }
 
