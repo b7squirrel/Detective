@@ -4947,6 +4947,7 @@ GameObject:
   - component: {fileID: 221868154}
   - component: {fileID: 221868156}
   - component: {fileID: 221868155}
+  - component: {fileID: 221868157}
   m_Layer: 5
   m_Name: Slots Materials
   m_TagString: Untagged
@@ -4972,7 +4973,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -43}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 180, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &221868155
 MonoBehaviour:
@@ -5006,10 +5007,18 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 90, y: 90}
+  m_CellSize: {x: 180, y: 180}
+  m_Spacing: {x: 5, y: 5}
   m_Constraint: 1
   m_ConstraintCount: 4
+--- !u!222 &221868157
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221868153}
+  m_CullTransparentMesh: 1
 --- !u!1 &225911764
 GameObject:
   m_ObjectHideFlags: 0
@@ -31031,9 +31040,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e00c2d388c5c54d96580c713d8aaf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponData: []
-  itemData: []
-  cardPrefab: {fileID: 7274414072999991561, guid: f850bd18eb1ac1747a0c4641f8ef19fb, type: 3}
+  weaponData:
+  - {fileID: 11400000, guid: 748bd85685be0084dba5e8bacedb4338, type: 2}
+  - {fileID: 11400000, guid: c4f75987eebcf6243b096959b45bcea5, type: 2}
+  - {fileID: 11400000, guid: 1595ce990325f194c9849a1919c23952, type: 2}
+  - {fileID: 11400000, guid: eadc04a85b573634fb378f8b03541b97, type: 2}
+  - {fileID: 11400000, guid: 64e7a7773cbf64546a29741924924362, type: 2}
+  - {fileID: 11400000, guid: 7d43842f4a716fa448918d6869cd3057, type: 2}
+  - {fileID: 11400000, guid: 98fc5b910e591774891b4c8b6f29e057, type: 2}
+  - {fileID: 11400000, guid: bbcd61aa0c2acbb4bb44c724643d0277, type: 2}
+  - {fileID: 11400000, guid: b1a4cbd9459df364a859d520cf108ae8, type: 2}
+  - {fileID: 11400000, guid: 9ea0db10f57b44e419f4b7b2ae1b08fc, type: 2}
+  itemData:
+  - {fileID: 11400000, guid: 6fed794634024654c8c2ee88559e9bae, type: 2}
+  - {fileID: 11400000, guid: 20155fcb50cd1dc4fb5339ff2364c93a, type: 2}
+  - {fileID: 11400000, guid: 0057b53b448e170419546c4881d51dbe, type: 2}
+  - {fileID: 11400000, guid: 0a8e636c5e214834084a4fc0390cc2a3, type: 2}
+  - {fileID: 11400000, guid: 19f5b53173fbfe843a87811665586130, type: 2}
+  - {fileID: 11400000, guid: 7a64f5031e72cd64581e534d57086656, type: 2}
+  - {fileID: 11400000, guid: 345063fe01eca2345bfaa975c540b87d, type: 2}
+  - {fileID: 11400000, guid: 6ad45399dd0db53409093d965b5d6eeb, type: 2}
+  - {fileID: 11400000, guid: 26e4f3c792fe04c4388d4557fef22918, type: 2}
+  - {fileID: 11400000, guid: e5e51114c04df144885f3f2a02b1ac96, type: 2}
+  - {fileID: 11400000, guid: 265238c716aa25049b7954d34deb60ea, type: 2}
+  cardPrefab: {fileID: 5933664252364881434, guid: f850bd18eb1ac1747a0c4641f8ef19fb, type: 3}
 --- !u!1 &1506877649
 GameObject:
   m_ObjectHideFlags: 0

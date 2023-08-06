@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   upgradeType: 6
-  Name: "\uAD74\uC808\uD14C\uC2BE\uB77C\uC624\uB9AC"
+  Name: Tesla
   icon: {fileID: 21300000, guid: cec4f252664138a4e8f1c8bc2021ac7d, type: 3}
   description: "\uBC88\uAC1C \uC2DC\uB108\uC9C0"
+  description2: 
   weaponData: {fileID: 11400000, guid: 7d43842f4a716fa448918d6869cd3057, type: 2}
   weaponUpgradeStats:
     damage: 0
@@ -37,7 +38,9 @@ MonoBehaviour:
     projectileAmount: 0
     projectileSpeed: 0
     knockBackChance: 0
+    criticalDamageChance: 0
     coolTimeDown: 0
+    hpRegenRate: 0
     hp: 0
     coins: 0
     currentLevel: 0

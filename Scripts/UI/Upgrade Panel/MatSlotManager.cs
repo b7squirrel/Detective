@@ -36,7 +36,12 @@ public class MatSlotManager : MonoBehaviour
         cardDatas = cardDataManager.GetMyCardList();
         foreach (var item in cardDatas)
         {
-            cardDictionary.GenCard(item.Type, item.Grade, item.Name);
+            GameObject newCard = cardDictionary.GenCard(item.Type, item.Grade, item.Name);
+            newCard.transform.SetParent(transform);
+            newCard.transform.position = Vector3.zero;
+            newCard.transform.localScale = Vector3.one;
+            Debug.Log(item.Name + "가 생성되었습니다");
+
         }
     }
 }

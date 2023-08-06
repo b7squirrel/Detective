@@ -19,7 +19,7 @@ public class GachaSystem : MonoBehaviour
     {
         foreach (var item in drawnItems)
         {
-            if(item.Type == CardType.weapon.ToString())
+            if(item.Type == CardType.Weapon.ToString())
             {
                 cardDictionary.GetWeaponData(item.Grade, item.Name);
             }

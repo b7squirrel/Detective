@@ -10,7 +10,5 @@ public class CardDisplay : MonoBehaviour
     {
         grade.text = cardGrade;
         Name.text = cardName;
-
-        Debug.Log("등급 = " + grade.text + "이름 = " + Name.text);
     }
 }

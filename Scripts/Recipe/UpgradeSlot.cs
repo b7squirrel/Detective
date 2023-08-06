@@ -89,7 +89,12 @@ public class UpgradeSlot : MonoBehaviour
         Destroy(cardToUpgrade.gameObject);
         Destroy(cardToFeed.gameObject);
 
-        cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
+        GameObject newCard = cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
+        newCard.transform.SetParent(transform);
+        newCard.transform.position = Vector3.zero;
+        RectTransform cardRect = newCard.GetComponent<RectTransform>();
+        RectTransform upgradeSlotRect = GetComponent<RectTransform>();
+        cardRect = upgradeSlotRect;
     }
 
     public void SetPrevParent(Transform prevParent)

@@ -11,12 +11,10 @@ public class CardsDictionary : MonoBehaviour
     [SerializeField] List<Item> itemData;
     [SerializeField] GameObject cardPrefab;
 
-    public WeaponData GetWeaponData(string grade, string Name)
+    public WeaponData GetWeaponData(string grade, string _name)
     {
-        List<WeaponData> wd = weaponData.FindAll(x => x.Name == Name);
-
-        WeaponData picked = wd.Find(x => x.grade.ToString() == grade);
-
+        List<WeaponData> wd = weaponData.FindAll(x => x.Name == _name);
+        WeaponData picked = wd.Find(x=>x.grade.ToString() == grade);
         return picked;
     }
 
@@ -29,18 +27,17 @@ public class CardsDictionary : MonoBehaviour
         return picked;
     }
 
-    public void GenCard(string cardType, string newGrade, string name)
+    public GameObject GenCard(string cardType, string newGrade, string name)
     {
-        GameObject newCard = Instantiate(cardPrefab, transform);
-        RectTransform newCardRec = newCard.GetComponent<RectTransform>();
-        newCardRec = GetComponent<RectTransform>();
+        GameObject newCard = Instantiate(cardPrefab);
+        
 
-        if (cardType == (CardType.weapon).ToString()) // weaponData로 무기 카드 초기화
+        if (cardType == (CardType.Weapon).ToString()) // weaponData로 무기 카드 초기화
         {
             WeaponData weaponData = GetWeaponData(newGrade, name);
             newCard.GetComponent<Card>().SetWeaponCardData(weaponData);
         }
-        if (cardType == (CardType.item).ToString()) // itemData로 아이템 카드 초기화
+        if (cardType == (CardType.Item).ToString()) // itemData로 아이템 카드 초기화
         {
             Item itemData = GetItemData(newGrade, name);
             newCard.GetComponent<Card>().SetItemCardData(itemData);
@@ -50,5 +47,7 @@ public class CardsDictionary : MonoBehaviour
         {
             Debug.Log("카드 타입이 정해지지 않았습니다");
         }
+
+        return newCard;
     }
 }
