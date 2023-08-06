@@ -8,6 +8,8 @@ public class MatSlotManager : MonoBehaviour
     CardsDictionary cardDictionary;
     int numSlots;
     List<CardData> cardDatas;
+    [SerializeField] GameObject slotPrefab;
+    List<GameObject> slots;
 
     void Awake()
     {
@@ -27,21 +29,34 @@ public class MatSlotManager : MonoBehaviour
 
     void UpdateSlots()
     {
-        if (cardDatas == null)
-        {
-            cardDatas = new List<CardData>();
-        }
+        if (cardDatas == null) cardDatas = new List<CardData>();
+
+        if(slots == null) slots = new List<GameObject>();
+        
 
         cardDatas.Clear();
         cardDatas = cardDataManager.GetMyCardList();
-        foreach (var item in cardDatas)
+
+        numSlots = cardDatas.Count;
+
+        for (int i = 0; i < numSlots; i++)
         {
-            GameObject newCard = cardDictionary.GenCard(item.Type, item.Grade, item.Name);
-            newCard.transform.SetParent(transform);
+            var slot = Instantiate(slotPrefab, transform);
+            slot.transform.position = Vector3.zero;
+            slot.transform.localScale = Vector3.one;
+            slots.Add(slot);
+        }
+
+        for (int i = 0; i < cardDatas.Count; i++)
+        {
+            GameObject newCard = 
+                cardDictionary.GenCard(cardDatas[i].Type, cardDatas[i].Grade, cardDatas[i].Name);
+            
+            newCard.transform.SetParent(slots[i].transform);
             newCard.transform.position = Vector3.zero;
             newCard.transform.localScale = Vector3.one;
-            Debug.Log(item.Name + "가 생성되었습니다");
-
+            Debug.Log(cardDatas[i].Name + "가 생성되었습니다");
         }
+        
     }
 }
