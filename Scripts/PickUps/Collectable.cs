@@ -60,16 +60,16 @@ public class Collectable : MonoBehaviour
     }
     protected void Update()
     {
-        if (sr.isVisible && IsGem)
-        {
-            gemManager.AddVisibleGemToList(transform);
-        }
-        else if (sr.isVisible == false && IsGem)
-        {
-            gemManager.RemoveVisibleGemFromList(transform);
-        }
+        // if (sr.isVisible && IsGem)
+        // {
+        //     gemManager.AddVisibleGemToList(transform);
+        // }
+        // else if (sr.isVisible == false && IsGem)
+        // {
+        //     gemManager.RemoveVisibleGemFromList(transform);
+        // }
 
-        TimeUP();
+        // TimeUP();
     }
     #endregion
 
@@ -153,7 +153,7 @@ public class Collectable : MonoBehaviour
 
         GetComponent<IPickUpObject>().OnPickUp(character);
 
-        SoundManager.instance.Play(pickup);
+        gemManager.PlayGemSound();
         gameObject.SetActive(false);
     }
     #endregion

@@ -41,11 +41,11 @@ public class DropOnDestroy : MonoBehaviour
                 exp = GetComponent<Enemy>().ExperienceReward;
             }
 
-            // bool isGem = toDrop.GetComponent<Collectable>().IsGem;
-            if(toDrop.GetComponent<GemUI>() != null)
+            if(toDrop.GetComponent<Collectable>() != null)
             {
-                isGem = toDrop.GetComponent<GemUI>().isGem;
+                isGem = toDrop.GetComponent<Collectable>().IsGem;
             }
+            Debug.Log("스폰시작");
             SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
         }
     }

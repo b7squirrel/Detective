@@ -40,7 +40,9 @@ public class WeaponStats
 [CreateAssetMenu]
 public class WeaponData : ScriptableObject
 {
+    public ItemGrade.grade grade;
     public string Name;
+    public Sprite charSprite;
     public string SynergyWeapon;
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
@@ -48,4 +50,5 @@ public class WeaponData : ScriptableObject
     [Header("children anim")] public RuntimeAnimatorController animatorController;
     public List<UpgradeData> upgrades;
     public UpgradeData synergyUpgrade;
+    public float dropChance; // 아이템 드랍 확률
 }

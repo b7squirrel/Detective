@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// ���� �ð� �Ŀ� ��Ȱ��ȭ
-/// </summary>
 public class DamageMessage : MonoBehaviour
 {
     [SerializeField] float lifeOfMessage;

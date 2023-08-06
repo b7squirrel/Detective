@@ -15,8 +15,6 @@ public class PoolManager : MonoBehaviour
     List<GameObject> itemFolders;
     GameObject temp; // 임시 폴더를 매번 생성하지 않게 하기 위해서
 
-    [SerializeField] GemManager gemManager;
-
     void Start()
     {
         InitEnemyPools();
@@ -27,8 +25,6 @@ public class PoolManager : MonoBehaviour
         enemyFolder.transform.parent = transform;
         
         itemFolders = new List<GameObject>();
-
-        gemManager = FindObjectOfType<GemManager>();
     }
 
     void InitEnemyPools()
@@ -147,15 +143,7 @@ public class PoolManager : MonoBehaviour
         // GameObject gemToUI = Instantiate(gem, transform);
         // return gemToUI;
         
-
         GameObject select = null;
-
-        if(gemManager.IsVisibleGemMax())
-        {
-            gemManager.MergeExp(exp);
-            Debug.Log("Merge " + exp);
-            return null;
-        }
 
         if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
 

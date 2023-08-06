@@ -10,6 +10,7 @@ public class Magnetic : MonoBehaviour
     Vector2 dir;
     GemManager gemManager;
     float magneticFieldDistance;
+    [SerializeField] LayerMask affectedByMagnet;
     private void Awake()
     {
         character = GetComponentInParent<Character>();
@@ -18,34 +19,43 @@ public class Magnetic : MonoBehaviour
 
     void Update()
     {
-        if (gemManager.GetGemVisible() == null)
-            return;
+        // if (gemManager.GetGemVisible() == null)
+        //     return;
 
         if (Time.frameCount % 6 != 0)
             return;
 
-        if (character.MagnetSize == 0)
-        {
-            magneticFieldDistance = 1;
-        }
-        else
-        {
-            magneticFieldDistance = Mathf.Pow(character.MagnetSize, 2);
-        }
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, character.MagnetSize, affectedByMagnet);
+        
+        if (hits == null)
+            return;
 
-        foreach (var item in gemManager.GetGemVisible())
-        {
-            if (((Vector2)item.position - (Vector2)transform.position).sqrMagnitude > magneticFieldDistance)
-                continue;
+        Debug.Log("Gem numbers Detected " + hits.Length);
 
+        foreach (var item in hits)
+        {
             Collectable collectable = item.GetComponent<Collectable>();
             if (collectable != null && collectable.IsHit == false)
             {
-                Vector2 dir = item.position - transform.position;
+                Vector2 dir = item.transform.position - transform.position;
                 
                 collectable.OnHitMagnetField(dir.normalized);
             }
         }
+
+        // foreach (var item in gemManager.GetGemVisible())
+        // {
+        //     if (((Vector2)item.position - (Vector2)transform.position).sqrMagnitude > magneticFieldDistance)
+        //         continue;
+
+        //     Collectable collectable = item.GetComponent<Collectable>();
+        //     if (collectable != null && collectable.IsHit == false)
+        //     {
+        //         Vector2 dir = item.position - transform.position;
+                
+        //         collectable.OnHitMagnetField(dir.normalized);
+        //     }
+        // }
     }
 
     public void MagneticField(float size)
@@ -55,22 +65,15 @@ public class Magnetic : MonoBehaviour
 
     IEnumerator MagneticFieldCo(float size)
     {
-        magneticFieldDistance = Mathf.Pow(character.MagnetSize, 2);
-
         for (int i = 1; i < size; i++)
         {
-            if (gemManager.GetGemVisible() == null)
-                break;
-
-            foreach (var item in gemManager.GetGemVisible())
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, i);
+            foreach (var item in hits)
             {
-                if ((item.position - transform.position).sqrMagnitude > Mathf.Pow(i, 2))
-                    continue;
-
                 Collectable collectable = item.GetComponent<Collectable>();
                 if (collectable != null && collectable.IsHit == false)
                 {
-                    Vector2 dir = item.position - transform.position;
+                    Vector2 dir = collectable.transform.position - transform.position;
                     collectable.OnHitMagnetField(dir.normalized);
                 }
             }

@@ -53,9 +53,12 @@ public class ItemStats
 public class Item : ScriptableObject
 {
     public string Name;
+    public ItemGrade.grade grade;
+    public Sprite charSprite;
     public string SynergyWeapon;
     public ItemStats stats;
     public List<UpgradeData> upgrades;
+    public float dropChance; // 아이템 드랍 확률
 
     public void Init(string Name)
     {

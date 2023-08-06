@@ -18,17 +18,15 @@ public class GemManager : MonoBehaviour
     [SerializeField] List<Transform> gems;
     [SerializeField] List<Transform> gemsVisible;
     string gemPoolingKey;
+    Character character;
+
+    [Header("Feedback")]
+    [SerializeField] AudioClip gemPickup_A;
 
     void Awake()
     {
         gemsVisible = new List<Transform>();
-    }
-
-    public bool IsMaxGemNumber()
-    {
-        if (GemNumbers >= MaxGemNumbers)
-            return true;
-        return false;
+        character = FindObjectOfType<Character>();
     }
 
     public void OnPoolingGem(Transform gemCreated)
@@ -56,6 +54,12 @@ public class GemManager : MonoBehaviour
         return false;
     }
 
+    public void PutExpToPlayer(int exp)
+    {
+        PlayGemSound();
+        character.level.AddExperience(exp);
+    }
+
     public void MergeExp(int exp)
     {
         int index = UnityEngine.Random.Range(0, gemsVisible.Count);
@@ -70,5 +74,10 @@ public class GemManager : MonoBehaviour
         if (gemsVisible == null || gemsVisible.Count == 0)
             return null;
         return gemsVisible;
+    }
+
+    public void PlayGemSound()
+    {
+        SoundManager.instance.Play(gemPickup_A);
     }
 }

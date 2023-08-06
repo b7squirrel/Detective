@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2114236243567753455}
   - component: {fileID: 980874901494317977}
   - component: {fileID: 613829030602766603}
-  m_Layer: 0
+  - component: {fileID: 1241117417832612320}
+  m_Layer: 13
   m_Name: Gem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,6 +84,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Key>k__BackingField: Gem
+--- !u!58 &1241117417832612320
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895778108224746509}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &8158874912557162758
 GameObject:
   m_ObjectHideFlags: 0

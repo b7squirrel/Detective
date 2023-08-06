@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UpgradeSlot : MonoBehaviour
 {
-    [SerializeField] public List<CardSo> cardSo;
     [SerializeField] GameObject cardPrefab; // 이걸로 새로운 카드를 생성
 
     Card cardToUpgrade; // 업그레이드 슬롯에 올라가 있는 카드
@@ -12,20 +11,27 @@ public class UpgradeSlot : MonoBehaviour
     Transform previousParentOfPointerDrag; // 업그레이드 슬롯에 올려놓은 카드가 되돌아갈 위치
     bool isAvailable; // 카드가 슬롯 위에 올라올 수 있는지 여부 (업그레이드 카드든 재료 카드든)
 
-
     ItemGrade.grade upgradeCardGrade;
     ItemGrade.grade feedCardGrade;
+
+    CardsDictionary cardDictionary;
+
+    void Start()
+    {
+        cardDictionary = FindObjectOfType<CardsDictionary>();
+    }
 
     void Update()
     {
         if (GetComponentInChildren<Card>() == null)
         {
             cardToUpgrade = null;
-            Debug.Log("업그레이드 슬롯 위에 카드가 없습니다.");
         }
     }
 
-    public void AcquireCard(Card card) // 업그레이드 슬롯위에 카드를 올릴 때
+// 업그레이드 슬롯위에 카드를 올릴 때
+// 업그레이드를 할 카드인지 재료 카드인지 구분해서 처리
+    public void AcquireCard(Card card) 
     {
         if (cardToUpgrade == null) // 업그레이드 슬롯이 비어 있다면
         {
@@ -43,29 +49,29 @@ public class UpgradeSlot : MonoBehaviour
         cardToFeed = card;
     }
 
-    public bool Available()
+    public bool Available(Card card)
     {
         isAvailable = true;
-        if (cardToUpgrade != null)
-        {
-            upgradeCardGrade = cardToUpgrade.GetCardGrad();
-        }
 
-        if (cardToFeed != null)
-        {
-            feedCardGrade = cardToFeed.GetCardGrad();
-        }
+        if (cardToUpgrade == null) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
+            return true;
+
+        upgradeCardGrade = cardToUpgrade.GetCardGrade();
+        feedCardGrade = card.GetCardGrade();
+        Debug.Log("업그레이드 카드 등급 = " + upgradeCardGrade + "재료 카드 등급 = " + feedCardGrade);
 
         if (upgradeCardGrade != feedCardGrade)
         {
             Debug.Log("같은 등급을 합쳐줘야 합니다");
             isAvailable = false;
+            return isAvailable;
         }
 
         if ((int)upgradeCardGrade == 4)
         {
             Debug.Log("전설 등급은 더 이상 강화할 수 없습니다.");
             isAvailable = false;
+            return isAvailable;
         }
 
         return isAvailable;
@@ -76,17 +82,14 @@ public class UpgradeSlot : MonoBehaviour
         if (isAvailable == false)
             return;
 
-        int newCardGrade = (int)cardToUpgrade.GetCardGrad() + 1;
+        int newCardGrade = (int)cardToUpgrade.GetCardGrade() + 1;
+        string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
+        string type = (cardToUpgrade.GetCardType()).ToString();
 
         Destroy(cardToUpgrade.gameObject);
         Destroy(cardToFeed.gameObject);
 
-        GameObject newCard = Instantiate(cardPrefab, transform);
-        RectTransform newCardRec = newCard.GetComponent<RectTransform>();
-        newCardRec = GetComponent<RectTransform>();
-        newCard.GetComponent<Card>().SetCardData(cardSo[0], newCardGrade);
-
-        Debug.Log("카드가 한 단께 높은 등급으로 합성되었습니다");
+        cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
     }
 
     public void SetPrevParent(Transform prevParent)

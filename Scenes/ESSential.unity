@@ -21294,22 +21294,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3118075186976557793, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
   m_PrefabInstance: {fileID: 986757283}
   m_PrefabAsset: {fileID: 0}
---- !u!58 &642351444
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 642351434}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1
 --- !u!50 &642351445
 Rigidbody2D:
   serializedVersion: 4
@@ -42598,9 +42582,9 @@ MonoBehaviour:
   <Armor>k__BackingField: 0
   <HpRegenerationRate>k__BackingField: 3
   <HpRegenerationTimer>k__BackingField: 0
-  <MagnetSize>k__BackingField: 0
+  <MagnetSize>k__BackingField: 1.5
   <Cooldown>k__BackingField: 0
-  <MoveSpeed>k__BackingField: 7
+  <MoveSpeed>k__BackingField: 9
   <ProjectileAmount>k__BackingField: 0
   <ProjectileSpeed>k__BackingField: 0
   <Area>k__BackingField: 0
@@ -57743,7 +57727,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1757420695
 Transform:
   m_ObjectHideFlags: 0
@@ -59832,9 +59816,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a78311391190846b1bd089286f3672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxGemNumbers: 50
+  MaxGemNumbers: 400
   gems: []
   gemsVisible: []
+  gemPickup_A: {fileID: 8300000, guid: d7ee7190494d8db498e56ab98d40efc7, type: 3}
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0
@@ -59879,6 +59864,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0378d29035af11d4fa8615dc2306493d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  affectedByMagnet:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!1001 &1836656790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61766,7 +61754,6 @@ MonoBehaviour:
   - {fileID: 7200239369209826798, guid: b03cd8e79a0e3bd43b1e62e82649d45f, type: 3}
   bossSpawnEffectPrefabs:
   - {fileID: 2404059689411940086, guid: 2447cdc0fe735fb4ca925d3751119a15, type: 3}
-  gemManager: {fileID: 0}
 --- !u!4 &1920186226
 Transform:
   m_ObjectHideFlags: 0

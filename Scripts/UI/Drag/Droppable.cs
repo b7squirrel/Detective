@@ -37,5 +37,7 @@ public class Droppable : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
 
         eventData.pointerDrag.transform.SetParent(transform);
         eventData.pointerDrag.GetComponent<RectTransform>().position = rect.position;
+        RectTransform cardRect = eventData.pointerDrag.GetComponent<RectTransform>();
+        // cardRect = rect;
     }
 }

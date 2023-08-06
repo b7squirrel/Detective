@@ -2,45 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CardType {weapon, item, none}
+public enum CardType { weapon, item, none }
 
 public class Card : MonoBehaviour
 {
-    CardSo cardSo;
-    ItemGrade.grade cardGrade;
-    
-    public void SetCardData(CardSo cardSo, int grade)
+    WeaponData weaponData;
+    Item itemData;
+    CardType cardType;
+    string Name;
+    ItemGrade.grade Grade;
+
+    public void SetWeaponCardData(WeaponData _weaponData)
     {
-        this.cardSo = cardSo;
-        cardGrade = (ItemGrade.grade)grade;
-        Debug.Log("생성된 카드의 레벨은 " + cardGrade);
+        this.weaponData = _weaponData;
+        cardType = CardType.weapon;
+        Name = _weaponData.Name;
+        Grade = _weaponData.grade;
+        GetComponent<CardDisplay>().SetCardDisplay(Grade.ToString(), Name);
+    }
+    public void SetItemCardData(Item _itemData)
+    {
+        this.itemData = _itemData;
+        cardType = CardType.item;
+        Name = _itemData.Name;
+        Grade = _itemData.grade;
+        GetComponent<CardDisplay>().SetCardDisplay(Grade.ToString(), Name);
     }
 
-    public CardSo GetCardSo()
+    public string GetCardName()
     {
-        if (cardSo == null)
-        {
-            Debug.Log("카드에 카드데이터가 없습니다");
-        }
-        return cardSo;
+        return Name;
     }
 
     public CardType GetCardType()
     {
-        if(cardSo.weaponData != null)
+        if (cardType != CardType.weapon && cardType != CardType.item)
         {
-            return CardType.weapon;
+            Debug.Log("카드 타입이 정해지지 않았습니다.");
+            return CardType.none;
         }
-        else if(cardSo.itemData != null)
-        {
-            return CardType.item;
-        }
-        Debug.Log("카드 타입이 정해지지 않았습니다.");
-        return CardType.none;
+
+        return cardType;
     }
 
-    public ItemGrade.grade GetCardGrad()
+    public ItemGrade.grade GetCardGrade()
     {
-        return cardGrade;
+        return Grade;
     }
 }
