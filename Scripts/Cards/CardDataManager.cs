@@ -22,6 +22,22 @@ public class CardData
     }
     public string Type, Grade, Name, Exp;
 }
+public class ReadCardData
+{
+    public List<CardData> cardList;
+    public List<CardData> GetCardsList(TextAsset cardDataText)
+    {
+        cardList = new List<CardData>();
+
+        string[] line = cardDataText.text.Substring(0, cardDataText.text.Length - 1).Split('\n');
+        for (int i = 0; i < line.Length; i++)
+        {
+            string[] row = line[i].Split('\t');
+            cardList.Add(new CardData(row[0], row[1], row[2], row[3]));
+        }
+        return cardList;
+    }
+}
 
 public class CardDataManager : MonoBehaviour
 {
@@ -46,12 +62,7 @@ public class CardDataManager : MonoBehaviour
     void Start()
     {
         // 전체 카드 리스트 불러오기
-        string[] line = CardDatabase.text.Substring(0, CardDatabase.text.Length - 1).Split('\n');
-        for (int i = 0; i < line.Length; i++)
-        {
-            string[] row = line[i].Split('\t');
-            AllCardsList.Add(new CardData(row[0], row[1], row[2], row[3]));
-        }
+        AllCardsList = new ReadCardData().GetCardsList(CardDatabase);
 
 #if UNITY_EDITOR
         if (Directory.Exists(Application.dataPath + "/PlayerData") == false)
@@ -90,9 +101,9 @@ public class CardDataManager : MonoBehaviour
     // 특정 카드를 가지고 시작하도록 만들려고. 아무것도 없이 시작할 수도 있다
     void ResetCards()
     {
-        List<CardData> basicCard = AllCardsList;
+        // List<CardData> basicCard = AllCardsList;
         MyCardsList.Clear();
-        MyCardsList.AddRange(basicCard);
+        // MyCardsList.AddRange(basicCard);
         Save();
         Load();
     }

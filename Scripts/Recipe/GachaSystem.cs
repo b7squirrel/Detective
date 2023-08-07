@@ -5,15 +5,38 @@ using UnityEngine;
 public class GachaSystem : MonoBehaviour
 {
     CardsDictionary cardDictionary;
+    CardDataManager cardDataManager;
+
+    [SerializeField] TextAsset gachaPoolDataBase;
+    List<CardData> gachaPools;
 
     void Start()
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
+        cardDataManager = FindObjectOfType<CardDataManager>();
     }
 
-    public void Draw(List<CardData> cardPool)
+    public void Draw()
     {
+        if(gachaPools == null) gachaPools = new List<CardData>();
 
+        gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
+
+        int pickIndex = UnityEngine.Random.Range(0, gachaPools.Count);
+
+        for (int i = 0; i < 3; i++)
+        {
+            string mType = gachaPools[pickIndex].Type;
+            string mGrade = gachaPools[pickIndex].Grade;
+            string mName = gachaPools[pickIndex].Name;
+            GameObject newCard = cardDictionary.GenCard(mType, mGrade, mName);
+            newCard.transform.SetParent(transform);
+            newCard.transform.position = transform.position;
+            newCard.transform.localScale = Vector3.one;
+
+            AddCardToList(newCard.GetComponent<Card>());
+            Destroy(newCard);
+        }
     }
     public void GenCards(List<CardData> drawnItems)
     {
@@ -28,7 +51,13 @@ public class GachaSystem : MonoBehaviour
                 cardDictionary.GetItemData(item.Grade, item.Name);
             }
         }
+    }
 
-
+    void AddCardToList(Card _card)
+    {
+        string type = _card.GetCardType().ToString();
+        string grade = _card.GetCardGrade().ToString();
+        string Name = _card.GetCardName();
+        cardDataManager.AddCardToMyCardsList(type, grade, Name);
     }
 }

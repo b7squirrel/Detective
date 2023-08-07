@@ -31,9 +31,9 @@ public class UpgradeSlot : MonoBehaviour
         }
     }
 
-// 업그레이드 슬롯위에 카드를 올릴 때
-// 업그레이드를 할 카드인지 재료 카드인지 구분해서 처리
-    public void AcquireCard(Card card) 
+    // 업그레이드 슬롯위에 카드를 올릴 때
+    // 업그레이드를 할 카드인지 재료 카드인지 구분해서 처리
+    public void AcquireCard(Card card)
     {
         if (cardToUpgrade == null) // 업그레이드 슬롯이 비어 있다면
         {
@@ -119,10 +119,4 @@ public class UpgradeSlot : MonoBehaviour
         string Name = _card.GetCardName();
         cardDataManager.AddCardToMyCardsList(type, grade, Name);
     }
-
-    void GetAllCards()
-    {
-
-    }
-
 }
