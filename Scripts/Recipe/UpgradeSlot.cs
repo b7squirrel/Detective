@@ -15,10 +15,12 @@ public class UpgradeSlot : MonoBehaviour
     ItemGrade.grade feedCardGrade;
 
     CardsDictionary cardDictionary;
+    CardDataManager cardDataManager;
 
     void Start()
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
+        cardDataManager = FindObjectOfType<CardDataManager>();
     }
 
     void Update()
@@ -86,15 +88,18 @@ public class UpgradeSlot : MonoBehaviour
         string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
         string type = (cardToUpgrade.GetCardType()).ToString();
 
-        Destroy(cardToUpgrade.gameObject);
+
+        cardDataManager.RemoveCardFromMyCardList(cardToUpgrade);// 카드 데이터 삭제
+        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
+        Destroy(cardToUpgrade.gameObject); // 실제 오브젝트 삭제
         Destroy(cardToFeed.gameObject);
 
         GameObject newCard = cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
         newCard.transform.SetParent(transform);
-        newCard.transform.position = Vector3.zero;
-        RectTransform cardRect = newCard.GetComponent<RectTransform>();
-        RectTransform upgradeSlotRect = GetComponent<RectTransform>();
-        cardRect = upgradeSlotRect;
+        newCard.transform.position = transform.position;
+        newCard.transform.localScale = Vector3.one;
+
+        AddCardToList(newCard.GetComponent<Card>());
     }
 
     public void SetPrevParent(Transform prevParent)
@@ -106,4 +111,18 @@ public class UpgradeSlot : MonoBehaviour
     {
         return cardToUpgrade;
     }
+
+    void AddCardToList(Card _card)
+    {
+        string type = _card.GetCardType().ToString();
+        string grade = _card.GetCardGrade().ToString();
+        string Name = _card.GetCardName();
+        cardDataManager.AddCardToMyCardsList(type, grade, Name);
+    }
+
+    void GetAllCards()
+    {
+
+    }
+
 }

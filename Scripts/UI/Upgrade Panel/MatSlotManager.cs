@@ -22,11 +22,6 @@ public class MatSlotManager : MonoBehaviour
         UpdateSlots();
     }
 
-    void Update()
-    {
-
-    }
-
     void UpdateSlots()
     {
         if (cardDatas == null) cardDatas = new List<CardData>();
@@ -55,8 +50,11 @@ public class MatSlotManager : MonoBehaviour
             newCard.transform.SetParent(slots[i].transform);
             newCard.transform.position = Vector3.zero;
             newCard.transform.localScale = Vector3.one;
+
             Debug.Log(cardDatas[i].Name + "가 생성되었습니다");
         }
+
+
         
     }
 }

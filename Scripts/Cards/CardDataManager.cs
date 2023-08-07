@@ -13,13 +13,14 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _Type, string _Grade, string _Name)
+    public CardData(string _Type, string _Grade, string _Name, string _exp)
     {
         Type = _Type;
         Grade = _Grade;
         Name = _Name;
+        Exp = _exp;
     }
-    public string Type, Grade, Name;
+    public string Type, Grade, Name, Exp;
 }
 
 public class CardDataManager : MonoBehaviour
@@ -49,7 +50,7 @@ public class CardDataManager : MonoBehaviour
         for (int i = 0; i < line.Length; i++)
         {
             string[] row = line[i].Split('\t');
-            AllCardsList.Add(new CardData(row[0], row[1], row[2]));
+            AllCardsList.Add(new CardData(row[0], row[1], row[2], row[3]));
         }
 
 #if UNITY_EDITOR
@@ -99,5 +100,43 @@ public class CardDataManager : MonoBehaviour
     public List<CardData> GetMyCardList()
     {
         return MyCardsList;
+    }
+
+    public void AddCardToMyCardsList(string _type, string _grade, string _name)
+    {
+        CardData newCard = new CardData(_type, _grade, _name, "1");
+        MyCardsList.Add(newCard);
+        Save();
+    }
+    public void RemoveCardFromMyCardList(Card cardToRemove)
+    {
+        string mType = cardToRemove.GetCardType().ToString();
+        string mGrade = cardToRemove.GetCardGrade().ToString();
+        string mName = cardToRemove.GetCardName();
+
+        foreach (var item in MyCardsList)
+        {
+            if(item.Type == mType && item.Grade == mGrade && item.Name == mName)
+            {
+                MyCardsList.Remove(item);
+                return;
+            }
+            Save();
+        }
+    }
+    public void DeleteData()
+    {
+        // 해당 폴더에 있는 파일 삭제
+        string path = Application.persistentDataPath + "/PlayerData";
+        if(Directory.Exists(path))
+        {
+            Directory.Delete(path, true);
+        }
+        else
+        {
+            Debug.LogWarning("삭제할 데이터가 없군요.");
+        }
+
+        ResetCards();
     }
 }
