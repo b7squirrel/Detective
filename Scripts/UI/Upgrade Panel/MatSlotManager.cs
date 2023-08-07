@@ -54,8 +54,6 @@ public class MatSlotManager : MonoBehaviour
             newCard.transform.SetParent(slots[i].transform);
             newCard.transform.position = Vector3.zero;
             newCard.transform.localScale = Vector3.one;
-
-            Debug.Log(cardDatas[i].Name + "가 생성되었습니다");
         }
     }
 }
