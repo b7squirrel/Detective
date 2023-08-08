@@ -22,10 +22,11 @@ public class GachaSystem : MonoBehaviour
 
         gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
 
-        int pickIndex = UnityEngine.Random.Range(0, gachaPools.Count);
+        
 
         for (int i = 0; i < 3; i++)
         {
+            int pickIndex = UnityEngine.Random.Range(0, gachaPools.Count);
             string mType = gachaPools[pickIndex].Type;
             string mGrade = gachaPools[pickIndex].Grade;
             string mName = gachaPools[pickIndex].Name;

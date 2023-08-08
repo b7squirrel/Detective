@@ -42,6 +42,7 @@ public class ReadCardData
 public class CardDataManager : MonoBehaviour
 {
     public TextAsset CardDatabase;
+    public TextAsset startingCardData;
     public List<CardData> AllCardsList, MyCardsList;
     string filePath;
     string myCards = "MyCards.txt";
@@ -101,15 +102,16 @@ public class CardDataManager : MonoBehaviour
     // 특정 카드를 가지고 시작하도록 만들려고. 아무것도 없이 시작할 수도 있다
     void ResetCards()
     {
-        // List<CardData> basicCard = AllCardsList;
         MyCardsList.Clear();
-        // MyCardsList.AddRange(basicCard);
+        List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
+        MyCardsList.AddRange(startingCards);
         Save();
         Load();
     }
 
     public List<CardData> GetMyCardList()
     {
+        if(MyCardsList == null)Debug.Log("리스트 널");
         return MyCardsList;
     }
 
