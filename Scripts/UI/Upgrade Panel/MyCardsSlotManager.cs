@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MatSlotManager : MonoBehaviour
+public class MyCardsSlotManager : MonoBehaviour
 {
     CardDataManager cardDataManager;
     CardsDictionary cardDictionary;
@@ -23,7 +23,7 @@ public class MatSlotManager : MonoBehaviour
         List<CardData> cardDatas = new List<CardData>();
         List<GameObject> slots = new List<GameObject>();
 
-        cardDatas.AddRange(cardDataManager.GetMyCardList()); // 재료가 될 수 있는 카드들의 리스트
+        cardDatas.AddRange(cardDataManager.GetMyCardList());
 
         numSlots = cardDatas.Count;
 
@@ -47,7 +47,7 @@ public class MatSlotManager : MonoBehaviour
     }
 
     //패널 최상단 UpgradePanelSlotsManager의 OnRefresh 유니티 이벤트에 등록되어 있음
-    public void ClearmatCardsSlots()
+    public void ClearMyCardsSlots()
     {
         int childCount = transform.childCount;
         for (int i = childCount - 1; i >= 0; i--)

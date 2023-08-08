@@ -7,14 +7,14 @@ public class Droppable : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
 {
     Image image;
     RectTransform rect;
-    UpgradeSlot upgradeSlot;
+    SlotUpCard slotUpCard;
 
 
     void Awake()
     {
         image = GetComponent<Image>();
         rect = GetComponent<RectTransform>();
-        upgradeSlot = GetComponent<UpgradeSlot>();
+        slotUpCard = GetComponent<SlotUpCard>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -33,7 +33,7 @@ public class Droppable : MonoBehaviour, IPointerEnterHandler, IDropHandler, IPoi
             return;
 
         Transform prevParent = eventData.pointerDrag.GetComponent<Draggable>().GetPreviousParent();
-        upgradeSlot.SetPrevParent(prevParent);
+        slotUpCard.SetPrevParent(prevParent);
 
         eventData.pointerDrag.transform.SetParent(transform);
         eventData.pointerDrag.GetComponent<RectTransform>().position = rect.position;

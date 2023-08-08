@@ -8,6 +8,10 @@ using UnityEngine.Events;
 // 0.01초 후에 리프레시를 하도록 했음
 public class UpgradePanelSlotsManager : MonoBehaviour
 {
+    [SerializeField] MyCardsSlotManager myCardsSlotManager;
+    [SerializeField] MatSlotManager matSlotManager;
+    [SerializeField] UpgradeSlot upgradeSlot;
+
     public UnityEvent OnRefresh;
 
     void OnEnable()
@@ -26,5 +30,17 @@ public class UpgradePanelSlotsManager : MonoBehaviour
     {
         yield return new WaitForSeconds(.01f);
         RefreshUpgradePanel();
+    }
+
+    public void GetIntoMatCardsManager()
+    {
+        myCardsSlotManager.gameObject.SetActive(false);
+        matSlotManager.gameObject.SetActive(true);
+    }
+
+    public void GetIntoMyCardsmanager()
+    {
+        myCardsSlotManager.gameObject.SetActive(true);
+        matSlotManager.gameObject.SetActive(false);
     }
 }

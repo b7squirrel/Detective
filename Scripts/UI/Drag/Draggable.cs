@@ -9,14 +9,15 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     RectTransform rect;
     Transform previousParent; // 드래그 되기 전 부모
     CanvasGroup canvasGroup;
-    UpgradeSlot upgradeSlot;
+    
+    SlotUpCard slotUpCard;
 
     void Awake()
     {
         root = FindAnyObjectByType<Canvas>().transform;
         rect = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        upgradeSlot = FindAnyObjectByType<UpgradeSlot>();
+        slotUpCard = FindAnyObjectByType<SlotUpCard>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -41,10 +42,10 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         }
 
         // 업그레이드 슬롯 위로 올릴 수 있는지 체크
-        if (upgradeSlot.Available(GetComponent<Card>()))
+        if (slotUpCard.IsAvailable(GetComponent<Card>()))
         {
             // 업그레이드 슬롯위로 카드를 떨어트리면 draggable의 역할은 끝
-            upgradeSlot.AcquireCard(GetComponent<Card>());
+            slotUpCard.AcquireCard(GetComponent<Card>());
         }
         else
         {
