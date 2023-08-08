@@ -13,7 +13,7 @@ public class MainMenuManager : MonoBehaviour
     const int SIZE = 5;
     int targetIndex;
     
-    void Start()
+    void Awake()
     {
         for (int i = 0; i < SIZE; i++)
         {
