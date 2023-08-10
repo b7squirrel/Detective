@@ -49,6 +49,7 @@ public class SlotUpCard : MonoBehaviour
         {
             cardToUpgrade = card;
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
+            slotManager.GetIntoMatCardsManager();
         }
         else
         {

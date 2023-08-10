@@ -13,10 +13,12 @@ public class SlotManager : MonoBehaviour
     CardsDictionary cardDictionary;
     UpgradeSuccessUI upgradeSuccessUI;
 
-    [SerializeField] UnityEvent OnRefresh;
+    // upCard, MatCard, AllCard의 refresh함수들이 등록되어 있음
+    [SerializeField] UnityEvent OnRefresh; 
 
     bool isCardOnUpSlot; // 업그레이드 슬롯에 카드가 올려져 있음
 
+    #region 유니티 콜백 함수
     void Awake()
     {
         int childCount = transform.childCount;
@@ -35,16 +37,13 @@ public class SlotManager : MonoBehaviour
         cardDictionary = FindObjectOfType<CardsDictionary>();
     }
 
-    #region Refresh
     void OnEnable()
     {
         StartCoroutine(RefreshCo());
     }
+    #endregion
 
-    void OnDisable()
-    {
-        // GetIntoMyCardsmanager();
-    }
+    #region Refresh
 
     // 업그레이드 연출이 끝나면, 업그레이드 패널을 떠났다가 되돌아오면(Disabled, Enabled)
     // 업그레이드 패널을 갱신한다
@@ -69,12 +68,31 @@ public class SlotManager : MonoBehaviour
     {
         slotsAllCards.gameObject.SetActive(false);
         slotsMatCards.gameObject.SetActive(true);
+
+        // MatCards 리스트 생성
+        GenerateMatCardsList();
     }
 
     public void GetIntoMyCardsmanager()
     {
         slotsAllCards.gameObject.SetActive(true);
         slotsMatCards.gameObject.SetActive(false);
+    }
+
+    public void GenerateMatCardsList()
+    {
+        // 슬롯 위의 카드들
+        List<Card> myCards = new List<Card>();
+        myCards.AddRange(slotsAllCards.GetCarsOnSlots()); 
+
+        // 업그레이드 슬롯 위의 카드
+        Card cardOnUpSlot = slotUpCard.GetCardToUpgrade(); 
+
+        // 슬롯 위의 카드들 중 업그레이드 슬롯 카드와 같은 이름, 같은 등급을 가진 카드를 추려냄
+        List<Card> picked = new List<Card>();
+        picked.AddRange(new CardClassifier().GetCardsAvailableForMat(myCards, cardOnUpSlot));
+
+        slotsMatCards.SetMatCards(picked);
     }
     #endregion
     

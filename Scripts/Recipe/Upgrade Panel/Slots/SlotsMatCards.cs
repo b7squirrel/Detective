@@ -11,7 +11,7 @@ public class SlotsMatCards : MonoBehaviour
     #region 슬롯 생성 관련 변수
     int numSlots;
     [SerializeField] GameObject slotPrefab;
-    List<CardData> matCards;
+    List<Card> matCards;
     #endregion
 
     #region 유니티 콜백 함수
@@ -21,49 +21,31 @@ public class SlotsMatCards : MonoBehaviour
         cardDictionary = FindObjectOfType<CardsDictionary>();
     }
     #endregion
-
-    private void OnEnable() {
-        ClearmatCardsSlots();
-    }
-    private void OnDisable() {
-        ClearmatCardsSlots();
-    }
-    public void SetMatCards(List<CardData> _matCards)
+    
+    #region MatCards 초기화
+    public void SetMatCards(List<Card> _matCards)
     {
-        if (this.matCards == null) matCards = new List<CardData>();
+        if (this.matCards == null) matCards = new List<Card>();
 
-        foreach (var item in _matCards)
-        {
-            Debug.Log(item.Name);
-        }
-        
+        this.matCards.Clear();
+
         this.matCards.AddRange(_matCards);
+
+        UpdateSlots();
     }
-
-    // public void InitMatPanel()
-    // {
-    //     List<Card> myCards = new List<Card>();
-    //     myCards.AddRange(slotsAllCards.GetCarsOnSlots()); // 슬롯 위의 카드들
-
-    //     Card cardOnUpSlot = slotUpCard.GetCardToUpgrade(); // 업그레이드 슬롯 위의 카드
-    //     string mGrade = cardOnUpSlot.GetCardGrade().ToString();
-    //     string mName = cardOnUpSlot.GetCardName();
-
-    //     // 슬롯 위의 카드들 중 업그레이드 슬롯 카드와 같은 이름, 같은 등급을 가진 카드를 추려냄
-    //     List<CardData> picked = new List<CardData>();
-    //     picked.AddRange(new CardClassifier().GetAvailableCardsForMat(cardDataManager.GetMyCardList(), cardOnUpSlot));
-    // }
+    #endregion
 
     #region Refresh
     public void UpdateSlots()
     {
-        List<CardData> cardDatas = new List<CardData>();
+        List<Card> cards = new List<Card>();
         List<GameObject> slots = new List<GameObject>();
 
-        cardDatas.AddRange(matCards); // 재료가 될 수 있는 카드 리스트 
+        cards.AddRange(matCards); // 재료가 될 수 있는 카드 리스트 
 
-        numSlots = cardDatas.Count;
+        numSlots = cards.Count;
 
+        // 재료 카드 갯수만큼 슬롯 생성
         for (int i = 0; i < numSlots; i++)
         {
             var slot = Instantiate(slotPrefab, transform);
@@ -72,10 +54,15 @@ public class SlotsMatCards : MonoBehaviour
             slots.Add(slot);
         }
 
-        for (int i = 0; i < cardDatas.Count; i++)
+        // 재료 카드 생성. 슬롯위에 배치
+        for (int i = 0; i < cards.Count; i++)
         {
+            string _type = cards[i].GetCardType().ToString();
+            string _grade = cards[i].GetCardGrade().ToString();
+            string _name = cards[i].GetCardName();
+
             GameObject newCard =
-                cardDictionary.GenCard(cardDatas[i].Type, cardDatas[i].Grade, cardDatas[i].Name);
+                cardDictionary.GenCard(_type, _grade, _name);
 
             newCard.transform.SetParent(slots[i].transform);
             newCard.transform.position = Vector3.zero;
@@ -92,8 +79,6 @@ public class SlotsMatCards : MonoBehaviour
             Transform child = transform.GetChild(i);
             Destroy(child.gameObject);
         }
-
-        UpdateSlots();
     }
     #endregion
 }
