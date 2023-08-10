@@ -12,6 +12,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     
     SlotUpCard slotUpCard;
 
+    bool isOnUpSlot; // 업그레이드 슬롯 위에 올라가 있는지 여부
+
     void Awake()
     {
         root = FindAnyObjectByType<Canvas>().transform;
@@ -46,6 +48,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         {
             // 업그레이드 슬롯위로 카드를 떨어트리면 draggable의 역할은 끝
             slotUpCard.AcquireCard(GetComponent<Card>());
+            isOnUpSlot = true;
         }
         else
         {

@@ -64,6 +64,7 @@ public class SlotsAllCards : MonoBehaviour
     }
     #endregion
 
+    #region Get Cards on Slots
     public List<Card> GetCarsOnSlots()
     {
         List<Card> cardsOnSlots = new List<Card>();
@@ -83,4 +84,5 @@ public class SlotsAllCards : MonoBehaviour
 
         return cardsOnSlots;
     }
+    #endregion
 }

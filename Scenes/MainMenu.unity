@@ -19059,6 +19059,18 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1808537187}
         m_TargetAssemblyTypeName: SlotManager, Assembly-CSharp
+        m_MethodName: GetIntoMyCardsmanager
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1808537187}
+        m_TargetAssemblyTypeName: SlotManager, Assembly-CSharp
         m_MethodName: RefreshUpgradePanel
         m_Mode: 1
         m_Arguments:
@@ -33394,6 +33406,7 @@ GameObject:
   - component: {fileID: 1587361508}
   - component: {fileID: 1587361510}
   - component: {fileID: 1587361509}
+  - component: {fileID: 1587361511}
   m_Layer: 5
   m_Name: Material Cards  Slots
   m_TagString: Untagged
@@ -33453,6 +33466,19 @@ MonoBehaviour:
   m_Spacing: {x: 5, y: 5}
   m_Constraint: 1
   m_ConstraintCount: 4
+--- !u!114 &1587361511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587361507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b6e51d2465ad8479e84c6cfddfd4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotPrefab: {fileID: 4851892563916347825, guid: 5200f1ab5cc8b6e428a2f1546b06e0e3, type: 3}
 --- !u!1 &1587535698
 GameObject:
   m_ObjectHideFlags: 0
@@ -37649,7 +37675,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1587361511}
         m_TargetAssemblyTypeName: SlotsMatCards, Assembly-CSharp
         m_MethodName: ClearmatCardsSlots
         m_Mode: 1

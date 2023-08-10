@@ -39,7 +39,8 @@ public class SlotManager : MonoBehaviour
 
     void OnEnable()
     {
-        StartCoroutine(RefreshCo());
+        GetIntoMyCardsmanager();
+        RefreshUpgradePanel();
     }
     #endregion
 
@@ -47,12 +48,6 @@ public class SlotManager : MonoBehaviour
 
     // 업그레이드 연출이 끝나면, 업그레이드 패널을 떠났다가 되돌아오면(Disabled, Enabled)
     // 업그레이드 패널을 갱신한다
-    IEnumerator RefreshCo()
-    {
-        yield return new WaitForSeconds(.01f);
-        RefreshUpgradePanel();
-    }
-
     public void RefreshUpgradePanel()
     {
         // slotsAllCards, slotsMatCards, slotUpCard의 Clear함수들을 가지고 있음
