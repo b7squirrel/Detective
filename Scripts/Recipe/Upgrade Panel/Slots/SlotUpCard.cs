@@ -9,24 +9,26 @@ public class SlotUpCard : MonoBehaviour
     Card cardToUpgrade; // 업그레이드 슬롯에 올라가 있는 카드
     Card cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
     Transform previousParentOfPointerDrag; // 업그레이드 슬롯에 올려놓은 카드가 되돌아갈 위치
-    bool isAvailable; // 카드가 슬롯 위에 올라올 수 있는지 여부 (업그레이드 카드든 재료 카드든)
     #endregion
 
     #region 참조 변수
     CardsDictionary cardDictionary;
     CardDataManager cardDataManager;
-    #endregion
-
-    #region 유니티 이벤트 변수
-    [SerializeField] UnityEvent OnCardPlacedInUpgradeSlot; // 슬롯에 카드가 올라가면 재료 카드들만 보여주는 이벤트
-    [SerializeField] UnityEvent OnUpgrade; // 업그레이드가 실행되면 업그레이드 연출화면으로 
+    [SerializeField] UpgradeSuccessUI upgradeSuccessUI;
+    [SerializeField] SlotManager slotManager;
     #endregion
 
     #region Unity Callback 함수
+
     void Awake()
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
+    }
+
+    void OnEnable()
+    {
+        upgradeSuccessUI.gameObject.SetActive(false);
     }
 
     void Update()
@@ -46,13 +48,12 @@ public class SlotUpCard : MonoBehaviour
         if (cardToUpgrade == null) // 업그레이드 슬롯이 비어 있다면
         {
             cardToUpgrade = card;
+            // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
         }
         else
         {
             AcquireMeterial(card); // 비어 있지 않다면 지금 카드는 재료 카드임
-            // UpgradeCard();
-
-            OnUpgrade?.Invoke();
+            UpgradeCard();
         }
     }
 
@@ -76,11 +77,11 @@ public class SlotUpCard : MonoBehaviour
     #region Check Slot Availability
     public bool IsAvailable(Card card) // Draggable에서 카드를 놓을 수 있는지 여부를 판단
     {
-        isAvailable = true;
+        bool isAvailable = true;
 
         if (cardToUpgrade == null) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
         {
-            // OnCardPlacedInUpgradeSlot?.Invoke(); // MatSlot 활성화
+            // MySlotsManager에서 MatSlots를 활성화 시키고 MySlots는 비활성화 시키도록 하기 
             return true;
         }
 
@@ -113,6 +114,40 @@ public class SlotUpCard : MonoBehaviour
     }
     #endregion
 
+    #region 업그레이드
+    public void UpgradeCard()
+    {
+        int newCardGrade = (int)cardToUpgrade.GetCardGrade() + 1;
+        string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
+        string type = (cardToUpgrade.GetCardType()).ToString();
+
+        // 업그레이드에 쓰인 카드 삭제
+        cardDataManager.RemoveCardFromMyCardList(cardToUpgrade);// 카드 데이터 삭제
+        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
+        Destroy(cardToUpgrade.gameObject); // 실제 오브젝트 삭제
+        Destroy(cardToFeed.gameObject);
+
+        // 업그레이드로 생성된 카드 생성
+        GameObject newCard = cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
+        newCard.transform.SetParent(transform);
+        newCard.transform.position = transform.position;
+        newCard.transform.localScale = Vector3.one;
+
+        // 생성된 카드를 내 카드 리스트에 저장
+        Card upgraded = newCard.GetComponent<Card>();
+        cardDataManager.AddCardToMyCardsList(upgraded);
+
+        // 강화 성공 패널
+        InitUpgradeSuccessPanel(upgraded);
+    }
+
+    void InitUpgradeSuccessPanel(Card upgraded)
+    {
+        upgradeSuccessUI.gameObject.SetActive(true); // 강화 성공 패널 활성화
+        upgradeSuccessUI.SetCard(upgraded); // 강화 성공 카드 초기화
+    }
+    #endregion
+
     #region Droppable 관련 함수
     public void SetPrevParent(Transform prevParent)
     {
@@ -121,14 +156,12 @@ public class SlotUpCard : MonoBehaviour
     #endregion
 
     #region Refresh
-    // 업그레이드 패널 최상단의 SlotManager의 OnRefresh 유니티 이벤트에 등록되어 있음
     public void ClearUpgradeSlot()
     {
         // 데이터는 이미 MyCardsList에 저장되었으니 gameObject는 제거해도 됨
         if (GetComponentInChildren<Card>() == null)
             return;
         Destroy(GetComponentInChildren<Card>().gameObject);
-        Debug.Log("업그레이드 슬롯 위의 카드 제거");
     }
     #endregion
 }

@@ -115,12 +115,6 @@ public class CardDataManager : MonoBehaviour
         return MyCardsList;
     }
 
-    public void AddCardToMyCardsList(string _type, string _grade, string _name)
-    {
-        CardData newCard = new CardData(_type, _grade, _name, "1");
-        MyCardsList.Add(newCard);
-        Save();
-    }
     public void RemoveCardFromMyCardList(Card cardToRemove)
     {
         string mType = cardToRemove.GetCardType().ToString();
@@ -136,6 +130,17 @@ public class CardDataManager : MonoBehaviour
             }
             Save();
         }
+    }
+
+    public void AddCardToMyCardsList(Card cardToAdd)
+    {
+        string mType = cardToAdd.GetCardType().ToString();
+        string mGrade = cardToAdd.GetCardGrade().ToString();
+        string mName = cardToAdd.GetCardName();
+
+        CardData newCard = new CardData(mType, mGrade, mName, "1");
+        MyCardsList.Add(newCard);
+        Save();
     }
     public void DeleteData()
     {

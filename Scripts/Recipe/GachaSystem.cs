@@ -35,7 +35,7 @@ public class GachaSystem : MonoBehaviour
             newCard.transform.position = transform.position;
             newCard.transform.localScale = Vector3.one;
 
-            AddCardToList(newCard.GetComponent<Card>());
+            cardDataManager.AddCardToMyCardsList(newCard.GetComponent<Card>());
             Destroy(newCard);
         }
     }
@@ -52,13 +52,5 @@ public class GachaSystem : MonoBehaviour
                 cardDictionary.GetItemData(item.Grade, item.Name);
             }
         }
-    }
-
-    void AddCardToList(Card _card)
-    {
-        string type = _card.GetCardType().ToString();
-        string grade = _card.GetCardGrade().ToString();
-        string Name = _card.GetCardName();
-        cardDataManager.AddCardToMyCardsList(type, grade, Name);
     }
 }
