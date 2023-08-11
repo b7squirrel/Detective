@@ -40,7 +40,6 @@ public class SlotManager : MonoBehaviour
     void OnEnable()
     {
         GetIntoMyCardsmanager();
-        RefreshUpgradePanel();
     }
     #endregion
 
@@ -50,8 +49,9 @@ public class SlotManager : MonoBehaviour
     // 업그레이드 패널을 갱신한다
     public void RefreshUpgradePanel()
     {
-        // slotsAllCards, slotsMatCards, slotUpCard의 Clear함수들을 가지고 있음
-        OnRefresh?.Invoke();
+        slotsAllCards.ClearMyCardsSlots();
+        slotsMatCards.ClearmatCardsSlots();
+        slotUpCard.ClearUpgradeSlot();
     }
     // MainMenuManger가 Awake에서 모든 패널을 비활성화 시키기 전에 
     // Refresh를 실행하는 것을 방지하기 위해 (NullReference)
@@ -72,6 +72,7 @@ public class SlotManager : MonoBehaviour
     {
         slotsAllCards.gameObject.SetActive(true);
         slotsMatCards.gameObject.SetActive(false);
+        RefreshUpgradePanel();
     }
 
     public void GenerateMatCardsList()

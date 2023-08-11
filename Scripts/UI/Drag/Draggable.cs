@@ -11,6 +11,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     CanvasGroup canvasGroup;
     
     SlotUpCard slotUpCard;
+    SlotManager slotManager;
 
     bool isOnUpSlot; // 업그레이드 슬롯 위에 올라가 있는지 여부
 
@@ -20,6 +21,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         rect = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         slotUpCard = FindAnyObjectByType<SlotUpCard>();
+        slotManager = FindAnyObjectByType<SlotManager>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -40,7 +42,18 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         if (transform.parent == root) // 슬롯 바깥쪽에 떨어트리면
         {
-            BackToPrevParent();
+            if (isOnUpSlot)
+            {
+                slotManager.GetIntoMyCardsmanager();
+                Destroy(gameObject);
+                return; // return이 없으면 Destroy 이후에도 아래로 내려가서 실행한다
+            }
+            else
+            {
+                BackToPrevParent();
+                canvasGroup.blocksRaycasts = true;
+                return;
+            }
         }
 
         // 업그레이드 슬롯 위로 올릴 수 있는지 체크
