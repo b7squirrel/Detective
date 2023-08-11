@@ -24,8 +24,8 @@ public class SlotsAllCards : MonoBehaviour
     #region Refresh
     public void UpdateSlots()
     {
-        List<CardData> cardDatas = new List<CardData>();
-        List<GameObject> slots = new List<GameObject>();
+        List<CardData> cardDatas = new();
+        List<GameObject> slots = new();
 
         cardDatas.AddRange(cardDataManager.GetMyCardList()); // 재료가 될 수 있는 카드들의 리스트
 
@@ -67,7 +67,7 @@ public class SlotsAllCards : MonoBehaviour
     #region Get Cards on Slots
     public List<Card> GetCarsOnSlots()
     {
-        List<Card> cardsOnSlots = new List<Card>();
+        List<Card> cardsOnSlots = new();
 
         int childCount = transform.childCount;
         for (int i = childCount - 1; i >= 0; i--)

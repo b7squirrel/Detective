@@ -4,7 +4,6 @@ using UnityEngine;
 public class SlotsMatCards : MonoBehaviour
 {
     #region 참조 변수
-    CardDataManager cardDataManager;
     CardsDictionary cardDictionary;
     #endregion
 
@@ -17,7 +16,6 @@ public class SlotsMatCards : MonoBehaviour
     #region 유니티 콜백 함수
     void Awake()
     {
-        cardDataManager = FindObjectOfType<CardDataManager>();
         cardDictionary = FindObjectOfType<CardsDictionary>();
     }
     #endregion
@@ -38,8 +36,8 @@ public class SlotsMatCards : MonoBehaviour
     #region Refresh
     public void UpdateSlots()
     {
-        List<Card> cards = new List<Card>();
-        List<GameObject> slots = new List<GameObject>();
+        List<Card> cards = new();
+        List<GameObject> slots = new();
 
         cards.AddRange(matCards); // 재료가 될 수 있는 카드 리스트 
 
@@ -69,7 +67,6 @@ public class SlotsMatCards : MonoBehaviour
             newCard.transform.localScale = Vector3.one;
         }
     }
-
     
     public void ClearmatCardsSlots()
     {

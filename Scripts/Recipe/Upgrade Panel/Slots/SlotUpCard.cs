@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class SlotUpCard : MonoBehaviour
 {
     #region Droppable 관련 변수
     Card cardToUpgrade; // 업그레이드 슬롯에 올라가 있는 카드
     Card cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
-    Transform previousParentOfPointerDrag; // 업그레이드 슬롯에 올려놓은 카드가 되돌아갈 위치
     #endregion
 
     #region 참조 변수
@@ -146,13 +142,6 @@ public class SlotUpCard : MonoBehaviour
     {
         upgradeSuccessUI.gameObject.SetActive(true); // 강화 성공 패널 활성화
         upgradeSuccessUI.SetCard(upgraded); // 강화 성공 카드 초기화
-    }
-    #endregion
-
-    #region Droppable 관련 함수
-    public void SetPrevParent(Transform prevParent)
-    {
-        previousParentOfPointerDrag = prevParent;
     }
     #endregion
 
