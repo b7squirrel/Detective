@@ -31668,6 +31668,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9ea0db10f57b44e419f4b7b2ae1b08fc, type: 2}
   - {fileID: 11400000, guid: 068140fb60363044f872b21fe03223fb, type: 2}
   - {fileID: 11400000, guid: 12134ec1545bc174eb15beb646ac9a19, type: 2}
+  - {fileID: 11400000, guid: 7c41ae9f7c8d42546b4683e7f6e3fa34, type: 2}
+  - {fileID: 11400000, guid: b447411ba711364458b4368d8fbf6f1c, type: 2}
+  - {fileID: 11400000, guid: fa0e94812952b16458faf27754e63d17, type: 2}
+  - {fileID: 11400000, guid: 1f97c9545e9f24549903494dbf8a7521, type: 2}
   itemData:
   - {fileID: 11400000, guid: 6fed794634024654c8c2ee88559e9bae, type: 2}
   - {fileID: 11400000, guid: 20155fcb50cd1dc4fb5339ff2364c93a, type: 2}
@@ -37391,45 +37395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46c33f99d7465374d8a4c6c6f985ad06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnRefresh:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 221868158}
-        m_TargetAssemblyTypeName: SlotsAllCards, Assembly-CSharp
-        m_MethodName: ClearMyCardsSlots
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1587361511}
-        m_TargetAssemblyTypeName: SlotsMatCards, Assembly-CSharp
-        m_MethodName: ClearmatCardsSlots
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1666965264}
-        m_TargetAssemblyTypeName: SlotUpCard, Assembly-CSharp
-        m_MethodName: ClearUpgradeSlot
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1813413105
 GameObject:
   m_ObjectHideFlags: 0

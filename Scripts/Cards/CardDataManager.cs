@@ -64,20 +64,11 @@ public class CardDataManager : MonoBehaviour
     {
         // 전체 카드 리스트 불러오기
         AllCardsList = new ReadCardData().GetCardsList(CardDatabase);
-
-#if UNITY_EDITOR
-        if (Directory.Exists(Application.dataPath + "/PlayerData") == false)
-            Directory.CreateDirectory(Application.dataPath + "/PlayerData");
-
-        filePath = Application.dataPath + "/PlayerData" + myCards;
-#endif
-
-#if UNITY_ANDROID
+        
         if (Directory.Exists(Application.persistentDataPath + "/PlayerData") == false)
             Directory.CreateDirectory(Application.persistentDataPath + "/PlayerData");
 
         filePath = Application.persistentDataPath + "/PlayerData/" + myCards;
-#endif
 
         Load();
     }

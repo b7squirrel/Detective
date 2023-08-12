@@ -78,7 +78,12 @@ public class SlotUpCard : MonoBehaviour
 
         if (cardToUpgrade == null) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
         {
-            // MySlotsManager에서 MatSlots를 활성화 시키고 MySlots는 비활성화 시키도록 하기 
+            if(card.GetCardGrade() == ItemGrade.grade.Legendary)
+            {
+                Debug.Log("전설 등급은 더 이상 강화할 수 없습니다.");
+                isAvailable = false;
+                return isAvailable;
+            }
             return true;
         }
 
@@ -93,13 +98,7 @@ public class SlotUpCard : MonoBehaviour
             isAvailable = false;
             return isAvailable;
         }
-
-        if ((int)upgradeCardGrade == 4)
-        {
-            Debug.Log("전설 등급은 더 이상 강화할 수 없습니다.");
-            isAvailable = false;
-            return isAvailable;
-        }
+        
         if (upgradeCardName != feedCardName)
         {
             Debug.Log("같은 이름의 카드를 합쳐줘야 합니다.");

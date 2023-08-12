@@ -67,8 +67,10 @@ public class Player : MonoBehaviour, IBouncable
         }
         if (bouncingCoroutine != null)
             StopCoroutine(bouncingCoroutine);
+            
+#if UNITY_EDITOR
 
-#if UNITY_ANDROID
+#elif UNITY_ANDROID
         InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
 #endif
 
