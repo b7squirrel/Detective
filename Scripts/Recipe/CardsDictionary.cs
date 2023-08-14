@@ -21,9 +21,7 @@ public class CardsDictionary : MonoBehaviour
     public Item GetItemData(string grade, string Name)
     {
         List<Item> item = itemData.FindAll(x => x.Name == Name);
-
         Item picked = item.Find(x => x.grade.ToString() == grade);
-
         return picked;
     }
 

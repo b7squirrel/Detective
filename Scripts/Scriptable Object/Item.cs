@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
 [Serializable]
@@ -54,7 +52,7 @@ public class Item : ScriptableObject
 {
     public string Name;
     public ItemGrade.grade grade;
-    public Sprite charSprite;
+    public Sprite charImage;
     public string SynergyWeapon;
     public ItemStats stats;
     public List<UpgradeData> upgrades;

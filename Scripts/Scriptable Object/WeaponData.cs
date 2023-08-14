@@ -42,7 +42,7 @@ public class WeaponData : ScriptableObject
 {
     public ItemGrade.grade grade;
     public string Name;
-    public Sprite charSprite;
+    public Sprite charImage;
     public string SynergyWeapon;
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;

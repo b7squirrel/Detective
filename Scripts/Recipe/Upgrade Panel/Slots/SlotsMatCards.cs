@@ -64,7 +64,7 @@ public class SlotsMatCards : MonoBehaviour
 
             newCard.transform.SetParent(slots[i].transform);
             newCard.transform.position = Vector3.zero;
-            newCard.transform.localScale = Vector3.one;
+            newCard.transform.localScale = .6f * Vector3.one;
         }
     }
     

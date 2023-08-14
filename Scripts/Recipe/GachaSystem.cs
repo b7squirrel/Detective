@@ -16,14 +16,14 @@ public class GachaSystem : MonoBehaviour
         cardDataManager = FindObjectOfType<CardDataManager>();
     }
 
+    // shop 패널의 뽑기 버튼에서 호출
     public void Draw()
     {
         if(gachaPools == null) gachaPools = new List<CardData>();
 
         gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
 
-        
-
+        // 임시로 3개씩 카드가 뽑힘
         for (int i = 0; i < 3; i++)
         {
             int pickIndex = UnityEngine.Random.Range(0, gachaPools.Count);
@@ -39,6 +39,7 @@ public class GachaSystem : MonoBehaviour
             Destroy(newCard);
         }
     }
+    
     public void GenCards(List<CardData> drawnItems)
     {
         foreach (var item in drawnItems)

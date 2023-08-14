@@ -10,7 +10,17 @@ public class Card : MonoBehaviour
     Item itemData;
     CardType cardType;
     string Name;
+    int exp;
+    int level;
     ItemGrade.grade Grade;
+
+    int To_Level_Up_Card
+    {
+        get
+        {
+            return (int)(Mathf.Pow((level) / 3.5f, 2)) * 1000 + (100 * level);
+        }
+    }
 
     public void SetWeaponCardData(WeaponData _weaponData)
     {
@@ -19,7 +29,8 @@ public class Card : MonoBehaviour
         cardType = CardType.Weapon;
         Name = _weaponData.Name;
         Grade = _weaponData.grade;
-        GetComponent<CardDisplay>().SetCardDisplay(Grade.ToString(), Name);
+        level = 1;
+        GetComponent<CardDisplay>().InitWeaponCardDisplay(this.weaponData);
     }
     public void SetItemCardData(Item _itemData)
     {
@@ -27,7 +38,8 @@ public class Card : MonoBehaviour
         cardType = CardType.Item;
         Name = _itemData.Name;
         Grade = _itemData.grade;
-        GetComponent<CardDisplay>().SetCardDisplay(Grade.ToString(), Name);
+        level = 1;
+        GetComponent<CardDisplay>().InitItemCardDisplay(this.itemData);
     }
 
     public string GetCardName()
@@ -48,5 +60,19 @@ public class Card : MonoBehaviour
     public ItemGrade.grade GetCardGrade()
     {
         return Grade;
+    }
+
+    public void AddExp(int expToAdd)
+    {
+        exp += expToAdd;
+    }
+
+    void LevelUp()
+    {
+        if(level < 30)
+        {
+            level++;
+            GetComponent<CardDisplay>().UpdateCard(level);
+        }
     }
 }

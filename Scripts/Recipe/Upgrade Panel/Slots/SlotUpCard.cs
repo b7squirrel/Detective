@@ -44,6 +44,7 @@ public class SlotUpCard : MonoBehaviour
         if (cardToUpgrade == null) // 업그레이드 슬롯이 비어 있다면
         {
             cardToUpgrade = card;
+            cardToUpgrade.GetComponent<RectTransform>().localScale = Vector3.one;
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
             slotManager.GetIntoMatCardsManager();
         }
