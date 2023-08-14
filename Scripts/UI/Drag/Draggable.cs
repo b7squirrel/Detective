@@ -56,6 +56,16 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             }
         }
 
+        // 업그레이드 슬롯에 있는 카드를 드래그 했다가 다시 업그레이드 슬롯에 놓으면 아무일도 일어나지 않음
+        if (transform.parent == slotUpCard.transform)
+        {
+            if (isOnUpSlot)
+            {
+                canvasGroup.blocksRaycasts = true;
+                return;
+            }
+        }
+
         // 업그레이드 슬롯 위로 올릴 수 있는지 체크
         if (slotUpCard.IsAvailable(GetComponent<Card>()))
         {

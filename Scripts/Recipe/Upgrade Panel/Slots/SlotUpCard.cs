@@ -79,12 +79,12 @@ public class SlotUpCard : MonoBehaviour
 
         if (cardToUpgrade == null) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
         {
-            if(card.GetCardGrade() == ItemGrade.grade.Legendary)
-            {
-                Debug.Log("전설 등급은 더 이상 강화할 수 없습니다.");
-                isAvailable = false;
-                return isAvailable;
-            }
+            // if(card.GetCardGrade() == ItemGrade.grade.Legendary)
+            // {
+            //     Debug.Log("전설 등급은 더 이상 강화할 수 없습니다.");
+            //     isAvailable = false;
+            //     return isAvailable;
+            // }
             return true;
         }
 
@@ -115,6 +115,8 @@ public class SlotUpCard : MonoBehaviour
     public void UpgradeCard()
     {
         int newCardGrade = (int)cardToUpgrade.GetCardGrade() + 1;
+        if (newCardGrade > 5) newCardGrade = 5;
+            
         string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
         string type = (cardToUpgrade.GetCardType()).ToString();
 

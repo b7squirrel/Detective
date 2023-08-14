@@ -17,7 +17,7 @@ public class CardDisplay : MonoBehaviour
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
         // 카드 레벨 텍스트
-        Level.text = "1";
+        Level.text = "LV1";
 
         // 캐릭터 이미지
         cardCharImage.sprite = weaponData.charImage;
@@ -31,7 +31,7 @@ public class CardDisplay : MonoBehaviour
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
         // 카드 레벨 텍스트
-        Level.text = "1";
+        Level.text = "LV1";
 
         // 캐릭터 이미지
         cardCharImage.sprite = itemData.charImage;
@@ -39,7 +39,7 @@ public class CardDisplay : MonoBehaviour
 
     public void UpdateCard(int level)
     {
-        Level.text = level.ToString();
+        Level.text = "LV" + level.ToString();
     }
 
     void SetNumStar(int numStars)
