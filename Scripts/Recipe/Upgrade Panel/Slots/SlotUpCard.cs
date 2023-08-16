@@ -44,7 +44,10 @@ public class SlotUpCard : MonoBehaviour
         if (cardToUpgrade == null) // 업그레이드 슬롯이 비어 있다면
         {
             cardToUpgrade = card;
+            cardToUpgrade.transform.SetParent(transform);
             cardToUpgrade.GetComponent<RectTransform>().localScale = Vector3.one;
+            cardToUpgrade.GetComponent<RectTransform>().position = GetComponent<RectTransform>().position;
+            
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
             slotManager.GetIntoMatCardsManager();
         }
@@ -78,15 +81,7 @@ public class SlotUpCard : MonoBehaviour
         bool isAvailable = true;
 
         if (cardToUpgrade == null) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
-        {
-            // if(card.GetCardGrade() == ItemGrade.grade.Legendary)
-            // {
-            //     Debug.Log("전설 등급은 더 이상 강화할 수 없습니다.");
-            //     isAvailable = false;
-            //     return isAvailable;
-            // }
             return true;
-        }
 
         ItemGrade.grade upgradeCardGrade = cardToUpgrade.GetCardGrade();
         ItemGrade.grade feedCardGrade = card.GetCardGrade();
