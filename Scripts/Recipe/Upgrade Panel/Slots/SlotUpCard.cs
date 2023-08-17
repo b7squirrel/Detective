@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SlotUpCard : MonoBehaviour
 {
-    #region Droppable 관련 변수
+    #region 카드 관련 변수
     Card cardToUpgrade; // 업그레이드 슬롯에 올라가 있는 카드
     Card cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
     #endregion
@@ -12,6 +12,7 @@ public class SlotUpCard : MonoBehaviour
     CardDataManager cardDataManager;
     [SerializeField] UpgradeSuccessUI upgradeSuccessUI;
     [SerializeField] SlotManager slotManager;
+    [SerializeField] GameObject halo;
     #endregion
 
     #region Unity Callback 함수
@@ -20,6 +21,7 @@ public class SlotUpCard : MonoBehaviour
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
+        halo.SetActive(false);
     }
 
     void OnEnable()
@@ -47,6 +49,8 @@ public class SlotUpCard : MonoBehaviour
             cardToUpgrade.transform.SetParent(transform);
             cardToUpgrade.GetComponent<RectTransform>().localScale = Vector3.one;
             cardToUpgrade.GetComponent<RectTransform>().position = GetComponent<RectTransform>().position;
+
+            halo.SetActive(true);
             
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
             slotManager.GetIntoMatCardsManager();
@@ -149,6 +153,8 @@ public class SlotUpCard : MonoBehaviour
         if (GetComponentInChildren<Card>() == null)
             return;
         Destroy(GetComponentInChildren<Card>().gameObject);
+
+        halo.SetActive(false);
     }
     #endregion
 }
