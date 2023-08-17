@@ -4,17 +4,17 @@ using UnityEngine.UI;
 
 public class CardDisplay : MonoBehaviour
 {
-    [SerializeField] Transform cardBaseContainer;
-    [SerializeField] Transform starContainer;
-    [SerializeField] Image cardCharImage;
-    [SerializeField] TextMeshProUGUI Level;
-    [SerializeField] GameObject starPrefab;
+    [SerializeField] protected Transform cardBaseContainer;
+    [SerializeField] protected Transform starContainer;
+    [SerializeField] protected Image cardCharImage;
+    [SerializeField] protected TextMeshProUGUI Level;
+    [SerializeField] protected GameObject starPrefab;
     public void InitWeaponCardDisplay(WeaponData weaponData)
     {
         // 별과 카드 색깔
         int intGrade = (int)weaponData.grade;
         SetNumStar(intGrade);
-        
+
         for (int i = 0; i < 5; i++)
         {
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
@@ -47,7 +47,7 @@ public class CardDisplay : MonoBehaviour
         Level.text = "LV" + level.ToString();
     }
 
-    void SetNumStar(int numStars)
+    protected virtual void SetNumStar(int numStars)
     {
         // 등급만큼 별 생성하고 별리스트에 넣기
         for (int i = 0; i < numStars; i++)

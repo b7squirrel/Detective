@@ -62,6 +62,26 @@ public class Card : MonoBehaviour
         return Grade;
     }
 
+    public WeaponData GetWeaponData()
+    {
+        if(weaponData == null)
+        {
+            Debug.Log("Weapon Data Null");
+            return null;
+        }
+        return weaponData;
+    }
+
+    public Item GetItemData()
+    {
+        if(itemData == null)
+        {
+            Debug.Log("Item Data Null");
+            return null;
+        }
+        return itemData;
+    }
+
     public void AddExp(int expToAdd)
     {
         exp += expToAdd;
