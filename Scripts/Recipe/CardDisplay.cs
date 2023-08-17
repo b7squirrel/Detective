@@ -13,7 +13,12 @@ public class CardDisplay : MonoBehaviour
     {
         // 별과 카드 색깔
         int intGrade = (int)weaponData.grade;
-        SetNumStar(intGrade + 1);
+        SetNumStar(intGrade);
+        
+        for (int i = 0; i < 5; i++)
+        {
+            cardBaseContainer.GetChild(i).gameObject.SetActive(false);
+        }
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
         // 카드 레벨 텍스트
