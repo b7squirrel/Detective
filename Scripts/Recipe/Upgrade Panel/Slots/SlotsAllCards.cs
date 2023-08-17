@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SlotsAllCards : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class SlotsAllCards : MonoBehaviour
 
         numSlots = cardDatas.Count;
 
+        // 슬롯 생성
         for (int i = 0; i < numSlots; i++)
         {
             var slot = Instantiate(slotPrefab, transform);
@@ -39,14 +41,33 @@ public class SlotsAllCards : MonoBehaviour
             slots.Add(slot);
         }
 
-        for (int i = 0; i < cardDatas.Count; i++)
+        // 카드 생성
+        List<GameObject> cards = new();
+
+        for (int i = 0; i < numSlots; i++)
         {
             GameObject newCard =
                 cardDictionary.GenCard(cardDatas[i].Type, cardDatas[i].Grade, cardDatas[i].Name);
 
-            newCard.transform.SetParent(slots[i].transform);
-            newCard.transform.position = Vector3.zero;
-            newCard.transform.localScale = .6f * Vector3.one;
+            cards.Add(newCard);
+        }
+
+        // 내림차순으로 카드 정렬 
+        cards.Sort((a,b) => 
+        {
+            int indexA = (int)a.GetComponent<Card>().GetCardGrade();
+            int indexB = (int)b.GetComponent<Card>().GetCardGrade();
+            return indexA.CompareTo(indexB);
+        });
+
+        cards.Reverse();
+
+        // 내림차순 순서대로 슬롯에 배치
+        for(int i = 0; i < numSlots; i++)
+        {
+            cards[i].transform.SetParent(slots[i].transform);
+            cards[i].transform.position = Vector3.zero;
+            cards[i].transform.localScale = .6f * Vector3.one;
         }
     }
 
