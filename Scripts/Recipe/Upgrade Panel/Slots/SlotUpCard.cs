@@ -13,6 +13,12 @@ public class SlotUpCard : MonoBehaviour
     [SerializeField] UpgradeSuccessUI upgradeSuccessUI;
     [SerializeField] SlotManager slotManager;
     [SerializeField] GameObject halo;
+
+    [SerializeField] Animator animUpSlot;
+    [SerializeField] Animator animMatSlot;
+    [SerializeField] Animator animPlus;
+    RectTransform upSlot, matSlot;
+    RectTransform upCard, matCard;
     #endregion
 
     #region Unity Callback 함수
@@ -27,6 +33,11 @@ public class SlotUpCard : MonoBehaviour
     void OnEnable()
     {
         upgradeSuccessUI.gameObject.SetActive(false);
+        animUpSlot.gameObject.SetActive(true);
+        animMatSlot.gameObject.SetActive(true);
+        animMatSlot.SetTrigger("Canceled");
+        animPlus.gameObject.SetActive(true);
+        animUpSlot.SetTrigger("Canceled");
     }
 
     void Update()
@@ -34,6 +45,12 @@ public class SlotUpCard : MonoBehaviour
         if (GetComponentInChildren<Card>() == null)
         {
             cardToUpgrade = null;
+            return; // 업그레이드 슬롯에 카드가 없다면 아무것도 안함
+        }
+
+        if (upCard != null && upSlot != null)
+        {
+            upCard.position = upSlot.position;
         }
     }
     #endregion
@@ -48,10 +65,15 @@ public class SlotUpCard : MonoBehaviour
             cardToUpgrade = card;
             cardToUpgrade.transform.SetParent(transform);
             cardToUpgrade.GetComponent<RectTransform>().localScale = Vector3.one;
-            cardToUpgrade.GetComponent<RectTransform>().position = GetComponent<RectTransform>().position;
+            upCard = cardToUpgrade.GetComponent<RectTransform>();
+            upSlot = animUpSlot.GetComponent<RectTransform>();
 
             halo.SetActive(true);
-            
+            animUpSlot.SetTrigger("HavingCard");
+            animMatSlot.gameObject.SetActive(true);
+            animMatSlot.SetTrigger("IntoInit");
+            animPlus.SetTrigger("PlusUp");
+
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
             slotManager.GetIntoMatCardsManager();
         }
@@ -98,14 +120,14 @@ public class SlotUpCard : MonoBehaviour
             isAvailable = false;
             return isAvailable;
         }
-        
+
         if (upgradeCardName != feedCardName)
         {
             Debug.Log("같은 이름의 카드를 합쳐줘야 합니다.");
             isAvailable = false;
             return isAvailable;
         }
-        
+
         return isAvailable;
     }
     #endregion
@@ -115,7 +137,7 @@ public class SlotUpCard : MonoBehaviour
     {
         int newCardGrade = (int)cardToUpgrade.GetCardGrade() + 1;
         if (newCardGrade > 5) newCardGrade = 5;
-            
+
         string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
         string type = (cardToUpgrade.GetCardType()).ToString();
 
@@ -155,6 +177,9 @@ public class SlotUpCard : MonoBehaviour
         Destroy(GetComponentInChildren<Card>().gameObject);
 
         halo.SetActive(false);
+        animUpSlot.SetTrigger("Canceld");
+        animMatSlot.SetTrigger("Canceled");
+        animPlus.SetTrigger("PlusDown");
     }
     #endregion
 }
