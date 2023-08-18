@@ -34,10 +34,8 @@ public class SlotUpCard : MonoBehaviour
     {
         upgradeSuccessUI.gameObject.SetActive(false);
         animUpSlot.gameObject.SetActive(true);
-        animMatSlot.gameObject.SetActive(true);
-        animMatSlot.SetTrigger("Canceled");
-        animPlus.gameObject.SetActive(true);
-        animUpSlot.SetTrigger("Canceled");
+        animMatSlot.gameObject.SetActive(false);
+        animPlus.gameObject.SetActive(false);
     }
 
     void Update()
@@ -72,6 +70,7 @@ public class SlotUpCard : MonoBehaviour
             animUpSlot.SetTrigger("HavingCard");
             animMatSlot.gameObject.SetActive(true);
             animMatSlot.SetTrigger("IntoInit");
+            animPlus.gameObject.SetActive(true);
             animPlus.SetTrigger("PlusUp");
 
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
