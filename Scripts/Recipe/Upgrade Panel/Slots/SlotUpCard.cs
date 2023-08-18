@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SlotUpCard : MonoBehaviour
@@ -12,13 +13,12 @@ public class SlotUpCard : MonoBehaviour
     CardDataManager cardDataManager;
     [SerializeField] UpgradeSuccessUI upgradeSuccessUI;
     [SerializeField] SlotManager slotManager;
-    [SerializeField] GameObject halo;
+    #endregion
 
-    [SerializeField] Animator animUpSlot;
-    [SerializeField] Animator animMatSlot;
-    [SerializeField] Animator animPlus;
-    RectTransform upSlot, matSlot;
-    RectTransform upCard, matCard;
+    #region 액션 이벤트
+    public event Action<Card> OnCardAcquiredOnUpSlotUI;
+    public event Action OnRefreshUI;
+    public event Action OnUpdateUI;
     #endregion
 
     #region Unity Callback 함수
@@ -27,15 +27,7 @@ public class SlotUpCard : MonoBehaviour
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
-        halo.SetActive(false);
-    }
-
-    void OnEnable()
-    {
-        upgradeSuccessUI.gameObject.SetActive(false);
-        animUpSlot.gameObject.SetActive(true);
-        animMatSlot.gameObject.SetActive(false);
-        animPlus.gameObject.SetActive(false);
+        
     }
 
     void Update()
@@ -46,10 +38,7 @@ public class SlotUpCard : MonoBehaviour
             return; // 업그레이드 슬롯에 카드가 없다면 아무것도 안함
         }
 
-        if (upCard != null && upSlot != null)
-        {
-            upCard.position = upSlot.position;
-        }
+        OnUpdateUI?.Invoke();
     }
     #endregion
 
@@ -63,15 +52,9 @@ public class SlotUpCard : MonoBehaviour
             cardToUpgrade = card;
             cardToUpgrade.transform.SetParent(transform);
             cardToUpgrade.GetComponent<RectTransform>().localScale = Vector3.one;
-            upCard = cardToUpgrade.GetComponent<RectTransform>();
-            upSlot = animUpSlot.GetComponent<RectTransform>();
 
-            halo.SetActive(true);
-            animUpSlot.SetTrigger("HavingCard");
-            animMatSlot.gameObject.SetActive(true);
-            animMatSlot.SetTrigger("IntoInit");
-            animPlus.gameObject.SetActive(true);
-            animPlus.SetTrigger("PlusUp");
+            // onCardAcquired
+            OnCardAcquiredOnUpSlotUI?.Invoke(card);
 
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
             slotManager.GetIntoMatCardsManager();
@@ -175,10 +158,7 @@ public class SlotUpCard : MonoBehaviour
             return;
         Destroy(GetComponentInChildren<Card>().gameObject);
 
-        halo.SetActive(false);
-        animUpSlot.SetTrigger("Canceld");
-        animMatSlot.SetTrigger("Canceled");
-        animPlus.SetTrigger("PlusDown");
+        OnRefreshUI?.Invoke();
     }
     #endregion
 }

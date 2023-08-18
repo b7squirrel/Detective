@@ -35753,6 +35753,7 @@ GameObject:
   - component: {fileID: 1666965259}
   - component: {fileID: 1666965262}
   - component: {fileID: 1666965264}
+  - component: {fileID: 1666965265}
   m_Layer: 5
   m_Name: UPgrade Slot
   m_TagString: Untagged
@@ -35805,6 +35806,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeSuccessUI: {fileID: 1016516609}
   slotManager: {fileID: 1808537187}
+--- !u!114 &1666965265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666965258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d4981fb74e0374f8c62802d60b72c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradeSuccessUI: {fileID: 1016516609}
   halo: {fileID: 1253722665}
   animUpSlot: {fileID: 307299971}
   animMatSlot: {fileID: 1462913151}
