@@ -167,8 +167,19 @@ public class SlotUpCard : MonoBehaviour
 
         OnRefreshUI?.Invoke();
 
-        cardToUpgrade = null;
-        cardToFeed = null;
+        if(cardToUpgrade != null)
+        {
+            GameObject cardPrefab = cardToUpgrade.gameObject;
+            cardToUpgrade = null;
+            Destroy(cardPrefab);
+        }
+        
+        if(cardToFeed != null)
+        {
+            GameObject cardPrefab = cardToFeed.gameObject;
+            cardToFeed = null;
+            Destroy(cardPrefab);
+        }
     }
     #endregion
 }
