@@ -47,6 +47,8 @@ public class CardAction : MonoBehaviour
         if (currentSlotType == SlotType.listSlot)
         {
             currentSlotType = slotUpCard.GetSlotType(GetComponent<Card>());
+            if (currentSlotType == SlotType.none) // 재료 슬롯에 이미 다른 카드가 올라가 있다면
+                return;
             slotUpCard.AcquireCard(GetComponent<Card>());
         }
         else

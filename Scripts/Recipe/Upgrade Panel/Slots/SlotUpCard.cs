@@ -93,6 +93,12 @@ public class SlotUpCard : MonoBehaviour
             return SlotType.upSlot;
         }
 
+        // 재료카드에 카드가 올라가 있는 경우
+        if(cardToFeed != null)
+        {
+            return SlotType.none;
+        }
+
         // 재료 카드의 경우
         ItemGrade.grade upgradeCardGrade = cardToUpgrade.GetCardGrade();
         ItemGrade.grade feedCardGrade = card.GetCardGrade();
@@ -160,6 +166,9 @@ public class SlotUpCard : MonoBehaviour
         Destroy(GetComponentInChildren<Card>().gameObject);
 
         OnRefreshUI?.Invoke();
+
+        cardToUpgrade = null;
+        cardToFeed = null;
     }
     #endregion
 }
