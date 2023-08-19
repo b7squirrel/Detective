@@ -20,7 +20,7 @@ public class SlotsMatCards : MonoBehaviour
     }
     #endregion
     
-    #region MatCards 초기화
+    #region MatCards 관련
     public void SetMatCards(List<Card> _matCards)
     {
         if (this.matCards == null) matCards = new List<Card>();
@@ -30,6 +30,11 @@ public class SlotsMatCards : MonoBehaviour
         this.matCards.AddRange(_matCards);
 
         UpdateSlots();
+    }
+
+    public List<Card> GetMMatCards()
+    {
+        return matCards;
     }
     #endregion
 

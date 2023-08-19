@@ -27,7 +27,7 @@ public class SlotManager : MonoBehaviour
 
     void OnEnable()
     {
-        GetIntoMyCardsmanager();
+        GetIntoMyCards();
     }
     #endregion
 
@@ -47,7 +47,7 @@ public class SlotManager : MonoBehaviour
     #endregion
 
     #region MyCards, MatCards 전환
-    public void GetIntoMatCardsManager()
+    public void GetIntoMatCards()
     {
         slotsAllCards.gameObject.SetActive(false);
         slotsMatCards.gameObject.SetActive(true);
@@ -56,11 +56,23 @@ public class SlotManager : MonoBehaviour
         GenerateMatCardsList();
     }
 
-    public void GetIntoMyCardsmanager()
+    public void GetIntoMyCards()
     {
         slotsAllCards.gameObject.SetActive(true);
         slotsMatCards.gameObject.SetActive(false);
         RefreshUpgradePanel();
+    }
+
+    public void BackToMatCards()
+    {
+        slotsAllCards.gameObject.SetActive(false);
+        slotsMatCards.gameObject.SetActive(true);
+
+        // MatCards 리스트 복구
+        List<Card> matCardsList = new();
+        matCardsList.AddRange(slotsMatCards.GetMMatCards());
+        slotsMatCards.ClearmatCardsSlots();
+        slotsMatCards.SetMatCards(matCardsList);
     }
 
     public void GenerateMatCardsList()

@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlotUpCard : MonoBehaviour
@@ -15,8 +16,9 @@ public class SlotUpCard : MonoBehaviour
     [SerializeField] SlotManager slotManager;
     #endregion
 
-    #region 액션 이벤트
+    #region 액션 이벤트 - SlotUpCardUI
     public event Action<Card> OnCardAcquiredOnUpSlotUI;
+    public event Action<Card> OnCardAcquiredOnMatSlotUI;
     public event Action OnRefreshUI;
     public event Action OnUpdateUI;
     #endregion
@@ -27,7 +29,6 @@ public class SlotUpCard : MonoBehaviour
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
-        
     }
 
     void Update()
@@ -57,18 +58,17 @@ public class SlotUpCard : MonoBehaviour
             OnCardAcquiredOnUpSlotUI?.Invoke(card);
 
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
-            slotManager.GetIntoMatCardsManager();
+            slotManager.GetIntoMatCards();
         }
         else
         {
-            AcquireMeterial(card); // 비어 있지 않다면 지금 카드는 재료 카드임
-            UpgradeCard();
-        }
-    }
+            cardToFeed = card;; // 비어 있지 않다면 지금 카드는 재료 카드임
 
-    void AcquireMeterial(Card card) // 재료가 되는 카드를 덮으면
-    {
-        cardToFeed = card;
+            cardToFeed.transform.SetParent(transform);
+            cardToFeed.GetComponent<RectTransform>().localScale = Vector3.one * .6f;
+
+            OnCardAcquiredOnMatSlotUI?.Invoke(card);
+        }
     }
     #endregion
 
@@ -84,13 +84,16 @@ public class SlotUpCard : MonoBehaviour
     #endregion
 
     #region Check Slot Availability
-    public bool IsAvailable(Card card) // Draggable에서 카드를 놓을 수 있는지 여부를 판단
+    public SlotType GetSlotType(Card card) // Draggable에서 카드를 놓을 수 있는지 여부를 판단
     {
-        bool isAvailable = true;
 
+        // 업그레이드 카드의 경우
         if (cardToUpgrade == null) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
-            return true;
+        {
+            return SlotType.upSlot;
+        }
 
+        // 재료 카드의 경우
         ItemGrade.grade upgradeCardGrade = cardToUpgrade.GetCardGrade();
         ItemGrade.grade feedCardGrade = card.GetCardGrade();
         string upgradeCardName = cardToUpgrade.GetCardName();
@@ -99,18 +102,16 @@ public class SlotUpCard : MonoBehaviour
         if (upgradeCardGrade != feedCardGrade)
         {
             Debug.Log("같은 등급을 합쳐줘야 합니다");
-            isAvailable = false;
-            return isAvailable;
+            return SlotType.none;
         }
 
         if (upgradeCardName != feedCardName)
         {
             Debug.Log("같은 이름의 카드를 합쳐줘야 합니다.");
-            isAvailable = false;
-            return isAvailable;
+            return SlotType.none;
         }
 
-        return isAvailable;
+        return SlotType.matSlot;
     }
     #endregion
 

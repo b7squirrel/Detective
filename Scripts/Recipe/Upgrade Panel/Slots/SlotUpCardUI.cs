@@ -16,7 +16,8 @@ public class SlotUpCardUI : MonoBehaviour
 
     void Start()
     {
-        GetComponent<SlotUpCard>().OnCardAcquiredOnUpSlotUI += cardAcquiredUI;
+        GetComponent<SlotUpCard>().OnCardAcquiredOnUpSlotUI += upCardAcquiredUI;
+        GetComponent<SlotUpCard>().OnCardAcquiredOnMatSlotUI += matCardAcquiredUI;
         GetComponent<SlotUpCard>().OnRefreshUI += refreshUpSlotUI;
         GetComponent<SlotUpCard>().OnUpdateUI += UpdateUI;
     }
@@ -26,6 +27,11 @@ public class SlotUpCardUI : MonoBehaviour
         if (upCard != null && upSlot != null)
         {
             upCard.position = upSlot.position;
+        }
+
+        if(matCard != null & matSlot != null)
+        {
+            matCard.position = matSlot.position;
         }
     }
 
@@ -38,8 +44,7 @@ public class SlotUpCardUI : MonoBehaviour
         halo.SetActive(false);
     }
 
-
-    void cardAcquiredUI(Card card)
+    void upCardAcquiredUI(Card card)
     {
         upCard = card.GetComponent<RectTransform>();
         upSlot = animUpSlot.GetComponent<RectTransform>();
@@ -50,6 +55,12 @@ public class SlotUpCardUI : MonoBehaviour
         animMatSlot.SetTrigger("IntoInit");
         animPlus.gameObject.SetActive(true);
         animPlus.SetTrigger("PlusUp");
+    }
+
+    void matCardAcquiredUI(Card card)
+    {
+        matCard = card.GetComponent<RectTransform>();
+        matSlot = animMatSlot.GetComponent<RectTransform>();
     }
 
     void refreshUpSlotUI()
