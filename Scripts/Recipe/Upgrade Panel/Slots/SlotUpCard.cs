@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,15 +13,16 @@ public class SlotUpCard : MonoBehaviour
     #region 참조 변수
     CardsDictionary cardDictionary;
     CardDataManager cardDataManager;
-    [SerializeField] UpgradeSuccessUI upgradeSuccessUI;
     [SerializeField] SlotManager slotManager;
     #endregion
 
     #region 액션 이벤트 - SlotUpCardUI
     public event Action<Card> OnCardAcquiredOnUpSlotUI;
     public event Action<Card> OnCardAcquiredOnMatSlotUI;
-    public event Action OnRefreshUI;
-    public event Action OnUpdateUI;
+    public event Action OnRefreshUI; // 슬롯을 비우는 등의 리프레시 UI
+    public event Action OnUpdateUI; // 매 프레임 업데이트 되는 UI
+    public event Action OnUpgradeConfirmation; // 합성 확인 창 UI
+    public event Action OnMerging; // 합성 효과 UI
     #endregion
 
     #region Unity Callback 함수
@@ -68,6 +70,7 @@ public class SlotUpCard : MonoBehaviour
             cardToFeed.GetComponent<RectTransform>().localScale = Vector3.one * .6f;
 
             OnCardAcquiredOnMatSlotUI?.Invoke(card);
+            OnUpgradeConfirmation?.Invoke();
         }
     }
     #endregion
@@ -147,13 +150,14 @@ public class SlotUpCard : MonoBehaviour
         cardDataManager.AddCardToMyCardsList(upgraded);
 
         // 강화 성공 패널
-        InitUpgradeSuccessPanel(upgraded);
+        StartCoroutine(UpgradeUICo(upgraded));
     }
 
-    void InitUpgradeSuccessPanel(Card upgraded)
+    IEnumerator UpgradeUICo(Card upgradedCard)
     {
-        upgradeSuccessUI.gameObject.SetActive(true); // 강화 성공 패널 활성화
-        upgradeSuccessUI.SetCard(upgraded); // 강화 성공 카드 초기화
+        OnMerging?.Invoke();
+        yield return new WaitForSeconds(.16f);
+        slotManager.OpenUpgradeSuccesUI(upgradedCard);
     }
     #endregion
 

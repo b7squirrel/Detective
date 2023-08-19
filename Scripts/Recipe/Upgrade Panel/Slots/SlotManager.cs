@@ -71,7 +71,7 @@ public class SlotManager : MonoBehaviour
         // MatCards 리스트 복구
         List<Card> matCardsList = new();
         matCardsList.AddRange(slotsMatCards.GetMMatCards());
-        slotsMatCards.ClearmatCardsSlots();
+        slotsMatCards.ClearmatCardsSlots(); // 재료 슬롯들의 카드만 갱신
         slotsMatCards.SetMatCards(matCardsList);
     }
 
@@ -91,11 +91,15 @@ public class SlotManager : MonoBehaviour
         slotsMatCards.SetMatCards(picked);
     }
     #endregion
-    
+
     #region Upgrade Success UI
-    public void OpenUpgradeSuccesUI()
+    public void OpenUpgradeSuccesUI(Card upgraded)
     {
+        slotsMatCards.gameObject.SetActive(false);
+
         upgradeSuccessUI.gameObject.SetActive(true);
+        upgradeSuccessUI.SetCard(upgraded); // 강화 성공 카드 초기화
+        // 계속하기 버튼을 누르면 AllCardsPanel로 가면서 refresh를 하므로 여기서는 필요 없다
     }
     public void CloseUpgradeSuccessUI()
     {

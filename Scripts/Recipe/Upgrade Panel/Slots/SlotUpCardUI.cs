@@ -7,6 +7,8 @@ public class SlotUpCardUI : MonoBehaviour
     [SerializeField] UpgradeSuccessUI upgradeSuccessUI;
 
     [SerializeField] GameObject halo;
+    [SerializeField] GameObject confirmationButtonContainer;
+    [SerializeField] GameObject slotPanel;
 
     [SerializeField] Animator animUpSlot;
     [SerializeField] Animator animMatSlot;
@@ -18,6 +20,8 @@ public class SlotUpCardUI : MonoBehaviour
     {
         GetComponent<SlotUpCard>().OnCardAcquiredOnUpSlotUI += upCardAcquiredUI;
         GetComponent<SlotUpCard>().OnCardAcquiredOnMatSlotUI += matCardAcquiredUI;
+        GetComponent<SlotUpCard>().OnUpgradeConfirmation += ActivationUpgradeConfirmationUI;
+        GetComponent<SlotUpCard>().OnMerging += MergingCardsUI;
         GetComponent<SlotUpCard>().OnRefreshUI += refreshUpSlotUI;
         GetComponent<SlotUpCard>().OnUpdateUI += UpdateUI;
     }
@@ -42,6 +46,7 @@ public class SlotUpCardUI : MonoBehaviour
         animMatSlot.gameObject.SetActive(false);
         animPlus.gameObject.SetActive(false);
         halo.SetActive(false);
+        confirmationButtonContainer.SetActive(false);
     }
 
     void upCardAcquiredUI(Card card)
@@ -63,9 +68,24 @@ public class SlotUpCardUI : MonoBehaviour
         matSlot = animMatSlot.GetComponent<RectTransform>();
     }
 
+    public void ActivationUpgradeConfirmationUI()
+    {
+        animMatSlot.gameObject.SetActive(false);
+        slotPanel.SetActive(false);
+        confirmationButtonContainer.SetActive(true);
+    }
+
+    void MergingCardsUI()
+    {
+        animUpSlot.SetTrigger("Merging");
+        animMatSlot.SetTrigger("Merging");
+    }
+
     void refreshUpSlotUI()
     {
         halo.SetActive(false);
+        confirmationButtonContainer.SetActive(false);
+        slotPanel.SetActive(true);
         animUpSlot.SetTrigger("Canceld");
         animMatSlot.SetTrigger("Canceled");
         animPlus.SetTrigger("PlusDown");
