@@ -46,8 +46,6 @@ public class CardsDictionary : MonoBehaviour
             Debug.Log("카드 타입이 정해지지 않았습니다");
         }
 
-        
-
         return newCard;
     }
 }

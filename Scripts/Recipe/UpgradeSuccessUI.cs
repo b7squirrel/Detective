@@ -29,7 +29,7 @@ public class UpgradeSuccessUI : CardDisplay
     protected override void SetNumStar(int numStars)
     {
         // 등급만큼 별 생성하고 별리스트에 넣기
-        for (int i = 0; i < numStars + 1; i++)
+        for (int i = 0; i < numStars; i++)
         {
             Instantiate(starPrefab, starContainer);
         }

@@ -21,6 +21,7 @@ public class SlotUpCardUI : MonoBehaviour
         GetComponent<SlotUpCard>().OnCardAcquiredOnUpSlotUI += upCardAcquiredUI;
         GetComponent<SlotUpCard>().OnCardAcquiredOnMatSlotUI += matCardAcquiredUI;
         GetComponent<SlotUpCard>().OnUpgradeConfirmation += ActivationUpgradeConfirmationUI;
+        GetComponent<SlotUpCard>().OnCloseUpgradeConfirmation += DeactivationUpgradeConfirmationUI;
         GetComponent<SlotUpCard>().OnMerging += MergingCardsUI;
         GetComponent<SlotUpCard>().OnRefreshUI += refreshUpSlotUI;
         GetComponent<SlotUpCard>().OnUpdateUI += UpdateUI;
@@ -41,6 +42,11 @@ public class SlotUpCardUI : MonoBehaviour
 
     void OnEnable()
     {
+        Init();
+    }
+
+    void Init()
+    {
         upgradeSuccessUI.gameObject.SetActive(false);
         animUpSlot.gameObject.SetActive(true);
         animMatSlot.gameObject.SetActive(false);
@@ -57,7 +63,7 @@ public class SlotUpCardUI : MonoBehaviour
         halo.SetActive(true);
         animUpSlot.SetTrigger("HavingCard");
         animMatSlot.gameObject.SetActive(true);
-        animMatSlot.SetTrigger("IntoInit");
+        animMatSlot.SetTrigger("Init");
         animPlus.gameObject.SetActive(true);
         animPlus.SetTrigger("PlusUp");
     }
@@ -70,9 +76,13 @@ public class SlotUpCardUI : MonoBehaviour
 
     public void ActivationUpgradeConfirmationUI()
     {
-        animMatSlot.gameObject.SetActive(false);
         slotPanel.SetActive(false);
         confirmationButtonContainer.SetActive(true);
+    }
+
+    public void DeactivationUpgradeConfirmationUI()
+    {
+        confirmationButtonContainer.SetActive(false);
     }
 
     void MergingCardsUI()
@@ -86,12 +96,18 @@ public class SlotUpCardUI : MonoBehaviour
         halo.SetActive(false);
         confirmationButtonContainer.SetActive(false);
         slotPanel.SetActive(true);
-        animUpSlot.SetTrigger("Canceld");
+        animUpSlot.SetTrigger("Canceled");
         animMatSlot.SetTrigger("Canceled");
         animPlus.SetTrigger("PlusDown");
         upSlot = null;
         upCard = null;
         matSlot = null;
         matCard = null;
+        StartCoroutine(WaitToInitCo());
+    }
+    IEnumerator WaitToInitCo()
+    {
+        yield return new WaitForSeconds(.5f);
+        Init();
     }
 }

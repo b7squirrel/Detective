@@ -37,13 +37,25 @@ public class SlotManager : MonoBehaviour
     // 업그레이드 패널을 갱신한다
     public void RefreshUpgradePanel()
     {
+        ClearMyCardsSlots();
+        ClearMatCardsSlots();
+        ClearUpgradeSlots();
+    }
+    
+    public void ClearMyCardsSlots()
+    {
         slotsAllCards.ClearMyCardsSlots();
+    }
+
+    public void ClearMatCardsSlots()
+    {
         slotsMatCards.ClearmatCardsSlots();
+    }
+
+    public void ClearUpgradeSlots()
+    {
         slotUpCard.ClearUpgradeSlot();
     }
-    // MainMenuManger가 Awake에서 모든 패널을 비활성화 시키기 전에 
-    // Refresh를 실행하는 것을 방지하기 위해 (NullReference)
-    // 0.01초 후에 리프레시를 하도록 했음
     #endregion
 
     #region MyCards, MatCards 전환
@@ -96,6 +108,8 @@ public class SlotManager : MonoBehaviour
     public void OpenUpgradeSuccesUI(Card upgraded)
     {
         slotsMatCards.gameObject.SetActive(false);
+
+        
 
         upgradeSuccessUI.gameObject.SetActive(true);
         upgradeSuccessUI.SetCard(upgraded); // 강화 성공 카드 초기화

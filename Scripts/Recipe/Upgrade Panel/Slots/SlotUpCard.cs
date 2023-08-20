@@ -22,6 +22,7 @@ public class SlotUpCard : MonoBehaviour
     public event Action OnRefreshUI; // 슬롯을 비우는 등의 리프레시 UI
     public event Action OnUpdateUI; // 매 프레임 업데이트 되는 UI
     public event Action OnUpgradeConfirmation; // 합성 확인 창 UI
+    public event Action OnCloseUpgradeConfirmation; // 합성 확인 창 UI 끌 때
     public event Action OnMerging; // 합성 효과 UI
     #endregion
 
@@ -71,6 +72,7 @@ public class SlotUpCard : MonoBehaviour
 
             OnCardAcquiredOnMatSlotUI?.Invoke(card);
             OnUpgradeConfirmation?.Invoke();
+            slotManager.ClearMatCardsSlots();
         }
     }
     #endregion
@@ -128,35 +130,42 @@ public class SlotUpCard : MonoBehaviour
     public void UpgradeCard()
     {
         int newCardGrade = (int)cardToUpgrade.GetCardGrade() + 1;
-        if (newCardGrade > 5) newCardGrade = 5;
+        if (newCardGrade > 4) newCardGrade = 4;
 
         string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
         string type = (cardToUpgrade.GetCardType()).ToString();
 
-        // 업그레이드에 쓰인 카드 삭제
-        cardDataManager.RemoveCardFromMyCardList(cardToUpgrade);// 카드 데이터 삭제
-        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
-        Destroy(cardToUpgrade.gameObject); // 실제 오브젝트 삭제
-        Destroy(cardToFeed.gameObject);
+        Debug.Log("New Card Grade = " + newGrade);
+        Debug.Log("New Card Type = " + type);
+        Debug.Log("New Card Name = " + cardToUpgrade.GetCardName());
 
         // 업그레이드로 생성된 카드 생성
         GameObject newCard = cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
-        newCard.transform.SetParent(transform);
-        newCard.transform.position = transform.position;
-        newCard.transform.localScale = Vector3.one;
 
         // 생성된 카드를 내 카드 리스트에 저장
         Card upgraded = newCard.GetComponent<Card>();
         cardDataManager.AddCardToMyCardsList(upgraded);
+        Destroy(newCard); // 오브젝트 자체는 이제 필요없음. UI는 업성공UI에서 보여짐
 
-        // 강화 성공 패널
+        // 합성 연출 후 강화 성공 패널로
         StartCoroutine(UpgradeUICo(upgraded));
     }
 
     IEnumerator UpgradeUICo(Card upgradedCard)
     {
+        // 강화 연출 UI
         OnMerging?.Invoke();
+        OnCloseUpgradeConfirmation?.Invoke();
+
         yield return new WaitForSeconds(.16f);
+
+        // 강화 연출이 끝나며녀 업그레이드에 쓰인 카드 삭제
+        cardDataManager.RemoveCardFromMyCardList(cardToUpgrade);// 카드 데이터 삭제
+        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
+        Destroy(cardToUpgrade.gameObject); // 실제 오브젝트 삭제
+        Destroy(cardToFeed.gameObject);
+
+        // 강화 성공 패널로
         slotManager.OpenUpgradeSuccesUI(upgradedCard);
     }
     #endregion
@@ -164,11 +173,6 @@ public class SlotUpCard : MonoBehaviour
     #region Refresh
     public void ClearUpgradeSlot()
     {
-        // 데이터는 이미 MyCardsList에 저장되었으니 gameObject는 제거해도 됨
-        if (GetComponentInChildren<Card>() == null)
-            return;
-        Destroy(GetComponentInChildren<Card>().gameObject);
-
         OnRefreshUI?.Invoke();
 
         if(cardToUpgrade != null)
