@@ -136,15 +136,15 @@ public class CardDataManager : MonoBehaviour
     public void DeleteData()
     {
         // 해당 폴더에 있는 파일 삭제
-        string path = Application.persistentDataPath + "/PlayerData";
-        if(Directory.Exists(path))
-        {
-            Directory.Delete(path, true);
-        }
-        else
-        {
-            Debug.LogWarning("삭제할 데이터가 없군요.");
-        }
+        // string path = Application.persistentDataPath + "/PlayerData";
+        // if(Directory.Exists(path))
+        // {
+        //     Directory.Delete(path, true);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("삭제할 데이터가 없군요.");
+        // }
 
         ResetCards();
     }

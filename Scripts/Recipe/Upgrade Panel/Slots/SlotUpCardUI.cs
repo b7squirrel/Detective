@@ -17,8 +17,6 @@ public class SlotUpCardUI : MonoBehaviour
     RectTransform upSlot, matSlot;
     RectTransform upCard, matCard;
 
-    public bool UpSlotState {get; set;} 
-
     void Start()
     {
         GetComponent<SlotUpCard>().OnCardAcquiredOnUpSlotUI += upCardAcquiredUI;
@@ -35,9 +33,10 @@ public class SlotUpCardUI : MonoBehaviour
         if (upCard != null && upSlot != null)
         {
             upCard.position = upSlot.position;
+            animUpSlot.SetBool("isCanceled", false);
         }
 
-        if(matCard != null & matSlot != null)
+        if (matCard != null & matSlot != null)
         {
             matCard.position = matSlot.position;
         }
@@ -46,14 +45,13 @@ public class SlotUpCardUI : MonoBehaviour
     void OnEnable()
     {
         Init();
-        UpSlotState = false;
     }
 
     void Init()
     {
         // panelUpgradePurple.SetActive(true);
         panelUpgradeDark.SetActive(false);
-        
+
         upgradeSuccessUI.gameObject.SetActive(false);
         animUpSlot.gameObject.SetActive(true);
         animMatSlot.gameObject.SetActive(false);
@@ -125,16 +123,14 @@ public class SlotUpCardUI : MonoBehaviour
     // 업그레이드 슬롯들을 다 비우는 리프레시
     void refreshUpSlotUI()
     {
+        Debug.Log("Refresh");
         haloUpCard.SetActive(false);
         confirmationButtonContainer.SetActive(false);
         slotPanel.SetActive(true);
 
-        if (UpSlotState == false) // 업그레이드 과정 중에 캔슬되었다는 의미
-        {
-            animUpSlot.SetTrigger("Canceled");
-            animMatSlot.SetTrigger("Canceled");
-            animPlus.SetTrigger("PlusDown");
-        }
+        animUpSlot.SetBool("isCanceled", true);
+        animMatSlot.SetTrigger("Canceled");
+        animPlus.SetTrigger("PlusDown");
 
         upSlot = null;
         upCard = null;
@@ -149,15 +145,5 @@ public class SlotUpCardUI : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         Init();
-    }
-
-    // 애니메이션 이벤트
-    public void TurnOffMatHalo()
-    {
-        haloMatCard.SetActive(false);
-    }
-    public void TurnOnMatHalo()
-    {
-        haloMatCard.SetActive(true);
     }
 }
