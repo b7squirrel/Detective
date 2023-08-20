@@ -9,6 +9,7 @@ public class CardAction : MonoBehaviour
     RectTransform rect;
 
     SlotUpCard slotUpCard;
+    SlotUpCardUI slotUpCardUI;
     SlotManager slotManager;
     SlotType currentSlotType;
 
@@ -16,6 +17,7 @@ public class CardAction : MonoBehaviour
     {
         rect = GetComponent<RectTransform>();
         slotUpCard = FindAnyObjectByType<SlotUpCard>();
+        slotUpCardUI = FindAnyObjectByType<SlotUpCardUI>();
         slotManager = FindAnyObjectByType<SlotManager>();
         currentSlotType = SlotType.listSlot;
     }
@@ -31,6 +33,7 @@ public class CardAction : MonoBehaviour
         if (currentSlotType == SlotType.upSlot)
         {
             slotManager.GetIntoMyCards();
+            slotUpCardUI.UpSlotState = false;
             Destroy(gameObject);
             return; // return이 없으면 Destroy 이후에도 아래로 내려가서 실행한다
         }
@@ -39,6 +42,7 @@ public class CardAction : MonoBehaviour
         if (currentSlotType == SlotType.matSlot)
         {
             slotManager.BackToMatCards();
+            slotUpCardUI.UpSlotState = true;
             Destroy(gameObject);
             return;
         }

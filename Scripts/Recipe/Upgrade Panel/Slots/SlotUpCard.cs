@@ -135,10 +135,6 @@ public class SlotUpCard : MonoBehaviour
         string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
         string type = (cardToUpgrade.GetCardType()).ToString();
 
-        Debug.Log("New Card Grade = " + newGrade);
-        Debug.Log("New Card Type = " + type);
-        Debug.Log("New Card Name = " + cardToUpgrade.GetCardName());
-
         // 업그레이드로 생성된 카드 생성
         GameObject newCard = cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
 
@@ -167,6 +163,12 @@ public class SlotUpCard : MonoBehaviour
 
         // 강화 성공 패널로
         slotManager.OpenUpgradeSuccesUI(upgradedCard);
+    }
+
+    // 합성 확인 창에서 취소를 하면 BackToMat으로 가면서 matSlot 위의 카드 파괴
+    public void DestroyMatSlotCard()
+    {
+        Destroy(cardToFeed.gameObject);
     }
     #endregion
 

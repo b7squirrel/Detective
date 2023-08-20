@@ -6,6 +6,7 @@ public class SlotManager : MonoBehaviour
     SlotsAllCards slotsAllCards;
     SlotsMatCards slotsMatCards;
     SlotUpCard slotUpCard;
+    SlotUpCardUI slotUpCardUI;
 
     UpgradeSuccessUI upgradeSuccessUI;
 
@@ -22,6 +23,7 @@ public class SlotManager : MonoBehaviour
         slotsAllCards = GetComponentInChildren<SlotsAllCards>();
         slotsMatCards = GetComponentInChildren<SlotsMatCards>();
         slotUpCard = GetComponentInChildren<SlotUpCard>();
+        slotUpCardUI = GetComponentInChildren<SlotUpCardUI>();
         upgradeSuccessUI = GetComponentInChildren<UpgradeSuccessUI>();
     }
 
@@ -66,6 +68,9 @@ public class SlotManager : MonoBehaviour
 
         // MatCards 리스트 생성
         GenerateMatCardsList();
+
+        // upgrade 슬롯에 카드가 올라온 상태
+        // slotUpCardUI.UpSlotState = true; 
     }
 
     public void GetIntoMyCards()
@@ -73,6 +78,9 @@ public class SlotManager : MonoBehaviour
         slotsAllCards.gameObject.SetActive(true);
         slotsMatCards.gameObject.SetActive(false);
         RefreshUpgradePanel();
+
+        // upgrade 슬롯에 카드가 올라온 상태
+        // slotUpCardUI.UpSlotState = false; 
     }
 
     public void BackToMatCards()
@@ -85,6 +93,11 @@ public class SlotManager : MonoBehaviour
         matCardsList.AddRange(slotsMatCards.GetMMatCards());
         slotsMatCards.ClearmatCardsSlots(); // 재료 슬롯들의 카드만 갱신
         slotsMatCards.SetMatCards(matCardsList);
+
+        slotUpCardUI.ActivateDarkPanel(false);
+
+        // upgrade 슬롯에 카드가 올라온 상태
+        // slotUpCardUI.UpSlotState = true;
     }
 
     public void GenerateMatCardsList()
@@ -109,11 +122,13 @@ public class SlotManager : MonoBehaviour
     {
         slotsMatCards.gameObject.SetActive(false);
 
-        
+
 
         upgradeSuccessUI.gameObject.SetActive(true);
         upgradeSuccessUI.SetCard(upgraded); // 강화 성공 카드 초기화
         // 계속하기 버튼을 누르면 AllCardsPanel로 가면서 refresh를 하므로 여기서는 필요 없다
+
+        // slotUpCardUI.UpSlotState = false; 
     }
     public void CloseUpgradeSuccessUI()
     {
