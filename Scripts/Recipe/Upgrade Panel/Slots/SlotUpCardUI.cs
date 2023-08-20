@@ -1,16 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlotUpCardUI : MonoBehaviour
 {
     [SerializeField] UpgradeSuccessUI upgradeSuccessUI;
 
-    [SerializeField] GameObject halo;
+    [SerializeField] GameObject haloUpCard;
+    [SerializeField] GameObject haloMatCard;
     [SerializeField] GameObject confirmationButtonContainer;
     [SerializeField] GameObject slotPanel;
-    [SerializeField] GameObject panelUpgradePurple;
     [SerializeField] GameObject panelUpgradeDark;
 
     [SerializeField] Animator animUpSlot;
@@ -60,10 +58,8 @@ public class SlotUpCardUI : MonoBehaviour
         animUpSlot.gameObject.SetActive(true);
         animMatSlot.gameObject.SetActive(false);
         animPlus.gameObject.SetActive(false);
-        halo.SetActive(false);
+        haloUpCard.SetActive(false);
         confirmationButtonContainer.SetActive(false);
-        
-
     }
 
     void upCardAcquiredUI(Card card)
@@ -71,8 +67,9 @@ public class SlotUpCardUI : MonoBehaviour
         upCard = card.GetComponent<RectTransform>();
         upSlot = animUpSlot.GetComponent<RectTransform>();
 
-        halo.SetActive(true);
         animUpSlot.SetTrigger("HavingCard");
+        haloUpCard.SetActive(true);
+
         animMatSlot.gameObject.SetActive(true);
         animMatSlot.SetTrigger("Up");
         animPlus.gameObject.SetActive(true);
@@ -87,7 +84,6 @@ public class SlotUpCardUI : MonoBehaviour
 
     public void ActivationUpgradeConfirmationUI()
     {
-        // panelUpgradePurple.SetActive(false);
         panelUpgradeDark.SetActive(true);
 
         slotPanel.SetActive(false);
@@ -109,6 +105,8 @@ public class SlotUpCardUI : MonoBehaviour
 
     void MergingCardsUI()
     {
+        haloUpCard.SetActive(false);
+
         animUpSlot.SetTrigger("Merging");
         animMatSlot.SetTrigger("Merging");
         animPlus.SetTrigger("PlusDown");
@@ -127,7 +125,7 @@ public class SlotUpCardUI : MonoBehaviour
     // 업그레이드 슬롯들을 다 비우는 리프레시
     void refreshUpSlotUI()
     {
-        halo.SetActive(false);
+        haloUpCard.SetActive(false);
         confirmationButtonContainer.SetActive(false);
         slotPanel.SetActive(true);
 
@@ -143,7 +141,6 @@ public class SlotUpCardUI : MonoBehaviour
         matSlot = null;
         matCard = null;
 
-        // panelUpgradePurple.SetActive(true);
         panelUpgradeDark.SetActive(false);
 
         StartCoroutine(WaitToInitCo());
@@ -152,5 +149,15 @@ public class SlotUpCardUI : MonoBehaviour
     {
         yield return new WaitForSeconds(.5f);
         Init();
+    }
+
+    // 애니메이션 이벤트
+    public void TurnOffMatHalo()
+    {
+        haloMatCard.SetActive(false);
+    }
+    public void TurnOnMatHalo()
+    {
+        haloMatCard.SetActive(true);
     }
 }

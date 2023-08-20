@@ -48,11 +48,16 @@ public class CardAction : MonoBehaviour
         }
 
         // 업그레이드 슬롯, 재료 슬롯 위에 있지 않은 카드들은 아래쪽 리스트 카드들이다
+        // 리스트 카드를 클릭했을 때
         if (currentSlotType == SlotType.listSlot)
         {
+            // 업그레이드 슬롯 혹은 재료 슬롯으로 올라갔는지 확인
             currentSlotType = slotUpCard.GetSlotType(GetComponent<Card>());
+
             if (currentSlotType == SlotType.none) // 재료 슬롯에 이미 다른 카드가 올라가 있다면
                 return;
+
+            // 업그레이드 혹은 재료 카드로 획득
             slotUpCard.AcquireCard(GetComponent<Card>());
         }
         else
