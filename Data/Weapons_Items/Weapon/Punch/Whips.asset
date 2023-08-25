@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Whips
+  m_EditorClassIdentifier: 
+  grade: 0
+  Name: "\uBFCC\uBFCC"
+  charImage: {fileID: 21300000, guid: f96f019da300ca84a93b0e00aa42b342, type: 3}
+  SynergyWeapon: "\uD380\uCE58 \uC624\uB9AC"
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 100
+    timeToAttack: 1.2
+    numberOfAttacks: 1
+    sizeOfArea: 0
+    projectileSpeed: 0
+    knockBackChance: 30
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 9130164228983271373, guid: 7bb9fb3495b4b1a4296c88faa06b1f9d, type: 3}
+  animatorController: {fileID: 0}
+  upgrades:
+  - {fileID: 11400000, guid: 8c166191010fb8243a64f329001f4c7c, type: 2}
+  - {fileID: 11400000, guid: b15b4ed8e353b194692b06f62f8860ab, type: 2}
+  - {fileID: 11400000, guid: 8c166191010fb8243a64f329001f4c7c, type: 2}
+  - {fileID: 11400000, guid: 232379f590558db47a600f1acd6c8da0, type: 2}
+  - {fileID: 11400000, guid: 66bb695bd2f925142b48a0c3e2101513, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 9ecb762d80c48d8429c8f2a7a1b7f735, type: 2}
+  dropChance: 0

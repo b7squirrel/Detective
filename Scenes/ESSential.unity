@@ -37765,7 +37765,7 @@ SpriteRenderer:
   m_Size: {x: 70.00709, y: 46.659996}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1123327833
@@ -42893,7 +42893,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerWeaponContainer: {fileID: 1014603022}
-  startingWeapon: {fileID: 11400000, guid: bbcd61aa0c2acbb4bb44c724643d0277, type: 2}
+  startingWeapon: {fileID: 11400000, guid: f3cad83072fe8e44db0c1b70c5a523bd, type: 2}
 --- !u!114 &1277960122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42908,6 +42908,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   containerPrefab: {fileID: 5984554558459288612, guid: bfac2899e58946246937f7087de7632d, type: 3}
   moveSpeed: 3.5
+  weaponContainers: []
 --- !u!70 &1277960123
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

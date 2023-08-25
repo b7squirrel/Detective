@@ -5,7 +5,7 @@ public class WeaponContainer : MonoBehaviour
 {
     [SerializeField] Transform containerPrefab;
     [SerializeField] float moveSpeed;
-    List<Transform> weaponContainers; // 각각의 아이들, weaponBase 및 무기 스크립트가 붙는 오브젝트
+    [SerializeField] List<Transform> weaponContainers; // 각각의 아이들, weaponBase 및 무기 스크립트가 붙는 오브젝트
     Player player;
     GameObject weaponContainerContainer; // 아이들을 묶어주는 부모 오브젝트
 
@@ -47,11 +47,10 @@ public class WeaponContainer : MonoBehaviour
         if (isInitialWeapon)
         {
             container.SetParent(transform);
-            container.GetComponent<SpriteRenderer>().sprite = null;
         }
         else
         {
-            container.parent = weaponContainerContainer.transform;
+            container.SetParent(weaponContainerContainer.transform);
 
             if (weaponData.animatorController != null)
                 container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
