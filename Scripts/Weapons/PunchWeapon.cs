@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Video;
 
 public class PunchWeapon : WeaponBase
 {
@@ -92,6 +89,7 @@ public class PunchWeapon : WeaponBase
         if (currentDir.x >= 0)
         {
             sr.flipY = false;
+
         }
         else
         {
