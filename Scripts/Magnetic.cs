@@ -30,8 +30,6 @@ public class Magnetic : MonoBehaviour
         if (hits == null)
             return;
 
-        Debug.Log("Gem numbers Detected " + hits.Length);
-
         foreach (var item in hits)
         {
             Collectable collectable = item.GetComponent<Collectable>();

@@ -41,19 +41,20 @@ public class WeaponContainer : MonoBehaviour
         }
     }
 
-    public Transform GetContainer(WeaponData weaponData, bool isInitialWeapon)
+    public Transform CreateContainer(WeaponData weaponData, bool isInitialWeapon)
     {
         Transform container = Instantiate(containerPrefab, transform.position, Quaternion.identity);
         if (isInitialWeapon)
         {
             container.SetParent(transform);
+            container.GetComponent<Animator>().enabled = false;            
         }
         else
         {
             container.SetParent(weaponContainerContainer.transform);
 
-            if (weaponData.animatorController != null)
-                container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
+            // if (weaponData.animatorController != null)
+            //     container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
         }
         container.gameObject.name = weaponData.Name;
         weaponContainers.Add(container);

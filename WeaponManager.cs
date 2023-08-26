@@ -28,7 +28,7 @@ public class WeaponManager : MonoBehaviour
 
     public void AddWeapon(WeaponData weaponData, bool isInitialWeapon)
     {
-        container = weaponContainer.GetContainer(weaponData, isInitialWeapon);
+        container = weaponContainer.CreateContainer(weaponData, isInitialWeapon);
 
         GameObject weaponGameObject = Instantiate(weaponData.weaponBasePrefab, container);
         weaponGameObject.transform.position = container.position;
