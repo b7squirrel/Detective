@@ -8,6 +8,7 @@ public class Card : MonoBehaviour
 {
     WeaponData weaponData;
     Item itemData;
+    Gear gear;
     CardType cardType;
     string Name;
     int exp;
@@ -80,6 +81,11 @@ public class Card : MonoBehaviour
             return null;
         }
         return itemData;
+    }
+
+    public EquipmentType GetEquipType()
+    {
+        return gear.equipmentType;
     }
 
     public void AddExp(int expToAdd)
