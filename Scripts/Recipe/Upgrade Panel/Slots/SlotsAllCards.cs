@@ -86,7 +86,7 @@ public class SlotsAllCards : MonoBehaviour
     #endregion
 
     #region 내가 가진 모든 카드들 얻어오기
-    public List<Card> GetCarsOnSlots()
+    public List<Card> GetCardsOnSlots()
     {
         List<Card> cardsOnSlots = new();
 

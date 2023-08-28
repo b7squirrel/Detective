@@ -7,6 +7,7 @@ public class SlotManager : MonoBehaviour
     SlotsMatCards slotsMatCards;
     SlotUpCard slotUpCard;
     SlotUpCardUI slotUpCardUI;
+    CardDataManager cardDataManager;
 
     UpgradeSuccessUI upgradeSuccessUI;
 
@@ -25,6 +26,8 @@ public class SlotManager : MonoBehaviour
         slotUpCard = GetComponentInChildren<SlotUpCard>();
         slotUpCardUI = GetComponentInChildren<SlotUpCardUI>();
         upgradeSuccessUI = GetComponentInChildren<UpgradeSuccessUI>();
+
+        cardDataManager = FindAnyObjectByType<CardDataManager>();
     }
 
     void OnEnable()
@@ -89,10 +92,10 @@ public class SlotManager : MonoBehaviour
         slotsMatCards.gameObject.SetActive(true);
 
         // MatCards 리스트 복구
-        List<Card> matCardsList = new();
-        matCardsList.AddRange(slotsMatCards.GetMMatCards());
+        List<CardData> matCardDataList = new();
+        matCardDataList.AddRange(slotsMatCards.GetCardDatas());
         slotsMatCards.ClearmatCardsSlots(); // 재료 슬롯들의 카드만 갱신
-        slotsMatCards.SetMatCards(matCardsList);
+        slotsMatCards.SetMatCards(matCardDataList);
 
         slotUpCardUI.ActivateDarkPanel(false);
 
@@ -102,16 +105,17 @@ public class SlotManager : MonoBehaviour
 
     public void GenerateMatCardsList()
     {
-        // 슬롯 위의 카드들
-        List<Card> myCards = new();
-        myCards.AddRange(slotsAllCards.GetCarsOnSlots()); 
+        // 업그레이드 슬롯 위의 CardData
+        CardData cardDataOnUpSlot = slotUpCard.GetCardToUpgrade().GetCardData(); 
 
-        // 업그레이드 슬롯 위의 카드
-        Card cardOnUpSlot = slotUpCard.GetCardToUpgrade(); 
+        // 슬롯 위의 CardData들 (= MyCardsList)
+        List<CardData> myCardData = new();
+        myCardData.AddRange(cardDataManager.GetMyCardList()); 
+        myCardData.Remove(cardDataOnUpSlot); // 업그레이드 슬롯 위의 카드는 빼기
 
         // 슬롯 위의 카드들 중 업그레이드 슬롯 카드와 같은 이름, 같은 등급을 가진 카드를 추려냄
-        List<Card> picked = new();
-        picked.AddRange(new CardClassifier().GetCardsAvailableForMat(myCards, cardOnUpSlot));
+        List<CardData> picked = new();
+        picked.AddRange(new CardClassifier().GetCardsAvailableForMat(myCardData, cardDataOnUpSlot));
 
         slotsMatCards.SetMatCards(picked);
     }
@@ -121,8 +125,6 @@ public class SlotManager : MonoBehaviour
     public void OpenUpgradeSuccesUI(WeaponItemData data)
     {
         slotsMatCards.gameObject.SetActive(false);
-
-
 
         upgradeSuccessUI.gameObject.SetActive(true);
         upgradeSuccessUI.SetCard(data); // 강화 성공 카드 초기화

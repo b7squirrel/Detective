@@ -10,7 +10,6 @@ public class SlotsMatCards : MonoBehaviour
     #region 슬롯 생성 관련 변수
     int numSlots;
     [SerializeField] GameObject slotPrefab;
-    List<Card> matCards;
     List<CardData> matCardsData;
     #endregion
 
@@ -22,28 +21,20 @@ public class SlotsMatCards : MonoBehaviour
     #endregion
     
     #region MatCards 관련
-    public void SetMatCards(List<Card> _matCards)
+    public void SetMatCards(List<CardData> _matCardDatas)
     {
-        // 재료 Card
-        if (matCards == null) matCards = new();
-        matCards.Clear();
-        matCards.AddRange(_matCards);
-
         // 재료 CardData
         if(matCardsData == null) matCardsData = new();
         matCardsData.Clear();
-        foreach (var item in matCards)
+        foreach (CardData item in _matCardDatas)
         {
-            matCardsData.Add(item.GetCardData());
+            matCardsData.Add(item);
+            Debug.Log(item.Name);
         }
 
         UpdateSlots();
     }
 
-    public List<Card> GetMMatCards()
-    {
-        return matCards;
-    }
     public List<CardData> GetCardDatas()
     {
         return matCardsData;
