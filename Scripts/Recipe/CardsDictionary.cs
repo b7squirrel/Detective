@@ -15,6 +15,7 @@ public class CardsDictionary : MonoBehaviour
     {
         List<WeaponData> wd = weaponData.FindAll(x => x.Name == _name);
         WeaponData picked = wd.Find(x=>x.grade.ToString() == grade);
+        Debug.Log("WeaponData = " + picked.Name);
         return picked;
     }
 
@@ -25,11 +26,10 @@ public class CardsDictionary : MonoBehaviour
         return picked;
     }
 
+    // 단순히 카드 오브젝트를 생성해서 화면에 보여주기 위함
     public GameObject GenCard(string cardType, string newGrade, string name)
     {
-        Debug.Log("CardType => " + cardType + " CardGrade => " + newGrade + " CardName => " + name);
         GameObject newCard = Instantiate(cardPrefab);
-        
 
         if (cardType == (CardType.Weapon).ToString()) // weaponData로 무기 카드 초기화
         {

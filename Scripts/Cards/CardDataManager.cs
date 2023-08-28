@@ -6,8 +6,8 @@ using System.IO;
 [System.Serializable]
 public class Serialization<T>
 {
-    public Serialization(List<T> _target) => target = _target;
-    public List<T> target;
+    public Serialization(List<T> _target) => MyCards = _target;
+    public List<T> MyCards;
 }
 
 [System.Serializable]
@@ -68,7 +68,7 @@ public class CardDataManager : MonoBehaviour
     void Start()
     {
         // 전체 카드 리스트 불러오기
-        AllCardsList = new ReadCardData().GetCardsList(CardDatabase);
+        // AllCardsList = new ReadCardData().GetCardsList(CardDatabase);
         
         if (Directory.Exists(Application.persistentDataPath + "/PlayerData") == false)
             Directory.CreateDirectory(Application.persistentDataPath + "/PlayerData");
@@ -92,20 +92,25 @@ public class CardDataManager : MonoBehaviour
             return;
         }
         string jdata = File.ReadAllText(filePath);
-        MyCardsList = JsonUtility.FromJson<Serialization<CardData>>(jdata).target;
+        MyCardsList = JsonUtility.FromJson<Serialization<CardData>>(jdata).MyCards;
     }
 
     // 특정 카드를 가지고 시작하도록 만들려고. 아무것도 없이 시작할 수도 있다
     void ResetCards()
     {
         MyCardsList.Clear();
-        // List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
+        List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
         // MyCardsList.AddRange(startingCards);
-        GameObject startingCard = cardDictionary.GenCard("Weapon", "Common", "뿌뿌");
+        string _weapon = startingCards[0].Type;
+        string _grade = startingCards[0].Grade;
+        string _name = startingCards[0].Name;
+        // GameObject startingCard = cardDictionary.GenCard(_weapon, _grade, _name);
+        // GameObject startingCard = cardDictionary.GenCard("Weapon", "Common", "뿌뿌");
 
         // 생성된 카드를 내 카드 리스트에 저장
-        Card newCard = startingCard.GetComponent<Card>();
-        AddCardToMyCardsList(newCard);
+        // Card newCard = startingCard.GetComponent<Card>();
+        AddCardToMyCardsList(_weapon, _grade, _name);
+        // Destroy(startingCard);
         Save();
         Load();
     }
@@ -134,14 +139,11 @@ public class CardDataManager : MonoBehaviour
         }
     }
 
-    public void AddCardToMyCardsList(Card cardToAdd)
+    public void AddCardToMyCardsList(string _type, string _grade, string _name)
     {
-        string mID = cardToAdd.GetCardID();
-        string mType = cardToAdd.GetCardType().ToString();
-        string mGrade = cardToAdd.GetCardGrade().ToString();
-        string mName = cardToAdd.GetCardName();
+        string _id = MyCardsList.Count.ToString();
 
-        CardData newCard = new CardData(mID, mType, mGrade, mName, "1");
+        CardData newCard = new CardData(_id, _type, _grade, _name, "1");
         MyCardsList.Add(newCard);
         Save();
     }

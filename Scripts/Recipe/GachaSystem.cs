@@ -30,13 +30,8 @@ public class GachaSystem : MonoBehaviour
             string mType = gachaPools[pickIndex].Type;
             string mGrade = gachaPools[pickIndex].Grade;
             string mName = gachaPools[pickIndex].Name;
-            GameObject newCard = cardDictionary.GenCard(mType, mGrade, mName);
-            newCard.transform.SetParent(transform);
-            newCard.transform.position = transform.position;
-            newCard.transform.localScale = Vector3.one;
-
-            cardDataManager.AddCardToMyCardsList(newCard.GetComponent<Card>());
-            Destroy(newCard);
+            
+            cardDataManager.AddCardToMyCardsList(mType, mGrade, mName);
         }
     }
     

@@ -3,6 +3,17 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public class WeaponItemData
+{
+    public WeaponItemData(WeaponData _weaponData, Item _itemData)
+    {
+        weaponData = _weaponData;
+        itemData = _itemData;
+    }
+    public WeaponData weaponData;
+    public Item itemData;
+}
+
 public class SlotUpCard : MonoBehaviour
 {
     #region 카드 관련 변수
@@ -135,19 +146,22 @@ public class SlotUpCard : MonoBehaviour
         string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
         string type = (cardToUpgrade.GetCardType()).ToString();
 
+
         // 업그레이드로 생성된 카드 생성
-        GameObject newCard = cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
+        // GameObject newCard = cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
 
         // 생성된 카드를 내 카드 리스트에 저장
-        Card upgraded = newCard.GetComponent<Card>();
-        cardDataManager.AddCardToMyCardsList(upgraded);
-        Destroy(newCard); // 오브젝트 자체는 이제 필요없음. UI는 업성공UI에서 보여짐
+        // Card upgraded = newCard.GetComponent<Card>();
+        cardDataManager.AddCardToMyCardsList(type, newGrade, cardToUpgrade.GetCardName());
+        // Destroy(newCard); // 오브젝트 자체는 이제 필요없음. UI는 업성공UI에서 보여짐
 
         // 합성 연출 후 강화 성공 패널로
-        StartCoroutine(UpgradeUICo(upgraded));
+        int index = cardDataManager.MyCardsList.Count-1;
+        CardData newCardData = cardDataManager.MyCardsList[index];
+        StartCoroutine(UpgradeUICo(newCardData));
     }
 
-    IEnumerator UpgradeUICo(Card upgradedCard)
+    IEnumerator UpgradeUICo(CardData upgradedCardData)
     {
         // 강화 연출 UI
         OnMerging?.Invoke();
@@ -161,8 +175,26 @@ public class SlotUpCard : MonoBehaviour
         Destroy(cardToUpgrade.gameObject); // 실제 오브젝트 삭제
         Destroy(cardToFeed.gameObject);
 
-        // 강화 성공 패널로
-        slotManager.OpenUpgradeSuccesUI(upgradedCard);
+
+        // WeaponData, ItemData
+        if(upgradedCardData.Type == "Weapon")
+        {
+            WeaponData wData = cardDictionary.GetWeaponData(upgradedCardData.Grade, upgradedCardData.Name);
+            WeaponItemData data = new WeaponItemData(wData, null);
+
+            // 강화 성공 패널로
+            slotManager.OpenUpgradeSuccesUI(data);
+        }
+        else
+        {
+            Item iData = cardDictionary.GetItemData(upgradedCardData.Grade, upgradedCardData.Name);
+            WeaponItemData data = new WeaponItemData(null, iData);
+
+            // 강화 성공 패널로
+            slotManager.OpenUpgradeSuccesUI(data);
+        }
+
+
     }
 
     // 합성 확인 창에서 취소를 하면 BackToMat으로 가면서 matSlot 위의 카드 파괴

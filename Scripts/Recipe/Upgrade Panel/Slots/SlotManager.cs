@@ -118,14 +118,14 @@ public class SlotManager : MonoBehaviour
     #endregion
 
     #region Upgrade Success UI
-    public void OpenUpgradeSuccesUI(Card upgraded)
+    public void OpenUpgradeSuccesUI(WeaponItemData data)
     {
         slotsMatCards.gameObject.SetActive(false);
 
 
 
         upgradeSuccessUI.gameObject.SetActive(true);
-        upgradeSuccessUI.SetCard(upgraded); // 강화 성공 카드 초기화
+        upgradeSuccessUI.SetCard(data); // 강화 성공 카드 초기화
         // 계속하기 버튼을 누르면 AllCardsPanel로 가면서 refresh를 하므로 여기서는 필요 없다
 
         // slotUpCardUI.UpSlotState = false; 

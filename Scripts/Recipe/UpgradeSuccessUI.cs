@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UpgradeSuccessUI : CardDisplay
 {
-    public void SetCard(Card card)
+    public void SetCard(WeaponItemData weaponItemData)
     {
         // 별을 다 없애기
         int childCount = starContainer.childCount;
@@ -16,13 +16,13 @@ public class UpgradeSuccessUI : CardDisplay
         }
 
         // 카드 타입에 따라 초기화
-        if (card.GetCardType() == CardType.Weapon)
+        if (weaponItemData.itemData == null)
         {
-            InitWeaponCardDisplay(card.GetWeaponData());
+            InitWeaponCardDisplay(weaponItemData.weaponData);
         }
-        else if (card.GetCardType() == CardType.Item)
+        else if (weaponItemData.weaponData == null)
         {
-            InitItemCardDisplay(card.GetItemData());
+            InitItemCardDisplay(weaponItemData.itemData);
         }
     }
 
