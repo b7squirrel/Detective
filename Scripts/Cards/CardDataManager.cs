@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 [System.Serializable]
 public class Serialization<T>
@@ -109,7 +110,7 @@ public class CardDataManager : MonoBehaviour
 
         // 생성된 카드를 내 카드 리스트에 저장
         // Card newCard = startingCard.GetComponent<Card>();
-        AddCardToMyCardsList(_weapon, _grade, _name);
+        AddCardToMyCardsList(GenNewCardData(_weapon, _grade, _name));
         // Destroy(startingCard);
         Save();
         Load();
@@ -124,14 +125,11 @@ public class CardDataManager : MonoBehaviour
     public void RemoveCardFromMyCardList(Card cardToRemove)
     {
         string mID = cardToRemove.GetCardID();
-        string mType = cardToRemove.GetCardType().ToString();
-        string mGrade = cardToRemove.GetCardGrade().ToString();
-        string mName = cardToRemove.GetCardName();
-
         foreach (var item in MyCardsList)
         {
-            if(item.ID == mID && item.Type == mType && item.Grade == mGrade && item.Name == mName)
+            if(item.ID == mID)
             {
+                Debug.Log("다음 카드를 제거합니다. " + item.Name);
                 MyCardsList.Remove(item);
                 return;
             }
@@ -139,11 +137,13 @@ public class CardDataManager : MonoBehaviour
         }
     }
 
-    public void AddCardToMyCardsList(string _type, string _grade, string _name)
+    public void AddCardToMyCardsList(CardData _cardData)
     {
-        string _id = MyCardsList.Count.ToString();
+        string _id = Guid.NewGuid().ToString();
+        
+        CardData newCard = 
+        new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1");
 
-        CardData newCard = new CardData(_id, _type, _grade, _name, "1");
         MyCardsList.Add(newCard);
         Save();
     }
@@ -161,5 +161,11 @@ public class CardDataManager : MonoBehaviour
         // }
 
         ResetCards();
+    }
+    public CardData GenNewCardData(string _type, string _grade, string _name)
+    {
+        string _id = GetInstanceID().ToString();
+        CardData newCard = new CardData(_id, _type, _grade, _name, "1");
+        return newCard;
     }
 }

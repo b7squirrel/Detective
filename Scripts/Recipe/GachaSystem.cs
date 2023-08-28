@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GachaSystem : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class GachaSystem : MonoBehaviour
             string mGrade = gachaPools[pickIndex].Grade;
             string mName = gachaPools[pickIndex].Name;
             
-            cardDataManager.AddCardToMyCardsList(mType, mGrade, mName);
+            cardDataManager.AddCardToMyCardsList(gachaPools[pickIndex]);
         }
     }
     

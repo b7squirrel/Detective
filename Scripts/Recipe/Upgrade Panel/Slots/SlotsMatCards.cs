@@ -11,6 +11,7 @@ public class SlotsMatCards : MonoBehaviour
     int numSlots;
     [SerializeField] GameObject slotPrefab;
     List<Card> matCards;
+    List<CardData> matCardsData;
     #endregion
 
     #region 유니티 콜백 함수
@@ -23,11 +24,18 @@ public class SlotsMatCards : MonoBehaviour
     #region MatCards 관련
     public void SetMatCards(List<Card> _matCards)
     {
-        if (this.matCards == null) matCards = new List<Card>();
+        // 재료 Card
+        if (matCards == null) matCards = new();
+        matCards.Clear();
+        matCards.AddRange(_matCards);
 
-        this.matCards.Clear();
-
-        this.matCards.AddRange(_matCards);
+        // 재료 CardData
+        if(matCardsData == null) matCardsData = new();
+        matCardsData.Clear();
+        foreach (var item in matCards)
+        {
+            matCardsData.Add(item.GetCardData());
+        }
 
         UpdateSlots();
     }
@@ -36,17 +44,21 @@ public class SlotsMatCards : MonoBehaviour
     {
         return matCards;
     }
+    public List<CardData> GetCardDatas()
+    {
+        return matCardsData;
+    }
     #endregion
 
     #region Refresh
     public void UpdateSlots()
     {
-        List<Card> cards = new();
+        List<CardData> cardDatas = new();
         List<GameObject> slots = new();
 
-        cards.AddRange(matCards); // 재료가 될 수 있는 카드 리스트 
+        cardDatas.AddRange(matCardsData); // 재료가 될 수 있는 카드 리스트 
 
-        numSlots = cards.Count;
+        numSlots = cardDatas.Count;
 
         // 재료 카드 갯수만큼 슬롯 생성
         for (int i = 0; i < numSlots; i++)
@@ -58,14 +70,10 @@ public class SlotsMatCards : MonoBehaviour
         }
 
         // 재료 카드 생성. 슬롯위에 배치
-        for (int i = 0; i < cards.Count; i++)
+        for (int i = 0; i < cardDatas.Count; i++)
         {
-            string _type = cards[i].GetCardType().ToString();
-            string _grade = cards[i].GetCardGrade().ToString();
-            string _name = cards[i].GetCardName();
-
             GameObject newCard =
-                cardDictionary.GenCard(_type, _grade, _name);
+                cardDictionary.GenCard(cardDatas[i]);
 
             newCard.transform.SetParent(slots[i].transform);
             newCard.transform.position = Vector3.zero;

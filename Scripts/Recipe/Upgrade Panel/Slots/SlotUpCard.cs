@@ -102,6 +102,12 @@ public class SlotUpCard : MonoBehaviour
     #region Check Slot Availability
     public SlotType GetSlotType(Card card) // Draggable에서 카드를 놓을 수 있는지 여부를 판단
     {
+        // 최고 레벨 카드는 올릴 수 없음
+        if(card.GetCardGrade() == ItemGrade.grade.Legendary)
+        {
+            Debug.Log("최고 레벨 카드는 업그레이드 할 수 없습니다");
+            return SlotType.none;
+        }
 
         // 업그레이드 카드의 경우
         if (cardToUpgrade == null) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
@@ -141,7 +147,7 @@ public class SlotUpCard : MonoBehaviour
     public void UpgradeCard()
     {
         int newCardGrade = (int)cardToUpgrade.GetCardGrade() + 1;
-        if (newCardGrade > 4) newCardGrade = 4;
+        if (newCardGrade > 4) {Debug.Log("업그레이드 된 카드가 최고등급을 넘습니다. 확인 할 것");}
 
         string newGrade = ((ItemGrade.grade)newCardGrade).ToString();
         string type = (cardToUpgrade.GetCardType()).ToString();
@@ -151,13 +157,15 @@ public class SlotUpCard : MonoBehaviour
         // GameObject newCard = cardDictionary.GenCard(type, newGrade, cardToUpgrade.GetCardName());
 
         // 생성된 카드를 내 카드 리스트에 저장
-        // Card upgraded = newCard.GetComponent<Card>();
-        cardDataManager.AddCardToMyCardsList(type, newGrade, cardToUpgrade.GetCardName());
+        string instantID = GetInstanceID().ToString();
+        CardData newCardData = cardDataManager.GenNewCardData(type, newGrade, cardToUpgrade.GetCardName());
+        cardDataManager.AddCardToMyCardsList(newCardData);
+        cardDataManager.RemoveCardFromMyCardList(cardToUpgrade);// 카드 데이터 삭제
+        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
         // Destroy(newCard); // 오브젝트 자체는 이제 필요없음. UI는 업성공UI에서 보여짐
 
         // 합성 연출 후 강화 성공 패널로
         int index = cardDataManager.MyCardsList.Count-1;
-        CardData newCardData = cardDataManager.MyCardsList[index];
         StartCoroutine(UpgradeUICo(newCardData));
     }
 
@@ -170,8 +178,7 @@ public class SlotUpCard : MonoBehaviour
         yield return new WaitForSeconds(.16f);
 
         // 강화 연출이 끝나며녀 업그레이드에 쓰인 카드 삭제
-        cardDataManager.RemoveCardFromMyCardList(cardToUpgrade);// 카드 데이터 삭제
-        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
+        
         Destroy(cardToUpgrade.gameObject); // 실제 오브젝트 삭제
         Destroy(cardToFeed.gameObject);
 

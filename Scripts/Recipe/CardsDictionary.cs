@@ -15,7 +15,6 @@ public class CardsDictionary : MonoBehaviour
     {
         List<WeaponData> wd = weaponData.FindAll(x => x.Name == _name);
         WeaponData picked = wd.Find(x=>x.grade.ToString() == grade);
-        Debug.Log("WeaponData = " + picked.Name);
         return picked;
     }
 
@@ -27,19 +26,24 @@ public class CardsDictionary : MonoBehaviour
     }
 
     // 단순히 카드 오브젝트를 생성해서 화면에 보여주기 위함
-    public GameObject GenCard(string cardType, string newGrade, string name)
+    public GameObject GenCard(CardData newCardData)
     {
+        string _cardType = newCardData.Type;
+        string _newGrade = newCardData.Grade;
+        string _name = newCardData.Name;
+
         GameObject newCard = Instantiate(cardPrefab);
 
-        if (cardType == (CardType.Weapon).ToString()) // weaponData로 무기 카드 초기화
+        if (_cardType == (CardType.Weapon).ToString()) // weaponData로 무기 카드 초기화
         {
-            WeaponData weaponData = GetWeaponData(newGrade, name);
-            newCard.GetComponent<Card>().SetWeaponCardData(weaponData);
+            WeaponData weaponData = GetWeaponData(_newGrade, _name);
+            // 겹치는 요소들이 있지만 cardData의 ID를 위해 매개변수로 넘김
+            newCard.GetComponent<Card>().SetWeaponCardData(weaponData, newCardData);
         }
-        if (cardType == (CardType.Item).ToString()) // itemData로 아이템 카드 초기화
+        if (_cardType == (CardType.Item).ToString()) // itemData로 아이템 카드 초기화
         {
-            Item itemData = GetItemData(newGrade, name);
-            newCard.GetComponent<Card>().SetItemCardData(itemData);
+            Item itemData = GetItemData(_newGrade, _name);
+            newCard.GetComponent<Card>().SetItemCardData(itemData, newCardData);
         }
 
         if (newCard == null)

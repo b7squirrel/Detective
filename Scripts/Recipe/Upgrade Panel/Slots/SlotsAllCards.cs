@@ -47,7 +47,7 @@ public class SlotsAllCards : MonoBehaviour
         for (int i = 0; i < numSlots; i++)
         {
             GameObject newCard =
-                cardDictionary.GenCard(cardDatas[i].Type, cardDatas[i].Grade, cardDatas[i].Name);
+                cardDictionary.GenCard(cardDatas[i]);
 
             cards.Add(newCard);
         }
