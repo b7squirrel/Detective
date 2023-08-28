@@ -10,7 +10,7 @@ public class Card : MonoBehaviour
     Item itemData;
     Gear gear;
     CardType cardType;
-    string Name;
+    string ID, Name;
     int exp;
     int level;
     ItemGrade.grade Grade;
@@ -27,6 +27,7 @@ public class Card : MonoBehaviour
     {
         if(_weaponData == null) Debug.Log("weaponData가 Null입니다.");
         this.weaponData = _weaponData;
+        ID = GetInstanceID().ToString();
         cardType = CardType.Weapon;
         Name = _weaponData.Name;
         Grade = _weaponData.grade;
@@ -36,11 +37,17 @@ public class Card : MonoBehaviour
     public void SetItemCardData(Item _itemData)
     {
         this.itemData = _itemData;
+        ID = GetInstanceID().ToString();
         cardType = CardType.Item;
         Name = _itemData.Name;
         Grade = _itemData.grade;
         level = 1;
         GetComponent<CardDisplay>().InitItemCardDisplay(this.itemData);
+    }
+
+    public string GetCardID()
+    {
+        return ID;
     }
 
     public string GetCardName()

@@ -27,6 +27,7 @@ public class CardsDictionary : MonoBehaviour
 
     public GameObject GenCard(string cardType, string newGrade, string name)
     {
+        Debug.Log("CardType => " + cardType + " CardGrade => " + newGrade + " CardName => " + name);
         GameObject newCard = Instantiate(cardPrefab);
         
 

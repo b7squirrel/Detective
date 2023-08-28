@@ -13,14 +13,15 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _Type, string _Grade, string _Name, string _exp)
+    public CardData(string _id, string _Type, string _Grade, string _Name, string _exp)
     {
+        ID = _id;
         Type = _Type;
         Grade = _Grade;
         Name = _Name;
         Exp = _exp;
     }
-    public string Type, Grade, Name, Exp;
+    public string ID, Type, Grade, Name, Exp;
 }
 public class ReadCardData
 {
@@ -33,7 +34,7 @@ public class ReadCardData
         for (int i = 0; i < line.Length; i++)
         {
             string[] row = line[i].Split('\t');
-            cardList.Add(new CardData(row[0], row[1], row[2], row[3]));
+            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4]));
         }
         return cardList;
     }
@@ -47,9 +48,13 @@ public class CardDataManager : MonoBehaviour
     string filePath;
     string myCards = "MyCards.txt";
 
+    CardsDictionary cardDictionary;
+
 #region Don't Destory
     void Awake()
     {
+        cardDictionary = GetComponent<CardsDictionary>();
+
         var cardDataManagers = FindObjectsOfType<CardDataManager>();
         if(cardDataManagers.Length > 1)
         {
@@ -94,8 +99,13 @@ public class CardDataManager : MonoBehaviour
     void ResetCards()
     {
         MyCardsList.Clear();
-        List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
-        MyCardsList.AddRange(startingCards);
+        // List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
+        // MyCardsList.AddRange(startingCards);
+        GameObject startingCard = cardDictionary.GenCard("Weapon", "Common", "뿌뿌");
+
+        // 생성된 카드를 내 카드 리스트에 저장
+        Card newCard = startingCard.GetComponent<Card>();
+        AddCardToMyCardsList(newCard);
         Save();
         Load();
     }
@@ -108,13 +118,14 @@ public class CardDataManager : MonoBehaviour
 
     public void RemoveCardFromMyCardList(Card cardToRemove)
     {
+        string mID = cardToRemove.GetCardID();
         string mType = cardToRemove.GetCardType().ToString();
         string mGrade = cardToRemove.GetCardGrade().ToString();
         string mName = cardToRemove.GetCardName();
 
         foreach (var item in MyCardsList)
         {
-            if(item.Type == mType && item.Grade == mGrade && item.Name == mName)
+            if(item.ID == mID && item.Type == mType && item.Grade == mGrade && item.Name == mName)
             {
                 MyCardsList.Remove(item);
                 return;
@@ -125,11 +136,12 @@ public class CardDataManager : MonoBehaviour
 
     public void AddCardToMyCardsList(Card cardToAdd)
     {
+        string mID = cardToAdd.GetCardID();
         string mType = cardToAdd.GetCardType().ToString();
         string mGrade = cardToAdd.GetCardGrade().ToString();
         string mName = cardToAdd.GetCardName();
 
-        CardData newCard = new CardData(mType, mGrade, mName, "1");
+        CardData newCard = new CardData(mID, mType, mGrade, mName, "1");
         MyCardsList.Add(newCard);
         Save();
     }
