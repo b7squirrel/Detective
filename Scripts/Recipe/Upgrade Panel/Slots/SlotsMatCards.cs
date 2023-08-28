@@ -29,7 +29,6 @@ public class SlotsMatCards : MonoBehaviour
         foreach (CardData item in _matCardDatas)
         {
             matCardsData.Add(item);
-            Debug.Log(item.Name);
         }
 
         UpdateSlots();
