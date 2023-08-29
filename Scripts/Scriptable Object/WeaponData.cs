@@ -40,7 +40,7 @@ public class WeaponStats
 [CreateAssetMenu]
 public class WeaponData : ScriptableObject
 {
-    public ItemGrade.grade grade;
+    public Grade grade;
     public string Name;
     public Sprite charImage;
     public string SynergyWeapon;

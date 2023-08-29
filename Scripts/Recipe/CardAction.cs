@@ -6,8 +6,6 @@ public enum SlotType { upSlot, matSlot, listSlot, none }
 
 public class CardAction : MonoBehaviour
 {
-    RectTransform rect;
-
     SlotUpCard slotUpCard;
     SlotUpCardUI slotUpCardUI;
     SlotManager slotManager;
@@ -15,7 +13,6 @@ public class CardAction : MonoBehaviour
 
     void Awake()
     {
-        rect = GetComponent<RectTransform>();
         slotUpCard = FindAnyObjectByType<SlotUpCard>();
         slotUpCardUI = FindAnyObjectByType<SlotUpCardUI>();
         slotManager = FindAnyObjectByType<SlotManager>();

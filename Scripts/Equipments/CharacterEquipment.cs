@@ -39,8 +39,8 @@ public class CharacterEquipment : MonoBehaviour
 
     public void EquipEquipment(Equipment equipment)
     {
-        EquipmentType equipmentType = equipment.card.GetEquipType();
-        equipments[(int)equipmentType] = equipment;
+        // EquipmentType equipmentType = equipment.card.GetEquipType();
+        // equipments[(int)equipmentType] = equipment;
     }
 
     public void UnequipEquipment(EquipmentType equipmentType)

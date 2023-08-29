@@ -6,7 +6,7 @@ public class CardDisplay : MonoBehaviour
 {
     [SerializeField] protected Transform cardBaseContainer;
     [SerializeField] protected Transform starContainer;
-    [SerializeField] protected Image cardCharImage;
+    [SerializeField] protected Image charImage;
     [SerializeField] protected TextMeshProUGUI Level;
     [SerializeField] protected GameObject starPrefab;
     public void InitWeaponCardDisplay(WeaponData weaponData)
@@ -25,7 +25,7 @@ public class CardDisplay : MonoBehaviour
         Level.text = "LV1";
 
         // 캐릭터 이미지
-        cardCharImage.sprite = weaponData.charImage;
+        charImage.sprite = weaponData.charImage;
     }
 
     public void InitItemCardDisplay(Item itemData)
@@ -39,7 +39,7 @@ public class CardDisplay : MonoBehaviour
         Level.text = "LV1";
 
         // 캐릭터 이미지
-        cardCharImage.sprite = itemData.charImage;
+        charImage.sprite = itemData.charImage;
     }
 
     public void UpdateCard(int level)

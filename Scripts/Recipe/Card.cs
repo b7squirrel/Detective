@@ -14,7 +14,7 @@ public class Card : MonoBehaviour
     string ID, Name;
     int exp;
     int level;
-    ItemGrade.grade Grade;
+    Grade Grade;
 
     int To_Level_Up_Card
     {
@@ -72,34 +72,9 @@ public class Card : MonoBehaviour
         return cardType;
     }
 
-    public ItemGrade.grade GetCardGrade()
+    public Grade GetCardGrade()
     {
         return Grade;
-    }
-
-    public WeaponData GetWeaponData()
-    {
-        if(weaponData == null)
-        {
-            Debug.Log("Weapon Data Null");
-            return null;
-        }
-        return weaponData;
-    }
-
-    public Item GetItemData()
-    {
-        if(itemData == null)
-        {
-            Debug.Log("Item Data Null");
-            return null;
-        }
-        return itemData;
-    }
-
-    public EquipmentType GetEquipType()
-    {
-        return gear.equipmentType;
     }
 
     public void AddExp(int expToAdd)

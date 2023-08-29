@@ -106,7 +106,7 @@ public class SlotManager : MonoBehaviour
     public void GenerateMatCardsList()
     {
         // 업그레이드 슬롯 위의 CardData
-        CardData cardDataOnUpSlot = slotUpCard.GetCardToUpgrade().GetCardData(); 
+        CardData cardDataOnUpSlot = slotUpCard.GetCardDataToUpgrade(); 
 
         // 슬롯 위의 CardData들 (= MyCardsList)
         List<CardData> myCardData = new();

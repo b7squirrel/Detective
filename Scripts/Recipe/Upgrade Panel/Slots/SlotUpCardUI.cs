@@ -60,9 +60,8 @@ public class SlotUpCardUI : MonoBehaviour
         confirmationButtonContainer.SetActive(false);
     }
 
-    void upCardAcquiredUI(Card card)
+    void upCardAcquiredUI()
     {
-        upCard = card.GetComponent<RectTransform>();
         upSlot = animUpSlot.GetComponent<RectTransform>();
 
         animUpSlot.SetTrigger("HavingCard");
@@ -74,9 +73,8 @@ public class SlotUpCardUI : MonoBehaviour
         animPlus.SetTrigger("PlusUp");
     }
 
-    void matCardAcquiredUI(Card card)
+    void matCardAcquiredUI()
     {
-        matCard = card.GetComponent<RectTransform>();
         matSlot = animMatSlot.GetComponent<RectTransform>();
     }
 

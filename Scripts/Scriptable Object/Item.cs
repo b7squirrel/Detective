@@ -51,7 +51,7 @@ public class ItemStats
 public class Item : ScriptableObject
 {
     public string Name;
-    public ItemGrade.grade grade;
+    public Grade grade;
     public Sprite charImage;
     public string SynergyWeapon;
     public ItemStats stats;

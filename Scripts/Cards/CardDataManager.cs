@@ -122,9 +122,9 @@ public class CardDataManager : MonoBehaviour
         return MyCardsList;
     }
 
-    public void RemoveCardFromMyCardList(Card cardToRemove)
+    public void RemoveCardFromMyCardList(CardData cardToRemove)
     {
-        string mID = cardToRemove.GetCardID();
+        string mID = cardToRemove.ID;
         foreach (var item in MyCardsList)
         {
             if(item.ID == mID)
