@@ -42,11 +42,11 @@ public class GachaSystem : MonoBehaviour
         {
             if(item.Type == CardType.Weapon.ToString())
             {
-                cardDictionary.GetWeaponData(item.Grade, item.Name);
+                cardDictionary.GetWeaponData(item);
             }
             else
             {
-                cardDictionary.GetItemData(item.Grade, item.Name);
+                cardDictionary.GetItemData(item);
             }
         }
     }

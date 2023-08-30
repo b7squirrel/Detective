@@ -20,6 +20,15 @@ public class SlotsAllCards : MonoBehaviour
         cardDataManager = FindObjectOfType<CardDataManager>();
         cardDictionary = FindObjectOfType<CardsDictionary>();
     }
+
+    void OnEnable()
+    {
+        UpdateSlots();
+    }
+    void OnDisable()
+    {
+        ClearMyCardsSlots();
+    }
     #endregion
 
     #region Refresh
@@ -37,41 +46,47 @@ public class SlotsAllCards : MonoBehaviour
         {
             var slot = Instantiate(slotPrefab, transform);
             slot.transform.position = Vector3.zero;
-            slot.transform.localScale = Vector3.one;
+            slot.transform.localScale = .6f * Vector3.one;
             slots.Add(slot);
         }
 
-        // 카드 생성
+        // 카드 데이터 정렬
+        List<CardData> cardDataSorted = new();
+        cardDataSorted.AddRange(cardDatas);
+
+        // 내림차순으로 카드 정렬 
+        cardDataSorted.Sort((a, b) =>
+        {
+            int indexA = new GradeConverter().ConvertStringToInt(a.Grade);
+            int indexB = new GradeConverter().ConvertStringToInt(b.Grade);
+            return indexA.CompareTo(indexB);
+        });
+
+        cardDataSorted.Reverse();
+
+        // 카드 Display
         List<GameObject> cards = new();
 
         for (int i = 0; i < numSlots; i++)
         {
-            GameObject newCard =
-                cardDictionary.GenCard(cardDatas[i]);
-
-            cards.Add(newCard);
-        }
-
-        // 내림차순으로 카드 정렬 
-        cards.Sort((a,b) => 
-        {
-            int indexA = (int)a.GetComponent<Card>().GetCardGrade();
-            int indexB = (int)b.GetComponent<Card>().GetCardGrade();
-            return indexA.CompareTo(indexB);
-        });
-
-        cards.Reverse();
-
-        // 내림차순 순서대로 슬롯에 배치
-        for(int i = 0; i < numSlots; i++)
-        {
-            cards[i].transform.SetParent(slots[i].transform);
-            cards[i].transform.position = Vector3.zero;
-            cards[i].transform.localScale = .6f * Vector3.one;
+            if (cardDatas[i].Type == CardType.Weapon.ToString())
+            {
+                WeaponData wData = cardDictionary.GetWeaponData(cardDatas[i]);
+                WeaponItemData data = new(wData, null);
+                slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], data.weaponData, TargetSlot.MatSlot);
+                
+                if(wData == null)
+                Debug.Log("slot all cards we = Null");
+            }
+            else
+            {
+                Item iData = cardDictionary.GetItemData(cardDatas[i]);
+                WeaponItemData data = new WeaponItemData(null, iData);
+                slots[i].GetComponent<CardSlot>().SetItemCard(cardDatas[i], data.itemData, TargetSlot.MatSlot);
+            }
         }
     }
 
-    //패널 최상단 SlotManager의 OnRefresh 유니티 이벤트에 등록되어 있음
     public void ClearMyCardsSlots()
     {
         int childCount = transform.childCount;
@@ -80,30 +95,6 @@ public class SlotsAllCards : MonoBehaviour
             Transform child = transform.GetChild(i);
             Destroy(child.gameObject);
         }
-
-        UpdateSlots();
-    }
-    #endregion
-
-    #region 내가 가진 모든 카드들 얻어오기
-    public List<Card> GetCardsOnSlots()
-    {
-        List<Card> cardsOnSlots = new();
-
-        int childCount = transform.childCount;
-        for (int i = childCount - 1; i >= 0; i--)
-        {
-            Transform child = transform.GetChild(i);
-            
-            Card _card = child.GetComponentInChildren<Card>();
-
-            if(_card == null)
-            continue;
-
-            cardsOnSlots.Add(_card);
-        }
-
-        return cardsOnSlots;
     }
     #endregion
 }

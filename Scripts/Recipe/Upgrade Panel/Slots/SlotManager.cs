@@ -4,7 +4,7 @@ using UnityEngine;
 public class SlotManager : MonoBehaviour
 {
     SlotsAllCards slotsAllCards;
-    SlotsMatCards slotsMatCards;
+    MatField slotsMatCards;
     SlotUpCard slotUpCard;
     SlotUpCardUI slotUpCardUI;
     CardDataManager cardDataManager;
@@ -22,7 +22,7 @@ public class SlotManager : MonoBehaviour
         }
 
         slotsAllCards = GetComponentInChildren<SlotsAllCards>();
-        slotsMatCards = GetComponentInChildren<SlotsMatCards>();
+        slotsMatCards = GetComponentInChildren<MatField>();
         slotUpCard = GetComponentInChildren<SlotUpCard>();
         slotUpCardUI = GetComponentInChildren<SlotUpCardUI>();
         upgradeSuccessUI = GetComponentInChildren<UpgradeSuccessUI>();

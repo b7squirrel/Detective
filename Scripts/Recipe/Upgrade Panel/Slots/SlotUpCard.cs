@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class WeaponItemData
@@ -19,12 +18,16 @@ public class SlotUpCard : MonoBehaviour
     #region 카드 관련 변수
     CardData cardToUpgrade; // 업그레이드 슬롯에 올라가 있는 카드
     CardData cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
+    bool isEmpty;
     #endregion
 
     #region 참조 변수
     CardsDictionary cardDictionary;
     CardDataManager cardDataManager;
     [SerializeField] SlotManager slotManager;
+    [SerializeField] CardSlot upCardSlot;
+    [SerializeField] CardSlot matCardSlot;
+
     #endregion
 
     #region 액션 이벤트 - SlotUpCardUI
@@ -43,17 +46,20 @@ public class SlotUpCard : MonoBehaviour
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
+        isEmpty = true;
+        upCardSlot.EmptySlot();
+        matCardSlot.EmptySlot();
     }
 
     void Update()
     {
-        if (GetComponentInChildren<Card>() == null)
-        {
-            cardToUpgrade = null;
-            return; // 업그레이드 슬롯에 카드가 없다면 아무것도 안함
-        }
+        // if (GetComponentInChildren<CardSlot>().IsEmpty() == true)
+        // {
+        //     cardToUpgrade = null;
+        //     return; // 업그레이드 슬롯에 카드가 없다면 아무것도 안함
+        // }
 
-        OnUpdateUI?.Invoke();
+        // OnUpdateUI?.Invoke();
     }
     #endregion
 
@@ -71,10 +77,38 @@ public class SlotUpCard : MonoBehaviour
 
             // 재료카드 패널 열기. SlotManager, SlotAllCards의 함수들 등록
             slotManager.GetIntoMatCards();
+
+            // 업그레이드 슬롯 위 카드 표시
+            if (cardData.Type == CardType.Weapon.ToString())
+            {
+                WeaponData wData = cardDictionary.GetWeaponData(cardData);
+                WeaponItemData data = new(wData, null);
+                upCardSlot.SetWeaponCard(cardData, data.weaponData, TargetSlot.MatSlot);
+            }
+            else
+            {
+                Item iData = cardDictionary.GetItemData(cardData);
+                WeaponItemData data = new WeaponItemData(null, iData);
+                upCardSlot.SetItemCard(cardData, data.itemData, TargetSlot.MatSlot);
+            }
         }
         else
         {
             cardToFeed = cardData;; // 비어 있지 않다면 지금 카드는 재료 카드임
+
+            // 재료 슬롯 위 카드 표시
+            if (cardData.Type == CardType.Weapon.ToString())
+            {
+                WeaponData wData = cardDictionary.GetWeaponData(cardData);
+                WeaponItemData data = new(wData, null);
+                matCardSlot.SetWeaponCard(cardData, data.weaponData, TargetSlot.MatSlot);
+            }
+            else
+            {
+                Item iData = cardDictionary.GetItemData(cardData);
+                WeaponItemData data = new WeaponItemData(null, iData);
+                matCardSlot.SetItemCard(cardData, data.itemData, TargetSlot.MatSlot);
+            }
 
             OnCardAcquiredOnMatSlotUI?.Invoke();
             OnUpgradeConfirmation?.Invoke();
@@ -172,9 +206,9 @@ public class SlotUpCard : MonoBehaviour
 
 
         // WeaponData, ItemData
-        if(upgradedCardData.Type == "Weapon")
+        if(upgradedCardData.Type == CardType.Weapon.ToString())
         {
-            WeaponData wData = cardDictionary.GetWeaponData(upgradedCardData.Grade, upgradedCardData.Name);
+            WeaponData wData = cardDictionary.GetWeaponData(upgradedCardData);
             WeaponItemData data = new WeaponItemData(wData, null);
 
             // 강화 성공 패널로
@@ -182,14 +216,12 @@ public class SlotUpCard : MonoBehaviour
         }
         else
         {
-            Item iData = cardDictionary.GetItemData(upgradedCardData.Grade, upgradedCardData.Name);
+            Item iData = cardDictionary.GetItemData(upgradedCardData);
             WeaponItemData data = new WeaponItemData(null, iData);
 
             // 강화 성공 패널로
             slotManager.OpenUpgradeSuccesUI(data);
         }
-
-
     }
     #endregion
 

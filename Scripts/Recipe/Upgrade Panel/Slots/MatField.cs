@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlotsMatCards : MonoBehaviour
+public class MatField : MonoBehaviour
 {
     #region 참조 변수
     CardsDictionary cardDictionary;
@@ -18,8 +18,13 @@ public class SlotsMatCards : MonoBehaviour
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
     }
-    #endregion
     
+    void OnDisable()
+    {
+        ClearmatCardsSlots();
+    }
+    #endregion
+
     #region MatCards 관련
     public void SetMatCards(List<CardData> _matCardDatas)
     {
@@ -55,22 +60,26 @@ public class SlotsMatCards : MonoBehaviour
         {
             var slot = Instantiate(slotPrefab, transform);
             slot.transform.position = Vector3.zero;
-            slot.transform.localScale = Vector3.one;
+            slot.transform.localScale = .6f * Vector3.one;
             slots.Add(slot);
         }
 
         // 재료 카드 생성. 슬롯위에 배치
         for (int i = 0; i < cardDatas.Count; i++)
         {
-            GameObject newCard =
-                cardDictionary.GenCard(cardDatas[i]);
-
-            newCard.transform.SetParent(slots[i].transform);
-            newCard.transform.position = Vector3.zero;
-            newCard.transform.localScale = .6f * Vector3.one;
+            if (cardDatas[i].Type == CardType.Weapon.ToString())
+            {
+                WeaponData wData = cardDictionary.GetWeaponData(cardDatas[i]);
+                slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], wData, TargetSlot.MatSlot);
+            }
+            else
+            {
+                Item iData = cardDictionary.GetItemData(cardDatas[i]);
+                slots[i].GetComponent<CardSlot>().SetItemCard(cardDatas[i], iData, TargetSlot.MatSlot);
+            }
         }
     }
-    
+
     public void ClearmatCardsSlots()
     {
         int childCount = transform.childCount;

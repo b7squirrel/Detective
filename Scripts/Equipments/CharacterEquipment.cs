@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Equipment
 {
-    public Equipment(Card card)
-    {
-        this.card = card;
-    }
-    public Card card;
+    // public Equipment(Card card)
+    // {
+    //     this.card = card;
+    // }
+    // public Card card;
 }
 
 public class EquipedEquipment
