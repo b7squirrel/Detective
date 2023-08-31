@@ -42,11 +42,13 @@ public class UpPanelManager : MonoBehaviour
     #endregion
 
     #region upField, matField 상태 전환
-    public void GetIntoMatField(CardData cardOnUpSlot)
+    public void GetIntoMatField()
     {
+        ClearAllFieldSlots();
+        
         allField.gameObject.SetActive(false);
         matField.gameObject.SetActive(true);
-        matField.GenerateMatCardsList(cardOnUpSlot);
+        matField.GenerateMatCardsList(CardToUpgrade);
     }
 
     public void GetIntoAllField()
@@ -54,20 +56,27 @@ public class UpPanelManager : MonoBehaviour
         ClearAllFieldSlots(); // allField, matField의 슬롯들을 모두 파괴
         allField.gameObject.SetActive(true);
         matField.gameObject.SetActive(false);
+
+        upPanelUI.UpSlotCanceled();
+    }
+
+    public void GetIntoConfirmation()
+    {
+        ClearAllFieldSlots();
+        upPanelUI.UpgradeConfirmationUI(); // 합성 확인 창 UI
     }
 
     public void BackToMatField()
     {
-        // slotsAllCards.gameObject.SetActive(false);
-        // slotsMatCards.gameObject.SetActive(true);
+        ClearAllFieldSlots();
+        
+        allField.gameObject.SetActive(false);
+        matField.gameObject.SetActive(true);
+        matField.GenerateMatCardsList(CardToUpgrade);
 
-        // // MatCards 리스트 복구
-        // List<CardData> matCardDataList = new();
-        // matCardDataList.AddRange(slotsMatCards.GetCardDatas());
-        // slotsMatCards.ClearmatCardsSlots(); // 재료 슬롯들의 카드만 갱신
-        // slotsMatCards.SetMatCards(matCardDataList);
+        matCardSlot.EmptySlot();
 
-        // slotUpCardUI.ActivateDarkPanel(false);
+        upPanelUI.OffUpgradeConfirmationUI();
     }
     #endregion
 
@@ -86,14 +95,17 @@ public class UpPanelManager : MonoBehaviour
         {
             CardToUpgrade = cardData;
 
+            // 카드의 slotType을 업그레이드로 설정
+
+
             // upSlot을 옆으로 이동 시키고 matSlot 나타나게 하기
             upPanelUI.UpCardAcquiredUI();
 
             // 재료카드 패널 열기
-            GetIntoMatField(cardData);
+            GetIntoMatField();
 
             // 업그레이드 슬롯 위 카드 표시
-            displayCardOnSlot.DispCardOnSlot(cardData, upCardSlot);
+            displayCardOnSlot.DispCardOnSlot(CardToUpgrade, upCardSlot);
             return;
         }
 
@@ -116,7 +128,7 @@ public class UpPanelManager : MonoBehaviour
         // 나머지는 재료 카드일 경우 뿐이다.
         cardToFeed = cardData; ; // 비어 있지 않다면 지금 카드는 재료 카드임
         displayCardOnSlot.DispCardOnSlot(cardData, matCardSlot);
-        upPanelUI.UpgradeConfirmationUI(); // 합성 확인 창 UI
+        GetIntoConfirmation(); // 합성 확인 화면으로
 
         matField.gameObject.SetActive(false);
     }
@@ -148,11 +160,10 @@ public class UpPanelManager : MonoBehaviour
         upPanelUI.MergingCardsUI();
         upPanelUI.OffUpgradeConfirmationUI();
 
-        yield return new WaitForSeconds(.16f);
+        yield return new WaitForSeconds(.15f);
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
-        upCardSlot.gameObject.SetActive(false);
-        matCardSlot.gameObject.SetActive(false);
+        upPanelUI.DeactivateSpecialSlots();
         OpenUpgradeSuccessPanel(upgradedCardData);
     }
     #endregion

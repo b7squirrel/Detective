@@ -29,28 +29,48 @@ public class UpPanelUI : MonoBehaviour
         confirmationButtonContainer.SetActive(false);
     }
 
-    #region Anim 업그레이드 슬롯 - with Card
-    public void UpSlotToWithCardAnimation()
+    #region Animation
+    // upSlot with a card
+    void UpCardAcquiredAnimation()
     {
-        upSlot.DOAnchorPos(new Vector2(-140,26), .1f).SetEase(Ease.OutElastic);
-        matSlot.DOAnchorPos(new Vector2(200,26), .1f).SetEase(Ease.OutElastic);
+        upSlot.DOAnchorPos(new Vector2(-140,26), .15f).SetEase(Ease.OutBack);
+        matSlot.DOAnchorPos(new Vector2(200,26), .15f).SetEase(Ease.OutBack);
     }
+    // upslot canceled
+    void UpSlotCanceledAnimation()
+    {
+        upSlot.DOAnchorPos(new Vector2(0,26), .15f).SetEase(Ease.OutBack);
+        matSlot.DOAnchorPos(new Vector2(0,26), .15f).SetEase(Ease.OutBack);
+    }
+
+    void UpgradeConfirmationAnimation()
+    {
+    }
+
+
     #endregion
 
     public void UpCardAcquiredUI()
     {
-        UpSlotToWithCardAnimation();
-        haloUpCard.SetActive(true);
+        UpCardAcquiredAnimation();
 
+        haloUpCard.SetActive(true);
         matSlot.gameObject.SetActive(true);
         plus.gameObject.SetActive(true);
+    }
+    public void UpSlotCanceled()
+    {
+        UpSlotCanceledAnimation();
+
+        haloUpCard.SetActive(false);
+        matSlot.gameObject.SetActive(false);
+        plus.gameObject.SetActive(false);
     }
 
     public void UpgradeConfirmationUI()
     {
-        panelUpgradeDark.SetActive(true);
+        UpgradeConfirmationAnimation();
 
-        fieldSlotPanel.SetActive(false);
         confirmationButtonContainer.SetActive(true);
 
         // 합성 혹은 취소 버튼이 아니라 카드를 클릭해서 취소하는 것을 방지
@@ -66,7 +86,15 @@ public class UpPanelUI : MonoBehaviour
 
     public void MergingCardsUI()
     {
+        upSlot.DOAnchorPos(new Vector2(0,26), .15f).SetEase(Ease.OutBack);
+        matSlot.DOAnchorPos(new Vector2(0,26), .15f).SetEase(Ease.OutBack);
         haloUpCard.SetActive(false);
+    }
+    public void DeactivateSpecialSlots()
+    {
+        upSlot.gameObject.SetActive(false);
+        matSlot.gameObject.SetActive(false);
+        plus.gameObject.SetActive(false);
     }
     
     // 업그레이드 슬롯들을 다 비우는 리프레시

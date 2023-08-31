@@ -41,7 +41,6 @@ public class CardSlot : MonoBehaviour
     public void EmptySlot()
     {
         IsEmpty = true;
-        cardData = null;
         GetComponent<CardDisp>().EmptyCardDisplay();
     }
 }
