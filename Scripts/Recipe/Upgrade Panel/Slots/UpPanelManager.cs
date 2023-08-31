@@ -14,7 +14,6 @@ public class UpPanelManager : MonoBehaviour
     CardDataManager cardDataManager;
     DisplayCardOnSlot displayCardOnSlot; // 슬롯 위에 있는 카드 Display
     UpPanelUI upPanelUI; // UI 관련 클래스
-    [SerializeField] GameObject upgradeSuccessPanel; 
 
     // 카드들이 보여지는 Field
     [SerializeField] AllField allField;
@@ -36,8 +35,6 @@ public class UpPanelManager : MonoBehaviour
         ClearAllFieldSlots();
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
-
-        upgradeSuccessPanel.SetActive(false);
     }
     #endregion
 
@@ -57,7 +54,11 @@ public class UpPanelManager : MonoBehaviour
         allField.gameObject.SetActive(true);
         matField.gameObject.SetActive(false);
 
+        upCardSlot.EmptySlot();
+        matCardSlot.EmptySlot();
+
         upPanelUI.UpSlotCanceled();
+        upPanelUI.ResetScrollContent();
     }
 
     public void GetIntoConfirmation()
@@ -163,24 +164,9 @@ public class UpPanelManager : MonoBehaviour
         yield return new WaitForSeconds(.15f);
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
+        ClearAllFieldSlots();
         upPanelUI.DeactivateSpecialSlots();
-        OpenUpgradeSuccessPanel(upgradedCardData);
-    }
-    #endregion
-
-    #region Upgrade Success Panel
-    public void OpenUpgradeSuccessPanel(CardData cardData)
-    {
-        upgradeSuccessPanel.gameObject.SetActive(true);
-        CardSlot successCardSlot = upgradeSuccessPanel.GetComponentInChildren<CardSlot>();
-        displayCardOnSlot.DispCardOnSlot(cardData, successCardSlot);
-    }
-
-    public void CloseUpgradeSuccessUI()
-    {
-        upgradeSuccessPanel.gameObject.SetActive(false);
-        upCardSlot.gameObject.SetActive(true);
-        matCardSlot.gameObject.SetActive(true);
+        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, displayCardOnSlot);
     }
     #endregion
 

@@ -7,8 +7,11 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] GameObject haloUpCard;
     [SerializeField] GameObject haloMatCard;
     [SerializeField] GameObject confirmationButtonContainer;
-    [SerializeField] GameObject fieldSlotPanel; 
+    [SerializeField] Transform upgradeConfirmationButton;
+    [SerializeField] GameObject fieldSlotPanel;
     [SerializeField] GameObject panelUpgradeDark;
+    [SerializeField] GameObject upgradeSuccessPanel;
+    [SerializeField] RectTransform scrollContent;
 
     [SerializeField] RectTransform upSlot, matSlot, plus;
 
@@ -27,24 +30,30 @@ public class UpPanelUI : MonoBehaviour
         plus.gameObject.SetActive(false);
         haloUpCard.SetActive(false);
         confirmationButtonContainer.SetActive(false);
+        upgradeSuccessPanel.SetActive(false);
+
+        fieldSlotPanel.transform.localScale = new Vector2(.8f, .8f);
+        fieldSlotPanel.transform.DOScale(1, .15f).SetEase(Ease.OutBack);
     }
 
     #region Animation
     // upSlot with a card
     void UpCardAcquiredAnimation()
     {
-        upSlot.DOAnchorPos(new Vector2(-140,26), .15f).SetEase(Ease.OutBack);
-        matSlot.DOAnchorPos(new Vector2(200,26), .15f).SetEase(Ease.OutBack);
+        upSlot.DOAnchorPos(new Vector2(-140, 26), .15f).SetEase(Ease.OutBack);
+        matSlot.DOAnchorPos(new Vector2(200, 26), .15f).SetEase(Ease.OutBack);
     }
     // upslot canceled
     void UpSlotCanceledAnimation()
     {
-        upSlot.DOAnchorPos(new Vector2(0,26), .15f).SetEase(Ease.OutBack);
-        matSlot.DOAnchorPos(new Vector2(0,26), .15f).SetEase(Ease.OutBack);
+        upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.OutBack);
+        matSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.OutBack);
     }
 
     void UpgradeConfirmationAnimation()
     {
+        upgradeConfirmationButton.localScale = Vector2.zero;
+        upgradeConfirmationButton.DOScale(1f, .15f).SetEase(Ease.OutBack);
     }
 
 
@@ -69,9 +78,9 @@ public class UpPanelUI : MonoBehaviour
 
     public void UpgradeConfirmationUI()
     {
-        UpgradeConfirmationAnimation();
 
         confirmationButtonContainer.SetActive(true);
+        UpgradeConfirmationAnimation();
 
         // 합성 혹은 취소 버튼이 아니라 카드를 클릭해서 취소하는 것을 방지
         // animUpSlot.GetComponent<CanvasGroup>().interactable = false;
@@ -86,32 +95,37 @@ public class UpPanelUI : MonoBehaviour
 
     public void MergingCardsUI()
     {
-        upSlot.DOAnchorPos(new Vector2(0,26), .15f).SetEase(Ease.OutBack);
-        matSlot.DOAnchorPos(new Vector2(0,26), .15f).SetEase(Ease.OutBack);
-        haloUpCard.SetActive(false);
+        upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.OutBack);
+        matSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.OutBack);
     }
     public void DeactivateSpecialSlots()
     {
+        haloUpCard.SetActive(false);
         upSlot.gameObject.SetActive(false);
         matSlot.gameObject.SetActive(false);
         plus.gameObject.SetActive(false);
     }
-    
-    // 업그레이드 슬롯들을 다 비우는 리프레시
-    public void RefreshUpSlotUI()
+
+    public void OpenUpgradeSuccessPanel(CardData cardData, DisplayCardOnSlot displayCardOnSlot)
     {
-        Debug.Log("Refresh");
-        haloUpCard.SetActive(false);
-        confirmationButtonContainer.SetActive(false);
-        fieldSlotPanel.SetActive(true);
-
-        panelUpgradeDark.SetActive(false);
-
-        StartCoroutine(WaitToInitCo());
+        upgradeSuccessPanel.SetActive(true);
+        CardSlot successCardSlot = upgradeSuccessPanel.GetComponentInChildren<CardSlot>();
+        displayCardOnSlot.DispCardOnSlot(cardData, successCardSlot);
+        fieldSlotPanel.SetActive(false);
     }
-    IEnumerator WaitToInitCo()
+
+    // upgrade success 버튼에서 호출
+    public void CloseUpgradeSuccessUI()
     {
-        yield return new WaitForSeconds(.5f);
-        Init();
+        upgradeSuccessPanel.gameObject.SetActive(false);
+        upSlot.gameObject.SetActive(true);
+        matSlot.gameObject.SetActive(true);
+        fieldSlotPanel.SetActive(true);
+    }
+    public void ResetScrollContent() // 스크롤뷰를 원래 위치로 되돌려 준다
+    {   
+        // 통 튀기는 효과를 위해 아래로 당겼다가 원래 위치로
+        scrollContent.anchoredPosition = new Vector2(scrollContent.anchoredPosition.x, 366f);
+        scrollContent.DOAnchorPosY(0, .15f).SetEase(Ease.OutBack);
     }
 }
