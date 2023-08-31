@@ -8,8 +8,12 @@ public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // 클릭되었을
 public class CardSlot : MonoBehaviour
 {
     CardData cardData;
-    bool isEmpty = true;
+    public bool IsEmpty { get; private set; } = true;
     public TargetSlot targetSlot { get; set; }
+
+    private void Awake() {
+        EmptySlot();
+    }
 
     public CardData GetCardData()
     {
@@ -18,7 +22,7 @@ public class CardSlot : MonoBehaviour
 
     public void SetWeaponCard(CardData _cardData, WeaponData _weaponData, TargetSlot _targetSlot)
     {
-        isEmpty = false;
+        IsEmpty = false;
         targetSlot = _targetSlot;
         cardData = _cardData;
         // cardDisp 호출해서 카드 출력
@@ -26,7 +30,7 @@ public class CardSlot : MonoBehaviour
     }
     public void SetItemCard(CardData _cardData, Item _itemData, TargetSlot _targetSlot)
     {
-        isEmpty = false;
+        IsEmpty = false;
         targetSlot = _targetSlot;
         cardData = _cardData;
 
@@ -36,7 +40,7 @@ public class CardSlot : MonoBehaviour
 
     public void EmptySlot()
     {
-        isEmpty = true;
+        IsEmpty = true;
         cardData = null;
         GetComponent<CardDisp>().EmptyCardDisplay();
     }

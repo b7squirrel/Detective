@@ -1,14 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class SlotUpCardUI : MonoBehaviour
+public class UpPanelUI : MonoBehaviour
 {
-    [SerializeField] UpgradeSuccessUI upgradeSuccessUI;
-
     [SerializeField] GameObject haloUpCard;
     [SerializeField] GameObject haloMatCard;
     [SerializeField] GameObject confirmationButtonContainer;
-    [SerializeField] GameObject slotPanel;
+    [SerializeField] GameObject fieldSlotPanel; 
     [SerializeField] GameObject panelUpgradeDark;
 
     [SerializeField] Animator animUpSlot;
@@ -17,42 +16,17 @@ public class SlotUpCardUI : MonoBehaviour
     RectTransform upSlot, matSlot;
     RectTransform upCard, matCard;
 
-    void Start()
-    {
-        GetComponent<SlotUpCard>().OnCardAcquiredOnUpSlotUI += upCardAcquiredUI;
-        GetComponent<SlotUpCard>().OnCardAcquiredOnMatSlotUI += matCardAcquiredUI;
-        GetComponent<SlotUpCard>().OnUpgradeConfirmation += ActivationUpgradeConfirmationUI;
-        GetComponent<SlotUpCard>().OnCloseUpgradeConfirmation += DeactivationUpgradeConfirmationUI;
-        GetComponent<SlotUpCard>().OnMerging += MergingCardsUI;
-        GetComponent<SlotUpCard>().OnRefreshUI += refreshUpSlotUI;
-        GetComponent<SlotUpCard>().OnUpdateUI += UpdateUI;
-    }
-
-    void UpdateUI()
-    {
-        if (upCard != null && upSlot != null)
-        {
-            upCard.position = upSlot.position;
-            animUpSlot.SetBool("isCanceled", false);
-        }
-
-        if (matCard != null & matSlot != null)
-        {
-            matCard.position = matSlot.position;
-        }
-    }
-
     void OnEnable()
     {
         Init();
     }
 
-    void Init()
+    public void Init()
     {
         // panelUpgradePurple.SetActive(true);
-        panelUpgradeDark.SetActive(false);
+        // panelUpgradeDark.SetActive(false);
 
-        upgradeSuccessUI.gameObject.SetActive(false);
+        animUpSlot.SetBool("isCanceled", false);
         animUpSlot.gameObject.SetActive(true);
         animMatSlot.gameObject.SetActive(false);
         animPlus.gameObject.SetActive(false);
@@ -60,7 +34,7 @@ public class SlotUpCardUI : MonoBehaviour
         confirmationButtonContainer.SetActive(false);
     }
 
-    void upCardAcquiredUI()
+    public void UpCardAcquiredUI()
     {
         upSlot = animUpSlot.GetComponent<RectTransform>();
 
@@ -73,33 +47,28 @@ public class SlotUpCardUI : MonoBehaviour
         animPlus.SetTrigger("PlusUp");
     }
 
-    void matCardAcquiredUI()
-    {
-        matSlot = animMatSlot.GetComponent<RectTransform>();
-    }
-
-    public void ActivationUpgradeConfirmationUI()
+    public void UpgradeConfirmationUI()
     {
         panelUpgradeDark.SetActive(true);
 
-        slotPanel.SetActive(false);
+        fieldSlotPanel.SetActive(false);
         confirmationButtonContainer.SetActive(true);
 
         // 합성 혹은 취소 버튼이 아니라 카드를 클릭해서 취소하는 것을 방지
-        upCard.GetComponent<CanvasGroup>().interactable = false;
-        matCard.GetComponent<CanvasGroup>().interactable = false;
+        // animUpSlot.GetComponent<CanvasGroup>().interactable = false;
+        // animMatSlot.GetComponent<CanvasGroup>().interactable = false;
     }
 
     // 강화를 승인하면 강화 연출을 위해 확인 창을 없애기
-    public void DeactivationUpgradeConfirmationUI()
+    public void OffUpgradeConfirmationUI()
     {
         confirmationButtonContainer.SetActive(false);
 
-        upCard.GetComponent<CanvasGroup>().interactable = true;
-        matCard.GetComponent<CanvasGroup>().interactable = true;
+        // upCard.GetComponent<CanvasGroup>().interactable = true;
+        // matCard.GetComponent<CanvasGroup>().interactable = true;
     }
 
-    void MergingCardsUI()
+    public void MergingCardsUI()
     {
         haloUpCard.SetActive(false);
 
@@ -107,24 +76,14 @@ public class SlotUpCardUI : MonoBehaviour
         animMatSlot.SetTrigger("Merging");
         animPlus.SetTrigger("PlusDown");
     }
-
-    public void ActivateSlotPanel(bool open)
-    {
-        slotPanel.SetActive(open);
-    }
-
-    public void ActivateDarkPanel(bool open)
-    {
-        panelUpgradeDark.SetActive(open);
-    }
-
+    
     // 업그레이드 슬롯들을 다 비우는 리프레시
-    void refreshUpSlotUI()
+    public void RefreshUpSlotUI()
     {
         Debug.Log("Refresh");
         haloUpCard.SetActive(false);
         confirmationButtonContainer.SetActive(false);
-        slotPanel.SetActive(true);
+        fieldSlotPanel.SetActive(true);
 
         animUpSlot.SetBool("isCanceled", true);
         animMatSlot.SetTrigger("Canceled");

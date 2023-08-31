@@ -5,6 +5,7 @@ public class MatField : MonoBehaviour
 {
     #region 참조 변수
     CardsDictionary cardDictionary;
+    CardDataManager cardDataManager;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -17,19 +18,35 @@ public class MatField : MonoBehaviour
     void Awake()
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
+        cardDataManager = FindObjectOfType<CardDataManager>();
     }
     
-    void OnDisable()
+    void Disabled()
     {
-        ClearmatCardsSlots();
+        ClearSlots();
     }
     #endregion
 
     #region MatCards 관련
+
+    public void GenerateMatCardsList(CardData cardDataOnUpSlot)
+    {
+        // 슬롯 위의 CardData들 (= MyCardsList)
+        List<CardData> myCardData = new();
+        myCardData.AddRange(cardDataManager.GetMyCardList());
+        myCardData.Remove(cardDataOnUpSlot); // 업그레이드 슬롯 위의 카드는 빼기
+
+        // 슬롯 위의 카드들 중 업그레이드 슬롯 카드와 같은 이름, 같은 등급을 가진 카드를 추려냄
+        List<CardData> picked = new();
+        picked.AddRange(new CardClassifier().GetCardsAvailableForMat(myCardData, cardDataOnUpSlot));
+
+        SetMatCards(picked);
+    }
+
     public void SetMatCards(List<CardData> _matCardDatas)
     {
         // 재료 CardData
-        if(matCardsData == null) matCardsData = new();
+        if (matCardsData == null) matCardsData = new();
         matCardsData.Clear();
         foreach (CardData item in _matCardDatas)
         {
@@ -80,9 +97,10 @@ public class MatField : MonoBehaviour
         }
     }
 
-    public void ClearmatCardsSlots()
+    public void ClearSlots()
     {
         int childCount = transform.childCount;
+        if(childCount == 0) return;
         for (int i = childCount - 1; i >= 0; i--)
         {
             Transform child = transform.GetChild(i);

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public class SlotsAllCards : MonoBehaviour
+public class AllField : MonoBehaviour
 {
     #region 참조 변수
     CardDataManager cardDataManager;
     CardsDictionary cardDictionary;
+    DisplayCardOnSlot displayCardOnSlot;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -19,20 +19,21 @@ public class SlotsAllCards : MonoBehaviour
     {
         cardDataManager = FindObjectOfType<CardDataManager>();
         cardDictionary = FindObjectOfType<CardsDictionary>();
+        displayCardOnSlot = GetComponentInParent<DisplayCardOnSlot>();
     }
 
     void OnEnable()
     {
-        UpdateSlots();
+        GenerateAllCardsList();
     }
     void OnDisable()
     {
-        ClearMyCardsSlots();
+        ClearSlots();
     }
     #endregion
 
     #region Refresh
-    public void UpdateSlots()
+    public void GenerateAllCardsList()
     {
         List<CardData> cardDatas = new();
         List<GameObject> slots = new();
@@ -69,27 +70,15 @@ public class SlotsAllCards : MonoBehaviour
 
         for (int i = 0; i < numSlots; i++)
         {
-            if (cardDatas[i].Type == CardType.Weapon.ToString())
-            {
-                WeaponData wData = cardDictionary.GetWeaponData(cardDatas[i]);
-                WeaponItemData data = new(wData, null);
-                slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], data.weaponData, TargetSlot.MatSlot);
-                
-                if(wData == null)
-                Debug.Log("slot all cards we = Null");
-            }
-            else
-            {
-                Item iData = cardDictionary.GetItemData(cardDatas[i]);
-                WeaponItemData data = new WeaponItemData(null, iData);
-                slots[i].GetComponent<CardSlot>().SetItemCard(cardDatas[i], data.itemData, TargetSlot.MatSlot);
-            }
+            displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
         }
     }
 
-    public void ClearMyCardsSlots()
+    public void ClearSlots()
     {
         int childCount = transform.childCount;
+        if(childCount == 0) return;
+
         for (int i = childCount - 1; i >= 0; i--)
         {
             Transform child = transform.GetChild(i);
