@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class UpPanelUI : MonoBehaviour
 {
@@ -13,8 +13,7 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] Animator animUpSlot;
     [SerializeField] Animator animMatSlot;
     [SerializeField] Animator animPlus;
-    RectTransform upSlot, matSlot;
-    RectTransform upCard, matCard;
+    [SerializeField] RectTransform upSlot, matSlot;
 
     void OnEnable()
     {
@@ -34,17 +33,25 @@ public class UpPanelUI : MonoBehaviour
         confirmationButtonContainer.SetActive(false);
     }
 
+    #region Anim 업그레이드 슬롯 - with Card
+    public void UpSlotToWithCardAnimation()
+    {
+        upSlot.DOAnchorPos(new Vector2(-140,26), .5f).SetEase(Ease.OutElastic);
+    }
+    #endregion
+
     public void UpCardAcquiredUI()
     {
-        upSlot = animUpSlot.GetComponent<RectTransform>();
+        UpSlotToWithCardAnimation();
+        // upSlot = animUpSlot.GetComponent<RectTransform>();
 
-        animUpSlot.SetTrigger("HavingCard");
-        haloUpCard.SetActive(true);
+        // animUpSlot.SetTrigger("HavingCard");
+        // haloUpCard.SetActive(true);
 
-        animMatSlot.gameObject.SetActive(true);
-        animMatSlot.SetTrigger("Up");
-        animPlus.gameObject.SetActive(true);
-        animPlus.SetTrigger("PlusUp");
+        // animMatSlot.gameObject.SetActive(true);
+        // animMatSlot.SetTrigger("Up");
+        // animPlus.gameObject.SetActive(true);
+        // animPlus.SetTrigger("PlusUp");
     }
 
     public void UpgradeConfirmationUI()
@@ -63,9 +70,6 @@ public class UpPanelUI : MonoBehaviour
     public void OffUpgradeConfirmationUI()
     {
         confirmationButtonContainer.SetActive(false);
-
-        // upCard.GetComponent<CanvasGroup>().interactable = true;
-        // matCard.GetComponent<CanvasGroup>().interactable = true;
     }
 
     public void MergingCardsUI()
@@ -88,12 +92,6 @@ public class UpPanelUI : MonoBehaviour
         animUpSlot.SetBool("isCanceled", true);
         animMatSlot.SetTrigger("Canceled");
         animPlus.SetTrigger("PlusDown");
-
-        upSlot = null;
-        upCard = null;
-        matSlot = null;
-        matCard = null;
-
         panelUpgradeDark.SetActive(false);
 
         StartCoroutine(WaitToInitCo());
