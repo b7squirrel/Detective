@@ -22,9 +22,6 @@ public class UpPanelUI : MonoBehaviour
 
     public void Init()
     {
-        // panelUpgradePurple.SetActive(true);
-        // panelUpgradeDark.SetActive(false);
-
         upSlot.gameObject.SetActive(true);
         matSlot.gameObject.SetActive(false);
         plus.gameObject.SetActive(false);
@@ -34,10 +31,15 @@ public class UpPanelUI : MonoBehaviour
 
         fieldSlotPanel.transform.localScale = new Vector2(.8f, .8f);
         fieldSlotPanel.transform.DOScale(1, .15f).SetEase(Ease.OutBack);
+        UpSlotInitAnimtion();
     }
 
     #region Animation
-    // upSlot with a card
+    void UpSlotInitAnimtion()
+    {
+        upSlot.localScale = Vector2.zero;
+        upSlot.DOScale(1f, .15f).SetEase(Ease.OutBack);
+    }
     void UpCardAcquiredAnimation()
     {
         upSlot.DOAnchorPos(new Vector2(-140, 26), .15f).SetEase(Ease.OutBack);
@@ -48,6 +50,7 @@ public class UpPanelUI : MonoBehaviour
     {
         upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.OutBack);
         matSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.OutBack);
+        UpSlotInitAnimtion();
     }
 
     void UpgradeConfirmationAnimation()
@@ -55,8 +58,6 @@ public class UpPanelUI : MonoBehaviour
         upgradeConfirmationButton.localScale = Vector2.zero;
         upgradeConfirmationButton.DOScale(1f, .15f).SetEase(Ease.OutBack);
     }
-
-
     #endregion
 
     public void UpCardAcquiredUI()
@@ -78,13 +79,8 @@ public class UpPanelUI : MonoBehaviour
 
     public void UpgradeConfirmationUI()
     {
-
         confirmationButtonContainer.SetActive(true);
         UpgradeConfirmationAnimation();
-
-        // 합성 혹은 취소 버튼이 아니라 카드를 클릭해서 취소하는 것을 방지
-        // animUpSlot.GetComponent<CanvasGroup>().interactable = false;
-        // animMatSlot.GetComponent<CanvasGroup>().interactable = false;
     }
 
     // 강화를 승인하면 강화 연출을 위해 확인 창을 없애기
@@ -125,7 +121,7 @@ public class UpPanelUI : MonoBehaviour
     public void ResetScrollContent() // 스크롤뷰를 원래 위치로 되돌려 준다
     {   
         // 통 튀기는 효과를 위해 아래로 당겼다가 원래 위치로
-        scrollContent.anchoredPosition = new Vector2(scrollContent.anchoredPosition.x, 366f);
+        scrollContent.anchoredPosition = new Vector2(scrollContent.anchoredPosition.x, 150f);
         scrollContent.DOAnchorPosY(0, .15f).SetEase(Ease.OutBack);
     }
 }
