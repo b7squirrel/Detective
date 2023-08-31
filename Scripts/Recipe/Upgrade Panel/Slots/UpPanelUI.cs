@@ -10,10 +10,7 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] GameObject fieldSlotPanel; 
     [SerializeField] GameObject panelUpgradeDark;
 
-    [SerializeField] Animator animUpSlot;
-    [SerializeField] Animator animMatSlot;
-    [SerializeField] Animator animPlus;
-    [SerializeField] RectTransform upSlot, matSlot;
+    [SerializeField] RectTransform upSlot, matSlot, plus;
 
     void OnEnable()
     {
@@ -25,10 +22,9 @@ public class UpPanelUI : MonoBehaviour
         // panelUpgradePurple.SetActive(true);
         // panelUpgradeDark.SetActive(false);
 
-        animUpSlot.SetBool("isCanceled", false);
-        animUpSlot.gameObject.SetActive(true);
-        animMatSlot.gameObject.SetActive(false);
-        animPlus.gameObject.SetActive(false);
+        upSlot.gameObject.SetActive(true);
+        matSlot.gameObject.SetActive(false);
+        plus.gameObject.SetActive(false);
         haloUpCard.SetActive(false);
         confirmationButtonContainer.SetActive(false);
     }
@@ -36,22 +32,18 @@ public class UpPanelUI : MonoBehaviour
     #region Anim 업그레이드 슬롯 - with Card
     public void UpSlotToWithCardAnimation()
     {
-        upSlot.DOAnchorPos(new Vector2(-140,26), .5f).SetEase(Ease.OutElastic);
+        upSlot.DOAnchorPos(new Vector2(-140,26), .1f).SetEase(Ease.OutElastic);
+        matSlot.DOAnchorPos(new Vector2(200,26), .1f).SetEase(Ease.OutElastic);
     }
     #endregion
 
     public void UpCardAcquiredUI()
     {
         UpSlotToWithCardAnimation();
-        // upSlot = animUpSlot.GetComponent<RectTransform>();
+        haloUpCard.SetActive(true);
 
-        // animUpSlot.SetTrigger("HavingCard");
-        // haloUpCard.SetActive(true);
-
-        // animMatSlot.gameObject.SetActive(true);
-        // animMatSlot.SetTrigger("Up");
-        // animPlus.gameObject.SetActive(true);
-        // animPlus.SetTrigger("PlusUp");
+        matSlot.gameObject.SetActive(true);
+        plus.gameObject.SetActive(true);
     }
 
     public void UpgradeConfirmationUI()
@@ -75,10 +67,6 @@ public class UpPanelUI : MonoBehaviour
     public void MergingCardsUI()
     {
         haloUpCard.SetActive(false);
-
-        animUpSlot.SetTrigger("Merging");
-        animMatSlot.SetTrigger("Merging");
-        animPlus.SetTrigger("PlusDown");
     }
     
     // 업그레이드 슬롯들을 다 비우는 리프레시
@@ -89,9 +77,6 @@ public class UpPanelUI : MonoBehaviour
         confirmationButtonContainer.SetActive(false);
         fieldSlotPanel.SetActive(true);
 
-        animUpSlot.SetBool("isCanceled", true);
-        animMatSlot.SetTrigger("Canceled");
-        animPlus.SetTrigger("PlusDown");
         panelUpgradeDark.SetActive(false);
 
         StartCoroutine(WaitToInitCo());
