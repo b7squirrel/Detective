@@ -166,6 +166,8 @@ public class UpPanelUI : MonoBehaviour
         upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
 
         fieldSlotPanel.SetActive(false);
+
+        
     }
 
     // upgrade success 버튼에서 호출

@@ -21,6 +21,7 @@ public class UpPanelManager : MonoBehaviour
     // 업그레이드 슬롯, 재료 슬롯
     [SerializeField] CardSlot upCardSlot;
     [SerializeField] CardSlot matCardSlot;
+    [SerializeField] CardSlot upSuccessSlot;
     #endregion
 
     #region Unity Callback 함수
@@ -63,6 +64,7 @@ public class UpPanelManager : MonoBehaviour
 
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
+        upSuccessSlot.EmptySlot();
 
         upPanelUI.UpSlotCanceled();
         upPanelUI.ResetScrollContent();

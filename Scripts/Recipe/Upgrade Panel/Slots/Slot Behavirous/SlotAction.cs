@@ -28,8 +28,8 @@ public class SlotAction : MonoBehaviour
         yield return new WaitForSeconds(.066f);
 
         ActionType();
-        
     }
+
     void ActionType()
     {
         if (currentSlotType == SlotType.Field)
