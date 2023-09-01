@@ -28,7 +28,6 @@ public class UpPanelUI : MonoBehaviour
 
         fieldSlotPanel.transform.localScale = new Vector2(.8f, .8f);
         fieldSlotPanel.transform.DOScale(1, .15f).SetEase(Ease.OutBack);
-        Debug.Log("핑크 패널 애님 후");
         UpSlotInitAnimtion();
         BGInitAnimation();
     }
@@ -42,13 +41,16 @@ public class UpPanelUI : MonoBehaviour
         UpPanelBG.DORotate(new Vector3(0, 0, -30f), .2f).SetEase(Ease.OutBack);
         UpPanelBG.transform.localScale = .4f * Vector2.one;
         UpPanelBG.DOScale(1f, .15f).SetEase(Ease.OutBack);
-        Debug.Log("배경 애님 후");
     }
     void UpSlotInitAnimtion()
     {
+        StartCoroutine(UpSlotInitAnimationCo());
+    }
+    IEnumerator UpSlotInitAnimationCo()
+    {
         upSlot.transform.localScale = Vector2.zero;
+        yield return new WaitForSeconds(.05f);
         upSlot.DOScale(1f, .15f).SetEase(Ease.OutBack);
-        Debug.Log("업 슬롯 애님 후");
     }
     void UpCardAcquiredAnimation()
     {
@@ -118,8 +120,8 @@ public class UpPanelUI : MonoBehaviour
         CardSlot successCardSlot = upgradeSuccessPanel.GetComponentInChildren<CardSlot>();
         displayCardOnSlot.DispCardOnSlot(cardData, successCardSlot);
 
-        upSuccess.localScale = Vector2.zero;
-        upSuccess.DOScale(1f, .15f).SetEase(Ease.OutBack);
+        upSuccess.localScale = .8f * Vector2.one;
+        upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
 
         fieldSlotPanel.SetActive(false);
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 
-public enum SlotType { Field, Up, Mat, UpSuccess };
+public enum SlotType { Field, Up, Mat, None };
 public class SlotAction : MonoBehaviour
 {
     [SerializeField] protected SlotType currentSlotType;
@@ -49,7 +49,7 @@ public class SlotAction : MonoBehaviour
             GetComponent<CardSlot>().EmptySlot();
             return;
         }
-        if (currentSlotType == SlotType.UpSuccess)
+        if (currentSlotType == SlotType.None)
             return;
     }
 }

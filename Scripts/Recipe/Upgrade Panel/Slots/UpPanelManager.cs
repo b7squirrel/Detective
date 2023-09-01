@@ -24,7 +24,6 @@ public class UpPanelManager : MonoBehaviour
     #endregion
 
     #region Unity Callback 함수
-
     void Awake()
     {
         displayCardOnSlot = GetComponent<DisplayCardOnSlot>();
@@ -34,6 +33,14 @@ public class UpPanelManager : MonoBehaviour
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
         GetIntoAllField();
+    }
+    void OnEnable()
+    {
+        GetIntoAllField();
+    }
+    void OnDisable()
+    {
+        
     }
     #endregion
 

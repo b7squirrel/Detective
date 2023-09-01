@@ -56,6 +56,7 @@ public class AllField : MonoBehaviour
         {
             displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
         }
+        Debug.Log("All Field");
     }
 
     public void ClearSlots()
