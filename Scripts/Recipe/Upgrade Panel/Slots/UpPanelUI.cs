@@ -143,6 +143,7 @@ public class UpPanelUI : MonoBehaviour
 
     public void MergingCardsUI() // 카드 합치기 UI
     {
+        plus.transform.localScale = new Vector3(.6f, .6f, .6f); // default .48f
         plus.DOScale(0, .2f).SetEase(Ease.InBack);
         upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack);
         matSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack);
