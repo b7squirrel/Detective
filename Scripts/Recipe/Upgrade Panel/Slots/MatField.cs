@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class MatField : MonoBehaviour
 {
@@ -55,7 +56,6 @@ public class MatField : MonoBehaviour
         {
             matCardsData.Add(item);
         }
-
         UpdateSlots();
     }
 
@@ -91,11 +91,15 @@ public class MatField : MonoBehaviour
             {
                 WeaponData wData = cardDictionary.GetWeaponData(cardDatas[i]);
                 slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], wData, TargetSlot.MatSlot);
+                slots[i].transform.localScale = new Vector2(0, 0);
+                slots[i].transform.DOScale(new Vector2(.6f, .6f), .2f).SetEase(Ease.OutBack);
             }
             else
             {
                 Item iData = cardDictionary.GetItemData(cardDatas[i]);
                 slots[i].GetComponent<CardSlot>().SetItemCard(cardDatas[i], iData, TargetSlot.MatSlot);
+                slots[i].transform.localScale = new Vector2(0, 0);
+                slots[i].transform.DOScale(new Vector2(.6f, .6f), .2f).SetEase(Ease.OutBack);
             }
         }
     }

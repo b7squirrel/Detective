@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class AllField : MonoBehaviour
 {
@@ -30,7 +31,8 @@ public class AllField : MonoBehaviour
         {
             var slot = Instantiate(slotPrefab, transform);
             slot.transform.position = Vector3.zero;
-            slot.transform.localScale = .6f * Vector3.one;
+            slot.transform.localScale = new Vector2(0, 0);
+            slot.transform.DOScale(new Vector2(.6f, .6f), .2f).SetEase(Ease.OutBack);
             slots.Add(slot);
         }
 

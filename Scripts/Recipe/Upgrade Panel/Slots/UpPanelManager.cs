@@ -47,6 +47,11 @@ public class UpPanelManager : MonoBehaviour
         
         allField.gameObject.SetActive(false);
         matField.gameObject.SetActive(true);
+        StartCoroutine(GenMatCardListCo());
+    }
+    IEnumerator GenMatCardListCo()
+    {
+        yield return new WaitForSeconds(.15f);
         matField.GenerateMatCardsList(CardToUpgrade);
     }
 
@@ -78,11 +83,12 @@ public class UpPanelManager : MonoBehaviour
         
         allField.gameObject.SetActive(false);
         matField.gameObject.SetActive(true);
-        matField.GenerateMatCardsList(CardToUpgrade);
+        StartCoroutine(GenMatCardListCo());
 
         matCardSlot.EmptySlot();
 
         upPanelUI.OffUpgradeConfirmationUI();
+        upPanelUI.MatSlotCanceled();
     }
     #endregion
 
