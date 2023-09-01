@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -51,20 +50,10 @@ public class CardDataManager : MonoBehaviour
 
     CardsDictionary cardDictionary;
 
-#region Don't Destory
     void Awake()
     {
         cardDictionary = GetComponent<CardsDictionary>();
-
-        var cardDataManagers = FindObjectsOfType<CardDataManager>();
-        if(cardDataManagers.Length > 1)
-        {
-            Destroy(this.gameObject);
-        }
-
-        DontDestroyOnLoad(this.gameObject);
     }
-    #endregion
 
     void Start()
     {
@@ -129,7 +118,6 @@ public class CardDataManager : MonoBehaviour
         {
             if(item.ID == mID)
             {
-                Debug.Log("다음 카드를 제거합니다. " + item.Name);
                 MyCardsList.Remove(item);
                 return;
             }

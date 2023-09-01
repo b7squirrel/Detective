@@ -31,6 +31,9 @@ public class MatField : MonoBehaviour
 
     public void GenerateMatCardsList(CardData cardDataOnUpSlot)
     {
+        if(cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
+        if(cardDataManager == null) cardDataManager = FindObjectOfType<CardDataManager>();
+
         // 슬롯 위의 CardData들 (= MyCardsList)
         List<CardData> myCardData = new();
         myCardData.AddRange(cardDataManager.GetMyCardList());

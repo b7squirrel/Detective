@@ -176,7 +176,6 @@ public class PoolManager : MonoBehaviour
             go.Add(select);
             miscPools.Add(poolingTag, go);
 
-            Debug.Log("Created folder");
             return select;
         }
 

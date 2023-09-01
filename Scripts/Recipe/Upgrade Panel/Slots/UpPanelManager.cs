@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -32,9 +31,9 @@ public class UpPanelManager : MonoBehaviour
         cardDataManager = FindObjectOfType<CardDataManager>();
         upPanelUI = GetComponent<UpPanelUI>();
 
-        ClearAllFieldSlots();
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
+        GetIntoAllField();
     }
     #endregion
 
@@ -59,6 +58,9 @@ public class UpPanelManager : MonoBehaviour
 
         upPanelUI.UpSlotCanceled();
         upPanelUI.ResetScrollContent();
+        allField.GenerateAllCardsList();
+
+        upPanelUI.Init();
     }
 
     public void GetIntoConfirmation()

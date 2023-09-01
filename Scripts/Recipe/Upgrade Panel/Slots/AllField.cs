@@ -1,12 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AllField : MonoBehaviour
 {
     #region 참조 변수
-    CardDataManager cardDataManager;
-    CardsDictionary cardDictionary;
-    DisplayCardOnSlot displayCardOnSlot;
+    [SerializeField] CardDataManager cardDataManager;
+    [SerializeField] DisplayCardOnSlot displayCardOnSlot;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -14,29 +14,13 @@ public class AllField : MonoBehaviour
     [SerializeField] GameObject slotPrefab;
     #endregion
 
-    #region 유니티 콜백 함수
-    void Awake()
-    {
-        cardDataManager = FindObjectOfType<CardDataManager>();
-        cardDictionary = FindObjectOfType<CardsDictionary>();
-        displayCardOnSlot = GetComponentInParent<DisplayCardOnSlot>();
-    }
-
-    void OnEnable()
-    {
-        GenerateAllCardsList();
-    }
-    void OnDisable()
-    {
-        ClearSlots();
-    }
-    #endregion
-
     #region Refresh
     public void GenerateAllCardsList()
     {
         List<CardData> cardDatas = new();
         List<GameObject> slots = new();
+
+        if(cardDataManager == null) cardDataManager = FindAnyObjectByType<CardDataManager>();
 
         cardDatas.AddRange(cardDataManager.GetMyCardList()); // 재료가 될 수 있는 카드들의 리스트
 
