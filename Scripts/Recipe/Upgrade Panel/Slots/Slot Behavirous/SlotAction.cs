@@ -23,7 +23,7 @@ public class SlotAction : MonoBehaviour
         RectTransform slotRec = GetComponent<RectTransform>();
         float initialValue = slotRec.transform.localScale.x;
         slotRec.transform.localScale = new Vector2(initialValue * 1.3f, initialValue * 1.3f);
-        slotRec.DOScale(initialValue, .07f).SetEase(Ease.OutBack);
+        slotRec.DOScale(initialValue, .07f).SetEase(Ease.InBack);
 
         yield return new WaitForSeconds(.066f);
 

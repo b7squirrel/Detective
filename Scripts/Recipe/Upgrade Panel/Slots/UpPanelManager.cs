@@ -38,10 +38,6 @@ public class UpPanelManager : MonoBehaviour
     {
         GetIntoAllField();
     }
-    void OnDisable()
-    {
-        
-    }
     #endregion
 
     #region upField, matField 상태 전환
@@ -105,9 +101,6 @@ public class UpPanelManager : MonoBehaviour
         {
             CardToUpgrade = cardData;
 
-            // 카드의 slotType을 업그레이드로 설정
-
-
             // upSlot을 옆으로 이동 시키고 matSlot 나타나게 하기
             upPanelUI.UpCardAcquiredUI();
 
@@ -137,6 +130,7 @@ public class UpPanelManager : MonoBehaviour
         }
         // 나머지는 재료 카드일 경우 뿐이다.
         cardToFeed = cardData; ; // 비어 있지 않다면 지금 카드는 재료 카드임
+        upPanelUI.MatCardAcquiredUI();
         displayCardOnSlot.DispCardOnSlot(cardData, matCardSlot);
         GetIntoConfirmation(); // 합성 확인 화면으로
 

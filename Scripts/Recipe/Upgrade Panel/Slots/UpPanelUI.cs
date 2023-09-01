@@ -5,7 +5,6 @@ using DG.Tweening;
 public class UpPanelUI : MonoBehaviour
 {
     [SerializeField] GameObject haloUpCard;
-    [SerializeField] GameObject haloMatCard;
     [SerializeField] GameObject confirmationButtonContainer;
     [SerializeField] Transform upgradeConfirmationButton;
     [SerializeField] GameObject fieldSlotPanel;
@@ -15,7 +14,6 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] RectTransform UpPanelBG;
 
     [SerializeField] RectTransform upSlot, matSlot, plus, upSuccess;
-    Coroutine InitCoroutine;
 
     public void Init()
     {
@@ -54,8 +52,15 @@ public class UpPanelUI : MonoBehaviour
     }
     void UpCardAcquiredAnimation()
     {
+        upSlot.transform.localScale = .8f * Vector2.one;
+        upSlot.DOScale(1f, .6f).SetEase(Ease.OutElastic);
         upSlot.DOAnchorPos(new Vector2(-140, 26), .15f).SetEase(Ease.OutBack);
         matSlot.DOAnchorPos(new Vector2(200, 26), .15f).SetEase(Ease.OutBack);
+    }
+    void MatCardAcquiredAnimation()
+    {
+        matSlot.transform.localScale = .6f * Vector2.one;
+        matSlot.DOScale(.7f, .6f).SetEase(Ease.OutElastic);
     }
     // upslot canceled
     void UpSlotCanceledAnimation()
@@ -67,7 +72,15 @@ public class UpPanelUI : MonoBehaviour
 
     void UpgradeConfirmationAnimation()
     {
+        fieldSlotPanel.GetComponent<RectTransform>().DOScaleY(0, .2f).SetEase(Ease.InBack);
         upgradeConfirmationButton.localScale = Vector2.zero;
+        upgradeConfirmationButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -560f);
+        StartCoroutine(UpgradeConfirmationAnimationCo());
+    }
+    IEnumerator UpgradeConfirmationAnimationCo() // 강화 확인 버튼이 살짝 늦게 나오도록
+    {
+        yield return new WaitForSeconds(.15f);
+        upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -520), .15f).SetEase(Ease.OutBack);
         upgradeConfirmationButton.DOScale(1f, .15f).SetEase(Ease.OutBack);
     }
     #endregion
@@ -79,6 +92,10 @@ public class UpPanelUI : MonoBehaviour
         haloUpCard.SetActive(true);
         matSlot.gameObject.SetActive(true);
         plus.gameObject.SetActive(true);
+    }
+    public void MatCardAcquiredUI()
+    {
+        MatCardAcquiredAnimation();
     }
     public void UpSlotCanceled()
     {
@@ -103,8 +120,8 @@ public class UpPanelUI : MonoBehaviour
 
     public void MergingCardsUI()
     {
-        upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.OutBack);
-        matSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.OutBack);
+        upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack);
+        matSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack);
     }
     public void DeactivateSpecialSlots()
     {
