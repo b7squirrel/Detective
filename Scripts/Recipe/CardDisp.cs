@@ -36,13 +36,20 @@ public class CardDisp : MonoBehaviour
         // 별과 카드 색깔
         int intGrade = (int)itemData.grade;
         SetNumStar(intGrade + 1);
+        for (int i = 0; i < 5; i++)
+        {
+            cardBaseContainer.GetChild(i).gameObject.SetActive(false);
+        }
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
         // 카드 레벨 텍스트
         Level.text = "LV1";
 
         // 캐릭터 이미지
+        charImage.color = new Color(1, 1, 1, 1);
         charImage.sprite = itemData.charImage;
+
+        cardBaseContainer.gameObject.SetActive(true);
     }
 
     protected virtual void SetNumStar(int numStars)
