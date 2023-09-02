@@ -2,45 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Equipment
-{
-    // public Equipment(Card card)
-    // {
-    //     this.card = card;
-    // }
-    // public Card card;
-}
-
-public class EquipedEquipment
-{
-    public EquipedEquipment(string id, Equipment[] equipments)
-    {
-        this.characterID = id;
-        this.equipments = equipments;
-    }
-    public string characterID;
-    public Equipment[] equipments = new Equipment[5];
-}
-
-public enum EquipmentType
-{
-    Head,
-    Chest,
-    Legs,
-    Gloves,
-    Weapon
-}
+public enum EquipmentType { Ori, Head, Chest, Legs, Gloves, Weapon }
 
 // 각각의 카드에 붙어서 장비를 관리
 public class CharacterEquipment : MonoBehaviour
 {
-    string characterID;
-    Equipment[] equipments = new Equipment[5];
+    string[] equipments = new string[5];
 
-    public void EquipEquipment(Equipment equipment)
+    public void EquipEquipment(CardData cardData)
     {
-        // EquipmentType equipmentType = equipment.card.GetEquipType();
-        // equipments[(int)equipmentType] = equipment;
+        // 해당 부위의 equiopments에 cardData.ID 저장
+        // equipments UI 
+        // equipment data manager
     }
 
     public void UnequipEquipment(EquipmentType equipmentType)

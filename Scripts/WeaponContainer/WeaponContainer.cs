@@ -24,7 +24,7 @@ public class WeaponContainer : MonoBehaviour
             weaponContainerContainer.name = "WeaponContainers";
         }
     }
-    void FixedUpdate()
+    void Update()
     {
         ApplyMovements();
     }
