@@ -13,15 +13,16 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _id, string _Type, string _Grade, string _Name, string _exp)
+    public CardData(string _id, string _Type, string _Grade, string _Name, string _exp, string _equipmentType)
     {
         ID = _id;
         Type = _Type;
         Grade = _Grade;
         Name = _Name;
         Exp = _exp;
+        EquipmentType = _equipmentType;
     }
-    public string ID, Type, Grade, Name, Exp;
+    public string ID, Type, Grade, Name, Exp, EquipmentType;
 }
 public class ReadCardData
 {
@@ -34,7 +35,7 @@ public class ReadCardData
         for (int i = 0; i < line.Length; i++)
         {
             string[] row = line[i].Split('\t');
-            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4]));
+            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], row[5]));
         }
         return cardList;
     }
@@ -90,17 +91,7 @@ public class CardDataManager : MonoBehaviour
     {
         MyCardsList.Clear();
         List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
-        // MyCardsList.AddRange(startingCards);
-        string _weapon = startingCards[0].Type;
-        string _grade = startingCards[0].Grade;
-        string _name = startingCards[0].Name;
-        // GameObject startingCard = cardDictionary.GenCard(_weapon, _grade, _name);
-        // GameObject startingCard = cardDictionary.GenCard("Weapon", "Common", "뿌뿌");
-
-        // 생성된 카드를 내 카드 리스트에 저장
-        // Card newCard = startingCard.GetComponent<Card>();
-        AddCardToMyCardsList(GenNewCardData(_weapon, _grade, _name));
-        // Destroy(startingCard);
+        MyCardsList.AddRange(startingCards);
         Save();
         Load();
     }
@@ -130,7 +121,7 @@ public class CardDataManager : MonoBehaviour
         string _id = Guid.NewGuid().ToString();
         
         CardData newCard = 
-        new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1");
+        new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1", _cardData.EquipmentType);
 
         MyCardsList.Add(newCard);
         Save();
@@ -150,10 +141,10 @@ public class CardDataManager : MonoBehaviour
 
         ResetCards();
     }
-    public CardData GenNewCardData(string _type, string _grade, string _name)
+    public CardData GenNewCardData(string _type, string _grade, string _name, string _equipmentType)
     {
         string _id = GetInstanceID().ToString();
-        CardData newCard = new CardData(_id, _type, _grade, _name, "1");
+        CardData newCard = new CardData(_id, _type, _grade, _name, "1", _equipmentType);
         return newCard;
     }
 }

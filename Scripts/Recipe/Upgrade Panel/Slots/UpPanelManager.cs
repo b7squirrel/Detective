@@ -150,13 +150,13 @@ public class UpPanelManager : MonoBehaviour
     public void UpgradeCard()
     {
         int newCardGrade = new GradeConverter().ConvertStringToInt(CardToUpgrade.Grade) + 1;
-        if (newCardGrade > 4) { Debug.Log("업그레이드 된 카드가 최고등급을 넘습니다. 확인 할 것"); }
+        if (newCardGrade > 4) { newCardGrade = 4; } // 전설 등급은 합성하면 전설 등급
 
         string newGrade = ((Grade)newCardGrade).ToString();
         string type = CardToUpgrade.Type;
 
         // 생성된 카드를 내 카드 리스트에 저장
-        CardData newCardData = cardDataManager.GenNewCardData(type, newGrade, CardToUpgrade.Name);
+        CardData newCardData = cardDataManager.GenNewCardData(type, newGrade, CardToUpgrade.Name, CardToUpgrade.EquipmentType);
         cardDataManager.AddCardToMyCardsList(newCardData);
         cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제
         cardDataManager.RemoveCardFromMyCardList(cardToFeed);
