@@ -6,8 +6,8 @@ using System;
 [System.Serializable]
 public class Serialization<T>
 {
-    public Serialization(List<T> _target) => MyCards = _target;
-    public List<T> MyCards;
+    public Serialization(List<T> _target) => Data = _target;
+    public List<T> Data;
 }
 
 [System.Serializable]
@@ -82,7 +82,7 @@ public class CardDataManager : MonoBehaviour
             return;
         }
         string jdata = File.ReadAllText(filePath);
-        MyCardsList = JsonUtility.FromJson<Serialization<CardData>>(jdata).MyCards;
+        MyCardsList = JsonUtility.FromJson<Serialization<CardData>>(jdata).Data;
     }
 
     // 특정 카드를 가지고 시작하도록 만들려고. 아무것도 없이 시작할 수도 있다
