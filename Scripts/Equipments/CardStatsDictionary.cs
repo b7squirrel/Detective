@@ -4,9 +4,9 @@ using System.IO;
 using System;
 
 [System.Serializable]
-public class CardStats
+public class CardStatsData
 {
-    public CardStats(string _name, string _grade, string _armor,
+    public CardStatsData(string _name, string _grade, string _armor,
             string _magnetSize, string _moveSpeed, string _maxHP, string _damageBonus,
             string _projAmount, string _projSpeed, string _knockbackChance,
             string _criticalChance, string _coolTIme, string _hpRegenRate)
@@ -34,8 +34,8 @@ public class CardStats
 [System.Serializable]
 public class ReadStatsData
 {
-    public List<CardStats> cardStatsList;
-    public List<CardStats> GetCardStatsList(TextAsset statsDataText)
+    public List<CardStatsData> cardStatsList;
+    public List<CardStatsData> GetCardStatsList(TextAsset statsDataText)
     {
         cardStatsList = new();
 
@@ -43,7 +43,7 @@ public class ReadStatsData
         for (int i = 0; i < line.Length; i++)
         {
             string[] row = line[i].Split('\t');
-            cardStatsList.Add(new CardStats(row[0], row[1], row[2], row[3], row[4],
+            cardStatsList.Add(new CardStatsData(row[0], row[1], row[2], row[3], row[4],
                                 row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12]));
         }
         return cardStatsList;
@@ -53,7 +53,7 @@ public class ReadStatsData
 public class CardStatsDictionary : MonoBehaviour
 {
     public TextAsset oriStatData;
-    public List<CardStats> AllCardStats;
+    public List<CardStatsData> AllCardStats;
     string filePath;
     string allStats = "AllStats.txt";
 
@@ -72,7 +72,7 @@ public class CardStatsDictionary : MonoBehaviour
 
     void Save()
     {
-        string jsonData = JsonUtility.ToJson(new Serialization<CardStats>(AllCardStats), true);
+        string jsonData = JsonUtility.ToJson(new Serialization<CardStatsData>(AllCardStats), true);
         File.WriteAllText(filePath, jsonData);
     }
 }

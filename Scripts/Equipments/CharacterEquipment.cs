@@ -7,7 +7,7 @@ public enum EquipmentType { Ori, Head, Chest, Legs, Gloves, Weapon }
 // 각각의 카드에 붙어서 장비를 관리
 public class CharacterEquipment : MonoBehaviour
 {
-    string[] equipments = new string[5];
+    string[] equipments = new string[6];
 
     public void EquipEquipment(CardData cardData)
     {
