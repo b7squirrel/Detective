@@ -16,3 +16,20 @@ public class GradeConverter
         return -1;
     }
 }
+
+public class EquipmentTypeConverter
+{
+    public int ConvertStringToInt(string _equipType)
+    {
+        EquipmentType[] allEquipType = (EquipmentType[])Enum.GetValues(typeof(EquipmentType));
+
+        for (int i = 0; i < allEquipType.Length; i++)
+        {
+            if(allEquipType[i].ToString() == _equipType)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
