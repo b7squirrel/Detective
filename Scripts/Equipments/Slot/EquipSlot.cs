@@ -1,18 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EquipSlot : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    CardData cardData;
+    public bool IsEmpty { get; private set; } = true;
 
-    // Update is called once per frame
-    void Update()
+    public CardData GetCardData()
     {
-        
+        return cardData;
+    }
+    public void SetWeaponSlot(CardData _cardData, WeaponData _weaponData)
+    {
+        IsEmpty = false;
+        // 슬롯에 카드 데이터를 넣고
+        cardData = _cardData;
+
+        // 디스플레이
+        GetComponent<CardDisp>().InitWeaponCardDisplay(_weaponData);
+    }
+    public void SetItemSlot(CardData _cardData, Item _itemData)
+    {
+        IsEmpty = false;
+
+        cardData = _cardData;
+        GetComponent<CardDisp>().InitItemCardDisplay(_itemData);
+    }
+    public void EmptySlot()
+    {
+        IsEmpty = true;
+        GetComponent<CardDisp>().EmptyCardDisplay();
     }
 }
