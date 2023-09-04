@@ -81,6 +81,7 @@ public class UpPanelUI : MonoBehaviour
     IEnumerator UpgradeConfirmationAnimationCo() // 강화 확인 버튼이 살짝 늦게 나오도록
     {
         yield return new WaitForSeconds(.15f);
+        upgradeConfirmationButton.localScale = .7f * Vector2.one;
         upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -520), .15f).SetEase(Ease.OutBack);
         upgradeConfirmationButton.DOScale(1f, .15f).SetEase(Ease.OutBack);
     }
