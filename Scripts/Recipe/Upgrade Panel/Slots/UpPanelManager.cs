@@ -68,7 +68,7 @@ public class UpPanelManager : MonoBehaviour
 
         upPanelUI.UpSlotCanceled();
         upPanelUI.ResetScrollContent();
-        allField.GenerateAllCardsList();
+        allField.GenerateAllCardsOfType(cardDataManager.GetMyCardList());
 
         upPanelUI.Init();
     }

@@ -15,8 +15,10 @@ public class EquipmentPanelManager : MonoBehaviour
     UpPanelUI upPanelUI; // UI 관련 클래스
 
     // 카드들이 보여지는 Field
-    [SerializeField] AllField allField;
-    [SerializeField] MatField matField;
+    [SerializeField] AllField allField; // 모든 카드
+    [SerializeField] AllField allOriField; // 모든 오리 카드
+    [SerializeField] MatField matField; // 오리 카드에 대한 장비 카드
+    [SerializeField] AllField allEquipField; // 모든 장비 카드
 
     // 업그레이드 슬롯, 재료 슬롯
     [SerializeField] CardSlot upCardSlot;
@@ -35,7 +37,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
     void OnEnable()
     {
-        SetAllField();
+        SetAllOriField();
     }
 
     public void SetAllField()
@@ -46,12 +48,43 @@ public class EquipmentPanelManager : MonoBehaviour
 
         // upCardSlot.EmptySlot();
         // matCardSlot.EmptySlot();
-        allField.GenerateAllCardsList();
+        allField.GenerateAllCardsOfType(cardDataManager.GetMyCardList());
+    }
+    public void SetAllOriField()
+    {
+        ClearAllFieldSlots();
+        allOriField.gameObject.SetActive(true);
+        allField.GenerateAllCardsOfType(GetAllOriList());
     }
     
     public void ClearAllFieldSlots()
     {
         allField.ClearSlots();
         // matField?.ClearSlots();
+    }
+
+    List<CardData> GetAllOriList()
+    {
+        List<CardData> ori = new();
+        foreach (var item in cardDataManager.GetMyCardList())
+        {
+            if (item.Type == CardType.Weapon.ToString())
+            {
+                ori.Add(item);
+            }
+        }
+        return ori;
+    }
+    List<CardData> GetAllEquipList()
+    {
+        List<CardData> equip = new();
+        foreach (var item in cardDataManager.GetMyCardList())
+        {
+            if (item.Type == CardType.Item.ToString())
+            {
+                equip.Add(item);
+            }
+        }
+        return equip;
     }
 }

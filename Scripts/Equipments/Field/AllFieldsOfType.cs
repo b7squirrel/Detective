@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class AllField : MonoBehaviour
+public class AllFieldsOfType : MonoBehaviour
 {
     #region 참조 변수
     [SerializeField] CardDataManager cardDataManager;
@@ -15,7 +16,7 @@ public class AllField : MonoBehaviour
     #endregion
 
     #region Refresh
-    public void GenerateAllCardsOfType(List<CardData> cardList)
+    public void GenerateAllCardsList(List<CardData> cardList)
     {
         List<CardData> cardDatas = new();
         List<GameObject> slots = new();
