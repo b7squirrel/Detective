@@ -30,7 +30,7 @@ public class EquipSlotAction : MonoBehaviour
 
         ActionType();
     }
-
+    
     void ActionType()
     {
         if (currentSlotType == EquipSlotType.FieldOri)

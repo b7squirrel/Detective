@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// ClearSlots - 슬롯 부수기
-// GenerateAllCardsList - 슬롯 생성하고 정렬, 카드 Display
+/// <summary>
+/// ClearSlots - 슬롯 부수기
+/// GenerateAllCardsList - 슬롯 생성하고 정렬, 카드 Display
+/// </summary>
 public class EquipmentPanelManager : MonoBehaviour
 {
     CardData CardOnDisplay { get; set; } // 디스플레이에 올라가 있는 오리 카드
