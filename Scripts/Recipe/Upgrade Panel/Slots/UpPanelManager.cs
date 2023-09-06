@@ -19,9 +19,9 @@ public class UpPanelManager : MonoBehaviour
     [SerializeField] MatField matField;
 
     // 업그레이드 슬롯, 재료 슬롯
-    [SerializeField] CardSlot upCardSlot;
-    [SerializeField] CardSlot matCardSlot;
-    [SerializeField] CardSlot upSuccessSlot;
+    [SerializeField] UpgradeCardSlot upCardSlot;
+    [SerializeField] UpgradeCardSlot matCardSlot;
+    [SerializeField] UpgradeCardSlot upSuccessSlot;
     #endregion
 
     #region Unity Callback 함수
@@ -105,7 +105,7 @@ public class UpPanelManager : MonoBehaviour
         }
 
         // 업그레이드 카드의 경우
-        if (upCardSlot.IsEmpty) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
+        if (upCardSlot.IsEmpty()) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
         {
             CardToUpgrade = cardData;
 
@@ -122,7 +122,7 @@ public class UpPanelManager : MonoBehaviour
 
         
         // 재료카드에 이미 다른 카드가 올라가 있는 경우
-        if (matCardSlot.IsEmpty == false)
+        if (matCardSlot.IsEmpty() == false)
             return;
 
         // 재료 카드의 경우

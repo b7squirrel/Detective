@@ -1,9 +1,18 @@
 using UnityEngine;
 
-public class EquipSlot : MonoBehaviour, CardSlot
+public enum CardType { Weapon, Item, none }
+public enum Grade { Common, Rare, Epic, Unique, Legendary }
+public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // 클릭되었을 때 이동할 슬롯
+
+// 슬롯 위에 있는 카드 내용 관리
+public class UpgradeCardSlot : MonoBehaviour, CardSlot
 {
     CardData cardData;
-    public bool isEmpty { get; private set; } = true;
+    bool isEmpty = true;
+    void Awake()
+    {
+        EmptySlot();
+    }
 
     public bool IsEmpty()
     {
@@ -13,35 +22,26 @@ public class EquipSlot : MonoBehaviour, CardSlot
     {
         return cardData;
     }
+
     public void SetWeaponCard(CardData _cardData, WeaponData _weaponData)
     {
         isEmpty = false;
-        // 슬롯에 카드 데이터를 넣고
         cardData = _cardData;
-
-        // 디스플레이
+        // cardDisp 호출해서 카드 출력
         GetComponent<CardDisp>().InitWeaponCardDisplay(_weaponData);
     }
     public void SetItemCard(CardData _cardData, Item _itemData)
     {
         isEmpty = false;
-
         cardData = _cardData;
+
+        // cardDisp 호출해서 카드 출력
         GetComponent<CardDisp>().InitItemCardDisplay(_itemData);
     }
+
     public void EmptySlot()
     {
         isEmpty = true;
         GetComponent<CardDisp>().EmptyCardDisplay();
-    }
-
-    public void SetWeaponCard(CardData _cardData, WeaponData _weaponData, TargetSlot _targetSlot)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetItemCard(CardData _cardData, Item _itemData, TargetSlot _targetSlot)
-    {
-        throw new System.NotImplementedException();
     }
 }

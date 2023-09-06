@@ -34,7 +34,6 @@ public class EquipmentPanelManager : MonoBehaviour
     void OnEnable()
     {
         SetAllField();
-        Debug.Log("getCardDataMagr = " + cardDataManager.GetMyCardList().Count);
     }
 
     public void SetAllField()
@@ -46,7 +45,6 @@ public class EquipmentPanelManager : MonoBehaviour
         // upCardSlot.EmptySlot();
         // matCardSlot.EmptySlot();
         allField.GenerateAllCardsList();
-        
     }
     
     public void ClearAllFieldSlots()

@@ -13,13 +13,13 @@ public class DisplayCardOnSlot : MonoBehaviour
         {
             WeaponData wData = cardDictionary.GetWeaponData(targetCardData);
             WeaponItemData data = new(wData, null);
-            targetSlot.SetWeaponCard(targetCardData, data.weaponData, TargetSlot.MatSlot);
+            targetSlot.SetWeaponCard(targetCardData, data.weaponData);
         }
         else
         {
             Item iData = cardDictionary.GetItemData(targetCardData);
             WeaponItemData data = new WeaponItemData(null, iData);
-            targetSlot.SetItemCard(targetCardData, data.itemData, TargetSlot.MatSlot);
+            targetSlot.SetItemCard(targetCardData, data.itemData);
         }
     }
 }

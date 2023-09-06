@@ -58,7 +58,6 @@ public class AllField : MonoBehaviour
         {
             displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
         }
-        Debug.Log("card 수 = " + cards.Count);
     }
 
     public void ClearSlots()
