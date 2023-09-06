@@ -3,8 +3,6 @@ using UnityEngine;
 using System.IO;
 using System;
 
-
-
 [System.Serializable]
 public class CardEquipmentData
 {
@@ -42,7 +40,7 @@ public class ReadEquipmentsData
 }
 public class EquipmentDataManager : MonoBehaviour
 {
-    public TextAsset startingEquipments;
+    // public TextAsset startingEquipments;
     public List<CardEquipmentData> MyEquipmentsList;
     string filePath;
     string myEquips = "MyEquipments.txt";
@@ -66,26 +64,26 @@ public class EquipmentDataManager : MonoBehaviour
     void Load()
     {
         // 로드할 파일이 있으면 로드
-        // 없으면 startingEquipments 로드하고 저장
+        // 없으면 아무것도 안함
         if (!File.Exists(filePath))
         {
-            InitEquipments();
+            // InitEquipments();
             return;
         }
         string jdata = File.ReadAllText(filePath);
         MyEquipmentsList = JsonUtility.FromJson<Serialization<CardEquipmentData>>(jdata).Data;
     }
 
-    void InitEquipments()
-    {
-        MyEquipmentsList.Clear();
-        List<CardEquipmentData> startingEquips =
-                    new ReadEquipmentsData().GetCardEquipmentsList(startingEquipments);
+    // void InitEquipments()
+    // {
+    //     MyEquipmentsList.Clear();
+    //     List<CardEquipmentData> startingEquips =
+    //                 new ReadEquipmentsData().GetCardEquipmentsList(startingEquipments);
 
-        MyEquipmentsList.AddRange(startingEquips);
-        Save();
-        Load();
-    }
+    //     MyEquipmentsList.AddRange(startingEquips);
+    //     Save();
+    //     Load();
+    // }
 
     public List<CardEquipmentData> GetMyEquipmentsList()
     {

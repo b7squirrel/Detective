@@ -58,11 +58,6 @@ public class MatField : MonoBehaviour
         }
         UpdateSlots();
     }
-
-    public List<CardData> GetCardDatas()
-    {
-        return matCardsData;
-    }
     #endregion
 
     #region Refresh

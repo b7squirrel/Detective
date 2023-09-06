@@ -25,6 +25,7 @@ public class AllField : MonoBehaviour
         cardDatas.AddRange(cardDataManager.GetMyCardList()); // 재료가 될 수 있는 카드들의 리스트
 
         numSlots = cardDatas.Count;
+        
 
         // 슬롯 생성
         for (int i = 0; i < numSlots; i++)
@@ -57,6 +58,7 @@ public class AllField : MonoBehaviour
         {
             displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
         }
+        Debug.Log("card 수 = " + cards.Count);
     }
 
     public void ClearSlots()
