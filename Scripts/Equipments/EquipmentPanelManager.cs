@@ -15,10 +15,7 @@ public class EquipmentPanelManager : MonoBehaviour
     UpPanelUI upPanelUI; // UI 관련 클래스
 
     // 카드들이 보여지는 Field
-    [SerializeField] AllField allField; // 모든 카드
-    [SerializeField] AllField allOriField; // 모든 오리 카드
-    [SerializeField] MatField matField; // 오리 카드에 대한 장비 카드
-    [SerializeField] AllField allEquipField; // 모든 장비 카드
+    [SerializeField] AllField field; // 모든 카드
 
     // 업그레이드 슬롯, 재료 슬롯
     [SerializeField] CardSlot upCardSlot;
@@ -37,54 +34,19 @@ public class EquipmentPanelManager : MonoBehaviour
 
     void OnEnable()
     {
-        SetAllOriField();
+        SetAllFieldTypeOf("Weapon");
     }
 
-    public void SetAllField()
-    {
-        ClearAllFieldSlots();
-        allField.gameObject.SetActive(true);
-        // matField.gameObject.SetActive(false);
-
-        // upCardSlot.EmptySlot();
-        // matCardSlot.EmptySlot();
-        allField.GenerateAllCardsOfType(cardDataManager.GetMyCardList());
-    }
-    public void SetAllOriField()
-    {
-        ClearAllFieldSlots();
-        allOriField.gameObject.SetActive(true);
-        allField.GenerateAllCardsOfType(GetAllOriList());
-    }
-    
     public void ClearAllFieldSlots()
     {
-        allField.ClearSlots();
+        field.ClearSlots();
         // matField?.ClearSlots();
     }
-
-    List<CardData> GetAllOriList()
+    public void SetAllFieldTypeOf(string cardType)
     {
-        List<CardData> ori = new();
-        foreach (var item in cardDataManager.GetMyCardList())
-        {
-            if (item.Type == CardType.Weapon.ToString())
-            {
-                ori.Add(item);
-            }
-        }
-        return ori;
-    }
-    List<CardData> GetAllEquipList()
-    {
-        List<CardData> equip = new();
-        foreach (var item in cardDataManager.GetMyCardList())
-        {
-            if (item.Type == CardType.Item.ToString())
-            {
-                equip.Add(item);
-            }
-        }
-        return equip;
+        ClearAllFieldSlots();
+        List<CardData> card = new();
+        card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType);
+        field.GenerateAllCardsOfType(card);
     }
 }

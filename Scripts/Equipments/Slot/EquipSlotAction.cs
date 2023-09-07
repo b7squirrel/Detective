@@ -35,7 +35,6 @@ public class EquipSlotAction : MonoBehaviour
     {
         if (currentSlotType == EquipSlotType.FieldOri)
         {
-            Debug.Log("Field");
             return;
         }
         if (currentSlotType == EquipSlotType.FieldEquipment)
