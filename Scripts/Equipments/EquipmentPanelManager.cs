@@ -37,12 +37,19 @@ public class EquipmentPanelManager : MonoBehaviour
     void OnEnable()
     {
         SetAllFieldTypeOf("Weapon");
-        equipDisplayUI.SetWeaponDisply(field.GetFirstCardData());
+        // SetDisplay(field.GetFirstCardData());
+    }
+
+    public void SetDisplay(CardData cardDataToDisplay)
+    {
+        equipDisplayUI.SetWeaponDisply(cardDataToDisplay);
+        CardOnDisplay = cardDataToDisplay;
     }
 
     public void ClearAllFieldSlots()
     {
         field.ClearSlots();
+        CardOnDisplay = null;
         // matField?.ClearSlots();
     }
     public void SetAllFieldTypeOf(string cardType)
@@ -64,5 +71,10 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             item.SetSlotType(currentSlotType);
         }
+    }
+    public void EquipToUpCard(CardData cardToEquip)
+    {
+        
+
     }
 }

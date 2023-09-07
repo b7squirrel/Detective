@@ -31,13 +31,16 @@ public class EquipSlotAction : MonoBehaviour
         if (currentSlotType == EquipSlotType.FieldOri)
         {
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            FindAnyObjectByType<EquipDisplayUI>().SetWeaponDisply(cardData);
-            GetComponentInParent<EquipmentPanelManager>().SetAllFieldTypeOf("Item");
+            EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
+            equipPanelManager.SetDisplay(cardData);
+            equipPanelManager.SetAllFieldTypeOf("Item");
             return;
         }
         if (currentSlotType == EquipSlotType.FieldEquipment)
         {
-            Debug.Log("Equipment SLot");
+            EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
+            CardData cardData = GetComponent<CardSlot>().GetCardData();
+            equipPanelManager.EquipToUpCard(cardData);
             return;
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
