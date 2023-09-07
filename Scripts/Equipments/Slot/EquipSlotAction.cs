@@ -32,11 +32,12 @@ public class EquipSlotAction : MonoBehaviour
         {
             CardData cardData = GetComponent<CardSlot>().GetCardData();
             FindAnyObjectByType<EquipDisplayUI>().SetWeaponDisply(cardData);
+            GetComponentInParent<EquipmentPanelManager>().SetAllFieldTypeOf("Item");
             return;
         }
         if (currentSlotType == EquipSlotType.FieldEquipment)
         {
-            GetComponent<CardSlot>().EmptySlot();
+            Debug.Log("Equipment SLot");
             return;
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
@@ -46,5 +47,9 @@ public class EquipSlotAction : MonoBehaviour
         }
         if (currentSlotType == EquipSlotType.None)
             return;
+    }
+    public void SetSlotType(EquipSlotType equipSLotType)
+    {
+        currentSlotType = equipSLotType;
     }
 }

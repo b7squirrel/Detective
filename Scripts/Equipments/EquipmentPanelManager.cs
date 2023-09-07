@@ -51,5 +51,18 @@ public class EquipmentPanelManager : MonoBehaviour
         List<CardData> card = new();
         card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType);
         field.GenerateAllCardsOfType(card);
+
+        // 장비 슬롯 타입 
+        EquipSlotType currentSlotType = EquipSlotType.FieldOri;
+        if(cardType == "Item") 
+        {
+            currentSlotType = EquipSlotType.FieldEquipment;
+        }
+        
+        EquipSlotAction[] slot = field.GetComponentsInChildren<EquipSlotAction>();
+        foreach (var item in slot)
+        {
+            item.SetSlotType(currentSlotType);
+        }
     }
 }
