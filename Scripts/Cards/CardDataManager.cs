@@ -91,7 +91,7 @@ public class CardDataManager : MonoBehaviour
     {
         MyCardsList.Clear();
         List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
-        MyCardsList.AddRange(startingCards);
+        AddNewCardToMyCardsList(startingCards[0]);
         Save();
         Load();
     }
@@ -116,10 +116,21 @@ public class CardDataManager : MonoBehaviour
         }
     }
 
-    public void AddCardToMyCardsList(CardData _cardData)
+    // 새로운 카드는 아이디를 발급받는다
+    public void AddNewCardToMyCardsList(CardData _cardData)
     {
         string _id = Guid.NewGuid().ToString();
         
+        CardData newCard = 
+        new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1", _cardData.EquipmentType);
+
+        MyCardsList.Add(newCard);
+        Save();
+    }
+    // 착용되어 있는 장비는 아이디가 바뀌면 안되므로
+    public void AddUpgradedCardToMyCardList(string _id, CardData _cardData)
+    {
+        Debug.Log("My Id is " + _id);
         CardData newCard = 
         new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1", _cardData.EquipmentType);
 

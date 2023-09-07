@@ -32,7 +32,7 @@ public class GachaSystem : MonoBehaviour
             string mGrade = gachaPools[pickIndex].Grade;
             string mName = gachaPools[pickIndex].Name;
             
-            cardDataManager.AddCardToMyCardsList(gachaPools[pickIndex]);
+            cardDataManager.AddNewCardToMyCardsList(gachaPools[pickIndex]);
         }
     }
     

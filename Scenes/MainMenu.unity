@@ -4520,7 +4520,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 357.1, y: 0}
-  m_SizeDelta: {x: -690.5338, y: -384.7852}
+  m_SizeDelta: {x: -690.5338, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &169999623
 MonoBehaviour:
@@ -13014,7 +13014,7 @@ RectTransform:
   m_Children:
   - {fileID: 959747856}
   m_Father: {fileID: 1168083571}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -16342,7 +16342,7 @@ RectTransform:
   m_Children:
   - {fileID: 745667011}
   m_Father: {fileID: 1168083571}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -23698,8 +23698,9 @@ RectTransform:
   m_Children:
   - {fileID: 1081217004}
   - {fileID: 1505695399}
+  - {fileID: 1803978047}
   m_Father: {fileID: 1168083571}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -23732,7 +23733,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   field: {fileID: 169999625}
-  equipDisplayUI: {fileID: 1803978050}
 --- !u!1 &1079948460
 GameObject:
   m_ObjectHideFlags: 0
@@ -25296,7 +25296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1168083571
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25309,7 +25309,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1803978047}
   - {fileID: 1745837095}
   - {fileID: 613767695}
   - {fileID: 1362257238}
@@ -30557,7 +30556,7 @@ RectTransform:
   - {fileID: 1859854436}
   - {fileID: 1392712537}
   m_Father: {fileID: 1168083571}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -39321,7 +39320,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1168083571}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -39771,8 +39770,8 @@ RectTransform:
   - {fileID: 344870843}
   - {fileID: 602529721}
   - {fileID: 1202889014}
-  m_Father: {fileID: 1168083571}
-  m_RootOrder: 0
+  m_Father: {fileID: 1078349321}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

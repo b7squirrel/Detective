@@ -13,6 +13,7 @@ public class EquipmentPanelManager : MonoBehaviour
     DisplayCardOnSlot displayCardOnSlot; // 슬롯 위에 있는 카드 Display
     CardDataManager cardDataManager;
     UpPanelUI upPanelUI; // UI 관련 클래스
+    EquipDisplayUI equipDisplayUI;
 
     // 카드들이 보여지는 Field
     [SerializeField] AllField field; // 모든 카드
@@ -20,13 +21,13 @@ public class EquipmentPanelManager : MonoBehaviour
     // 업그레이드 슬롯, 재료 슬롯
     [SerializeField] CardSlot upCardSlot;
     [SerializeField] CardSlot matCardSlot;
-    [SerializeField] EquipDisplayUI equipDisplayUI;
 
     void Awake()
     {
         displayCardOnSlot = GetComponent<DisplayCardOnSlot>();
         cardDataManager = FindObjectOfType<CardDataManager>();
         upPanelUI = GetComponent<UpPanelUI>();
+        equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
 
         // upCardSlot.EmptySlot();
         // matCardSlot.EmptySlot();

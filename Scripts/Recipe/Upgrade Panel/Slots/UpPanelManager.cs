@@ -157,7 +157,11 @@ public class UpPanelManager : MonoBehaviour
 
         // 생성된 카드를 내 카드 리스트에 저장
         CardData newCardData = cardDataManager.GenNewCardData(type, newGrade, CardToUpgrade.Name, CardToUpgrade.EquipmentType);
-        cardDataManager.AddCardToMyCardsList(newCardData);
+        cardDataManager.AddUpgradedCardToMyCardList(CardToUpgrade.ID, newCardData);
+
+        Debug.Log(CardToUpgrade.ID);
+        Debug.Log(cardToFeed.ID);
+
         cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제
         cardDataManager.RemoveCardFromMyCardList(cardToFeed);
 
