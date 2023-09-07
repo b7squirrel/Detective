@@ -9,11 +9,6 @@ public class EquipSlotAction : MonoBehaviour
 {
     [SerializeField] protected EquipSlotType currentSlotType;
 
-    void Awake()
-    {
-        
-    }
-
     public void Onclick()
     {
         StartCoroutine(OnClickCo());
@@ -35,6 +30,8 @@ public class EquipSlotAction : MonoBehaviour
     {
         if (currentSlotType == EquipSlotType.FieldOri)
         {
+            CardData cardData = GetComponent<CardSlot>().GetCardData();
+            FindAnyObjectByType<EquipDisplayUI>().SetWeaponDisply(cardData);
             return;
         }
         if (currentSlotType == EquipSlotType.FieldEquipment)

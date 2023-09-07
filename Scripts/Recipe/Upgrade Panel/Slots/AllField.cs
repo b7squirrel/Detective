@@ -11,6 +11,7 @@ public class AllField : MonoBehaviour
 
     #region 슬롯 생성 관련 변수
     int numSlots;
+    CardData firstCardData;
     [SerializeField] GameObject slotPrefab;
     #endregion
 
@@ -49,13 +50,19 @@ public class AllField : MonoBehaviour
 
         cardDataSorted.Reverse();
 
-        // 카드 Display
-        List<GameObject> cards = new();
+        
 
+        // 카드 Display
         for (int i = 0; i < numSlots; i++)
         {
+            firstCardData = cardDataSorted[0];
             displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
         }
+    }
+
+    public CardData GetFirstCardData()
+    {
+        return firstCardData;
     }
 
     public void ClearSlots()
@@ -68,6 +75,8 @@ public class AllField : MonoBehaviour
             Transform child = transform.GetChild(i);
             Destroy(child.gameObject);
         }
+
+        firstCardData = null;
     }
     #endregion
 }

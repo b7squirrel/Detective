@@ -20,6 +20,7 @@ public class EquipmentPanelManager : MonoBehaviour
     // 업그레이드 슬롯, 재료 슬롯
     [SerializeField] CardSlot upCardSlot;
     [SerializeField] CardSlot matCardSlot;
+    [SerializeField] EquipDisplayUI equipDisplayUI;
 
     void Awake()
     {
@@ -35,6 +36,7 @@ public class EquipmentPanelManager : MonoBehaviour
     void OnEnable()
     {
         SetAllFieldTypeOf("Weapon");
+        equipDisplayUI.SetWeaponDisply(field.GetFirstCardData());
     }
 
     public void ClearAllFieldSlots()
