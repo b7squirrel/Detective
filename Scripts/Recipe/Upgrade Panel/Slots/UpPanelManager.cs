@@ -98,11 +98,11 @@ public class UpPanelManager : MonoBehaviour
     public void AcquireCard(CardData cardData)
     {
         // 최고 레벨 카드는 올릴 수 없음
-        if (cardData.Grade == "Legendary")
-        {
-            Debug.Log("최고 레벨 카드는 업그레이드 할 수 없습니다");
-            return;
-        }
+        // if (cardData.Grade == "Legendary")
+        // {
+        //     Debug.Log("최고 레벨 카드는 업그레이드 할 수 없습니다");
+        //     return;
+        // }
 
         // 업그레이드 카드의 경우
         if (upCardSlot.IsEmpty()) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
@@ -158,9 +158,6 @@ public class UpPanelManager : MonoBehaviour
         // 생성된 카드를 내 카드 리스트에 저장
         CardData newCardData = cardDataManager.GenNewCardData(type, newGrade, CardToUpgrade.Name, CardToUpgrade.EquipmentType);
         cardDataManager.AddUpgradedCardToMyCardList(CardToUpgrade.ID, newCardData);
-
-        Debug.Log(CardToUpgrade.ID);
-        Debug.Log(cardToFeed.ID);
 
         cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제
         cardDataManager.RemoveCardFromMyCardList(cardToFeed);

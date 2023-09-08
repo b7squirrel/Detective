@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EquipmetManager : MonoBehaviour
 {
-    List<Equipment> characterEquips;
+    // List<Equipment> characterEquips;
 
     EquipmentDataManager equipmentDatamanager;
     void Awake()
