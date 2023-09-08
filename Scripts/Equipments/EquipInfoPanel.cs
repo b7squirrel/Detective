@@ -14,5 +14,8 @@ public class EquipInfoPanel : MonoBehaviour
         Name.text = cardData.Name;
         
         CardsDictionary cardsDictionary = FindAnyObjectByType<CardsDictionary>();
+        WeaponItemData weaponItemData = cardsDictionary.GetWeaponItemData(cardData);
+        itemImage.sprite = weaponItemData.itemData.charImage;
+
     }
 }

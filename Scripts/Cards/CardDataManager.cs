@@ -67,6 +67,7 @@ public class CardDataManager : MonoBehaviour
         filePath = Application.persistentDataPath + "/PlayerData/" + myCards;
 
         Load();
+        FindAnyObjectByType<CardList>().InitCardList();
     }
 
     void Save()

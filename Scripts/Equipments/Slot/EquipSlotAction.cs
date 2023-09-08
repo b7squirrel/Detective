@@ -40,7 +40,7 @@ public class EquipSlotAction : MonoBehaviour
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.EquipToUpCard(cardData);
+            equipPanelManager.ActivateEquipInfoPanel(cardData);
             return;
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
