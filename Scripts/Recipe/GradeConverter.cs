@@ -17,6 +17,8 @@ public class GradeConverter
     }
 }
 
+public enum EquipmentType { Head, Chest, Legs, Weapon }
+
 public class EquipmentTypeConverter
 {
     public int ConvertStringToInt(string _equipType)
