@@ -130,7 +130,6 @@ public class CardDataManager : MonoBehaviour
     // 착용되어 있는 장비는 아이디가 바뀌면 안되므로
     public void AddUpgradedCardToMyCardList(string _id, CardData _cardData)
     {
-        Debug.Log("My Id is " + _id);
         CardData newCard = 
         new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1", _cardData.EquipmentType);
 
