@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
+
 using UnityEngine;
 
 /// <summary>
@@ -10,7 +10,7 @@ using UnityEngine;
 public class EquipmentPanelManager : MonoBehaviour
 {
     CardData CardOnDisplay { get; set; } // 디스플레이에 올라가 있는 오리 카드
-    [SerializeField]CardData[] CardToEquip = new CardData[4]; // Equipment Info에 올라 갈 장비 카드
+    [SerializeField] CardData[] CardToEquip = new CardData[4]; // Equipment Info에 올라 갈 장비 카드
     [SerializeField] CardData[] currentEquipments = new CardData[4]; // Equipment Info에 올라가 있는 장비 카드
     int index; // 어떤 장비 슬롯인지
 
@@ -63,6 +63,7 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         equipDisplayUI.SetWeaponDisply(cardDataToDisplay);
         CardOnDisplay = cardDataToDisplay;
+        PutEquipmentsOnCharCard(cardDataToDisplay);
     }
 
     public void ClearAllFieldSlots()
@@ -110,7 +111,7 @@ public class EquipmentPanelManager : MonoBehaviour
     // info panel 의 equip 버튼
     public void EquipToUpCard()
     {
-        if(currentEquipments[index] != null)
+        if (currentEquipments[index] != null)
         {
             Debug.Log("장비가 이미 있습니다.");
             // 이미 장비가 장착되어 있다면 해제하고
@@ -121,7 +122,7 @@ public class EquipmentPanelManager : MonoBehaviour
         cardList.Equip(CardOnDisplay, CardToEquip[index]);
         currentEquipments[index] = CardToEquip[index];
 
-        var slot = Instantiate(slotPrefab, transform);
+        var slot = Instantiate(slotPrefab);
         slot.transform.SetParent(equipDispSlots[index]);
         slot.transform.localPosition = Vector2.zero;
         slot.transform.localScale = Vector2.one;
@@ -147,6 +148,38 @@ public class EquipmentPanelManager : MonoBehaviour
 
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
+    }
+    void PutEquipmentsOnCharCard(CardData charCardData)
+    {
+        EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(charCardData);
+
+        // 슬롯을 다 부수고
+        for (int i = 0; i < equipDispSlots.Length; i++)
+        {
+            EquipSlot equipSlot = equipDispSlots[i].GetComponentInChildren<EquipSlot>();
+            if (equipSlot != null) Destroy(equipSlot.gameObject);
+
+            // 슬롯을 equipmentCards 갯수대로 만들고 배치
+            if (equipmentCards[i] != null)
+            {
+                currentEquipments[i] = equipmentCards[i].CardData;
+                
+                var slot = Instantiate(slotPrefab);
+                slot.transform.SetParent(equipDispSlots[i]);
+                slot.transform.localPosition = Vector2.zero;
+                slot.transform.localScale = Vector2.one;
+                slot.transform.rotation = equipDispSlots[i].rotation;
+
+                Item itemData = cardDictionary.GetWeaponItemData(currentEquipments[i]).itemData;
+
+                slot.GetComponent<CardSlot>().SetItemCard(currentEquipments[i], itemData);
+                slot.GetComponent<CardDisp>().InitItemCardDisplay(itemData);
+                slot.GetComponent<EquipSlotAction>().SetSlotType(EquipSlotType.UpEquipment);
+
+            }
+            currentEquipments[i] = null;
+        }
+        // 카드 리스트에서 불러오는 것이니까 카드 리스트에 따로 해줄 것은 없다.
     }
     public void ActivateEquipInfoPanel(CardData cardData, bool isEquipButton)
     {

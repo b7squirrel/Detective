@@ -69,6 +69,10 @@ public class CardList : MonoBehaviour
         EquipmentCard card = equipmentCards.Find(x => x.CardData.ID == cardData.ID);
         return card;
     }
+    public EquipmentCard[] GetEquipmentsCardData(CardData charCardData)
+    {
+        return FindCharCard(charCardData).equipmentCards;
+    }
     public void InitCardList()
     {
         charCards = new();
