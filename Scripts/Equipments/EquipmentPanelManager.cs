@@ -15,7 +15,6 @@ public class EquipmentPanelManager : MonoBehaviour
 
     DisplayCardOnSlot displayCardOnSlot; // 슬롯 위에 있는 카드 Display
     CardDataManager cardDataManager;
-    EquipmentUIManager equipmentUIManger;
     CardsDictionary cardDictionary;
     CardList cardList;
 
@@ -41,7 +40,6 @@ public class EquipmentPanelManager : MonoBehaviour
         cardDataManager = FindObjectOfType<CardDataManager>();
         upPanelUI = GetComponent<UpPanelUI>();
         equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
-        equipmentUIManger = GetComponentInChildren<EquipmentUIManager>();
         cardList = FindAnyObjectByType<CardList>();
         cardDictionary = FindAnyObjectByType<CardsDictionary>();
 
@@ -129,7 +127,11 @@ public class EquipmentPanelManager : MonoBehaviour
         slot.transform.localPosition = Vector2.zero;
         slot.transform.localScale = Vector2.one;
         slot.transform.rotation = equipDispSlots[index].rotation;
-        slot.GetComponent<CardDisp>().InitItemCardDisplay(cardDictionary.GetWeaponItemData(CardOnInfo).itemData);
+
+        Item itemData = cardDictionary.GetWeaponItemData(currentCardOnInfo).itemData;
+
+        slot.GetComponent<CardSlot>().SetItemCard(currentCardOnInfo, itemData);
+        slot.GetComponent<CardDisp>().InitItemCardDisplay(itemData);
         slot.GetComponent<EquipSlotAction>().SetSlotType(EquipSlotType.UpEquipment);
 
         SetAllFieldTypeOf("Item");

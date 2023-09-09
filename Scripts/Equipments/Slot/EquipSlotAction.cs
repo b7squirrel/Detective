@@ -45,7 +45,10 @@ public class EquipSlotAction : MonoBehaviour
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
         {
-            Debug.Log("Up Equipment Slot Cliced");
+            EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
+            CardData cardData = GetComponent<CardSlot>().GetCardData();
+            Debug.Log("Up equip card data = " + cardData.Name);
+            equipPanelManager.ActivateEquipInfoPanel(cardData);
             return;
         }
         if (currentSlotType == EquipSlotType.None)
