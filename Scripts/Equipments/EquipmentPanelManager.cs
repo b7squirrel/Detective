@@ -12,6 +12,7 @@ public class EquipmentPanelManager : MonoBehaviour
     CardData CardOnDisplay { get; set; } // 디스플레이에 올라가 있는 오리 카드
     [SerializeField] CardData[] CardToEquip = new CardData[4]; // Equipment Info에 올라 갈 장비 카드
     [SerializeField] CardData[] currentEquipments = new CardData[4]; // Equipment Info에 올라가 있는 장비 카드
+    [SerializeField] CardSlot[] equipSlots; // 4개의 장비 슬롯
     int index; // 어떤 장비 슬롯인지
 
     DisplayCardOnSlot displayCardOnSlot; // 슬롯 위에 있는 카드 Display
@@ -111,6 +112,24 @@ public class EquipmentPanelManager : MonoBehaviour
     // info panel 의 equip 버튼
     public void EquipToUpCard()
     {
+        // 카드 리스트에서 현재 선택된 오리의 장비정보 가져오기
+        // 가져온 장비 정보를 4개의 슬롯에 집어 넣음.
+
+        // 슬롯에 장비가 이미 있으면 CardList에서 그 장비를 해제하고 새로운 장비 장착
+        // 슬롯에 장비가 없다면 SlotDiplay를 업데이트 하고 CardList에서 장비 장착
+        
+        // currentEquipment 는 없애고 (cardOnDisplay, CardToEquip은 필요 함)
+        // 장비 패널 UI 를 분리시켜서 카드를 업데이트 하는 등의 작업은 모두 거기서 하자 
+
+        // 슬롯은 계속 재활용 하니까 serielizedField로 해서 사용하자 <EquipSlot> equipSlots
+
+        EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
+        for (int i = 0; i < 4; i++)
+        {
+
+        }
+
+
         if (currentEquipments[index] != null)
         {
             Debug.Log("장비가 이미 있습니다.");
