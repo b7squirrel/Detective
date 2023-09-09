@@ -12988,6 +12988,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b1ddad5724995499f7d0a0fa5c6f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CardToEquip:
+  - ID: 
+    Type: 
+    Grade: 
+    Name: 
+    Exp: 
+    EquipmentType: 
+  - ID: 
+    Type: 
+    Grade: 
+    Name: 
+    Exp: 
+    EquipmentType: 
+  - ID: 
+    Type: 
+    Grade: 
+    Name: 
+    Exp: 
+    EquipmentType: 
+  - ID: 
+    Type: 
+    Grade: 
+    Name: 
+    Exp: 
+    EquipmentType: 
+  currentEquipments:
+  - ID: 
+    Type: 
+    Grade: 
+    Name: 
+    Exp: 
+    EquipmentType: 
+  - ID: 
+    Type: 
+    Grade: 
+    Name: 
+    Exp: 
+    EquipmentType: 
+  - ID: 
+    Type: 
+    Grade: 
+    Name: 
+    Exp: 
+    EquipmentType: 
+  - ID: 
+    Type: 
+    Grade: 
+    Name: 
+    Exp: 
+    EquipmentType: 
   equipInfoPanel: {fileID: 388860202}
   equipDispSlots:
   - {fileID: 1165827125}
@@ -18102,7 +18152,6 @@ GameObject:
   - component: {fileID: 1500030661}
   - component: {fileID: 1500030662}
   - component: {fileID: 1500030664}
-  - component: {fileID: 1500030663}
   m_Layer: 0
   m_Name: CardDataManager
   m_TagString: Untagged
@@ -18204,19 +18253,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MyEquipmentsList: []
---- !u!114 &1500030663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1500030657}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06afbde2fd440f541aaf57daef08d578, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  equipmentCards: []
 --- !u!114 &1500030664
 MonoBehaviour:
   m_ObjectHideFlags: 0

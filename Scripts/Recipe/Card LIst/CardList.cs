@@ -52,6 +52,9 @@ public class CardList : MonoBehaviour
         CharCard charCard = FindCharCard(charData);
         EquipmentCard equipmentCard = FindEquipmentCard(equipData);
 
+        Debug.Log("Char Card = " + charCard.CardData.Name);
+        Debug.Log("equipment Card = " + equipmentCard.CardData.Name);
+
         int index = new EquipmentTypeConverter().ConvertStringToInt(equipData.EquipmentType);
         charCard.equipmentCards[index] = null;
         equipmentCard.IsEquipped = false;

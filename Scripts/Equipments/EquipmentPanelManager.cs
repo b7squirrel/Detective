@@ -44,16 +44,15 @@ public class EquipmentPanelManager : MonoBehaviour
         cardList = FindAnyObjectByType<CardList>();
         cardDictionary = FindAnyObjectByType<CardsDictionary>();
 
-        // upCardSlot.EmptySlot();
-        // matCardSlot.EmptySlot();
-        // SetAllField();
+        for (int i = 0; i < CardToEquip.Length; i++)
+        {
+            currentEquipments[i] = null;
+            CardToEquip[i] = null;
+        }
     }
 
     void OnEnable()
     {
-        
-        
-
         SetAllFieldTypeOf("Weapon");
         // SetDisplay(field.GetFirstCardData());
         DeActivateEquipInfoPanel();
@@ -111,14 +110,9 @@ public class EquipmentPanelManager : MonoBehaviour
     // info panel 의 equip 버튼
     public void EquipToUpCard()
     {
-        Debug.Log("null check = " + currentEquipments.Length);
-        // 장착 조건을 만족하지 않으면 버튼을 누를 수 없도록 하자.
-        // equipmentUIManger.SetEquipSlot(CardData cardDataToEquip);
-        Debug.Log("index = " + index);
-        Debug.Log("Name = " + currentEquipments[0].Name);
-
         if(currentEquipments[index] != null)
         {
+            Debug.Log("장비가 이미 있습니다.");
             // 이미 장비가 장착되어 있다면 해제하고
             cardList.UnEquip(CardOnDisplay, currentEquipments[index]);
             Destroy(equipDispSlots[index].GetComponentInChildren<EquipSlot>().gameObject);
@@ -149,6 +143,7 @@ public class EquipmentPanelManager : MonoBehaviour
         cardList.UnEquip(CardOnDisplay, currentEquipments[index]);
         Destroy(equipDispSlots[index].GetComponentInChildren<EquipSlot>().gameObject);
         currentEquipments[index] = null;
+        CardToEquip[index] = null;
 
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
