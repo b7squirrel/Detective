@@ -137,10 +137,22 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
     }
-    public void ActivateEquipInfoPanel(CardData cardData)
+    // info panel의 UnEquip 버튼
+    public void UnEquipCard()
+    {
+        int index = new EquipmentTypeConverter().ConvertStringToInt(CardOnInfo.EquipmentType);
+        // 장비 해제
+        cardList.UnEquip(CardOnDisplay, currentCardOnInfo);
+        Destroy(equipDispSlots[index].GetComponentInChildren<EquipSlot>().gameObject);
+        currentCardOnInfo = null;
+
+        SetAllFieldTypeOf("Item");
+        DeActivateEquipInfoPanel();
+    }
+    public void ActivateEquipInfoPanel(CardData cardData, bool isEquipButton)
     {
         equipInfoPanel.gameObject.SetActive(true);
-        equipInfoPanel.SetPanel(cardData);
+        equipInfoPanel.SetPanel(cardData, isEquipButton);
         CardOnInfo = cardData;
     }
     public void DeActivateEquipInfoPanel()

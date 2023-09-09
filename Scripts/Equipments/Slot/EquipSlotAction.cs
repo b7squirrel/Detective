@@ -40,7 +40,7 @@ public class EquipSlotAction : MonoBehaviour
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.ActivateEquipInfoPanel(cardData);
+            equipPanelManager.ActivateEquipInfoPanel(cardData, true);
             return;
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
@@ -48,7 +48,7 @@ public class EquipSlotAction : MonoBehaviour
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
             Debug.Log("Up equip card data = " + cardData.Name);
-            equipPanelManager.ActivateEquipInfoPanel(cardData);
+            equipPanelManager.ActivateEquipInfoPanel(cardData, false);
             return;
         }
         if (currentSlotType == EquipSlotType.None)
