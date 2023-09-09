@@ -44,7 +44,6 @@ public class CardList : MonoBehaviour
         EquipmentCard equipmentCard = FindEquipmentCard(equipData);
 
         int index = new EquipmentTypeConverter().ConvertStringToInt(equipData.EquipmentType);
-        Debug.Log("equipment index = " + index);
         charCard.equipmentCards[index] = equipmentCard;
         equipmentCard.IsEquipped = true;
     }
@@ -54,7 +53,6 @@ public class CardList : MonoBehaviour
         EquipmentCard equipmentCard = FindEquipmentCard(equipData);
 
         int index = new EquipmentTypeConverter().ConvertStringToInt(equipData.EquipmentType);
-        Debug.Log("equipment index = " + index);
         charCard.equipmentCards[index] = null;
         equipmentCard.IsEquipped = false;
     }
@@ -63,7 +61,7 @@ public class CardList : MonoBehaviour
         CharCard card = charCards.Find(x => x.CardData.ID == cardData.ID);
         return card;
     }
-    EquipmentCard FindEquipmentCard(CardData cardData)
+    public EquipmentCard FindEquipmentCard(CardData cardData)
     {
         EquipmentCard card = equipmentCards.Find(x => x.CardData.ID == cardData.ID);
         return card;

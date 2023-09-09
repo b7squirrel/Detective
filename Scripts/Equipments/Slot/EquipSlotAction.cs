@@ -45,7 +45,7 @@ public class EquipSlotAction : MonoBehaviour
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
         {
-            GetComponent<CardSlot>().EmptySlot();
+            Debug.Log("Up Equipment Slot Cliced");
             return;
         }
         if (currentSlotType == EquipSlotType.None)
