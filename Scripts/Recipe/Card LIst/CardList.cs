@@ -49,7 +49,7 @@ public class CardList : MonoBehaviour
         charCard.equipmentCards[index] = equipmentCard;
         equipmentCard.IsEquipped = true;
 
-        equipmentDataManager.UpdateEquipment(charCard); // 데이터 업데이트 및 저장
+        equipmentDataManager.UpdateEquipment(charCard, index); // 데이터 업데이트 및 저장
     }
     public void UnEquip(CardData charData, EquipmentCard _equipmentCard)
     {
@@ -60,7 +60,7 @@ public class CardList : MonoBehaviour
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
 
-        equipmentDataManager.UpdateEquipment(charCard);// 데이터 업데이트 및 저장
+        equipmentDataManager.UpdateEquipment(charCard, index);// 데이터 업데이트 및 저장
     }
     CharCard FindCharCard(CardData cardData)
     {
@@ -115,25 +115,30 @@ public class CardList : MonoBehaviour
 
         if (myEquipmentData.Count == 0) return;
 
-        string charID = _charCard.CardData.ID;
-        CardEquipmentData equipData = myEquipmentData.Find(x => x.charID == charID);
+        CardEquipmentData equipData = myEquipmentData.Find(x => x.charID == _charCard.CardData.ID);
 
+        if (equipData == null) return;
         // ID로 각각의 EquipmentCard를 찾아서 장비 카드만 모아둔 equipmentCards 리스트에서 찾아 준다
         for (int i = 0; i < 4; i++)
         {
             Debug.Log("id of the card to equip = " + equipData.IDs[i]);
-            if (equipData.IDs[i] == null)
-                continue;
-            CardData cardToEquip = FindCardDataByID(equipData.IDs[i]);
-            Debug.Log("name of the card to equip = " + cardToEquip.Name);
-            Equip(_charCard.CardData, cardToEquip);
+            if (equipData.IDs[i] != "")
+            {
+                CardData cardToEquip = FindCardDataByID(equipData.IDs[i]);
+                Debug.Log("name of the card to equip = " + cardToEquip.Name);
+                Equip(_charCard.CardData, cardToEquip);
+            }
+            else if(equipData.IDs[i] == "")
+            {
+                Debug.Log("장비가 장착되어 있지 않습니다.");
+            }
         }
         // 저장되어 있는 데이터를 가져와서 반영하는 것이므로 또 저장할 필요가 없다.
     }
     CardData FindCardDataByID(string cardID)
     {
-        CardData cardData = equipmentCards.Find(x => x.CardData.ID == cardID).CardData;
-        return cardData;
+        EquipmentCard equipmentCard = equipmentCards.Find(x => x.CardData.ID == cardID);
+        return equipmentCard.CardData;
     }
 
 }

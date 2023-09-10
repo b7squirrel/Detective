@@ -70,7 +70,8 @@ public class EquipmentPanelManager : MonoBehaviour
         // 아이템 카드는 착용되어 있지 않는 것들만 보여주기
         if (cardType == CardType.Weapon.ToString())
         {
-            card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType);
+            equipDisplayUI.OffDisplay(); // Display의 장비 슬롯들을 모두 비우고
+            card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field 오리만 보여줌
         }
         else if (cardType == CardType.Item.ToString())
         {

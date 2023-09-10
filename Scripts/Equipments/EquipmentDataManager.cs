@@ -79,7 +79,8 @@ public class EquipmentDataManager : MonoBehaviour
     }
 
     // 아이디로 charCard를 찾아서 장비 데이터(My Equipment List) 업데이트
-    public void UpdateEquipment(CharCard charCard)
+    // Card List의 Equip과 UnEquip이 호출.
+    public void UpdateEquipment(CharCard charCard, int Equipmentindex)
     {
         // 오리ID 비교
         CardEquipmentData charEquipData = MyEquipmentsList.Find(x => x.charID == charCard.CardData.ID);
@@ -87,13 +88,14 @@ public class EquipmentDataManager : MonoBehaviour
 
         string[] equipmentCardID = new string[4];
 
-
+        // 쓰기 편하게 equipmentCardID 에 아이디를 저장
         for (int i = 0; i < 4; i++)
         {
             if (charCard.equipmentCards[i] != null)
                 equipmentCardID[i] = charCard.equipmentCards[i].CardData.ID;
         }
 
+        // 해당 charCard의 장비 데이터가 존재하지 않으면 새로 생성해서 저장
         if (charEquipData == null)
         {
             CardEquipmentData newEquipData =
@@ -101,14 +103,10 @@ public class EquipmentDataManager : MonoBehaviour
 
             MyEquipmentsList.Add(newEquipData);
         }
+        // 해당 charCard의 장비 데이터가 존재한다면 바뀌는 장비만 교체하고 저장
         else
         {
-            charEquipData.charID = charCardData.ID;
-
-            for (int i = 0; i < equipmentCardID.Length; i++)
-            {
-                charEquipData.IDs[i] = equipmentCardID[i];
-            }
+            charEquipData.IDs[Equipmentindex] = equipmentCardID[Equipmentindex];
         }
 
         Save();
