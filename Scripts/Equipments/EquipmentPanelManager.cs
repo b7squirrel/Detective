@@ -12,10 +12,9 @@ public class EquipmentPanelManager : MonoBehaviour
 {
     CardData CardOnDisplay { get; set; } // 디스플레이에 올라가 있는 오리 카드
     [SerializeField] CardData[] CardToEquip = new CardData[4]; // Equipment Info에 올라 갈 장비 카드
-    [SerializeField] EquipSlot[] equipSlots; // 4개의 장비 슬롯
+    
     int index; // 어떤 장비 슬롯인지
 
-    DisplayCardOnSlot displayCardOnSlot; // 슬롯 위에 있는 카드 Display
     CardDataManager cardDataManager;
     CardsDictionary cardDictionary;
     CardList cardList;
@@ -25,7 +24,6 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] EquipInfoPanel equipInfoPanel;
 
     [Tooltip("Head, Chest, Legs, Weapon 순서")]
-    [SerializeField] Transform[] equipDispSlots; // 디스플레이에 있는 4개 슬롯
 
     // 카드들이 보여지는 Field
     [SerializeField] AllField field; // 모든 카드
@@ -38,7 +36,6 @@ public class EquipmentPanelManager : MonoBehaviour
 
     void Awake()
     {
-        displayCardOnSlot = GetComponent<DisplayCardOnSlot>();
         cardDataManager = FindObjectOfType<CardDataManager>();
         upPanelUI = GetComponent<UpPanelUI>();
         equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
@@ -48,7 +45,6 @@ public class EquipmentPanelManager : MonoBehaviour
         for (int i = 0; i < CardToEquip.Length; i++)
         {
             CardToEquip[i] = null;
-            equipSlots[i].EmptySlot();
         }
     }
 
@@ -57,10 +53,12 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Weapon");
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
+        equipDisplayUI.OffDisplay();
     }
 
     public void SetDisplay(CardData cardDataToDisplay)
     {
+        equipDisplayUI.OnDisplay();
         equipDisplayUI.SetWeaponDisply(cardDataToDisplay);
         CardOnDisplay = cardDataToDisplay;
         PutEquipmentsOnCharCard(cardDataToDisplay);
@@ -115,7 +113,7 @@ public class EquipmentPanelManager : MonoBehaviour
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
         
         // 4개 슬롯에 업데이트 하기 
-        UpdateSlots(equipmentCards);
+        equipDisplayUI.UpdateSlots(equipmentCards);
 
         // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
         if(equipmentCards[index] != null)
@@ -129,30 +127,10 @@ public class EquipmentPanelManager : MonoBehaviour
 
         Item itemData = cardDictionary.GetWeaponItemData(CardToEquip[index]).itemData;
 
-        equipSlots[index].SetItemCard(CardToEquip[index], itemData);
-        equipSlots[index].GetComponent<CardDisp>().InitItemCardDisplay(itemData);
+        equipDisplayUI.SetSlot(index, itemData, CardToEquip[index]);
 
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
-    }
-
-    void UpdateSlots(EquipmentCard[] equipmentCards)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            if (equipmentCards[i] == null)
-            {
-                if (equipSlots[i] != null)
-                    equipSlots[i].EmptySlot();
-            }
-            else
-            {
-                CardData cardData = equipmentCards[i].CardData;
-                WeaponItemData weaponItemData =
-                        cardDictionary.GetWeaponItemData(cardData);
-                equipSlots[i].SetItemCard(cardData, weaponItemData.itemData);
-            }
-        }
     }
 
     // info panel의 UnEquip 버튼
@@ -161,7 +139,8 @@ public class EquipmentPanelManager : MonoBehaviour
         // 장비 해제
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
         cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
-        equipDispSlots[index].GetComponentInChildren<EquipSlot>().EmptySlot();
+
+        equipDisplayUI.EmptyEquipSlot(index);
         CardToEquip[index] = null;
 
         SetAllFieldTypeOf("Item");
@@ -173,7 +152,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
         // 슬롯 업데이트
         // 카드 리스트에서 불러오는 것이니까 카드 리스트에 따로 해줄 것은 없다.
-        UpdateSlots(equipmentCards);
+        equipDisplayUI.UpdateSlots(equipmentCards);
         
     }
     public void ActivateEquipInfoPanel(CardData cardData, bool isEquipButton)
