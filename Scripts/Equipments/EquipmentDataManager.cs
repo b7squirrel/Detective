@@ -11,12 +11,13 @@ public class CardEquipmentData
     public CardEquipmentData(string _ori, string _head, string _chest,
             string _legs, string _weapon)
     {
-        IDs[0] = _ori;
-        IDs[1] = _head;
-        IDs[2] = _chest;
-        IDs[3] = _legs;
-        IDs[4] = _weapon;
+        charID = _ori;
+        IDs[0] = _head;
+        IDs[1] = _chest;
+        IDs[2] = _legs;
+        IDs[3] = _weapon;
     }
+    public string charID;
     public string[] IDs = new string[4];
 }
 
@@ -51,6 +52,7 @@ public class EquipmentDataManager : MonoBehaviour
         filePath = Application.persistentDataPath + "/MyEquipmentsData/" + myEquips;
 
         Load();
+        FindAnyObjectByType<CardList>().InitCardList();
     }
 
     void Save()
@@ -76,13 +78,15 @@ public class EquipmentDataManager : MonoBehaviour
         return MyEquipmentsList;
     }
 
-    // 아이디로 charCard를 찾아서 equipment 업데이트
+    // 아이디로 charCard를 찾아서 장비 데이터(My Equipment List) 업데이트
     public void UpdateEquipment(CharCard charCard)
     {
         // 오리ID 비교
-        CardEquipmentData charEquipData = MyEquipmentsList.Find(x => x.IDs[0] == charCard.CardData.ID);
+        CardEquipmentData charEquipData = MyEquipmentsList.Find(x => x.charID == charCard.CardData.ID);
         CardData charCardData = charCard.CardData;
+
         string[] equipmentCardID = new string[4];
+
 
         for (int i = 0; i < 4; i++)
         {
@@ -99,6 +103,8 @@ public class EquipmentDataManager : MonoBehaviour
         }
         else
         {
+            charEquipData.charID = charCardData.ID;
+
             for (int i = 0; i < equipmentCardID.Length; i++)
             {
                 charEquipData.IDs[i] = equipmentCardID[i];

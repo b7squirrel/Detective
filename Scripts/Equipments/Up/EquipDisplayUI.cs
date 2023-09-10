@@ -47,7 +47,7 @@ public class EquipDisplayUI : MonoBehaviour
     {
         equipSlots[index].EmptySlot();
     }
-    
+
     public void SetSlot(int index, Item itemData, CardData cardToEquip)
     {
         equipSlots[index].SetItemCard(cardToEquip, itemData);
@@ -57,16 +57,17 @@ public class EquipDisplayUI : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            if (equipmentCards[i] == null)
-            {
-                if (equipSlots[i] != null)
-                    equipSlots[i].EmptySlot();
-            }
-            else
+            // 일단 기존 슬롯을 다 비우고
+            equipSlots[i].EmptySlot();
+            
+            // 장착되어 있는 장비가 있다면
+            if (equipmentCards[i].CardData.Name != null)
             {
                 CardData cardData = equipmentCards[i].CardData;
                 WeaponItemData weaponItemData =
-                        cardDictionary.GetWeaponItemData(cardData);
+                cardDictionary.GetWeaponItemData(cardData);
+                // Debug.Log("ItemData = " + weaponItemData.itemData.Name);
+                
                 equipSlots[i].SetItemCard(cardData, weaponItemData.itemData);
             }
         }

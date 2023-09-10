@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 
 [System.Serializable]
@@ -54,7 +55,7 @@ public class CardList : MonoBehaviour
     {
         CharCard charCard = FindCharCard(charData);
 
-        int index = 
+        int index =
                 new EquipmentTypeConverter().ConvertStringToInt(_equipmentCard.CardData.EquipmentType);
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
@@ -75,44 +76,64 @@ public class CardList : MonoBehaviour
     {
         return FindCharCard(charCardData).equipmentCards;
     }
+
+    // weapon과 item을 분리해서 저장
     public void InitCardList()
     {
         charCards = new();
         equipmentCards = new();
-        
+
         List<CardData> myCardList = cardDataManager.GetMyCardList();
-        
 
         foreach (var item in myCardList)
         {
-            if(item.Type == CardType.Weapon.ToString())
+            if (item.Type == CardType.Weapon.ToString())
             {
-                CharCard charCard = new(item);
-                charCards.Add(charCard);
-
-
-                // charCards에 장비 데이터 로드해서 장착하기
-                // 장착시킨 장비는 isEqupped로 설정하기
+                CharCard _charCard = new(item);
+                charCards.Add(_charCard);
+                
             }
-            else if(item.Type == CardType.Item.ToString())
+            else if (item.Type == CardType.Item.ToString())
             {
                 EquipmentCard equipCard = new(item);
                 equipmentCards.Add(equipCard);
             }
         }
-    }
-    void LoadEquipmentData(CharCard _charCard)
-    {
-        // 해당 장비 데이터를 찾아서
-        List<CardEquipmentData> myEquipmentData = equipmentDataManager.GetMyEquipmentsList();
-        string charID = _charCard.CardData.ID;
-        CardEquipmentData equipData = myEquipmentData.Find(x => x.IDs[0] == charID);
 
-        // ID로 각각의 EquipmentCard를 찾아서 
-        EquipmentCard[] equipCard = new EquipmentCard[4];
-        for (int i = 0; i < 4; i++)
+        // 모든 카드가 분류되고 나면 장비 데이터대로 장비 장착하기
+        foreach (var item in charCards)
         {
-            
+            LoadEquipmentData(item);
         }
     }
+    // charCards에 장비 데이터 로드해서 장착하기
+    // 장착시킨 장비는 isEqupped로 설정하기
+    void LoadEquipmentData(CharCard _charCard)
+    {
+        // 매개 변수로 받은 오리카드의 장비 데이터를 찾아서 equipData에 저장
+        List<CardEquipmentData> myEquipmentData = equipmentDataManager.GetMyEquipmentsList();
+
+        if (myEquipmentData.Count == 0) return;
+
+        string charID = _charCard.CardData.ID;
+        CardEquipmentData equipData = myEquipmentData.Find(x => x.charID == charID);
+
+        // ID로 각각의 EquipmentCard를 찾아서 장비 카드만 모아둔 equipmentCards 리스트에서 찾아 준다
+        for (int i = 0; i < 4; i++)
+        {
+            Debug.Log("id of the card to equip = " + equipData.IDs[i]);
+            if (equipData.IDs[i] == null)
+                continue;
+            CardData cardToEquip = FindCardDataByID(equipData.IDs[i]);
+            Debug.Log("name of the card to equip = " + cardToEquip.Name);
+            Equip(_charCard.CardData, cardToEquip);
+        }
+        // 저장되어 있는 데이터를 가져와서 반영하는 것이므로 또 저장할 필요가 없다.
+    }
+    CardData FindCardDataByID(string cardID)
+    {
+        CardData cardData = equipmentCards.Find(x => x.CardData.ID == cardID).CardData;
+        return cardData;
+    }
+
 }

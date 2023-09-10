@@ -19,7 +19,6 @@ public class EquipmentPanelManager : MonoBehaviour
     CardsDictionary cardDictionary;
     CardList cardList;
 
-    UpPanelUI upPanelUI; // UI 관련 클래스
     EquipDisplayUI equipDisplayUI;
     [SerializeField] EquipInfoPanel equipInfoPanel;
 
@@ -28,16 +27,11 @@ public class EquipmentPanelManager : MonoBehaviour
     // 카드들이 보여지는 Field
     [SerializeField] AllField field; // 모든 카드
 
-    // 업그레이드 슬롯, 재료 슬롯
-    [SerializeField] EquipSlot upCardSlot;
-    [SerializeField] EquipSlot matCardSlot;
-
     [SerializeField] GameObject slotPrefab;
 
     void Awake()
     {
         cardDataManager = FindObjectOfType<CardDataManager>();
-        upPanelUI = GetComponent<UpPanelUI>();
         equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
         cardList = FindAnyObjectByType<CardList>();
         cardDictionary = FindAnyObjectByType<CardsDictionary>();
@@ -116,7 +110,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.UpdateSlots(equipmentCards);
 
         // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
-        if(equipmentCards[index] != null)
+        if(equipmentCards[index].CardData.Name != null)
         {
             Debug.Log("장비가 이미 있습니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
