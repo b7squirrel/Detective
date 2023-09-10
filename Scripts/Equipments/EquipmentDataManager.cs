@@ -1,23 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using System;
 
+/// <summary>
+/// 내가 구글시트로 작성할 필요 없는 데이터
+/// </summary>
 [System.Serializable]
 public class CardEquipmentData
 {
     public CardEquipmentData(string _ori, string _head, string _chest,
-            string _legs, string _gloves, string _weapon)
+            string _legs, string _weapon)
     {
-        ori = _ori;
-        head = _head;
-        chest = _chest;
-        legs = _legs;
-        gloves = _gloves;
-        weapon = _weapon;
+        IDs[0] = _ori;
+        IDs[1] = _head;
+        IDs[2] = _chest;
+        IDs[3] = _legs;
+        IDs[4] = _weapon;
     }
-
-    public string ori, head, chest, legs, gloves, weapon;
+    public string[] IDs = new string[4];
 }
 
 [System.Serializable]
@@ -32,15 +32,13 @@ public class ReadEquipmentsData
         for (int i = 0; i < line.Length; i++)
         {
             string[] row = line[i].Split('\t');
-            cardStatsList.Add(new CardEquipmentData(row[0], row[1], row[2], row[3], row[4],
-                                row[5]));
+            cardStatsList.Add(new CardEquipmentData(row[0], row[1], row[2], row[3], row[4]));
         }
         return cardStatsList;
     }
 }
 public class EquipmentDataManager : MonoBehaviour
 {
-    // public TextAsset startingEquipments;
     public List<CardEquipmentData> MyEquipmentsList;
     string filePath;
     string myEquips = "MyEquipments.txt";
@@ -51,7 +49,7 @@ public class EquipmentDataManager : MonoBehaviour
             Directory.CreateDirectory(Application.persistentDataPath + "/MyEquipmentsData");
 
         filePath = Application.persistentDataPath + "/MyEquipmentsData/" + myEquips;
-        
+
         Load();
     }
 
@@ -63,31 +61,50 @@ public class EquipmentDataManager : MonoBehaviour
 
     void Load()
     {
-        // 로드할 파일이 있으면 로드
-        // 없으면 아무것도 안함
+        // 로드할 파일이 있으면 로드, 없으면 아무것도 안함
         if (!File.Exists(filePath))
         {
-            // InitEquipments();
             return;
         }
         string jdata = File.ReadAllText(filePath);
         MyEquipmentsList = JsonUtility.FromJson<Serialization<CardEquipmentData>>(jdata).Data;
     }
 
-    // void InitEquipments()
-    // {
-    //     MyEquipmentsList.Clear();
-    //     List<CardEquipmentData> startingEquips =
-    //                 new ReadEquipmentsData().GetCardEquipmentsList(startingEquipments);
-
-    //     MyEquipmentsList.AddRange(startingEquips);
-    //     Save();
-    //     Load();
-    // }
-
     public List<CardEquipmentData> GetMyEquipmentsList()
     {
         if (MyEquipmentsList == null) Debug.Log("리스트 널");
         return MyEquipmentsList;
+    }
+
+    // 아이디로 charCard를 찾아서 equipment 업데이트
+    public void UpdateEquipment(CharCard charCard)
+    {
+        // 오리ID 비교
+        CardEquipmentData charEquipData = MyEquipmentsList.Find(x => x.IDs[0] == charCard.CardData.ID);
+        CardData charCardData = charCard.CardData;
+        string[] equipmentCardID = new string[4];
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (charCard.equipmentCards[i] != null)
+                equipmentCardID[i] = charCard.equipmentCards[i].CardData.ID;
+        }
+
+        if (charEquipData == null)
+        {
+            CardEquipmentData newEquipData =
+                new CardEquipmentData(charCardData.ID, equipmentCardID[0], equipmentCardID[1], equipmentCardID[2], equipmentCardID[3]);
+
+            MyEquipmentsList.Add(newEquipData);
+        }
+        else
+        {
+            for (int i = 0; i < equipmentCardID.Length; i++)
+            {
+                charEquipData.IDs[i] = equipmentCardID[i];
+            }
+        }
+
+        Save();
     }
 }
