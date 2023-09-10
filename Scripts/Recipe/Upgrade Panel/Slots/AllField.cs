@@ -24,7 +24,6 @@ public class AllField : MonoBehaviour
         cardDatas.AddRange(cardList); // 재료가 될 수 있는 카드들의 리스트
 
         numSlots = cardDatas.Count;
-        
 
         // 슬롯 생성
         for (int i = 0; i < numSlots; i++)
@@ -50,13 +49,11 @@ public class AllField : MonoBehaviour
 
         cardDataSorted.Reverse();
 
-        
-
         // 카드 Display
         for (int i = 0; i < numSlots; i++)
         {
             firstCardData = cardDataSorted[0];
-            displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<EquipSlot>());
+            displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
         }
     }
 

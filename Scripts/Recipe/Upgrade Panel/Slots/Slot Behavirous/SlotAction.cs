@@ -34,19 +34,19 @@ public class SlotAction : MonoBehaviour
     {
         if (currentSlotType == SlotType.Field)
         {
-            upPanelManager.AcquireCard(GetComponent<EquipSlot>().GetCardData());
+            upPanelManager.AcquireCard(GetComponent<CardSlot>().GetCardData());
             return;
         }
         if (currentSlotType == SlotType.Up)
         {
             upPanelManager.GetIntoAllField();
-            GetComponent<EquipSlot>().EmptySlot();
+            GetComponent<CardSlot>().EmptySlot();
             return;
         }
         if (currentSlotType == SlotType.Mat)
         {
             upPanelManager.BackToMatField();
-            GetComponent<EquipSlot>().EmptySlot();
+            GetComponent<CardSlot>().EmptySlot();
             return;
         }
         if (currentSlotType == SlotType.None)

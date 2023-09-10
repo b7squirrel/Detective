@@ -134,8 +134,6 @@ public class UpPanelUI : MonoBehaviour
     public void MatSlotCanceled()
     {
         OffUpgradeConfirmationUI();
-        
-
     }
     public void OffUpgradeConfirmationUI() // 강화를 승인하면 강화 연출을 위해 확인 창을 없애기
     {
@@ -161,15 +159,13 @@ public class UpPanelUI : MonoBehaviour
     public void OpenUpgradeSuccessPanel(CardData cardData, DisplayCardOnSlot displayCardOnSlot)
     {
         upgradeSuccessPanel.SetActive(true);
-        EquipSlot successCardSlot = upgradeSuccessPanel.GetComponentInChildren<EquipSlot>();
+        CardSlot successCardSlot = upgradeSuccessPanel.GetComponentInChildren<CardSlot>();
         displayCardOnSlot.DispCardOnSlot(cardData, successCardSlot);
 
         upSuccess.localScale = .8f * Vector2.one;
         upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
 
         fieldSlotPanel.SetActive(false);
-
-        
     }
 
     // upgrade success 버튼에서 호출
