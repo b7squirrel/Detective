@@ -111,7 +111,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.UpdateSlots(equipmentCards);
 
         // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
-        if(equipmentCards[index].CardData.Name != null)
+        if(equipmentCards[index] != null)
         {
             Debug.Log("장비가 이미 있습니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
@@ -143,6 +143,7 @@ public class EquipmentPanelManager : MonoBehaviour
     }
     void PutEquipmentsOnCharCard(CardData charCardData)
     {
+        Debug.Log("디스플레이 할 오리 카드 = " + charCardData.Name);
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(charCardData);
 
         // 슬롯 업데이트
