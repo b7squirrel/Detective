@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 
+#region CharCard, EquipmentCard
 [System.Serializable]
 public class CharCard
 {
@@ -25,12 +25,16 @@ public class EquipmentCard
     public CardData CardData;
     public bool IsEquipped;
 }
+#endregion
 
 public class CardList : MonoBehaviour
 {
+    #region charCards, equipmentCards 변수
     [SerializeField] List<CharCard> charCards;
     [SerializeField] List<EquipmentCard> equipmentCards;
+    #endregion
 
+    #region 참조 변수
     CardDataManager cardDataManager;
     EquipmentDataManager equipmentDataManager;
 
@@ -39,7 +43,9 @@ public class CardList : MonoBehaviour
         cardDataManager = GetComponent<CardDataManager>();
         equipmentDataManager = GetComponent<EquipmentDataManager>();
     }
+    #endregion
 
+    #region Equip, UnEquip
     public void Equip(CardData charData, CardData equipData)
     {
         CharCard charCard = FindCharCard(charData);
@@ -57,21 +63,28 @@ public class CardList : MonoBehaviour
 
         int index =
                 new EquipmentTypeConverter().ConvertStringToInt(_equipmentCard.CardData.EquipmentType);
+        Debug.Log("Index = " + _equipmentCard.CardData.Name);
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
 
         equipmentDataManager.UpdateEquipment(charCard, index);// 데이터 업데이트 및 저장
     }
+    #endregion
+
     CharCard FindCharCard(CardData cardData)
     {
-        CharCard card = charCards.Find(x => x.CardData.ID == cardData.ID);
-        return card;
+        CharCard oriCard = charCards.Find(x => x.CardData.ID == cardData.ID);
+        Debug.Log("찾을 카드 아이디 = " + cardData.ID);
+        Debug.Log("찾은 카드 아이디 = " + oriCard.CardData.ID);
+        return oriCard;
     }
+    // 카드 데이터로 EquipmentCard 얻기
     public EquipmentCard FindEquipmentCard(CardData cardData)
     {
         EquipmentCard card = equipmentCards.Find(x => x.CardData.ID == cardData.ID);
         return card;
     }
+    // 특정 오리 카드의 장비 카드 얻기
     public EquipmentCard[] GetEquipmentsCardData(CardData charCardData)
     {
         return FindCharCard(charCardData).equipmentCards;
@@ -128,10 +141,6 @@ public class CardList : MonoBehaviour
                 Debug.Log("name of the card to equip = " + cardToEquip.Name);
                 Equip(_charCard.CardData, cardToEquip);
             }
-            else if(equipData.IDs[i] == "")
-            {
-                Debug.Log("장비가 장착되어 있지 않습니다.");
-            }
         }
         // 저장되어 있는 데이터를 가져와서 반영하는 것이므로 또 저장할 필요가 없다.
     }
@@ -141,4 +150,8 @@ public class CardList : MonoBehaviour
         return equipmentCard.CardData;
     }
 
+    public List<EquipmentCard> GetEquipmentCardsList()
+    {
+        return equipmentCards;
+    }
 }

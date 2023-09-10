@@ -27,6 +27,8 @@ public class EquipSlot : MonoBehaviour, CardSlot
         isEmpty = false;
 
         cardData = _cardData;
+
+        Debug.Log("item data = " + _itemData.Name);
         
         GetComponent<CardDisp>().InitItemCardDisplay(_itemData);
     }

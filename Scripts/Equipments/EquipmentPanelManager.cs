@@ -44,6 +44,10 @@ public class EquipmentPanelManager : MonoBehaviour
 
     void OnEnable()
     {
+        for (int i = 0; i < CardToEquip.Length; i++)
+        {
+            CardToEquip[i] = null;
+        }
         SetAllFieldTypeOf("Weapon");
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
@@ -75,14 +79,11 @@ public class EquipmentPanelManager : MonoBehaviour
         }
         else if (cardType == CardType.Item.ToString())
         {
-            foreach (var item in cardDataManager.GetMyCardList())
+            foreach (var item in cardList.GetEquipmentCardsList())
             {
-                if (item.Type == CardType.Weapon.ToString())
+                if (item.IsEquipped)
                     continue;
-
-                if (cardList.FindEquipmentCard(item).IsEquipped)
-                    continue;
-                card.Add(item);
+                card.Add(item.CardData);
             }
         }
         field.GenerateAllCardsOfType(card);
@@ -103,17 +104,13 @@ public class EquipmentPanelManager : MonoBehaviour
     // info panel 의 equip 버튼
     public void EquipToUpCard()
     {
-        // 장비 패널 UI 를 분리시켜서 카드를 업데이트 하는 등의 작업은 모두 거기서 하자 
         // 디스플레이 되는 charCard의 equipments
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
-        
-        // 4개 슬롯에 업데이트 하기 
-        equipDisplayUI.UpdateSlots(equipmentCards);
 
         // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
         if(equipmentCards[index] != null)
         {
-            Debug.Log("장비가 이미 있습니다.");
+            Debug.Log("장비가 이미 있습니다. 교체합니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
         }
 
@@ -145,10 +142,11 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         Debug.Log("디스플레이 할 오리 카드 = " + charCardData.Name);
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(charCardData);
-
+        
+        Debug.Log("장비 카드 수 = " + equipmentCards.Length);
         // 슬롯 업데이트
         // 카드 리스트에서 불러오는 것이니까 카드 리스트에 따로 해줄 것은 없다.
-        equipDisplayUI.UpdateSlots(equipmentCards);
+        // equipDisplayUI.UpdateSlots(equipmentCards);
         
     }
     public void ActivateEquipInfoPanel(CardData cardData, bool isEquipButton)

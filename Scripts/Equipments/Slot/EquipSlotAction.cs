@@ -33,6 +33,7 @@ public class EquipSlotAction : MonoBehaviour
             CardData cardData = GetComponent<EquipSlot>().GetCardData();
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             equipPanelManager.SetDisplay(cardData);
+            Debug.Log("눌러진 오리 카드 = " + cardData.Name);
             equipPanelManager.SetAllFieldTypeOf("Item");
             return;
         }

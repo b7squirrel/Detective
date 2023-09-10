@@ -52,10 +52,6 @@ public class EquipDisplayUI : MonoBehaviour
     }
     public void UpdateSlots(EquipmentCard[] equipmentCards)
     {
-        // Debug.Log("넘겨 받은 장비들 = " + equipmentCards[0].CardData.Name);
-        // Debug.Log("넘겨 받은 장비들 = " + equipmentCards[1].CardData.Name);
-        // Debug.Log("넘겨 받은 장비들 = " + equipmentCards[2].CardData.Name);
-        // Debug.Log("넘겨 받은 장비들 = " + equipmentCards[3].CardData.Name);
         for (int i = 0; i < 4; i++)
         {
             // 일단 기존 슬롯을 다 비우고
@@ -64,9 +60,11 @@ public class EquipDisplayUI : MonoBehaviour
             // 장착되어 있는 장비가 있다면
             if (equipmentCards[i] != null)
             {
+                Debug.Log("Test " + equipmentCards[i].CardData.Name);
                 CardData cardData = equipmentCards[i].CardData;
                 WeaponItemData weaponItemData =
                 cardDictionary.GetWeaponItemData(cardData);
+                Debug.Log("오리가 되면 안되는 카드 데이터 = " + cardData.Name);
                 // Debug.Log("ItemData = " + weaponItemData.itemData.Name);
                 
                 equipSlots[i].SetItemCard(cardData, weaponItemData.itemData);

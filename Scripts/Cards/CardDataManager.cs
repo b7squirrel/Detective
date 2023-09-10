@@ -73,6 +73,8 @@ public class CardDataManager : MonoBehaviour
     {
         string jsonData = JsonUtility.ToJson(new Serialization<CardData>(MyCardsList), true);
         File.WriteAllText(filePath, jsonData);
+
+        FindAnyObjectByType<CardList>().InitCardList();
     }
 
     void Load()
