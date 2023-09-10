@@ -161,7 +161,7 @@ public class UpPanelUI : MonoBehaviour
     public void OpenUpgradeSuccessPanel(CardData cardData, DisplayCardOnSlot displayCardOnSlot)
     {
         upgradeSuccessPanel.SetActive(true);
-        CardSlot successCardSlot = upgradeSuccessPanel.GetComponentInChildren<CardSlot>();
+        EquipSlot successCardSlot = upgradeSuccessPanel.GetComponentInChildren<EquipSlot>();
         displayCardOnSlot.DispCardOnSlot(cardData, successCardSlot);
 
         upSuccess.localScale = .8f * Vector2.one;

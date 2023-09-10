@@ -34,14 +34,4 @@ public class EquipSlot : MonoBehaviour, CardSlot
         isEmpty = true;
         GetComponent<CardDisp>().EmptyCardDisplay();
     }
-
-    public void SetWeaponCard(CardData _cardData, WeaponData _weaponData, TargetSlot _targetSlot)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void SetItemCard(CardData _cardData, Item _itemData, TargetSlot _targetSlot)
-    {
-        throw new System.NotImplementedException();
-    }
 }

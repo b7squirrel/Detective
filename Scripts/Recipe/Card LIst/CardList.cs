@@ -47,17 +47,17 @@ public class CardList : MonoBehaviour
         charCard.equipmentCards[index] = equipmentCard;
         equipmentCard.IsEquipped = true;
     }
-    public void UnEquip(CardData charData, CardData equipData)
+    public void UnEquip(CardData charData, EquipmentCard _equipmentCard)
     {
         CharCard charCard = FindCharCard(charData);
-        EquipmentCard equipmentCard = FindEquipmentCard(equipData);
 
         Debug.Log("Char Card = " + charCard.CardData.Name);
-        Debug.Log("equipment Card = " + equipmentCard.CardData.Name);
+        Debug.Log("equipment Card = " + _equipmentCard.CardData.Name);
 
-        int index = new EquipmentTypeConverter().ConvertStringToInt(equipData.EquipmentType);
+        int index = 
+                new EquipmentTypeConverter().ConvertStringToInt(_equipmentCard.CardData.EquipmentType);
         charCard.equipmentCards[index] = null;
-        equipmentCard.IsEquipped = false;
+        _equipmentCard.IsEquipped = false;
     }
     CharCard FindCharCard(CardData cardData)
     {

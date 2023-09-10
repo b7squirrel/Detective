@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// ClearSlots - 슬롯 부수기
@@ -11,8 +12,7 @@ public class EquipmentPanelManager : MonoBehaviour
 {
     CardData CardOnDisplay { get; set; } // 디스플레이에 올라가 있는 오리 카드
     [SerializeField] CardData[] CardToEquip = new CardData[4]; // Equipment Info에 올라 갈 장비 카드
-    [SerializeField] CardData[] currentEquipments = new CardData[4]; // Equipment Info에 올라가 있는 장비 카드
-    [SerializeField] CardSlot[] equipSlots; // 4개의 장비 슬롯
+    [SerializeField] EquipSlot[] equipSlots; // 4개의 장비 슬롯
     int index; // 어떤 장비 슬롯인지
 
     DisplayCardOnSlot displayCardOnSlot; // 슬롯 위에 있는 카드 Display
@@ -31,8 +31,8 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] AllField field; // 모든 카드
 
     // 업그레이드 슬롯, 재료 슬롯
-    [SerializeField] CardSlot upCardSlot;
-    [SerializeField] CardSlot matCardSlot;
+    [SerializeField] EquipSlot upCardSlot;
+    [SerializeField] EquipSlot matCardSlot;
 
     [SerializeField] GameObject slotPrefab;
 
@@ -47,15 +47,14 @@ public class EquipmentPanelManager : MonoBehaviour
 
         for (int i = 0; i < CardToEquip.Length; i++)
         {
-            currentEquipments[i] = null;
             CardToEquip[i] = null;
+            equipSlots[i].EmptySlot();
         }
     }
 
     void OnEnable()
     {
         SetAllFieldTypeOf("Weapon");
-        // SetDisplay(field.GetFirstCardData());
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
     }
@@ -70,7 +69,6 @@ public class EquipmentPanelManager : MonoBehaviour
     public void ClearAllFieldSlots()
     {
         field.ClearSlots();
-        // matField?.ClearSlots();
     }
     public void SetAllFieldTypeOf(string cardType)
     {
@@ -112,57 +110,58 @@ public class EquipmentPanelManager : MonoBehaviour
     // info panel 의 equip 버튼
     public void EquipToUpCard()
     {
-        // 카드 리스트에서 현재 선택된 오리의 장비정보 가져오기
-        // 가져온 장비 정보를 4개의 슬롯에 집어 넣음.
-
-        // 슬롯에 장비가 이미 있으면 CardList에서 그 장비를 해제하고 새로운 장비 장착
-        // 슬롯에 장비가 없다면 SlotDiplay를 업데이트 하고 CardList에서 장비 장착
-        
-        // currentEquipment 는 없애고 (cardOnDisplay, CardToEquip은 필요 함)
         // 장비 패널 UI 를 분리시켜서 카드를 업데이트 하는 등의 작업은 모두 거기서 하자 
-
-        // 슬롯은 계속 재활용 하니까 serielizedField로 해서 사용하자 <EquipSlot> equipSlots
-
+        // 디스플레이 되는 charCard의 equipments
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
-        for (int i = 0; i < 4; i++)
-        {
+        
+        // 4개 슬롯에 업데이트 하기 
+        UpdateSlots(equipmentCards);
 
-        }
-
-
-        if (currentEquipments[index] != null)
+        // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
+        if(equipmentCards[index] != null)
         {
             Debug.Log("장비가 이미 있습니다.");
-            // 이미 장비가 장착되어 있다면 해제하고
-            cardList.UnEquip(CardOnDisplay, currentEquipments[index]);
-            Destroy(equipDispSlots[index].GetComponentInChildren<EquipSlot>().gameObject);
+            cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
         }
-        // 장비 장착
+
+        // 새로운 장비 장착
         cardList.Equip(CardOnDisplay, CardToEquip[index]);
-        currentEquipments[index] = CardToEquip[index];
 
-        var slot = Instantiate(slotPrefab);
-        slot.transform.SetParent(equipDispSlots[index]);
-        slot.transform.localPosition = Vector2.zero;
-        slot.transform.localScale = Vector2.one;
-        slot.transform.rotation = equipDispSlots[index].rotation;
+        Item itemData = cardDictionary.GetWeaponItemData(CardToEquip[index]).itemData;
 
-        Item itemData = cardDictionary.GetWeaponItemData(currentEquipments[index]).itemData;
-
-        slot.GetComponent<CardSlot>().SetItemCard(currentEquipments[index], itemData);
-        slot.GetComponent<CardDisp>().InitItemCardDisplay(itemData);
-        slot.GetComponent<EquipSlotAction>().SetSlotType(EquipSlotType.UpEquipment);
+        equipSlots[index].SetItemCard(CardToEquip[index], itemData);
+        equipSlots[index].GetComponent<CardDisp>().InitItemCardDisplay(itemData);
 
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
     }
+
+    void UpdateSlots(EquipmentCard[] equipmentCards)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (equipmentCards[i] == null)
+            {
+                if (equipSlots[i] != null)
+                    equipSlots[i].EmptySlot();
+            }
+            else
+            {
+                CardData cardData = equipmentCards[i].CardData;
+                WeaponItemData weaponItemData =
+                        cardDictionary.GetWeaponItemData(cardData);
+                equipSlots[i].SetItemCard(cardData, weaponItemData.itemData);
+            }
+        }
+    }
+
     // info panel의 UnEquip 버튼
     public void UnEquipCard()
     {
         // 장비 해제
-        cardList.UnEquip(CardOnDisplay, currentEquipments[index]);
-        Destroy(equipDispSlots[index].GetComponentInChildren<EquipSlot>().gameObject);
-        currentEquipments[index] = null;
+        EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
+        cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
+        equipDispSlots[index].GetComponentInChildren<EquipSlot>().EmptySlot();
         CardToEquip[index] = null;
 
         SetAllFieldTypeOf("Item");
@@ -172,33 +171,10 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(charCardData);
 
-        // 슬롯을 다 부수고
-        for (int i = 0; i < equipDispSlots.Length; i++)
-        {
-            EquipSlot equipSlot = equipDispSlots[i].GetComponentInChildren<EquipSlot>();
-            if (equipSlot != null) Destroy(equipSlot.gameObject);
-
-            // 슬롯을 equipmentCards 갯수대로 만들고 배치
-            if (equipmentCards[i] != null)
-            {
-                currentEquipments[i] = equipmentCards[i].CardData;
-                
-                var slot = Instantiate(slotPrefab);
-                slot.transform.SetParent(equipDispSlots[i]);
-                slot.transform.localPosition = Vector2.zero;
-                slot.transform.localScale = Vector2.one;
-                slot.transform.rotation = equipDispSlots[i].rotation;
-
-                Item itemData = cardDictionary.GetWeaponItemData(currentEquipments[i]).itemData;
-
-                slot.GetComponent<CardSlot>().SetItemCard(currentEquipments[i], itemData);
-                slot.GetComponent<CardDisp>().InitItemCardDisplay(itemData);
-                slot.GetComponent<EquipSlotAction>().SetSlotType(EquipSlotType.UpEquipment);
-
-            }
-            currentEquipments[i] = null;
-        }
+        // 슬롯 업데이트
         // 카드 리스트에서 불러오는 것이니까 카드 리스트에 따로 해줄 것은 없다.
+        UpdateSlots(equipmentCards);
+        
     }
     public void ActivateEquipInfoPanel(CardData cardData, bool isEquipButton)
     {
