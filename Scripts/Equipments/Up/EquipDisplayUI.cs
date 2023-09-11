@@ -60,7 +60,6 @@ public class EquipDisplayUI : MonoBehaviour
             // 장착되어 있는 장비가 있다면
             if (equipmentCards[i] != null)
             {
-                Debug.Log("Test " + equipmentCards[i].CardData.Name);
                 CardData cardData = equipmentCards[i].CardData;
                 WeaponItemData weaponItemData =
                 cardDictionary.GetWeaponItemData(cardData);

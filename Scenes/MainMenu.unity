@@ -3944,7 +3944,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1078349323}
         m_TargetAssemblyTypeName: EquipmentPanelManager, Assembly-CSharp
-        m_MethodName: UnEquipCard
+        m_MethodName: UnEquip
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13282,8 +13282,6 @@ MonoBehaviour:
     EquipmentType: 
   equipInfoPanel: {fileID: 388860202}
   field: {fileID: 169999625}
-  upCardSlot: {fileID: 0}
-  matCardSlot: {fileID: 0}
   slotPrefab: {fileID: 3311998609424905349, guid: 54a78dd3fab55d148a4a920b061fec74, type: 3}
 --- !u!1 &1081217003
 GameObject:
@@ -24916,7 +24914,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1078349323}
         m_TargetAssemblyTypeName: EquipmentPanelManager, Assembly-CSharp
-        m_MethodName: EquipToUpCard
+        m_MethodName: Equip
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

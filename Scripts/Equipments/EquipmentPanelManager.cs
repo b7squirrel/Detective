@@ -52,7 +52,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.OnDisplay();
         equipDisplayUI.SetWeaponDisply(cardDataToDisplay);
         CardOnDisplay = cardDataToDisplay;
-        PutEquipmentsOnCharCard(cardDataToDisplay);
+        LoadEquipmentsOf(cardDataToDisplay);
     }
 
     public void ClearAllFieldSlots()
@@ -95,7 +95,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
     }
     
-    public void EquipToUpCard() // info panel 의 equip 버튼
+    public void Equip() // info panel 의 equip 버튼
     {
         // 디스플레이 되는 charCard의 equipments
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
@@ -118,7 +118,7 @@ public class EquipmentPanelManager : MonoBehaviour
         DeActivateEquipInfoPanel();
     }
     
-    public void UnEquipCard() // info panel의 UnEquip 버튼
+    public void UnEquip() // info panel의 UnEquip 버튼
     {
         // 장비 해제
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
@@ -130,12 +130,13 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
     }
-    void PutEquipmentsOnCharCard(CardData charCardData)
+    void LoadEquipmentsOf(CardData charCardData)
     {
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(charCardData);
+        if (equipmentCards == null) return;
         // 슬롯 업데이트
         // 카드 리스트에서 불러오는 것이니까 카드 리스트에 따로 해줄 것은 없다.
-        // equipDisplayUI.UpdateSlots(equipmentCards);
+        equipDisplayUI.UpdateSlots(equipmentCards);
     }
     public void ActivateEquipInfoPanel(CardData cardData, bool isEquipButton)
     {
