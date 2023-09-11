@@ -64,11 +64,15 @@ public class EquipDisplayUI : MonoBehaviour
                 CardData cardData = equipmentCards[i].CardData;
                 WeaponItemData weaponItemData =
                 cardDictionary.GetWeaponItemData(cardData);
-                Debug.Log("오리가 되면 안되는 카드 데이터 = " + cardData.Name);
-                // Debug.Log("ItemData = " + weaponItemData.itemData.Name);
-                
                 equipSlots[i].SetItemCard(cardData, weaponItemData.itemData);
             }
         }
+    }
+
+    public bool isEmpty(int index)
+    {
+        if (equipSlots[index].isEmpty)
+            return true;
+        return false;
     }
 }

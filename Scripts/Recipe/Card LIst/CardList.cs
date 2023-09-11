@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#region CharCard, EquipmentCard
 [System.Serializable]
 public class CharCard
 {
@@ -9,6 +8,10 @@ public class CharCard
     {
         CardData = _cardData;
         equipmentCards = new EquipmentCard[4];
+        for (int i = 0; i < equipmentCards.Length; i++)
+        {
+            equipmentCards[i] = null;
+        }
     }
     public CardData CardData;
     public EquipmentCard[] equipmentCards;
@@ -25,16 +28,12 @@ public class EquipmentCard
     public CardData CardData;
     public bool IsEquipped;
 }
-#endregion
 
 public class CardList : MonoBehaviour
 {
-    #region charCards, equipmentCards 변수
     [SerializeField] List<CharCard> charCards;
     [SerializeField] List<EquipmentCard> equipmentCards;
-    #endregion
 
-    #region 참조 변수
     CardDataManager cardDataManager;
     EquipmentDataManager equipmentDataManager;
 
@@ -43,9 +42,7 @@ public class CardList : MonoBehaviour
         cardDataManager = GetComponent<CardDataManager>();
         equipmentDataManager = GetComponent<EquipmentDataManager>();
     }
-    #endregion
 
-    #region Equip, UnEquip
     public void Equip(CardData charData, CardData equipData)
     {
         CharCard charCard = FindCharCard(charData);
@@ -69,13 +66,10 @@ public class CardList : MonoBehaviour
 
         equipmentDataManager.UpdateEquipment(charCard, index);// 데이터 업데이트 및 저장
     }
-    #endregion
 
     CharCard FindCharCard(CardData cardData)
     {
         CharCard oriCard = charCards.Find(x => x.CardData.ID == cardData.ID);
-        Debug.Log("찾을 카드 아이디 = " + cardData.ID);
-        Debug.Log("찾은 카드 아이디 = " + oriCard.CardData.ID);
         return oriCard;
     }
     // 카드 데이터로 EquipmentCard 얻기
@@ -134,11 +128,9 @@ public class CardList : MonoBehaviour
         // ID로 각각의 EquipmentCard를 찾아서 장비 카드만 모아둔 equipmentCards 리스트에서 찾아 준다
         for (int i = 0; i < 4; i++)
         {
-            Debug.Log("id of the card to equip = " + equipData.IDs[i]);
             if (equipData.IDs[i] != "")
             {
                 CardData cardToEquip = FindCardDataByID(equipData.IDs[i]);
-                Debug.Log("name of the card to equip = " + cardToEquip.Name);
                 Equip(_charCard.CardData, cardToEquip);
             }
         }

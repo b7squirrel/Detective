@@ -1,13 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
-using UnityEngine.Rendering;
 
-/// <summary>
-/// ClearSlots - 슬롯 부수기
-/// GenerateAllCardsList - 슬롯 생성하고 정렬, 카드 Display
-/// </summary>
 public class EquipmentPanelManager : MonoBehaviour
 {
     CardData CardOnDisplay { get; set; } // 디스플레이에 올라가 있는 오리 카드
@@ -101,14 +94,14 @@ public class EquipmentPanelManager : MonoBehaviour
             item.SetSlotType(currentSlotType);
         }
     }
-    // info panel 의 equip 버튼
-    public void EquipToUpCard()
+    
+    public void EquipToUpCard() // info panel 의 equip 버튼
     {
         // 디스플레이 되는 charCard의 equipments
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
 
         // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
-        if(equipmentCards[index] != null)
+        if(equipDisplayUI.isEmpty(index) == false)
         {
             Debug.Log("장비가 이미 있습니다. 교체합니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
@@ -124,9 +117,8 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
     }
-
-    // info panel의 UnEquip 버튼
-    public void UnEquipCard()
+    
+    public void UnEquipCard() // info panel의 UnEquip 버튼
     {
         // 장비 해제
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
@@ -140,14 +132,10 @@ public class EquipmentPanelManager : MonoBehaviour
     }
     void PutEquipmentsOnCharCard(CardData charCardData)
     {
-        Debug.Log("디스플레이 할 오리 카드 = " + charCardData.Name);
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(charCardData);
-        
-        Debug.Log("장비 카드 수 = " + equipmentCards.Length);
         // 슬롯 업데이트
         // 카드 리스트에서 불러오는 것이니까 카드 리스트에 따로 해줄 것은 없다.
         // equipDisplayUI.UpdateSlots(equipmentCards);
-        
     }
     public void ActivateEquipInfoPanel(CardData cardData, bool isEquipButton)
     {
