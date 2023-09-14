@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -30,24 +29,23 @@ public class EquipSlotAction : MonoBehaviour
     {
         if (currentSlotType == EquipSlotType.FieldOri)
         {
-            CardData cardData = GetComponent<EquipSlot>().GetCardData();
+            CardData cardData = GetComponent<CardSlot>().GetCardData();
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             equipPanelManager.SetDisplay(cardData);
-            Debug.Log("눌러진 오리 카드 = " + cardData.Name);
             equipPanelManager.SetAllFieldTypeOf("Item");
             return;
         }
         if (currentSlotType == EquipSlotType.FieldEquipment)
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
-            CardData cardData = GetComponent<EquipSlot>().GetCardData();
+            CardData cardData = GetComponent<CardSlot>().GetCardData();
             equipPanelManager.ActivateEquipInfoPanel(cardData, true);
             return;
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
-            CardData cardData = GetComponent<EquipSlot>().GetCardData();
+            CardData cardData = GetComponent<CardSlot>().GetCardData();
             equipPanelManager.ActivateEquipInfoPanel(cardData, false);
             return;
         }

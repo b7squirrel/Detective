@@ -19,9 +19,9 @@ public class UpPanelManager : MonoBehaviour
     [SerializeField] MatField matField;
 
     // 업그레이드 슬롯, 재료 슬롯
-    [SerializeField] UpgradeCardSlot upCardSlot;
-    [SerializeField] UpgradeCardSlot matCardSlot;
-    [SerializeField] UpgradeCardSlot upSuccessSlot;
+    [SerializeField] CardSlot upCardSlot;
+    [SerializeField] CardSlot matCardSlot;
+    [SerializeField] CardSlot upSuccessSlot;
     #endregion
 
     #region Unity Callback 함수

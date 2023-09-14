@@ -5,7 +5,7 @@ public class EquipDisplayUI : MonoBehaviour
 {
     [SerializeField] Image charImage;
     [SerializeField] CardsDictionary cardDictionary;
-    [SerializeField] EquipSlot[] equipSlots; // 4개의 장비 슬롯
+    [SerializeField] CardSlot[] equipSlots; // 4개의 장비 슬롯
     [SerializeField] GameObject atkLabel, hpLabel;
 
     public void SetWeaponDisply(CardData cardData)

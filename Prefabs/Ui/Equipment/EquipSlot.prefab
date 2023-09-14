@@ -300,8 +300,8 @@ GameObject:
   - component: {fileID: 6967299111584892364}
   - component: {fileID: 6744050166114537610}
   - component: {fileID: 7408766789263154288}
+  - component: {fileID: 5509206353909697052}
   - component: {fileID: 4384868501686917948}
-  - component: {fileID: 4345388099277413431}
   - component: {fileID: 4845119189100970787}
   m_Layer: 5
   m_Name: EquipSlot
@@ -355,6 +355,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &5509206353909697052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3311998609424905349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05de75c5c26e6d439d323673f3ff6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4384868501686917948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,18 +384,6 @@ MonoBehaviour:
   charImage: {fileID: 8924585538590291286}
   Level: {fileID: 8167803695987322690}
   starPrefab: {fileID: 7422844248308132606, guid: 9fbd6ad198424e14f9fd34d44a38dac1, type: 3}
---- !u!114 &4345388099277413431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3311998609424905349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4350ae2297a7284694e4193b118c985, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4845119189100970787
 MonoBehaviour:
   m_ObjectHideFlags: 0

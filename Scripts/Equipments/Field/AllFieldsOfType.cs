@@ -55,7 +55,7 @@ public class AllFieldsOfType : MonoBehaviour
 
         for (int i = 0; i < numSlots; i++)
         {
-            displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<EquipSlot>());
+            displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
         }
     }
 
