@@ -50,11 +50,11 @@ public class SoundManager : MonoBehaviour
     }
     public void PlaySingle(AudioClip audioClip)
     {
-        foreach (AudioSource item in audioSources)
+        for (int i = 0; i < audioSources.Count; i++)
         {
-            if (item.clip == null)
+            if (audioSources[i].clip == null)
                 continue;
-            if (item.clip.name == audioClip.name)
+            if (audioSources[i].clip.name == audioClip.name)
             {
                 return;
             }

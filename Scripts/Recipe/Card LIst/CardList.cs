@@ -60,7 +60,6 @@ public class CardList : MonoBehaviour
 
         int index =
                 new EquipmentTypeConverter().ConvertStringToInt(_equipmentCard.CardData.EquipmentType);
-        Debug.Log("Index = " + _equipmentCard.CardData.Name);
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
 
@@ -108,9 +107,10 @@ public class CardList : MonoBehaviour
         }
 
         // 모든 카드가 분류되고 나면 장비 데이터대로 장비 장착하기
-        foreach (var item in charCards)
+        for (int i = 0; i < charCards.Count; i++)
         {
-            LoadEquipmentData(item);
+            LoadEquipmentData(charCards[i]);
+            
         }
     }
     // charCards에 장비 데이터 로드해서 장착하기

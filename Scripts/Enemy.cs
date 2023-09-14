@@ -57,7 +57,6 @@ public class Enemy : EnemyBase
 
     private void LateUpdate()
     {
-
         if (!isLive)
             return;
         if (GameManager.instance.player == null)

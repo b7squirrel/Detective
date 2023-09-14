@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WeaponBase : MonoBehaviour
@@ -203,12 +204,13 @@ public class WeaponBase : MonoBehaviour
         Collider2D[] hits =
             Physics2D.OverlapBoxAll(transform.position, size, 0f, enemy);
         List<Transform> allEnemies = new List<Transform>();
-        foreach (var item in hits)
+
+        for (int i = 0; i < hits.Length; i++)
         {
-            Idamageable Idamage = item.GetComponent<Idamageable>();
+            Idamageable Idamage = hits[i].GetComponent<Idamageable>();
             if (Idamage != null)
             {
-                allEnemies.Add(item.GetComponent<Transform>());
+                allEnemies.Add(hits[i].GetComponent<Transform>());
             }
         }
 
@@ -220,17 +222,18 @@ public class WeaponBase : MonoBehaviour
         for (int i = 0; i < numberOfTargets; i++)
         {
             distanceToclosestEnemy = 20f;
-            foreach (Transform item in allEnemies)
+            for (int y = 0; y < allEnemies.Count; y++)
             {
                 float distanceToEnmey =
-                Vector3.Distance(item.position, transform.position);
+                Vector3.Distance(allEnemies[y].position, transform.position);
 
                 if (distanceToEnmey < distanceToclosestEnemy)
                 {
                     distanceToclosestEnemy = distanceToEnmey;
-                    closestEnemy = item;
+                    closestEnemy = allEnemies[y];
                 }
             }
+            
             // foreach가 다 돌고 나서 가장 가까운 적이 존재하면
             // 반환할 pickedEnemies에 추가하고, 그 적을 제외하고 다시 순회검색 
             if(closestEnemy != null)

@@ -30,13 +30,15 @@ public class Spawner : MonoBehaviour
     {
         List<Enemy> activeEnemies = new List<Enemy>();
         Enemy[] enemies = Resources.FindObjectsOfTypeAll<Enemy>();
-        foreach (var item in enemies)
+
+        for (int i = 0; i < enemies.Length; i++)
         {
-            if(item.gameObject.activeSelf)
+            if(enemies[i].gameObject.activeSelf)
             {
-                activeEnemies.Add(item);
+                activeEnemies.Add(enemies[i]);
             }
         }
+        
         if (activeEnemies == null)
             return 0;
             // Debug.Log("Enemy numbers = " + activeEnemies.Count);

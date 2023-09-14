@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PropManager : MonoBehaviour
@@ -17,9 +18,10 @@ public class PropManager : MonoBehaviour
         {
             visitedArea = new List<Vector2>();
         }
-        foreach (var item in spawnAreas)
+        for (int i = 0; i < spawnAreas.Length; i++)
         {
-            SpawnProps(item.transform.position);
+            SpawnProps(spawnAreas[i].transform.position);
+
         }
     }
     // 스폰박스를 끌어다 놓고
@@ -27,16 +29,17 @@ public class PropManager : MonoBehaviour
     // 이곳을 방문한 곳으로 기록해 놓기
     public void SpawnProps(Vector2 pos)
     {
-        foreach (var item in visitedArea)
+        for (int i = 0; i < visitedArea.Count; i++)
         {
-            if (item == pos)
+            if (visitedArea[i] == pos)
                 return;
         }
 
         GetSpawnBox(pos);
-        foreach (var item in points)
+
+        for (int i = 0; i < points.Length; i++)
         {
-            GameObject go = Instantiate(PropToSpawn, item.transform.position, Quaternion.identity);
+            GameObject go = Instantiate(PropToSpawn, points[i].transform.position, Quaternion.identity);
             go.transform.parent = propContainer;
         }
 

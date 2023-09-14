@@ -32,17 +32,17 @@ public class GarlicWeapon : WeaponBase
 
     private void ApplyDamage(Collider2D[] colliders)
     {
-        foreach (var item in colliders)
+        for (int i = 0; i < colliders.Length; i++)
         {
-            Idamageable enemy = item.transform.GetComponent<Idamageable>();
+            Idamageable enemy = colliders[i].transform.GetComponent<Idamageable>();
 
             if (enemy != null)
             {
-                PostMessage(damage, item.transform.position);
+                PostMessage(damage, colliders[i].transform.position);
 
-                Vector2 enemyDir = item.transform.position - transform.position;
+                Vector2 enemyDir = colliders[i].transform.position - transform.position;
                 Vector2 offsetDir = -(enemyDir.normalized);
-                Vector2 hitPoint = (Vector2)item.transform.position + (offsetDir * 2f); // 대략 적 콜라이더의 반정도
+                Vector2 hitPoint = (Vector2)colliders[i].transform.position + (offsetDir * 2f); // 대략 적 콜라이더의 반정도
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
                 enemy.TakeDamage(damage, knockback, hitPoint, hitEffect);
@@ -59,6 +59,4 @@ public class GarlicWeapon : WeaponBase
     {
         // Debug.Log("Garlic");
     }
-
-
 }

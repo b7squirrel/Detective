@@ -38,15 +38,15 @@ public class GachaSystem : MonoBehaviour
     
     public void GenCards(List<CardData> drawnItems)
     {
-        foreach (var item in drawnItems)
+        for (int i = 0; i < drawnItems.Count; i++)
         {
-            if(item.Type == CardType.Weapon.ToString())
+            if(drawnItems[i].Type == CardType.Weapon.ToString())
             {
-                cardDictionary.GetWeaponData(item);
+                cardDictionary.GetWeaponData(drawnItems[i]);
             }
             else
             {
-                cardDictionary.GetItemData(item);
+                cardDictionary.GetItemData(drawnItems[i]);
             }
         }
     }

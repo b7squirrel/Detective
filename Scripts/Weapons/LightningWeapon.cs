@@ -96,14 +96,14 @@ public class LightningWeapon : WeaponBase
 
     void ApplyDamage(Collider2D[] colliders)
     {
-        foreach (var item in colliders)
+        for (int i = 0; i < colliders.Length; i++)
         {
-            Idamageable enemy = item.transform.GetComponent<Idamageable>();
-            GameObject enemyObject = item.gameObject;
+            Idamageable enemy = colliders[i].transform.GetComponent<Idamageable>();
+            GameObject enemyObject = colliders[i].gameObject;
 
             if (enemy != null && enemyObject.activeSelf)
             {
-                PostMessage(damage, item.transform.position);
+                PostMessage(damage, colliders[i].transform.position);
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
                 enemy.TakeDamage(damage, knockback, Player.instance.transform.position, hitEffect);

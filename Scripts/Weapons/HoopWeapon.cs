@@ -114,14 +114,15 @@ public class HoopWeapon : WeaponBase
     }
     void DestroyProjectiles()
     {
-        foreach(Transform proj in projectiles)
+        for (int i = 0; i < projectiles.Count; i++)
         {
-            proj.gameObject.SetActive(false);
+            projectiles[i].gameObject.SetActive(false);
         }
 
-        foreach(Transform proj in projectilesSynergy)
+        for (int i = 0; i < projectilesSynergy.Count; i++)
         {
-            proj.gameObject.SetActive(false);
+            projectilesSynergy[i].gameObject.SetActive(false);
+            
         }
         
         isProjectileActive = false;

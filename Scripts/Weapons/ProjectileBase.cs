@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 
 public class ProjectileBase : MonoBehaviour
@@ -40,9 +41,9 @@ public class ProjectileBase : MonoBehaviour
     protected virtual void CastDamage()
     {
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, .7f);
-        foreach (var item in hit)
+        for (int i = 0; i < hit.Length; i++)
         {
-            Transform enmey = item.GetComponent<Transform>();
+            Transform enmey = hit[i].GetComponent<Transform>();
             if (enmey.GetComponent<Idamageable>() != null)
             {
                 PostMessage(Damage, enmey.transform.position);
@@ -52,6 +53,7 @@ public class ProjectileBase : MonoBehaviour
                 break;
             }
         }
+        
         if (hitDetected == true)
         {
             HitObject();

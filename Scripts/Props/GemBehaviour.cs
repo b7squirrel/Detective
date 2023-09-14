@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GemBehaviour : MonoBehaviour
@@ -43,14 +44,14 @@ public class GemBehaviour : MonoBehaviour
         if (props == null)
             return;
 
-        foreach (var item in props)
+        for (int i = 0; i < props.Length; i++)
         {
-            if(item.GetComponent<GemPickUpObject>() != null)
+            if(props[i].GetComponent<GemPickUpObject>() != null)
             {
-                GemBehaviour g = item.GetComponent<GemBehaviour>();
+                GemBehaviour g = props[i].GetComponent<GemBehaviour>();
                 if (g.IsFollower == false)
                     g.IsTarget = true;
-                gems.Add(item.gameObject);
+                gems.Add(props[i].gameObject);
             }
         }
 

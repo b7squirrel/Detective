@@ -66,9 +66,9 @@ public class WeaponContainer : MonoBehaviour
     // 플레이어가 coupleweapon을 가지고 있는지 검색
     public WeaponData GetCoupleWeaponData(string synergyWeapon)
     {
-        foreach (var item in weaponContainers)
+        for (int i = 0; i < weaponContainers.Count; i++)
         {
-            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            WeaponBase wb = weaponContainers[i].GetComponentInChildren<WeaponBase>();
             if (wb.weaponData.SynergyWeapon == synergyWeapon)
             {
                 return wb.weaponData;
@@ -78,9 +78,9 @@ public class WeaponContainer : MonoBehaviour
     }
     public bool IsWeaponMaxLevel(WeaponData weaponData)
     {
-        foreach (var item in weaponContainers)
+        for (int i = 0; i < weaponContainers.Count; i++)
         {
-            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            WeaponBase wb = weaponContainers[i].GetComponentInChildren<WeaponBase>();
             if (wb.weaponData == weaponData)
             {
                 if (wb.weaponStats.currentLevel == wb.weaponData.upgrades.Count)
@@ -89,27 +89,29 @@ public class WeaponContainer : MonoBehaviour
                 }
             }
         }
+        
         return false;
     }
 
     public int GetWeaponLevel(WeaponData weaponData)
     {
-        foreach (var item in weaponContainers)
+        for (int i = 0; i < weaponContainers.Count; i++)
         {
-            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            WeaponBase wb = weaponContainers[i].GetComponentInChildren<WeaponBase>();
             if (wb.weaponData.Name == weaponData.Name)
             {
                 return wb.weaponStats.currentLevel;
             }
         }
+        
         return 0; // 가지고 있는 무기가 아니라 새로운 무기라면 레벨 0
     }
     public void SetSynergyWeaponActive(WeaponData weaponData)
     {
         // 이 함수가 실행되는 시점에서 해당 weapon이 null일 수가 없음.
-        foreach (var item in weaponContainers)
+        for (int i = 0; i < weaponContainers.Count; i++)
         {
-            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            WeaponBase wb = weaponContainers[i].GetComponentInChildren<WeaponBase>();
             if (wb.weaponData.Name == weaponData.Name)
             {
                 wb.ActivateSynergyWeapon();
@@ -119,9 +121,9 @@ public class WeaponContainer : MonoBehaviour
     public bool CheckSynergyWeaponActivated(UpgradeData synergyUpgrade)
     {
         if (weaponContainers.Count == 0) return false;
-        foreach (var item in weaponContainers)
+        for (int i = 0; i < weaponContainers.Count; i++)
         {
-            WeaponBase wb = item.GetComponentInChildren<WeaponBase>();
+            WeaponBase wb = weaponContainers[i].GetComponentInChildren<WeaponBase>();
             if (wb.weaponData.Name == synergyUpgrade.weaponData.Name)
             {
                 return wb.IsSynergyWeaponActivated();

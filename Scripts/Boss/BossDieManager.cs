@@ -78,9 +78,9 @@ public class BossDieManager : MonoBehaviour
         Collider2D[] enemies = 
             Physics2D.OverlapCircleAll(Player.instance.transform.position, 1000f, enemyLayer);
 
-        foreach (var item in enemies)
+        for (int i = 0; i < enemies.Length; i++)
         {
-            EnemyBase enemyBase = item.GetComponent<EnemyBase>();
+            EnemyBase enemyBase = enemies[i].GetComponent<EnemyBase>();
             if(enemyBase != null)
             {
                 enemyBase.DieWithoutDrop();
@@ -95,10 +95,9 @@ public class BossDieManager : MonoBehaviour
             Physics2D.OverlapCircleAll(Player.instance.transform.position, 1000f, wallLayer);
 
 
-        Debug.Log("number of bouncers = " + walls.Length);
-        foreach (var item in walls)
+        for (int i = 0; i < walls.Length; i++)
         {
-            Bouncer bouncer = item.GetComponent<Bouncer>();
+            Bouncer bouncer = walls[i].GetComponent<Bouncer>();
             if(bouncer != null)
             {
                 bouncer.DeactivateWall();

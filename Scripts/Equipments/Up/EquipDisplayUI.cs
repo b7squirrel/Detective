@@ -35,9 +35,9 @@ public class EquipDisplayUI : MonoBehaviour
     }
     void EmptyEquipSlots()
     {
-        foreach (var item in equipSlots)
+        for (int i = 0; i < equipSlots.Length; i++)
         {
-            item.EmptySlot();
+            equipSlots[i].EmptySlot();
         }
     }
     public void EmptyEquipSlot(int index)

@@ -187,14 +187,14 @@ public class EnemyBoss : EnemyBase, Idamageable
         SoundManager.instance.Play(landingSFX);
         effect.transform.position = transform.position;
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, landingImpactSize, landingHit);
-        
-        foreach (Collider2D item in hits)
+
+        for (int i = 0; i < hits.Length; i++)
         {
-            EnemyBase hit = item.GetComponent<EnemyBase>();
+            EnemyBase hit = hits[i].GetComponent<EnemyBase>();
 
             if (hit != null && !hit.IsBoss) // 보스 랜딩 공격에 자신까지 포함시키지 않기
             {
-                if (item.CompareTag("Enemy"))
+                if (hits[i].CompareTag("Enemy"))
                 {
                     hit.Stunned(transform.position);
                 }

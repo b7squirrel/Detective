@@ -49,10 +49,10 @@ public class GenerateWalls : MonoBehaviour
         int minY = playerPos.y - halfBouncerNumber;
         int maxY = playerPos.y + halfBouncerNumber;
 
-        foreach (GameObject item in bricks)
+        for (int i = 0; i < bricks.Count; i++)
         {
-            Transform itemTransform = item.transform;
-            Bouncer bouncer = item.GetComponent<Bouncer>();
+            Transform itemTransform = bricks[i].transform;
+            Bouncer bouncer = bricks[i].GetComponent<Bouncer>();
 
             if (itemTransform.position.x == minX)
             {
@@ -108,9 +108,10 @@ public class GenerateWalls : MonoBehaviour
                 continue;
             allEnemies.Remove(e); // 벽 밖의 적들만 남게된다
         }
-        foreach (var item in allEnemies)
+        for (int i = 0; i < allEnemies.Count; i++)
         {
-            item.Die();
+            allEnemies[i].Die();
+            
         }
     }
 }

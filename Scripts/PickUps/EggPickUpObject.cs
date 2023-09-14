@@ -21,11 +21,11 @@ public class EggPickUpObject : Collectable, IPickUpObject
         List<UpgradeData> checks = new List<UpgradeData>();
         checks.AddRange(upgradeToPick);
 
-        foreach (UpgradeData item in checks)
+        for (int i = 0; i < checks.Count; i++)
         {
-            if (character.GetComponent<Level>().HavingWeapon(item))
+            if (character.GetComponent<Level>().HavingWeapon(checks[i]))
             {
-                upgradeToPick.Remove(item);
+                upgradeToPick.Remove(checks[i]);
                 // Debug.Log("겹치는 무기 = " + item.Name);
             }
         }
