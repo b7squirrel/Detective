@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UpPanelManager : MonoBehaviour
@@ -11,6 +12,7 @@ public class UpPanelManager : MonoBehaviour
 
     #region 참조 변수
     CardDataManager cardDataManager;
+    CardsDictionary cardsDictionary;
     DisplayCardOnSlot displayCardOnSlot; // 슬롯 위에 있는 카드 Display
     UpPanelUI upPanelUI; // UI 관련 클래스
 
@@ -29,6 +31,7 @@ public class UpPanelManager : MonoBehaviour
     {
         displayCardOnSlot = GetComponent<DisplayCardOnSlot>();
         cardDataManager = FindObjectOfType<CardDataManager>();
+        cardsDictionary = FindObjectOfType<CardsDictionary>();
         upPanelUI = GetComponent<UpPanelUI>();
 
         upCardSlot.EmptySlot();
@@ -153,10 +156,9 @@ public class UpPanelManager : MonoBehaviour
         if (newCardGrade > 4) { newCardGrade = 4; } // 전설 등급은 합성하면 전설 등급
 
         string newGrade = ((Grade)newCardGrade).ToString();
-        string type = CardToUpgrade.Type;
 
         // 생성된 카드를 내 카드 리스트에 저장
-        CardData newCardData = cardDataManager.GenNewCardData(type, newGrade, CardToUpgrade.Name, CardToUpgrade.EquipmentType);
+        CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newGrade);
         cardDataManager.AddUpgradedCardToMyCardList(CardToUpgrade.ID, newCardData);
 
         cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제
@@ -179,6 +181,17 @@ public class UpPanelManager : MonoBehaviour
         ClearAllFieldSlots();
         upPanelUI.DeactivateSpecialSlots();
         upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, displayCardOnSlot);
+    }
+
+    public CardData GenUpgradeCardData(string _cardName, string _grade)
+    {
+        List<CardData> newCard = new();
+        newCard.AddRange(cardsDictionary.GetCardPool());
+
+        List<CardData> sameNameCardData = newCard.FindAll(x => x.Name == _cardName);
+        CardData picked = sameNameCardData.Find(x => x.Grade == _grade);
+
+        return picked;
     }
     #endregion
 

@@ -63,6 +63,7 @@ public class EquipDisplayUI : MonoBehaviour
                 CardData cardData = equipmentCards[i].CardData;
                 WeaponItemData weaponItemData =
                 cardDictionary.GetWeaponItemData(cardData);
+                if(weaponItemData.itemData == null) continue;
                 equipSlots[i].SetItemCard(cardData, weaponItemData.itemData);
             }
         }

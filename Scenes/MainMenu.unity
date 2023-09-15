@@ -941,11 +941,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2145c8e0ec74d741b46cb4ae4073270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBuffer: {fileID: 1228873888}
-  slotRoot: {fileID: 0}
-  itemInfoPanel: {fileID: 0}
-  slots: []
-  currentSlot: {fileID: 0}
 --- !u!114 &100704231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6176,24 +6171,32 @@ MonoBehaviour:
     Grade: 
     Name: 
     Exp: 
+    Hp: 
+    Atk: 
     EquipmentType: 
   - ID: 
     Type: 
     Grade: 
     Name: 
     Exp: 
+    Hp: 
+    Atk: 
     EquipmentType: 
   - ID: 
     Type: 
     Grade: 
     Name: 
     Exp: 
+    Hp: 
+    Atk: 
     EquipmentType: 
   - ID: 
     Type: 
     Grade: 
     Name: 
     Exp: 
+    Hp: 
+    Atk: 
     EquipmentType: 
   equipInfoPanel: {fileID: 388860202}
   field: {fileID: 169999625}
@@ -9074,6 +9077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e00c2d388c5c54d96580c713d8aaf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardPoolDataBase: {fileID: 4900000, guid: 02177c7e01f21c243929041b49532f98, type: 3}
   weaponData:
   - {fileID: 11400000, guid: 748bd85685be0084dba5e8bacedb4338, type: 2}
   - {fileID: 11400000, guid: c4f75987eebcf6243b096959b45bcea5, type: 2}
@@ -9102,7 +9106,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3870e6df3ac8355478d754d8125e0cbf, type: 2}
   - {fileID: 11400000, guid: 1e4df878631be994394000ee0ec308b8, type: 2}
   - {fileID: 11400000, guid: a89f593f76b2e204a90a13c569187923, type: 2}
-  cardPrefab: {fileID: 8782935464688134205, guid: 280a1ea8f5fa41b4a80563110998228b, type: 3}
 --- !u!114 &1500030661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11225,6 +11228,8 @@ MonoBehaviour:
     Grade: 
     Name: 
     Exp: 
+    Hp: 
+    Atk: 
     EquipmentType: 
   allField: {fileID: 865142885}
   matField: {fileID: 1587361511}

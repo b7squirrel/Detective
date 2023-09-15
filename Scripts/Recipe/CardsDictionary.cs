@@ -18,10 +18,23 @@ public class WeaponItemData
 // GatchaSystem 과 upgradeSlot 두 클래스가 접근해서 값을 얻어간다. 
 public class CardsDictionary : MonoBehaviour
 {
+    [SerializeField] TextAsset cardPoolDataBase;
+    List<CardData> CardPool;
     [SerializeField] List<WeaponData> weaponData;
     [SerializeField] List<Item> itemData;
-    [SerializeField] GameObject cardPrefab;
 
+    void Awake()
+    {
+        if (CardPool == null)
+        {
+            CardPool = new();
+            CardPool = new ReadCardData().GetCardsList(cardPoolDataBase);
+        }
+    }
+    public List<CardData> GetCardPool()
+    {
+        return CardPool;
+    }
     public WeaponItemData GetWeaponItemData(CardData cardData)
     {
         string grade = cardData.Grade;

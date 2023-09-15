@@ -20,9 +20,12 @@ public class GachaSystem : MonoBehaviour
     // shop 패널의 뽑기 버튼에서 호출
     public void Draw()
     {
-        if(gachaPools == null) gachaPools = new List<CardData>();
+        if (gachaPools == null)
+        {
+            gachaPools = new();
 
-        gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
+            gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
+        }
 
         // 임시로 3개씩 카드가 뽑힘
         for (int i = 0; i < 3; i++)
@@ -31,7 +34,7 @@ public class GachaSystem : MonoBehaviour
             string mType = gachaPools[pickIndex].Type;
             string mGrade = gachaPools[pickIndex].Grade;
             string mName = gachaPools[pickIndex].Name;
-            
+
             cardDataManager.AddNewCardToMyCardsList(gachaPools[pickIndex]);
         }
     }
