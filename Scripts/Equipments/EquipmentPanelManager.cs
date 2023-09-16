@@ -20,8 +20,6 @@ public class EquipmentPanelManager : MonoBehaviour
     // 카드들이 보여지는 Field
     [SerializeField] AllField field; // 모든 카드
 
-    [SerializeField] GameObject slotPrefab;
-
     void Awake()
     {
         cardDataManager = FindObjectOfType<CardDataManager>();
