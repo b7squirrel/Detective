@@ -12,12 +12,13 @@ public class CharCard
         {
             equipmentCards[i] = null;
         }
-        cardName = _cardData.Name + "_" +_cardData.Grade; 
+        cardName = _cardData.Name + "_" + _cardData.Grade;
     }
     public string cardName; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
     public int numberOfEquipments; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
     public CardData CardData;
     public EquipmentCard[] equipmentCards;
+    public int totalHp, totalAtk;
 }
 
 [System.Serializable]
@@ -61,6 +62,7 @@ public class CardList : MonoBehaviour
         equipmentCard.equippedWho = charCard.cardName;
         charCard.numberOfEquipments++;
 
+        EquipStats(charCard, equipData); // 장비의 스탯을 오리카드에 반영
         equipmentDataManager.UpdateEquipment(charCard, index); // 데이터 업데이트 및 저장
     }
     public void UnEquip(CardData charData, EquipmentCard _equipmentCard)
@@ -73,6 +75,8 @@ public class CardList : MonoBehaviour
         _equipmentCard.IsEquipped = false;
         charCard.numberOfEquipments--;
 
+        UnEquipStats(charCard, _equipmentCard.CardData);  // 장비의 스탯을 오리카드에서 제거
+        
         equipmentDataManager.UpdateEquipment(charCard, index);// 데이터 업데이트 및 저장
     }
 
@@ -107,7 +111,7 @@ public class CardList : MonoBehaviour
             {
                 CharCard _charCard = new(item);
                 charCards.Add(_charCard);
-                
+
             }
             else if (item.Type == CardType.Item.ToString())
             {
@@ -120,7 +124,7 @@ public class CardList : MonoBehaviour
         for (int i = 0; i < charCards.Count; i++)
         {
             LoadEquipmentData(charCards[i]);
-            
+
         }
     }
     // charCards에 장비 데이터 로드해서 장착하기
@@ -150,6 +154,23 @@ public class CardList : MonoBehaviour
     {
         EquipmentCard equipmentCard = equipmentCards.Find(x => x.CardData.ID == cardID);
         return equipmentCard.CardData;
+    }
+
+    void EquipStats(CharCard _charCard, CardData _equipCard)
+    {
+        int.TryParse(_equipCard.Hp, out int equipCardHp);
+        int.TryParse(_equipCard.Atk, out int equipCardAtk);
+
+        _charCard.totalHp += equipCardHp;
+        _charCard.totalAtk += equipCardAtk;
+    }
+    void UnEquipStats(CharCard _charCard, CardData _equipCard)
+    {
+        int.TryParse(_equipCard.Hp, out int equipCardHp);
+        int.TryParse(_equipCard.Atk, out int equipCardAtk);
+
+        _charCard.totalHp -= equipCardHp;
+        _charCard.totalAtk -= equipCardAtk;
     }
 
     public List<EquipmentCard> GetEquipmentCardsList()
