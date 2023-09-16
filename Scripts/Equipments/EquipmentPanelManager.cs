@@ -73,7 +73,15 @@ public class EquipmentPanelManager : MonoBehaviour
             foreach (var item in cardList.GetEquipmentCardsList())
             {
                 if (item.IsEquipped)
+                {
                     continue;
+                    // 장착된 카드일 경우
+                    // 카드에 있는 반투명 Equipped 활성화 시키기
+                    // slot type 추가 : Equipped
+                    // Equipped 카드는 터치하면 장착을 해제할 것인지 팝업을 띄움
+                    // 장착에서는 아이템만 Equipped 처리하면 됨
+                    // 장착해제를 선택하면 장착되어 있던 오리에게서 장착해제가 됨
+                }
                 card.Add(item.CardData);
             }
         }
@@ -99,7 +107,7 @@ public class EquipmentPanelManager : MonoBehaviour
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
 
         // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
-        if(equipDisplayUI.isEmpty(index) == false)
+        if(equipDisplayUI.IsEmpty(index) == false)
         {
             Debug.Log("장비가 이미 있습니다. 교체합니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);

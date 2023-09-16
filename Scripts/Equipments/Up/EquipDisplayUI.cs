@@ -69,7 +69,7 @@ public class EquipDisplayUI : MonoBehaviour
         }
     }
 
-    public bool isEmpty(int index)
+    public bool IsEmpty(int index)
     {
         if (equipSlots[index].isEmpty)
             return true;

@@ -12,7 +12,10 @@ public class CharCard
         {
             equipmentCards[i] = null;
         }
+        cardName = _cardData.Name + "_" +_cardData.Grade; 
     }
+    public string cardName; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
+    public int numberOfEquipments; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
     public CardData CardData;
     public EquipmentCard[] equipmentCards;
 }
@@ -24,7 +27,11 @@ public class EquipmentCard
     {
         CardData = _cardData;
         IsEquipped = false;
+
+        cardName = _cardData.Name + "_" + _cardData.Grade;
     }
+    public string cardName; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
+    public string equippedWho; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
     public CardData CardData;
     public bool IsEquipped;
 }
@@ -51,6 +58,8 @@ public class CardList : MonoBehaviour
         int index = new EquipmentTypeConverter().ConvertStringToInt(equipData.EquipmentType);
         charCard.equipmentCards[index] = equipmentCard;
         equipmentCard.IsEquipped = true;
+        equipmentCard.equippedWho = charCard.cardName;
+        charCard.numberOfEquipments++;
 
         equipmentDataManager.UpdateEquipment(charCard, index); // 데이터 업데이트 및 저장
     }
@@ -62,6 +71,7 @@ public class CardList : MonoBehaviour
                 new EquipmentTypeConverter().ConvertStringToInt(_equipmentCard.CardData.EquipmentType);
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
+        charCard.numberOfEquipments--;
 
         equipmentDataManager.UpdateEquipment(charCard, index);// 데이터 업데이트 및 저장
     }
