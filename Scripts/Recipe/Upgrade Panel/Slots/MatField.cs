@@ -7,6 +7,7 @@ public class MatField : MonoBehaviour
     #region 참조 변수
     CardsDictionary cardDictionary;
     CardDataManager cardDataManager;
+    CardList cardList;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -20,6 +21,7 @@ public class MatField : MonoBehaviour
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
+        cardList = FindObjectOfType<CardList>();
     }
     
     void Disabled()
@@ -85,18 +87,32 @@ public class MatField : MonoBehaviour
             if (cardDatas[i].Type == CardType.Weapon.ToString())
             {
                 WeaponData wData = cardDictionary.GetWeaponData(cardDatas[i]);
-                slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], wData);
+
+                bool onEquipment = cardList.FindCharCard(cardDatas[i]).IsEquipped;
+
+                slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], wData, onEquipment);
                 slots[i].transform.localScale = new Vector2(0, 0);
                 slots[i].transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
             }
             else
             {
                 Item iData = cardDictionary.GetItemData(cardDatas[i]);
-                slots[i].GetComponent<CardSlot>().SetItemCard(cardDatas[i], iData);
+
+                bool onEquipment = cardList.FindEquipmentCard(cardDatas[i]).IsEquipped;
+
+                slots[i].GetComponent<CardSlot>().SetItemCard(cardDatas[i], iData, onEquipment);
                 slots[i].transform.localScale = new Vector2(0, 0);
                 slots[i].transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
             }
         }
+    }
+    void GetCharCard(CardData _cardData)
+    {
+        cardList.FindCharCard(_cardData);
+    }
+    void GetEquipCard(CardData _cardData)
+    {
+        cardList.FindEquipmentCard(_cardData);
     }
 
     public void ClearSlots()

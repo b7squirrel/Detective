@@ -47,8 +47,8 @@ public class EquipDisplayUI : MonoBehaviour
 
     public void SetSlot(int index, Item itemData, CardData cardToEquip)
     {
-        equipSlots[index].SetItemCard(cardToEquip, itemData);
-        equipSlots[index].GetComponent<CardDisp>().InitItemCardDisplay(itemData);
+        equipSlots[index].SetItemCard(cardToEquip, itemData, false); // 장착 중 text가 표시될 필요가 없음
+        equipSlots[index].GetComponent<CardDisp>().InitItemCardDisplay(itemData, false); // 장착 중 text가 표시될 필요가 없음
     }
     public void UpdateSlots(EquipmentCard[] equipmentCards)
     {
@@ -64,14 +64,14 @@ public class EquipDisplayUI : MonoBehaviour
                 WeaponItemData weaponItemData =
                 cardDictionary.GetWeaponItemData(cardData);
                 if(weaponItemData.itemData == null) continue;
-                equipSlots[i].SetItemCard(cardData, weaponItemData.itemData);
+                equipSlots[i].SetItemCard(cardData, weaponItemData.itemData, false); // 장착 중 text가 표시될 필요가 없음
             }
         }
     }
 
     public bool IsEmpty(int index)
     {
-        if (equipSlots[index].isEmpty)
+        if (equipSlots[index].IsEmpty)
             return true;
         return false;
     }

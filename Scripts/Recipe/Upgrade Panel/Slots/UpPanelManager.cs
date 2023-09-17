@@ -108,7 +108,7 @@ public class UpPanelManager : MonoBehaviour
         // }
 
         // 업그레이드 카드의 경우
-        if (upCardSlot.IsEmpty()) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
+        if (upCardSlot.IsEmpty) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
         {
             CardToUpgrade = cardData;
 
@@ -125,7 +125,7 @@ public class UpPanelManager : MonoBehaviour
 
         
         // 재료카드에 이미 다른 카드가 올라가 있는 경우
-        if (matCardSlot.IsEmpty() == false)
+        if (matCardSlot.IsEmpty == false)
             return;
 
         // 재료 카드의 경우

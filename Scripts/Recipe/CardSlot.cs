@@ -8,40 +8,43 @@ public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // 클릭되었을
 public class CardSlot : MonoBehaviour
 {
     CardData cardData;
-    public bool isEmpty { get; private set; } = true;
+    public bool IsEmpty { get; private set; } = true;
+    public bool OnEquipment {get; private set;} = false; // 착용되어 있거나 장비를 착용하고 있는지 여부
+    
     void Awake()
     {
         EmptySlot();
     }
-
-    public bool IsEmpty()
-    {
-        return isEmpty;
-    }
+    
     public CardData GetCardData()
     {
         return cardData;
     }
 
-    public void SetWeaponCard(CardData _cardData, WeaponData _weaponData)
+    public void SetWeaponCard(CardData _cardData, WeaponData _weaponData, bool _onEquipment)
     {
-        isEmpty = false;
+        IsEmpty = false;
         cardData = _cardData;
         // cardDisp 호출해서 카드 출력
-        GetComponent<CardDisp>().InitWeaponCardDisplay(_weaponData);
+        CardDisp cardDisp = GetComponent<CardDisp>();
+        cardDisp.InitWeaponCardDisplay(_weaponData, _onEquipment);
+        cardDisp.SetEquppiedTextActive(_onEquipment);
+
     }
-    public void SetItemCard(CardData _cardData, Item _itemData)
+    public void SetItemCard(CardData _cardData, Item _itemData, bool _onEquipment)
     {
-        isEmpty = false;
+        IsEmpty = false;
         cardData = _cardData;
 
         // cardDisp 호출해서 카드 출력
-        GetComponent<CardDisp>().InitItemCardDisplay(_itemData);
+        CardDisp cardDisp = GetComponent<CardDisp>();
+        cardDisp.InitItemCardDisplay(_itemData, _onEquipment);
+        cardDisp.SetEquppiedTextActive(_onEquipment);
     }
 
     public void EmptySlot()
     {
-        isEmpty = true;
+        IsEmpty = true;
         GetComponent<CardDisp>().EmptyCardDisplay();
     }
 }

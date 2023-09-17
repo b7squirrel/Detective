@@ -8,6 +8,7 @@ public class CharCard
     {
         CardData = _cardData;
         equipmentCards = new EquipmentCard[4];
+        IsEquipped = false;
         for (int i = 0; i < equipmentCards.Length; i++)
         {
             equipmentCards[i] = null;
@@ -15,10 +16,11 @@ public class CharCard
         cardName = _cardData.Name + "_" + _cardData.Grade;
     }
     public string cardName; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
-    public int numberOfEquipments; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
+    public int numberOfEquipments; 
     public CardData CardData;
     public EquipmentCard[] equipmentCards;
     public int totalHp, totalAtk;
+    public bool IsEquipped; // 문법상 이상하지만 그냥 equipmentCard와 통일하기 위해
 }
 
 [System.Serializable]
@@ -59,8 +61,10 @@ public class CardList : MonoBehaviour
         int index = new EquipmentTypeConverter().ConvertStringToInt(equipData.EquipmentType);
         charCard.equipmentCards[index] = equipmentCard;
         equipmentCard.IsEquipped = true;
+
         equipmentCard.equippedWho = charCard.cardName;
         charCard.numberOfEquipments++;
+        charCard.IsEquipped = true;
 
         EquipStats(charCard, equipData); // 장비의 스탯을 오리카드에 반영
         equipmentDataManager.UpdateEquipment(charCard, index); // 데이터 업데이트 및 저장
@@ -74,13 +78,14 @@ public class CardList : MonoBehaviour
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
         charCard.numberOfEquipments--;
+        if (charCard.numberOfEquipments > 0) charCard.IsEquipped = true;
 
         UnEquipStats(charCard, _equipmentCard.CardData);  // 장비의 스탯을 오리카드에서 제거
-        
+
         equipmentDataManager.UpdateEquipment(charCard, index);// 데이터 업데이트 및 저장
     }
 
-    CharCard FindCharCard(CardData cardData)
+    public CharCard FindCharCard(CardData cardData)
     {
         CharCard oriCard = charCards.Find(x => x.CardData.ID == cardData.ID);
         return oriCard;

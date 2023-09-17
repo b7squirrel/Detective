@@ -5,11 +5,12 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected Transform cardBaseContainer;
     [SerializeField] protected Transform starContainer;
     [SerializeField] protected UnityEngine.UI.Image charImage;
+    [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
     [SerializeField] protected GameObject starPrefab;
     GameObject[] stars;
 
-    public void InitWeaponCardDisplay(WeaponData weaponData)
+    public void InitWeaponCardDisplay(WeaponData weaponData, bool onEquipment)
     {
         // 별과 카드 색깔
         int intGrade = (int)weaponData.grade;
@@ -29,9 +30,11 @@ public class CardDisp : MonoBehaviour
         charImage.sprite = weaponData.charImage;
 
         cardBaseContainer.gameObject.SetActive(true);
+
+        SetEquppiedTextActive(onEquipment);
     }
 
-    public void InitItemCardDisplay(Item itemData)
+    public void InitItemCardDisplay(Item itemData, bool onEquipment)
     {
         // 별과 카드 색깔
         int intGrade = (int)itemData.grade;
@@ -50,6 +53,8 @@ public class CardDisp : MonoBehaviour
         charImage.sprite = itemData.charImage;
 
         cardBaseContainer.gameObject.SetActive(true);
+
+        SetEquppiedTextActive(onEquipment);
     }
 
     protected virtual void SetNumStar(int numStars)
@@ -72,6 +77,11 @@ public class CardDisp : MonoBehaviour
         }
     }
 
+    public void SetEquppiedTextActive(bool _isActive)
+    {
+        equippedText.SetActive(_isActive);
+    }
+
     public void EmptyCardDisplay()
     {
         // 별 비활성화
@@ -90,5 +100,7 @@ public class CardDisp : MonoBehaviour
         // 캐릭터 이미지
         charImage.color = new Color(1, 1, 1, 0);
         cardBaseContainer.gameObject.SetActive(false);
+
+        SetEquppiedTextActive(false);
     }
 }
