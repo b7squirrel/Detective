@@ -140,6 +140,13 @@ public class CardDataManager : MonoBehaviour
         MyCardsList.Add(newCard);
         Save();
     }
+    public void UpgradeCardData(CardData _cardData, int _exp, int _hp, int _atk)
+    {
+        _cardData.Exp = _exp.ToString();
+        _cardData.Hp = _hp.ToString();
+        _cardData.Atk = _atk.ToString();
+        Save();
+    }
     public void DeleteData()
     {
         ResetCards();

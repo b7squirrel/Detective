@@ -4,13 +4,14 @@ using UnityEngine;
 public class EquipmentPanelManager : MonoBehaviour
 {
     CardData CardOnDisplay { get; set; } // 디스플레이에 올라가 있는 오리 카드
-    [SerializeField] CardData[] CardToEquip = new CardData[4]; // Equipment Info에 올라 갈 장비 카드
+    [SerializeField] CardData cardToEquip; // Equipment Info에 올라 갈 장비 카드
     
     int index; // 어떤 장비 슬롯인지
 
     CardDataManager cardDataManager;
     CardsDictionary cardDictionary;
     CardList cardList;
+    StatManager statManager;
 
     EquipDisplayUI equipDisplayUI;
     [SerializeField] EquipInfoPanel equipInfoPanel;
@@ -26,19 +27,14 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
         cardList = FindAnyObjectByType<CardList>();
         cardDictionary = FindAnyObjectByType<CardsDictionary>();
+        statManager = FindAnyObjectByType<StatManager>();
 
-        for (int i = 0; i < CardToEquip.Length; i++)
-        {
-            CardToEquip[i] = null;
-        }
+        cardToEquip = null;
     }
 
     void OnEnable()
     {
-        for (int i = 0; i < CardToEquip.Length; i++)
-        {
-            CardToEquip[i] = null;
-        }
+        cardToEquip = null;
         SetAllFieldTypeOf("Weapon");
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
@@ -59,6 +55,8 @@ public class EquipmentPanelManager : MonoBehaviour
     }
     public void SetAllFieldTypeOf(string cardType)
     {
+        cardToEquip = null;
+
         ClearAllFieldSlots();
         List<CardData> card = new();
 
@@ -100,8 +98,9 @@ public class EquipmentPanelManager : MonoBehaviour
             item.SetSlotType(currentSlotType);
         }
     }
-    
-    public void Equip() // info panel 의 equip 버튼
+
+    // info panel 의 equip 버튼
+    public void Equip() 
     {
         // 디스플레이 되는 charCard의 equipments
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
@@ -114,24 +113,24 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         // 새로운 장비 장착
-        cardList.Equip(CardOnDisplay, CardToEquip[index]);
+        cardList.Equip(CardOnDisplay, cardToEquip);
 
-        Item itemData = cardDictionary.GetWeaponItemData(CardToEquip[index]).itemData;
+        Item itemData = cardDictionary.GetWeaponItemData(cardToEquip).itemData;
 
-        equipDisplayUI.SetSlot(index, itemData, CardToEquip[index]);
+        equipDisplayUI.SetSlot(index, itemData, cardToEquip);
 
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
     }
-    
-    public void UnEquip() // info panel의 UnEquip 버튼
+    // info panel의 UnEquip 버튼
+    public void UnEquip() 
     {
         // 장비 해제
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
         cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
 
         equipDisplayUI.EmptyEquipSlot(index);
-        CardToEquip[index] = null;
+        cardToEquip = null;
 
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
@@ -150,10 +149,15 @@ public class EquipmentPanelManager : MonoBehaviour
 
         equipInfoPanel.gameObject.SetActive(true);
         equipInfoPanel.SetPanel(cardData, isEquipButton);
-        CardToEquip[index] = cardData;
+        cardToEquip = cardData;
     }
     public void DeActivateEquipInfoPanel()
     {
         equipInfoPanel.gameObject.SetActive(false);
+    }
+    // info panel의 Upgrade 버튼
+    public void UpgradeCard()
+    {
+        statManager.AddExperience(cardToEquip);
     }
 }

@@ -6165,32 +6165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b1ddad5724995499f7d0a0fa5c6f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CardToEquip:
-  - ID: 
-    Type: 
-    Grade: 
-    Name: 
-    Exp: 
-    Hp: 
-    Atk: 
-    EquipmentType: 
-  - ID: 
-    Type: 
-    Grade: 
-    Name: 
-    Exp: 
-    Hp: 
-    Atk: 
-    EquipmentType: 
-  - ID: 
-    Type: 
-    Grade: 
-    Name: 
-    Exp: 
-    Hp: 
-    Atk: 
-    EquipmentType: 
-  - ID: 
+  cardToEquip:
+    ID: 
     Type: 
     Grade: 
     Name: 
@@ -6200,7 +6176,6 @@ MonoBehaviour:
     EquipmentType: 
   equipInfoPanel: {fileID: 388860202}
   field: {fileID: 169999625}
-  slotPrefab: {fileID: 3311998609424905349, guid: 54a78dd3fab55d148a4a920b061fec74, type: 3}
 --- !u!1 &1081217003
 GameObject:
   m_ObjectHideFlags: 0
@@ -9027,6 +9002,7 @@ GameObject:
   - component: {fileID: 1500030661}
   - component: {fileID: 1500030662}
   - component: {fileID: 1500030664}
+  - component: {fileID: 1500030665}
   m_Layer: 0
   m_Name: CardDataManager
   m_TagString: Untagged
@@ -9147,6 +9123,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charCards: []
   equipmentCards: []
+--- !u!114 &1500030665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500030657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a455bd682cc048148b0ed7ad5567cba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardDataManager: {fileID: 1500030658}
 --- !u!1 &1505695398
 GameObject:
   m_ObjectHideFlags: 0
@@ -10880,7 +10869,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1783161907}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1078349323}
+        m_TargetAssemblyTypeName: EquipmentPanelManager, Assembly-CSharp
+        m_MethodName: UpgradeCard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1783161907
 MonoBehaviour:
   m_ObjectHideFlags: 0
