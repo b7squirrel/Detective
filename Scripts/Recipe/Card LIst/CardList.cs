@@ -88,12 +88,14 @@ public class CardList : MonoBehaviour
     public CharCard FindCharCard(CardData cardData)
     {
         CharCard oriCard = charCards.Find(x => x.CardData.ID == cardData.ID);
+        if(oriCard == null) Debug.Log("Can't find ID " + cardData.ID);
         return oriCard;
     }
     // 카드 데이터로 EquipmentCard 얻기
     public EquipmentCard FindEquipmentCard(CardData cardData)
     {
         EquipmentCard card = equipmentCards.Find(x => x.CardData.ID == cardData.ID);
+        if(card == null) Debug.Log("Can't find ID " + cardData.ID);
         return card;
     }
     // 특정 오리 카드의 장비 카드 얻기

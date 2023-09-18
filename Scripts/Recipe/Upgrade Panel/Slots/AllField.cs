@@ -6,7 +6,7 @@ public class AllField : MonoBehaviour
 {
     #region 참조 변수
     [SerializeField] CardDataManager cardDataManager;
-    [SerializeField] DisplayCardOnSlot displayCardOnSlot;
+    [SerializeField] SetCardDataOnSlot displayCardOnSlot;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -53,7 +53,7 @@ public class AllField : MonoBehaviour
         for (int i = 0; i < numSlots; i++)
         {
             firstCardData = cardDataSorted[0];
-            displayCardOnSlot.DispCardOnSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
+            displayCardOnSlot.PutCardDataIntoSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
         }
     }
 

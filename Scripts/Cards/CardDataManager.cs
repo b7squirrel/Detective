@@ -100,6 +100,12 @@ public class CardDataManager : MonoBehaviour
         Load();
     }
 
+    public CardData GetStartingCardData()
+    {
+        List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
+        return startingCards[0];
+    }
+    
     public List<CardData> GetMyCardList()
     {
         if (MyCardsList == null) Debug.Log("리스트 널");
@@ -132,12 +138,13 @@ public class CardDataManager : MonoBehaviour
         Save();
     }
     // 착용되어 있는 장비는 아이디가 바뀌면 안되므로
-    public void AddUpgradedCardToMyCardList(string _id, CardData _cardData)
+    public void AddUpgradedCardToMyCardList(CardData _cardData)
     {
-        CardData newCard =
-        new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1", _cardData.Hp, _cardData.Atk, _cardData.EquipmentType);
+        
+        // CardData newCard =
+        // new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1", _cardData.Hp, _cardData.Atk, _cardData.EquipmentType);
 
-        MyCardsList.Add(newCard);
+        MyCardsList.Add(_cardData);
         Save();
     }
     public void UpgradeCardData(CardData _cardData, int _exp, int _hp, int _atk)

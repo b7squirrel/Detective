@@ -13,7 +13,8 @@ public class UpPanelManager : MonoBehaviour
     #region 참조 변수
     CardDataManager cardDataManager;
     CardsDictionary cardsDictionary;
-    DisplayCardOnSlot displayCardOnSlot; // 슬롯 위에 있는 카드 Display
+    CardList cardList;
+    SetCardDataOnSlot setCardDataOnSlot; // CardData를 Slot에 넣음
     UpPanelUI upPanelUI; // UI 관련 클래스
 
     // 카드들이 보여지는 Field
@@ -29,9 +30,10 @@ public class UpPanelManager : MonoBehaviour
     #region Unity Callback 함수
     void Awake()
     {
-        displayCardOnSlot = GetComponent<DisplayCardOnSlot>();
+        setCardDataOnSlot = GetComponent<SetCardDataOnSlot>();
         cardDataManager = FindObjectOfType<CardDataManager>();
         cardsDictionary = FindObjectOfType<CardsDictionary>();
+        cardList = FindObjectOfType<CardList>();
         upPanelUI = GetComponent<UpPanelUI>();
 
         upCardSlot.EmptySlot();
@@ -119,7 +121,7 @@ public class UpPanelManager : MonoBehaviour
             GetIntoMatField();
 
             // 업그레이드 슬롯 위 카드 표시
-            displayCardOnSlot.DispCardOnSlot(CardToUpgrade, upCardSlot);
+            setCardDataOnSlot.PutCardDataIntoSlot(CardToUpgrade, upCardSlot);
             return;
         }
 
@@ -142,7 +144,7 @@ public class UpPanelManager : MonoBehaviour
         // 나머지는 재료 카드일 경우 뿐이다.
         cardToFeed = cardData; ; // 비어 있지 않다면 지금 카드는 재료 카드임
         upPanelUI.MatCardAcquiredUI();
-        displayCardOnSlot.DispCardOnSlot(cardData, matCardSlot);
+        setCardDataOnSlot.PutCardDataIntoSlot(cardData, matCardSlot);
         GetIntoConfirmation(); // 합성 확인 화면으로
 
         matField.gameObject.SetActive(false);
@@ -159,10 +161,13 @@ public class UpPanelManager : MonoBehaviour
 
         // 생성된 카드를 내 카드 리스트에 저장
         CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newGrade);
-        cardDataManager.AddUpgradedCardToMyCardList(CardToUpgrade.ID, newCardData);
+        newCardData.ID = CardToUpgrade.ID;
+        cardDataManager.AddUpgradedCardToMyCardList(newCardData);
 
         cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제
         cardDataManager.RemoveCardFromMyCardList(cardToFeed);
+
+        cardList.InitCardList(); // 장비 슬롯들 업데이트
 
         // 합성 연출 후 강화 성공 패널로
         matField.gameObject.SetActive(false);
@@ -180,9 +185,13 @@ public class UpPanelManager : MonoBehaviour
         matCardSlot.EmptySlot();
         ClearAllFieldSlots();
         upPanelUI.DeactivateSpecialSlots();
-        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, displayCardOnSlot);
+        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData);
+
+        // 합성 성공 패널이 활성화 된 후에 실행되어야 슬롯이 empty된 상태로 끝나지 않게 된다
+        setCardDataOnSlot.PutCardDataIntoSlot(upgradedCardData, upSuccessSlot);
     }
 
+    // 아이디를 발급 받지 않은 card data 생성
     public CardData GenUpgradeCardData(string _cardName, string _grade)
     {
         List<CardData> newCard = new();

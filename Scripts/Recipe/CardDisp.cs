@@ -13,6 +13,9 @@ public class CardDisp : MonoBehaviour
     public void InitWeaponCardDisplay(WeaponData weaponData, bool onEquipment)
     {
         // 별과 카드 색깔
+        cardBaseContainer.gameObject.SetActive(true);
+        Debug.Log("카드 베이스 온");
+
         int intGrade = (int)weaponData.grade;
         SetNumStar(intGrade + 1);
 
@@ -29,7 +32,6 @@ public class CardDisp : MonoBehaviour
         charImage.color = new Color(1, 1, 1, 1);
         charImage.sprite = weaponData.charImage;
 
-        cardBaseContainer.gameObject.SetActive(true);
 
         SetEquppiedTextActive(onEquipment);
     }
@@ -37,6 +39,8 @@ public class CardDisp : MonoBehaviour
     public void InitItemCardDisplay(Item itemData, bool onEquipment)
     {
         // 별과 카드 색깔
+        cardBaseContainer.gameObject.SetActive(true);
+        Debug.Log("카드 베이스 온");
         int intGrade = (int)itemData.grade;
         SetNumStar(intGrade + 1);
         for (int i = 0; i < 5; i++)
@@ -52,7 +56,6 @@ public class CardDisp : MonoBehaviour
         charImage.color = new Color(1, 1, 1, 1);
         charImage.sprite = itemData.charImage;
 
-        cardBaseContainer.gameObject.SetActive(true);
 
         SetEquppiedTextActive(onEquipment);
     }
@@ -100,6 +103,8 @@ public class CardDisp : MonoBehaviour
         // 캐릭터 이미지
         charImage.color = new Color(1, 1, 1, 0);
         cardBaseContainer.gameObject.SetActive(false);
+        Debug.Log("카드 베이스 오르");
+
 
         SetEquppiedTextActive(false);
     }

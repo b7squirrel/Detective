@@ -11,7 +11,7 @@ public class CardSlot : MonoBehaviour
     public bool IsEmpty { get; private set; } = true;
     public bool OnEquipment {get; private set;} = false; // 착용되어 있거나 장비를 착용하고 있는지 여부
     
-    void Awake()
+    void OnEnable()
     {
         EmptySlot();
     }
@@ -28,7 +28,6 @@ public class CardSlot : MonoBehaviour
         // cardDisp 호출해서 카드 출력
         CardDisp cardDisp = GetComponent<CardDisp>();
         cardDisp.InitWeaponCardDisplay(_weaponData, _onEquipment);
-        cardDisp.SetEquppiedTextActive(_onEquipment);
 
     }
     public void SetItemCard(CardData _cardData, Item _itemData, bool _onEquipment)
@@ -39,7 +38,6 @@ public class CardSlot : MonoBehaviour
         // cardDisp 호출해서 카드 출력
         CardDisp cardDisp = GetComponent<CardDisp>();
         cardDisp.InitItemCardDisplay(_itemData, _onEquipment);
-        cardDisp.SetEquppiedTextActive(_onEquipment);
     }
 
     public void EmptySlot()

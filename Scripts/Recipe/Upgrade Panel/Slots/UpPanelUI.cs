@@ -29,7 +29,7 @@ public class UpPanelUI : MonoBehaviour
         UpSlotInitAnimtion();
         BGInitAnimation();
     }
-    
+
     #region Animation
     void BGInitAnimation() // 배경 초기화 애님
     {
@@ -63,7 +63,7 @@ public class UpPanelUI : MonoBehaviour
         matSlot.transform.localScale = .5f * Vector2.one;
         matSlot.DOScale(.6f, .6f).SetEase(Ease.OutElastic);
     }
-    
+
     void UpSlotCanceledAnimation() // 업그레이드 슬롯 취소 탭
     {
         upSlot.anchoredPosition = Vector2.zero;
@@ -155,12 +155,10 @@ public class UpPanelUI : MonoBehaviour
         plus.gameObject.SetActive(false);
     }
 
-// 강화 성공 패널
-    public void OpenUpgradeSuccessPanel(CardData cardData, DisplayCardOnSlot displayCardOnSlot)
+    // 강화 성공 패널
+    public void OpenUpgradeSuccessPanel(CardData cardData)
     {
         upgradeSuccessPanel.SetActive(true);
-        CardSlot successCardSlot = upgradeSuccessPanel.GetComponentInChildren<CardSlot>();
-        displayCardOnSlot.DispCardOnSlot(cardData, successCardSlot);
 
         upSuccess.localScale = .8f * Vector2.one;
         upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
