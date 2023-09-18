@@ -13,7 +13,7 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _id, string _Type, string _Grade, string _Name, string _exp, string _hp, string _atk, string _equipmentType)
+    public CardData(string _id, string _Type, string _Grade, string _Name, string _exp, string _hp, string _atk, string _equipmentType, string _startingMember)
     {
         ID = _id;
         Type = _Type;
@@ -23,8 +23,10 @@ public class CardData
         Hp = _hp;
         Atk = _atk;
         EquipmentType = _equipmentType;
+        startingMember = _startingMember;
     }
-    public string ID, Type, Grade, Name, Exp, Hp, Atk, EquipmentType;
+    
+    public string ID, Type, Grade, Name, Exp, Hp, Atk, EquipmentType, startingMember;
 }
 public class ReadCardData
 {
@@ -37,7 +39,7 @@ public class ReadCardData
         for (int i = 0; i < line.Length; i++)
         {
             string[] row = line[i].Split('\t');
-            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]));
+            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]));
         }
         return cardList;
     }
@@ -96,16 +98,11 @@ public class CardDataManager : MonoBehaviour
         MyCardsList.Clear();
         List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
         AddNewCardToMyCardsList(startingCards[0]);
+        startingCards[0].startingMember = "1";
         Save();
         Load();
     }
 
-    public CardData GetStartingCardData()
-    {
-        List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
-        return startingCards[0];
-    }
-    
     public List<CardData> GetMyCardList()
     {
         if (MyCardsList == null) Debug.Log("리스트 널");
@@ -129,12 +126,9 @@ public class CardDataManager : MonoBehaviour
     // 새로운 카드는 아이디를 발급받는다
     public void AddNewCardToMyCardsList(CardData _cardData)
     {
-        string _id = Guid.NewGuid().ToString();
+        _cardData.ID = Guid.NewGuid().ToString();
 
-        CardData newCard =
-        new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1", _cardData.Hp, _cardData.Atk, _cardData.EquipmentType);
-
-        MyCardsList.Add(newCard);
+        MyCardsList.Add(_cardData);
         Save();
     }
     // 착용되어 있는 장비는 아이디가 바뀌면 안되므로

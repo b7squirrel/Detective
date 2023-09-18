@@ -8,27 +8,22 @@ public class LaunchManager : MonoBehaviour
 {
     [SerializeField] CardSlot leadOriSlot;
     [SerializeField] CardDataManager cardDataManager;
+    [SerializeField] SetCardDataOnSlot setCardDataOnSlot;
     string firstOriID;
 
-    void Start()
+    void OnEnable()
     {
         LoadLeadOri();
     }
-    public void SaveLeadOri()
-    {
-        PlayerPrefs.SetString("1st", firstOriID);
-    }
+
     public void LoadLeadOri()
     {
-        if (PlayerPrefs.HasKey("1st"))
-        {
-            firstOriID = PlayerPrefs.GetString("1st");
-        }
-        else
-        {
-            firstOriID = cardDataManager.GetStartingCardData().ID;
-        }
-
-        SaveLeadOri();
+        StartCoroutine(loadCo());
+    }
+    IEnumerator loadCo()
+    {
+        yield return new WaitForSeconds(.1f);
+        CardData lead = cardDataManager.GetMyCardList().Find(x => x.startingMember == "1");
+        setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
     }
 }
