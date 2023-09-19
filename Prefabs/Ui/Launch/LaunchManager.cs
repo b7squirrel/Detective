@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 // 대장 오리는 playerPref에 저장하자
@@ -22,7 +21,7 @@ public class LaunchManager : MonoBehaviour
     }
     IEnumerator loadCo()
     {
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.01f);
         CardData lead = cardDataManager.GetMyCardList().Find(x => x.startingMember == "1");
         setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
     }

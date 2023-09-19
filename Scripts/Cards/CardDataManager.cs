@@ -129,6 +129,7 @@ public class CardDataManager : MonoBehaviour
         _cardData.ID = Guid.NewGuid().ToString();
 
         MyCardsList.Add(_cardData);
+        Debug.Log(_cardData.Name + _cardData.ID + " 를 등록했습니다");
         Save();
     }
     // 착용되어 있는 장비는 아이디가 바뀌면 안되므로
