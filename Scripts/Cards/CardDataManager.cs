@@ -53,13 +53,6 @@ public class CardDataManager : MonoBehaviour
     string filePath;
     string myCards = "MyCards.txt";
 
-    CardsDictionary cardDictionary;
-
-    void Awake()
-    {
-        cardDictionary = GetComponent<CardsDictionary>();
-    }
-
     void Start()
     {
         // 전체 카드 리스트 불러오기
@@ -78,7 +71,7 @@ public class CardDataManager : MonoBehaviour
         string jsonData = JsonUtility.ToJson(new Serialization<CardData>(MyCardsList), true);
         File.WriteAllText(filePath, jsonData);
 
-        FindAnyObjectByType<CardList>().InitCardList();
+        GetComponent<CardList>().InitCardList();
     }
 
     void Load()

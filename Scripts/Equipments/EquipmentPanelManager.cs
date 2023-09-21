@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -100,7 +101,7 @@ public class EquipmentPanelManager : MonoBehaviour
     }
 
     // info panel 의 equip 버튼
-    public void Equip() 
+    public void OnEquipButton() 
     {
         // 디스플레이 되는 charCard의 equipments
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
@@ -123,7 +124,7 @@ public class EquipmentPanelManager : MonoBehaviour
         DeActivateEquipInfoPanel();
     }
     // info panel의 UnEquip 버튼
-    public void UnEquip() 
+    public void OnUnEquipButton() 
     {
         // 장비 해제
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);

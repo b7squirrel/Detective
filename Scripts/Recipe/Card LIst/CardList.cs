@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -131,7 +132,6 @@ public class CardList : MonoBehaviour
         for (int i = 0; i < charCards.Count; i++)
         {
             LoadEquipmentData(charCards[i]);
-
         }
     }
     // charCards에 장비 데이터 로드해서 장착하기
@@ -145,22 +145,23 @@ public class CardList : MonoBehaviour
 
         CardEquipmentData equipData = myEquipmentData.Find(x => x.charID == _charCard.CardData.ID);
 
-        if (equipData == null) return;
+        if (equipData == null)
+            return;
         // ID로 각각의 EquipmentCard를 찾아서 장비 카드만 모아둔 equipmentCards 리스트에서 찾아 준다
         for (int i = 0; i < 4; i++)
         {
-            if (equipData.IDs[i] != "")
+            if (String.IsNullOrEmpty(equipData.IDs[i]) == false) // 해당 부위에 장비카드가 있다면
             {
-                CardData cardToEquip = FindCardDataByID(equipData.IDs[i]);
-                Equip(_charCard.CardData, cardToEquip);
+                EquipmentCard equipCard = FindCardDataByID(equipData.IDs[i]);
+                Equip(_charCard.CardData, equipCard.CardData);
             }
         }
         // 저장되어 있는 데이터를 가져와서 반영하는 것이므로 또 저장할 필요가 없다.
     }
-    CardData FindCardDataByID(string cardID)
+    EquipmentCard FindCardDataByID(string cardID)
     {
         EquipmentCard equipmentCard = equipmentCards.Find(x => x.CardData.ID == cardID);
-        return equipmentCard.CardData;
+        return equipmentCard;
     }
 
     void EquipStats(CharCard _charCard, CardData _equipCard)

@@ -1764,7 +1764,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 357.1, y: 0}
-  m_SizeDelta: {x: -690.5338, y: 0}
+  m_SizeDelta: {x: -690.5338, y: -384.7852}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &169999623
 MonoBehaviour:
@@ -2091,7 +2091,7 @@ GameObject:
   - component: {fileID: 254035727}
   - component: {fileID: 254035726}
   m_Layer: 5
-  m_Name: UnEquip Button_1
+  m_Name: UnEquip Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2164,7 +2164,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1078349323}
         m_TargetAssemblyTypeName: EquipmentPanelManager, Assembly-CSharp
-        m_MethodName: UnEquip
+        m_MethodName: OnUnEquipButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7292,7 +7292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1168083571
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13333,7 +13333,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1078349323}
         m_TargetAssemblyTypeName: EquipmentPanelManager, Assembly-CSharp
-        m_MethodName: Equip
+        m_MethodName: OnEquipButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

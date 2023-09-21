@@ -106,14 +106,6 @@ public class MatField : MonoBehaviour
             }
         }
     }
-    void GetCharCard(CardData _cardData)
-    {
-        cardList.FindCharCard(_cardData);
-    }
-    void GetEquipCard(CardData _cardData)
-    {
-        cardList.FindEquipmentCard(_cardData);
-    }
 
     public void ClearSlots()
     {

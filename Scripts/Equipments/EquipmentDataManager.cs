@@ -52,7 +52,7 @@ public class EquipmentDataManager : MonoBehaviour
         filePath = Application.persistentDataPath + "/MyEquipmentsData/" + myEquips;
 
         Load();
-        FindAnyObjectByType<CardList>().InitCardList();
+        GetComponent<CardList>().InitCardList();
     }
 
     void Save()

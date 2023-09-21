@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 
 public class GachaSystem : MonoBehaviour
 {
-    CardsDictionary cardDictionary;
     CardDataManager cardDataManager;
 
     [SerializeField] TextAsset gachaPoolDataBase;
@@ -13,7 +12,6 @@ public class GachaSystem : MonoBehaviour
 
     void Start()
     {
-        cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
     }
 
