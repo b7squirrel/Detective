@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EquipDisplayUI : MonoBehaviour
 {
     [SerializeField] Image charImage;
+    [SerializeField] TMPro.TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] CardSlot[] equipSlots; // 4개의 장비 슬롯
     [SerializeField] GameObject atkLabel, hpLabel;
@@ -13,12 +15,25 @@ public class EquipDisplayUI : MonoBehaviour
         OnDisplay();
         WeaponData wd = cardDictionary.GetWeaponData(cardData);
         charImage.sprite = wd.charImage;
+
+        atk.text = cardData.Atk;
+        hp.text = cardData.Hp;
     }
+    // 아직 사용되지 않았음
     public void SetItemDisplay(CardData cardData)
     {
         OnDisplay();
         Item item = cardDictionary.GetItemData(cardData);
         charImage.sprite = item.charImage;
+
+        if(cardData.EquipmentType == EquipmentType.Weapon.ToString())
+        {
+            atk.text = cardData.Atk;
+        }
+        else
+        {
+            hp.text = cardData.Hp;
+        }
     }
     public void OffDisplay()
     {
