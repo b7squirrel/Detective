@@ -11,6 +11,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
     CardDataManager cardDataManager;
     CardsDictionary cardDictionary;
+    EquipmentSlotsManager equipmentSlotsManager;
     CardList cardList;
     StatManager statManager;
     CardDisp cardDisp; // Equip info panel이 활성화 되면 클릭한 카드의 disp클래스를 저장(equipped Text 표시를 위해)
@@ -29,6 +30,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
         cardList = FindAnyObjectByType<CardList>();
         cardDictionary = FindAnyObjectByType<CardsDictionary>();
+        equipmentSlotsManager = GetComponent<EquipmentSlotsManager>();
         statManager = FindAnyObjectByType<StatManager>();
 
         cardToEquip = null;
@@ -40,15 +42,17 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Weapon");
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
-        equipDisplayUI.OffDisplay();
+        EmptyAllEquipmentSlots(); // logic, UI 모두 처리
     }
 
-    public void SetDisplay(CardData cardDataToDisplay)
+    // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출
+    // 오리 카드를 equip display에 보여준다
+    public void SetDisplay(CardData oriCardDataToDisplay)
     {
-        equipDisplayUI.OnDisplay();
-        equipDisplayUI.SetWeaponDisply(cardDataToDisplay);
-        CardOnDisplay = cardDataToDisplay;
-        LoadEquipmentsOf(cardDataToDisplay);
+        equipDisplayUI.OnDisplay(oriCardDataToDisplay); // 디스플레이 활성
+        CardOnDisplay = oriCardDataToDisplay;
+        equipmentSlotsManager.InitEquipSlots(oriCardDataToDisplay); // 오리 카드의 Data대로 장비 슬롯 설정 
+        equipDisplayUI.SetWeaponDisply(oriCardDataToDisplay, equipmentSlotsManager.GetCurrentAttribute()); // 오리 카드 및 Attr
     }
 
     public void ClearAllFieldSlots()
@@ -65,7 +69,8 @@ public class EquipmentPanelManager : MonoBehaviour
         // 아이템 카드는 착용되어 있지 않는 것들만 보여주기
         if (cardType == CardType.Weapon.ToString())
         {
-            equipDisplayUI.OffDisplay(); // Display의 장비 슬롯들을 모두 비우고
+            EmptyAllEquipmentSlots(); // logic, UI 모두 처리
+
             card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field 오리만 보여줌
         }
         else if (cardType == CardType.Item.ToString())
@@ -100,15 +105,21 @@ public class EquipmentPanelManager : MonoBehaviour
             item.SetSlotType(currentSlotType);
         }
     }
+    void EmptyAllEquipmentSlots()
+    {
+        // Display의 장비 슬롯들을 모두 비우기
+        equipmentSlotsManager.EmptyEquipSlots(); // logic
+        equipDisplayUI.OffDisplay(); // UI
+    }
 
     // info panel 의 equip 버튼
-    public void OnEquipButton() 
+    public void OnEquipButton()
     {
         // 디스플레이 되는 charCard의 equipments
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
 
         // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
-        if(equipDisplayUI.IsEmpty(index) == false)
+        if(equipmentSlotsManager.IsEmpty(index) == false)
         {
             Debug.Log("장비가 이미 있습니다. 교체합니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
@@ -119,7 +130,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
         Item itemData = cardDictionary.GetWeaponItemData(cardToEquip).itemData;
 
-        equipDisplayUI.SetSlot(index, itemData, cardToEquip);
+        equipmentSlotsManager.SetEquipSlot(index, itemData, cardToEquip);
 
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
@@ -131,20 +142,12 @@ public class EquipmentPanelManager : MonoBehaviour
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
         cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
 
-        equipDisplayUI.EmptyEquipSlot(index);
+        equipmentSlotsManager.EmptyEquipSlot(index);
         cardToEquip = null;
 
         cardDisp.SetEquppiedTextActive(false);
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
-    }
-    void LoadEquipmentsOf(CardData charCardData)
-    {
-        EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(charCardData);
-        if (equipmentCards == null) return;
-        // 슬롯 업데이트
-        // 카드 리스트에서 불러오는 것이니까 카드 리스트에 따로 해줄 것은 없다.
-        equipDisplayUI.UpdateSlots(equipmentCards);
     }
     public void ActivateEquipInfoPanel(CardData cardData, CardDisp cardDisp, bool isEquipButton)
     {

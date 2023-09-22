@@ -1,9 +1,21 @@
 using UnityEngine;
 
+public class OriAttribute
+{
+    public OriAttribute(int atk, int hp)
+    {
+        Atk = atk;
+        Hp = hp;
+    }
+    public int Atk, Hp;
+}
+
+// 카드를 업그레이드 할 떄 스탯 업데이트
 public class StatManager : MonoBehaviour
 {
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] EquipInfoPanel equipInfoPanel;
+    OriAttribute leadAttribute;
 
     public void LevelUp(CardData _cardData)
     {
@@ -47,4 +59,8 @@ public class StatManager : MonoBehaviour
             equipInfoPanel.UpdatePanel(_level, _hp);
         }
     }
+    // 리드 오리 공격력, 체력 임시 저장
+    public void SetLeadAttribute(int atk, int hp) => leadAttribute = new OriAttribute(atk, hp);
+    
+    public OriAttribute GetLeadAttribute() => leadAttribute;
 }

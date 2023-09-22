@@ -6670,6 +6670,7 @@ GameObject:
   - component: {fileID: 1078349321}
   - component: {fileID: 1078349323}
   - component: {fileID: 1078349322}
+  - component: {fileID: 1078349324}
   m_Layer: 5
   m_Name: Panel Manager
   m_TagString: Untagged
@@ -6740,6 +6741,25 @@ MonoBehaviour:
     startingMember: 
   equipInfoPanel: {fileID: 388860202}
   field: {fileID: 169999625}
+--- !u!114 &1078349324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078349320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa44de61a916d0e4c924d4d3afe86be2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equipSlots:
+  - {fileID: 1035571292}
+  - {fileID: 939133732}
+  - {fileID: 1722748297}
+  - {fileID: 1991018270}
+  cardDictionary: {fileID: 1500030660}
+  cardList: {fileID: 1500030664}
 --- !u!1 &1081217003
 GameObject:
   m_ObjectHideFlags: 0
@@ -12023,11 +12043,6 @@ MonoBehaviour:
   atk: {fileID: 1870249436}
   hp: {fileID: 1605086890}
   cardDictionary: {fileID: 1500030660}
-  equipSlots:
-  - {fileID: 1035571292}
-  - {fileID: 939133732}
-  - {fileID: 1722748297}
-  - {fileID: 1991018270}
   atkLabel: {fileID: 2107530156}
   hpLabel: {fileID: 1297977489}
 --- !u!1 &1808537185
