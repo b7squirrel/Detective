@@ -38,7 +38,7 @@ public class LaunchSlotAction : MonoBehaviour
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.ActivateEquipInfoPanel(cardData, true);
+            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), true);
             return;
         }
         if (currentSlotType == LaunchSlotType.None)

@@ -32,7 +32,6 @@ public class CardSlot : MonoBehaviour
         cardDisp.InitWeaponCardDisplay(_weaponData, _onEquipment);
 
         ID = cardData.ID;
-
     }
     public void SetItemCard(CardData _cardData, Item _itemData, bool _onEquipment)
     {
@@ -44,7 +43,6 @@ public class CardSlot : MonoBehaviour
         cardDisp.InitItemCardDisplay(_itemData, _onEquipment);
 
         ID = cardData.ID;
-
     }
 
     public void EmptySlot()

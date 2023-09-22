@@ -40,14 +40,14 @@ public class EquipSlotAction : MonoBehaviour
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.ActivateEquipInfoPanel(cardData, true);
+            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), true);
             return;
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.ActivateEquipInfoPanel(cardData, false);
+            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), false);
             return;
         }
         if (currentSlotType == EquipSlotType.None)

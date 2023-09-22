@@ -13,6 +13,7 @@ public class EquipmentPanelManager : MonoBehaviour
     CardsDictionary cardDictionary;
     CardList cardList;
     StatManager statManager;
+    CardDisp cardDisp; // Equip info panel이 활성화 되면 클릭한 카드의 disp클래스를 저장(equipped Text 표시를 위해)
 
     EquipDisplayUI equipDisplayUI;
     [SerializeField] EquipInfoPanel equipInfoPanel;
@@ -133,6 +134,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.EmptyEquipSlot(index);
         cardToEquip = null;
 
+        cardDisp.SetEquppiedTextActive(false);
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
     }
@@ -144,21 +146,23 @@ public class EquipmentPanelManager : MonoBehaviour
         // 카드 리스트에서 불러오는 것이니까 카드 리스트에 따로 해줄 것은 없다.
         equipDisplayUI.UpdateSlots(equipmentCards);
     }
-    public void ActivateEquipInfoPanel(CardData cardData, bool isEquipButton)
+    public void ActivateEquipInfoPanel(CardData cardData, CardDisp cardDisp, bool isEquipButton)
     {
         index = new EquipmentTypeConverter().ConvertStringToInt(cardData.EquipmentType);
 
         equipInfoPanel.gameObject.SetActive(true);
-        equipInfoPanel.SetPanel(cardData, isEquipButton);
+        equipInfoPanel.SetPanel(cardData, cardDisp, isEquipButton);
         cardToEquip = cardData;
+        this.cardDisp = cardDisp;
     }
     public void DeActivateEquipInfoPanel()
     {
         equipInfoPanel.gameObject.SetActive(false);
+        this.cardDisp = null;
     }
     // info panel의 Upgrade 버튼
     public void UpgradeCard()
     {
-        statManager.AddExperience(cardToEquip);
+        statManager.LevelUp(cardToEquip);
     }
 }

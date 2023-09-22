@@ -79,7 +79,7 @@ public class CardList : MonoBehaviour
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
         charCard.numberOfEquipments--;
-        if (charCard.numberOfEquipments > 0) charCard.IsEquipped = true;
+        charCard.IsEquipped = charCard.numberOfEquipments > 0;
 
         UnEquipStats(charCard, _equipmentCard.CardData);  // 장비의 스탯을 오리카드에서 제거
 

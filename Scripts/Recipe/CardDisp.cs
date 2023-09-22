@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// equipped text는 카드슬롯이 생성될 때 정해짐. 
+// 장착되거나 해제되면 Equipment Panel Manager에서 업데이트
 public class CardDisp : MonoBehaviour
 {
     [SerializeField] protected Transform cardBaseContainer;

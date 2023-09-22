@@ -13,20 +13,20 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _id, string _Type, string _Grade, string _Name, string _exp, string _hp, string _atk, string _equipmentType, string _startingMember)
+    public CardData(string _id, string _Type, string _Grade, string _Name, string _level, string _hp, string _atk, string _equipmentType, string _startingMember)
     {
         ID = _id;
         Type = _Type;
         Grade = _Grade;
         Name = _Name;
-        Exp = _exp;
+        Level = _level;
         Hp = _hp;
         Atk = _atk;
         EquipmentType = _equipmentType;
         startingMember = _startingMember;
     }
     
-    public string ID, Type, Grade, Name, Exp, Hp, Atk, EquipmentType, startingMember;
+    public string ID, Type, Grade, Name, Level, Hp, Atk, EquipmentType, startingMember;
 }
 public class ReadCardData
 {
@@ -135,11 +135,11 @@ public class CardDataManager : MonoBehaviour
         MyCardsList.Add(_cardData);
         Save();
     }
-    public void UpgradeCardData(CardData _cardData, int _exp, int _hp, int _atk)
+    public void UpgradeCardData(CardData _cardData, string _level, string _hp, string _atk)
     {
-        _cardData.Exp = _exp.ToString();
-        _cardData.Hp = _hp.ToString();
-        _cardData.Atk = _atk.ToString();
+        _cardData.Level = _level;
+        _cardData.Hp = _hp;
+        _cardData.Atk = _atk;
         Save();
     }
     public void DeleteData()

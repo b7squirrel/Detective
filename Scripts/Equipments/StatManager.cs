@@ -1,54 +1,65 @@
 using UnityEngine;
 
-public class StatManager : MonoBehaviour
+public class CardLevel
 {
-    [SerializeField] CardDataManager cardDataManager;
-
-    #region 스탯 업
-    public void AddExperience(CardData _cardData)
-    {
-        int.TryParse(_cardData.Exp, out int cardExp);
-
-        cardExp += 300; // Temp
-        CheckLevelUp(_cardData, cardExp);
-    }
-    int GetCardLevel(int _exp, CardData _cardData)
+    public int GetLevel(int _exp)
     {
         int level = (int)Mathf.Floor(_exp / 10000); // Temp
         return level;
     }
-    void CheckLevelUp(CardData _cardData, int _upgradedExp)
+    public int StringToInt(string _value)
     {
-        int level = GetCardLevel(_upgradedExp, _cardData);
-        int ExpToLevelUp = GetExpToLevelUp(_upgradedExp, _cardData);
-
-        if (_upgradedExp >= ExpToLevelUp)
-        {
-            LevelUp(_upgradedExp, ExpToLevelUp, level, _cardData);
-        }
+        int.TryParse(_value, out int intValue);
+        return intValue;
     }
-    // 현재 레벨에서 필요한 경험치 구하기
-    int GetExpToLevelUp(int _exp, CardData _cardData)
-    {
-        int level = GetCardLevel(_exp, _cardData);
-        return level * 1000; // Temp
-    }
+}
+public class StatManager : MonoBehaviour
+{
+    [SerializeField] CardDataManager cardDataManager;
+    [SerializeField] EquipInfoPanel equipInfoPanel;
 
-    void LevelUp(int _Exp, int cardToLevelUp, int level, CardData _cardData)
+    #region 스탯 업
+    public void LevelUp(CardData _cardData)
     {
-        _Exp -= cardToLevelUp;
-        level++;
+        int level = new CardLevel().StringToInt(_cardData.Level);
 
         int.TryParse(_cardData.Hp, out int newHp);
         int.TryParse(_cardData.Atk, out int newAtk);
-        newHp += level * 100; // Temp
-        newAtk += level * 100; // Temp
 
-        UpdateStat(_cardData, _Exp, newHp, newAtk);
+        if(_cardData.EquipmentType == "Ori") // 오리라면
+        {
+            newAtk += level * 100; // Temp
+            newHp += level * 100; // Temp
+        }
+        else if(_cardData.EquipmentType == EquipmentType.Weapon.ToString()) // 무기 카드라면
+        {
+            newAtk += level * 100; // Temp
+        }
+        else // 방어구 카드라면
+        {
+            newHp += level * 100; // Temp
+        }
+
+        level++;
+        
+        UpdateStat(_cardData, level.ToString(), newHp.ToString(), newAtk.ToString());
     }
-    void UpdateStat(CardData _cardData, int _exp, int _hp, int _atk)
+    void UpdateStat(CardData _cardData, string _level, string _hp, string _atk)
     {
-        cardDataManager.UpgradeCardData(_cardData, _exp, _hp, _atk);
+        cardDataManager.UpgradeCardData(_cardData, _level, _hp, _atk);
+
+        if(_cardData.EquipmentType == "Ori") // 오리라면
+        {
+            // 오리 레벨, 속성 UI 업데이트
+        }
+        else if(_cardData.EquipmentType == EquipmentType.Weapon.ToString()) // 무기 카드라면
+        {
+            equipInfoPanel.UpdatePanel(_level, _atk);
+        }
+        else // 방어구 카드라면
+        {
+            equipInfoPanel.UpdatePanel(_level, _hp);
+        }
     }
     #endregion
 }
