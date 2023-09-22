@@ -1,27 +1,13 @@
 using UnityEngine;
 
-public class CardLevel
-{
-    public int GetLevel(int _exp)
-    {
-        int level = (int)Mathf.Floor(_exp / 10000); // Temp
-        return level;
-    }
-    public int StringToInt(string _value)
-    {
-        int.TryParse(_value, out int intValue);
-        return intValue;
-    }
-}
 public class StatManager : MonoBehaviour
 {
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] EquipInfoPanel equipInfoPanel;
 
-    #region 스탯 업
     public void LevelUp(CardData _cardData)
     {
-        int level = new CardLevel().StringToInt(_cardData.Level);
+        int level = new Convert().StringToInt(_cardData.Level);
 
         int.TryParse(_cardData.Hp, out int newHp);
         int.TryParse(_cardData.Atk, out int newAtk);
@@ -61,5 +47,4 @@ public class StatManager : MonoBehaviour
             equipInfoPanel.UpdatePanel(_level, _hp);
         }
     }
-    #endregion
 }

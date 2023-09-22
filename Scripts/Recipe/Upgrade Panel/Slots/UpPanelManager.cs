@@ -154,7 +154,7 @@ public class UpPanelManager : MonoBehaviour
     #region 업그레이드
     public void UpgradeCard()
     {
-        int newCardGrade = new GradeConverter().ConvertStringToInt(CardToUpgrade.Grade) + 1;
+        int newCardGrade = new Convert().GradeToInt(CardToUpgrade.Grade) + 1;
         if (newCardGrade > 4) { newCardGrade = 4; } // 전설 등급은 합성하면 전설 등급
 
         string newGrade = ((Grade)newCardGrade).ToString();

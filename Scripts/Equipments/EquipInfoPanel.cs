@@ -42,7 +42,7 @@ public class EquipInfoPanel : MonoBehaviour
     // 레벨업을 하면 레벨과 속성을 업데이트
     public void UpdatePanel(string _level, string _attribute)
     {
-        Level.text = new CardLevel().StringToInt(_level).ToString();
-        attribute.text = new CardLevel().StringToInt(_attribute).ToString();
+        Level.text = new Convert().StringToInt(_level).ToString();
+        attribute.text = new Convert().StringToInt(_attribute).ToString();
     }
 }

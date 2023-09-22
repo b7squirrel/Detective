@@ -148,7 +148,7 @@ public class EquipmentPanelManager : MonoBehaviour
     }
     public void ActivateEquipInfoPanel(CardData cardData, CardDisp cardDisp, bool isEquipButton)
     {
-        index = new EquipmentTypeConverter().ConvertStringToInt(cardData.EquipmentType);
+        index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
 
         equipInfoPanel.gameObject.SetActive(true);
         equipInfoPanel.SetPanel(cardData, cardDisp, isEquipButton);

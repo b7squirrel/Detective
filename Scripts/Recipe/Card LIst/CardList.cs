@@ -59,7 +59,7 @@ public class CardList : MonoBehaviour
         CharCard charCard = FindCharCard(charData);
         EquipmentCard equipmentCard = FindEquipmentCard(equipData);
 
-        int index = new EquipmentTypeConverter().ConvertStringToInt(equipData.EquipmentType);
+        int index = new Convert().EquipmentTypeToInt(equipData.EquipmentType);
         charCard.equipmentCards[index] = equipmentCard;
         equipmentCard.IsEquipped = true;
 
@@ -75,7 +75,7 @@ public class CardList : MonoBehaviour
         CharCard charCard = FindCharCard(charData);
 
         int index =
-                new EquipmentTypeConverter().ConvertStringToInt(_equipmentCard.CardData.EquipmentType);
+                new Convert().EquipmentTypeToInt(_equipmentCard.CardData.EquipmentType);
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
         charCard.numberOfEquipments--;

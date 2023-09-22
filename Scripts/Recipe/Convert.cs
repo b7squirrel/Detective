@@ -1,8 +1,9 @@
 using System;
 
-public class GradeConverter
+public enum EquipmentType { Head, Chest, Legs, Weapon }
+public class Convert
 {
-    public int ConvertStringToInt(string _grade)
+    public int GradeToInt(string _grade)
     {
         Grade[] allGrade = (Grade[])Enum.GetValues(typeof(Grade));
 
@@ -15,19 +16,18 @@ public class GradeConverter
         }
         return -1;
     }
-}
-
-public enum EquipmentType { Head, Chest, Legs, Weapon }
-
-public class EquipmentTypeConverter
-{
-    public int ConvertStringToInt(string _equipType)
+    public int StringToInt(string _value)
+    {
+        int.TryParse(_value, out int intValue);
+        return intValue;
+    }
+    public int EquipmentTypeToInt(string _equipmentType)
     {
         EquipmentType[] allEquipType = (EquipmentType[])Enum.GetValues(typeof(EquipmentType));
 
         for (int i = 0; i < allEquipType.Length; i++)
         {
-            if(allEquipType[i].ToString() == _equipType)
+            if(allEquipType[i].ToString() == _equipmentType)
             {
                 return i;
             }

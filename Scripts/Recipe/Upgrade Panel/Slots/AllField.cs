@@ -42,8 +42,8 @@ public class AllField : MonoBehaviour
         // 내림차순으로 카드 정렬 
         cardDataSorted.Sort((a, b) =>
         {
-            int indexA = new GradeConverter().ConvertStringToInt(a.Grade);
-            int indexB = new GradeConverter().ConvertStringToInt(b.Grade);
+            int indexA = new Convert().GradeToInt(a.Grade);
+            int indexB = new Convert().GradeToInt(b.Grade);
             return indexA.CompareTo(indexB);
         });
 
