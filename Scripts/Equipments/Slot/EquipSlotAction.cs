@@ -36,18 +36,11 @@ public class EquipSlotAction : MonoBehaviour
             equipPanelManager.SetAllFieldTypeOf("Item");
             return;
         }
-        if (currentSlotType == EquipSlotType.FieldEquipment)
+        if (currentSlotType == EquipSlotType.FieldOri)
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
             equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), true);
-            return;
-        }
-        if (currentSlotType == EquipSlotType.UpEquipment)
-        {
-            EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
-            CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), false);
             return;
         }
         if (currentSlotType == EquipSlotType.None)

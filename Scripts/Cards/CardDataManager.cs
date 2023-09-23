@@ -128,10 +128,6 @@ public class CardDataManager : MonoBehaviour
     // 착용되어 있는 장비는 아이디가 바뀌면 안되므로
     public void AddUpgradedCardToMyCardList(CardData _cardData)
     {
-        
-        // CardData newCard =
-        // new CardData(_id, _cardData.Type, _cardData.Grade, _cardData.Name, "1", _cardData.Hp, _cardData.Atk, _cardData.EquipmentType);
-
         MyCardsList.Add(_cardData);
         Save();
     }
@@ -140,6 +136,11 @@ public class CardDataManager : MonoBehaviour
         _cardData.Level = _level;
         _cardData.Hp = _hp;
         _cardData.Atk = _atk;
+        Save();
+    }
+    public void UpdateStartingmemberOfCard(CardData cardToUpdate, string orderIndex)
+    {
+        cardToUpdate.startingMember = orderIndex;
         Save();
     }
     public void DeleteData()
