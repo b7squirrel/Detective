@@ -430,7 +430,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7e29965e800659346a95a3d00626e566, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f96f019da300ca84a93b0e00aa42b342, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -588,7 +588,7 @@ GameObject:
   - component: {fileID: 898992425183644679}
   - component: {fileID: 2800191140630338155}
   - component: {fileID: 6229261511981943627}
-  - component: {fileID: 2996499896688808788}
+  - component: {fileID: 1732395016690309114}
   m_Layer: 5
   m_Name: LaunchSlot
   m_TagString: Untagged
@@ -654,6 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05de75c5c26e6d439d323673f3ff6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 
 --- !u!114 &6229261511981943627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,7 +673,7 @@ MonoBehaviour:
   equippedText: {fileID: 666432732562915267}
   Level: {fileID: 2013452987319009077}
   starPrefab: {fileID: 7422844248308132606, guid: 9fbd6ad198424e14f9fd34d44a38dac1, type: 3}
---- !u!114 &2996499896688808788
+--- !u!114 &1732395016690309114
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -681,10 +682,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5142675147805730034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce86ea3d7c7f1ab4baa340d7d060fc0e, type: 3}
+  m_Script: {fileID: 11500000, guid: 73275be5e8b9cb84fb268a8123fa06d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSlotType: 0
+  currentSlotType: 1
 --- !u!1 &6579258769298851910
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,7 +807,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2996499896688808788}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: EquipSlotAction, Assembly-CSharp
         m_MethodName: Onclick
         m_Mode: 1

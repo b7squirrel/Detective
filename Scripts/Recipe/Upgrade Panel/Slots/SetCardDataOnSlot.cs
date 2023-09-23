@@ -13,18 +13,16 @@ public class SetCardDataOnSlot : MonoBehaviour
         if (targetCardData.Type == CardType.Weapon.ToString())
         {
             WeaponData wData = cardDictionary.GetWeaponData(targetCardData);
-            WeaponItemData data = new(wData, null);
 
             bool onEquipment = cardList.FindCharCard(targetCardData).IsEquipped;
-            targetSlot.SetWeaponCard(targetCardData, data.weaponData, onEquipment);
+            targetSlot.SetWeaponCard(targetCardData, wData, onEquipment);
         }
         else
         {
             Item iData = cardDictionary.GetItemData(targetCardData);
-            WeaponItemData data = new WeaponItemData(null, iData);
 
             bool onEquipment = cardList.FindEquipmentCard(targetCardData).IsEquipped;
-            targetSlot.SetItemCard(targetCardData, data.itemData, onEquipment);
+            targetSlot.SetItemCard(targetCardData, iData, onEquipment);
         }
     }
 }

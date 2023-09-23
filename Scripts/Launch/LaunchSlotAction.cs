@@ -29,16 +29,13 @@ public class LaunchSlotAction : MonoBehaviour
         if (currentSlotType == LaunchSlotType.Up)
         {
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            LaunchPanelManager launchPanelManager = GetComponentInParent<LaunchPanelManager>();
-            // 
-            launchPanelManager.SetAllFieldTypeOf("Item");
+            LaunchManager launchPanelManager = GetComponentInParent<LaunchManager>();
+            Debug.Log("리드 오리 클릭");
             return;
         }
         if (currentSlotType == LaunchSlotType.Field)
         {
-            EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), true);
             return;
         }
         if (currentSlotType == LaunchSlotType.None)
