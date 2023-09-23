@@ -6,6 +6,7 @@ public enum LaunchSlotType { Field, Up, None }
 public class LaunchSlotAction : MonoBehaviour
 {
     [SerializeField] protected LaunchSlotType currentSlotType;
+    [SerializeField] LaunchManager launchManager;
 
     public void Onclick()
     {
@@ -29,8 +30,7 @@ public class LaunchSlotAction : MonoBehaviour
         if (currentSlotType == LaunchSlotType.Up)
         {
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            LaunchManager launchPanelManager = GetComponentInParent<LaunchManager>();
-            Debug.Log("리드 오리 클릭");
+            launchManager.SetAllFieldTypeOf("Weapon", cardData);
             return;
         }
         if (currentSlotType == LaunchSlotType.Field)
