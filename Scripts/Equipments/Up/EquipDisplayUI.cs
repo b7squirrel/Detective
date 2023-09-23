@@ -12,11 +12,7 @@ public class EquipDisplayUI : MonoBehaviour
     {
         WeaponData wd = cardDictionary.GetWeaponData(cardData);
         charImage.sprite = wd.charImage;
-        if (currentAttr == null)
-        {
-            Debug.Log("current attr is null");
-        }
-        Debug.Log("Current atk = " + currentAttr.Atk);
+        
         atk.text = currentAttr.Atk.ToString();
         hp.text = currentAttr.Hp.ToString();
     }

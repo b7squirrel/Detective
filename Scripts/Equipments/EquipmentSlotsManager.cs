@@ -57,16 +57,16 @@ public class EquipmentSlotsManager : MonoBehaviour
         // 해당 장비의 attribute 더해줌
         if (_equipCardData.EquipmentType == EquipmentType.Weapon.ToString())
         {
-            currentAttribute = new OriAttribute(Atk, addingFactor * Hp + itemData.stats.hp);
+            currentAttribute = new OriAttribute(addingFactor * Atk + currentAttribute.Atk, currentAttribute.Hp);
         }
         else
         {
-            currentAttribute = new OriAttribute(addingFactor * Atk + (int)itemData.stats.damage, Hp);
+            currentAttribute = new OriAttribute(currentAttribute.Atk, addingFactor * Hp + currentAttribute.Hp);
         }
     }
 
     public OriAttribute GetCurrentAttribute() => currentAttribute;
-    
+
     public void EmptyEquipSlots()
     {
         for (int i = 0; i < equipSlots.Length; i++)
