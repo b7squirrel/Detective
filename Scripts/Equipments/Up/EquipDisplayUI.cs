@@ -8,11 +8,11 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] GameObject atkLabel, hpLabel;
 
-    public void SetWeaponDisply(CardData cardData, OriAttribute currentAttr)
+    public void SetWeaponDisply(CardData charCardData, OriAttribute currentAttr)
     {
-        WeaponData wd = cardDictionary.GetWeaponData(cardData);
+        WeaponData wd = cardDictionary.GetWeaponData(charCardData);
         charImage.sprite = wd.charImage;
-        
+
         atk.text = currentAttr.Atk.ToString();
         hp.text = currentAttr.Hp.ToString();
     }

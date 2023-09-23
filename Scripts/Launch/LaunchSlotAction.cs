@@ -29,9 +29,9 @@ public class LaunchSlotAction : MonoBehaviour
         if (currentSlotType == LaunchSlotType.Up)
         {
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
-            equipPanelManager.SetDisplay(cardData);
-            equipPanelManager.SetAllFieldTypeOf("Item");
+            LaunchPanelManager launchPanelManager = GetComponentInParent<LaunchPanelManager>();
+            // 
+            launchPanelManager.SetAllFieldTypeOf("Item");
             return;
         }
         if (currentSlotType == LaunchSlotType.Field)

@@ -6,8 +6,9 @@ public class EquipmentPanelManager : MonoBehaviour
 {
     CardData CardOnDisplay { get; set; } // 디스플레이에 올라가 있는 오리 카드
     [SerializeField] CardData cardToEquip; // Equipment Info에 올라 갈 장비 카드
-    
+
     int index; // 어떤 장비 슬롯인지
+    bool isEquipped; // 장비 정보창에 띄워진 장비가 착용중인지 아닌지 판단. 레벨업을 할 때 오리에게 attr을 적용할지 말지를 결정하기 위해
 
     CardDataManager cardDataManager;
     CardsDictionary cardDictionary;
@@ -18,10 +19,6 @@ public class EquipmentPanelManager : MonoBehaviour
 
     EquipDisplayUI equipDisplayUI;
     [SerializeField] EquipInfoPanel equipInfoPanel;
-
-    [Tooltip("Head, Chest, Legs, Weapon 순서")]
-
-    // 카드들이 보여지는 Field
     [SerializeField] AllField field; // 모든 카드
 
     void Awake()
@@ -42,17 +39,18 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Weapon");
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
-        EmptyAllEquipmentSlots(); // logic, UI 모두 처리
+        ClearAllEquipmentSlots(); // logic, UI 모두 처리
     }
 
     // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출
     // 오리 카드를 equip display에 보여준다
-    public void SetDisplay(CardData oriCardDataToDisplay)
+    public void InitDisplay(CardData oriCardDataToDisplay)
     {
         equipDisplayUI.OnDisplay(oriCardDataToDisplay); // 디스플레이 활성
         CardOnDisplay = oriCardDataToDisplay;
         equipmentSlotsManager.InitEquipSlots(oriCardDataToDisplay); // 오리 카드의 Data대로 장비 슬롯 설정 
         equipDisplayUI.SetWeaponDisply(oriCardDataToDisplay, equipmentSlotsManager.GetCurrentAttribute()); // 오리 카드 및 Attr
+        isEquipped = false;
     }
 
     public void ClearAllFieldSlots()
@@ -69,7 +67,7 @@ public class EquipmentPanelManager : MonoBehaviour
         // 아이템 카드는 착용되어 있지 않는 것들만 보여주기
         if (cardType == CardType.Weapon.ToString())
         {
-            EmptyAllEquipmentSlots(); // logic, UI 모두 처리
+            ClearAllEquipmentSlots(); // logic, UI 모두 처리
 
             card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field 오리만 보여줌
         }
@@ -105,10 +103,10 @@ public class EquipmentPanelManager : MonoBehaviour
             item.SetSlotType(currentSlotType);
         }
     }
-    void EmptyAllEquipmentSlots()
+    void ClearAllEquipmentSlots()
     {
         // Display의 장비 슬롯들을 모두 비우기
-        equipmentSlotsManager.EmptyEquipSlots(); // logic
+        equipmentSlotsManager.ClearEquipSlots(); // logic
         equipDisplayUI.OffDisplay(); // UI
     }
 
@@ -119,7 +117,7 @@ public class EquipmentPanelManager : MonoBehaviour
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
 
         // 장착하려는 장비 부위에 이미 다른 장비가 장착되어 있다면 CardList에서 그 장비를 해제하고
-        if(equipmentSlotsManager.IsEmpty(index) == false)
+        if (equipmentSlotsManager.IsEmpty(index) == false)
         {
             Debug.Log("장비가 이미 있습니다. 교체합니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
@@ -136,22 +134,25 @@ public class EquipmentPanelManager : MonoBehaviour
         DeActivateEquipInfoPanel();
     }
     // info panel의 UnEquip 버튼
-    public void OnUnEquipButton() 
+    public void OnUnEquipButton()
     {
         // 장비 해제
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
         cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
 
         equipmentSlotsManager.EmptyEquipSlot(index);
+
         cardToEquip = null;
 
         cardDisp.SetEquppiedTextActive(false);
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
     }
+    // equip slot action 에서 호출
     public void ActivateEquipInfoPanel(CardData cardData, CardDisp cardDisp, bool isEquipButton)
     {
         index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
+        isEquipped = !isEquipButton; // equip button을 띄운다는 것은 field에 있는 장비 카드라는 뜻이므로
 
         equipInfoPanel.gameObject.SetActive(true);
         equipInfoPanel.SetPanel(cardData, cardDisp, isEquipButton);
@@ -167,5 +168,11 @@ public class EquipmentPanelManager : MonoBehaviour
     public void UpgradeCard()
     {
         statManager.LevelUp(cardToEquip);
+
+        // 장착되어 있는 장비를 레벨업 하는 경우라면 바로바로 currentAttr을 업데이트
+        if (isEquipped) 
+        {
+            equipmentSlotsManager.InitEquipSlots(CardOnDisplay);
+        }
     }
 }
