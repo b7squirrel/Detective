@@ -4968,7 +4968,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &797962536
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6337,7 +6337,7 @@ MonoBehaviour:
   cardDataManager: {fileID: 1500030658}
   setCardDataOnSlot: {fileID: 958746580}
   statManager: {fileID: 1500030665}
-  statContainer: {fileID: 1307305262}
+  startingDataContainer: {fileID: 1307305262}
   fieldSlotPanel: {fileID: 1524433602}
   field: {fileID: 1649636984}
 --- !u!1 &965344237
@@ -10343,6 +10343,7 @@ MonoBehaviour:
   cardDataManager: {fileID: 1500030658}
   equipInfoPanel: {fileID: 388860202}
   cardList: {fileID: 1500030664}
+  statContainer: {fileID: 1307305262}
 --- !u!1 &1505695398
 GameObject:
   m_ObjectHideFlags: 0

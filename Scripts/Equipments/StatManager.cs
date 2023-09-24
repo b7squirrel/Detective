@@ -16,6 +16,7 @@ public class StatManager : MonoBehaviour
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] EquipInfoPanel equipInfoPanel;
     [SerializeField] CardList cardList;
+    [SerializeField] StartingDataContainer statContainer;
     OriAttribute leadAttribute;
 
     public void LevelUp(CardData _cardData)

@@ -23,6 +23,8 @@ public class WeaponManager : MonoBehaviour
 
     private void Start()
     {
+        StartingDataContainer startingContainer = FindObjectOfType<StartingDataContainer>();
+        startingWeapon = startingContainer.GetLeadWeaponData();
         AddWeapon(startingWeapon, true);
     }
 

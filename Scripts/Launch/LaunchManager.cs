@@ -10,7 +10,7 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] SetCardDataOnSlot setCardDataOnSlot;
     [SerializeField] StatManager statManager;
-    [SerializeField] StatContainer statContainer;
+    [SerializeField] StartingDataContainer startingDataContainer;
 
     [SerializeField] GameObject fieldSlotPanel; // 패널 켜고 끄기 위해
     [SerializeField] AllField field; // 모든 카드
@@ -21,21 +21,18 @@ public class LaunchManager : MonoBehaviour
     void OnEnable()
     {
         fieldSlotPanel.SetActive(false);
-        LoadLeadOri();
+        InitLead();
     }
 
-    public void LoadLeadOri()
+    public void InitLead()
     {
-        StartCoroutine(loadCo());
+        StartCoroutine(InitCo());
     }
-    IEnumerator loadCo()
+    IEnumerator InitCo()
     {
         yield return new WaitForSeconds(.01f);
         CardData lead = cardDataManager.GetMyCardList().Find(x => x.startingMember == "1");
-        currentLead = lead;
-        UpdateLead(currentLead);
-        
-        setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
+        SetLead(lead);
     }
     public void ClearAllFieldSlots()
     {
@@ -55,18 +52,23 @@ public class LaunchManager : MonoBehaviour
 
         field.GenerateAllCardsOfType(card);
     }
+    void SetLead(CardData lead)
+    {
+        currentLead = lead;
+
+        // 리드오리 attr update
+        currentAttr = statManager.GetLeadAttribute(currentLead);
+        startingDataContainer.SetLead(lead, currentAttr);
+        setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
+    }
 
     public void UpdateLead(CardData newLead)
     {
         cardDataManager.UpdateStartingmemberOfCard(currentLead, "N");
         cardDataManager.UpdateStartingmemberOfCard(newLead, "1");
-        currentLead = newLead;
+        
         CloseField();
-        LoadLeadOri();
-
-        // 리드오리 attr update
-        currentAttr = statManager.GetLeadAttribute(currentLead);
-        statContainer.SetLeadAttr(currentAttr);
+        SetLead(newLead);
     }
     public void CloseField()
     {
