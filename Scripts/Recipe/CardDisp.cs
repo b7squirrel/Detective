@@ -14,6 +14,7 @@ public class CardDisp : MonoBehaviour
 
     public void InitWeaponCardDisplay(WeaponData weaponData, bool onEquipment)
     {
+        EmptyCardDisplay();
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
 
@@ -33,8 +34,11 @@ public class CardDisp : MonoBehaviour
         charImage.color = new Color(1, 1, 1, 1);
         charImage.sprite = weaponData.charImage;
 
-
-        SetEquppiedTextActive(onEquipment);
+        // Launch 슬롯이 아닐 때만 착용 중 표시
+        if (GetComponent<LaunchSlotAction>() == null)
+        {
+            SetEquppiedTextActive(onEquipment);
+        }
     }
 
     public void InitItemCardDisplay(Item itemData, bool onEquipment)
@@ -62,7 +66,7 @@ public class CardDisp : MonoBehaviour
 
     protected virtual void SetNumStar(int numStars)
     {
-        if(stars == null) 
+        if (stars == null)
         {
             // 5개 만들어서 비활성화
             stars = new GameObject[5];
