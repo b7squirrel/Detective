@@ -15,6 +15,7 @@ public class StatManager : MonoBehaviour
 {
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] EquipInfoPanel equipInfoPanel;
+    [SerializeField] CardList cardList;
     OriAttribute leadAttribute;
 
     public void LevelUp(CardData _cardData)
@@ -59,8 +60,28 @@ public class StatManager : MonoBehaviour
             equipInfoPanel.UpdatePanel(_level, _hp);
         }
     }
-    // 리드 오리 공격력, 체력 임시 저장
-    public void SetLeadAttribute(int atk, int hp) => leadAttribute = new OriAttribute(atk, hp);
-    
-    public OriAttribute GetLeadAttribute() => leadAttribute;
+    // 리드 오리 공격력, 체력
+    public OriAttribute GetLeadAttribute(CardData oriCard)
+    {
+        CharCard lead = cardList.FindCharCard(oriCard);
+        EquipmentCard[] equipments = lead.equipmentCards;
+
+        int oriAtk = new Convert().StringToInt(oriCard.Atk);
+        int oriHp = new Convert().StringToInt(oriCard.Hp);
+        OriAttribute leadAttr = new OriAttribute(oriAtk, oriHp);
+
+        if(lead != null)
+        {
+            for (int i = 0; i < equipments.Length; i++)
+            {
+                if (equipments[i] == null)
+                    continue;
+
+                int equipmentAtk = new Convert().StringToInt(equipments[i].CardData.Atk);
+                int equipmentHp = new Convert().StringToInt(equipments[i].CardData.Hp);
+                leadAttr = new OriAttribute(oriAtk + equipmentAtk, oriHp + equipmentHp);
+            }
+        }
+        return leadAttr;
+    }
 }

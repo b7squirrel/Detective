@@ -28,7 +28,6 @@ public class Character : MonoBehaviour
 
     [SerializeField] AudioClip hurtSound;
 
-
     // public event Action OnDie;
     public UnityEvent OnDie;
     Animator anim;
@@ -62,12 +61,12 @@ public class Character : MonoBehaviour
     // 처음 시작할 때 persistant 데이터들을 가져옴.
     void ApplyPersistantUpgrade()
     {
-        int hpUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.HP);
-        MaxHealth += MaxHealth / 10 * hpUpgradeLevel;
-        currentHealth = MaxHealth;
+        //int hpUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.HP);
+        //MaxHealth += MaxHealth / 10 * hpUpgradeLevel;
+        //currentHealth = MaxHealth;
 
-        int damageUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.DAMAGE);
-        DamageBonus = 1f + 0.1f * damageUpgradeLevel;
+        //int damageUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.DAMAGE);
+        //DamageBonus = 1f + 0.1f * damageUpgradeLevel;
 
         int ArmorUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.Armor);
         Armor += ArmorUpgradeLevel;
@@ -92,6 +91,10 @@ public class Character : MonoBehaviour
         
         int KnockBackChanceLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.knockBackChance);
         this.knockBackChance += 0.1f * KnockBackChanceLevel * this.knockBackChance; // 레벱업 당 10% 증가
+
+        StatContainer statContainer = FindObjectOfType<StatContainer>();
+        MaxHealth = statContainer.GetLeadAttr().Hp;
+        DamageBonus = statContainer.GetLeadAttr().Atk;
     }
 
     public void TakeDamage(int damage)

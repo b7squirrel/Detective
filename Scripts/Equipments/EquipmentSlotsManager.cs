@@ -8,7 +8,7 @@ public class EquipmentSlotsManager : MonoBehaviour
     [SerializeField] CardList cardList;
     OriAttribute currentAttribute;
 
-    CardData instantCharCard;
+    CardData instantCharCard; // 현재 display 되고 있는 charCard 임시 저장
 
     // 오리가 display될 때 처음 한 번 순회하며 업데이트
     public void InitEquipSlots(CardData charCardData)

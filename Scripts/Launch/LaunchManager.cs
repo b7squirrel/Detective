@@ -9,12 +9,14 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] CardSlot leadOriSlot;
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] SetCardDataOnSlot setCardDataOnSlot;
-    string firstOriID;
+    [SerializeField] StatManager statManager;
+    [SerializeField] StatContainer statContainer;
 
     [SerializeField] GameObject fieldSlotPanel; // 패널 켜고 끄기 위해
     [SerializeField] AllField field; // 모든 카드
 
     CardData currentLead; // 현재 리드로 선택된 오리
+    OriAttribute currentAttr; // 현재 리드로 선택된 오리의 attr
 
     void OnEnable()
     {
@@ -31,6 +33,7 @@ public class LaunchManager : MonoBehaviour
         yield return new WaitForSeconds(.01f);
         CardData lead = cardDataManager.GetMyCardList().Find(x => x.startingMember == "1");
         currentLead = lead;
+        UpdateLead(currentLead);
         
         setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
     }
@@ -55,11 +58,15 @@ public class LaunchManager : MonoBehaviour
 
     public void UpdateLead(CardData newLead)
     {
-        cardDataManager.UpdateStartingmemberOfCard(newLead, "1");
         cardDataManager.UpdateStartingmemberOfCard(currentLead, "N");
+        cardDataManager.UpdateStartingmemberOfCard(newLead, "1");
         currentLead = newLead;
         CloseField();
         LoadLeadOri();
+
+        // 리드오리 attr update
+        currentAttr = statManager.GetLeadAttribute(currentLead);
+        statContainer.SetLeadAttr(currentAttr);
     }
     public void CloseField()
     {
