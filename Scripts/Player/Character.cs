@@ -93,6 +93,12 @@ public class Character : MonoBehaviour
         this.knockBackChance += 0.1f * KnockBackChanceLevel * this.knockBackChance; // 레벱업 당 10% 증가
 
         StartingDataContainer statContainer = FindObjectOfType<StartingDataContainer>();
+        if(statContainer == null)
+        {
+            MaxHealth = 3000;
+            DamageBonus = 0;
+            return;
+        }
         MaxHealth = statContainer.GetLeadAttr().Hp;
         DamageBonus = statContainer.GetLeadAttr().Atk;
     }
