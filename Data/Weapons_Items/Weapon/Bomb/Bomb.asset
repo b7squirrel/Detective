@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
   m_Name: Bomb
   m_EditorClassIdentifier: 
+  grade: 0
   Name: "\uD3ED\uD0C4"
+  charImage: {fileID: 0}
   SynergyWeapon: "\uC624\uB9AC \uD3ED\uD0C4 \uC624\uB9AC"
+  CardCharAnimator:
+    CardImageAnim: {fileID: 9100000, guid: 3f5e6393ee74d2647a25660d988077db, type: 2}
   weaponPrefab: {fileID: 0}
   stats:
     damage: 150
@@ -32,3 +36,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3cacccf799afeff478a8a5be69599de8, type: 2}
   - {fileID: 11400000, guid: 5824e3dcee509a440b1b8d6e8b1d1cfd, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: abffbc3ad75c3834197e0cd7b28fc718, type: 2}
+  dropChance: 0

@@ -4,6 +4,10 @@ using UnityEngine.UI;
 public class EquipDisplayUI : MonoBehaviour
 {
     [SerializeField] Image charImage;
+    [SerializeField] Image HeadImage;
+    [SerializeField] Image ChestImage;
+    [SerializeField] Image FaceImage;
+    [SerializeField] Image HandImage;
     [SerializeField] TMPro.TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] GameObject atkLabel, hpLabel;

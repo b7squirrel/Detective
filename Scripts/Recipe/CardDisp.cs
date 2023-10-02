@@ -7,6 +7,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected Transform cardBaseContainer;
     [SerializeField] protected Transform starContainer;
     [SerializeField] protected UnityEngine.UI.Image charImage;
+    [SerializeField] Animator charAnim;
     [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
     [SerializeField] protected GameObject starPrefab;
@@ -34,6 +35,8 @@ public class CardDisp : MonoBehaviour
         // 캐릭터 이미지
         charImage.color = new Color(1, 1, 1, 1);
         charImage.sprite = weaponData.charImage;
+        Debug.Log(weaponData.Name);
+        charAnim.runtimeAnimatorController = weaponData.CardCharAnimator.CardImageAnim;
 
         // Launch 슬롯이 아닐 때만 착용 중 표시
         // 업슬롯, 맷슬롯은 착용 중 표시 하지 않음

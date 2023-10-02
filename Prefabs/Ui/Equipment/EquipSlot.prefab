@@ -384,6 +384,7 @@ MonoBehaviour:
   cardBaseContainer: {fileID: 6261320613809575816}
   starContainer: {fileID: 4452425675381175627}
   charImage: {fileID: 8924585538590291286}
+  charAnim: {fileID: 8778028942744402392}
   equippedText: {fileID: 7176279258643410868}
   Level: {fileID: 8167803695987322690}
   starPrefab: {fileID: 7422844248308132606, guid: 9fbd6ad198424e14f9fd34d44a38dac1, type: 3}
@@ -941,6 +942,7 @@ GameObject:
   - component: {fileID: 2987032177119288783}
   - component: {fileID: 7151998669390115313}
   - component: {fileID: 8924585538590291286}
+  - component: {fileID: 8778028942744402392}
   m_Layer: 5
   m_Name: Char Image
   m_TagString: Untagged
@@ -1006,6 +1008,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &8778028942744402392
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6482745599888864741}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7176279258643410868
 GameObject:
   m_ObjectHideFlags: 0

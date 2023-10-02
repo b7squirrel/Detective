@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 [Serializable]
@@ -37,6 +38,12 @@ public class WeaponStats
     }
 }
 
+[Serializable]
+public class AnimatorData
+{
+    public RuntimeAnimatorController CardImageAnim;
+}
+
 [CreateAssetMenu]
 public class WeaponData : ScriptableObject
 {
@@ -44,6 +51,7 @@ public class WeaponData : ScriptableObject
     public string Name;
     public Sprite charImage;
     public string SynergyWeapon;
+    public AnimatorData CardCharAnimator;
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
     public GameObject weaponBasePrefab;

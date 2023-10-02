@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
   m_Name: Laser
   m_EditorClassIdentifier: 
+  grade: 0
   Name: "\uB808\uC774\uC838\uBE54"
+  charImage: {fileID: 0}
   SynergyWeapon: "\uBB34\uC9C0\uAC1C \uC624\uB9AC"
+  CardCharAnimator:
+    CardImageAnim: {fileID: 9100000, guid: 3f5e6393ee74d2647a25660d988077db, type: 2}
   weaponPrefab: {fileID: 6822868710250514242, guid: f71c0c1781d42624eae696cc65fa84fd, type: 3}
   stats:
     damage: 30
@@ -32,3 +36,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5de6db0302c822042a8ce90497f1813f, type: 2}
   - {fileID: 11400000, guid: 4dce82c90dc626d4084f29423bee15cf, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: 054f357e12882934eb76f17e2ca5ac05, type: 2}
+  dropChance: 0

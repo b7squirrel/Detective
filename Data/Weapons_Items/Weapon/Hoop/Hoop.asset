@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
   m_Name: Hoop
   m_EditorClassIdentifier: 
+  grade: 0
   Name: "\uC694\uC694"
+  charImage: {fileID: 0}
   SynergyWeapon: HoopSynergy
+  CardCharAnimator:
+    CardImageAnim: {fileID: 9100000, guid: 3f5e6393ee74d2647a25660d988077db, type: 2}
   weaponPrefab: {fileID: 0}
   stats:
     damage: 10
@@ -32,3 +36,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 68b09bea5f8178048b19a1c5b25500b4, type: 2}
   - {fileID: 11400000, guid: 2926c1663e3b0474d94a510be6806b6a, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: e1f8c72b6c2c4ff438a004df76ffa53f, type: 2}
+  dropChance: 0

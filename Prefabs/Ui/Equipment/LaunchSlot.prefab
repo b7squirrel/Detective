@@ -375,6 +375,7 @@ GameObject:
   - component: {fileID: 4890054929259957688}
   - component: {fileID: 714355012515078534}
   - component: {fileID: 1257236293959050529}
+  - component: {fileID: 6898327244481666464}
   m_Layer: 5
   m_Name: Char Image
   m_TagString: Untagged
@@ -440,6 +441,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &6898327244481666464
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3701871183720965522}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4122939449012639694
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,9 +692,11 @@ MonoBehaviour:
   cardBaseContainer: {fileID: 4344930274301708287}
   starContainer: {fileID: 6296832118316541244}
   charImage: {fileID: 1257236293959050529}
+  charAnim: {fileID: 6898327244481666464}
   equippedText: {fileID: 666432732562915267}
   Level: {fileID: 2013452987319009077}
   starPrefab: {fileID: 7422844248308132606, guid: 9fbd6ad198424e14f9fd34d44a38dac1, type: 3}
+  displayEquippedText: 0
 --- !u!114 &1732395016690309114
 MonoBehaviour:
   m_ObjectHideFlags: 0

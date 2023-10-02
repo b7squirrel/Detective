@@ -53,6 +53,7 @@ public class Item : ScriptableObject
     public string Name;
     public Grade grade;
     public Sprite charImage;
+    public AnimatorData CardItemAnimator;
     public string SynergyWeapon;
     public ItemStats stats;
     public List<UpgradeData> upgrades;
