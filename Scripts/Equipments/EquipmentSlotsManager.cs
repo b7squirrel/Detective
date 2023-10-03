@@ -35,6 +35,7 @@ public class EquipmentSlotsManager : MonoBehaviour
             WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
             if (weaponItemData.itemData == null) continue;
             SetEquipSlot(i, weaponItemData.itemData, cardData);
+            equipDisplayUI.SetEquipmentDisplay(cardData, true);
         }
     }
 
@@ -46,6 +47,7 @@ public class EquipmentSlotsManager : MonoBehaviour
 
         // 장비가 더해지면 오리 스탯 업데이트
         UpdateAttribute(cardToEquip, true); // attr data 업데이트
+        equipDisplayUI.SetEquipmentDisplay(cardToEquip, true);
     }
 
     // 장비가 장착될 때, 해제될 때 각각 스탯을 업데이트
@@ -67,7 +69,7 @@ public class EquipmentSlotsManager : MonoBehaviour
             currentAttribute = new OriAttribute(currentAttribute.Atk, addingFactor * Hp + currentAttribute.Hp);
         }
 
-        equipDisplayUI.SetWeaponDisply(instantCharCard, currentAttribute); // attr ui 업데이트
+        equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute); // attr ui 업데이트
     }
 
     public OriAttribute GetCurrentAttribute() => currentAttribute;
@@ -84,8 +86,10 @@ public class EquipmentSlotsManager : MonoBehaviour
         CardData cardDataToRemove = equipSlots[index].GetCardData();
         equipSlots[index].EmptySlot();
 
-        // 장비가 빠지면 오리 스탯 업데이트
         UpdateAttribute(cardDataToRemove, false);
+
+        // 장비가 빠지면 오리 스탯 업데이트
+        equipDisplayUI.SetEquipmentDisplay(cardDataToRemove, false);
     }
     public bool IsEmpty(int index)
     {

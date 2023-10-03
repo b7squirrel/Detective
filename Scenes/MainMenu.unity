@@ -12573,7 +12573,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1666993444
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13520,12 +13520,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 082f5e7451eb0d44e8d628745ed467d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charDisp: {fileID: 1666993443}
   charImage: {fileID: 910446812}
-  HeadImage: {fileID: 1977202632}
-  ChestImage: {fileID: 747076157}
-  FaceImage: {fileID: 1682732796}
-  HandImage: {fileID: 256988795}
+  EquipmentImages:
+  - {fileID: 1977202632}
+  - {fileID: 747076157}
+  - {fileID: 1682732796}
+  - {fileID: 256988795}
+  HeadImage: {fileID: 1977202630}
+  ChestImage: {fileID: 747076155}
+  FaceImage: {fileID: 1682732794}
+  HandImage: {fileID: 256988793}
   atk: {fileID: 1870249436}
   hp: {fileID: 1605086890}
   cardDictionary: {fileID: 1500030660}
