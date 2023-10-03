@@ -23,7 +23,7 @@ public class CardSlot : MonoBehaviour
         return cardData;
     }
 
-    public void SetWeaponCard(CardData _cardData, WeaponData _weaponData, Animator[] equipAnims, bool _onEquipment)
+    public void SetWeaponCard(CardData _cardData, WeaponData _weaponData, RuntimeAnimatorController[] equipAnims, bool _onEquipment)
     {
         IsEmpty = false;
         cardData = _cardData;

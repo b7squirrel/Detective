@@ -18,7 +18,15 @@ public class SetCardDataOnSlot : MonoBehaviour
             bool onEquipment = cardList.FindCharCard(targetCardData).IsEquipped;
 
             Debug.Log("target slot = " + targetSlot.name);
-            Animator[] anims = equipAnims.GetEquipmentAnimators(targetCardData, targetSlot);
+            if(equipAnims.GetEquipmentAnimators(targetCardData, targetSlot) == null)
+            Debug.Log("NUll");
+            RuntimeAnimatorController[] anims = equipAnims.GetEquipmentAnimators(targetCardData, targetSlot);
+
+            foreach (var item in anims)
+            {
+                if(item == null) continue;
+                Debug.Log(item.name);
+            }
             targetSlot.SetWeaponCard(targetCardData, wData, anims, onEquipment);
         }
         else

@@ -10,16 +10,17 @@ public class EquipmentsAnimators : MonoBehaviour
     [SerializeField] CardList cardList;
     [SerializeField] CardsDictionary cardsDictionary;
 
-    public Animator[] GetEquipmentAnimators(CardData charCardData, CardSlot targetSlot)
+    public RuntimeAnimatorController[] GetEquipmentAnimators(CardData charCardData, CardSlot targetSlot)
     {
         Animator[] equipAnims = targetSlot.GetComponent<CardDisp>().GetEquipmentAnimators();
+        RuntimeAnimatorController[] animCons = new RuntimeAnimatorController[4];
 
         EquipmentCard[] equipCards = cardList.GetEquipmentsCardData(charCardData);
         for (int i = 0; i < 4; i++)
         {
             if (equipCards[i] == null)
             {
-                equipAnims[i] = null;
+                animCons[i] = null;
                 continue;
             }
                 
@@ -30,7 +31,7 @@ public class EquipmentsAnimators : MonoBehaviour
             if (weaponItemData.itemData == null) continue;
 
             Debug.Log(equipAnims[i].name);
-            equipAnims[i].runtimeAnimatorController = weaponItemData.itemData.CardItemAnimator.CardImageAnim;
+            animCons[i] = weaponItemData.itemData.CardItemAnimator.CardImageAnim;
         }
         foreach (var item in equipAnims)
         {
@@ -39,6 +40,6 @@ public class EquipmentsAnimators : MonoBehaviour
 
             Debug.Log(item.name);
         }
-        return equipAnims;
+        return animCons;
     }
 }

@@ -15,7 +15,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부
     GameObject[] stars;
 
-    public void InitWeaponCardDisplay(WeaponData weaponData, Animator[] equipAnims, bool onEquipment)
+    public void InitWeaponCardDisplay(WeaponData weaponData, RuntimeAnimatorController[] equipAnims, bool onEquipment)
     {
         EmptyCardDisplay();
         // 별과 카드 색깔
@@ -45,7 +45,7 @@ public class CardDisp : MonoBehaviour
                 continue;
 
             equipmentAnimators[i].gameObject.SetActive(true);
-            equipmentAnimators[i].runtimeAnimatorController = equipAnims[i].runtimeAnimatorController;
+            equipmentAnimators[i].runtimeAnimatorController = equipAnims[i];
         }
 
         // Launch 슬롯이 아닐 때만 착용 중 표시
