@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// ����ī�忡 ������ ����� animator ������ �Ѱ���
-/// </summary>
 public class EquipmentsAnimators : MonoBehaviour
 {
     [SerializeField] CardList cardList;
@@ -30,15 +27,12 @@ public class EquipmentsAnimators : MonoBehaviour
 
             if (weaponItemData.itemData == null) continue;
 
-            Debug.Log(equipAnims[i].name);
             animCons[i] = weaponItemData.itemData.CardItemAnimator.CardImageAnim;
         }
         foreach (var item in equipAnims)
         {
             if(item == null)
             continue;
-
-            Debug.Log(item.name);
         }
         return animCons;
     }

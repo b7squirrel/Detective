@@ -15,9 +15,9 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부
     GameObject[] stars;
 
-    public void InitWeaponCardDisplay(WeaponData weaponData, RuntimeAnimatorController[] equipAnims, bool onEquipment)
+    public void InitWeaponCardDisplay(WeaponData weaponData, bool onEquipment)
     {
-        EmptyCardDisplay();
+        //EmptyCardDisplay();
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
 
@@ -34,19 +34,9 @@ public class CardDisp : MonoBehaviour
         Level.text = "LV1";
 
         // 캐릭터 이미지
-        charImage.sprite = weaponData.charImage;
+        //charImage.sprite = weaponData.charImage;
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.CardCharAnimator.CardImageAnim;
-
-        // 장비 이미지
-        for (int i = 0; i < 4; i++)
-        {
-            if (equipAnims[i] == null)
-                continue;
-
-            equipmentAnimators[i].gameObject.SetActive(true);
-            equipmentAnimators[i].runtimeAnimatorController = equipAnims[i];
-        }
 
         // Launch 슬롯이 아닐 때만 착용 중 표시
         // 업슬롯, 맷슬롯은 착용 중 표시 하지 않음
@@ -83,6 +73,15 @@ public class CardDisp : MonoBehaviour
         }
     }
 
+    public void SetRunTimeAnimController(int index, RuntimeAnimatorController animatorController)
+    {
+        equipmentAnimators[index].gameObject.SetActive(true);
+        equipmentAnimators[index].runtimeAnimatorController = animatorController;
+        if (animatorController == null)
+        { 
+            equipmentAnimators[index].gameObject.SetActive(false); 
+        }
+    }
     protected virtual void SetNumStar(int numStars)
     {
         if (stars == null)

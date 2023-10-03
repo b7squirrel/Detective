@@ -4,7 +4,6 @@ public class SetCardDataOnSlot : MonoBehaviour
 {
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] CardList cardList;
-    [SerializeField] EquipmentsAnimators equipAnims;
 
     /// <summary>
     /// CardData를 넣으면 Weapon인지 Item인지 판별해서 원하는 슬롯에 표시해 줌
@@ -17,17 +16,8 @@ public class SetCardDataOnSlot : MonoBehaviour
 
             bool onEquipment = cardList.FindCharCard(targetCardData).IsEquipped;
 
-            Debug.Log("target slot = " + targetSlot.name);
-            if(equipAnims.GetEquipmentAnimators(targetCardData, targetSlot) == null)
-            Debug.Log("NUll");
-            RuntimeAnimatorController[] anims = equipAnims.GetEquipmentAnimators(targetCardData, targetSlot);
-
-            foreach (var item in anims)
-            {
-                if(item == null) continue;
-                Debug.Log(item.name);
-            }
-            targetSlot.SetWeaponCard(targetCardData, wData, anims, onEquipment);
+            targetSlot.SetWeaponCard(targetCardData, wData, onEquipment);
+            SetAnimController(targetCardData, targetSlot);
         }
         else
         {
@@ -35,6 +25,28 @@ public class SetCardDataOnSlot : MonoBehaviour
 
             bool onEquipment = cardList.FindEquipmentCard(targetCardData).IsEquipped;
             targetSlot.SetItemCard(targetCardData, iData, onEquipment);
+        }
+    }
+
+    void SetAnimController(CardData charCard, CardSlot targetSlot)
+    {
+        CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
+        EquipmentCard[] equipCards = cardList.GetEquipmentsCardData(charCard);
+        for (int i = 0; i < 4; i++)
+        {
+            if (equipCards[i] == null)
+            {
+                cardDisp.SetRunTimeAnimController(i, null);
+                continue;
+            }
+
+            // 장비의 runtimeAnimatorController 구하기
+            CardData equipCardData = equipCards[i].CardData;
+            WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(equipCardData);
+
+            if (weaponItemData.itemData == null) continue;
+
+            cardDisp.SetRunTimeAnimController(i, weaponItemData.itemData.CardItemAnimator.CardImageAnim);
         }
     }
 }

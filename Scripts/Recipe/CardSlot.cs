@@ -23,13 +23,13 @@ public class CardSlot : MonoBehaviour
         return cardData;
     }
 
-    public void SetWeaponCard(CardData _cardData, WeaponData _weaponData, RuntimeAnimatorController[] equipAnims, bool _onEquipment)
+    public void SetWeaponCard(CardData _cardData, WeaponData _weaponData, bool _onEquipment)
     {
         IsEmpty = false;
         cardData = _cardData;
         // cardDisp 호출해서 카드 출력
         CardDisp cardDisp = GetComponent<CardDisp>();
-        cardDisp.InitWeaponCardDisplay(_weaponData, equipAnims, _onEquipment);
+        cardDisp.InitWeaponCardDisplay(_weaponData, _onEquipment);
 
         ID = cardData.ID;
     }

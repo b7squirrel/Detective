@@ -92,9 +92,10 @@ public class MatField : MonoBehaviour
 
                 bool onEquipment = cardList.FindCharCard(cardDatas[i]).IsEquipped;
 
-                RuntimeAnimatorController[] anims = equipAnims.GetEquipmentAnimators(cardDatas[i], slots[i].GetComponent<CardSlot>());
+                CardSlot cardSlot = slots[i].GetComponent<CardSlot>();
+                cardSlot.SetWeaponCard(cardDatas[i], wData, onEquipment);
+                SetAnimController(cardDatas[i], cardSlot);
 
-                slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], wData, anims, onEquipment);
                 slots[i].transform.localScale = new Vector2(0, 0);
                 slots[i].transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
             }
@@ -108,6 +109,28 @@ public class MatField : MonoBehaviour
                 slots[i].transform.localScale = new Vector2(0, 0);
                 slots[i].transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
             }
+        }
+    }
+    void SetAnimController(CardData charCard, CardSlot targetSlot)
+    {
+        CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
+        EquipmentCard[] equipCards = cardList.GetEquipmentsCardData(charCard);
+        for (int i = 0; i < 4; i++)
+        {
+            if (equipCards[i] == null)
+            {
+                cardDisp.SetRunTimeAnimController(i, null);
+                Debug.Log(i + " 번 장비는 null");
+                continue;
+            }
+
+            // 장비의 runtimeAnimatorController 구하기
+            CardData equipCardData = equipCards[i].CardData;
+            WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(equipCardData);
+
+            if (weaponItemData.itemData == null) continue;
+
+            cardDisp.SetRunTimeAnimController(i, weaponItemData.itemData.CardItemAnimator.CardImageAnim);
         }
     }
 

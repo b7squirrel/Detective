@@ -32,7 +32,6 @@ public class EquipSlotAction : MonoBehaviour
             CardData cardData = GetComponent<CardSlot>().GetCardData();
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             equipPanelManager.InitDisplay(cardData);
-            Debug.Log("ID = " + cardData.ID);
             equipPanelManager.SetAllFieldTypeOf("Item");
             return;
         }
