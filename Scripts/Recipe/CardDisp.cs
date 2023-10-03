@@ -12,7 +12,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
     [SerializeField] protected GameObject starPrefab;
-    [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부
+    [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
     GameObject[] stars;
 
     public void InitWeaponCardDisplay(WeaponData weaponData, bool onEquipment)
@@ -38,13 +38,9 @@ public class CardDisp : MonoBehaviour
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.CardCharAnimator.CardImageAnim;
 
-        // Launch 슬롯이 아닐 때만 착용 중 표시
-        // 업슬롯, 맷슬롯은 착용 중 표시 하지 않음
-        // 장비 슬롯은 착용 중 표시
-        if (displayEquippedText)
-        {
-            SetEquppiedTextActive(onEquipment);
-        }
+        // 오리카드는 착용 중 표시 안 함
+        // 장비카드만 착용 중 표시
+        SetEquppiedTextActive(false);
     }
 
     public void InitItemCardDisplay(Item itemData, bool onEquipment)
