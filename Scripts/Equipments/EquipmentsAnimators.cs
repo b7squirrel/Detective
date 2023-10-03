@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ¿À¸®Ä«µå¿¡ ÀåÂøµÈ ÀåºñÀÇ animator Á¤º¸¸¦ ³Ñ°ÜÁÜ
+/// ï¿½ï¿½ï¿½ï¿½Ä«ï¿½å¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ animator ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½
 /// </summary>
 public class EquipmentsAnimators : MonoBehaviour
 {
@@ -32,7 +32,13 @@ public class EquipmentsAnimators : MonoBehaviour
             Debug.Log(equipAnims[i].name);
             equipAnims[i].runtimeAnimatorController = weaponItemData.itemData.CardItemAnimator.CardImageAnim;
         }
-        Debug.Log(equipAnims.Length);
+        foreach (var item in equipAnims)
+        {
+            if(item == null)
+            continue;
+
+            Debug.Log(item.name);
+        }
         return equipAnims;
     }
 }
