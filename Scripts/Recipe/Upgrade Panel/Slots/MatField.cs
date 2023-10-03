@@ -8,6 +8,7 @@ public class MatField : MonoBehaviour
     CardsDictionary cardDictionary;
     CardDataManager cardDataManager;
     CardList cardList;
+    EquipmentsAnimators equipAnims;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -22,6 +23,7 @@ public class MatField : MonoBehaviour
         cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
         cardList = FindObjectOfType<CardList>();
+        equipAnims = GetComponent<EquipmentsAnimators>();
     }
     
     void Disabled()
@@ -90,7 +92,9 @@ public class MatField : MonoBehaviour
 
                 bool onEquipment = cardList.FindCharCard(cardDatas[i]).IsEquipped;
 
-                slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], wData, onEquipment);
+                Animator[] anims = equipAnims.GetEquipmentAnimators(cardDatas[i], slots[i].GetComponent<CardSlot>());
+
+                slots[i].GetComponent<CardSlot>().SetWeaponCard(cardDatas[i], wData, anims, onEquipment);
                 slots[i].transform.localScale = new Vector2(0, 0);
                 slots[i].transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
             }

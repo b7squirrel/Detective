@@ -6718,6 +6718,7 @@ GameObject:
   - component: {fileID: 958746579}
   - component: {fileID: 958746581}
   - component: {fileID: 958746580}
+  - component: {fileID: 958746582}
   m_Layer: 5
   m_Name: Launch Panel Manager
   m_TagString: Untagged
@@ -6761,6 +6762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardDictionary: {fileID: 1500030660}
   cardList: {fileID: 1500030664}
+  equipAnims: {fileID: 958746582}
 --- !u!114 &958746581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6780,6 +6782,20 @@ MonoBehaviour:
   startingDataContainer: {fileID: 1307305262}
   fieldSlotPanel: {fileID: 1524433602}
   field: {fileID: 1649636984}
+--- !u!114 &958746582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958746578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardList: {fileID: 1500030664}
+  cardsDictionary: {fileID: 1500030660}
 --- !u!1 &965344237
 GameObject:
   m_ObjectHideFlags: 0
@@ -7617,6 +7633,7 @@ GameObject:
   - component: {fileID: 1078349323}
   - component: {fileID: 1078349322}
   - component: {fileID: 1078349324}
+  - component: {fileID: 1078349325}
   m_Layer: 5
   m_Name: Panel Manager
   m_TagString: Untagged
@@ -7663,6 +7680,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardDictionary: {fileID: 1500030660}
   cardList: {fileID: 1500030664}
+  equipAnims: {fileID: 0}
 --- !u!114 &1078349323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7707,6 +7725,20 @@ MonoBehaviour:
   cardDictionary: {fileID: 1500030660}
   equipDisplayUI: {fileID: 1803978050}
   cardList: {fileID: 1500030664}
+--- !u!114 &1078349325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078349320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardList: {fileID: 1500030664}
+  cardsDictionary: {fileID: 1500030660}
 --- !u!1 &1081217003
 GameObject:
   m_ObjectHideFlags: 0
@@ -11682,6 +11714,7 @@ GameObject:
   - component: {fileID: 1587361510}
   - component: {fileID: 1587361509}
   - component: {fileID: 1587361511}
+  - component: {fileID: 1587361512}
   m_Layer: 5
   m_Name: Mat Field
   m_TagString: Untagged
@@ -11754,6 +11787,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotPrefab: {fileID: 8782935464688134205, guid: 280a1ea8f5fa41b4a80563110998228b, type: 3}
+--- !u!114 &1587361512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587361507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardList: {fileID: 1500030664}
+  cardsDictionary: {fileID: 1500030660}
 --- !u!1 &1605086888
 GameObject:
   m_ObjectHideFlags: 0
@@ -13548,6 +13595,7 @@ GameObject:
   - component: {fileID: 1808537189}
   - component: {fileID: 1808537190}
   - component: {fileID: 1808537191}
+  - component: {fileID: 1808537192}
   m_Layer: 5
   m_Name: Up Panel Manager
   m_TagString: Untagged
@@ -13629,6 +13677,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardDictionary: {fileID: 1500030660}
   cardList: {fileID: 1500030664}
+  equipAnims: {fileID: 0}
 --- !u!114 &1808537191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13653,6 +13702,20 @@ MonoBehaviour:
   matSlot: {fileID: 1462913148}
   plus: {fileID: 61836428}
   upSuccess: {fileID: 248510364}
+--- !u!114 &1808537192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808537185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardList: {fileID: 1500030664}
+  cardsDictionary: {fileID: 1500030660}
 --- !u!1 &1842591797
 GameObject:
   m_ObjectHideFlags: 0

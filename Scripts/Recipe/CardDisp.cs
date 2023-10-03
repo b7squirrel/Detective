@@ -4,17 +4,18 @@ using UnityEngine;
 // 장착되거나 해제되면 Equipment Panel Manager에서 업데이트
 public class CardDisp : MonoBehaviour
 {
-    [SerializeField] protected Transform cardBaseContainer;
+    [SerializeField] protected Transform cardBaseContainer; // 등급 5개
     [SerializeField] protected Transform starContainer;
     [SerializeField] protected UnityEngine.UI.Image charImage;
     [SerializeField] Animator charAnim;
+    [SerializeField] Animator[] equipmentAnimators;
     [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
     [SerializeField] protected GameObject starPrefab;
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부
     GameObject[] stars;
 
-    public void InitWeaponCardDisplay(WeaponData weaponData, bool onEquipment)
+    public void InitWeaponCardDisplay(WeaponData weaponData, Animator[] equipAnims, bool onEquipment)
     {
         EmptyCardDisplay();
         // 별과 카드 색깔
@@ -33,10 +34,19 @@ public class CardDisp : MonoBehaviour
         Level.text = "LV1";
 
         // 캐릭터 이미지
-        charImage.color = new Color(1, 1, 1, 1);
         charImage.sprite = weaponData.charImage;
-        Debug.Log(weaponData.Name);
+        charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.CardCharAnimator.CardImageAnim;
+
+        // 장비 이미지
+        for (int i = 0; i < 4; i++)
+        {
+            if (equipAnims[i] == null)
+                continue;
+
+            equipmentAnimators[i].gameObject.SetActive(true);
+            equipmentAnimators[i].runtimeAnimatorController = equipAnims[i].runtimeAnimatorController;
+        }
 
         // Launch 슬롯이 아닐 때만 착용 중 표시
         // 업슬롯, 맷슬롯은 착용 중 표시 하지 않음
@@ -93,6 +103,11 @@ public class CardDisp : MonoBehaviour
         }
     }
 
+    public Animator[] GetEquipmentAnimators()
+    {
+        return equipmentAnimators;
+    }
+
     public void SetEquppiedTextActive(bool _isActive)
     {
         equippedText.SetActive(_isActive);
@@ -114,8 +129,16 @@ public class CardDisp : MonoBehaviour
         Level.text = "";
 
         // 캐릭터 이미지
-        charImage.color = new Color(1, 1, 1, 0);
         cardBaseContainer.gameObject.SetActive(false);
+
+        // 장비 이미지
+        for (int i = 0; i < 4; i++)
+        {
+            if (equipmentAnimators[i] == null)
+                continue;
+            equipmentAnimators[i].gameObject.SetActive(false);
+        }
+
         SetEquppiedTextActive(false);
     }
 }
