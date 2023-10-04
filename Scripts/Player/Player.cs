@@ -10,7 +10,7 @@ public class Player : MonoBehaviour, IBouncable
     Vector2 pastInputVec;
     Rigidbody2D rb;
     [SerializeField] SpriteRenderer[] sr;
-    Animator anim;
+    Animator[] anim = new Animator[5];
     Character character;
 
     [field: SerializeField]
@@ -29,7 +29,11 @@ public class Player : MonoBehaviour, IBouncable
     {
         instance = this;
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
+        anim[0] = GetComponent<Animator>();
+        for(int i = 1; i < anim.Length; i++)
+        {
+            anim[i] = sr[i].GetComponent<Animator>();
+        }
         character = GetComponent<Character>();
     }
     void Start()
@@ -39,7 +43,12 @@ public class Player : MonoBehaviour, IBouncable
         for (int i = 0; i < 4; i++)
         {
             if (iDatas[i] == null)
+            {
+                sr[i + 1].gameObject.SetActive(false);
+                anim[i + 1].gameObject.SetActive(false);
                 continue;
+            }
+
             sr[i + 1].GetComponent<Animator>().runtimeAnimatorController = iDatas[i].CardItemAnimator.CardImageAnim;
         }
     }
@@ -102,7 +111,27 @@ public class Player : MonoBehaviour, IBouncable
     }
     void UpdateAniamtionState()
     {
-        anim.SetFloat("Speed", InputVec.magnitude);
+        anim[0].SetFloat("Speed", InputVec.magnitude);
+        if (InputVec.magnitude > .01f)
+        {
+            for (int i = 1; i < 5; i++)
+            {
+                if (anim[i].gameObject.activeSelf == false)
+                    continue;
+                anim[i].SetBool("Walk", true);
+                anim[i].SetBool("Idle", false);
+            }
+        }
+        else if (InputVec.magnitude < .01f)
+        {
+            for (int i = 1; i < 5; i++)
+            {
+                if (anim[i].gameObject.activeSelf == false)
+                    continue;
+                anim[i].SetBool("Walk", false);
+                anim[i].SetBool("Idle", true);
+            }
+        }
     }
 
     public void GetBounced(float bouncingForce, Vector2 direction, float bouncingTime)
@@ -127,7 +156,7 @@ public class Player : MonoBehaviour, IBouncable
     #region OnDead Event
     public void Die()
     {
-        anim.SetTrigger("Dead");
+        anim[0].SetTrigger("Dead");
         rb.mass = 10000f;
     }
     #endregion
