@@ -8,7 +8,6 @@ public class MatField : MonoBehaviour
     CardsDictionary cardDictionary;
     CardDataManager cardDataManager;
     CardList cardList;
-    EquipmentsAnimators equipAnims;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -23,7 +22,6 @@ public class MatField : MonoBehaviour
         cardDictionary = FindObjectOfType<CardsDictionary>();
         cardDataManager = FindObjectOfType<CardDataManager>();
         cardList = FindObjectOfType<CardList>();
-        equipAnims = GetComponent<EquipmentsAnimators>();
     }
     
     void Disabled()

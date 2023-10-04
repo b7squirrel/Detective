@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // equipped text는 카드슬롯이 생성될 때 정해짐. 
@@ -77,7 +78,14 @@ public class CardDisp : MonoBehaviour
         { 
             equipmentAnimators[index].gameObject.SetActive(false); 
         }
-
+        charAnim.Rebind();
+        for (int i = 0; i < 4; i++)
+        {
+            if(equipmentAnimators[i].gameObject.activeSelf)
+            {
+                equipmentAnimators[i].Rebind();
+            }
+        }
     }
     protected virtual void SetNumStar(int numStars)
     {
@@ -99,9 +107,14 @@ public class CardDisp : MonoBehaviour
         }
     }
 
-    public Animator[] GetEquipmentAnimators()
+    public List<RuntimeAnimatorController> GetEquipmentRuntimeAnimators()
     {
-        return equipmentAnimators;
+        List<RuntimeAnimatorController> anims = new();
+        for (int i = 0; i < 4; i++)
+        {
+            anims.Add(equipmentAnimators[i].runtimeAnimatorController);
+        }
+        return anims;
     }
 
     public void SetEquppiedTextActive(bool _isActive)

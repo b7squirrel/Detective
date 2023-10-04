@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 7242998360539562925}
   - component: {fileID: 4183574564098673767}
   - component: {fileID: 5643468381126323483}
+  - component: {fileID: 5143743020638701779}
   m_Layer: 5
   m_Name: Head
   m_TagString: Untagged
@@ -233,6 +234,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5143743020638701779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946009519773226458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.18, g: 0.13, b: 0.15, a: 0.29803923}
+  m_EffectDistance: {x: 1, y: -13}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1000505775764498781
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,6 +261,7 @@ GameObject:
   - component: {fileID: 3987045289123982665}
   - component: {fileID: 3445160488947837422}
   - component: {fileID: 8447414011726664376}
+  - component: {fileID: 8086833306687186806}
   m_Layer: 5
   m_Name: Char Image
   m_TagString: Untagged
@@ -331,6 +348,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8086833306687186806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000505775764498781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.18, g: 0.13, b: 0.15, a: 0.29803923}
+  m_EffectDistance: {x: 1, y: -13}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1792454958496148224
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,6 +451,7 @@ GameObject:
   - component: {fileID: 8701025702306921903}
   - component: {fileID: 5724650385300174639}
   - component: {fileID: 2135301584409930276}
+  - component: {fileID: 5570023767710100593}
   m_Layer: 5
   m_Name: Face
   m_TagString: Untagged
@@ -505,6 +538,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5570023767710100593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2225261286731542912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.18, g: 0.13, b: 0.15, a: 0.29803923}
+  m_EffectDistance: {x: 1, y: -13}
+  m_UseGraphicAlpha: 1
 --- !u!1 &3102066114833069208
 GameObject:
   m_ObjectHideFlags: 0
@@ -1277,6 +1325,7 @@ GameObject:
   - component: {fileID: 2023261853665845734}
   - component: {fileID: 1950999665387447090}
   - component: {fileID: 6950402492648014087}
+  - component: {fileID: 3743401937920472067}
   m_Layer: 5
   m_Name: Hand
   m_TagString: Untagged
@@ -1363,6 +1412,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3743401937920472067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8301602455309130114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.18, g: 0.13, b: 0.15, a: 0.29803923}
+  m_EffectDistance: {x: 1, y: -13}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8782935464688134205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,6 +1510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05de75c5c26e6d439d323673f3ff6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equipAnims: []
   ID: 
 --- !u!114 &-1670841101056456828
 MonoBehaviour:
@@ -1497,6 +1562,7 @@ GameObject:
   - component: {fileID: 2773726441305391741}
   - component: {fileID: 1533134332962495890}
   - component: {fileID: 6415799841142554752}
+  - component: {fileID: 7542253489699698018}
   m_Layer: 5
   m_Name: Chest
   m_TagString: Untagged
@@ -1583,3 +1649,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7542253489699698018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8892167124953711814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.18, g: 0.13, b: 0.15, a: 0.29803923}
+  m_EffectDistance: {x: 1, y: -7}
+  m_UseGraphicAlpha: 1
