@@ -64,10 +64,7 @@ public class CardDisp : MonoBehaviour
         int index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
         equipmentAnimators[index].gameObject.SetActive(true);
         equipmentAnimators[index].runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
-
-        Debug.Log(itemData.Name + " - " + index + " item data = " + itemData.Name);
-        
-
+        equipmentAnimators[index].SetTrigger("Card");
 
         if (displayEquippedText)
         {
