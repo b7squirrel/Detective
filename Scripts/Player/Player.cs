@@ -8,7 +8,7 @@ public class Player : MonoBehaviour, IBouncable
     public Vector2 InputVec { get; private set; }
     Vector2 pastInputVec;
     Rigidbody2D rb;
-    [SerializeField] SpriteRenderer sr;
+    [SerializeField] SpriteRenderer[] sr;
     Animator anim;
     Character character;
 
@@ -30,6 +30,15 @@ public class Player : MonoBehaviour, IBouncable
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         character = GetComponent<Character>();
+    }
+    void Start()
+    {
+        //StartingDataContainer startingDataContainer = FindObjectOfType<StartingDataContainer>();
+        //RuntimeAnimatorController[] runtimeAnims = startingDataContainer.GetEquipRuntimeAnims();
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    sr[i + 1].GetComponent<Animator>().runtimeAnimatorController = runtimeAnims[i];
+        //}
     }
 
     void LateUpdate()
@@ -83,7 +92,10 @@ public class Player : MonoBehaviour, IBouncable
         {
             FacingDir *= -1f;
         }
-        sr.flipX = FacingDir < 0;
+        for (int i = 0; i < sr.Length; i++)
+        {
+            sr[i].flipX = FacingDir < 0;
+        }
     }
     void UpdateAniamtionState()
     {
