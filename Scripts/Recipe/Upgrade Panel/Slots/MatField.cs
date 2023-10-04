@@ -93,7 +93,7 @@ public class MatField : MonoBehaviour
                 bool onEquipment = cardList.FindCharCard(cardDatas[i]).IsEquipped;
 
                 CardSlot cardSlot = slots[i].GetComponent<CardSlot>();
-                cardSlot.SetWeaponCard(cardDatas[i], wData, onEquipment);
+                cardSlot.SetWeaponCard(cardDatas[i], wData);
                 SetAnimController(cardDatas[i], cardSlot);
 
                 slots[i].transform.localScale = new Vector2(0, 0);

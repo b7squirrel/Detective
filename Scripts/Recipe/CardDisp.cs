@@ -15,7 +15,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
     GameObject[] stars;
 
-    public void InitWeaponCardDisplay(WeaponData weaponData, bool onEquipment)
+    public void InitWeaponCardDisplay(WeaponData weaponData)
     {
         //EmptyCardDisplay();
         // 별과 카드 색깔
@@ -77,6 +77,7 @@ public class CardDisp : MonoBehaviour
         { 
             equipmentAnimators[index].gameObject.SetActive(false); 
         }
+
     }
     protected virtual void SetNumStar(int numStars)
     {

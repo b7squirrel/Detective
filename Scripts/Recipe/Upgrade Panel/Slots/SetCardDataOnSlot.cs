@@ -14,9 +14,7 @@ public class SetCardDataOnSlot : MonoBehaviour
         {
             WeaponData wData = cardDictionary.GetWeaponData(targetCardData);
 
-            bool onEquipment = cardList.FindCharCard(targetCardData).IsEquipped;
-
-            targetSlot.SetWeaponCard(targetCardData, wData, onEquipment);
+            targetSlot.SetWeaponCard(targetCardData, wData);
             SetAnimController(targetCardData, targetSlot);
         }
         else
