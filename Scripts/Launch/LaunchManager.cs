@@ -10,6 +10,7 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] SetCardDataOnSlot setCardDataOnSlot;
     [SerializeField] StatManager statManager;
+    [SerializeField] CardList cardList;
     [SerializeField] StartingDataContainer startingDataContainer;
 
     [SerializeField] GameObject fieldSlotPanel; // 패널 켜고 끄기 위해
@@ -58,12 +59,10 @@ public class LaunchManager : MonoBehaviour
 
         // 리드오리 attr update
         currentAttr = statManager.GetLeadAttribute(currentLead);
-        startingDataContainer.SetLead(lead, currentAttr, GetEquipmentAnims());
-        foreach (var item in GetEquipmentAnims())
-        {
-            Debug.Log(item.name);
-        }
+        
         setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
+        
+        startingDataContainer.SetLead(lead, currentAttr, GetEquipmentAnims());
     }
     List<RuntimeAnimatorController> GetEquipmentAnims()
     {

@@ -7012,7 +7012,6 @@ GameObject:
   - component: {fileID: 958746579}
   - component: {fileID: 958746581}
   - component: {fileID: 958746580}
-  - component: {fileID: 958746582}
   m_Layer: 5
   m_Name: Launch Panel Manager
   m_TagString: Untagged
@@ -7072,23 +7071,10 @@ MonoBehaviour:
   cardDataManager: {fileID: 1500030658}
   setCardDataOnSlot: {fileID: 958746580}
   statManager: {fileID: 1500030665}
+  cardList: {fileID: 1500030664}
   startingDataContainer: {fileID: 1307305262}
   fieldSlotPanel: {fileID: 1524433602}
   field: {fileID: 1649636984}
---- !u!114 &958746582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 958746578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardList: {fileID: 1500030664}
-  cardsDictionary: {fileID: 1500030660}
 --- !u!1 &965344237
 GameObject:
   m_ObjectHideFlags: 0
@@ -8029,8 +8015,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardList: {fileID: 1500030664}
-  cardsDictionary: {fileID: 1500030660}
 --- !u!1 &1081217003
 GameObject:
   m_ObjectHideFlags: 0
@@ -9678,10 +9662,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb2633482c6fe9c48a36357ba56f78b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equipmentsAnims: []
   hp: 0
   atk: 0
-  equipAnimators: []
+  itemDatasDebug: []
 --- !u!1 &1313318720
 GameObject:
   m_ObjectHideFlags: 0
@@ -12196,8 +12179,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardList: {fileID: 1500030664}
-  cardsDictionary: {fileID: 1500030660}
 --- !u!1 &1605086888
 GameObject:
   m_ObjectHideFlags: 0
@@ -14145,8 +14126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardList: {fileID: 1500030664}
-  cardsDictionary: {fileID: 1500030660}
 --- !u!1 &1842591797
 GameObject:
   m_ObjectHideFlags: 0

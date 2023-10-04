@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour, IBouncable
 {
@@ -33,12 +34,14 @@ public class Player : MonoBehaviour, IBouncable
     }
     void Start()
     {
-        //StartingDataContainer startingDataContainer = FindObjectOfType<StartingDataContainer>();
-        //RuntimeAnimatorController[] runtimeAnims = startingDataContainer.GetEquipRuntimeAnims();
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    sr[i + 1].GetComponent<Animator>().runtimeAnimatorController = runtimeAnims[i];
-        //}
+        StartingDataContainer startingDataContainer = FindObjectOfType<StartingDataContainer>();
+        List<Item> iDatas = startingDataContainer.GetItemDatas();
+        for (int i = 0; i < 4; i++)
+        {
+            if (iDatas[i] == null)
+                continue;
+            sr[i + 1].GetComponent<Animator>().runtimeAnimatorController = iDatas[i].CardItemAnimator.CardImageAnim;
+        }
     }
 
     void LateUpdate()

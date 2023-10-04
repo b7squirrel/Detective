@@ -5,12 +5,12 @@ public class StartingDataContainer : MonoBehaviour
 {
     OriAttribute leadAttr = new OriAttribute(0, 0);
     WeaponData leadWd;
-    [SerializeField] RuntimeAnimatorController[] equipmentsAnims;
+    List<Item> itemDatas = new();
 
     [Header("Debugging")]
     [SerializeField] int hp = 0;
     [SerializeField] int atk = 0;
-    [SerializeField] List<RuntimeAnimatorController> equipAnimators = new();
+    [SerializeField] List<Item> itemDatasDebug = new();
 
     void Awake() => DontDestroyOnLoad(this);
     public void SetLead(CardData lead, OriAttribute leadAttr, List<RuntimeAnimatorController> equipAnims)
@@ -20,19 +20,28 @@ public class StartingDataContainer : MonoBehaviour
         hp = this.leadAttr.Hp;
         atk = this.leadAttr.Atk;
 
-        Debug.Log(equipAnims.Count);
+        CardsDictionary cardDic = FindAnyObjectByType<CardsDictionary>();
+        CardList cardList = FindObjectOfType<CardList>();
+
+        leadWd = cardDic.GetWeaponItemData(lead).weaponData;
+
+        // 장비 데이터 넘기기
+        EquipmentCard[] equipCard = cardList.GetEquipmentsCardData(lead);
         for (int i = 0; i < 4; i++)
         {
-            equipmentsAnims[i] = equipAnims[i];
-            equipAnimators.Add(equipAnims[i]);
+            if(equipCard[i] == null) 
+            {
+                itemDatas.Add(null);
+                itemDatasDebug.Add(null);
+                continue;
+            }
+            itemDatas.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
+            itemDatasDebug.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
         }
-
-        leadWd = FindObjectOfType<CardsDictionary>().GetWeaponItemData(lead).weaponData;
-        
     }
 
     // Player loads the following information after starting the game
     public OriAttribute GetLeadAttr() => this.leadAttr;
     public WeaponData GetLeadWeaponData() => this.leadWd;
-    //public RuntimeAnimatorController[] GetEquipRuntimeAnims() => this.equipmentsAnims;
+    public List<Item> GetItemDatas() => this.itemDatas;
 }
