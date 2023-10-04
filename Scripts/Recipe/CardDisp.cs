@@ -134,6 +134,7 @@ public class CardDisp : MonoBehaviour
 
         // 캐릭터 이미지
         cardBaseContainer.gameObject.SetActive(false);
+        charImage.gameObject.SetActive(false);
 
         // 장비 이미지
         for (int i = 0; i < 4; i++)
