@@ -59,6 +59,10 @@ public class LaunchManager : MonoBehaviour
         // 리드오리 attr update
         currentAttr = statManager.GetLeadAttribute(currentLead);
         startingDataContainer.SetLead(lead, currentAttr, GetEquipmentAnims());
+        foreach (var item in GetEquipmentAnims())
+        {
+            Debug.Log(item.name);
+        }
         setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
     }
     List<RuntimeAnimatorController> GetEquipmentAnims()

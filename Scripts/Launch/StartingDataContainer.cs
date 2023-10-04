@@ -5,7 +5,7 @@ public class StartingDataContainer : MonoBehaviour
 {
     OriAttribute leadAttr = new OriAttribute(0, 0);
     WeaponData leadWd;
-    [SerializeField] Animator[] equipmentsAnims;
+    [SerializeField] RuntimeAnimatorController[] equipmentsAnims;
 
     [Header("Debugging")]
     [SerializeField] int hp = 0;
@@ -19,9 +19,11 @@ public class StartingDataContainer : MonoBehaviour
         // debugging
         hp = this.leadAttr.Hp;
         atk = this.leadAttr.Atk;
+
+        Debug.Log(equipAnims.Count);
         for (int i = 0; i < 4; i++)
         {
-            equipmentsAnims[i].runtimeAnimatorController = equipAnims[i];
+            equipmentsAnims[i] = equipAnims[i];
             equipAnimators.Add(equipAnims[i]);
         }
 
