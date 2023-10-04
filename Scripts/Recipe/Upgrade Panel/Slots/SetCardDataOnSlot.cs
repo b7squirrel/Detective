@@ -12,14 +12,14 @@ public class SetCardDataOnSlot : MonoBehaviour
     {
         if (targetCardData.Type == CardType.Weapon.ToString())
         {
-            WeaponData wData = cardDictionary.GetWeaponData(targetCardData);
+            WeaponData wData = cardDictionary.GetWeaponItemData(targetCardData).weaponData;
 
             targetSlot.SetWeaponCard(targetCardData, wData);
             SetAnimController(targetCardData, targetSlot);
         }
         else
         {
-            Item iData = cardDictionary.GetItemData(targetCardData);
+            Item iData = cardDictionary.GetWeaponItemData(targetCardData).itemData;
 
             bool onEquipment = cardList.FindEquipmentCard(targetCardData).IsEquipped;
             targetSlot.SetItemCard(targetCardData, iData, onEquipment);

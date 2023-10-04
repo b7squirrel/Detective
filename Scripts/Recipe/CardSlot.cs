@@ -41,7 +41,7 @@ public class CardSlot : MonoBehaviour
 
         // cardDisp 호출해서 카드 출력
         CardDisp cardDisp = GetComponent<CardDisp>();
-        cardDisp.InitItemCardDisplay(_itemData, _onEquipment);
+        cardDisp.InitItemCardDisplay(_itemData, _cardData, _onEquipment);
 
         ID = cardData.ID;
     }

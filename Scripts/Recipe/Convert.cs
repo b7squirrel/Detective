@@ -1,6 +1,6 @@
 using System;
 
-public enum EquipmentType { Head, Chest, Legs, Weapon }
+public enum EquipmentType { Head, Chest, Face, Hand }
 public class Convert
 {
     public int GradeToInt(string _grade)

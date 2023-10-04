@@ -3,6 +3,8 @@ using UnityEngine;
 
 // equipped text는 카드슬롯이 생성될 때 정해짐. 
 // 장착되거나 해제되면 Equipment Panel Manager에서 업데이트
+// 지금은 Instantiate로 카드를 생성하고 destroy 하니까 상관없지만
+// 오브젝트 풀을 사용하면 비활성화 할 때 모든 animator=null, setactive=false 로 해야 함
 public class CardDisp : MonoBehaviour
 {
     [SerializeField] protected Transform cardBaseContainer; // 등급 5개
@@ -18,7 +20,6 @@ public class CardDisp : MonoBehaviour
 
     public void InitWeaponCardDisplay(WeaponData weaponData)
     {
-        //EmptyCardDisplay();
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
 
@@ -44,10 +45,11 @@ public class CardDisp : MonoBehaviour
         SetEquppiedTextActive(false);
     }
 
-    public void InitItemCardDisplay(Item itemData, bool onEquipment)
+    public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
     {
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
+        if(itemData == null) { Debug.Log("NULL item data"); }
         int intGrade = (int)itemData.grade;
         SetNumStar(intGrade + 1);
         for (int i = 0; i < 5; i++)
@@ -59,9 +61,10 @@ public class CardDisp : MonoBehaviour
         // 카드 레벨 텍스트
         Level.text = "LV1";
 
-        // 캐릭터 이미지
-        charImage.color = new Color(1, 1, 1, 1);
-        charImage.sprite = itemData.charImage;
+        // 아이템 이미지
+        int index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
+        equipmentAnimators[index].gameObject.SetActive(true);
+        equipmentAnimators[index].runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
 
 
         if (displayEquippedText)
@@ -105,16 +108,6 @@ public class CardDisp : MonoBehaviour
         {
             stars[i].SetActive(true);
         }
-    }
-
-    public List<RuntimeAnimatorController> GetEquipmentRuntimeAnimators()
-    {
-        List<RuntimeAnimatorController> anims = new();
-        for (int i = 0; i < 4; i++)
-        {
-            anims.Add(equipmentAnimators[i].runtimeAnimatorController);
-        }
-        return anims;
     }
 
     public void SetEquppiedTextActive(bool _isActive)

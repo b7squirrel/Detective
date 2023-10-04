@@ -62,11 +62,7 @@ public class LaunchManager : MonoBehaviour
         
         setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
         
-        startingDataContainer.SetLead(lead, currentAttr, GetEquipmentAnims());
-    }
-    List<RuntimeAnimatorController> GetEquipmentAnims()
-    {
-        return leadOriSlot.GetComponent<CardDisp>().GetEquipmentRuntimeAnimators();
+        startingDataContainer.SetLead(lead, currentAttr);
     }
 
     public void UpdateLead(CardData newLead)

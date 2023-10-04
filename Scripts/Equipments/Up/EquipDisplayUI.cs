@@ -16,7 +16,7 @@ public class EquipDisplayUI : MonoBehaviour
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr)
     {
         charImage.gameObject.SetActive(true);
-        WeaponData wd = cardDictionary.GetWeaponData(charCardData);
+        WeaponData wd = cardDictionary.GetWeaponItemData(charCardData).weaponData;
         // charImage.sprite = wd.charImage;
         charImage.runtimeAnimatorController = wd.CardCharAnimator.CardImageAnim;
 

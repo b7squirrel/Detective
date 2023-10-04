@@ -86,7 +86,7 @@ public class MatField : MonoBehaviour
         {
             if (cardDatas[i].Type == CardType.Weapon.ToString())
             {
-                WeaponData wData = cardDictionary.GetWeaponData(cardDatas[i]);
+                WeaponData wData = cardDictionary.GetWeaponItemData(cardDatas[i]).weaponData;
 
                 bool onEquipment = cardList.FindCharCard(cardDatas[i]).IsEquipped;
 
@@ -99,7 +99,7 @@ public class MatField : MonoBehaviour
             }
             else
             {
-                Item iData = cardDictionary.GetItemData(cardDatas[i]);
+                Item iData = cardDictionary.GetWeaponItemData(cardDatas[i]).itemData;
 
                 bool onEquipment = cardList.FindEquipmentCard(cardDatas[i]).IsEquipped;
 

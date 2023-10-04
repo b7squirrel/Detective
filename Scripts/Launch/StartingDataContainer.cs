@@ -13,7 +13,7 @@ public class StartingDataContainer : MonoBehaviour
     [SerializeField] List<Item> itemDatasDebug = new();
 
     void Awake() => DontDestroyOnLoad(this);
-    public void SetLead(CardData lead, OriAttribute leadAttr, List<RuntimeAnimatorController> equipAnims)
+    public void SetLead(CardData lead, OriAttribute leadAttr)
     {
         this.leadAttr = leadAttr;
         // debugging

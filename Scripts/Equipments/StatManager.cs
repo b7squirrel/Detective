@@ -31,7 +31,7 @@ public class StatManager : MonoBehaviour
             newAtk += level * 100; // Temp
             newHp += level * 100; // Temp
         }
-        else if(_cardData.EquipmentType == EquipmentType.Weapon.ToString()) // 무기 카드라면
+        else if(_cardData.EquipmentType == EquipmentType.Hand.ToString()) // 무기 카드라면
         {
             newAtk += level * 100; // Temp
         }
@@ -52,7 +52,7 @@ public class StatManager : MonoBehaviour
         {
             // 오리 레벨, 속성 UI 업데이트
         }
-        else if(_cardData.EquipmentType == EquipmentType.Weapon.ToString()) // 무기 카드라면
+        else if(_cardData.EquipmentType == EquipmentType.Hand.ToString()) // 무기 카드라면
         {
             equipInfoPanel.UpdatePanel(_level, _atk);
         }

@@ -55,22 +55,4 @@ public class CardsDictionary : MonoBehaviour
             return weaponItemData;
         }
     }
-
-    public WeaponData GetWeaponData(CardData cardData)
-    {
-        string grade = cardData.Grade;
-        string _name = cardData.Name;
-        List<WeaponData> wd = weaponData.FindAll(x => x.Name == _name);
-        WeaponData picked = wd.Find(x=>x.grade.ToString() == grade);
-        return picked;
-    }
-
-    public Item GetItemData(CardData cardData)
-    {
-        string grade = cardData.Grade;
-        string _name = cardData.Name;
-        List<Item> item = itemData.FindAll(x => x.Name == _name);
-        Item picked = item.Find(x => x.grade.ToString() == grade);
-        return picked;
-    }
 }
