@@ -15,6 +15,9 @@ public class StartingDataContainer : MonoBehaviour
     void Awake() => DontDestroyOnLoad(this);
     public void SetLead(CardData lead, OriAttribute leadAttr)
     {
+        itemDatas.Clear();
+        itemDatasDebug.Clear();
+
         this.leadAttr = leadAttr;
         // debugging
         hp = this.leadAttr.Hp;

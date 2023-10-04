@@ -49,7 +49,6 @@ public class CardDisp : MonoBehaviour
     {
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
-        if(itemData == null) { Debug.Log("NULL item data"); }
         int intGrade = (int)itemData.grade;
         SetNumStar(intGrade + 1);
         for (int i = 0; i < 5; i++)
@@ -65,6 +64,9 @@ public class CardDisp : MonoBehaviour
         int index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
         equipmentAnimators[index].gameObject.SetActive(true);
         equipmentAnimators[index].runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
+
+        Debug.Log(itemData.Name + " - " + index + " item data = " + itemData.Name);
+        
 
 
         if (displayEquippedText)

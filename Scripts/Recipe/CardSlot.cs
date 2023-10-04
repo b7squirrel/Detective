@@ -10,10 +10,11 @@ public class CardSlot : MonoBehaviour
     CardData cardData;
     public bool IsEmpty { get; private set; } = true;
     public bool OnEquipment {get; private set;} = false; // 착용되어 있거나 장비를 착용하고 있는지 여부
-    [SerializeField] Animator[] equipAnims; // 카드의 장비 animator들을 끌어다 놓기
 
     [Header("debug")]
     [SerializeField] string ID;
+    [SerializeField] string grade;
+    [SerializeField] string Name;
     void OnEnable()
     {
         EmptySlot();
@@ -33,6 +34,8 @@ public class CardSlot : MonoBehaviour
         cardDisp.InitWeaponCardDisplay(_weaponData);
 
         ID = cardData.ID;
+        grade = cardData.Grade;
+        Name = cardData.Name;
     }
     public void SetItemCard(CardData _cardData, Item _itemData, bool _onEquipment)
     {
@@ -44,10 +47,8 @@ public class CardSlot : MonoBehaviour
         cardDisp.InitItemCardDisplay(_itemData, _cardData, _onEquipment);
 
         ID = cardData.ID;
-    }
-    public Animator[] GetEquipAnims()
-    {
-        return equipAnims;
+        grade = cardData.Grade;
+        Name = cardData.Name;
     }
 
     public void EmptySlot()
