@@ -124,7 +124,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         // 새로운 장비 장착
-        EquipCard(CardOnDisplay, cardToEquip);
+        cardList.Equip(CardOnDisplay, cardToEquip);
         Item itemData = cardDictionary.GetWeaponItemData(cardToEquip).itemData;
         equipmentSlotsManager.SetEquipSlot(index, itemData, cardToEquip);
 
