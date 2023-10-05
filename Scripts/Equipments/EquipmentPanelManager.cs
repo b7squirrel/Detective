@@ -124,15 +124,19 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         // 새로운 장비 장착
-        cardList.Equip(CardOnDisplay, cardToEquip);
-
+        EquipCard(CardOnDisplay, cardToEquip);
         Item itemData = cardDictionary.GetWeaponItemData(cardToEquip).itemData;
-
         equipmentSlotsManager.SetEquipSlot(index, itemData, cardToEquip);
 
         SetAllFieldTypeOf("Item");
         DeActivateEquipInfoPanel();
     }
+
+    public void EquipCard(CardData oriCard, CardData equipCard)
+    {
+        cardList.Equip(oriCard, equipCard);
+    }
+
     // info panel의 UnEquip 버튼
     public void OnUnEquipButton()
     {
@@ -149,18 +153,25 @@ public class EquipmentPanelManager : MonoBehaviour
         DeActivateEquipInfoPanel();
     }
     // equip slot action 에서 호출
-    public void ActivateEquipInfoPanel(CardData cardData, CardDisp cardDisp, bool isEquipButton)
+    public void ActivateEquipInfoPanel(CardData itemCardData, CardDisp cardDisp, bool isEquipButton, EquipmentType equipType)
     {
-        index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
+        index = new Convert().EquipmentTypeToInt(itemCardData.EquipmentType);
         isEquipped = !isEquipButton; // equip button을 띄운다는 것은 field에 있는 장비 카드라는 뜻이므로
 
-        Item iData = cardDictionary.GetWeaponItemData(cardData).itemData;
+        Item iData = cardDictionary.GetWeaponItemData(itemCardData).itemData;
 
         equipInfoPanel.gameObject.SetActive(true);
-        equipInfoPanel.SetPanel(cardData, iData, cardDisp, isEquipButton);
-        cardToEquip = cardData;
+
+        bool isEssential = false;
+        if (CardOnDisplay.EssentialEquip == equipType.ToString())
+        {
+            isEssential = true;
+        }
+        equipInfoPanel.SetPanel(itemCardData, iData, cardDisp, isEquipButton, isEssential);
+        cardToEquip = itemCardData;
         this.cardDisp = cardDisp;
     }
+
     public void DeActivateEquipInfoPanel()
     {
         equipInfoPanel.gameObject.SetActive(false);

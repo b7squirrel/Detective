@@ -7,6 +7,7 @@ public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
 public class EquipSlotAction : MonoBehaviour
 {
     [SerializeField] protected EquipSlotType currentSlotType;
+    [SerializeField] protected EquipmentType equipmentType;
 
     public void Onclick()
     {
@@ -39,14 +40,14 @@ public class EquipSlotAction : MonoBehaviour
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), true);
+            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), true, equipmentType);
             return;
         }
         if (currentSlotType == EquipSlotType.UpEquipment)
         {
             EquipmentPanelManager equipPanelManager = GetComponentInParent<EquipmentPanelManager>();
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), false);
+            equipPanelManager.ActivateEquipInfoPanel(cardData, GetComponent<CardDisp>(), false, equipmentType);
             return;
         }
         if (currentSlotType == EquipSlotType.None)

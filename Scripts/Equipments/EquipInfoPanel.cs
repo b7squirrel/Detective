@@ -16,7 +16,7 @@ public class EquipInfoPanel : MonoBehaviour
     public CardDisp cardDisp;
 
     // 처음 패널이 활성화 되면 초기화
-    public void SetPanel(CardData cardData, Item itemData, CardDisp _cardDisp, bool isEquipButton)
+    public void SetPanel(CardData cardData, Item itemData, CardDisp _cardDisp, bool isEquipButton, bool isEssential)
     {
         this.cardDisp = _cardDisp;
         
@@ -40,6 +40,13 @@ public class EquipInfoPanel : MonoBehaviour
         anim.SetTrigger("Card");
 
         equipButton.SetActive(isEquipButton);
+
+        if (isEssential)
+        {
+            unEquipButton.SetActive(false);
+            return;
+        }
+
         unEquipButton.SetActive(!isEquipButton);
     }
     // 레벨업을 하면 레벨과 속성을 업데이트
