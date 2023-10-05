@@ -4011,6 +4011,7 @@ MonoBehaviour:
   Level: {fileID: 1452287709}
   attribute: {fileID: 1948315482}
   itemImage: {fileID: 1249008198}
+  anim: {fileID: 1249008200}
   attributeImage: {fileID: 760958530}
   atkIcon: {fileID: 21300000, guid: 7f0f4aec58525cb4e9c940010c34c6d0, type: 3}
   hpIcon: {fileID: 21300000, guid: c6341920767a9634ca80b754761724b9, type: 3}
@@ -7980,6 +7981,7 @@ MonoBehaviour:
     Hp: 
     Atk: 
     EquipmentType: 
+    EssentialEquip: 
     startingMember: 
   equipInfoPanel: {fileID: 388860202}
   field: {fileID: 169999625}
@@ -9397,6 +9399,7 @@ GameObject:
   - component: {fileID: 1249008197}
   - component: {fileID: 1249008199}
   - component: {fileID: 1249008198}
+  - component: {fileID: 1249008200}
   m_Layer: 5
   m_Name: Item Image
   m_TagString: Untagged
@@ -9462,6 +9465,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1249008196}
   m_CullTransparentMesh: 1
+--- !u!95 &1249008200
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249008196}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1253722665
 GameObject:
   m_ObjectHideFlags: 0
@@ -14080,6 +14104,7 @@ MonoBehaviour:
     Hp: 
     Atk: 
     EquipmentType: 
+    EssentialEquip: 
     startingMember: 
   allField: {fileID: 865142885}
   matField: {fileID: 1587361511}

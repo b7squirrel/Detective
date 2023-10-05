@@ -7,6 +7,7 @@ public class EquipInfoPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI Level;
     [SerializeField] TMPro.TextMeshProUGUI attribute;
     [SerializeField] UnityEngine.UI.Image itemImage;
+    [SerializeField] Animator anim;
     [SerializeField] UnityEngine.UI.Image attributeImage;
     [SerializeField] Sprite atkIcon, hpIcon;
     [SerializeField] GameObject equipButton, unEquipButton;
@@ -15,7 +16,7 @@ public class EquipInfoPanel : MonoBehaviour
     public CardDisp cardDisp;
 
     // 처음 패널이 활성화 되면 초기화
-    public void SetPanel(CardData cardData, CardDisp _cardDisp, bool isEquipButton)
+    public void SetPanel(CardData cardData, Item itemData, CardDisp _cardDisp, bool isEquipButton)
     {
         this.cardDisp = _cardDisp;
         
@@ -35,6 +36,8 @@ public class EquipInfoPanel : MonoBehaviour
         
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
         itemImage.sprite = weaponItemData.itemData.charImage;
+        anim.runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
+        anim.SetTrigger("Card");
 
         equipButton.SetActive(isEquipButton);
         unEquipButton.SetActive(!isEquipButton);

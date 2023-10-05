@@ -154,8 +154,10 @@ public class EquipmentPanelManager : MonoBehaviour
         index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
         isEquipped = !isEquipButton; // equip button을 띄운다는 것은 field에 있는 장비 카드라는 뜻이므로
 
+        Item iData = cardDictionary.GetWeaponItemData(cardData).itemData;
+
         equipInfoPanel.gameObject.SetActive(true);
-        equipInfoPanel.SetPanel(cardData, cardDisp, isEquipButton);
+        equipInfoPanel.SetPanel(cardData, iData, cardDisp, isEquipButton);
         cardToEquip = cardData;
         this.cardDisp = cardDisp;
     }
