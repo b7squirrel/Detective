@@ -30,12 +30,13 @@ public class GachaSystem : MonoBehaviour
         // 임시로 3개씩 카드가 뽑힘
         for (int i = 0; i < 1; i++)
         {
-            //int pickIndex = UnityEngine.Random.Range(0, gachaPools.Count);
+            int pickIndex = UnityEngine.Random.Range(0, gachaPools.Count);
             //string mType = gachaPools[pickIndex].Type;
             //string mGrade = gachaPools[pickIndex].Grade;
             //string mName = gachaPools[pickIndex].Name;
-            CardData oriData = gachaPools.Find(x => x.Name == "Cowboy");
+            //CardData oriData = gachaPools.Find(x => x.Name == "Cowboy");
 
+            CardData oriData = gachaPools[pickIndex];
             cardDataManager.AddNewCardToMyCardsList(oriData);
             Debug.Log(oriData.Name + oriData.ID + " 을 뽑았습니다.");
 
@@ -44,6 +45,7 @@ public class GachaSystem : MonoBehaviour
                 List<CardData> sameItems = gachaPools.FindAll(x => x.EssentialEquip == oriData.Name);
                 CardData defaultItem = sameItems.Find(x => x.startingMember == "E");
 
+                if (defaultItem == null) Debug.Log(oriData.Name + "의 필수 무기가 NULL입니다.");
                 cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
                 cardList.Equip(oriData, defaultItem);
             }

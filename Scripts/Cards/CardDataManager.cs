@@ -13,7 +13,7 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _id, string _Type, string _Grade, string _Name, string _level, string _hp, string _atk, string _equipmentType, string _essectialEquip, string _startingMember)
+    public CardData(string _id, string _Type, string _Grade, string _Name, string _level, string _hp, string _atk, string _equipmentType, string _essectialEquip, string _bindingTo, string _startingMember)
     {
         ID = _id;
         Type = _Type;
@@ -24,10 +24,11 @@ public class CardData
         Atk = _atk;
         EquipmentType = _equipmentType;
         EssentialEquip = _essectialEquip;
+        BindingTo = _bindingTo;
         startingMember = _startingMember;
     }
     
-    public string ID, Type, Grade, Name, Level, Hp, Atk, EquipmentType, EssentialEquip, startingMember;
+    public string ID, Type, Grade, Name, Level, Hp, Atk, EquipmentType, EssentialEquip, BindingTo, startingMember;
 }
 public class ReadCardData
 {
@@ -40,7 +41,7 @@ public class ReadCardData
         for (int i = 0; i < line.Length; i++)
         {
             string[] row = line[i].Split('\t');
-            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]));
+            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]));
         }
         return cardList;
     }
