@@ -179,7 +179,7 @@ public class UpPanelManager : MonoBehaviour
             EquipmentCard equipCard = cardList.FindEquipmentCard(_cardData);
 
             // 장비가 필수 카드라면
-            if (equipCard.CardData.EquipmentType == equipCard.EquippedWho.EquipmentType)
+            if (equipCard.CardData.EquipmentType == equipCard.EquippedWho.EssentialEquip)
             {
                 AcquireCard(_cardData); // 그냥 슬롯에 카드를 올리기
                 return;
