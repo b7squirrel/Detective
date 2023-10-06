@@ -196,9 +196,18 @@ public class UpPanelManager : MonoBehaviour
     {
         List<CardData> newCard = new();
         newCard.AddRange(cardsDictionary.GetCardPool());
+        foreach (var item in newCard)
+        {
+            Debug.Log(item.Name);
+        }
 
         List<CardData> sameNameCardData = newCard.FindAll(x => x.Name == _cardName);
+        Debug.Log("찾는 카드 = " + _cardName);
         CardData picked = sameNameCardData.Find(x => x.Grade == _grade);
+        if (picked == null)
+        {
+            Debug.Log("검색된 카드가 없습니ㅏㄷ");
+        }
 
         return picked;
     }

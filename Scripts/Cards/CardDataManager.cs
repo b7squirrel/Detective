@@ -94,6 +94,9 @@ public class CardDataManager : MonoBehaviour
         List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
         AddNewCardToMyCardsList(startingCards[0]);
         startingCards[0].startingMember = "1";
+
+        FindObjectOfType<GachaSystem>().AddEssentialEquip(startingCards[0]);
+
         Save();
         Load();
     }

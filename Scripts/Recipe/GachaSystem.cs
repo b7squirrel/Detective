@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GachaSystem : MonoBehaviour
 {
@@ -13,8 +12,8 @@ public class GachaSystem : MonoBehaviour
 
     void Start()
     {
-        cardDataManager = FindObjectOfType<CardDataManager>();
-        cardList = FindObjectOfType<CardList>();
+        cardDataManager = GetComponent<CardDataManager>();
+        cardList = GetComponent<CardList>();
     }
 
     // shop 패널의 뽑기 버튼에서 호출
@@ -42,15 +41,28 @@ public class GachaSystem : MonoBehaviour
 
             if (oriData.Type == "Weapon")
             {
-                List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == oriData.Name);
-                CardData defaultItem = sameItems.Find(x => x.startingMember == "E");
-
-                if (defaultItem == null) Debug.Log(oriData.Name + "의 필수 무기가 NULL입니다.");
-                cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
-                cardList.Equip(oriData, defaultItem);
+                AddEssentialEquip(oriData);
             }
 
             gachaPools = null; // 생성된 카드 데이터가 가챠풀에 저장되어 버리므로
         }
+    }
+    public void AddEssentialEquip(CardData _oriCardData)
+    {
+        if (gachaPools == null)
+        {
+            gachaPools = new();
+
+            gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
+        }
+
+        Debug.Log("In Gacha system " +  _oriCardData.Name);
+        Debug.Log("Gacha Pools numbers = " + gachaPools.Count);
+        List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == _oriCardData.Name);
+        CardData defaultItem = sameItems.Find(x => x.startingMember == "E");
+
+        if (defaultItem == null) Debug.Log(_oriCardData.Name + "의 필수 무기가 NULL입니다.");
+        cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
+        cardList.Equip(_oriCardData, defaultItem);
     }
 }

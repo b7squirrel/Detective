@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using System.IO;
 
@@ -109,6 +110,20 @@ public class EquipmentDataManager : MonoBehaviour
             charEquipData.IDs[Equipmentindex] = equipmentCardID[Equipmentindex];
         }
 
+        if(filePath != null)
+        {
+            Save();
+            
+        }
+        else
+        {
+            StartCoroutine(WaitToStartMethodRunning());
+        }
+    }
+
+    IEnumerator WaitToStartMethodRunning()
+    {
+        yield return new WaitForSeconds(.04f);
         Save();
     }
 }

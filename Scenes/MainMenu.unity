@@ -1034,7 +1034,6 @@ GameObject:
   - component: {fileID: 100704228}
   - component: {fileID: 100704227}
   - component: {fileID: 100704229}
-  - component: {fileID: 100704231}
   m_Layer: 5
   m_Name: Panel Store
   m_TagString: Untagged
@@ -1118,19 +1117,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
---- !u!114 &100704231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100704225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a36258f240384d478d393fea4e472f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gachaPoolDataBase: {fileID: 4900000, guid: 07714b5c97aade44ca6a6bebfce2602f, type: 3}
 --- !u!1 &103031165
 GameObject:
   m_ObjectHideFlags: 0
@@ -11493,6 +11479,7 @@ GameObject:
   - component: {fileID: 1500030662}
   - component: {fileID: 1500030664}
   - component: {fileID: 1500030665}
+  - component: {fileID: 1500030666}
   m_Layer: 0
   m_Name: CardDataManager
   m_TagString: Untagged
@@ -11649,6 +11636,19 @@ MonoBehaviour:
   equipInfoPanel: {fileID: 388860202}
   cardList: {fileID: 1500030664}
   statContainer: {fileID: 1307305262}
+--- !u!114 &1500030666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500030657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a36258f240384d478d393fea4e472f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gachaPoolDataBase: {fileID: 4900000, guid: 07714b5c97aade44ca6a6bebfce2602f, type: 3}
 --- !u!1 &1505695398
 GameObject:
   m_ObjectHideFlags: 0
@@ -15987,7 +15987,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 100704231}
+      - m_Target: {fileID: 1500030666}
         m_TargetAssemblyTypeName: GachaSystem, Assembly-CSharp
         m_MethodName: Draw
         m_Mode: 1
