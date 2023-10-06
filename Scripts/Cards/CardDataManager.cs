@@ -27,7 +27,7 @@ public class CardData
         BindingTo = _bindingTo;
         startingMember = _startingMember;
     }
-    
+
     public string ID, Type, Grade, Name, Level, Hp, Atk, EquipmentType, EssentialEquip, BindingTo, startingMember;
 }
 public class ReadCardData

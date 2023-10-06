@@ -53,29 +53,4 @@ public class GachaSystem : MonoBehaviour
             gachaPools = null; // 생성된 카드 데이터가 가챠풀에 저장되어 버리므로
         }
     }
-    public void DrawCardOf(string _name, string _grade)
-    {
-        if (gachaPools == null)
-        {
-            gachaPools = new();
-
-            gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
-        }
-
-        List<CardData> oriData = gachaPools.FindAll(x => x.Name == _name);
-        CardData card = oriData.Find(x => x.Grade == _grade);
-        cardDataManager.AddNewCardToMyCardsList(card);
-
-        if(card.Type == "Weapon")
-        {
-            List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == card.Name);
-            CardData defaultItem = sameItems.Find(x => x.startingMember == "E");
-
-            if (defaultItem == null) Debug.Log(card.Name + "의 필수 무기가 NULL입니다.");
-            cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
-            cardList.Equip(card, defaultItem);
-        }
-
-        gachaPools = null;
-    }
 }
