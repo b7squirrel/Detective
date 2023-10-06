@@ -23,12 +23,13 @@ public class EquipInfoPanel : MonoBehaviour
         grade.text = cardData.Grade;
         Name.text = cardData.Name;
         Level.text = cardData.Level;
-        if(cardData.EquipmentType == EquipmentType.Hand.ToString()) // 무기 카드라면
+
+        if(cardData.Atk != "0") 
         {
             attributeImage.sprite = atkIcon;
             attribute.text = cardData.Atk;
         }
-        else
+        else if(cardData.Hp != "0")
         {
             attributeImage.sprite = hpIcon;
             attribute.text = cardData.Hp;
