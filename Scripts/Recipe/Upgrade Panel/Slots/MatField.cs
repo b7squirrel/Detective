@@ -118,7 +118,6 @@ public class MatField : MonoBehaviour
             if (equipCards[i] == null)
             {
                 cardDisp.SetRunTimeAnimController(i, null);
-                Debug.Log(i + " 번 장비는 null");
                 continue;
             }
 

@@ -69,13 +69,13 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             ClearAllEquipmentSlots(); // logic, UI 모두 처리
 
-            card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field 오리만 보여줌
+            card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field에는 오리만 보여줌
         }
         else if (cardType == CardType.Item.ToString())
         {
             foreach (var item in cardList.GetEquipmentCardsList())
             {
-                if (item.IsEquipped)
+                if (item.IsEquipped) // 다른 오리에 장착된 카드는 보여주지 않음
                 {
                     continue;
                     // 장착된 카드일 경우

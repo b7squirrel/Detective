@@ -42,7 +42,7 @@ public class GachaSystem : MonoBehaviour
 
             if (oriData.Type == "Weapon")
             {
-                List<CardData> sameItems = gachaPools.FindAll(x => x.EssentialEquip == oriData.Name);
+                List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == oriData.Name);
                 CardData defaultItem = sameItems.Find(x => x.startingMember == "E");
 
                 if (defaultItem == null) Debug.Log(oriData.Name + "의 필수 무기가 NULL입니다.");
