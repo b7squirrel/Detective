@@ -89,10 +89,13 @@ public class EquipmentPanelManager : MonoBehaviour
                 // 범용이거나 해당 오리에 바인딩 되어 있는 장비라면 필드에 추가
                 if (item.CardData.BindingTo == "All")
                 {
+                    // 범용이어도 필수 장비 슬롯과 겹치면서 해당 오리에 바인딩 되어 있지 않다면 빼기
+                    if (item.CardData.EquipmentType == CardOnDisplay.EssentialEquip && item.CardData.BindingTo != CardOnDisplay.Name) 
+                        continue;
                     card.Add(item.CardData);
                     continue;
                 }
-                if(item.CardData.BindingTo == CardOnDisplay.Name)
+                if (item.CardData.BindingTo == CardOnDisplay.Name)
                 {
                     card.Add(item.CardData);
                     continue;
