@@ -85,7 +85,18 @@ public class EquipmentPanelManager : MonoBehaviour
                     // 장착에서는 아이템만 Equipped 처리하면 됨
                     // 장착해제를 선택하면 장착되어 있던 오리에게서 장착해제가 됨
                 }
-                card.Add(item.CardData);
+
+                // 범용이거나 해당 오리에 바인딩 되어 있는 장비라면 필드에 추가
+                if (item.CardData.BindingTo == "All")
+                {
+                    card.Add(item.CardData);
+                    continue;
+                }
+                if(item.CardData.BindingTo == CardOnDisplay.Name)
+                {
+                    card.Add(item.CardData);
+                    continue;
+                }
             }
         }
         field.GenerateAllCardsOfType(card);
