@@ -2,8 +2,6 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 
-public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
-
 public class EquipSlotAction : MonoBehaviour
 {
     [SerializeField] protected EquipSlotType currentSlotType;

@@ -1,9 +1,5 @@
 using UnityEngine;
 
-public enum CardType { Weapon, Item, none }
-public enum Grade { Common, Rare, Epic, Unique, Legendary }
-public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // 클릭되었을 때 이동할 슬롯
-
 // 슬롯 위에 있는 카드 내용 관리
 public class CardSlot : MonoBehaviour
 {

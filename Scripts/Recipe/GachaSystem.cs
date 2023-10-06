@@ -10,7 +10,7 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] TextAsset gachaPoolDataBase;
     List<CardData> gachaPools;
 
-    void Start()
+    void Awake()
     {
         cardDataManager = GetComponent<CardDataManager>();
         cardList = GetComponent<CardList>();
@@ -55,13 +55,18 @@ public class GachaSystem : MonoBehaviour
 
             gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
         }
-
-        Debug.Log("In Gacha system " +  _oriCardData.Name);
-        Debug.Log("Gacha Pools numbers = " + gachaPools.Count);
         List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == _oriCardData.Name);
-        CardData defaultItem = sameItems.Find(x => x.startingMember == "E");
 
+        foreach (CardData item in sameItems)
+        {
+            Debug.Log(item.Name + " _ " + item.Grade);
+        }
+
+        CardData defaultItem = sameItems.Find(x => x.DefaultItem == DefaultItem.Default.ToString());
+
+        Debug.Log("Default Item = " + defaultItem.Name + " Grade = " + defaultItem.Grade);
         if (defaultItem == null) Debug.Log(_oriCardData.Name + "의 필수 무기가 NULL입니다.");
+        if (cardDataManager == null) Debug.Log("카드 데이터 메니져가 NULL");
         cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
         cardList.Equip(_oriCardData, defaultItem);
     }

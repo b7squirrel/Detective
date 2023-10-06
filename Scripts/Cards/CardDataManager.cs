@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 [System.Serializable]
 public class Serialization<T>
@@ -13,7 +14,7 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _id, string _Type, string _Grade, string _Name, string _level, string _hp, string _atk, string _equipmentType, string _essectialEquip, string _bindingTo, string _startingMember)
+    public CardData(string _id, string _Type, string _Grade, string _Name, string _level, string _hp, string _atk, string _equipmentType, string _essectialEquip, string _bindingTo, string _startingMember, string _defaultItem)
     {
         ID = _id;
         Type = _Type;
@@ -25,10 +26,11 @@ public class CardData
         EquipmentType = _equipmentType;
         EssentialEquip = _essectialEquip;
         BindingTo = _bindingTo;
-        startingMember = _startingMember;
+        StartingMember = _startingMember;
+        DefaultItem = _defaultItem;
     }
 
-    public string ID, Type, Grade, Name, Level, Hp, Atk, EquipmentType, EssentialEquip, BindingTo, startingMember;
+    public string ID, Type, Grade, Name, Level, Hp, Atk, EquipmentType, EssentialEquip, BindingTo, StartingMember, DefaultItem;
 }
 public class ReadCardData
 {
@@ -41,7 +43,14 @@ public class ReadCardData
         for (int i = 0; i < line.Length; i++)
         {
             string[] row = line[i].Split('\t');
-            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]));
+
+            List<string> rowList = new();
+            for(int j = 0; j < row.Length - 1; j++)
+            {
+                rowList.Add(row[j]);
+            }
+
+            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11]));
         }
         return cardList;
     }
@@ -90,10 +99,11 @@ public class CardDataManager : MonoBehaviour
     // 특정 카드를 가지고 시작하도록 만들려고. 아무것도 없이 시작할 수도 있다
     void ResetCards()
     {
+        Debug.Log("리셋 카드 데이터");
         MyCardsList.Clear();
         List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
         AddNewCardToMyCardsList(startingCards[0]);
-        startingCards[0].startingMember = "1";
+        startingCards[0].StartingMember = StartingMember.Zero.ToString();
 
         FindObjectOfType<GachaSystem>().AddEssentialEquip(startingCards[0]);
 
@@ -144,7 +154,7 @@ public class CardDataManager : MonoBehaviour
     }
     public void UpdateStartingmemberOfCard(CardData cardToUpdate, string orderIndex)
     {
-        cardToUpdate.startingMember = orderIndex;
+        cardToUpdate.StartingMember = orderIndex;
         Save();
     }
     public void DeleteData()

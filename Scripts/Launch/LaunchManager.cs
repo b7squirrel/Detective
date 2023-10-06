@@ -31,8 +31,8 @@ public class LaunchManager : MonoBehaviour
     }
     IEnumerator InitCo()
     {
-        yield return new WaitForSeconds(.01f);
-        CardData lead = cardDataManager.GetMyCardList().Find(x => x.startingMember == "1");
+        yield return new WaitForSeconds(.05f);
+        CardData lead = cardDataManager.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
         SetLead(lead);
     }
     public void ClearAllFieldSlots()

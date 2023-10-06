@@ -2,7 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 
-public enum SlotType { Field, Up, Mat, None };
+
 public class SlotAction : MonoBehaviour
 {
     [SerializeField] protected SlotType currentSlotType;
@@ -34,7 +34,8 @@ public class SlotAction : MonoBehaviour
     {
         if (currentSlotType == SlotType.Field)
         {
-            upPanelManager.AcquireCard(GetComponent<CardSlot>().GetCardData());
+            // 장착이 되어 있는지 확인하는 메서드 실행
+            upPanelManager.CheckIsEquipped(GetComponent<CardSlot>().GetCardData());
             return;
         }
         if (currentSlotType == SlotType.Up)

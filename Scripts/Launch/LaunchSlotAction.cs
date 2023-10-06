@@ -2,7 +2,6 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 
-public enum LaunchSlotType { Field, Up, None }
 public class LaunchSlotAction : MonoBehaviour
 {
     [SerializeField] protected LaunchSlotType currentSlotType;

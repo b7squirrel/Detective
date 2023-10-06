@@ -33,7 +33,9 @@ public class EquipmentCard
         IsEquipped = false;
 
         cardName = _cardData.Name + "_" + _cardData.Grade;
+        EquippedWho = null;
     }
+    public CardData EquippedWho;
     public string cardName; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
     public string equippedWho; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
     public CardData CardData;
@@ -62,8 +64,9 @@ public class CardList : MonoBehaviour
         int index = new Convert().EquipmentTypeToInt(equipData.EquipmentType);
         charCard.equipmentCards[index] = equipmentCard;
         equipmentCard.IsEquipped = true;
+        equipmentCard.EquippedWho = charCard.CardData;
 
-        equipmentCard.equippedWho = charCard.cardName;
+        equipmentCard.equippedWho = equipmentCard.EquippedWho.Name;
         charCard.numberOfEquipments++;
         charCard.IsEquipped = true;
 
@@ -86,17 +89,17 @@ public class CardList : MonoBehaviour
         equipmentDataManager.UpdateEquipment(charCard, index);// 데이터 업데이트 및 저장
     }
 
-    public CharCard FindCharCard(CardData cardData)
+    public CharCard FindCharCard(CardData charCardData)
     {
-        CharCard oriCard = charCards.Find(x => x.CardData.ID == cardData.ID);
-        if (oriCard == null) Debug.Log("Can't find ID " + cardData.ID);
+        CharCard oriCard = charCards.Find(x => x.CardData.ID == charCardData.ID);
+        if (oriCard == null) Debug.Log("Can't find ID " + charCardData.ID);
         return oriCard;
     }
     // 카드 데이터로 EquipmentCard 얻기
-    public EquipmentCard FindEquipmentCard(CardData cardData)
+    public EquipmentCard FindEquipmentCard(CardData equipCardData)
     {
-        EquipmentCard card = equipmentCards.Find(x => x.CardData.ID == cardData.ID);
-        if (card == null) Debug.Log("Can't find ID " + cardData.ID);
+        EquipmentCard card = equipmentCards.Find(x => x.CardData.ID == equipCardData.ID);
+        if (card == null) Debug.Log("Can't find ID " + equipCardData.ID);
         return card;
     }
     // 특정 오리 카드의 장비 카드 얻기

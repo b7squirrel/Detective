@@ -1,6 +1,22 @@
 using System;
 
+// Slot Action
+public enum SlotType { Field, Up, Mat, None };
+public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
+public enum LaunchSlotType { Field, Up, None }
+
+// Card Slot
+public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // 클릭되었을 때 이동할 슬롯
+
+// Card Data
+public enum CardType { Weapon, Item, none }
+public enum Grade { Common, Rare, Epic, Unique, Legendary }
 public enum EquipmentType { Head, Chest, Face, Hand }
+public enum EssentialEquip { Head, Chest, Face, Hand, Default }
+public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
+public enum DefaultItem { Default }
+
+
 public class Convert
 {
     public int GradeToInt(string _grade)
