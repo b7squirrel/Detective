@@ -6,6 +6,7 @@ public class EquipmentSlotsManager : MonoBehaviour
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] EquipDisplayUI equipDisplayUI;
     [SerializeField] CardList cardList;
+    [SerializeField] CardDataManager cardDataManager;
     OriAttribute currentAttribute;
 
     CardData instantCharCard; // 현재 display 되고 있는 charCard 임시 저장
@@ -60,7 +61,7 @@ public class EquipmentSlotsManager : MonoBehaviour
         int addingFactor = isAdding ? 1 : -1; // 장착이면 더하기, 해제면 빼기
 
         // 해당 장비의 attribute 더해줌
-        if (_equipCardData.EquipmentType == EquipmentType.Hand.ToString())
+        if (new CheckIsEssentialItem().IsEssential(_equipCardData, cardDataManager.GetMyCardList()))
         {
             currentAttribute = new OriAttribute(addingFactor * Atk + currentAttribute.Atk, currentAttribute.Hp);
         }

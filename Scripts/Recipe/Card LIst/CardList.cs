@@ -91,7 +91,6 @@ public class CardList : MonoBehaviour
 
     public CharCard FindCharCard(CardData charCardData)
     {
-        Debug.Log("CharCardData = " + charCardData.Name);
         CharCard oriCard = charCards.Find(x => x.CardData.ID == charCardData.ID);
         if (oriCard == null) Debug.Log("Can't find ID " + charCardData.ID);
         return oriCard;

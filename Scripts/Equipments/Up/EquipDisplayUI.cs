@@ -18,6 +18,7 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] GameObject atkLabel, hpLabel;
+    [SerializeField] GameObject button;
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr)
     {
@@ -46,6 +47,8 @@ public class EquipDisplayUI : MonoBehaviour
 
         atk.text = currentAttr.Atk.ToString();
         hp.text = currentAttr.Hp.ToString();
+
+        button.SetActive(true);
     }
     public void SetEquipmentDisplay(CardData itemCardData, bool isAdding)
     {
@@ -63,6 +66,8 @@ public class EquipDisplayUI : MonoBehaviour
         {
             EquipmentImages[index].gameObject.SetActive(false);
         }
+
+        button.SetActive(true);
     }
     void RestartAnim()
     {
@@ -121,6 +126,8 @@ public class EquipDisplayUI : MonoBehaviour
             EquipmentImages[i].gameObject.SetActive(false);
         }
         charImage.gameObject.SetActive(false);
+
+        button.SetActive(false);
     }
     public void OnDisplay(CardData cardData)
     {

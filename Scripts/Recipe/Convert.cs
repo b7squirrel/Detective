@@ -13,7 +13,7 @@ public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // 클릭되었을 때 �
 // Card Data
 public enum CardType { Weapon, Item, none }
 public enum Grade { Common, Rare, Epic, Unique, Legendary }
-public enum EquipmentType { Head, Chest, Face, Hand }
+public enum EquipmentType { Head, Chest, Face, Hand, Ori }
 public enum EssentialEquip { Head, Chest, Face, Hand, Default }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
 public enum DefaultItem { Default }
@@ -53,6 +53,7 @@ public class Convert
         return -1;
     }
 }
+// 해당 장비카드가 필수 장비인지 알려줌
 public class CheckIsEssentialItem
 {
     public bool IsEssential(CardData equipmentCard, List<CardData> cardPool)

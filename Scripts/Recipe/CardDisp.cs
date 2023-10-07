@@ -17,6 +17,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
     [SerializeField] protected GameObject starPrefab;
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
+    [SerializeField] GameObject button; // 버튼을 활성, 비활성 하기 위해
     GameObject[] stars;
 
     public void InitWeaponCardDisplay(WeaponData weaponData)
@@ -46,6 +47,9 @@ public class CardDisp : MonoBehaviour
         // 오리카드는 착용 중 표시 안 함
         // 장비카드만 착용 중 표시
         SetEquppiedTextActive(false);
+
+        // 버튼 활성화
+        button.SetActive(true);
     }
 
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
@@ -76,6 +80,9 @@ public class CardDisp : MonoBehaviour
         {
             SetEquppiedTextActive(onEquipment);
         }
+
+        // 버튼 활성화
+        button.SetActive(true);
     }
 
     public void SetRunTimeAnimController(int index, RuntimeAnimatorController animatorController)
@@ -149,5 +156,8 @@ public class CardDisp : MonoBehaviour
         }
 
         SetEquppiedTextActive(false);
+
+        // 버튼 비활성화
+        button.SetActive(false);
     }
 }
