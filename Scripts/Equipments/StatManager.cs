@@ -31,7 +31,7 @@ public class StatManager : MonoBehaviour
             newAtk += level * 100; // Temp
             newHp += level * 100; // Temp
         }
-        else if(new CheckIsEssentialItem().IsEssential(_cardData, cardDataManager.GetMyCardList())) // 무기 카드라면
+        else if(new CheckIsEssentialItem().IsEssential(_cardData, cardDataManager.GetAllCardList())) // 무기 카드라면
         {
             newAtk += level * 100; // Temp
         }
@@ -53,7 +53,7 @@ public class StatManager : MonoBehaviour
             // 오리 레벨, 속성 UI 업데이트
         }
         // 필수 무기라면 Atk을 info UI에 보여줌
-        else if (new CheckIsEssentialItem().IsEssential(_cardData, cardDataManager.GetMyCardList()))
+        else if (new CheckIsEssentialItem().IsEssential(_cardData, cardDataManager.GetAllCardList()))
         {
             equipInfoPanel.UpdatePanel(_level, _atk);
         }

@@ -60,8 +60,10 @@ public class EquipmentSlotsManager : MonoBehaviour
 
         int addingFactor = isAdding ? 1 : -1; // 장착이면 더하기, 해제면 빼기
 
+        Debug.Log("Get all card list numbers = " + cardDataManager.GetAllCardList().Count);
+        Debug.Log("장비 카드 = " + _equipCardData.Name);
         // 해당 장비의 attribute 더해줌
-        if (new CheckIsEssentialItem().IsEssential(_equipCardData, cardDataManager.GetMyCardList()))
+        if (new CheckIsEssentialItem().IsEssential(_equipCardData, cardDataManager.GetAllCardList()))
         {
             currentAttribute = new OriAttribute(addingFactor * Atk + currentAttribute.Atk, currentAttribute.Hp);
         }

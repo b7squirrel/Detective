@@ -116,6 +116,14 @@ public class CardDataManager : MonoBehaviour
         if (MyCardsList == null) Debug.Log("리스트 널");
         return MyCardsList;
     }
+    public List<CardData> GetAllCardList()
+    {
+        if (AllCardsList == null) AllCardsList = new();
+        if (AllCardsList.Count == 0)
+            AllCardsList = new ReadCardData().GetCardsList(CardDatabase);
+        Debug.Log("All card list numbers = " + AllCardsList.Count);
+        return AllCardsList;
+    }
 
     public void RemoveCardFromMyCardList(CardData cardToRemove)
     {
