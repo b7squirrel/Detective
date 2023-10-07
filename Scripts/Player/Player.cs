@@ -39,7 +39,13 @@ public class Player : MonoBehaviour, IBouncable
     void Start()
     {
         StartingDataContainer startingDataContainer = FindObjectOfType<StartingDataContainer>();
+        if (startingDataContainer != null)
+        {
+            anim[0].runtimeAnimatorController = startingDataContainer.GetLeadWeaponData().Animators.InGamePlayerAnim;
+        }
+
         List<Item> iDatas = startingDataContainer.GetItemDatas();
+
         for (int i = 0; i < 4; i++)
         {
             if (iDatas[i] == null)
@@ -50,7 +56,14 @@ public class Player : MonoBehaviour, IBouncable
             }
 
             sr[i + 1].GetComponent<Animator>().runtimeAnimatorController = iDatas[i].CardItemAnimator.CardImageAnim;
+
+            if(sr[i + 1].GetComponent<Animator>().runtimeAnimatorController == null)
+            {
+                sr[i+1].gameObject.SetActive(false);
+            }
         }
+        Debug.Log("essential indes = " + startingDataContainer.GetEssectialIndex());
+        sr[startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비는 비활성화
     }
 
     void LateUpdate()

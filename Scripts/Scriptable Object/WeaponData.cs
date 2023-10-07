@@ -42,6 +42,7 @@ public class WeaponStats
 public class AnimatorData
 {
     public RuntimeAnimatorController CardImageAnim;
+    public RuntimeAnimatorController InGamePlayerAnim;
 }
 
 [CreateAssetMenu]
@@ -51,7 +52,7 @@ public class WeaponData : ScriptableObject
     public string Name;
     public Sprite charImage;
     public string SynergyWeapon;
-    public AnimatorData CardCharAnimator;
+    public AnimatorData Animators;
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
     public GameObject weaponBasePrefab;

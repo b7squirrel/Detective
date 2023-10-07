@@ -43,7 +43,7 @@ public class EquipDisplayUI : MonoBehaviour
         charImage.gameObject.SetActive(true);
         WeaponData wd = cardDictionary.GetWeaponItemData(charCardData).weaponData;
         // charImage.sprite = wd.charImage;
-        charImage.runtimeAnimatorController = wd.CardCharAnimator.CardImageAnim;
+        charImage.runtimeAnimatorController = wd.Animators.CardImageAnim;
 
         atk.text = currentAttr.Atk.ToString();
         hp.text = currentAttr.Hp.ToString();

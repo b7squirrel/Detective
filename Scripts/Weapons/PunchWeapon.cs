@@ -10,7 +10,7 @@ public class PunchWeapon : WeaponBase
     Player player; // 무기 방향을 정하는 InputVec을 가져오기 위해
     Vector2 currentDir; // 정지해 있을 때의 방향을 정하기 위해
     bool isAttacking; // 공격 중일 떄는 무기가 회전하지 않도록 하기 위해
-    SpriteRenderer sr;
+    [SerializeField] SpriteRenderer sr;
 
     [Header("Sounds")]
     [SerializeField] AudioClip punch;
@@ -22,7 +22,6 @@ public class PunchWeapon : WeaponBase
         anim = GetComponent<Animator>();
         player = GetComponentInParent<Player>();
         isAttacking = false;
-        sr = GetComponentInChildren<SpriteRenderer>();
     }
 
     protected override void Update()

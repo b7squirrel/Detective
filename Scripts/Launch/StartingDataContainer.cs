@@ -6,17 +6,21 @@ public class StartingDataContainer : MonoBehaviour
     OriAttribute leadAttr = new OriAttribute(0, 0);
     WeaponData leadWd;
     List<Item> itemDatas = new();
+    int essectialEquipmentIndex;
 
     [Header("Debugging")]
     [SerializeField] int hp = 0;
     [SerializeField] int atk = 0;
     [SerializeField] List<Item> itemDatasDebug = new();
+    [SerializeField] int essectialIndexDebug;
 
     void Awake() => DontDestroyOnLoad(this);
     public void SetLead(CardData lead, OriAttribute leadAttr)
     {
         itemDatas.Clear();
         itemDatasDebug.Clear();
+        essectialEquipmentIndex = -1;
+        essectialIndexDebug = -1;
 
         this.leadAttr = leadAttr;
         // debugging
@@ -24,6 +28,7 @@ public class StartingDataContainer : MonoBehaviour
         atk = this.leadAttr.Atk;
 
         CardsDictionary cardDic = FindAnyObjectByType<CardsDictionary>();
+        CardDataManager cardDataManager = FindAnyObjectByType<CardDataManager>();
         CardList cardList = FindObjectOfType<CardList>();
 
         leadWd = cardDic.GetWeaponItemData(lead).weaponData;
@@ -40,6 +45,12 @@ public class StartingDataContainer : MonoBehaviour
             }
             itemDatas.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
             itemDatasDebug.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
+
+            if (new CheckIsEssentialItem().IsEssential(equipCard[i].CardData, cardDataManager.GetAllCardList()))
+            {
+                essectialEquipmentIndex = i;
+                essectialIndexDebug = i;
+            }
         }
     }
 
@@ -47,4 +58,5 @@ public class StartingDataContainer : MonoBehaviour
     public OriAttribute GetLeadAttr() => this.leadAttr;
     public WeaponData GetLeadWeaponData() => this.leadWd;
     public List<Item> GetItemDatas() => this.itemDatas;
+    public int GetEssectialIndex() => this.essectialEquipmentIndex;
 }

@@ -42,7 +42,7 @@ public class CardDisp : MonoBehaviour
         // 캐릭터 이미지
         //charImage.sprite = weaponData.charImage;
         charAnim.gameObject.SetActive(true);
-        charAnim.runtimeAnimatorController = weaponData.CardCharAnimator.CardImageAnim;
+        charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
 
         // 오리카드는 착용 중 표시 안 함
         // 장비카드만 착용 중 표시
