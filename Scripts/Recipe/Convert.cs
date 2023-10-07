@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 // Slot Action
 public enum SlotType { Field, Up, Mat, None };
@@ -49,5 +51,38 @@ public class Convert
             }
         }
         return -1;
+    }
+}
+public class CheckIsEssentialItem
+{
+    public bool IsEssential(CardData equipmentCard, List<CardData> cardPool)
+    {
+        CardData charCard = cardPool.Find(x => x.Name == equipmentCard.BindingTo);
+        string essentialEquip = charCard.EssentialEquip;
+
+        if (essentialEquip == equipmentCard.EquipmentType)
+        {
+            return true;
+        }
+        return false;
+    }
+}
+
+public class CardClassifier
+{
+    // 내가 가진 카드들 중 업슬롯에 올라와 있는 카드와 이름과 등급이 같으면 추려내는 메서드
+    public List<CardData> GetCardsAvailableForMat(List<CardData> myCardsExceptUpCard, CardData upCard)
+    {
+        List<CardData> cardsPicked = new(); // 재료가 될 수 있는 카드 목록
+        string essentialEquip = upCard.EssentialEquip;
+
+        foreach (CardData card in myCardsExceptUpCard)
+        {
+            if (card.Grade == upCard.Grade && card.Name == upCard.Name)
+            {
+                cardsPicked.Add(card);
+            }
+        }
+        return cardsPicked;
     }
 }

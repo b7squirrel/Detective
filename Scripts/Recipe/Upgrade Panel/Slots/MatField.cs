@@ -46,6 +46,24 @@ public class MatField : MonoBehaviour
         List<CardData> picked = new();
         picked.AddRange(new CardClassifier().GetCardsAvailableForMat(myCardData, cardDataOnUpSlot));
 
+        // 장비가 필수장비이고, 다른 오리에게 장착되어 있으면 건너뛴다
+        if(cardDataOnUpSlot.Type == CardType.Item.ToString())
+        {
+            List<CardData> myCardList = new();
+            myCardList.AddRange(cardDataManager.GetMyCardList());
+            List<CardData> picked2 = new();
+            picked2.AddRange(picked);
+
+            for (int i = 0; i < picked2.Count; i++)
+            {
+                CardData charCard = myCardData.Find(x => x.Name == picked2[i].BindingTo);
+                EquipmentCard equipCard = cardList.FindEquipmentCard(picked2[i]);
+                if(charCard.EssentialEquip == picked2[i].EquipmentType && equipCard.IsEquipped)
+                {
+                    picked.Remove(picked2[i]);
+                }
+            }
+        }
         SetMatCards(picked);
     }
 

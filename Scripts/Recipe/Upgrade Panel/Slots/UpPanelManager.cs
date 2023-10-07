@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UpPanelManager : MonoBehaviour
@@ -169,23 +170,33 @@ public class UpPanelManager : MonoBehaviour
                 AcquireCard(_cardData); // 슬롯에 카드를 올리기
                 return;
             }
-            else
+            else // 장비가 두 개 이상 장착된 상태라면 (오리 카드는 장착이 하나도 없는 경우는 없음)
             {
-                isEquipped = charCard.IsEquipped;
+                isEquipped = true;
             }
         }
-        else
+        else // 장비 카드라면
         {
             EquipmentCard equipCard = cardList.FindEquipmentCard(_cardData);
 
-            // 장비가 필수 카드라면
-            if (equipCard.CardData.EquipmentType == equipCard.EquippedWho.EssentialEquip)
+            // 장비가 장착되어 있지 않다면 무조건 Acquire
+            if(equipCard.IsEquipped == false)
             {
-                AcquireCard(_cardData); // 그냥 슬롯에 카드를 올리기
+                AcquireCard(_cardData);
                 return;
             }
 
-            isEquipped = equipCard.IsEquipped;
+            // 다른 오리에 장착되어 있지만 그것이 필수 장비라면
+            if(equipCard.IsEquipped)
+            {
+                if (_cardData.EquipmentType == equipCard.EquippedWho.EssentialEquip)
+                {
+                    AcquireCard(_cardData); // 그냥 슬롯에 카드를 올리기
+                    return;
+                }
+            }
+            // 필수 오리가 아니면서 다른 오리에 장착되어 있다면
+            isEquipped = true;
         }
 
         // 장착을 하고 있다면 장착을 해제할지 물어보는 팝업창을 띄움
