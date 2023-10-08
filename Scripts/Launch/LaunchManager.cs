@@ -68,7 +68,7 @@ public class LaunchManager : MonoBehaviour
     public void UpdateLead(CardData newLead)
     {
         cardDataManager.UpdateStartingmemberOfCard(currentLead, "N");
-        cardDataManager.UpdateStartingmemberOfCard(newLead, "1");
+        cardDataManager.UpdateStartingmemberOfCard(newLead, "Zero");
         
         CloseField();
         SetLead(newLead);
