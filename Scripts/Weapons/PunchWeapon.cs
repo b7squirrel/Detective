@@ -96,6 +96,12 @@ public class PunchWeapon : WeaponBase
         }
     }
 
+    // Essential Container로 Essectial Weapon을 넣을 타이밍을 보기 위해
+    public bool CheckIsAttacking()
+    {
+        return isAttacking;
+    }
+
     // animation events
     void BoxColOn() => boxCol.enabled = true;
     void BoxColOff() => boxCol.enabled = false;

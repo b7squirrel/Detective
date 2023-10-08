@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 // Slot Action
 public enum SlotType { Field, Up, Mat, None };
@@ -62,7 +63,6 @@ public class CheckIsEssentialItem
 
         CardData charCardData = cardPool.Find(x => x.Name == equipmentCard.BindingTo);
         string essentialEquip = charCardData.EssentialEquip;
-
         if (essentialEquip == equipmentCard.EquipmentType)
         {
             return true;
