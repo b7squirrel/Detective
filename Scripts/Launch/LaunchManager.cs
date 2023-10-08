@@ -24,6 +24,10 @@ public class LaunchManager : MonoBehaviour
         fieldSlotPanel.SetActive(false);
         InitLead();
     }
+    void OnDisable()
+    {
+        CloseField();
+    }
 
     public void InitLead()
     {
@@ -31,7 +35,7 @@ public class LaunchManager : MonoBehaviour
     }
     IEnumerator InitCo()
     {
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.1f);
         CardData lead = cardDataManager.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
         SetLead(lead);
     }
@@ -50,6 +54,7 @@ public class LaunchManager : MonoBehaviour
 
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
         card.Remove(currentLeadOri);
+        Debug.Log("카드 개수 = " + card.Count);
 
         field.GenerateAllCardsOfType(card);
     }
