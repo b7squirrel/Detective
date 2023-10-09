@@ -2721,6 +2721,7 @@ GameObject:
   - component: {fileID: 256988794}
   - component: {fileID: 256988793}
   - component: {fileID: 256988795}
+  - component: {fileID: 256988796}
   m_Layer: 5
   m_Name: Hand Image
   m_TagString: Untagged
@@ -2807,6 +2808,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &256988796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256988791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -13}
+  m_UseGraphicAlpha: 1
 --- !u!1 &259832373
 GameObject:
   m_ObjectHideFlags: 0
@@ -7105,6 +7121,7 @@ GameObject:
   - component: {fileID: 910446811}
   - component: {fileID: 910446810}
   - component: {fileID: 910446812}
+  - component: {fileID: 910446813}
   m_Layer: 5
   m_Name: Char Image
   m_TagString: Untagged
@@ -7191,6 +7208,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &910446813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910446808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -13}
+  m_UseGraphicAlpha: 1
 --- !u!1 &916650440
 GameObject:
   m_ObjectHideFlags: 0
@@ -16985,6 +17017,7 @@ GameObject:
   - component: {fileID: 1977202631}
   - component: {fileID: 1977202630}
   - component: {fileID: 1977202632}
+  - component: {fileID: 1977202633}
   m_Layer: 5
   m_Name: Head Image
   m_TagString: Untagged
@@ -17071,6 +17104,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1977202633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977202628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -13}
+  m_UseGraphicAlpha: 1
 --- !u!114 &1991018270 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5509206353909697052, guid: 54a78dd3fab55d148a4a920b061fec74, type: 3}
