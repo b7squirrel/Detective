@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class EquipDisplayUI : MonoBehaviour
 {
-    [SerializeField] Transform cardBaseContainer; // µî±Ş 5°³ 
+    [SerializeField] Transform cardBaseContainer; // ï¿½ï¿½ï¿½ 5ï¿½ï¿½ 
     [SerializeField] Transform starContainer;
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
@@ -18,11 +18,12 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] GameObject atkLabel, hpLabel;
-    [SerializeField] GameObject button;
+    [SerializeField] GameObject charButton;
+    [SerializeField] GameObject backButton;
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr)
     {
-        // º°°ú Ä«µå »ö±ò
+        // ë³„ê³¼ ì¹´ë“œ ìƒ‰ê¹”
         cardBaseContainer.gameObject.SetActive(true);
 
         int intGrade = new Convert().GradeToInt(charCardData.Grade);
@@ -34,12 +35,12 @@ public class EquipDisplayUI : MonoBehaviour
         }
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
-        // Ä«µå ÀÌ¸§ ÅØ½ºÆ®
+        // ì¹´ë“œ ì´ë¦„ í…ìŠ¤íŠ¸
         Title.text = charCardData.Name;
-        // Ä«µå ·¹º§ ÅØ½ºÆ®
+        // ì¹´ë“œ ë ˆë²¨ í…ìŠ¤íŠ¸
         Level.text = "LV1";
 
-        // ¿À¸® ÀÌ¹ÌÁö
+        // ìºë¦­í„° ì´ë¯¸ì§€
         charImage.gameObject.SetActive(true);
         WeaponData wd = cardDictionary.GetWeaponItemData(charCardData).weaponData;
         // charImage.sprite = wd.charImage;
@@ -48,8 +49,10 @@ public class EquipDisplayUI : MonoBehaviour
         atk.text = currentAttr.Atk.ToString();
         hp.text = currentAttr.Hp.ToString();
 
-        button.SetActive(true);
+        charButton.SetActive(true);
+        backButton.SetActive(true);
     }
+    // ì˜¤ë¦¬ ìœ„ì— ì¥ì°©ëœ ì¥ë¹„ í‘œì‹œ/ ìˆ¨ê¸°ê¸°
     public void SetEquipmentDisplay(CardData itemCardData, bool isAdding)
     {
         Item data = cardDictionary.GetWeaponItemData(itemCardData).itemData;
@@ -67,8 +70,9 @@ public class EquipDisplayUI : MonoBehaviour
             EquipmentImages[index].gameObject.SetActive(false);
         }
 
-        button.SetActive(true);
+        charButton.SetActive(true);
     }
+    // ì˜¤ë¦¬ì˜ idleê³¼ íƒ€ì´ë°ì„ ë§ì¶”ê¸° ìœ„í•´ì„œ ì¥ë¹„ê°€ ì¥ì°©ë  ë•Œë§ˆë‹¤ ì• ë‹ˆë©”ì´ì…˜ ë¦¬ì…‹
     void RestartAnim()
     {
         for (int i = 0; i < EquipmentImages.Length; i++)
@@ -83,7 +87,7 @@ public class EquipDisplayUI : MonoBehaviour
     {
         if (stars == null)
         {
-            // 5°³ ¸¸µé¾î¼­ ºñÈ°¼ºÈ­
+            // 5ê°œ ë§Œë“¤ì–´ì„œ ë¹„í™œì„±í™”
             stars = new GameObject[5];
             for (int i = 0; i < stars.Length; i++)
             {
@@ -92,7 +96,7 @@ public class EquipDisplayUI : MonoBehaviour
             }
         }
 
-        // µî±Ş¸¸Å­ º° È°¼ºÈ­ÇÏ°í º°¸®½ºÆ®¿¡ ³Ö±â
+        // ë“±ê¸‰ë§Œí¼ ë³„ í™œì„±í™”í•˜ê³  ë³„ë¦¬ìŠ¤íŠ¸ì— ë„£ê¸°
         for (int i = 0; i < numStars; i++)
         {
             stars[i].SetActive(true);
@@ -101,10 +105,10 @@ public class EquipDisplayUI : MonoBehaviour
 
     public void OffDisplay()
     {
-        // Ä«µå Base Container ºñÈ°¼ºÈ­
+        // Base Container ë¹„í™œì„±í™”
         cardBaseContainer.gameObject.SetActive(false);
 
-        // º° ºñÈ°¼ºÈ­
+        // ë³„ ë¹„í™œì„±í™”
         if (stars != null)
         {
             for (int i = 0; i < stars.Length; i++)
@@ -114,7 +118,7 @@ public class EquipDisplayUI : MonoBehaviour
             }
         }
 
-        // Ä«µå ·¹º§ ÅØ½ºÆ®
+        // ì¹´ë“œ ë ˆë²¨ í…ìŠ¤íŠ¸
         Level.text = "";
         Title.text = "";
 
@@ -127,7 +131,7 @@ public class EquipDisplayUI : MonoBehaviour
         }
         charImage.gameObject.SetActive(false);
 
-        button.SetActive(false);
+        charButton.SetActive(false);
     }
     public void OnDisplay(CardData cardData)
     {

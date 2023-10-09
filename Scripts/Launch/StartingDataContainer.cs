@@ -37,7 +37,7 @@ public class StartingDataContainer : MonoBehaviour
         EquipmentCard[] equipCard = cardList.GetEquipmentsCardData(lead);
         for (int i = 0; i < 4; i++)
         {
-            if(equipCard[i] == null) 
+            if (equipCard[i] == null)
             {
                 itemDatas.Add(null);
                 itemDatasDebug.Add(null);

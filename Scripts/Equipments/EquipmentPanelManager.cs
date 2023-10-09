@@ -90,7 +90,8 @@ public class EquipmentPanelManager : MonoBehaviour
                 if (item.CardData.BindingTo == "All")
                 {
                     // 범용이어도 필수 장비 슬롯과 겹치면서 해당 오리에 바인딩 되어 있지 않다면 빼기
-                    if (item.CardData.EquipmentType == CardOnDisplay.EssentialEquip && item.CardData.BindingTo != CardOnDisplay.Name) 
+                    if (item.CardData.EquipmentType == CardOnDisplay.EssentialEquip
+                        && item.CardData.BindingTo != CardOnDisplay.Name)
                         continue;
                     card.Add(item.CardData);
                     continue;
@@ -197,7 +198,7 @@ public class EquipmentPanelManager : MonoBehaviour
         statManager.LevelUp(cardToEquip);
 
         // 장착되어 있는 장비를 레벨업 하는 경우라면 바로바로 currentAttr을 업데이트
-        if (isEquipped) 
+        if (isEquipped)
         {
             equipmentSlotsManager.InitEquipSlots(CardOnDisplay);
         }
