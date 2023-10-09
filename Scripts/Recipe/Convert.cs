@@ -1,23 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-
-// Slot Action
-public enum SlotType { Field, Up, Mat, None };
-public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
-public enum LaunchSlotType { Field, Up, None }
-
-// Card Slot
-public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // Å¬¸¯µÇ¾úÀ» ¶§ ÀÌµ¿ÇÒ ½½·Ô
-
-// Card Data
-public enum CardType { Weapon, Item, none }
-public enum Grade { Common, Rare, Epic, Unique, Legendary }
-public enum EquipmentType { Head, Chest, Face, Hand, Ori }
-public enum EssentialEquip { Head, Chest, Face, Hand, Default }
-public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
-public enum DefaultItem { Default }
-
 
 public class Convert
 {
@@ -53,7 +35,7 @@ public class Convert
         return -1;
     }
 }
-// ÇØ´ç ÀåºñÄ«µå°¡ ÇÊ¼ö ÀåºñÀÎÁö ¾Ë·ÁÁÜ
+// Check if a specific equipment card is an essential card
 public class CheckIsEssentialItem
 {
     public bool IsEssential(CardData equipmentCard, List<CardData> cardPool)
@@ -73,10 +55,10 @@ public class CheckIsEssentialItem
 
 public class CardClassifier
 {
-    // ³»°¡ °¡Áø Ä«µåµé Áß ¾÷½½·Ô¿¡ ¿Ã¶ó¿Í ÀÖ´Â Ä«µå¿Í ÀÌ¸§°ú µî±ŞÀÌ °°À¸¸é Ãß·Á³»´Â ¸Ş¼­µå
+    // ë‚´ê°€ ê°€ì§„ ì¹´ë“œë“¤ ì¤‘ ì—…ìŠ¬ë¡¯ì— ì˜¬ë¼ì™€ ìˆëŠ” ì¹´ë“œì™€ ì´ë¦„ê³¼ ë“±ê¸‰ì´ ê°™ìœ¼ë©´ ì¶”ë ¤ë‚´ëŠ” ë©”ì„œë“œ
     public List<CardData> GetCardsAvailableForMat(List<CardData> myCardsExceptUpCard, CardData upCard)
     {
-        List<CardData> cardsPicked = new(); // Àç·á°¡ µÉ ¼ö ÀÖ´Â Ä«µå ¸ñ·Ï
+        List<CardData> cardsPicked = new(); // List of Cards that can be used as material
         string essentialEquip = upCard.EssentialEquip;
 
         foreach (CardData card in myCardsExceptUpCard)
