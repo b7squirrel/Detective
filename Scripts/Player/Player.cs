@@ -32,7 +32,7 @@ public class Player : MonoBehaviour, IBouncable
         instance = this;
         rb = GetComponent<Rigidbody2D>();
         anim[0] = GetComponent<Animator>();
-        for(int i = 1; i < anim.Length; i++)
+        for (int i = 1; i < anim.Length; i++)
         {
             anim[i] = sr[i].GetComponent<Animator>();
         }
@@ -43,9 +43,10 @@ public class Player : MonoBehaviour, IBouncable
     void Start()
     {
         StartingDataContainer startingDataContainer = FindObjectOfType<StartingDataContainer>();
+        WeaponData wd = startingDataContainer.GetLeadWeaponData();
         if (startingDataContainer != null)
         {
-            anim[0].runtimeAnimatorController = startingDataContainer.GetLeadWeaponData().Animators.InGamePlayerAnim;
+            anim[0].runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
         }
 
         List<Item> iDatas = startingDataContainer.GetItemDatas();
@@ -66,13 +67,16 @@ public class Player : MonoBehaviour, IBouncable
                 sr[i + 1].gameObject.SetActive(false);
             }
         }
-        Debug.Log("essential index = " + startingDataContainer.GetEssectialIndex());
 
-        // Face에 붙는 Essential 이라면 
-        if (startingDataContainer.GetEssectialIndex() == (int)EssentialEquip.Face)
+        // 오리의 Idle 모션에 맞춰야 한다면
+        if (wd.needToSyncIdle)
         {
-            sr[startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비는 비활성화
             syncIdleAnim.SetIdleSync(true);
+        }
+        // 겹치지 않도록 Essential Weapon을 숨겨야 한다면
+        if (wd.hideEsentialEquipmentOnPlay)
+        {
+            sr[startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
         }
     }
 
@@ -83,7 +87,7 @@ public class Player : MonoBehaviour, IBouncable
             InputVec = Vector2.zero;
             return;
         }
-        
+
         Flip();
         UpdateAniamtionState();
     }
@@ -111,7 +115,7 @@ public class Player : MonoBehaviour, IBouncable
         }
         if (bouncingCoroutine != null)
             StopCoroutine(bouncingCoroutine);
-            
+
 #if UNITY_EDITOR
 
 #elif UNITY_ANDROID

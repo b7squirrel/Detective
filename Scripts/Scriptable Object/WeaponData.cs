@@ -60,4 +60,6 @@ public class WeaponData : ScriptableObject
     public List<UpgradeData> upgrades;
     public UpgradeData synergyUpgrade;
     public float dropChance; // 아이템 드랍 확률
+    public bool hideEsentialEquipmentOnPlay;
+    public bool needToSyncIdle;
 }
