@@ -227,7 +227,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if(isOffScreen)
             return;
 
-        anim.SetTrigger("Hit");
+        // anim.SetTrigger("Hit");
 
         Stats.hp -= damage;
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
@@ -239,7 +239,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (chance < knockBackChance && knockBackChance != 0)
         {
             knockBackDelay = 0.04f;
-            
         }
         WhiteFlash(whiteFlashDuration);
         KnockBack(target, knockBackDelay);
