@@ -16,8 +16,9 @@ MonoBehaviour:
   Name: Tesla
   charImage: {fileID: 21300000, guid: eaf127dc0e65ebd40a96900cba0e3b9d, type: 3}
   SynergyWeapon: "\uAD74\uC808\uD14C\uC2BE\uB77C\uC624\uB9AC"
-  CardCharAnimator:
+  Animators:
     CardImageAnim: {fileID: 9100000, guid: 3f5e6393ee74d2647a25660d988077db, type: 2}
+    InGamePlayerAnim: {fileID: 9100000, guid: 70c3689a5431d5c45bd3dd76c5a7961d, type: 2}
   weaponPrefab: {fileID: 6822868710250514242, guid: cced79b0b48cc454d829e8729681e188, type: 3}
   stats:
     damage: 30
@@ -37,3 +38,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c8bb3b576428de940b92ab01b7c39850, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: bed4ea6117f2e68499d6460ecf09ff91, type: 2}
   dropChance: 0
+  hideEssentialEquipmentOnPlay: 0
+  needToSyncIdle: 0

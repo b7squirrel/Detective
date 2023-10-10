@@ -74,7 +74,7 @@ public class Player : MonoBehaviour, IBouncable
             syncIdleAnim.SetIdleSync(true);
         }
         // 겹치지 않도록 Essential Weapon을 숨겨야 한다면
-        if (wd.hideEsentialEquipmentOnPlay)
+        if (wd.hideEssentialEquipmentOnPlay)
         {
             sr[startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
         }
