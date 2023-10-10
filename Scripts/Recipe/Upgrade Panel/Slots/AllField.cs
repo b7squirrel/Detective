@@ -65,7 +65,6 @@ public class AllField : MonoBehaviour
     public void ClearSlots()
     {
         int childCount = transform.childCount;
-        Debug.Log(childCount + "개의 제거 가능한 카드가 있습니다.");
         if(childCount == 0) return;
 
         for (int i = childCount - 1; i >= 0; i--)
@@ -75,7 +74,6 @@ public class AllField : MonoBehaviour
         }
 
         firstCardData = null;
-        Debug.Log(childCount + "개의 카드를 제거했습니다");
     }
     #endregion
 }

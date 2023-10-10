@@ -7,6 +7,7 @@ public class WeaponManager : MonoBehaviour
 {
     [SerializeField] Transform playerWeaponContainer;
     [SerializeField] WeaponData startingWeapon;
+    [SerializeField] Transform essentialContainer;
 
     Character character;
 
@@ -65,6 +66,11 @@ public class WeaponManager : MonoBehaviour
         if (level != null)
         {
             level.AddUpgradesIntoTheListOfAvailableUpgrades(weaponData.upgrades);
+        }
+
+        if (isInitialWeapon)
+        {
+            GetComponent<SyncIdleAnim>().Init(essentialContainer, container, weaponBase.transform);
         }
     }
     public void AddExtraWeaponTool(WeaponData weaponData, WeaponBase weaponBase)

@@ -42342,6 +42342,7 @@ GameObject:
   - component: {fileID: 1277960125}
   - component: {fileID: 1277960126}
   - component: {fileID: 1277960127}
+  - component: {fileID: 1277960128}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -42694,6 +42695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerWeaponContainer: {fileID: 1014603022}
   startingWeapon: {fileID: 11400000, guid: f3cad83072fe8e44db0c1b70c5a523bd, type: 2}
+  essentialContainer: {fileID: 1992867231}
 --- !u!114 &1277960122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42825,6 +42827,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1277960128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277960107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f79c43adc187ba4c8e5c6d05618f272, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  essential: {fileID: 0}
+  weaponContainer: {fileID: 0}
+  weapon: {fileID: 0}
 --- !u!1001 &1277994479
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,6 +13,8 @@ public class Player : MonoBehaviour, IBouncable
     Animator[] anim = new Animator[5];
     Character character;
 
+    SyncIdleAnim syncIdleAnim;
+
     [field: SerializeField]
     public float FacingDir { get; private set; } = 1f;
 
@@ -35,6 +37,8 @@ public class Player : MonoBehaviour, IBouncable
             anim[i] = sr[i].GetComponent<Animator>();
         }
         character = GetComponent<Character>();
+
+        syncIdleAnim = GetComponent<SyncIdleAnim>();
     }
     void Start()
     {
@@ -57,13 +61,19 @@ public class Player : MonoBehaviour, IBouncable
 
             sr[i + 1].GetComponent<Animator>().runtimeAnimatorController = iDatas[i].CardItemAnimator.CardImageAnim;
 
-            if(sr[i + 1].GetComponent<Animator>().runtimeAnimatorController == null)
+            if (sr[i + 1].GetComponent<Animator>().runtimeAnimatorController == null)
             {
-                sr[i+1].gameObject.SetActive(false);
+                sr[i + 1].gameObject.SetActive(false);
             }
         }
-        Debug.Log("essential indes = " + startingDataContainer.GetEssectialIndex());
-        sr[startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비는 비활성화
+        Debug.Log("essential index = " + startingDataContainer.GetEssectialIndex());
+
+        // Face에 붙는 Essential 이라면 
+        if (startingDataContainer.GetEssectialIndex() == (int)EssentialEquip.Face)
+        {
+            sr[startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비는 비활성화
+            syncIdleAnim.SetIdleSync(true);
+        }
     }
 
     void LateUpdate()
@@ -134,6 +144,8 @@ public class Player : MonoBehaviour, IBouncable
                 anim[i].SetBool("Walk", true);
                 anim[i].SetBool("Idle", false);
             }
+
+            syncIdleAnim.SetState(false);
         }
         else if (InputVec.magnitude < .01f)
         {
@@ -144,6 +156,8 @@ public class Player : MonoBehaviour, IBouncable
                 anim[i].SetBool("Walk", false);
                 anim[i].SetBool("Idle", true);
             }
+            Debug.Log("IN PLAYER. IDLE");
+            syncIdleAnim.SetState(true);
         }
     }
 
