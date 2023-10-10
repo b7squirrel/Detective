@@ -85,12 +85,11 @@ public class PunchWeapon : WeaponBase
     {
         if (isAttacking) return;
 
-        if (currentDir.x >= 0)
+        if (currentDir.x > 0)
         {
             sr.flipY = false;
-
         }
-        else
+        else if (currentDir.x < 0)
         {
             sr.flipY = true;
         }

@@ -129,6 +129,9 @@ public class Player : MonoBehaviour, IBouncable
         }
         for (int i = 0; i < sr.Length; i++)
         {
+            if (sr[i] == null)
+                continue;
+
             sr[i].flipX = FacingDir < 0;
         }
     }
@@ -145,7 +148,7 @@ public class Player : MonoBehaviour, IBouncable
                 anim[i].SetBool("Idle", false);
             }
 
-            syncIdleAnim.SetState(false);
+            syncIdleAnim.SetState(false, FacingDir);
         }
         else if (InputVec.magnitude < .01f)
         {
@@ -157,7 +160,7 @@ public class Player : MonoBehaviour, IBouncable
                 anim[i].SetBool("Idle", true);
             }
             Debug.Log("IN PLAYER. IDLE");
-            syncIdleAnim.SetState(true);
+            syncIdleAnim.SetState(true, FacingDir);
         }
     }
 

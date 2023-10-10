@@ -7,7 +7,7 @@ public class WeaponManager : MonoBehaviour
 {
     [SerializeField] Transform playerWeaponContainer;
     [SerializeField] WeaponData startingWeapon;
-    [SerializeField] Transform essentialContainer;
+    [SerializeField] Transform[] essentialContainers;
 
     Character character;
 
@@ -70,7 +70,7 @@ public class WeaponManager : MonoBehaviour
 
         if (isInitialWeapon)
         {
-            GetComponent<SyncIdleAnim>().Init(essentialContainer, container, weaponBase.transform);
+            GetComponent<SyncIdleAnim>().Init(essentialContainers, container, weaponBase.transform);
         }
     }
     public void AddExtraWeaponTool(WeaponData weaponData, WeaponBase weaponBase)
