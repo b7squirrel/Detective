@@ -63,7 +63,7 @@ public class EquipmentSlotsManager : MonoBehaviour
         Debug.Log("Get all card list numbers = " + cardDataManager.GetAllCardList().Count);
         Debug.Log("장비 카드 = " + _equipCardData.Name);
         // 해당 장비의 attribute 더해줌
-        if (new CheckIsEssentialItem().IsEssential(_equipCardData, cardDataManager.GetAllCardList()))
+        if (_equipCardData.EssentialEquip == EssentialEquip.Essential.ToString())
         {
             currentAttribute = new OriAttribute(addingFactor * Atk + currentAttribute.Atk, currentAttribute.Hp);
         }

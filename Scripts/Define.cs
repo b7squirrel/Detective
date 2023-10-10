@@ -14,7 +14,7 @@ public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // Target Slot to 
 public enum CardType { Weapon, Item, none }
 public enum Grade { Common, Rare, Epic, Unique, Legendary }
 public enum EquipmentType { Head, Chest, Face, Hand, Ori }
-public enum EssentialEquip { Head, Chest, Face, Hand, Default }
+public enum EssentialEquip { Head, Chest, Face, Hand, Essential }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
 public enum DefaultItem { Default }
 

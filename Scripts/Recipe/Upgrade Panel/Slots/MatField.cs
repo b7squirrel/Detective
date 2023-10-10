@@ -56,9 +56,8 @@ public class MatField : MonoBehaviour
 
             for (int i = 0; i < picked2.Count; i++)
             {
-                CardData charCard = myCardData.Find(x => x.Name == picked2[i].BindingTo);
                 EquipmentCard equipCard = cardList.FindEquipmentCard(picked2[i]);
-                if(charCard.EssentialEquip == picked2[i].EquipmentType && equipCard.IsEquipped)
+                if(picked2[i].EssentialEquip == EssentialEquip.Essential.ToString() && equipCard.IsEquipped)
                 {
                     picked.Remove(picked2[i]);
                 }

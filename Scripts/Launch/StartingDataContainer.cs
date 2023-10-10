@@ -46,7 +46,7 @@ public class StartingDataContainer : MonoBehaviour
             itemDatas.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
             itemDatasDebug.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
 
-            if (new CheckIsEssentialItem().IsEssential(equipCard[i].CardData, cardDataManager.GetAllCardList()))
+            if (equipCard[i].CardData.EssentialEquip == EssentialEquip.Essential.ToString())
             {
                 essectialEquipmentIndex = i;
                 essectialIndexDebug = i;

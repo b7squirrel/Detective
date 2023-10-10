@@ -35,23 +35,6 @@ public class Convert
         return -1;
     }
 }
-// Check if a specific equipment card is an essential card
-public class CheckIsEssentialItem
-{
-    public bool IsEssential(CardData equipmentCard, List<CardData> cardPool)
-    {
-        if (equipmentCard.BindingTo == "All")
-            return false;
-
-        CardData charCardData = cardPool.Find(x => x.Name == equipmentCard.BindingTo);
-        string essentialEquip = charCardData.EssentialEquip;
-        if (essentialEquip == equipmentCard.EquipmentType)
-        {
-            return true;
-        }
-        return false;
-    }
-}
 
 public class CardClassifier
 {
