@@ -14,7 +14,6 @@ public class StartingDataContainer : MonoBehaviour
     [SerializeField] List<Item> itemDatasDebug = new();
     [SerializeField] int essectialIndexDebug;
 
-    void Awake() => DontDestroyOnLoad(this);
     public void SetLead(CardData lead, OriAttribute leadAttr)
     {
         itemDatas.Clear();

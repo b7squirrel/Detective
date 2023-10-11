@@ -10382,6 +10382,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1307305261}
   - component: {fileID: 1307305262}
+  - component: {fileID: 1307305263}
   m_Layer: 0
   m_Name: StatContainer
   m_TagString: Untagged
@@ -10421,6 +10422,18 @@ MonoBehaviour:
   atk: 0
   itemDatasDebug: []
   essectialIndexDebug: 0
+--- !u!114 &1307305263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307305260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd328eedc9682984c9c463c1afab42f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1312497642
 GameObject:
   m_ObjectHideFlags: 0
@@ -11361,7 +11374,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1556187351
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 388563035, guid: 3adca712a7287eb40afd76c8c0e4a267, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
