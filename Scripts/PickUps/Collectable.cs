@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 습득 가능한 오브젝트의 행동들 정의
@@ -50,27 +49,13 @@ public class Collectable : MonoBehaviour
     {
         StopAllCoroutines();
         sr.material = initialMat;
-
-        if (IsGem) gemManager.RemoveVisibleGemFromList(transform);
     }
     protected void Awake()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
         initialMat = sr.material;
     }
-    protected void Update()
-    {
-        // if (sr.isVisible && IsGem)
-        // {
-        //     gemManager.AddVisibleGemToList(transform);
-        // }
-        // else if (sr.isVisible == false && IsGem)
-        // {
-        //     gemManager.RemoveVisibleGemFromList(transform);
-        // }
-
-        // TimeUP();
-    }
+    
     #endregion
 
     #region 자력에 닿았을 때

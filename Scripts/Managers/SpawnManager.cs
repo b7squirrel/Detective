@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -21,12 +19,13 @@ public class SpawnManager : MonoBehaviour
 
         if (isGem)
         {
-            if (gemManager.IsVisibleGemMax())
+            if (gemManager.IsMaxGemNumber()) // 보석이 일정량 이상 늘어나면
             {
-                gemManager.PutExpToPlayer(experience);
+                gemManager.IncreasePotentialExp(experience); // 임시로 경험치를 저장해 둠
                 return;
             }
             pickup = GameManager.instance.poolManager.GetGem(toSpawn, experience).transform;
+            gemManager.IncreaseGemCount(); // 보석 수 증가
         }
         else
         {

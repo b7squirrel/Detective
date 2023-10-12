@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 플레이어와 닿았을 때 OnPickup()호출
