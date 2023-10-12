@@ -47,6 +47,7 @@ public class MainMenu : MonoBehaviour
     {
         panelPause.SetActive(false);
         UnPause();
+        GameManager.instance.DestroyStartingData();
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 }

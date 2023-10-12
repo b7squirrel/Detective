@@ -92,15 +92,15 @@ public class Character : MonoBehaviour
         int KnockBackChanceLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.knockBackChance);
         this.knockBackChance += 0.1f * KnockBackChanceLevel * this.knockBackChance; // 레벱업 당 10% 증가
 
-        StartingDataContainer statContainer = FindObjectOfType<StartingDataContainer>();
-        if(statContainer == null)
+        GameManager.instance.startingDataContainer = FindObjectOfType<StartingDataContainer>();
+        if(GameManager.instance.startingDataContainer == null)
         {
             MaxHealth = 3000;
             DamageBonus = 0;
             return;
         }
-        MaxHealth = statContainer.GetLeadAttr().Hp;
-        DamageBonus = statContainer.GetLeadAttr().Atk;
+        MaxHealth = GameManager.instance.startingDataContainer.GetLeadAttr().Hp;
+        DamageBonus = GameManager.instance.startingDataContainer.GetLeadAttr().Atk;
     }
 
     public void TakeDamage(int damage)

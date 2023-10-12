@@ -24,11 +24,7 @@ public class WeaponManager : MonoBehaviour
 
     private void Start()
     {
-        StartingDataContainer startingContainer = FindObjectOfType<StartingDataContainer>();
-        if(startingContainer != null)
-        {
-            startingWeapon = startingContainer.GetLeadWeaponData();
-        }
+        startingWeapon = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         AddWeapon(startingWeapon, true);
     }
 

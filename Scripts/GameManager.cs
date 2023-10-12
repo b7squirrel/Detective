@@ -21,12 +21,14 @@ public class GameManager : MonoBehaviour
     public Collider2D cameraBoundary;
 
     public RectTransform CoinUIPosition;
+    public StartingDataContainer startingDataContainer;
 
     #region Unity CallBack Functions
     private void Awake()
     {
         instance = this;
         currentCamera = Camera.main;
+        startingDataContainer = FindObjectOfType<StartingDataContainer>();
     }
 
     void Update()
@@ -43,6 +45,10 @@ public class GameManager : MonoBehaviour
     public void SetPlayerDead()
     {
         IsPlayerDead = true;
+    }
+    public void DestroyStartingData()
+    {
+        Destroy(startingDataContainer.gameObject);
     }
 
     #region Option Input
