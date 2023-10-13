@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PauseManager : MonoBehaviour
 {
-
     void Start()
     {
         UnPauseGame();
@@ -13,11 +12,13 @@ public class PauseManager : MonoBehaviour
     public void PauseGame()
     {
         Time.timeScale = 0;
+        Player.instance.IsPauseing = true;
     }
 
     public void UnPauseGame()
     {
         Time.timeScale = 1;
+        Player.instance.IsPauseing = false;
     }
     public void SetTimeScale(float timeScale, float waitingTime)
     {

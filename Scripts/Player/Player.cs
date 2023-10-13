@@ -17,6 +17,7 @@ public class Player : MonoBehaviour, IBouncable
 
     [field: SerializeField]
     public float FacingDir { get; private set; } = 1f;
+    public bool IsPauseing { get; set; }
 
     [Header("Joystic")]
     public FloatingJoystick joy;
@@ -123,6 +124,8 @@ public class Player : MonoBehaviour, IBouncable
     }
     void Flip()
     {
+        if (IsPauseing) return;
+
         if (InputVec.x != 0 && InputVec.x * FacingDir < 0f)
         {
             FacingDir *= -1f;
@@ -137,6 +140,8 @@ public class Player : MonoBehaviour, IBouncable
     }
     void UpdateAniamtionState()
     {
+        if (IsPauseing) return;
+
         anim[0].SetFloat("Speed", InputVec.magnitude);
         if (InputVec.magnitude > .01f)
         {

@@ -57,6 +57,8 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (Player.instance.IsPauseing) return;
+
         SetAngle();
         RotateWeapon();
         RotateExtraWeapon();
@@ -258,6 +260,8 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void RotateWeapon()
     {
+        if (Player.instance.IsPauseing) return;
+
         if (weaponTools == null)
             return;
 
@@ -266,6 +270,8 @@ public class WeaponBase : MonoBehaviour
     }
     protected void RotateExtraWeapon()
     {
+        if (Player.instance.IsPauseing) return;
+
         if (weaponToolsExtra == null)
             return;
 
@@ -275,6 +281,8 @@ public class WeaponBase : MonoBehaviour
 
     protected void FlipChild()
     {
+        if (Player.instance.IsPauseing) return;
+
         if (direction.x < 0)
         {
             flip = true;
@@ -291,6 +299,8 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void FlipWeaponTools()
     {
+        if (Player.instance.IsPauseing) return;
+
         // flip
         if (weaponTools != null)
         {
