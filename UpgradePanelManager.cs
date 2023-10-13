@@ -122,5 +122,6 @@ public class UpgradePanelManager : MonoBehaviour
         HideButtons();
         greyBase.SetActive(false);
         panel.SetActive(false);
+        Player.instance.GetComponent<Level>().CheckLevelUp();
     }
 }

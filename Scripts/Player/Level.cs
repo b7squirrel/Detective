@@ -65,9 +65,11 @@ public class Level : MonoBehaviour
         experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
     }
 
-    void CheckLevelUp()
+    public void CheckLevelUp()
     {
-        if (experience >= To_Level_Up)
+        // 레벨업을 했는데도 경험치가 레벨업 경험치보다 높으면 계속 레벨업
+        // Upgrade Panel Manager에서 패널을 닫으면서 CheckLevelUp 호출
+        if (experience >= To_Level_Up) 
         {
             LevelUp();
         }
@@ -79,6 +81,7 @@ public class Level : MonoBehaviour
         {
             selectedUpgrads = new List<UpgradeData>();
         }
+
         selectedUpgrads.Clear();
         selectedUpgrads.AddRange(GetRandomUpgrades());
         experience -= To_Level_Up;
