@@ -60,7 +60,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         StopFlipCoroutine();
         isFlipping = false;
 
-        if (Target.position.x - transform.position.x > 0) 
+        if (Target.position.x - rb.transform.position.x > 0) 
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -152,7 +152,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     void ResetFlip()
     {
         StopFlipCoroutine();
-        if (Target.position.x - transform.position.x > 0) 
+        if (Target.position.x - rb.transform.position.x > 0) 
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -178,17 +178,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return;
         }
 
-        Vector2 dirVec = Target.position - (Vector2)transform.position;
+        Vector2 dirVec = Target.position - (Vector2)rb.transform.position;
         if(IsGrouping)
         {
             // dirVec = groupDir;
             rb.velocity = Stats.speed * GroupDir;
-            Debug.DrawRay(transform.position, GroupDir * 5f);
             return;
         }
 
         Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
-        rb.MovePosition((Vector2)transform.position + nextVec);
+        rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
     #endregion
