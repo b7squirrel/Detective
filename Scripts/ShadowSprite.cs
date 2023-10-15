@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShadowSprite : MonoBehaviour
 {
-    Vector2 offset = new Vector2(.17f, -.17f);
+    Vector2 offset = new Vector2(.17f, -.3f);
 
     SpriteRenderer sprRndCaster;
     SpriteRenderer sprRndshadow;
@@ -26,7 +26,7 @@ public class ShadowSprite : MonoBehaviour
         sprRndshadow = transShadow.gameObject.AddComponent<SpriteRenderer>();
 
         
-        sprRndshadow.color = new Color(0, 0, 0, .5f);
+        sprRndshadow.color = new Color(0, 0, .2f, .7f);
         // sprRndshadow.sortingLayerName = "Shadow";
         sprRndshadow.sortingLayerName = sprRndCaster.sortingLayerName;
         sprRndshadow.sortingOrder = sprRndCaster.sortingOrder - 1;
