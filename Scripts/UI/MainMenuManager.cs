@@ -12,6 +12,8 @@ public class MainMenuManager : MonoBehaviour
     float[] pos = new float[SIZE];
     const int SIZE = 5;
     int targetIndex;
+
+    Animator[] tabAnims = new Animator[5];
     
     void Awake()
     {
@@ -24,6 +26,11 @@ public class MainMenuManager : MonoBehaviour
         for (int i = 0; i < tabPanels.Length; i++)
         {
             tabPanels[i].SetActive(false);
+        }
+
+        for (int i = 0; i < BtnImageRect.Length; i++)
+        {
+            tabAnims[i] = BtnImageRect[i].GetComponent<Animator>();
         }
     }
 
@@ -40,14 +47,19 @@ public class MainMenuManager : MonoBehaviour
         {
             Vector3 BtnTargetPos = BtnRect[i].anchoredPosition3D;
             Vector3 BtnTargetScale = Vector3.one;
-            bool textActive = false;
+            bool textActive = true;
+
+            tabAnims[i].SetBool("Up", false);
+            tabAnims[i].SetBool("Idle", true);
 
 
             if (i == targetIndex)
             {
                 BtnTargetPos.y = -23f;
                 BtnTargetScale = new Vector3(1.7f, 1.7f, 1);
-                textActive = true;
+                tabAnims[i].SetBool("Up", true);
+                tabAnims[i].SetBool("Idle", false);
+                textActive = false;
             }
 
             BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, .5f);
