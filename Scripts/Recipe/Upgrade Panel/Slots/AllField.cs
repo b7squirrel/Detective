@@ -42,9 +42,7 @@ public class AllField : MonoBehaviour
         // 내림차순으로 카드 정렬 
         cardDataSorted.Sort((a, b) =>
         {
-            int indexA = new Convert().GradeToInt(a.Grade);
-            int indexB = new Convert().GradeToInt(b.Grade);
-            return indexA.CompareTo(indexB);
+            return new Sort().ByGrade(a, b);
         });
 
         cardDataSorted.Reverse();
