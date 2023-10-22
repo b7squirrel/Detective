@@ -5,6 +5,7 @@ public class SyncIdleAnim : MonoBehaviour
 {
     // debug용으로 직렬화
     [SerializeField] List<Transform> essentialContainers;
+    [SerializeField] Transform essentialContainerParent;
     [SerializeField] Transform weaponContainer;
     [SerializeField] Transform weapon;
     bool isIdle;
@@ -15,7 +16,7 @@ public class SyncIdleAnim : MonoBehaviour
     {
         if (isIdle)
         {
-            weapon.position = essentialContainers[index].position;
+            weapon.position = essentialContainers[0].position;
             Debug.Log("In Sync - IDle");
         }
         else
@@ -43,9 +44,12 @@ public class SyncIdleAnim : MonoBehaviour
         if(dir > 0)
         {
             index = 0;
+            essentialContainerParent.eulerAngles = new Vector3(0, 0, 0);
         }
         else
         {
+            essentialContainerParent.eulerAngles = new Vector3(0, 180f, 0);
+
             index = 1;
         }
     }
