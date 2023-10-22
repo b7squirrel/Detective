@@ -17,19 +17,15 @@ public class SyncIdleAnim : MonoBehaviour
         if (isIdle)
         {
             weapon.position = essentialContainers[0].position;
-            Debug.Log("In Sync - IDle");
         }
         else
         {
             weapon.position = weaponContainer.position;
-            Debug.Log("In Sync - Walk");
-
         }
     }
     public void Init(Transform[] _essentials, Transform _weaponcontainer, Transform _weapon)
     {
         if(essentialContainers == null) essentialContainers = new();
-        Debug.Log("INIT IN SYNC");
         essentialContainers.AddRange(_essentials);
         weaponContainer = _weaponcontainer;
         weapon = _weapon;
@@ -37,10 +33,6 @@ public class SyncIdleAnim : MonoBehaviour
 
     public void SetState(bool isIdle, float dir)
     {
-        if (needToSync == false)
-            return;
-        this.isIdle = isIdle;
-        
         if(dir > 0)
         {
             index = 0;
@@ -49,9 +41,12 @@ public class SyncIdleAnim : MonoBehaviour
         else
         {
             essentialContainerParent.eulerAngles = new Vector3(0, 180f, 0);
-
             index = 1;
         }
+
+        if (needToSync == false)
+            return;
+        this.isIdle = isIdle;
     }
 
     public void SetIdleSync(bool needToSync)

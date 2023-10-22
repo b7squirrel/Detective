@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine.Video;
 
 public class Player : MonoBehaviour, IBouncable
 {
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour, IBouncable
     Character character;
 
     SyncIdleAnim syncIdleAnim;
+    [SerializeField] Transform essentialContainer;
 
     [field: SerializeField]
     public float FacingDir { get; private set; } = 1f;
@@ -62,6 +64,12 @@ public class Player : MonoBehaviour, IBouncable
             if (sr[i + 1].GetComponent<Animator>().runtimeAnimatorController == null)
             {
                 sr[i + 1].gameObject.SetActive(false);
+            }
+
+            if (i < 3)
+            {
+                sr[i + 1].GetComponent<Transform>().SetParent(essentialContainer);
+                sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
             }
         }
 
@@ -132,8 +140,9 @@ public class Player : MonoBehaviour, IBouncable
         }
         for (int i = 0; i < sr.Length; i++)
         {
-            if (sr[i] == null)
-                continue;
+            if (sr[i] == null) continue;
+
+            if (i > 0 && i < 4) continue;
 
             sr[i].flipX = FacingDir < 0;
         }
@@ -152,7 +161,6 @@ public class Player : MonoBehaviour, IBouncable
                 anim[i].SetBool("Walk", true);
                 anim[i].SetBool("Idle", false);
             }
-
             syncIdleAnim.SetState(false, FacingDir);
         }
         else if (InputVec.magnitude < .01f)
@@ -164,7 +172,6 @@ public class Player : MonoBehaviour, IBouncable
                 anim[i].SetBool("Walk", false);
                 anim[i].SetBool("Idle", true);
             }
-            Debug.Log("IN PLAYER. IDLE");
             syncIdleAnim.SetState(true, FacingDir);
         }
     }
