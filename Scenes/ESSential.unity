@@ -50861,7 +50861,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1516664208}
   - component: {fileID: 1516664210}
-  - component: {fileID: 1516664209}
   m_Layer: 8
   m_Name: Chest
   m_TagString: Untagged
@@ -50884,27 +50883,6 @@ Transform:
   m_Father: {fileID: 312285042}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1516664209
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1516664207}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &1516664210
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -52132,7 +52110,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1548711301}
   - component: {fileID: 1548711303}
-  - component: {fileID: 1548711302}
   m_Layer: 8
   m_Name: Face
   m_TagString: Untagged
@@ -52155,27 +52132,6 @@ Transform:
   m_Father: {fileID: 312285042}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1548711302
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1548711300}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &1548711303
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -58485,7 +58441,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1761144441}
   - component: {fileID: 1761144443}
-  - component: {fileID: 1761144442}
   m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
@@ -58508,27 +58463,6 @@ Transform:
   m_Father: {fileID: 312285042}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1761144442
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1761144440}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!212 &1761144443
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -66282,7 +66216,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2046821376}
   - component: {fileID: 2046821374}
-  - component: {fileID: 2046821375}
   m_Layer: 8
   m_Name: Hand
   m_TagString: Untagged
@@ -66342,27 +66275,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &2046821375
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2046821373}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &2046821376
 Transform:
   m_ObjectHideFlags: 0
@@ -67636,7 +67548,7 @@ SpriteRenderer:
   m_SortingLayerID: -231762679
   m_SortingLayer: 10
   m_SortingOrder: 0
-  m_Sprite: {fileID: -629809687, guid: 6ec795deca42ada4cabd883703c1b223, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3a80fe01ce2753140b1270b91e00b67f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0

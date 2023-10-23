@@ -11,7 +11,7 @@ public class Player : MonoBehaviour, IBouncable
     Vector2 pastInputVec;
     Rigidbody2D rb;
     [SerializeField] SpriteRenderer[] sr;
-    Animator[] anim = new Animator[5];
+    Animator anim;
     Character character;
 
     SyncIdleAnim syncIdleAnim;
@@ -34,11 +34,8 @@ public class Player : MonoBehaviour, IBouncable
     {
         instance = this;
         rb = GetComponent<Rigidbody2D>();
-        anim[0] = GetComponent<Animator>();
-        for (int i = 1; i < anim.Length; i++)
-        {
-            anim[i] = sr[i].GetComponent<Animator>();
-        }
+        anim = GetComponent<Animator>();
+        
         character = GetComponent<Character>();
 
         syncIdleAnim = GetComponent<SyncIdleAnim>();
@@ -46,7 +43,7 @@ public class Player : MonoBehaviour, IBouncable
     void Start()
     {
         WeaponData wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
-        anim[0].runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
+        anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
         List<Item> iDatas =  GameManager.instance.startingDataContainer.GetItemDatas();
 
@@ -55,19 +52,12 @@ public class Player : MonoBehaviour, IBouncable
             if (iDatas[i] == null)
             {
                 sr[i + 1].gameObject.SetActive(false);
-                anim[i + 1].gameObject.SetActive(false);
                 continue;
-            }
-
-            sr[i + 1].GetComponent<Animator>().runtimeAnimatorController = iDatas[i].CardItemAnimator.CardImageAnim;
-
-            if (sr[i + 1].GetComponent<Animator>().runtimeAnimatorController == null)
-            {
-                sr[i + 1].gameObject.SetActive(false);
             }
 
             if (i < 3)
             {
+            sr[i + 1].sprite = iDatas[i].charImage;
                 sr[i + 1].GetComponent<Transform>().SetParent(essentialContainer);
                 sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
             }
@@ -151,27 +141,13 @@ public class Player : MonoBehaviour, IBouncable
     {
         if (IsPauseing) return;
 
-        anim[0].SetFloat("Speed", InputVec.magnitude);
+        anim.SetFloat("Speed", InputVec.magnitude);
         if (InputVec.magnitude > .01f)
         {
-            for (int i = 1; i < 5; i++)
-            {
-                if (anim[i].gameObject.activeSelf == false)
-                    continue;
-                anim[i].SetBool("Walk", true);
-                anim[i].SetBool("Idle", false);
-            }
             syncIdleAnim.SetState(false, FacingDir);
         }
         else if (InputVec.magnitude < .01f)
         {
-            for (int i = 1; i < 5; i++)
-            {
-                if (anim[i].gameObject.activeSelf == false)
-                    continue;
-                anim[i].SetBool("Walk", false);
-                anim[i].SetBool("Idle", true);
-            }
             syncIdleAnim.SetState(true, FacingDir);
         }
     }
@@ -198,7 +174,7 @@ public class Player : MonoBehaviour, IBouncable
     #region OnDead Event
     public void Die()
     {
-        anim[0].SetTrigger("Dead");
+        anim.SetTrigger("Dead");
         rb.mass = 10000f;
     }
     #endregion

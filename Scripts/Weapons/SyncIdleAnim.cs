@@ -10,18 +10,12 @@ public class SyncIdleAnim : MonoBehaviour
     [SerializeField] Transform weapon;
     bool isIdle;
     bool needToSync;
-    int index;
 
     void Update()
     {
-        if (isIdle)
-        {
-            weapon.position = essentialContainers[0].position;
-        }
-        else
-        {
-            weapon.position = weaponContainer.position;
-        }
+        weapon.position = essentialContainers[0].position;
+        weapon.rotation = essentialContainers[0].rotation;
+        
     }
     public void Init(Transform[] _essentials, Transform _weaponcontainer, Transform _weapon)
     {
@@ -35,13 +29,11 @@ public class SyncIdleAnim : MonoBehaviour
     {
         if(dir > 0)
         {
-            index = 0;
             essentialContainerParent.eulerAngles = new Vector3(0, 0, 0);
         }
         else
         {
             essentialContainerParent.eulerAngles = new Vector3(0, 180f, 0);
-            index = 1;
         }
 
         if (needToSync == false)
