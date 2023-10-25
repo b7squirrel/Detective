@@ -45,7 +45,7 @@ public class Player : MonoBehaviour, IBouncable
         WeaponData wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
-        List<Item> iDatas =  GameManager.instance.startingDataContainer.GetItemDatas();
+        List<Item> iDatas = GameManager.instance.startingDataContainer.GetItemDatas();
 
         for (int i = 0; i < 4; i++)
         {
@@ -57,9 +57,9 @@ public class Player : MonoBehaviour, IBouncable
 
             if (i < 3)
             {
-            sr[i + 1].sprite = iDatas[i].charImage;
-                sr[i + 1].GetComponent<Transform>().SetParent(essentialContainer);
-                sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
+                sr[i + 1].sprite = iDatas[i].charImage;
+                // sr[i + 1].GetComponent<Transform>().SetParent(essentialContainer);
+                // sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
             }
         }
 

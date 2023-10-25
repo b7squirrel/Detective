@@ -13,13 +13,15 @@ public class SyncIdleAnim : MonoBehaviour
 
     void Update()
     {
-        weapon.position = essentialContainers[0].position;
-        weapon.rotation = essentialContainers[0].rotation;
-        
+        if (needToSync)
+        {
+            weapon.position = essentialContainers[0].position;
+            weapon.rotation = essentialContainers[0].rotation;
+        }
     }
     public void Init(Transform[] _essentials, Transform _weaponcontainer, Transform _weapon)
     {
-        if(essentialContainers == null) essentialContainers = new();
+        if (essentialContainers == null) essentialContainers = new();
         essentialContainers.AddRange(_essentials);
         weaponContainer = _weaponcontainer;
         weapon = _weapon;
