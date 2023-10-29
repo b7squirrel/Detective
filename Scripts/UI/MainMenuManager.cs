@@ -64,7 +64,7 @@ public class MainMenuManager : MonoBehaviour
 
             BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, .5f);
             BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .5f);
-            BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(textActive);
+            // BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(textActive);
             tabPanels[i].SetActive(i == targetIndex);
 
         }
