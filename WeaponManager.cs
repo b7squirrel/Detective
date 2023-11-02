@@ -7,7 +7,7 @@ public class WeaponManager : MonoBehaviour
 {
     [SerializeField] Transform playerWeaponContainer;
     [SerializeField] WeaponData startingWeapon;
-    [SerializeField] Transform[] essentialContainers;
+    [SerializeField] Transform faceGroupToFollow;
 
     Character character;
 
@@ -66,7 +66,7 @@ public class WeaponManager : MonoBehaviour
 
         if (isInitialWeapon)
         {
-            GetComponent<SyncIdleAnim>().Init(essentialContainers, container, weaponBase.transform);
+            GetComponent<SyncIdleAnim>().Init(faceGroupToFollow, container, weaponBase.transform);
         }
     }
     public void AddExtraWeaponTool(WeaponData weaponData, WeaponBase weaponBase)

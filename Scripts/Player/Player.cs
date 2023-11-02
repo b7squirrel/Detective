@@ -11,11 +11,12 @@ public class Player : MonoBehaviour, IBouncable
     Vector2 pastInputVec;
     Rigidbody2D rb;
     [SerializeField] SpriteRenderer[] sr;
+    [SerializeField] Transform spriteGroup;
     Animator anim;
     Character character;
 
     SyncIdleAnim syncIdleAnim;
-    [SerializeField] Transform essentialContainer;
+    [SerializeField] Transform faceGroup;
 
     [field: SerializeField]
     public float FacingDir { get; private set; } = 1f;
@@ -45,7 +46,7 @@ public class Player : MonoBehaviour, IBouncable
         WeaponData wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
-        List<Item> iDatas = GameManager.instance.startingDataContainer.GetItemDatas();
+        List<Item> iDatas =  GameManager.instance.startingDataContainer.GetItemDatas();
 
         for (int i = 0; i < 4; i++)
         {
@@ -57,9 +58,9 @@ public class Player : MonoBehaviour, IBouncable
 
             if (i < 3)
             {
-                sr[i + 1].sprite = iDatas[i].charImage;
-                // sr[i + 1].GetComponent<Transform>().SetParent(essentialContainer);
-                // sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
+            sr[i + 1].sprite = iDatas[i].charImage;
+                sr[i + 1].GetComponent<Transform>().SetParent(faceGroup);
+                sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
             }
         }
 
@@ -128,14 +129,24 @@ public class Player : MonoBehaviour, IBouncable
         {
             FacingDir *= -1f;
         }
-        for (int i = 0; i < sr.Length; i++)
+
+        if(FacingDir < 0) 
         {
-            if (sr[i] == null) continue;
-
-            if (i > 0 && i < 4) continue;
-
-            sr[i].flipX = FacingDir < 0;
+            spriteGroup.eulerAngles = new Vector3(0, 180f, 0);
         }
+        else
+        {
+            spriteGroup.eulerAngles = new Vector3(0, 0, 0);
+        }
+
+        // for (int i = 0; i < sr.Length; i++)
+        // {
+        //     if (sr[i] == null) continue;
+
+        //     if (i > 0 && i < 4) continue;
+
+        //     sr[i].flipX = FacingDir < 0;
+        // }
     }
     void UpdateAniamtionState()
     {

@@ -617,7 +617,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 599.66504, y: -70.97}
-  m_SizeDelta: {x: 158.57143, y: 177.14285}
+  m_SizeDelta: {x: 136.15, y: 136.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &62741975
 MonoBehaviour:
@@ -659,7 +659,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2182a9bd35e4f3f41b9203c0fec9a289, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 894bf826070757f4c9157562f111a1f1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -687,7 +687,7 @@ Animator:
   m_GameObject: {fileID: 62741973}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: cc19677fa0d8aa04f8fa44a7ccf953f4, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1985,7 +1985,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &162923776
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6011,7 +6011,7 @@ Animator:
   m_GameObject: {fileID: 770947168}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 10c8dc389179d8f409fc61cb9b0f2b2e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5cddaba5f5092744d90f13424a548b7f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -7702,7 +7702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &965344238
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8968,7 +8968,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1094231461
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9289,10 +9289,6 @@ PrefabInstance:
       propertyPath: m_EffectDistance.y
       value: -9
       objectReference: {fileID: 0}
-    - target: {fileID: 3701871183720965522, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5142675147805730034, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
       propertyPath: m_Name
       value: LaunchSlot
@@ -9301,10 +9297,6 @@ PrefabInstance:
       propertyPath: m_EffectDistance.y
       value: -7
       objectReference: {fileID: 0}
-    - target: {fileID: 6898327244481666464, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
 --- !u!1 &1116856404
@@ -10944,7 +10936,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1375445094
 RectTransform:
   m_ObjectHideFlags: 0
