@@ -46,7 +46,7 @@ public class Player : MonoBehaviour, IBouncable
         WeaponData wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
-        List<Item> iDatas =  GameManager.instance.startingDataContainer.GetItemDatas();
+        List<Item> iDatas = GameManager.instance.startingDataContainer.GetItemDatas();
 
         for (int i = 0; i < 4; i++)
         {
@@ -58,9 +58,9 @@ public class Player : MonoBehaviour, IBouncable
 
             if (i < 3)
             {
-            sr[i + 1].sprite = iDatas[i].charImage;
+                sr[i + 1].sprite = iDatas[i].charImage;
                 sr[i + 1].GetComponent<Transform>().SetParent(faceGroup);
-                sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
+                // sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
             }
         }
 
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour, IBouncable
         // 겹치지 않도록 Essential Weapon을 숨겨야 한다면
         if (wd.hideEssentialEquipmentOnPlay)
         {
-            sr[ GameManager.instance.startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
+            sr[GameManager.instance.startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
         }
     }
 
