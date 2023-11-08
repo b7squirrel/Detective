@@ -19,6 +19,9 @@ public enum EssentialEquip { Head, Chest, Face, Hand, Essential }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
 public enum DefaultItem { Default }
 
+
+// Slot Pooling
+public enum Slots { CardSlot, LaunchSlot, EquipSlot }
 public class MyGrade
 {
     public static int Common = 0;
