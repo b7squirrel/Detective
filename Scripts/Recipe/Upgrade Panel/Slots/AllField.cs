@@ -7,12 +7,19 @@ public class AllField : MonoBehaviour
     #region 참조 변수
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] SetCardDataOnSlot displayCardOnSlot;
+    [SerializeField] SlotPool slotPool;
     #endregion
 
     #region 슬롯 생성 관련 변수
     int numSlots;
     [SerializeField] GameObject slotPrefab;
+    [SerializeField] Slots slotType;
     #endregion
+
+    void OnDisable()
+    {
+        ClearSlots();
+    }
 
     #region Refresh
     public void GenerateAllCardsOfType(List<CardData> cardList)
@@ -28,10 +35,13 @@ public class AllField : MonoBehaviour
         for (int i = 0; i < numSlots; i++)
         {
             var slot = Instantiate(slotPrefab, transform);
+            // var slot = slotPool.GetSlot(slotType, transform);
             slot.transform.position = Vector3.zero;
             slot.transform.localScale = new Vector2(0, 0);
             slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
             slots.Add(slot);
+
+            Debug.Log("슬롯 타입 = " + slotType);
         }
 
         // 카드 데이터 정렬
@@ -62,6 +72,7 @@ public class AllField : MonoBehaviour
         {
             Transform child = transform.GetChild(i);
             Destroy(child.gameObject);
+            // slotPool.ReturnToPool(child);
         }
     }
     #endregion

@@ -21,7 +21,7 @@ public enum DefaultItem { Default }
 
 
 // Slot Pooling
-public enum Slots { CardSlot, LaunchSlot, EquipSlot }
+public enum Slots { CardSlot, EquipSlot, LaunchSlot }
 public class MyGrade
 {
     public static int Common = 0;

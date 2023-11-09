@@ -33,8 +33,16 @@ public class SlotPool : MonoBehaviour
         slotFoler.transform.parent = transform;
     }
 
-    public GameObject GetSlot(int index, Transform _transform)
+    public GameObject GetSlot(Slots _slotType, Transform _transform)
     {
+        int index = -1;
+        if (_slotType == Slots.CardSlot)
+            index = 0;
+        if (_slotType == Slots.EquipSlot)
+            index = 1;
+        if (_slotType == Slots.LaunchSlot)
+            index = 2;
+
         GameObject select = null;
 
         // 선택된 풀에 놀고 있는 게임 오브젝트 접근
