@@ -37,8 +37,9 @@ public class AllField : MonoBehaviour
             var slot = Instantiate(slotPrefab, transform);
             // var slot = slotPool.GetSlot(slotType, transform);
             slot.transform.position = Vector3.zero;
-            slot.transform.localScale = new Vector2(0, 0);
-            slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
+            // slot.transform.localScale = new Vector2(0, 0);
+            // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
+            slot.transform.localScale = new Vector2(.5f, .5f);
             slots.Add(slot);
 
             Debug.Log("슬롯 타입 = " + slotType);
