@@ -7,7 +7,7 @@ public class WeaponContainer : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] List<Transform> weaponContainers; // 각각의 아이들, weaponBase 및 무기 스크립트가 붙는 오브젝트
     Player player;
-    GameObject weaponContainerContainer; // 아이들을 묶어주는 부모 오브젝트
+    GameObject weaponContainerGroup; // 아이들을 묶어주는 부모 오브젝트
 
     private void Awake()
     {
@@ -17,11 +17,11 @@ public class WeaponContainer : MonoBehaviour
 
     void Start()
     {
-        if (weaponContainerContainer == null)
+        if (weaponContainerGroup == null)
         {
-            weaponContainerContainer = new GameObject();
-            weaponContainerContainer.transform.position = Vector3.zero;
-            weaponContainerContainer.name = "WeaponContainers";
+            weaponContainerGroup = new GameObject();
+            weaponContainerGroup.transform.position = Vector3.zero;
+            weaponContainerGroup.name = "WeaponContainerGroup";
         }
     }
     void Update()
@@ -51,7 +51,7 @@ public class WeaponContainer : MonoBehaviour
         }
         else
         {
-            container.SetParent(weaponContainerContainer.transform);
+            container.SetParent(weaponContainerGroup.transform);
 
             // if (weaponData.animatorController != null)
             //     container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
