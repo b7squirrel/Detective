@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 [Serializable]
@@ -53,6 +52,7 @@ public class WeaponData : ScriptableObject
     public Sprite charImage;
     public string SynergyWeapon;
     public AnimatorData Animators;
+    public Sprite DefaultHead, DefaultChest, DefaultFace, DefaultHand;
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
     public GameObject weaponBasePrefab;

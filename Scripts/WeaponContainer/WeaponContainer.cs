@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class WeaponContainer : MonoBehaviour
@@ -8,6 +9,7 @@ public class WeaponContainer : MonoBehaviour
     [SerializeField] List<Transform> weaponContainers; // 각각의 아이들, weaponBase 및 무기 스크립트가 붙는 오브젝트
     Player player;
     GameObject weaponContainerGroup; // 아이들을 묶어주는 부모 오브젝트
+    List<WeaponContainerAnim> weaponContainerAnims; // 아이들의 방향에 접근하기 위해
 
     private void Awake()
     {
@@ -23,6 +25,7 @@ public class WeaponContainer : MonoBehaviour
             weaponContainerGroup.transform.position = Vector3.zero;
             weaponContainerGroup.name = "WeaponContainerGroup";
         }
+        
     }
     void Update()
     {
@@ -38,16 +41,22 @@ public class WeaponContainer : MonoBehaviour
         {
             weaponContainers[i].position =
                 Vector2.Lerp(weaponContainers[i].position, weaponContainers[i - 1].position, moveSpeed * Time.deltaTime);
+
+            weaponContainerAnims[i - 1].FacingRight = 
+                (weaponContainers[i - 1].position.x - weaponContainers[i].position.x) > 0;
         }
     }
 
-    public Transform CreateContainer(WeaponData weaponData, bool isInitialWeapon)
+    public Transform CreateContainer(WeaponData wd, bool isInitialWeapon)
     {
         Transform container = Instantiate(containerPrefab, transform.position, Quaternion.identity);
+        container.gameObject.name = wd.Name;
+        weaponContainers.Add(container);
+
         if (isInitialWeapon)
         {
             container.SetParent(transform);
-            container.GetComponent<Animator>().enabled = false;            
+            container.GetComponent<Animator>().enabled = false;
         }
         else
         {
@@ -55,11 +64,13 @@ public class WeaponContainer : MonoBehaviour
 
             // if (weaponData.animatorController != null)
             //     container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
+            if (weaponContainerAnims == null) weaponContainerAnims = new List<WeaponContainerAnim>();
+            WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
+            weaponContainerAnims.Add(wa);
+            wa.SetEquipmentSprites(wd.Animators.InGamePlayerAnim, wd.DefaultHead, wd.DefaultChest, wd.DefaultFace, wd.DefaultHand);
         }
-        container.gameObject.name = weaponData.Name;
-        weaponContainers.Add(container);
-        SetSortingOrder();
 
+        SetSortingOrder();
         return container;
     }
 

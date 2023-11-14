@@ -21,6 +21,7 @@ public class ShadowSprite : MonoBehaviour
         transShadow.parent = transCaster;
         transShadow.gameObject.name = "Shadow";
         transShadow.localRotation = Quaternion.identity;
+        transShadow.localScale = transCaster.localScale;
 
         sprRndCaster = GetComponent<SpriteRenderer>();
         sprRndshadow = transShadow.gameObject.AddComponent<SpriteRenderer>();
