@@ -53,32 +53,32 @@ public class Player : MonoBehaviour, IBouncable
         iDatas = GameManager.instance.startingDataContainer.GetItemDatas();
 
 
-        // for (int i = 0; i < 4; i++)
-        // {
-        //     if (iDatas[i] == null)
-        //     {
-        //         sr[i + 1].gameObject.SetActive(false);
-        //         continue;
-        //     }
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    if (iDatas[i] == null)
+        //    {
+        //        sr[i + 1].gameObject.SetActive(false);
+        //        continue;
+        //    }
 
-        //     if (i < 3)
-        //     {
-        //         sr[i + 1].sprite = iDatas[i].charImage;
-        //         sr[i + 1].GetComponent<Transform>().SetParent(faceGroup);
-        //         // sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
-        //     }
-        // }
+        //    if (i < 3)
+        //    {
+        //        sr[i + 1].sprite = iDatas[i].charImage;
+        //        sr[i + 1].GetComponent<Transform>().SetParent(faceGroup);
+        //        // sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
+        //    }
+        //}
 
-        // // 오리의 Idle 모션에 맞춰야 한다면
-        // if (wd.needToSyncIdle)
-        // {
-        //     syncIdleAnim.SetIdleSync(true);
-        // }
-        // // 겹치지 않도록 Essential Weapon을 숨겨야 한다면
-        // if (wd.hideEssentialEquipmentOnPlay)
-        // {
-        //     sr[GameManager.instance.startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
-        // }
+        // 오리의 Idle 모션에 맞춰야 한다면
+        if (wd.needToSyncIdle)
+        {
+            syncIdleAnim.SetIdleSync(true);
+        }
+        //// 겹치지 않도록 Essential Weapon을 숨겨야 한다면
+        //if (wd.hideEssentialEquipmentOnPlay)
+        //{
+        //    sr[GameManager.instance.startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
+        //}
     }
 
     void LateUpdate()

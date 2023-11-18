@@ -58,14 +58,19 @@ public class WeaponContainer : MonoBehaviour
 
     public Transform CreateContainer(WeaponData wd, List<Item> iData, bool isInitialWeapon)
     {
+        // weapon container 생성하고 컨테이너 관리 리스트에 추가함
         Transform container = Instantiate(containerPrefab, transform.position, Quaternion.identity);
         container.gameObject.name = wd.Name;
         weaponContainers.Add(container);
 
+        // weapon container anim 컴포넌트를 가져오고 관리 리스트에 추가함
         if (weaponContainerAnims == null) weaponContainerAnims = new List<WeaponContainerAnim>();
         WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
         weaponContainerAnims.Add(wa);
 
+        // 대장 오리에 붙는 무기인지 아닌지 구별해서 부모 설정
+        // weapon data와 item data를 container anim에 넘겨줌
+        // 아이들 오리는 정해진 default 복장이기 때문데 넘겨줄 item data가 없다
         if (isInitialWeapon)
         {
             container.SetParent(transform);
@@ -76,7 +81,6 @@ public class WeaponContainer : MonoBehaviour
             container.SetParent(weaponContainerGroup.transform);
             wa.SetEquipmentSprites(wd);
         }
-
 
         SetSortingOrder();
         return container;
