@@ -63,7 +63,6 @@ public class WeaponBase : MonoBehaviour
         RotateWeapon();
         RotateExtraWeapon();
 
-        FlipChild();
         FlipWeaponTools();
 
         timer -= Time.deltaTime;
@@ -277,24 +276,6 @@ public class WeaponBase : MonoBehaviour
 
         if (weaponToolsExtra.IsDirectional)
             weaponToolsExtra.transform.rotation = Quaternion.Euler(0, 0, angleExtra);
-    }
-
-    protected void FlipChild()
-    {
-        if (Player.instance.IsPauseing) return;
-
-        if (direction.x < 0)
-        {
-            flip = true;
-        }
-        else
-        {
-            flip = false;
-        }
-
-        weaponContainerAnim.Flip(flip);
-
-        //개별 무기 flip
     }
 
     protected virtual void FlipWeaponTools()

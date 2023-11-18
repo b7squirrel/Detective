@@ -1,10 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponContainerAnim : MonoBehaviour
 {
     Animator anim;
-    SpriteRenderer sr;
-    Vector2 pastPosition, currentPosition;
     [SerializeField] SpriteRenderer body, head, chest, face, hands;
     [SerializeField] Transform spriteGroup;
     [SerializeField] Animator costume;
@@ -22,35 +21,64 @@ public class WeaponContainerAnim : MonoBehaviour
     void OnEnable()
     {
         anim = GetComponent<Animator>();
-        sr = GetComponent<SpriteRenderer>();
     }
     public void Init(RuntimeAnimatorController animCon)
     {
         anim.runtimeAnimatorController = animCon;
     }
-    public void SetEquipmentSprites(RuntimeAnimatorController _anim, Sprite _head, Sprite _chest, Sprite _face, Sprite _hands)
+    public void SetEquipmentSprites(WeaponData wd)
     {
-        anim.runtimeAnimatorController = _anim;
-        head.sprite = _head;
-        chest.sprite = _chest;
-        face.sprite = _face;
-        hands.sprite = _hands;
+        anim.runtimeAnimatorController = wd.animatorController;
+        head.sprite = wd.DefaultHead;
+        chest.sprite = wd.DefaultChest;
+        face.sprite = wd.DefaultFace;
+        hands.sprite = wd.DefaultHand;
+    }
+    public void SetPlayerEquipmentSprites(WeaponData wd, List<Item> itemDatas)
+    {
+        anim.runtimeAnimatorController = wd.animatorController;
+        if (itemDatas[0] == null)
+        {
+            head.gameObject.SetActive(false);
+        }
+        else
+        {
+            head.sprite = itemDatas[0].charImage;
+        }
+
+        if (itemDatas[1] == null)
+        {
+            chest.gameObject.SetActive(false);
+        }
+        else
+        {
+            chest.sprite = itemDatas[1].charImage;
+        }
+
+        if (itemDatas[2] == null)
+        {
+            face.gameObject.SetActive(false);
+        }
+        else
+        {
+            face.sprite = itemDatas[2].charImage;
+        }
+
+        // if(itemDatas[3] == null) 
+        // {
+        //     hands.gameObject.SetActive(false);
+        // }
+        // else
+        // {
+        //     hands.sprite = itemDatas[3].charImage;
+        // }
     }
     void FlipSpriteGroup()
     {
         transform.eulerAngles += new Vector3(0, 180f, 0);
     }
-    public void Flip(bool flip)
+    public void SetAnimState(float speed)
     {
-        // sr.flipX = flip;
-        // Debug.Log("Flip = " + flip);
-        // if(flip) 
-        // {
-        //     transform.eulerAngles = new Vector3(0, 180f, 0);
-        // }
-        // else
-        // {
-        //     spriteGroup.eulerAngles = new Vector3(0, 0, 0);
-        // }
+        anim.SetFloat("Speed", speed);
     }
 }

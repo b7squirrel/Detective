@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using UnityEngine.Video;
 
 public class Player : MonoBehaviour, IBouncable
 {
@@ -16,6 +15,9 @@ public class Player : MonoBehaviour, IBouncable
     Character character;
 
     SyncIdleAnim syncIdleAnim;
+    WeaponContainerAnim weaponContainerAnim;
+    public WeaponData wd;
+    public List<Item> iDatas;
     [SerializeField] Transform faceGroup;
 
     [field: SerializeField]
@@ -40,40 +42,43 @@ public class Player : MonoBehaviour, IBouncable
         character = GetComponent<Character>();
 
         syncIdleAnim = GetComponent<SyncIdleAnim>();
+
+        
     }
     void Start()
     {
-        WeaponData wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
+        wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
-        List<Item> iDatas = GameManager.instance.startingDataContainer.GetItemDatas();
+        iDatas = GameManager.instance.startingDataContainer.GetItemDatas();
 
-        for (int i = 0; i < 4; i++)
-        {
-            if (iDatas[i] == null)
-            {
-                sr[i + 1].gameObject.SetActive(false);
-                continue;
-            }
 
-            if (i < 3)
-            {
-                sr[i + 1].sprite = iDatas[i].charImage;
-                sr[i + 1].GetComponent<Transform>().SetParent(faceGroup);
-                // sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
-            }
-        }
+        // for (int i = 0; i < 4; i++)
+        // {
+        //     if (iDatas[i] == null)
+        //     {
+        //         sr[i + 1].gameObject.SetActive(false);
+        //         continue;
+        //     }
 
-        // 오리의 Idle 모션에 맞춰야 한다면
-        if (wd.needToSyncIdle)
-        {
-            syncIdleAnim.SetIdleSync(true);
-        }
-        // 겹치지 않도록 Essential Weapon을 숨겨야 한다면
-        if (wd.hideEssentialEquipmentOnPlay)
-        {
-            sr[GameManager.instance.startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
-        }
+        //     if (i < 3)
+        //     {
+        //         sr[i + 1].sprite = iDatas[i].charImage;
+        //         sr[i + 1].GetComponent<Transform>().SetParent(faceGroup);
+        //         // sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
+        //     }
+        // }
+
+        // // 오리의 Idle 모션에 맞춰야 한다면
+        // if (wd.needToSyncIdle)
+        // {
+        //     syncIdleAnim.SetIdleSync(true);
+        // }
+        // // 겹치지 않도록 Essential Weapon을 숨겨야 한다면
+        // if (wd.hideEssentialEquipmentOnPlay)
+        // {
+        //     sr[GameManager.instance.startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
+        // }
     }
 
     void LateUpdate()
@@ -125,6 +130,8 @@ public class Player : MonoBehaviour, IBouncable
     {
         if (IsPauseing) return;
 
+        if (weaponContainerAnim == null) weaponContainerAnim = GetComponentInChildren<WeaponContainerAnim>();
+
         if (InputVec.x != 0 && InputVec.x * FacingDir < 0f)
         {
             FacingDir *= -1f;
@@ -133,10 +140,12 @@ public class Player : MonoBehaviour, IBouncable
         if(FacingDir < 0) 
         {
             spriteGroup.eulerAngles = new Vector3(0, 180f, 0);
+            weaponContainerAnim.FacingRight = false;
         }
         else
         {
             spriteGroup.eulerAngles = new Vector3(0, 0, 0);
+            weaponContainerAnim.FacingRight = true;
         }
 
         // for (int i = 0; i < sr.Length; i++)

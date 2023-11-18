@@ -25,7 +25,6 @@ public class WeaponContainer : MonoBehaviour
             weaponContainerGroup.transform.position = Vector3.zero;
             weaponContainerGroup.name = "WeaponContainerGroup";
         }
-        
     }
     void Update()
     {
@@ -35,40 +34,49 @@ public class WeaponContainer : MonoBehaviour
     void ApplyMovements()
     {
         if (player.IsPlayerMoving() == false)
+        {
+            for (int i = weaponContainers.Count; i > 0; i--)
+            {
+                weaponContainerAnims[i - 1].SetAnimState(0f);
+            }
             return;
+        }
+        
+        weaponContainerAnims[0].SetAnimState(1f);
 
         for (int i = weaponContainers.Count - 1; i > 0; i--)
         {
             weaponContainers[i].position =
                 Vector2.Lerp(weaponContainers[i].position, weaponContainers[i - 1].position, moveSpeed * Time.deltaTime);
 
-            weaponContainerAnims[i - 1].FacingRight = 
+            weaponContainerAnims[i - 1].FacingRight =
                 (weaponContainers[i - 1].position.x - weaponContainers[i].position.x) > 0;
+
+            weaponContainerAnims[i - 1].SetAnimState(1f);
         }
     }
 
-    public Transform CreateContainer(WeaponData wd, bool isInitialWeapon)
+    public Transform CreateContainer(WeaponData wd, List<Item> iData, bool isInitialWeapon)
     {
         Transform container = Instantiate(containerPrefab, transform.position, Quaternion.identity);
         container.gameObject.name = wd.Name;
         weaponContainers.Add(container);
 
+        if (weaponContainerAnims == null) weaponContainerAnims = new List<WeaponContainerAnim>();
+        WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
+        weaponContainerAnims.Add(wa);
+
         if (isInitialWeapon)
         {
             container.SetParent(transform);
-            container.GetComponent<Animator>().enabled = false;
+            wa.SetPlayerEquipmentSprites(wd, iData);
         }
         else
         {
             container.SetParent(weaponContainerGroup.transform);
-
-            // if (weaponData.animatorController != null)
-            //     container.GetComponent<Animator>().runtimeAnimatorController = weaponData.animatorController;
-            if (weaponContainerAnims == null) weaponContainerAnims = new List<WeaponContainerAnim>();
-            WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
-            weaponContainerAnims.Add(wa);
-            wa.SetEquipmentSprites(wd.Animators.InGamePlayerAnim, wd.DefaultHead, wd.DefaultChest, wd.DefaultFace, wd.DefaultHand);
+            wa.SetEquipmentSprites(wd);
         }
+
 
         SetSortingOrder();
         return container;
@@ -100,7 +108,7 @@ public class WeaponContainer : MonoBehaviour
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -114,7 +122,7 @@ public class WeaponContainer : MonoBehaviour
                 return wb.weaponStats.currentLevel;
             }
         }
-        
+
         return 0; // 가지고 있는 무기가 아니라 새로운 무기라면 레벨 0
     }
     public void SetSynergyWeaponActive(WeaponData weaponData)
@@ -140,7 +148,7 @@ public class WeaponContainer : MonoBehaviour
                 return wb.IsSynergyWeaponActivated();
             }
         }
-        
+
         return false;
     }
 
