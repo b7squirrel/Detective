@@ -4,7 +4,6 @@ using UnityEngine;
 public class WeaponContainerAnim : MonoBehaviour
 {
     Animator anim;
-    [SerializeField] SpriteRenderer body, head, chest, face, hands;
     [SerializeField] SpriteRenderer[] sr;
     [SerializeField] Transform spriteGroup;
     [SerializeField] Animator costume;
@@ -34,10 +33,10 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetEquipmentSprites(WeaponData wd)
     {
         Init(wd.Animators.InGamePlayerAnim);
-        head.sprite = wd.DefaultHead;
-        chest.sprite = wd.DefaultChest;
-        face.sprite = wd.DefaultFace;
-        hands.sprite = wd.DefaultHand;
+        if (wd.DefaultHead != null) { sr[1].sprite = wd.DefaultHead; }
+        if (wd.DefaultChest != null) { sr[2].sprite = wd.DefaultChest; }
+        if (wd.DefaultFace != null) { sr[3].sprite = wd.DefaultFace; }
+        if (wd.DefaultHand != null) { sr[4].sprite = wd.DefaultHand; }
     }
     // GameManager의 Starting Data Container에서 weapon data, item data를 불러오니까 매개변수가 필요없다. 
     public void SetPlayerEquipmentSprites()
@@ -69,7 +68,7 @@ public class WeaponContainerAnim : MonoBehaviour
     }
     public void ParentWeaponObjectTo(int _index, Transform _weaponObject)
     {
-        if (_index == 0 || _index == 2) // 머리 혹은 얼굴 부위이면
+        if (_index == 0 ) // 머리 부위이면
         {
             _weaponObject.SetParent(headGroup);
         }
@@ -77,8 +76,13 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             _weaponObject.SetParent(chestGroup);
         }
+        if (_index == 2) // 얼굴 부위이면
+        {
+            _weaponObject.SetParent(headGroup);
+        }
 
         // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
+        _weaponObject.position = sr[_index+1].GetComponent<Transform>().position;
         sr[_index + 1].gameObject.SetActive(false);
     }
 }

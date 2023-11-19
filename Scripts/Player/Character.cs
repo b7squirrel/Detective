@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -36,8 +35,6 @@ public class Character : MonoBehaviour
     {
         level = GetComponent<Level>();
         coin = GetComponent<Coins>();
-
-        anim = GetComponent<Animator>();
     }
 
     void Start()
@@ -113,18 +110,16 @@ public class Character : MonoBehaviour
         ApplyArmor(ref damage);
 
         SoundManager.instance.PlaySingle(hurtSound);
-        anim.SetTrigger("Hurt");
 
-        // 데미지을 입으면 진동
-        // if(Time.timeScale != 0)
-        // {
-        //     Handheld.Vibrate();
-        // }
+        if (anim == null) anim = GetComponentInChildren<WeaponContainerAnim>().GetComponent<Animator>();
+
+        anim.SetTrigger("Hurt");
 
         currentHealth -= damage;
         if (currentHealth < 0)
         {
             Die();
+            Debug.Log("Dead");
         }
         else
         {

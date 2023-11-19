@@ -61,7 +61,6 @@ public class WeaponData : ScriptableObject
     public UpgradeData synergyUpgrade;
     public float dropChance; // 아이템 드랍 확률
     public bool hideEssentialEquipmentOnPlay;
-    public bool needToSyncIdle;
 
     // 어느 부위에 붙을지 알려줌. weapon container anim에서 해당 부위의 sprite는 비활성화
     // 플레이어는 card data의 essential index가 필요하지만 

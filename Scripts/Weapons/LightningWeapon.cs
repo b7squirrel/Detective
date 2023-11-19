@@ -39,7 +39,6 @@ public class LightningWeapon : WeaponBase
         for (int i = 0; i < targets.Count; i++)
         {
             endPosition = targets[i];
-            // GameObject bolt = Instantiate(lightning);
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
             LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
             boltScript.StartObject.transform.parent = ShootPoint;
@@ -57,7 +56,7 @@ public class LightningWeapon : WeaponBase
         secondShootPoint.AddRange(targets);
         targets.Clear();
 
-        // 시너지 무기 ======================================
+        // 시너지 무기
         if(isSynergyWeaponActivated == false)
             return;
         

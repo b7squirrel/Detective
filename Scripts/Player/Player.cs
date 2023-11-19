@@ -48,7 +48,6 @@ public class Player : MonoBehaviour, IBouncable
         }
 
         Flip();
-        UpdateAniamtionState();
     }
     void FixedUpdate()
     {
@@ -104,12 +103,6 @@ public class Player : MonoBehaviour, IBouncable
             weaponContainerAnim.FacingRight = true;
         }
     }
-    void UpdateAniamtionState()
-    {
-        if (IsPauseing) return;
-
-        anim.SetFloat("Speed", InputVec.magnitude);
-    }
 
     public void GetBounced(float bouncingForce, Vector2 direction, float bouncingTime)
     {
@@ -133,7 +126,7 @@ public class Player : MonoBehaviour, IBouncable
     #region OnDead Event
     public void Die()
     {
-        anim.SetTrigger("Dead");
+        //anim.SetTrigger("Dead");
         rb.mass = 10000f;
     }
     #endregion

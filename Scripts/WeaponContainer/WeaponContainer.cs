@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class WeaponContainer : MonoBehaviour
@@ -78,7 +77,7 @@ public class WeaponContainer : MonoBehaviour
         else
         {
             container.SetParent(weaponContainerGroup.transform);
-            container.transform.localScale = .8f * Vector2.one;
+            container.transform.localScale = .74f * Vector2.one;
             wa.SetEquipmentSprites(wd);
         }
 
