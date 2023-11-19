@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +14,8 @@ public class LaunchManager : MonoBehaviour
 
     [SerializeField] GameObject fieldSlotPanel; // 패널 켜고 끄기 위해
     [SerializeField] AllField field; // 모든 카드
+
+    [SerializeField] GameObject startButton;
 
     CardData currentLead; // 현재 리드로 선택된 오리
     OriAttribute currentAttr; // 현재 리드로 선택된 오리의 attr
@@ -35,9 +36,12 @@ public class LaunchManager : MonoBehaviour
     }
     IEnumerator InitCo()
     {
+        startButton.SetActive(false);
         yield return new WaitForSeconds(.1f);
         CardData lead = cardDataManager.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
         SetLead(lead);
+        yield return new WaitForSeconds(.03f);
+        startButton.SetActive(true); // 리드 카드가 셋업되기 전에 시작 버튼을 누르면 리드가 스프라이트가 없는 채로 시작된다.
     }
     public void ClearAllFieldSlots()
     {
@@ -54,7 +58,6 @@ public class LaunchManager : MonoBehaviour
 
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
         card.Remove(currentLeadOri);
-        Debug.Log("카드 개수 = " + card.Count);
 
         field.GenerateAllCardsOfType(card);
     }

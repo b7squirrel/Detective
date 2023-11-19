@@ -14,7 +14,6 @@ public class Player : MonoBehaviour, IBouncable
     Animator anim;
     Character character;
 
-    SyncIdleAnim syncIdleAnim;
     WeaponContainerAnim weaponContainerAnim;
     public WeaponData wd;
     public List<Item> iDatas;
@@ -37,48 +36,7 @@ public class Player : MonoBehaviour, IBouncable
     {
         instance = this;
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        
         character = GetComponent<Character>();
-
-        syncIdleAnim = GetComponent<SyncIdleAnim>();
-
-        
-    }
-    void Start()
-    {
-        wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
-        anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
-
-        iDatas = GameManager.instance.startingDataContainer.GetItemDatas();
-
-
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    if (iDatas[i] == null)
-        //    {
-        //        sr[i + 1].gameObject.SetActive(false);
-        //        continue;
-        //    }
-
-        //    if (i < 3)
-        //    {
-        //        sr[i + 1].sprite = iDatas[i].charImage;
-        //        sr[i + 1].GetComponent<Transform>().SetParent(faceGroup);
-        //        // sr[i + 1].GetComponent<Transform>().localPosition = Vector3.zero;
-        //    }
-        //}
-
-        // 오리의 Idle 모션에 맞춰야 한다면
-        //if (wd.needToSyncIdle)
-        //{
-        //    syncIdleAnim.SetIdleSync(true);
-        //}
-        //// 겹치지 않도록 Essential Weapon을 숨겨야 한다면
-        //if (wd.hideEssentialEquipmentOnPlay)
-        //{
-        //    sr[GameManager.instance.startingDataContainer.GetEssectialIndex() + 1].gameObject.SetActive(false); // 필수 장비를 비활성화
-        //}
     }
 
     void LateUpdate()
@@ -151,14 +109,6 @@ public class Player : MonoBehaviour, IBouncable
         if (IsPauseing) return;
 
         anim.SetFloat("Speed", InputVec.magnitude);
-        if (InputVec.magnitude > .01f)
-        {
-            syncIdleAnim.SetState(false, FacingDir);
-        }
-        else if (InputVec.magnitude < .01f)
-        {
-            syncIdleAnim.SetState(true, FacingDir);
-        }
     }
 
     public void GetBounced(float bouncingForce, Vector2 direction, float bouncingTime)

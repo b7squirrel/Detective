@@ -52,7 +52,6 @@ public class WeaponContainer : MonoBehaviour
                 (weaponContainers[i].position.x - weaponContainers[i - 1].position.x) < 0;
 
             weaponContainerAnims[i].SetAnimState(1f);
-            Debug.Log(i + "의 FacingRight는 " + weaponContainerAnims[i].FacingRight);
         }
     }
 

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -77,11 +75,6 @@ public class WeaponManager : MonoBehaviour
         if (level != null)
         {
             level.AddUpgradesIntoTheListOfAvailableUpgrades(weaponData.upgrades);
-        }
-
-        if (isInitialWeapon)
-        {
-            GetComponent<SyncIdleAnim>().Init(faceGroupToFollow, container, weaponBase.transform);
         }
     }
     public void AddExtraWeaponTool(WeaponData weaponData, WeaponBase weaponBase)

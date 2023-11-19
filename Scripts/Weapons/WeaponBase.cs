@@ -91,7 +91,12 @@ public class WeaponBase : MonoBehaviour
     {
         this.weaponData = wd;
         weaponStats =
-            new WeaponStats(wd.stats.damage, wd.stats.timeToAttack, wd.stats.numberOfAttacks, wd.stats.sizeOfArea, wd.stats.projectileSpeed, wd.stats.knockBackChance);
+            new WeaponStats(wd.stats.damage, 
+                            wd.stats.timeToAttack, 
+                            wd.stats.numberOfAttacks, 
+                            wd.stats.sizeOfArea, 
+                            wd.stats.projectileSpeed, 
+                            wd.stats.knockBackChance);
     }
 
     protected virtual void GetAttackParameters()
@@ -149,29 +154,29 @@ public class WeaponBase : MonoBehaviour
         // 스탯 업그레이드 후
         CheckIfMaxLevel();
     }
-    
+
     void CheckIfMaxLevel()
     {
         // 아이템과는 다르게 알을 먹으면 무기 레벨이 0인 상태로 acquired 되니까 Count와 같음
-        if (weaponStats.currentLevel == weaponData.upgrades.Count) 
+        if (weaponStats.currentLevel == weaponData.upgrades.Count)
         {
             Item item = Wielder.GetComponent<PassiveItems>().GetSynergyCouple(weaponData.SynergyWeapon);
-                if (item == null)
-                {
-                    // Debug.Log("시너지 커플 아이템이 없습니다");
-                    return;
-                }
+            if (item == null)
+            {
+                // Debug.Log("시너지 커플 아이템이 없습니다");
+                return;
+            }
 
-                // if (item.stats.currentLevel == item.upgrades.Count + 1)
-                if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
-                {
-                    // Debug.Log("wb시너지 웨폰 활성화");
-                    Wielder.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(weaponData);
-                }
-                else
-                {
-                    // Debug.Log("시너지 커플 아이템이 최고레벨이 아닙니다");
-                }
+            // if (item.stats.currentLevel == item.upgrades.Count + 1)
+            if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
+            {
+                // Debug.Log("wb시너지 웨폰 활성화");
+                Wielder.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(weaponData);
+            }
+            else
+            {
+                // Debug.Log("시너지 커플 아이템이 최고레벨이 아닙니다");
+            }
         }
     }
 
