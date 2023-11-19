@@ -43,20 +43,20 @@ public class WeaponContainer : MonoBehaviour
         }
         
         weaponContainerAnims[0].SetAnimState(1f);
-
         for (int i = weaponContainers.Count - 1; i > 0; i--)
         {
             weaponContainers[i].position =
                 Vector2.Lerp(weaponContainers[i].position, weaponContainers[i - 1].position, moveSpeed * Time.deltaTime);
 
-            weaponContainerAnims[i - 1].FacingRight =
-                (weaponContainers[i - 1].position.x - weaponContainers[i].position.x) > 0;
+            weaponContainerAnims[i].FacingRight =
+                (weaponContainers[i].position.x - weaponContainers[i - 1].position.x) < 0;
 
-            weaponContainerAnims[i - 1].SetAnimState(1f);
+            weaponContainerAnims[i].SetAnimState(1f);
+            Debug.Log(i + "의 FacingRight는 " + weaponContainerAnims[i].FacingRight);
         }
     }
 
-    public Transform CreateContainer(WeaponData wd, List<Item> iData, bool isInitialWeapon)
+    public Transform CreateContainer(WeaponData wd, bool isInitialWeapon)
     {
         // weapon container 생성하고 컨테이너 관리 리스트에 추가함
         Transform container = Instantiate(containerPrefab, transform.position, Quaternion.identity);
@@ -74,11 +74,12 @@ public class WeaponContainer : MonoBehaviour
         if (isInitialWeapon)
         {
             container.SetParent(transform);
-            wa.SetPlayerEquipmentSprites(wd, iData);
+            wa.SetPlayerEquipmentSprites();
         }
         else
         {
             container.SetParent(weaponContainerGroup.transform);
+            container.transform.localScale = .8f * Vector2.one;
             wa.SetEquipmentSprites(wd);
         }
 

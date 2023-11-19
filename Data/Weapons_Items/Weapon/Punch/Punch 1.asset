@@ -19,6 +19,10 @@ MonoBehaviour:
   Animators:
     CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
     InGamePlayerAnim: {fileID: 22100000, guid: 51a048babf0fd24449027a1879e9c1f4, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHand: {fileID: 0}
   weaponPrefab: {fileID: 0}
   stats:
     damage: 100
@@ -40,3 +44,4 @@ MonoBehaviour:
   dropChance: 0
   hideEssentialEquipmentOnPlay: 1
   needToSyncIdle: 1
+  equipmentType: 2

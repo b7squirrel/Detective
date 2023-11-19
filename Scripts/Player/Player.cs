@@ -70,10 +70,10 @@ public class Player : MonoBehaviour, IBouncable
         //}
 
         // 오리의 Idle 모션에 맞춰야 한다면
-        if (wd.needToSyncIdle)
-        {
-            syncIdleAnim.SetIdleSync(true);
-        }
+        //if (wd.needToSyncIdle)
+        //{
+        //    syncIdleAnim.SetIdleSync(true);
+        //}
         //// 겹치지 않도록 Essential Weapon을 숨겨야 한다면
         //if (wd.hideEssentialEquipmentOnPlay)
         //{
@@ -139,23 +139,12 @@ public class Player : MonoBehaviour, IBouncable
 
         if(FacingDir < 0) 
         {
-            spriteGroup.eulerAngles = new Vector3(0, 180f, 0);
             weaponContainerAnim.FacingRight = false;
         }
         else
         {
-            spriteGroup.eulerAngles = new Vector3(0, 0, 0);
             weaponContainerAnim.FacingRight = true;
         }
-
-        // for (int i = 0; i < sr.Length; i++)
-        // {
-        //     if (sr[i] == null) continue;
-
-        //     if (i > 0 && i < 4) continue;
-
-        //     sr[i].flipX = FacingDir < 0;
-        // }
     }
     void UpdateAniamtionState()
     {

@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     public Collider2D cameraBoundary;
 
     public RectTransform CoinUIPosition;
-    public StartingDataContainer startingDataContainer;
+    public StartingDataContainer startingDataContainer { get; private set; }
 
     #region Unity CallBack Functions
     private void Awake()

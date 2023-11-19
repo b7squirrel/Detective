@@ -92,7 +92,6 @@ public class Character : MonoBehaviour
         int KnockBackChanceLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.knockBackChance);
         this.knockBackChance += 0.1f * KnockBackChanceLevel * this.knockBackChance; // 레벱업 당 10% 증가
 
-        GameManager.instance.startingDataContainer = FindObjectOfType<StartingDataContainer>();
         if(GameManager.instance.startingDataContainer == null)
         {
             MaxHealth = 3000;

@@ -30,18 +30,25 @@ public class WeaponManager : MonoBehaviour
 
     public void AddWeapon(WeaponData weaponData, bool isInitialWeapon)
     {
+        WeaponData wd = null;
         if(isInitialWeapon)
         {
-            Player player = GetComponent<Player>();
-            container = weaponContainer.CreateContainer(player.wd, player.iDatas, isInitialWeapon);
+            wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
+            container = weaponContainer.CreateContainer(wd, isInitialWeapon);
         }
         else
         {
-            container = weaponContainer.CreateContainer(weaponData, null, isInitialWeapon);
+            wd = weaponData;
+            container = weaponContainer.CreateContainer(weaponData, isInitialWeapon);
         }
 
+        // WeaponBase Prefab - 특정 오리 (Punch, Tesla..)
+        // Weapon Prefab - 특정 오리에 붙는 무기 (Rifle, Tesla Tower...)
         GameObject weaponGameObject = Instantiate(weaponData.weaponBasePrefab, container);
         weaponGameObject.transform.position = container.position;
+
+        WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
+        wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponGameObject.transform); // Head, Chest, Face, Hand 순서 EquipmentType
 
         WeaponBase weaponBase = weaponGameObject.GetComponent<WeaponBase>();
         weaponBase.InitialWeapon = isInitialWeapon; // 오리 탐정에게 붙는 무기인지 
