@@ -10,6 +10,8 @@ public class WeaponContainerAnim : MonoBehaviour
     [SerializeField] Transform headGroup; // 머리와 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
 
+    List<SpriteRenderer> weaponToolSRs; // 개별 무기들의 sprites
+
     bool _facingRight = true;
     int essentialIndex;
     public bool FacingRight
@@ -84,5 +86,9 @@ public class WeaponContainerAnim : MonoBehaviour
         // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
         _weaponObject.position = sr[_index+1].GetComponent<Transform>().position;
         sr[_index + 1].gameObject.SetActive(false);
+    }
+    public void SetWeaponToolSpriteRenderer(SpriteRenderer _sp, int _index)
+    {
+        weaponToolSRs[_index] = _sp;
     }
 }

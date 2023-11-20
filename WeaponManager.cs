@@ -49,7 +49,7 @@ public class WeaponManager : MonoBehaviour
         wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponGameObject.transform); // Head, Chest, Face, Hand 순서 EquipmentType
 
         WeaponBase weaponBase = weaponGameObject.GetComponent<WeaponBase>();
-        weaponBase.InitialWeapon = isInitialWeapon; // 오리 탐정에게 붙는 무기인지 
+        //weaponBase.InitialWeapon = isInitialWeapon; // Player 리드 오리에게 붙는 무기인지 
         weaponBase.Init(weaponData.stats);
 
         // 개별 무기들 부착
@@ -63,6 +63,9 @@ public class WeaponManager : MonoBehaviour
             weaponBase.ShootPoint = weaponBase.weaponTools.shootPoint;
             weaponBase.EffectPoint = weaponBase.weaponTools.effectPoint;
             weaponBase.anim = weaponTool.GetComponent<Animator>();
+
+            // 시너지 등으로 무기가 추가된다면 weaponManager.AddExtraWeaponTool에서 추가
+            wa.SetWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>(), 0);
         }
 
         weaponBase.SetData(weaponData);
@@ -90,6 +93,10 @@ public class WeaponManager : MonoBehaviour
             weaponBase.ShootPointExtra = weaponBase.weaponToolsExtra.shootPoint;
             weaponBase.EffectPointExtra = weaponBase.weaponToolsExtra.effectPoint;
             weaponBase.animExtra = weaponTool.GetComponent<Animator>();
+
+            WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
+            wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponTool.transform);
+            wa.SetWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>(), 1);
         }
     }
 
