@@ -72,7 +72,11 @@ public class WeaponManager : MonoBehaviour
             }
             else
             {
-                sprite = wd.Defaults[(int)wd.equipmentType];
+                int _index = (int)wd.equipmentType;
+                if (_index == 0) sprite = wd.DefaultHead;
+                if (_index == 1) sprite = wd.DefaultChest;
+                if (_index == 2) sprite = wd.DefaultFace;
+                if (_index == 3) sprite = wd.DefaultHands;
             }
             wa.SetWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>(), sprite);
             wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponTool);

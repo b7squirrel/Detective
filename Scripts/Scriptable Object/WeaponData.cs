@@ -52,7 +52,8 @@ public class WeaponData : ScriptableObject
     public Sprite charImage;
     public string SynergyWeapon;
     public AnimatorData Animators;
-    public Sprite[] Defaults;
+    public Sprite DefaultHead, DefaultChest, DefaultFace, DefaultHands;
+    public RuntimeAnimatorController costumeAnim;
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
     public GameObject weaponBasePrefab;

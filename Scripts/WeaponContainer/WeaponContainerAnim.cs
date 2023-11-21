@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class WeaponContainerAnim : MonoBehaviour
 {
-    Animator anim;
+    Animator anim; // 오리의 animator
+    Animator costumeAnimator; // costume animator
     [SerializeField] SpriteRenderer[] sr;
     [SerializeField] Transform spriteGroup;
-    [SerializeField] Animator costume;
+    [SerializeField] GameObject costume;
     [SerializeField] Transform headGroup; // 머리와 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform handsGroup; // 손과 함께 움직이는 중비들은 모두 여기에 페어런트 시킨다
 
+    RuntimeAnimatorController costumeAnim; 
     Sprite sprite; // 개별 무기들의 sprite
 
     bool _facingRight = true;
@@ -36,9 +38,18 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetEquipmentSprites(WeaponData wd)
     {
         Init(wd.Animators.InGamePlayerAnim);
-        for (int i = 0; i < 4; i++)
+        
+        if (wd.DefaultHead != null) sr[1].sprite = wd.DefaultHead;
+        if (wd.DefaultChest != null) sr[2].sprite = wd.DefaultChest;
+        if (wd.DefaultFace != null) sr[3].sprite = wd.DefaultFace;
+        if (wd.DefaultHands != null) sr[4].sprite = wd.DefaultHands;
+
+        if(wd.costumeAnim != null)
         {
-            if (wd.Defaults[i] != null) { sr[i + 1].sprite = wd.Defaults[i]; }
+            GameObject costumePrefab = Instantiate(costume, transform);
+            costumePrefab.transform.localPosition = Vector3.zero;
+            costumeAnimator = costumePrefab.GetComponent<Animator>();
+            costumeAnimator.runtimeAnimatorController = wd.costumeAnim;
         }
     }
     // GameManager의 Starting Data Container에서 weapon data, item data를 불러오니까 매개변수가 필요없다. 
@@ -68,6 +79,7 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetAnimState(float speed)
     {
         anim.SetFloat("Speed", speed);
+        if(costumeAnimator != null) costumeAnimator.SetFloat("Speed", speed);
     }
     public void ParentWeaponObjectTo(int _index, Transform _weaponObject)
     {
