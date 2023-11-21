@@ -19,10 +19,11 @@ MonoBehaviour:
   Animators:
     CardImageAnim: {fileID: 9100000, guid: 3f5e6393ee74d2647a25660d988077db, type: 2}
     InGamePlayerAnim: {fileID: 22100000, guid: 23c20b0e76fc5bb43a5a4fdfc0559b5c, type: 2}
-  DefaultHead: {fileID: 1591285406, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
-  DefaultChest: {fileID: 735485920, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
-  DefaultFace: {fileID: 664530602, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
-  DefaultHand: {fileID: -441495344, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
+  Defaults:
+  - {fileID: 1591285406, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
+  - {fileID: 735485920, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
+  - {fileID: 664530602, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
+  - {fileID: -441495344, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
   weaponPrefab: {fileID: 5831665795245939412, guid: 291aed483e7745e40b52be27fc10bc5a, type: 3}
   stats:
     damage: 20
@@ -43,5 +44,4 @@ MonoBehaviour:
   synergyUpgrade: {fileID: 11400000, guid: 68c234a9941285f4182e615d1b4f3d91, type: 2}
   dropChance: 0
   hideEssentialEquipmentOnPlay: 1
-  needToSyncIdle: 0
   equipmentType: 3

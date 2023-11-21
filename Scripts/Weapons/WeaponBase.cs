@@ -283,6 +283,10 @@ public class WeaponBase : MonoBehaviour
     protected virtual void FlipWeaponTools()
     {
         if (Player.instance.IsPauseing) return;
+        if (weaponTools == null) return;
+        if (weaponToolsExtra == null) return;
+
+        if (weaponTools.IsDirectional == false) return;
 
         // flip
         if (weaponTools != null)

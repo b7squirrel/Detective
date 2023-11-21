@@ -65,7 +65,17 @@ public class WeaponManager : MonoBehaviour
             weaponBase.anim = weaponTool.GetComponent<Animator>();
 
             // 시너지 등으로 무기가 추가된다면 weaponManager.AddExtraWeaponTool에서 추가
-            wa.SetWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>(), 0);
+            Sprite sprite = null;
+            if(isInitialWeapon)
+            {
+                sprite = GameManager.instance.startingDataContainer.GetItemDatas()[(int)wd.equipmentType].charImage;
+            }
+            else
+            {
+                sprite = wd.Defaults[(int)wd.equipmentType];
+            }
+            wa.SetWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>(), sprite);
+            wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponTool);
         }
 
         weaponBase.SetData(weaponData);
@@ -80,7 +90,9 @@ public class WeaponManager : MonoBehaviour
             level.AddUpgradesIntoTheListOfAvailableUpgrades(weaponData.upgrades);
         }
     }
-    public void AddExtraWeaponTool(WeaponData weaponData, WeaponBase weaponBase)
+
+    // _index는 몇 번째 무기인지 알려줌
+    public void AddExtraWeaponTool(WeaponData weaponData, WeaponBase weaponBase, int _index)
     {
         // 개별 무기들 부착
         if (weaponData.weaponPrefab != null)
@@ -95,8 +107,8 @@ public class WeaponManager : MonoBehaviour
             weaponBase.animExtra = weaponTool.GetComponent<Animator>();
 
             WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
-            wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponTool.transform);
-            wa.SetWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>(), 1);
+            wa.ParentWeaponObjectTo((int)weaponData.equipmentType, weaponTool.transform);
+            wa.SetExtraWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>());
         }
     }
 

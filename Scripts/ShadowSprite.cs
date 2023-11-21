@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShadowSprite : MonoBehaviour
 {
-    Vector2 offset = new Vector2(.17f, -.3f);
+    Vector2 offset = new Vector2(.07f, -.07f);
 
     SpriteRenderer sprRndCaster;
     SpriteRenderer sprRndshadow;
@@ -21,13 +21,13 @@ public class ShadowSprite : MonoBehaviour
         transShadow.parent = transCaster;
         transShadow.gameObject.name = "Shadow";
         transShadow.localRotation = Quaternion.identity;
-        transShadow.localScale = transCaster.localScale;
+        transShadow.localScale = Vector2.one;
 
         sprRndCaster = GetComponent<SpriteRenderer>();
         sprRndshadow = transShadow.gameObject.AddComponent<SpriteRenderer>();
 
         
-        sprRndshadow.color = new Color(0, 0, .2f, .7f);
+        sprRndshadow.color = new Color(0, 0, .2f, .9f);
         // sprRndshadow.sortingLayerName = "Shadow";
         sprRndshadow.sortingLayerName = sprRndCaster.sortingLayerName;
         sprRndshadow.sortingOrder = sprRndCaster.sortingOrder - 1;
@@ -60,6 +60,6 @@ public class ShadowSprite : MonoBehaviour
     }
     public void Show()
     {
-        sprRndshadow.color = new Color(sprRndshadow.color.r, sprRndshadow.color.g, sprRndshadow.color.b, .5f);
+        sprRndshadow.color = new Color(sprRndshadow.color.r, sprRndshadow.color.g, sprRndshadow.color.b, .9f);
     }
 }

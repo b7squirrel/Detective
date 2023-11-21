@@ -9,8 +9,9 @@ public class WeaponContainerAnim : MonoBehaviour
     [SerializeField] Animator costume;
     [SerializeField] Transform headGroup; // 머리와 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
+    [SerializeField] Transform handsGroup; // 손과 함께 움직이는 중비들은 모두 여기에 페어런트 시킨다
 
-    List<SpriteRenderer> weaponToolSRs; // 개별 무기들의 sprites
+    Sprite sprite; // 개별 무기들의 sprite
 
     bool _facingRight = true;
     int essentialIndex;
@@ -35,10 +36,10 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetEquipmentSprites(WeaponData wd)
     {
         Init(wd.Animators.InGamePlayerAnim);
-        if (wd.DefaultHead != null) { sr[1].sprite = wd.DefaultHead; }
-        if (wd.DefaultChest != null) { sr[2].sprite = wd.DefaultChest; }
-        if (wd.DefaultFace != null) { sr[3].sprite = wd.DefaultFace; }
-        if (wd.DefaultHand != null) { sr[4].sprite = wd.DefaultHand; }
+        for (int i = 0; i < 4; i++)
+        {
+            if (wd.Defaults[i] != null) { sr[i + 1].sprite = wd.Defaults[i]; }
+        }
     }
     // GameManager의 Starting Data Container에서 weapon data, item data를 불러오니까 매개변수가 필요없다. 
     public void SetPlayerEquipmentSprites()
@@ -82,13 +83,24 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             _weaponObject.SetParent(headGroup);
         }
+        if (_index == 3) // 손 부위이면
+        {
+            _weaponObject.SetParent(handsGroup);
+        }
 
         // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
         _weaponObject.position = sr[_index+1].GetComponent<Transform>().position;
         sr[_index + 1].gameObject.SetActive(false);
     }
-    public void SetWeaponToolSpriteRenderer(SpriteRenderer _sp, int _index)
+    // 첫 번째 무기는 starting data 혹은 weaponData에서 스프라이트를 받아오지만
+    public void SetWeaponToolSpriteRenderer(SpriteRenderer _sp, Sprite _sprite)
     {
-        weaponToolSRs[_index] = _sp;
+        sprite = _sprite;
+        _sp.sprite = sprite;
+    }
+    // 두 번째 무기부터는 첫 번째 무기의 스프라이트를 받아와서 주입한다.
+    public void SetExtraWeaponToolSpriteRenderer(SpriteRenderer _sp)
+    {
+        _sp.sprite = sprite;
     }
 }
