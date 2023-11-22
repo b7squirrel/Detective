@@ -46,6 +46,7 @@ public class WeaponManager : MonoBehaviour
         weaponGameObject.transform.position = container.position;
 
         WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
+
         wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponGameObject.transform); // Head, Chest, Face, Hand 순서 EquipmentType
 
         WeaponBase weaponBase = weaponGameObject.GetComponent<WeaponBase>();

@@ -99,9 +99,15 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             _weaponObject.SetParent(handsGroup);
         }
+        if ( _index == 4) // 그냥 몸에 붙여서 움직이는 무기라면
+        {
+            // 겹치는 스프라이트가 없을테니 여기서 끝
+            _weaponObject.SetParent(transform);
+            return; 
+        }
 
         // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
-        _weaponObject.position = sr[_index+1].GetComponent<Transform>().position;
+        _weaponObject.position = sr[_index + 1].GetComponent<Transform>().position;
         sr[_index + 1].gameObject.SetActive(false);
     }
     // 첫 번째 무기는 starting data 혹은 weaponData에서 스프라이트를 받아오지만
