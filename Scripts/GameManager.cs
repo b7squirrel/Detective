@@ -22,13 +22,15 @@ public class GameManager : MonoBehaviour
 
     public RectTransform CoinUIPosition;
     public StartingDataContainer startingDataContainer { get; private set; }
+    public StageManager stageManager { get; private set; }
 
     #region Unity CallBack Functions
-    private void Awake()
+    void Awake()
     {
         instance = this;
         currentCamera = Camera.main;
         startingDataContainer = FindObjectOfType<StartingDataContainer>();
+        stageManager = FindObjectOfType<StageManager>();
     }
 
     void Update()
@@ -48,7 +50,7 @@ public class GameManager : MonoBehaviour
     }
     public void DestroyStartingData()
     {
-        Destroy(startingDataContainer.gameObject);
+        startingDataContainer.DestroyStartingDataContainer();
     }
 
     #region Option Input

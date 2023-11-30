@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using System;
 using UnityEngine.Events;
 
 public class MainMenu : MonoBehaviour
@@ -14,7 +11,6 @@ public class MainMenu : MonoBehaviour
     PauseManager pauseManager;
     bool isPaused;
     // public Action<bool> OnPauseButtonPressed;
-
 
     void Awake()
     {
@@ -28,7 +24,6 @@ public class MainMenu : MonoBehaviour
         
         pauseManager.PauseGame();
         panelPause.SetActive(true);
-
     }
 
     public void UnPause()

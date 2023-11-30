@@ -52,6 +52,10 @@ public class StartingDataContainer : MonoBehaviour
             }
         }
     }
+    public void DestroyStartingDataContainer()
+    {
+        Destroy(gameObject);
+    }
 
     // Player loads the following information after starting the game
     public OriAttribute GetLeadAttr() => this.leadAttr;

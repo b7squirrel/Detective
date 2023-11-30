@@ -65,11 +65,11 @@ public class BossDieManager : MonoBehaviour
         // Camera.main.transform.GetComponent<CameraController>().CameraToTarget(Player.instance.transform.position, false);
     }
 
-    IEnumerator WinMessage()
-    {
-        yield return new WaitForSeconds(7f);
-        GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
-    }
+    //IEnumerator WinMessage()
+    //{
+    //    yield return new WaitForSeconds(7f);
+    //    GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
+    //}
     
     void RemoveAllEnemies()
     {
