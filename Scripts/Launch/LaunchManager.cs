@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 // 대장 오리는 playerPref에 저장하자
@@ -17,6 +18,9 @@ public class LaunchManager : MonoBehaviour
 
     [SerializeField] GameObject startButton;
 
+    [SerializeField] StageInfoUI stageInfoUi;
+    [SerializeField] StageInfo stageInfo;
+
     CardData currentLead; // 현재 리드로 선택된 오리
     OriAttribute currentAttr; // 현재 리드로 선택된 오리의 attr
 
@@ -30,7 +34,14 @@ public class LaunchManager : MonoBehaviour
         CloseField();
     }
 
-    public void InitLead()
+    void InitStageInfo()
+    {
+        int stageNum = FindObjectOfType<StageManager>().GetCurrentStageNumber();
+        Stages currentStage = stageInfo.GetStageInfo(stageNum);
+        stageInfoUi.Init(currentStage);
+    }
+
+    void InitLead()
     {
         StartCoroutine(InitCo());
     }
@@ -42,6 +53,7 @@ public class LaunchManager : MonoBehaviour
         SetLead(lead);
         yield return new WaitForSeconds(.03f);
         startButton.SetActive(true); // 리드 카드가 셋업되기 전에 시작 버튼을 누르면 리드가 스프라이트가 없는 채로 시작된다.
+        InitStageInfo();
     }
     public void ClearAllFieldSlots()
     {

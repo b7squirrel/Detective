@@ -5,11 +5,12 @@ using System.IO;
 public class StageNumberData
 {
     public int currentStageNumber;
+    public bool isNewStage;
 }
 
 public class StageManager : MonoBehaviour
 {
-    StageNumberData stageNumberData;
+    [SerializeField] StageNumberData stageNumberData; // 디버그를 위해 직렬화
     string filePath;
 
     void Awake()
@@ -27,6 +28,13 @@ public class StageManager : MonoBehaviour
     {
         stageNumberData.currentStageNumber = stageNumber;
         
+        SaveStageNumberData();
+    }
+
+    public bool IsNewStage() { return stageNumberData.isNewStage; }
+    public void SetIsNewStage(bool isNew) 
+    { 
+        stageNumberData.isNewStage = isNew;
         SaveStageNumberData();
     }
 
