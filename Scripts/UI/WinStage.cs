@@ -10,14 +10,12 @@ public class WinStage : MonoBehaviour
         StageInfo stageinfo = FindObjectOfType<StageInfo>();
         int currentStage = stageManager.GetCurrentStageNumber();
 
-        if (stageinfo == null) Debug.Log("Stage info Null");
         if (stageinfo.IsFinalStage(currentStage) == false)
         {
             currentStage++;
             stageManager.SetCurrentStageNumber(currentStage);
         }
         
-        Debug.Log("Current Stage = " + currentStage);
         winStage.gameObject.SetActive(true);
     }
 }
