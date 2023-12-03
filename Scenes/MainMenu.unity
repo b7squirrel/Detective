@@ -7313,7 +7313,6 @@ GameObject:
   - component: {fileID: 958746581}
   - component: {fileID: 958746580}
   - component: {fileID: 958746582}
-  - component: {fileID: 958746583}
   m_Layer: 5
   m_Name: Launch Panel Manager
   m_TagString: Untagged
@@ -7379,7 +7378,7 @@ MonoBehaviour:
   field: {fileID: 1649636984}
   startButton: {fileID: 1441387486}
   stageInfoUi: {fileID: 958746582}
-  stageInfo: {fileID: 958746583}
+  stageInfo: {fileID: 1400131445}
 --- !u!114 &958746582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7394,21 +7393,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageManager: {fileID: 1400131443}
   Title: {fileID: 302984224}
---- !u!114 &958746583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 958746578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75a796741c8abf54d874ea17a771c777, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stages:
-  - Title: "1. \uC2AC\uB77C\uC784"
-  - Title: "2. \uBD84\uB178\uC758 \uC2AC\uB77C\uC784"
 --- !u!1 &965344237
 GameObject:
   m_ObjectHideFlags: 0
@@ -10752,6 +10736,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1400131444}
   - component: {fileID: 1400131443}
+  - component: {fileID: 1400131445}
   - component: {fileID: 1400131442}
   m_Layer: 0
   m_Name: StageManager
@@ -10802,6 +10787,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1400131445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400131441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a796741c8abf54d874ea17a771c777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stages:
+  - Title: "1. \uC2AC\uB77C\uC784"
+  - Title: "2. \uBD84\uB178\uC758 \uC2AC\uB77C\uC784"
 --- !u!1 &1409031060
 GameObject:
   m_ObjectHideFlags: 0

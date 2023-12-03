@@ -16,6 +16,7 @@ public class StageInfo : MonoBehaviour
     }
     public bool IsFinalStage(int stageIndex)
     {
+        Debug.Log("stage count = " + stages.Count + "  stage index = " + stageIndex);
         return stages.Count == stageIndex;
     }
 }

@@ -9,6 +9,8 @@ public class WinStage : MonoBehaviour
         StageManager stageManager = FindObjectOfType<StageManager>();
         StageInfo stageinfo = FindObjectOfType<StageInfo>();
         int currentStage = stageManager.GetCurrentStageNumber();
+
+        if (stageinfo == null) Debug.Log("Stage info Null");
         if (stageinfo.IsFinalStage(currentStage) == false)
         {
             currentStage++;
