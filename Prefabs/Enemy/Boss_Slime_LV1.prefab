@@ -73,14 +73,14 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 10
-  m_Sprite: {fileID: -1491921282, guid: 0caeae6df72b7ab45b48f68fbcba220c, type: 3}
+  m_Sprite: {fileID: 1651081743, guid: 1c67b65e89656374ea0be9f011313479, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 8.888888, y: 7.6736107}
+  m_Size: {x: 3.625, y: 3.2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -98,7 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.5, y: -0.3}
 --- !u!114 &5489282720295142908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,7 +258,7 @@ Transform:
   m_GameObject: {fileID: 7200239369209826798}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2085975788}
@@ -343,7 +342,6 @@ MonoBehaviour:
   chance: 1
   exp: 0
   hp: 0
-  isGem: 0
 --- !u!114 &271258211328832522
 MonoBehaviour:
   m_ObjectHideFlags: 0
