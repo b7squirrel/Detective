@@ -17,6 +17,7 @@ public class StageManager : MonoBehaviour
     {
         filePath = Path.Combine(Application.persistentDataPath, "stageNumberData.json");
         LoadStageNumberData();
+        Debug.Log("LOAD");
     }
 
     public int GetCurrentStageNumber()
@@ -29,6 +30,10 @@ public class StageManager : MonoBehaviour
         stageNumberData.currentStageNumber = stageNumber;
         
         SaveStageNumberData();
+    }
+    public void LoadCurrentStageNumber()
+    {
+        LoadStageNumberData();
     }
 
     public bool IsNewStage() { return stageNumberData.isNewStage; }
