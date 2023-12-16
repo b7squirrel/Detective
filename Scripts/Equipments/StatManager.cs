@@ -28,16 +28,16 @@ public class StatManager : MonoBehaviour
 
         if(_cardData.EquipmentType == "Ori") // 오리라면
         {
-            newAtk += level * 100; // Temp
-            newHp += level * 100; // Temp
+            newAtk += level; // Temp
+            newHp += level; // Temp
         }
         else if(_cardData.EssentialEquip == EssentialEquip.Essential.ToString()) // 무기 카드라면
         {
-            newAtk += level * 100; // Temp
+            newAtk += level; // Temp
         }
         else // 방어구 카드라면
         {
-            newHp += level * 100; // Temp
+            newHp += level; // Temp
         }
 
         level++;
