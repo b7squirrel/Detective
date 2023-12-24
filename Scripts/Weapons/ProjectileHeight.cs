@@ -18,6 +18,7 @@ public class ProjectileHeight : MonoBehaviour
 
     float gravity = -100f;
     float verticalVelocity;
+    float initVerticalVelocity;
     [SerializeField] bool isGrounded;
     bool isInitialized;
 
@@ -53,6 +54,7 @@ public class ProjectileHeight : MonoBehaviour
 
         isGrounded = false;
         this.verticalVelocity = verticalVelocity;
+        initVerticalVelocity = verticalVelocity;
     }
 
     void UpdatePosition()
@@ -61,6 +63,10 @@ public class ProjectileHeight : MonoBehaviour
         {
             verticalVelocity += gravity * Time.deltaTime;
             trnsBody.position += new Vector3(0, verticalVelocity, 0) * Time.deltaTime;
+
+            float verticalVelocityRate = Mathf.Abs(verticalVelocity / initVerticalVelocity);
+            float sizeFactor = 1f + (1 - verticalVelocityRate * 1.4f);
+            trnsBody.localScale = sizeFactor * Vector2.one;
         }
     }
     void UpdateShadow()
@@ -76,7 +82,7 @@ public class ProjectileHeight : MonoBehaviour
         if (trnsBody.position.y < trnsObject.position.y && !isGrounded)
         {
             trnsBody.position = trnsObject.position;
-            GetComponent<BombProjectile>().Explode();
+            //GetComponent<BombProjectile>().Explode();
             onHitGround?.Invoke(); // Bomb projectile의 Explode함수를 끌어다 놓았음
         }
     }

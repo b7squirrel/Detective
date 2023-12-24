@@ -28,12 +28,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     #region FeedBack Variables
     [Header("Effect")]
-    [SerializeField] protected Material whiteMaterial;
+    //[SerializeField] protected Material whiteMaterial;
     [SerializeField] protected Transform hitEffectPoint;
     [SerializeField] protected float whiteFlashDuration = 0.08f;
     [SerializeField] protected float knockBackSpeed;
     protected float stunnedDuration = .2f;
-    protected Material initialMat;
+    //protected Material initialMat;
     [HideInInspector] public Vector2 targetDir;
     protected float stunnedSpeed = 14f;
     Coroutine whiteFlashCoroutine;
@@ -51,7 +51,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         sr = GetComponentInChildren<SpriteRenderer>();
         colEnemy = GetComponent<Collider2D>();
 
-        initialMat = sr.material;
+        //initialMat = sr.material;
         IsKnockBack = false;
         IsStunned = false;
         isOffScreen = true;
@@ -212,7 +212,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     #endregion
 
-
     #region Take Damage
     protected void CheckOffScreen()
     {
@@ -247,14 +246,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         StopAllCoroutines();
 
-        sr.material = initialMat;
+        //sr.material = initialMat;
         IsGrouping = false;
         ResetFlip();
         gameObject.SetActive(false);
     }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록
     {
-        sr.material = initialMat;
+        //sr.material = initialMat;
         IsGrouping = false;
         gameObject.SetActive(false);
     }
@@ -263,7 +262,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (whiteFlashCoroutine != null)
             StopCoroutine(whiteFlashCoroutine);
 
-        sr.material = initialMat;
+        //sr.material = initialMat;
         gameObject.SetActive(false);
     }
 
@@ -317,9 +316,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected IEnumerator WhiteFlashCo(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
-        sr.material = whiteMaterial;
+        //sr.material = whiteMaterial;
         yield return new WaitForSeconds(.1f);
-        sr.material = initialMat;
+        //sr.material = initialMat;
     }
     #endregion
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BombProjectile : ProjectileBase
@@ -8,6 +6,7 @@ public class BombProjectile : ProjectileBase
     float sizeOfArea;
     [SerializeField] LayerMask target; // 조준해서 던지는 것은 enemy지만 터지면 enemy, prop 둘 다 공격
     [SerializeField] GameObject hitEffect; // 폭발 이펙트
+    [SerializeField] GameObject starEffect; // 폭발 이펙트 - 별
     [SerializeField] AudioClip hitSFX;
 
     protected override void Update()
@@ -21,7 +20,7 @@ public class BombProjectile : ProjectileBase
     }
     public void Explode()
     {
-        // GenerateHitEffect();
+        GenerateHitEffect();
         SoundManager.instance.Play(hitSFX);
         CastDamage();
 
@@ -54,7 +53,10 @@ public class BombProjectile : ProjectileBase
     }
     void GenerateHitEffect()
     {
-        GameObject effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
-        effect.transform.localScale *= sizeOfArea;
+        GameObject smoke = Instantiate(hitEffect, transform.position, Quaternion.identity);
+        GameObject stars = Instantiate(starEffect, transform.position, Quaternion.identity);
+        
+        smoke.transform.localScale *= sizeOfArea;
+        stars.transform.localScale *= sizeOfArea;
     }
 }
