@@ -21,10 +21,10 @@ public class Collectable : MonoBehaviour
     protected float timeToDisapear;
 
     [Header("Effect")]
-    [SerializeField] Material whiteMaterial;
+    //[SerializeField] Material whiteMaterial;
     [SerializeField] float whiteFlashDuration;
     [SerializeField] public AudioClip pickup;
-    Material initialMat;
+    //Material initialMat;
     SpriteRenderer sr;
     GemManager gemManager;
 
@@ -32,7 +32,7 @@ public class Collectable : MonoBehaviour
 
     public void TempWhite()
     {
-        sr.material = whiteMaterial;
+        //sr.material = whiteMaterial;
     }
     #region 유니티 콜백함수
     protected virtual void OnEnable()
@@ -48,12 +48,12 @@ public class Collectable : MonoBehaviour
     protected virtual void OnDisable()
     {
         StopAllCoroutines();
-        sr.material = initialMat;
+        //sr.material = initialMat;
     }
     protected void Awake()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
-        initialMat = sr.material;
+        //initialMat = sr.material;
     }
     
     #endregion
@@ -87,9 +87,9 @@ public class Collectable : MonoBehaviour
     IEnumerator Blink()
     {
         yield return new WaitForSeconds(.08f);
-        sr.material = whiteMaterial;
+        //sr.material = whiteMaterial;
         yield return new WaitForSeconds(.08f);
-        sr.material = initialMat;
+        //sr.material = initialMat;
     }
 
     IEnumerator FlyToPlayer()

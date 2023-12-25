@@ -17,7 +17,10 @@ public class GenerateEnemies : MonoBehaviour
         if (timeCounter < 0)
         {
             GameObject go = Instantiate(enemyPrefab);
-            go.GetComponent<Animator>().runtimeAnimatorController = animatorCon;
+            if(go.GetComponent<Animator>() != null)
+            {
+                go.GetComponent<Animator>().runtimeAnimatorController = animatorCon;
+            }
             timeCounter = timer;
             return;
         }
