@@ -1,6 +1,8 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using System.Collections;
+using UnityEngine.UI;
 
 public class EquipmentPanelManager : MonoBehaviour
 {
@@ -21,6 +23,12 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] EquipInfoPanel equipInfoPanel;
     [SerializeField] AllField field; // 모든 카드
 
+    PlayerDataManager playerDataManager;
+    [SerializeField] TMPro.TextMeshProUGUI candyAmountToUpgrade;
+    [SerializeField] CanvasGroup warningLackCanvasGroup;
+    [SerializeField] CanvasGroup warningLMaxLevelCanvasGroup;
+    [SerializeField] Button upgradeButton;
+
     void Awake()
     {
         cardDataManager = FindObjectOfType<CardDataManager>();
@@ -31,6 +39,11 @@ public class EquipmentPanelManager : MonoBehaviour
         statManager = FindAnyObjectByType<StatManager>();
 
         cardToEquip = null;
+
+        playerDataManager = FindObjectOfType<PlayerDataManager>();
+
+        warningLackCanvasGroup.alpha = 0;
+        warningLMaxLevelCanvasGroup.alpha = 0;
     }
 
     void OnEnable()
@@ -185,6 +198,13 @@ public class EquipmentPanelManager : MonoBehaviour
         equipInfoPanel.SetPanel(itemCardData, iData, cardDisp, isEquipButton, isEssential);
         cardToEquip = itemCardData;
         this.cardDisp = cardDisp;
+
+        warningLackCanvasGroup.alpha = 0;
+        warningLMaxLevelCanvasGroup.alpha = 0;
+
+        UpdateAmountToUpgrade(itemCardData);
+
+        UpdateButtonState(upgradeButton);
     }
 
     public void DeActivateEquipInfoPanel()
@@ -195,6 +215,23 @@ public class EquipmentPanelManager : MonoBehaviour
     // info panel의 Upgrade 버튼
     public void UpgradeCard()
     {
+        int level = int.Parse(cardToEquip.Level);
+        int amountToUpgrade = GetAmountToUpgrade(level);
+        int candyNumbers = playerDataManager.GetCurrentCandyNumber();
+
+        if (amountToUpgrade > candyNumbers)
+        {
+            // 업그레이드가 가능하지 않게 하기
+            warningLackCanvasGroup.DOFade(1, 1f);
+            StartCoroutine(HideWarning(warningLackCanvasGroup));
+            return;
+        }
+
+        // 가지고 있는 재화에서 업그레이드 비용 빼주고 데이터 저장
+        candyNumbers -= amountToUpgrade;
+        playerDataManager.SetCurrentCandyNumber(candyNumbers);
+
+        // 레벨업 하고 card data에 저장
         statManager.LevelUp(cardToEquip);
 
         // 장착되어 있는 장비를 레벨업 하는 경우라면 바로바로 currentAttr을 업데이트
@@ -202,5 +239,35 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             equipmentSlotsManager.InitEquipSlots(CardOnDisplay);
         }
+        
+        UpdateAmountToUpgrade(cardToEquip);
+        UpdateButtonState(upgradeButton);
+    }
+
+    void UpdateAmountToUpgrade(CardData cardToUpgrade)
+    {
+        int amountToUpgrade = int.Parse(cardToUpgrade.Level);
+        candyAmountToUpgrade.text = GetAmountToUpgrade(amountToUpgrade).ToString();
+    }
+    int GetAmountToUpgrade(int level)
+    {
+        return level * 3;
+    }
+    void UpdateButtonState(Button button)
+    {
+        if (int.Parse(cardToEquip.Level) == 30)
+        {
+            // 최고 레벨 경고를 띄우고 레벨업 버튼 비활성화
+            warningLMaxLevelCanvasGroup.DOFade(1, 1f);
+            candyAmountToUpgrade.text = "Max";
+            button.interactable = false;
+            return;
+        }
+        button.interactable = true;
+    }
+    IEnumerator HideWarning(CanvasGroup canvasGroupToHide)
+    {
+        yield return new WaitForSeconds(1f);
+        canvasGroupToHide.DOFade(0, 1f);
     }
 }

@@ -21,6 +21,7 @@ public class ProjectileHeight : MonoBehaviour
     float initVerticalVelocity;
     [SerializeField] bool isGrounded;
     bool isInitialized;
+    [SerializeField] float sizeRateForHeight;
 
     void Update()
     {
@@ -65,7 +66,7 @@ public class ProjectileHeight : MonoBehaviour
             trnsBody.position += new Vector3(0, verticalVelocity, 0) * Time.deltaTime;
 
             float verticalVelocityRate = Mathf.Abs(verticalVelocity / initVerticalVelocity);
-            float sizeFactor = 1f + (1 - verticalVelocityRate * 1.4f);
+            float sizeFactor = 1f + (1 - (verticalVelocityRate * sizeRateForHeight));
             trnsBody.localScale = sizeFactor * Vector2.one;
         }
     }

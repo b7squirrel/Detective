@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
-using UnityEngine;
-
 // Slot Action
 public enum SlotType { Field, Up, Mat, None };
 public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
