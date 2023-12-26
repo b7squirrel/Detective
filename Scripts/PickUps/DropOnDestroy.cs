@@ -10,14 +10,14 @@ public class DropOnDestroy : MonoBehaviour
 
     bool isQuiting;
 
-    void OnApplicationQuit()
-    {
-        isQuiting = true;
-    }
+    //void OnApplicationQuit()
+    //{
+    //    isQuiting = true;
+    //}
 
     public void CheckDrop()
     {
-        if (isQuiting) return;
+        //if (isQuiting) return;
 
         if (dropItemPrefab.Count <= 0)
         {
