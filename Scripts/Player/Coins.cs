@@ -1,20 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Coins : MonoBehaviour
 {
     [SerializeField] DataContainer dataContainer;
-    [SerializeField] TMPro.TextMeshProUGUI coinsCountText;
+    [SerializeField] TMPro.TextMeshProUGUI candyCountText;
+    PlayerDataManager playerDataManager;
+    int currentCandyNum;
 
     void Start()
     {
-        Add(0);
+        playerDataManager = FindObjectOfType<PlayerDataManager>();
+        currentCandyNum = playerDataManager.GetCurrentCandyNumber();
+        Add(0); // UI √ ±‚»≠
     }
 
-    public void Add(int coinAmount)
+    public void Add(int candyAmount)
     {
-        dataContainer.coins += coinAmount;
-        coinsCountText.text = dataContainer.coins.ToString();
+        //dataContainer.coins += coinAmount;
+        currentCandyNum += candyAmount;
+        playerDataManager.SetCurrentCandyNumber(currentCandyNum);
+        candyCountText.text = currentCandyNum.ToString();
     }
 }

@@ -2,51 +2,44 @@ using UnityEngine;
 using System.IO;
 
 [System.Serializable]
-public class StageNumberData
+public class PlayerData
 {
     public int currentStageNumber;
     public bool isNewStage;
+
+    public int currentCandyNumber;
+
+    public int currentLightningNumber;
+    public int currentKillNumber;
 }
 
 public class PlayerDataManager : MonoBehaviour
 {
-    [SerializeField] StageNumberData stageNumberData; // 디버그를 위해 직렬화
+    [SerializeField] PlayerData playerData; // 디버그를 위해 직렬화
     string filePath;
 
     void Awake()
     {
-        filePath = Path.Combine(Application.persistentDataPath, "stageNumberData.json");
+        filePath = Path.Combine(Application.persistentDataPath, "playerData.json");
         LoadStageNumberData();
-        Debug.Log("LOAD");
+        LoadCandyNumberData();
     }
 
+    #region Stage
     public int GetCurrentStageNumber()
     {
-        return stageNumberData.currentStageNumber;
+        return playerData.currentStageNumber;
     }
 
     public void SetCurrentStageNumber(int stageNumber)
     {
-        stageNumberData.currentStageNumber = stageNumber;
-        
+        playerData.currentStageNumber = stageNumber;
+
         SaveStageNumberData();
     }
-    public void LoadCurrentStageNumber()
-    {
-        LoadStageNumberData();
-    }
-
-    public bool IsNewStage() { return stageNumberData.isNewStage; }
-    public void SetIsNewStage(bool isNew) 
-    { 
-        stageNumberData.isNewStage = isNew;
-        SaveStageNumberData();
-    }
-
     void SaveStageNumberData()
     {
-        string jsonData = JsonUtility.ToJson(stageNumberData);
-        Debug.Log("Saving Current Stage number = " + stageNumberData.currentStageNumber);
+        string jsonData = JsonUtility.ToJson(playerData);
         File.WriteAllText(filePath, jsonData);
     }
 
@@ -55,15 +48,57 @@ public class PlayerDataManager : MonoBehaviour
         if (File.Exists(filePath))
         {
             string jsonData = File.ReadAllText(filePath);
-            stageNumberData = JsonUtility.FromJson<StageNumberData>(jsonData);
+            playerData = JsonUtility.FromJson<PlayerData>(jsonData);
         }
         else
         {
-            stageNumberData = new StageNumberData
+            playerData = new PlayerData
             {
                 currentStageNumber = 1 // 초기 스테이지 넘버 설정
             };
             SaveStageNumberData();
         }
     }
+    public bool IsNewStage() { return playerData.isNewStage; }
+    public void SetIsNewStage(bool isNew)
+    {
+        playerData.isNewStage = isNew;
+        SaveStageNumberData();
+    }
+    #endregion
+
+    #region Candy
+    public int GetCurrentCandyNumber()
+    {
+        return playerData.currentCandyNumber;
+    }
+    public void SetCurrentCandyNumber(int candyNumber)
+    {
+        playerData.currentCandyNumber = candyNumber;
+
+        SaveCandyNumberData();
+    }
+
+    void SaveCandyNumberData()
+    {
+        string jsonData = JsonUtility.ToJson(playerData);
+        File.WriteAllText(filePath, jsonData);
+    }
+    void LoadCandyNumberData()
+    {
+        if (File.Exists(filePath))
+        {
+            string jsonData = File.ReadAllText(filePath);
+            playerData = JsonUtility.FromJson<PlayerData>(jsonData);
+        }
+        else
+        {
+            playerData = new PlayerData
+            {
+                currentCandyNumber = 1 // 초기 스테이지 넘버 설정
+            };
+            SaveCandyNumberData();
+        }
+    }
+    #endregion
 }

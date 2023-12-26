@@ -8013,7 +8013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 150121cb2cefdf2438d76106461feae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageManager: {fileID: 1400131443}
+  stageManager: {fileID: 0}
   Title: {fileID: 302984224}
 --- !u!1 &965344237
 GameObject:
@@ -11504,9 +11504,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1400131444}
-  - component: {fileID: 1400131443}
   - component: {fileID: 1400131445}
   - component: {fileID: 1400131442}
+  - component: {fileID: 1400131446}
   m_Layer: 0
   m_Name: StageManager
   m_TagString: Untagged
@@ -11526,21 +11526,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd328eedc9682984c9c463c1afab42f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1400131443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1400131441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccf7ee1fd63e9ff4a805ca6e56f71a0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageNumberData:
-    currentStageNumber: 0
-    isNewStage: 0
 --- !u!4 &1400131444
 Transform:
   m_ObjectHideFlags: 0
@@ -11571,6 +11556,22 @@ MonoBehaviour:
   stages:
   - Title: "1. \uC2AC\uB77C\uC784"
   - Title: "2. \uBD84\uB178\uC758 \uC2AC\uB77C\uC784"
+--- !u!114 &1400131446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400131441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee014bc360bd1d4fbf9e05e0128bdcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData:
+    currentStageNumber: 0
+    isNewStage: 0
+    currentCandyNumber: 0
 --- !u!1 &1409031060
 GameObject:
   m_ObjectHideFlags: 0

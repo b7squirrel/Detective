@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 1647154091}
   - component: {fileID: 1647154090}
   - component: {fileID: -6616644622741974676}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,12 +166,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   knockBackForce: 12
+  <IsGem>k__BackingField: 0
   pickupEffect: {fileID: 985285463175719073, guid: 92a091687ffeddb4d9a8477edf9f1f8e, type: 3}
   dir: {x: 0, y: 0}
   delay: 0
-  whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   whiteFlashDuration: 0
-  acc: 5
+  pickup: {fileID: 0}
   coinAmount: 1
 --- !u!50 &-6721317060970081831
 Rigidbody2D:
