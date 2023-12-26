@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class StageInfoUI : MonoBehaviour
 {
-    [SerializeField] StageManager stageManager;
+    [SerializeField] PlayerDataManager stageManager;
     [SerializeField] TMPro.TextMeshProUGUI Title;
 
     internal void Init(Stages _currentStage)

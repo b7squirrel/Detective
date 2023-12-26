@@ -6,7 +6,7 @@ public class WinStage : MonoBehaviour
 
     public void OpenPanel()
     {
-        StageManager stageManager = FindObjectOfType<StageManager>();
+        PlayerDataManager stageManager = FindObjectOfType<PlayerDataManager>();
         StageInfo stageinfo = FindObjectOfType<StageInfo>();
         int currentStage = stageManager.GetCurrentStageNumber();
 

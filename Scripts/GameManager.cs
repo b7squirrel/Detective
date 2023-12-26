@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     public RectTransform CoinUIPosition;
     public StartingDataContainer startingDataContainer { get; private set; }
-    public StageManager stageManager { get; private set; }
+    public PlayerDataManager stageManager { get; private set; }
 
     #region Unity CallBack Functions
     void Awake()
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
         instance = this;
         currentCamera = Camera.main;
         startingDataContainer = FindObjectOfType<StartingDataContainer>();
-        stageManager = FindObjectOfType<StageManager>();
+        stageManager = FindObjectOfType<PlayerDataManager>();
     }
 
     void Update()

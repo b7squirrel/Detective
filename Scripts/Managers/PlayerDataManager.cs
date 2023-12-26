@@ -8,7 +8,7 @@ public class StageNumberData
     public bool isNewStage;
 }
 
-public class StageManager : MonoBehaviour
+public class PlayerDataManager : MonoBehaviour
 {
     [SerializeField] StageNumberData stageNumberData; // 디버그를 위해 직렬화
     string filePath;
