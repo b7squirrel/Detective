@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 // 대장 오리는 playerPref에 저장하자
 public class LaunchManager : MonoBehaviour
@@ -20,11 +21,22 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] StageInfoUI stageInfoUi;
     [SerializeField] StageInfo stageInfo;
 
+    [SerializeField] CanvasGroup BlackFadeIn; // 처음 시작할 때 화면이 준비될 동안 암전
+    bool onStart = true; // 처음 시작할 때만 검은색에서 페이드인 되도록
+
     CardData currentLead; // 현재 리드로 선택된 오리
     OriAttribute currentAttr; // 현재 리드로 선택된 오리의 attr
 
     void OnEnable()
     {
+        if(onStart)
+        {
+            BlackFadeIn.gameObject.SetActive(true);
+            BlackFadeIn.alpha = 1f;
+            BlackFadeIn.DOFade(0, 4f);
+            onStart = false;
+        }
+
         fieldSlotPanel.SetActive(false);
         InitLead();
     }
