@@ -24,7 +24,7 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] AllField field; // 모든 카드
 
     PlayerDataManager playerDataManager;
-    [SerializeField] TMPro.TextMeshProUGUI candyAmountToUpgrade;
+    [SerializeField] TMPro.TextMeshProUGUI upgradeCost;
     [SerializeField] CanvasGroup warningLackCanvasGroup;
     [SerializeField] CanvasGroup warningLMaxLevelCanvasGroup;
     [SerializeField] Button upgradeButton;
@@ -202,7 +202,7 @@ public class EquipmentPanelManager : MonoBehaviour
         warningLackCanvasGroup.alpha = 0;
         warningLMaxLevelCanvasGroup.alpha = 0;
 
-        UpdateAmountToUpgrade(itemCardData);
+        UpdateUpgradeCost(itemCardData);
 
         UpdateButtonState(upgradeButton);
     }
@@ -240,14 +240,14 @@ public class EquipmentPanelManager : MonoBehaviour
             equipmentSlotsManager.InitEquipSlots(CardOnDisplay);
         }
         
-        UpdateAmountToUpgrade(cardToEquip);
+        UpdateUpgradeCost(cardToEquip);
         UpdateButtonState(upgradeButton);
     }
 
-    void UpdateAmountToUpgrade(CardData cardToUpgrade)
+    void UpdateUpgradeCost(CardData cardToUpgrade)
     {
         int amountToUpgrade = int.Parse(cardToUpgrade.Level);
-        candyAmountToUpgrade.text = GetAmountToUpgrade(amountToUpgrade).ToString();
+        upgradeCost.text = GetAmountToUpgrade(amountToUpgrade).ToString();
     }
     int GetAmountToUpgrade(int level)
     {
@@ -259,7 +259,7 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             // 최고 레벨 경고를 띄우고 레벨업 버튼 비활성화
             warningLMaxLevelCanvasGroup.DOFade(1, 1f);
-            candyAmountToUpgrade.text = "Max";
+            upgradeCost.text = "Max";
             button.interactable = false;
             return;
         }

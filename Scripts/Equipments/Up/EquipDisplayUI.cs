@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class EquipDisplayUI : MonoBehaviour
 {
-    [SerializeField] Transform cardBaseContainer; // ��� 5�� 
+    [SerializeField] Transform cardBaseContainer; // 5레벨
     [SerializeField] Transform starContainer;
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
