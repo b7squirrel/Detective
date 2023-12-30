@@ -35,6 +35,7 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         anim.runtimeAnimatorController = animCon;
     }
+    // 따라다니는 아이들의 sprite는 모두 default로
     public void SetEquipmentSprites(WeaponData wd)
     {
         Init(wd.Animators.InGamePlayerAnim);

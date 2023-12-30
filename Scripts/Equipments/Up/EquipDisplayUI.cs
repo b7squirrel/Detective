@@ -10,11 +10,9 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] protected GameObject starPrefab;
     GameObject[] stars;
     [SerializeField] Animator charImage;
+    [SerializeField] WeaponContainerAnim weaponContainerAnim;
     [SerializeField] Animator[] EquipmentImages;
-    [SerializeField] Image HeadImage;
-    [SerializeField] Image ChestImage;
-    [SerializeField] Image FaceImage;
-    [SerializeField] Image HandImage;
+    [SerializeField] SpriteRenderer[] EquipmentSprites;
     [SerializeField] TMPro.TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] GameObject atkLabel, hpLabel;
@@ -44,7 +42,7 @@ public class EquipDisplayUI : MonoBehaviour
         charImage.gameObject.SetActive(true);
         WeaponData wd = cardDictionary.GetWeaponItemData(charCardData).weaponData;
         // charImage.sprite = wd.charImage;
-        charImage.runtimeAnimatorController = wd.Animators.CardImageAnim;
+        charImage.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
         atk.text = currentAttr.Atk.ToString();
         hp.text = currentAttr.Hp.ToString();
@@ -61,13 +59,23 @@ public class EquipDisplayUI : MonoBehaviour
         if (isAdding)
         {
             EquipmentImages[index].gameObject.SetActive(true);
+            if (itemCardData.EssentialEquip == "Essential")
+            {
+                //Debug.Log("Essential = " + data.Name);
+                //EquipmentImages[index].runtimeAnimatorController = data.CardItemAnimator.InGamePlayerAnim;
+                EquipmentSprites[index].sprite = data.charImage;
 
-            EquipmentImages[index].runtimeAnimatorController = data.CardItemAnimator.CardImageAnim;
+            }
+            else
+            {
+                EquipmentSprites[index].sprite = data.charImage;
+            }
             RestartAnim();
         }
         else
         {
             EquipmentImages[index].gameObject.SetActive(false);
+
         }
 
         charButton.SetActive(true);
