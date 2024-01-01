@@ -2270,7 +2270,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 357.1, y: 0}
-  m_SizeDelta: {x: -690.5338, y: 0}
+  m_SizeDelta: {x: -690.5338, y: -480.20538}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &169999623
 MonoBehaviour:
@@ -2307,9 +2307,9 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 195, y: 228.22}
-  m_Spacing: {x: -63, y: -36.5}
+  m_Spacing: {x: -34, y: -36.5}
   m_Constraint: 1
-  m_ConstraintCount: 5
+  m_ConstraintCount: 4
 --- !u!114 &169999625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7237,7 +7237,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 357.1, y: 0}
-  m_SizeDelta: {x: -690.5338, y: -740.4024}
+  m_SizeDelta: {x: -690.5338, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &865142883
 MonoBehaviour:
@@ -7274,9 +7274,9 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 195, y: 227}
-  m_Spacing: {x: -63, y: -53}
+  m_Spacing: {x: -34, y: -53}
   m_Constraint: 1
-  m_ConstraintCount: 5
+  m_ConstraintCount: 4
 --- !u!114 &865142885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7826,7 +7826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &917734566
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10020,7 +10020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1168083571
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14316,7 +14316,6 @@ GameObject:
   - component: {fileID: 1587361510}
   - component: {fileID: 1587361509}
   - component: {fileID: 1587361511}
-  - component: {fileID: 1587361512}
   m_Layer: 5
   m_Name: Mat Field
   m_TagString: Untagged
@@ -14373,9 +14372,9 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 195, y: 180}
-  m_Spacing: {x: -63, y: 53}
+  m_Spacing: {x: -34, y: 53}
   m_Constraint: 1
-  m_ConstraintCount: 5
+  m_ConstraintCount: 4
 --- !u!114 &1587361511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14388,19 +14387,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b6e51d2465ad8479e84c6cfddfd4fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  setCardDataOnSlot: {fileID: 1808537190}
   slotPrefab: {fileID: 8782935464688134205, guid: 280a1ea8f5fa41b4a80563110998228b, type: 3}
---- !u!114 &1587361512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587361507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5351e9630f189f946a09cfbf6d6380ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1605086888
 GameObject:
   m_ObjectHideFlags: 0
@@ -15390,9 +15378,9 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 195, y: 227}
-  m_Spacing: {x: -63, y: -53}
+  m_Spacing: {x: -34, y: -53}
   m_Constraint: 1
-  m_ConstraintCount: 5
+  m_ConstraintCount: 4
 --- !u!1 &1662185934
 GameObject:
   m_ObjectHideFlags: 0

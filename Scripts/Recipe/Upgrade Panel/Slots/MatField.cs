@@ -8,6 +8,7 @@ public class MatField : MonoBehaviour
     CardsDictionary cardDictionary;
     CardDataManager cardDataManager;
     CardList cardList;
+    [SerializeField] SetCardDataOnSlot setCardDataOnSlot;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -108,8 +109,9 @@ public class MatField : MonoBehaviour
                 bool onEquipment = cardList.FindCharCard(cardDatas[i]).IsEquipped;
 
                 CardSlot cardSlot = slots[i].GetComponent<CardSlot>();
-                cardSlot.SetWeaponCard(cardDatas[i], wData);
-                SetAnimController(cardDatas[i], cardSlot);
+                //cardSlot.SetWeaponCard(cardDatas[i], wData);
+                //SetAnimController(cardDatas[i], cardSlot);
+                setCardDataOnSlot.PutCardDataIntoSlot(cardDatas[i], cardSlot);
 
                 slots[i].transform.localScale = new Vector2(0, 0);
                 slots[i].transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);

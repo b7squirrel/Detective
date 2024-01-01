@@ -26,6 +26,7 @@ public class SetCardDataOnSlot : MonoBehaviour
         }
     }
 
+    // 카드의 장비칸을 순회하면서 아이템이 있다면 표시해 줌
     void SetAnimController(CardData charCard, CardSlot targetSlot)
     {
         CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
@@ -35,6 +36,8 @@ public class SetCardDataOnSlot : MonoBehaviour
             if (equipCards[i] == null)
             {
                 cardDisp.SetRunTimeAnimController(i, null);
+
+                cardDisp.SetEquipCardImage(i, null);
                 continue;
             }
 
@@ -44,7 +47,9 @@ public class SetCardDataOnSlot : MonoBehaviour
 
             if (weaponItemData.itemData == null) continue;
 
-            cardDisp.SetRunTimeAnimController(i, weaponItemData.itemData.CardItemAnimator.CardImageAnim);
+            //cardDisp.SetRunTimeAnimController(i, weaponItemData.itemData.CardItemAnimator.CardImageAnim);
+
+            cardDisp.SetEquipCardImage(i, weaponItemData.itemData.charImage);
         }
     }
 }

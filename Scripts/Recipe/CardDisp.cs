@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // equipped text는 카드슬롯이 생성될 때 정해짐. 
 // 장착되거나 해제되면 Equipment Panel Manager에서 업데이트
@@ -12,6 +12,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected UnityEngine.UI.Image charImage;
     [SerializeField] Animator charAnim;
     [SerializeField] Animator[] equipmentAnimators;
+    [SerializeField] Image[] equipmentImages;
     [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
@@ -101,6 +102,16 @@ public class CardDisp : MonoBehaviour
                 equipmentAnimators[i].Rebind();
             }
         }
+    }
+    public void SetEquipCardImage(int index, Sprite equipmentImage)
+    {
+        if (equipmentImage == null)
+        {
+            equipmentImages[index].gameObject.SetActive(false);
+            return;
+        }
+        equipmentImages[index].gameObject.SetActive(true);
+        equipmentImages[index].sprite = equipmentImage;
     }
     protected virtual void SetNumStar(int numStars)
     {
