@@ -18,6 +18,7 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject atkLabel, hpLabel;
     [SerializeField] GameObject charButton;
     [SerializeField] GameObject backButton;
+    [SerializeField] GameObject charUpgradeButton; // 디스플레이되는 오리카드 업그레이드 버튼
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr)
     {
@@ -36,7 +37,7 @@ public class EquipDisplayUI : MonoBehaviour
         // 카드 이름 텍스트
         Title.text = charCardData.Name;
         // 카드 레벨 텍스트
-        Level.text = "LV1";
+        Level.text = charCardData.Level;
 
         // 캐릭터 이미지
         charImage.gameObject.SetActive(true);
@@ -49,6 +50,7 @@ public class EquipDisplayUI : MonoBehaviour
 
         charButton.SetActive(true);
         backButton.SetActive(true);
+        charUpgradeButton.SetActive(true);
     }
     // 오리 위에 장착된 장비 표시/ 숨기기
     public void SetEquipmentDisplay(CardData itemCardData, bool isAdding)
@@ -79,6 +81,11 @@ public class EquipDisplayUI : MonoBehaviour
         }
 
         charButton.SetActive(true);
+    }
+    public void SetLevelUI(CardData cardOnDisplay)
+    {
+        Level.text = cardOnDisplay.Level;
+
     }
     // 오리의 idle과 타이밍을 맞추기 위해서 장비가 장착될 때마다 애니메이션 리셋
     void RestartAnim()
@@ -140,11 +147,15 @@ public class EquipDisplayUI : MonoBehaviour
         charImage.gameObject.SetActive(false);
 
         charButton.SetActive(false);
+        charUpgradeButton.SetActive(false);
+
     }
     public void OnDisplay(CardData cardData)
     {
         atkLabel.SetActive(true);
         hpLabel.SetActive(true);
+        charUpgradeButton.SetActive(true);
+
         // charImage.color = new Color(1, 1, 1, 1);
     }
 }

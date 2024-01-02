@@ -23,11 +23,19 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] EquipInfoPanel equipInfoPanel;
     [SerializeField] AllField field; // 모든 카드
 
+    [Header("Equipment Slots")]
     PlayerDataManager playerDataManager;
     [SerializeField] TMPro.TextMeshProUGUI upgradeCost;
     [SerializeField] CanvasGroup warningLackCanvasGroup;
     [SerializeField] CanvasGroup warningLMaxLevelCanvasGroup;
     [SerializeField] Button upgradeButton;
+
+    [Header("Char Card Slot")]
+    [SerializeField] TMPro.TextMeshProUGUI charUpgradeCost;
+    [SerializeField] CanvasGroup charWarningLackCanvasGroup;
+    [SerializeField] CanvasGroup charWarningLMaxLevelCanvasGroup;
+    [SerializeField] Button charUpgradeButton;
+
 
     void Awake()
     {
@@ -44,6 +52,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         warningLackCanvasGroup.alpha = 0;
         warningLMaxLevelCanvasGroup.alpha = 0;
+        charWarningLackCanvasGroup.alpha = 0;
+        charWarningLMaxLevelCanvasGroup.alpha = 0;
     }
 
     void OnEnable()
@@ -52,6 +62,7 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Weapon");
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
+        charUpgradeButton.gameObject.SetActive(false);
         ClearAllEquipmentSlots(); // logic, UI 모두 처리
     }
 
@@ -63,6 +74,12 @@ public class EquipmentPanelManager : MonoBehaviour
         CardOnDisplay = oriCardDataToDisplay; // 디스플레이 되는 카드의 card data
         equipmentSlotsManager.InitEquipSlots(oriCardDataToDisplay); // 오리 카드의 Data대로 장비 슬롯 설정 
         equipDisplayUI.SetWeaponDisplay(oriCardDataToDisplay, equipmentSlotsManager.GetCurrentAttribute()); // 오리 카드 및 Attr
+
+        // 나중에는 이 항목들을 EquipDispUI에 옮겨야 한다. SetWeaponDisplay에 포함되도록
+        int level = int.Parse(CardOnDisplay.Level);
+        UpdateUpgradeCost(level, charUpgradeCost);
+        UpdateButtonState(charUpgradeButton, true);
+
         isEquipped = false;
     }
 
@@ -202,9 +219,10 @@ public class EquipmentPanelManager : MonoBehaviour
         warningLackCanvasGroup.alpha = 0;
         warningLMaxLevelCanvasGroup.alpha = 0;
 
-        UpdateUpgradeCost(itemCardData);
+        int level = int.Parse(itemCardData.Level);
+        UpdateUpgradeCost(level, upgradeCost);
 
-        UpdateButtonState(upgradeButton);
+        UpdateButtonState(upgradeButton, false);
     }
 
     public void DeActivateEquipInfoPanel()
@@ -212,7 +230,39 @@ public class EquipmentPanelManager : MonoBehaviour
         equipInfoPanel.gameObject.SetActive(false);
         this.cardDisp = null;
     }
-    // info panel의 Upgrade 버튼
+    /// <summary>
+    /// Display에 보여지는 오리카드의 업그레이드
+    /// </summary>
+    public void UpgradeCardOnDisplay()
+    {
+        int level = int.Parse(CardOnDisplay.Level);
+        int amountToUpgrade = GetAmountToUpgrade(level);
+        int candyNumbers = playerDataManager.GetCurrentCandyNumber();
+
+        if (amountToUpgrade > candyNumbers)
+        {
+            // 업그레이드가 가능하지 않게 하기
+            charWarningLackCanvasGroup.DOFade(1, 1f);
+            StartCoroutine(HideWarning(charWarningLackCanvasGroup));
+            return;
+        }
+
+        // 가지고 있는 재화에서 업그레이드 비용 빼주고 데이터 저장
+        candyNumbers -= amountToUpgrade;
+        playerDataManager.SetCurrentCandyNumber(candyNumbers);
+
+        // 레벨업 하고 card data에 저장
+        statManager.LevelUp(CardOnDisplay);
+
+        // 레벨업된 수치를 UI에 반영
+        equipDisplayUI.SetLevelUI(CardOnDisplay);
+
+        UpdateUpgradeCost(level, charUpgradeCost);
+        UpdateButtonState(charUpgradeButton, true);
+    }
+    /// <summary>
+    /// info panel의 업그레이드 버튼
+    /// </summary>
     public void UpgradeCard()
     {
         int level = int.Parse(cardToEquip.Level);
@@ -240,31 +290,56 @@ public class EquipmentPanelManager : MonoBehaviour
             equipmentSlotsManager.InitEquipSlots(CardOnDisplay);
         }
         
-        UpdateUpgradeCost(cardToEquip);
-        UpdateButtonState(upgradeButton);
+        UpdateUpgradeCost(level, upgradeCost);
+        UpdateButtonState(upgradeButton, false);
     }
 
-    void UpdateUpgradeCost(CardData cardToUpgrade)
+    /// <summary>
+    /// 업그레이드 비용을 UI에 표시
+    /// </summary>
+    void UpdateUpgradeCost(int _level, TMPro.TextMeshProUGUI _upgradeCost)
     {
-        int amountToUpgrade = int.Parse(cardToUpgrade.Level);
-        upgradeCost.text = GetAmountToUpgrade(amountToUpgrade).ToString();
+        _upgradeCost.text = GetAmountToUpgrade(_level).ToString();
     }
+
+    /// <summary>
+    /// 카드의 레벨에 대응하는 업그레이드 비용 계산
+    /// </summary>
     int GetAmountToUpgrade(int level)
     {
         return level * 3;
     }
-    void UpdateButtonState(Button button)
+
+    /// <summary>
+    /// 조건에 따라 업그레이드 버튼을 활성/비활성 시킴
+    /// </summary>
+    void UpdateButtonState(Button button, bool isChar)
     {
-        if (int.Parse(cardToEquip.Level) == 30)
+        if(isChar)
         {
-            // 최고 레벨 경고를 띄우고 레벨업 버튼 비활성화
-            warningLMaxLevelCanvasGroup.DOFade(1, 1f);
-            upgradeCost.text = "Max";
-            button.interactable = false;
-            return;
+            if (int.Parse(CardOnDisplay.Level) == 30)
+            {
+                charWarningLMaxLevelCanvasGroup.DOFade(1, 1f);
+                StartCoroutine(HideWarning(charWarningLMaxLevelCanvasGroup));
+                charUpgradeCost.text = "Max";
+                button.interactable = false;
+                return;
+            }
         }
+        else
+        {
+            if (int.Parse(cardToEquip.Level) == 30)
+            {
+                warningLMaxLevelCanvasGroup.DOFade(1, 1f);
+                upgradeCost.text = "Max";
+                button.interactable = false;
+                return;
+            }
+        }
+
         button.interactable = true;
     }
+
     IEnumerator HideWarning(CanvasGroup canvasGroupToHide)
     {
         yield return new WaitForSeconds(1f);

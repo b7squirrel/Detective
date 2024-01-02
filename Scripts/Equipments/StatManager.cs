@@ -10,7 +10,9 @@ public class OriAttribute
     public int Atk, Hp;
 }
 
-// 카드를 업그레이드 할 떄 스탯 업데이트
+/// <summary>
+/// 오리, 아이템 구분해서 업그레이드 하면서 스탯 업데이트
+/// </summary>
 public class StatManager : MonoBehaviour
 {
     [SerializeField] CardDataManager cardDataManager;
@@ -19,6 +21,9 @@ public class StatManager : MonoBehaviour
     [SerializeField] StartingDataContainer statContainer;
     OriAttribute leadAttribute;
 
+    /// <summary>
+    /// 오리, 아이템 구분해서 레벨업, 스탯업
+    /// </summary>
     public void LevelUp(CardData _cardData)
     {
         int level = new Convert().StringToInt(_cardData.Level);
@@ -62,7 +67,9 @@ public class StatManager : MonoBehaviour
             equipInfoPanel.UpdatePanel(_level, _hp);
         }
     }
-    // 리드 오리 공격력, 체력
+    /// <summary>
+    /// 리드 오리 공격력, 체력
+    /// </summary>
     public OriAttribute GetLeadAttribute(CardData oriCard)
     {
         CharCard lead = cardList.FindCharCard(oriCard);
