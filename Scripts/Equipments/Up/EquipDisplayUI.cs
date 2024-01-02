@@ -20,6 +20,9 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject backButton;
     [SerializeField] GameObject charUpgradeButton; // 디스플레이되는 오리카드 업그레이드 버튼
 
+    [SerializeField] CanvasGroup charWarningLackCanvasGroup;
+    [SerializeField] CanvasGroup charWarningLMaxLevelCanvasGroup;
+
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr)
     {
         // 별과 카드 색깔
@@ -149,6 +152,11 @@ public class EquipDisplayUI : MonoBehaviour
         charButton.SetActive(false);
         charUpgradeButton.SetActive(false);
 
+        GetComponentInParent<EquipmentPanelManager>().TempKillAllTweens();
+        charWarningLackCanvasGroup.gameObject.SetActive(false);
+        charWarningLMaxLevelCanvasGroup.gameObject.SetActive(false);
+
+
     }
     public void OnDisplay(CardData cardData)
     {
@@ -156,6 +164,8 @@ public class EquipDisplayUI : MonoBehaviour
         hpLabel.SetActive(true);
         charUpgradeButton.SetActive(true);
 
+        charWarningLackCanvasGroup.gameObject.SetActive(true);
+        charWarningLMaxLevelCanvasGroup.gameObject.SetActive(true);
         // charImage.color = new Color(1, 1, 1, 1);
     }
 }

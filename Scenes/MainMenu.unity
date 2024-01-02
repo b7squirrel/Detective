@@ -3453,7 +3453,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1666993444}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8512,6 +8512,7 @@ MonoBehaviour:
   stageInfoUi: {fileID: 958746582}
   stageInfo: {fileID: 1400131445}
   BlackFadeIn: {fileID: 1052057345}
+  fadeSpeed: 0.5
 --- !u!114 &958746582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10537,7 +10538,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1666993444}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15934,8 +15935,8 @@ RectTransform:
   - {fileID: 111309218}
   - {fileID: 2141287392}
   - {fileID: 1312497643}
-  - {fileID: 294699613}
   - {fileID: 1201786803}
+  - {fileID: 294699613}
   m_Father: {fileID: 1803978047}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17311,6 +17312,8 @@ MonoBehaviour:
   charButton: {fileID: 294699612}
   backButton: {fileID: 259832373}
   charUpgradeButton: {fileID: 1648519612}
+  charWarningLackCanvasGroup: {fileID: 1128768738}
+  charWarningLMaxLevelCanvasGroup: {fileID: 371436934}
 --- !u!1 &1808537185
 GameObject:
   m_ObjectHideFlags: 0

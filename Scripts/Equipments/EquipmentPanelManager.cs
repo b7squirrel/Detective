@@ -29,12 +29,16 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] CanvasGroup warningLackCanvasGroup;
     [SerializeField] CanvasGroup warningLMaxLevelCanvasGroup;
     [SerializeField] Button upgradeButton;
+    Tween warningLack;
+    Tween warningMax;
 
     [Header("Char Card Slot")]
     [SerializeField] TMPro.TextMeshProUGUI charUpgradeCost;
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
     [SerializeField] CanvasGroup charWarningLMaxLevelCanvasGroup;
     [SerializeField] Button charUpgradeButton;
+    Tween charWarningLack;
+    Tween charWarningMax;
 
 
     void Awake()
@@ -242,7 +246,7 @@ public class EquipmentPanelManager : MonoBehaviour
         if (amountToUpgrade > candyNumbers)
         {
             // 업그레이드가 가능하지 않게 하기
-            charWarningLackCanvasGroup.DOFade(1, 1f);
+            charWarningLack = charWarningLackCanvasGroup.DOFade(1, 1f);
             StartCoroutine(HideWarning(charWarningLackCanvasGroup));
             return;
         }
@@ -272,7 +276,7 @@ public class EquipmentPanelManager : MonoBehaviour
         if (amountToUpgrade > candyNumbers)
         {
             // 업그레이드가 가능하지 않게 하기
-            warningLackCanvasGroup.DOFade(1, 1f);
+            warningLack = warningLackCanvasGroup.DOFade(1, 1f);
             StartCoroutine(HideWarning(warningLackCanvasGroup));
             return;
         }
@@ -319,7 +323,7 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             if (int.Parse(CardOnDisplay.Level) == 30)
             {
-                charWarningLMaxLevelCanvasGroup.DOFade(1, 1f);
+                charWarningMax = charWarningLMaxLevelCanvasGroup.DOFade(1, 1f);
                 StartCoroutine(HideWarning(charWarningLMaxLevelCanvasGroup));
                 charUpgradeCost.text = "Max";
                 button.interactable = false;
@@ -330,7 +334,7 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             if (int.Parse(cardToEquip.Level) == 30)
             {
-                warningLMaxLevelCanvasGroup.DOFade(1, 1f);
+                warningLack = warningLMaxLevelCanvasGroup.DOFade(1, 1f);
                 upgradeCost.text = "Max";
                 button.interactable = false;
                 return;
@@ -344,5 +348,9 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         canvasGroupToHide.DOFade(0, 1f);
+    }
+    public void TempKillAllTweens()
+    {
+        DOTween.KillAll();
     }
 }
