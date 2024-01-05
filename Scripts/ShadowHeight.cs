@@ -1,10 +1,12 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class ShadowHeight : MonoBehaviour
 {
-    [SerializeField] Vector2 offset = new Vector2(.3f, -.17f);
+    Vector2 shadowOffset = new Vector2(.07f, -.07f);
     [SerializeField] int bouncingNumbers;
+    [SerializeField] bool noHeightShadow;
     public bool IsDone { get; private set; }
     public UnityEvent onGroundHitEvent;
 
@@ -16,13 +18,15 @@ public class ShadowHeight : MonoBehaviour
     SpriteRenderer sprRndshadow;
     Rigidbody2D rb;
 
-    float gravity = -300f;
+    float gravity = -100f;
     Vector2 groundVelocity;
     Vector2 pastGroundVelocity;
     float verticalVelocity;
     float lastInitaialVerticalVelocity;
     [SerializeField] bool isGrounded;
     bool isInitialized;
+
+    Animator anim;
 
     void Update()
     {
@@ -58,6 +62,8 @@ public class ShadowHeight : MonoBehaviour
         this.groundVelocity = groundVelocity;
         this.verticalVelocity = verticalVelocity;
         lastInitaialVerticalVelocity = verticalVelocity;
+
+        anim = GetComponent<Animator>();
     }
 
     void UpdatePosition()
@@ -80,8 +86,8 @@ public class ShadowHeight : MonoBehaviour
 
         if (isGrounded)
         {
-            trnsShadow.position = new Vector2(trnsObject.position.x + offset.x,
-                        trnsObject.position.y + offset.y);
+            trnsShadow.position = new Vector2(trnsObject.position.x + shadowOffset.x,
+                        trnsObject.position.y + shadowOffset.y);
 
             sprRndBody.sortingLayerName = "Enemy";
             sprRndshadow.sortingLayerName = "Shadow";
@@ -141,5 +147,23 @@ public class ShadowHeight : MonoBehaviour
         }
         groundVelocity = groundVelocity / divisionFactor;
         pastGroundVelocity = groundVelocity;
+    }
+
+    public void RemoveHeigihtShadow()
+    {
+        if (noHeightShadow == false)
+            return;
+        if (verticalVelocity < 0.1f && bouncingNumbers == 0)
+        {
+            sprRndshadow.color = new Color(0, 0, 0, 0f);
+        }
+    }
+
+    public void TriggerIdleAnim()
+    {
+        if (verticalVelocity < 0.1f && bouncingNumbers == 0)
+        {
+            anim.SetTrigger("Idle");
+        }
     }
 }
