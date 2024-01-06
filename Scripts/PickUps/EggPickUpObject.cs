@@ -1,13 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class EggPickUpObject : Collectable, IPickUpObject
 {
     [SerializeField] List<UpgradeData> upgradeToPick;
     int index;
 
+    [SerializeField] Collider2D[] colliders;
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        DeactivateColliders();
+    }
     public override void OnHitMagnetField(Vector2 direction)
     {
         // 알은 자력에 영향을 받지 않는다
@@ -55,6 +60,21 @@ public class EggPickUpObject : Collectable, IPickUpObject
 
             SoundManager.instance.Play(pickup);
             gameObject.SetActive(false);
+        }
+    }
+
+    public void DeactivateColliders()
+    {
+        for (int i = 0; i<colliders.Length; i++)
+        {
+            colliders[i].enabled = false;
+        }
+    }
+    public void ActivateColliders()
+    {
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].enabled = true;
         }
     }
 }
