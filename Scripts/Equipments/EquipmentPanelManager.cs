@@ -259,8 +259,13 @@ public class EquipmentPanelManager : MonoBehaviour
         // 레벨업 하고 card data에 저장
         statManager.LevelUp(CardOnDisplay);
 
-        // 레벨업된 수치를 UI에 반영
+        // 레벨업된 수치를 Level UI에 반영
         equipDisplayUI.SetLevelUI(CardOnDisplay);
+
+        // 레벨업 된 수치를 Atk, Hp UI에 반영
+        int.TryParse(CardOnDisplay.Hp, out int currentHp);
+        int.TryParse(CardOnDisplay.Atk, out int currentAtk);
+        equipDisplayUI.SetAtkHpStats(currentAtk, currentHp);
 
         UpdateUpgradeCost(level, charUpgradeCost);
         UpdateButtonState(charUpgradeButton, true);

@@ -55,14 +55,10 @@ public class EquipDisplayUI : MonoBehaviour
         backButton.SetActive(true);
         charUpgradeButton.SetActive(true);
     }
-
-    public void SetAtkStats(int _atk)
+    public void SetAtkHpStats(int _currentAtk, int _currnetHp)
     {
-        this.atk.text = _atk.ToString();
-    }
-    public void SetHpStats(int _hp)
-    {
-        this.hp.text = _hp.ToString();
+        atk.text = _currentAtk.ToString();
+        hp.text = _currnetHp.ToString();
     }
     // 오리 위에 장착된 장비 표시/ 숨기기
     public void SetEquipmentDisplay(CardData itemCardData, bool isAdding)
