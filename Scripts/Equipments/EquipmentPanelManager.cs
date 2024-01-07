@@ -170,6 +170,7 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             Debug.Log("장비가 이미 있습니다. 교체합니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
+            equipmentSlotsManager.EmptyEquipSlot(index);
         }
 
         // 새로운 장비 장착

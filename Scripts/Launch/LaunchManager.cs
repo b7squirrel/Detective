@@ -131,9 +131,7 @@ public class LaunchManager : MonoBehaviour
     public void CloseField()
     {
         ClearAllFieldSlots();
-        Debug.Log("1 Tween 갯수는 = " + DOTween.TotalActiveTweeners());
         DOTween.KillAll(true);
-        Debug.Log("2 Tween 갯수는 = " + DOTween.TotalActiveTweeners());
 
         fieldSlotPanel.SetActive(false);
     }

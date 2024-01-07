@@ -41,8 +41,6 @@ public class AllField : MonoBehaviour
             // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
             slot.transform.localScale = new Vector2(.5f, .5f);
             slots.Add(slot);
-
-            Debug.Log("슬롯 타입 = " + slotType);
         }
 
         // 카드 데이터 정렬

@@ -40,7 +40,9 @@ public class EquipmentSlotsManager : MonoBehaviour
         }
     }
 
-    // 장비를 장착하면 equipment panel manager에서 Set slot 호출해서 해당 장비 슬롯에 배정
+    /// <summary>
+    /// 장비를 장착하면 equipment panel manager에서 Set slot 호출해서 해당 장비 슬롯에 배정
+    /// </summary>
     public void SetEquipSlot(int index, Item itemData, CardData cardToEquip)
     {
         // 장착 중 text가 표시될 필요가 없음
@@ -51,7 +53,9 @@ public class EquipmentSlotsManager : MonoBehaviour
         equipDisplayUI.SetEquipmentDisplay(cardToEquip, true);
     }
 
-    // 장비가 장착될 때, 해제될 때 각각 스탯을 업데이트
+    /// <summary>
+    /// 장비가 장착될 때, 해제될 때 각각 스탯을 업데이트, UI도 업데이트
+    /// </summary>
     void UpdateAttribute(CardData _equipCardData, bool isAdding)
     {
         // 장비 카드의 attribute
@@ -60,8 +64,6 @@ public class EquipmentSlotsManager : MonoBehaviour
 
         int addingFactor = isAdding ? 1 : -1; // 장착이면 더하기, 해제면 빼기
 
-        Debug.Log("Get all card list numbers = " + cardDataManager.GetAllCardList().Count);
-        Debug.Log("장비 카드 = " + _equipCardData.Name);
         // 해당 장비의 attribute 더해줌
         if (_equipCardData.EssentialEquip == EssentialEquip.Essential.ToString())
         {
@@ -84,6 +86,9 @@ public class EquipmentSlotsManager : MonoBehaviour
             equipSlots[i].EmptySlot();
         }
     }
+    /// <summary>
+    /// 장비 칸의 index를 받아서 비움, Stat UI 업데이트
+    /// </summary>
     public void EmptyEquipSlot(int index)
     {
         CardData cardDataToRemove = equipSlots[index].GetCardData();
