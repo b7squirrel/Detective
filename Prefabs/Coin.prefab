@@ -94,11 +94,13 @@ GameObject:
   m_Component:
   - component: {fileID: 9024913478097617490}
   - component: {fileID: 7404354614668522898}
-  - component: {fileID: 4206347044284979647}
+  - component: {fileID: 3508880822523242293}
   - component: {fileID: -51498579471568922}
   - component: {fileID: -6721317060970081831}
   - component: {fileID: 1647154091}
   - component: {fileID: -6616644622741974676}
+  - component: {fileID: 6879441611312922273}
+  - component: {fileID: 7589284701973751143}
   m_Layer: 13
   m_Name: Coin
   m_TagString: Untagged
@@ -114,7 +116,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3089954493006562425}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.0742831, y: -1.893862, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -137,20 +139,23 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.30555555
---- !u!114 &4206347044284979647
-MonoBehaviour:
+  m_Radius: 0.73
+--- !u!58 &3508880822523242293
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3089954493006562425}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5894f44e38b24ca4cb98a7c674383e1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pickup: {fileID: 8300000, guid: 472c0920e6dcbb64cbafbd2c3ac6c954, type: 3}
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.67
 --- !u!114 &-51498579471568922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,15 +189,15 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
+  m_Mass: 1000000
+  m_LinearDrag: 10
   m_AngularDrag: 0
   m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: cd2848b1ebd1e64489d4fcefe4b9d988, type: 2}
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!95 &1647154091
 Animator:
   serializedVersion: 5
@@ -227,3 +232,84 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Key>k__BackingField: Coin_A
+--- !u!114 &6879441611312922273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3089954493006562425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882983c82ab37e54a80827961b02362b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bouncingNumbers: 1
+  noHeightShadow: 1
+  onGroundHitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6879441611312922273}
+        m_TargetAssemblyTypeName: ShadowHeight, Assembly-CSharp
+        m_MethodName: Bounce
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 2.7
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6879441611312922273}
+        m_TargetAssemblyTypeName: ShadowHeight, Assembly-CSharp
+        m_MethodName: SlowDownGroundVelocity
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 2.7
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6879441611312922273}
+        m_TargetAssemblyTypeName: ShadowHeight, Assembly-CSharp
+        m_MethodName: TriggerIdleAnim
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: -51498579471568922}
+        m_TargetAssemblyTypeName: Collectable, Assembly-CSharp
+        m_MethodName: ActivateColliders
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  isGrounded: 0
+--- !u!114 &7589284701973751143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3089954493006562425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615289b5a4869a345a967aac1cd54bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  verticalVel: 25
+  groundVel: {x: 0, y: 0}
+  randomGroundVel: 1

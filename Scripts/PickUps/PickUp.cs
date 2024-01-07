@@ -20,7 +20,7 @@ public class PickUp : MonoBehaviour
     {
         while (true)
         {
-            if ((transform.position - Player.instance.transform.position).sqrMagnitude < .04f)
+            if ((transform.position - Player.instance.transform.position).sqrMagnitude < 1f)
             {
                 HitPlayerFeedback();
                 break;

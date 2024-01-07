@@ -53,10 +53,10 @@ public class ShadowHeight : MonoBehaviour
             sprRndshadow.color = new Color(0, 0, 0, .5f);
             sprRndshadow.sortingLayerName = "ShadowOver";
 
-            IsDone = false;
 
             isInitialized = true;
         }
+        IsDone = false;
 
         isGrounded = false;
         this.groundVelocity = groundVelocity;
@@ -131,6 +131,7 @@ public class ShadowHeight : MonoBehaviour
         }
         if (bouncingNumbers < 1)
         {
+            IsDone = true;
             return;
         }
         Initialize(groundVelocity, lastInitaialVerticalVelocity / divisionFactor);
