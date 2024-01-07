@@ -49,7 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4498907a34de1624496d744fb1dc7ba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 10
+  hp: 1
+  hitEffect: {fileID: 985285463175719073, guid: 92a091687ffeddb4d9a8477edf9f1f8e, type: 3}
 --- !u!114 &8155687002099685990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +65,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItemPrefab:
   - {fileID: 8884259230644267150, guid: e3c3d9b88e9ead441aefd7102fd9764a, type: 3}
+  - {fileID: 3089954493006562425, guid: e966530f6cd20b6438cacecd2eed29b0, type: 3}
+  - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+  - {fileID: 7188308438288182905, guid: 7055ff343fdbd5a4d9783a4ec9861b2c, type: 3}
   dropLastItemPrefab: {fileID: 0}
   chance: 1
   exp: 1000

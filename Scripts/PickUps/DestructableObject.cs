@@ -8,10 +8,17 @@ using UnityEngine;
 public class DestructableObject : MonoBehaviour, Idamageable
 {
     [SerializeField] int hp;
+    [SerializeField] GameObject hitEffect;
     int currentHp;
+    Animator anim;
+
     void OnEnable()
     {
         currentHp = hp;
+        if (anim == null)
+        {
+            anim = GetComponent<Animator>();
+        }
     }
 
     public void TakeDamage(int damage, float knockBackChance, Vector2 target, GameObject hitEffect)
@@ -21,6 +28,13 @@ public class DestructableObject : MonoBehaviour, Idamageable
         if (currentHp <= 0)
         {
             DestroyObject();
+        }
+        if(anim != null)
+        {
+            anim.SetTrigger("Hit");
+            GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
+            effect.transform.position = transform.position;
+            effect.transform.localScale = Vector2.one * 1.3f;
         }
         DropItem();
     }

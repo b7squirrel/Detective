@@ -19,4 +19,16 @@ public class GemPickUpObject : Collectable, IPickUpObject
         character.level.AddExperience(potentialEXP + ExpAmount);
         GemManager.instance.DecreaseGemCount();
     }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        Character character = collision.GetComponent<Character>();
+        if (character != null)
+        {
+            OnPickUp(character);
+
+            SoundManager.instance.Play(pickup);
+            gameObject.SetActive(false);
+        }
+    }
 }

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class PropManager : MonoBehaviour
@@ -8,7 +6,7 @@ public class PropManager : MonoBehaviour
     [SerializeField] Transform[] spawnAreas; // 4개
     [SerializeField] Transform spawnBox; // 스폰 포인트들을 가지고 있는 박스
     [SerializeField] Transform propContainer; // 프랍을 담을 empty object. 하이어라키 정리용
-    [SerializeField] GameObject PropToSpawn;
+    [SerializeField] GameObject[] PropToSpawn;
     PropPoint[] points; // 스폰 포인트들
     List<Vector2> visitedArea;
     void Start()
@@ -39,7 +37,7 @@ public class PropManager : MonoBehaviour
 
         for (int i = 0; i < points.Length; i++)
         {
-            GameObject go = Instantiate(PropToSpawn, points[i].transform.position, Quaternion.identity);
+            GameObject go = Instantiate(PropToSpawn[(int)Random.Range(0, 2)], points[i].transform.position, Quaternion.identity);
             go.transform.parent = propContainer;
         }
 
