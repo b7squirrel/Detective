@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1317013318406892793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6511155516434692605}
+  m_Layer: 0
+  m_Name: Transform Milk
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6511155516434692605
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317013318406892793}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3213637475077025516}
+  m_Father: {fileID: 8884259230644267184}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3984598113752142270
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3213637475077025516}
   - component: {fileID: 4055280216060841603}
-  - component: {fileID: 2066468318570962210}
+  - component: {fileID: 967961916526221746}
   m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
@@ -25,12 +57,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3984598113752142270}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8884259230644267184}
+  m_Father: {fileID: 6511155516434692605}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4055280216060841603
@@ -72,7 +104,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: -100
   m_Sprite: {fileID: 21300000, guid: 640826e68fc63c949aa602bbc1c8d34e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -85,7 +117,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2066468318570962210
+--- !u!114 &967961916526221746
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,11 +139,14 @@ GameObject:
   m_Component:
   - component: {fileID: 8884259230644267184}
   - component: {fileID: 8884259230644267149}
-  - component: {fileID: 1362534692}
   - component: {fileID: -490822388464860488}
+  - component: {fileID: -3786502207025165850}
   - component: {fileID: 6388896032119097397}
-  - component: {fileID: 6685209178160507188}
-  m_Layer: 7
+  - component: {fileID: 1362534692}
+  - component: {fileID: 328928784886804876}
+  - component: {fileID: 4556722193487380517}
+  - component: {fileID: -4795666020089958391}
+  m_Layer: 0
   m_Name: Milk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +165,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3213637475077025516}
+  - {fileID: 6511155516434692605}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -152,10 +187,54 @@ MonoBehaviour:
   pickupEffect: {fileID: 985285463175719073, guid: 92a091687ffeddb4d9a8477edf9f1f8e, type: 3}
   dir: {x: 0, y: 0}
   delay: 0.05
-  whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   whiteFlashDuration: 0
   pickup: {fileID: 8300000, guid: a53016552f6421a4b96e87c7b571400d, type: 3}
   <HealAmount>k__BackingField: 1200
+--- !u!114 &-490822388464860488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8884259230644267150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad10bd374ff11e34faf5438b72bd3a52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Key>k__BackingField: Milk_A
+--- !u!70 &-3786502207025165850
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8884259230644267150}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.27, y: 2.22}
+  m_Direction: 0
+--- !u!70 &6388896032119097397
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8884259230644267150}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.18, y: 2.07}
+  m_Direction: 0
 --- !u!95 &1362534692
 Animator:
   serializedVersion: 5
@@ -177,7 +256,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-490822388464860488
+--- !u!114 &328928784886804876
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,27 +265,91 @@ MonoBehaviour:
   m_GameObject: {fileID: 8884259230644267150}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad10bd374ff11e34faf5438b72bd3a52, type: 3}
+  m_Script: {fileID: 11500000, guid: 882983c82ab37e54a80827961b02362b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Key>k__BackingField: Milk_A
---- !u!70 &6388896032119097397
-CapsuleCollider2D:
+  bouncingNumbers: 1
+  noHeightShadow: 1
+  onGroundHitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 328928784886804876}
+        m_TargetAssemblyTypeName: ShadowHeight, Assembly-CSharp
+        m_MethodName: Bounce
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 2.7
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 328928784886804876}
+        m_TargetAssemblyTypeName: ShadowHeight, Assembly-CSharp
+        m_MethodName: RemoveHeigihtShadow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 328928784886804876}
+        m_TargetAssemblyTypeName: ShadowHeight, Assembly-CSharp
+        m_MethodName: TriggerIdleAnim
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8884259230644267149}
+        m_TargetAssemblyTypeName: Collectable, Assembly-CSharp
+        m_MethodName: ActivateColliders
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 328928784886804876}
+        m_TargetAssemblyTypeName: ShadowHeight, Assembly-CSharp
+        m_MethodName: SlowDownGroundVelocity
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 2.7
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  isGrounded: 0
+--- !u!114 &4556722193487380517
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8884259230644267150}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.27, y: 2.22}
-  m_Direction: 0
---- !u!50 &6685209178160507188
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615289b5a4869a345a967aac1cd54bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  verticalVel: 25
+  groundVel: {x: 5, y: 5}
+  randomGroundVel: 1
+--- !u!50 &-4795666020089958391
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -218,7 +361,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 1000000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0

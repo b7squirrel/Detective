@@ -30,6 +30,9 @@ public class Collectable : MonoBehaviour
 
     float accel = 50f;
 
+    [Header("Drop Bounce")]
+    protected Collider2D[] colliders;
+
     public void TempWhite()
     {
         //sr.material = whiteMaterial;
@@ -44,7 +47,27 @@ public class Collectable : MonoBehaviour
         {
             gemManager = FindAnyObjectByType<GemManager>();
         }
+
+        colliders = GetComponents<Collider2D>();
+        DeactivateColliders();
     }
+
+    public void DeactivateColliders()
+    {
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].enabled = false;
+        }
+    }
+    // shadow height의 유니티 이벤트에서 참조
+    public void ActivateColliders()
+    {
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].enabled = true;
+        }
+    }
+
     protected virtual void OnDisable()
     {
         StopAllCoroutines();
@@ -55,7 +78,6 @@ public class Collectable : MonoBehaviour
         sr = GetComponentInChildren<SpriteRenderer>();
         //initialMat = sr.material;
     }
-    
     #endregion
 
     #region 자력에 닿았을 때

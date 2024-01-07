@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 1519986380285838772}
   - component: {fileID: 1519986380285838773}
   - component: {fileID: 8155687002099685990}
-  - component: {fileID: 3308938147385764352}
   - component: {fileID: 6857776902098202006}
+  - component: {fileID: 3188774486444296818}
   m_Layer: 7
   m_Name: Chest
   m_TagString: Props
@@ -75,6 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4498907a34de1624496d744fb1dc7ba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 3
 --- !u!114 &8155687002099685990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,32 +90,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItemPrefab:
   - {fileID: 8884259230644267150, guid: e3c3d9b88e9ead441aefd7102fd9764a, type: 3}
-  - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-  - {fileID: 7188308438288182905, guid: 7055ff343fdbd5a4d9783a4ec9861b2c, type: 3}
+  dropLastItemPrefab: {fileID: 0}
   chance: 1
   exp: 1000
   hp: 0
---- !u!50 &3308938147385764352
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1519986380285838769}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 100000
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!114 &6857776902098202006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +107,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Key>k__BackingField: Chest_A
+--- !u!50 &3188774486444296818
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519986380285838769}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &4685323377475136602
 GameObject:
   m_ObjectHideFlags: 0
