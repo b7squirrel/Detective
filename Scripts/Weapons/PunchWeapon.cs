@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PunchWeapon : WeaponBase
@@ -47,9 +45,10 @@ public class PunchWeapon : WeaponBase
         }
     }
 
-    public void CastDamage(Idamageable enemy, Vector3 enemyPos, Vector3 contactPos)
+    public void CastDamage(Idamageable enemy, Transform enemyTrans, Vector3 contactPos)
     {
-        PostMessage(damage, enemyPos);
+        if (enemyTrans.GetComponent<DestructableObject>() == null)
+            PostMessage(damage, enemyTrans.position);
 
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
         enemy.TakeDamage(damage, knockback, contactPos, hitEffect);

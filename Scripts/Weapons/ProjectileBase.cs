@@ -46,7 +46,9 @@ public class ProjectileBase : MonoBehaviour
             Transform enmey = hit[i].GetComponent<Transform>();
             if (enmey.GetComponent<Idamageable>() != null)
             {
-                PostMessage(Damage, enmey.transform.position);
+                if (enmey.GetComponent<DestructableObject>() == null)
+                    PostMessage(Damage, enmey.transform.position);
+
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
                 enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
                 hitDetected = true;
