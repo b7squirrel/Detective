@@ -262,7 +262,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.75, y: 1.75}
+  m_Size: {x: 4.1, y: 3.325}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -381,7 +381,7 @@ Animator:
   m_GameObject: {fileID: 8170831695603223110}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: aa75087b35f52ad4baa116522f56759a, type: 2}
+  m_Controller: {fileID: 22100000, guid: b78797129470cd249a268972d329035e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -445,7 +445,6 @@ MonoBehaviour:
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
-  whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   hitEffectPoint: {fileID: 8170831695603223113}
   whiteFlashDuration: 0.08
   knockBackSpeed: 0
@@ -471,6 +470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItemPrefab:
   - {fileID: 3118075186976557793, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
+  dropLastItemPrefab: {fileID: 0}
   chance: 1
   exp: 0
   hp: 0

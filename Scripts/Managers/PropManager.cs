@@ -37,7 +37,8 @@ public class PropManager : MonoBehaviour
 
         for (int i = 0; i < points.Length; i++)
         {
-            GameObject go = Instantiate(PropToSpawn[(int)Random.Range(0, 2)], points[i].transform.position, Quaternion.identity);
+            int index = (Random.value < .2f) ? 1 : 0; // 동전 저금통이 나올 확률을 20%로 임시로 정하자
+            GameObject go = Instantiate(PropToSpawn[index], points[i].transform.position, Quaternion.identity);
             go.transform.parent = propContainer;
         }
 

@@ -34,7 +34,7 @@ public class DestructableObject : MonoBehaviour, Idamageable
             anim.SetTrigger("Hit");
             GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
             effect.transform.position = transform.position;
-            effect.transform.localScale = Vector2.one * 1.2f;
+            effect.transform.localScale = Vector2.one * 1.3f;
         }
         DropItem();
     }
