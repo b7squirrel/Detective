@@ -25,6 +25,9 @@ public class DestructableObject : MonoBehaviour, Idamageable
     {
         // knockBackChance값을 받아오지만 쓰지는 않는다
         currentHp--;
+
+        DropItem();
+
         if (currentHp <= 0)
         {
             DestroyObject();
@@ -36,7 +39,6 @@ public class DestructableObject : MonoBehaviour, Idamageable
             effect.transform.position = transform.position;
             effect.transform.localScale = Vector2.one * 1.3f;
         }
-        DropItem();
     }
 
     void DropItem()
