@@ -114,7 +114,7 @@ public class WeaponBase : MonoBehaviour
     public int GetDamage()
     {
         // int damage = (int)(weaponData.stats.damage * wielder.DamageBonus);
-        int damage = (int)(weaponStats.damage * Wielder.DamageBonus);
+        int damage = (int)(weaponStats.damage + Wielder.DamageBonus);
 
         float chance = UnityEngine.Random.Range(0, 100);
 

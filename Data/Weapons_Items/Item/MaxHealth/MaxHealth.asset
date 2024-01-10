@@ -13,12 +13,17 @@ MonoBehaviour:
   m_Name: MaxHealth
   m_EditorClassIdentifier: 
   Name: "\uCD5C\uB300 \uCCB4\uB825"
+  grade: 0
+  charImage: {fileID: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
   SynergyWeapon: "\uBB34\uC9C0\uAC1C \uC624\uB9AC"
   stats:
     armor: 0
     magnetSize: 0
     moveSpeed: 0
-    maxHp: 500
+    maxHp: 800
     damage: 0
     projectileAmount: 0
     projectileSpeed: 0
@@ -32,3 +37,4 @@ MonoBehaviour:
   upgrades:
   - {fileID: 11400000, guid: 22a3cce0d1d3d2b4095c76d103b41fbf, type: 2}
   - {fileID: 11400000, guid: 9f1baca7fd1c6064c9ac478f3eddf582, type: 2}
+  dropChance: 0

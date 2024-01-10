@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: HpRegenRate
   m_EditorClassIdentifier: 
   Name: "\uCCB4\uB825 \uD68C\uBCF5"
+  grade: 0
+  charImage: {fileID: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
   SynergyWeapon: "\uC624\uB9AC \uD3ED\uD0C4 \uC624\uB9AC"
   stats:
     armor: 0
@@ -25,10 +30,11 @@ MonoBehaviour:
     knockBackChance: 0
     criticalDamageChance: 0
     coolTimeDown: 0
-    hpRegenRate: 0
+    hpRegenRate: 100
     hp: 0
     coins: 0
     currentLevel: 0
   upgrades:
   - {fileID: 11400000, guid: 53e72b5a49a043444ba57afb0922485d, type: 2}
   - {fileID: 11400000, guid: 86e0977253b5b3840b54ab191e0ed12e, type: 2}
+  dropChance: 0
