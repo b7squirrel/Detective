@@ -92,7 +92,7 @@ public class EquipDisplayUI : MonoBehaviour
     }
     public void SetLevelUI(CardData cardOnDisplay)
     {
-        Level.text = cardOnDisplay.Level;
+        Level.text = "LV " + cardOnDisplay.Level;
 
     }
     // 오리의 idle과 타이밍을 맞추기 위해서 장비가 장착될 때마다 애니메이션 리셋
