@@ -37,8 +37,10 @@ public class DropOnDestroy : MonoBehaviour
             if (isChest)
             {
                 Character character = FindObjectOfType<Character>();
-                if (character.GetCurrentHP() / character.MaxHealth < .3f)
+                Debug.Log("character = " + character.gameObject.name);
+                if ((float)character.GetCurrentHP() / (float)character.MaxHealth < .3f)
                 {
+                    Debug.Log("체력 비율 = " + (float)character.GetCurrentHP() / (float)character.MaxHealth);
                     for (int i = 0; i < dropItemPrefab.Count; i++)
                     {
                         if (dropItemPrefab[i].GetComponent<HealPickUpObject>() != null)
