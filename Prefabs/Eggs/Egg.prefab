@@ -68,9 +68,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 115dbec4a4befe245929dc3c36f4ba7b, type: 2}
   - {fileID: 11400000, guid: 33abd3426917f4f48962789222ea5754, type: 2}
   - {fileID: 11400000, guid: 5836482e39c69b44b95694d14838502f, type: 2}
-  colliders:
-  - {fileID: 6122567282814417926}
-  - {fileID: 2138229186417466458}
 --- !u!114 &8815776592040008053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +113,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 1.5107744
 --- !u!58 &2138229186417466458
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -132,7 +129,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.9
+  m_Radius: 1.3464656
 --- !u!95 &2076059054769933217
 Animator:
   serializedVersion: 5
@@ -234,6 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   verticalVel: 40
   groundVel: {x: 0, y: 0}
+  randomGroundVel: 0
 --- !u!1 &5475136992582794200
 GameObject:
   m_ObjectHideFlags: 0
