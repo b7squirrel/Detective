@@ -40,7 +40,7 @@ public class EquipDisplayUI : MonoBehaviour
         // 카드 이름 텍스트
         Title.text = charCardData.Name;
         // 카드 레벨 텍스트
-        Level.text = charCardData.Level;
+        Level.text = "LV " + charCardData.Level;
 
         // 캐릭터 이미지
         charImage.gameObject.SetActive(true);
