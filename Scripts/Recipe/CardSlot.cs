@@ -27,7 +27,7 @@ public class CardSlot : MonoBehaviour
         cardData = _cardData;
         // cardDisp 호출해서 카드 출력
         CardDisp cardDisp = GetComponent<CardDisp>();
-        cardDisp.InitWeaponCardDisplay(_weaponData);
+        cardDisp.InitWeaponCardDisplay(_weaponData, _cardData);
 
         ID = cardData.ID;
         grade = cardData.Grade;

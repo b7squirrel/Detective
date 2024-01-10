@@ -21,7 +21,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] GameObject button; // 버튼을 활성, 비활성 하기 위해
     GameObject[] stars;
 
-    public void InitWeaponCardDisplay(WeaponData weaponData)
+    public void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
     {
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
@@ -38,7 +38,7 @@ public class CardDisp : MonoBehaviour
         // 카드 이름 텍스트
         Title.text = weaponData.Name;
         // 카드 레벨 텍스트
-        Level.text = "LV1";
+        Level.text = "LV " + cardData.Level;
 
         // 캐릭터 이미지
         //charImage.sprite = weaponData.charImage;
@@ -69,7 +69,7 @@ public class CardDisp : MonoBehaviour
         Title.text= itemData.Name;
 
         // 카드 레벨 텍스트
-        Level.text = "LV1";
+        Level.text = "LV " + cardData.Level;
 
         // 아이템 이미지
         int index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
