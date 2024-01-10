@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class DropOnDestroy : MonoBehaviour
 {
-    [SerializeField] List<GameObject> dropItemPrefab; // 맞을 때마다 떨어트리는 아이템
+    [SerializeField] List<GameObject> dropItemPrefab; // 맞을 때마다 떨어트리는 아이템 (chest는 그냥 이걸로 드롭)
     [SerializeField] GameObject dropLastItemPrefab; // 파괴될 때 떨어트리는 아이템
     [SerializeField][Range(0f, 1f)] float chance = 1f;
     [SerializeField] int exp;
     [SerializeField] int hp;
+    [SerializeField] bool isChest; // 상자는 플레이어의 체력에 따라 우유를 떨어트려야 하므로 구별해야 함
 
     bool isQuiting;
 
@@ -28,9 +29,27 @@ public class DropOnDestroy : MonoBehaviour
 
         bool isGem = false;
 
+        // 체력이 30%이하로 내려가면 무조건 힐링을 할 수 있는 아이템이 드롭되도록
         if (Random.value < chance)
         {
             GameObject toDrop = dropItemPrefab[Random.Range(0, dropItemPrefab.Count)];
+
+            if (isChest)
+            {
+                Character character = FindObjectOfType<Character>();
+                if (character.GetCurrentHP() / character.MaxHealth < .3f)
+                {
+                    for (int i = 0; i < dropItemPrefab.Count; i++)
+                    {
+                        if (dropItemPrefab[i].GetComponent<HealPickUpObject>() != null)
+                        {
+                            toDrop = dropItemPrefab[i];
+                            break;
+                        }
+                    }
+                }
+            }
+
             if (toDrop == null)
             {
                 Debug.LogWarning("DropOnDestroy, drop Item Prefab이 null입니다.");

@@ -148,6 +148,11 @@ public class Character : MonoBehaviour
         hpBar.SetStatus(currentHealth, MaxHealth);
     }
 
+    public int GetCurrentHP()
+    {
+        return currentHealth;
+    }
+
     void Die()
     {
         hpBar.gameObject.SetActive(false);
