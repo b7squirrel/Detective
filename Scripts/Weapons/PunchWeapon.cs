@@ -60,7 +60,14 @@ public class PunchWeapon : WeaponBase
         base.Attack();
 
         isAttacking = true;
-        anim.SetTrigger("Attack");
+        if(isSynergyWeaponActivated)
+        {
+            anim.SetTrigger("AttackSynergy");
+        }
+        else
+        {
+            anim.SetTrigger("Attack");
+        }
         SoundManager.instance.Play(punch);
     }
 
