@@ -24,7 +24,11 @@ public class TennisBallProjectile : ProjectileBase
 
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
+            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, 
+                                                                    KnockBackChance, 
+                                                                    KnockBackSpeedFactor,
+                                                                    transform.position, 
+                                                                    hitEffect);
             PostMessage(Damage, other.transform.position);
 
             // 입사벡터
@@ -67,7 +71,7 @@ public class TennisBallProjectile : ProjectileBase
 
         if (other.gameObject.CompareTag("Props"))
         {
-            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
+            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, KnockBackSpeedFactor, transform.position, hitEffect);
             // 입사벡터
             Vector2 incomingVector = Direction;
             incomingVector = incomingVector.normalized;

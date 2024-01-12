@@ -9,6 +9,7 @@ public class PunchWeapon : WeaponBase
     Vector2 currentDir; // 정지해 있을 때의 방향을 정하기 위해
     bool isAttacking; // 공격 중일 떄는 무기가 회전하지 않도록 하기 위해
     [SerializeField] SpriteRenderer sr;
+    [SerializeField] float SynergyKnockBackSpeedFactor;
 
     [Header("Sounds")]
     [SerializeField] AudioClip punch;
@@ -51,7 +52,14 @@ public class PunchWeapon : WeaponBase
             PostMessage(damage, enemyTrans.position);
 
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-        enemy.TakeDamage(damage, knockback, contactPos, hitEffect);
+        if (isSynergyWeaponActivated)
+        {
+            enemy.TakeDamage(damage, knockback, SynergyKnockBackSpeedFactor, contactPos, hitEffect);
+        }
+        else
+        {
+            enemy.TakeDamage(damage, knockback, knockbackSpeedFactor, contactPos, hitEffect);
+        }
     }
 
     // 공격을 할 동안은 무기의 회전이나 Flip이 없어야 함

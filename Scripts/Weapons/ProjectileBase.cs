@@ -6,11 +6,12 @@ using UnityEngine;
 public class ProjectileBase : MonoBehaviour
 {
     
-    [field : SerializeField]public Vector3 Direction { get; set; }
+    [field : SerializeField] public Vector3 Direction { get; set; }
     [field : SerializeField] public float Speed {get; set;}
     protected bool hitDetected = false;
     public int Damage { get; set; } = 5;
     public float KnockBackChance {get; set;}
+    [field: SerializeField] public float KnockBackSpeedFactor { get; set;}
     public bool IsCriticalDamageProj {get; set;}
     [field : SerializeField] public float TimeToLive {get; set;} = 3f;
 
@@ -50,7 +51,7 @@ public class ProjectileBase : MonoBehaviour
                     PostMessage(Damage, enmey.transform.position);
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, transform.position, hitEffect);
+                enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, KnockBackSpeedFactor, transform.position, hitEffect);
                 hitDetected = true;
                 break;
             }

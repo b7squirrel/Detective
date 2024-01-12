@@ -10,6 +10,7 @@ public class WeaponBase : MonoBehaviour
     protected float timer;
     protected int damage; // Attack이 시작되면 GetDamage()로 얻어냄
     protected float knockback; // Attack이 시작되면 GetKnockBackChance()로 얻어냄
+    [SerializeField] protected float knockbackSpeedFactor; // 각 무기의 프리펩에서 직접 입력
 
     public Character Wielder {get; private set;}
     protected bool isSynergyWeaponActivated;

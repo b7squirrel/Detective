@@ -105,7 +105,11 @@ public class LightningWeapon : WeaponBase
                 PostMessage(damage, colliders[i].transform.position);
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enemy.TakeDamage(damage, knockback, Player.instance.transform.position, hitEffect);
+                enemy.TakeDamage(damage, 
+                                 knockback, 
+                                 knockbackSpeedFactor,
+                                 Player.instance.transform.position, 
+                                 hitEffect);
             }
         }
     }

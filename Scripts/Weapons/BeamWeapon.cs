@@ -93,6 +93,7 @@ public class BeamWeapon : WeaponBase
             ProjectileBase projectile = projectiles[i].GetComponent<ProjectileBase>();
             projectile.Damage = damage;
             projectile.KnockBackChance = knockback;;
+            projectile.KnockBackSpeedFactor = knockbackSpeedFactor;
             projectile.IsCriticalDamageProj = isCriticalDamage;
         }
 

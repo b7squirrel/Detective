@@ -32,6 +32,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected Transform hitEffectPoint;
     [SerializeField] protected float whiteFlashDuration = 0.08f;
     [SerializeField] protected float knockBackSpeed;
+    protected float enemyKnockBackSpeedFactor; // TakeDamage 때마다 인자로 넘어오는 knockBackSpeedFactor를 담아 두는 용도
     protected float stunnedDuration = .2f;
     //protected Material initialMat;
     [HideInInspector] public Vector2 targetDir;
@@ -170,6 +171,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (IsKnockBack)
         {
             rb.velocity = knockBackSpeed * targetDir;
+            //rb.velocity = knockBackSpeed * enemyKnockBackSpeedFactor * targetDir;
             return;
         }
         if (IsStunned)
@@ -218,7 +220,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         isOffScreen = !(sr.isVisible);
     }
 
-    public virtual void TakeDamage(int damage, float knockBackChance, Vector2 target, GameObject hitEffect)
+    public virtual void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
     {
         CheckOffScreen();
         if(isOffScreen)
@@ -231,6 +233,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         effect.transform.position = target;
         SoundManager.instance.Play(hit);
 
+        enemyKnockBackSpeedFactor = knockBackSpeedFactor;
+
         float knockBackDelay = 0f;
         float chance = UnityEngine.Random.Range(0, 100);
         if (chance < knockBackChance && knockBackChance != 0)
@@ -238,7 +242,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             knockBackDelay = 0.04f;
         }
         WhiteFlash(whiteFlashDuration);
-        KnockBack(target, knockBackDelay);
+        KnockBack(target, knockBackDelay, knockBackSpeedFactor);
     }
     public virtual void Die()
     {
@@ -266,7 +270,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         gameObject.SetActive(false);
     }
 
-    protected virtual void KnockBack(Vector2 target, float knockBackDelay)
+    protected virtual void KnockBack(Vector2 target, float knockBackDelay, float knockBackSpeedFactor)
     {
         if (knockBackDelay != 0) // 낙백이 일어나지 않게. 낵백이 끝나야 kill이 진행된다
         {
@@ -277,7 +281,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (this.gameObject.activeSelf)
         {
-            StartCoroutine(KnockBackDone(knockBackDelay));
+            StartCoroutine(KnockBackDone(knockBackDelay * knockBackSpeedFactor));
         }
     }
     IEnumerator KnockBackDone(float knockBackDelay)

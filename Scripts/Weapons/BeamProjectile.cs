@@ -44,7 +44,11 @@ public class BeamProjectile : ProjectileBase
         PostMessage(Damage, enmey.position);
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
         hitEffect.transform.position = enmey.position;
-        enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, other.ClosestPoint(transform.position), hitEffect);
+        enmey.GetComponent<Idamageable>().TakeDamage(Damage, 
+                                                     KnockBackChance, 
+                                                     KnockBackSpeedFactor,
+                                                     other.ClosestPoint(transform.position), 
+                                                     hitEffect);
         hitDetected = true;
     }
 
