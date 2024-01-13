@@ -447,7 +447,7 @@ MonoBehaviour:
     m_Bits: 1024
   hitEffectPoint: {fileID: 8170831695603223113}
   whiteFlashDuration: 0.08
-  knockBackSpeed: 0
+  knockBackSpeed: 15
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
@@ -474,6 +474,7 @@ MonoBehaviour:
   chance: 1
   exp: 0
   hp: 0
+  isChest: 0
 --- !u!114 &4172382219901582434
 MonoBehaviour:
   m_ObjectHideFlags: 0
