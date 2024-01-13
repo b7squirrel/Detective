@@ -54,7 +54,7 @@ public class PunchWeapon : WeaponBase
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
         if (isSynergyWeaponActivated)
         {
-            enemy.TakeDamage(damage, knockback, SynergyKnockBackSpeedFactor, contactPos, hitEffect);
+            enemy.TakeDamage(damage, knockback, SynergyKnockBackSpeedFactor, transform.position, hitEffect);
         }
         else
         {
