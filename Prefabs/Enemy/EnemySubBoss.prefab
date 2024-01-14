@@ -442,9 +442,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 
+  isSubBoss: 1
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
+  dieEffectPrefeab: {fileID: 0}
   hitEffectPoint: {fileID: 8170831695603223113}
   whiteFlashDuration: 0.08
   knockBackSpeed: 15
@@ -470,7 +472,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItemPrefab:
   - {fileID: 3118075186976557793, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
-  dropLastItemPrefab: {fileID: 0}
+  dropLastItemPrefab: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
   chance: 1
   exp: 0
   hp: 0

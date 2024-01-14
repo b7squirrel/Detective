@@ -4,7 +4,7 @@ public class TriggerHeightShadow : MonoBehaviour
 {
     ShadowHeight shadowHeight;
     [SerializeField] float verticalVel;
-    [SerializeField] Vector2 groundVel;
+    Vector2 groundVel;
 
     [SerializeField] bool randomGroundVel;
     void OnEnable()
@@ -29,9 +29,10 @@ public class TriggerHeightShadow : MonoBehaviour
             {
                 y -= 1f;
             }
-            groundVel = new Vector2(x, y);
-            
+            groundVel = new Vector2(x, y).normalized;
+
             groundVel *= 3f;
+            //groundVel = groundVel.normalized;
         }
         shadowHeight = GetComponent<ShadowHeight>();
         shadowHeight.Initialize(groundVel, verticalVel);

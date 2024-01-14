@@ -9,6 +9,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [HideInInspector] public Rigidbody2D Target{get; set;}
     public EnemyStats Stats {get; set;}
     public bool IsBoss{get; set;}
+    [SerializeField] bool isSubBoss;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir {get; set;} // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
@@ -251,7 +252,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
             GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
             dieEffect.transform.position = transform.position;
         }
-        
+
+        if (isSubBoss)
+        {
+            for (int i = 0; i < 25; i++)
+            {
+                GetComponent<DropOnDestroy>().DropLastItem();
+            }
+        }
         GetComponent<DropOnDestroy>().CheckDrop();
 
         StopAllCoroutines();

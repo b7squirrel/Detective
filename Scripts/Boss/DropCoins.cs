@@ -30,8 +30,9 @@ public class DropCoins : MonoBehaviour
             Vector3 bulMoveVector = new Vector3(bulDirX, bulDirY, 0f);
             Vector2 bulDir = (bulMoveVector - initialPosition).normalized;
 
-            GameObject bullet = Instantiate(bulletPrefab, initialPosition, Quaternion.identity);
-            bullet.GetComponent<ShadowHeight>().Initialize(bulDir * dropForce, 50f);
+            //GameObject bullet = Instantiate(bulletPrefab, initialPosition, Quaternion.identity);
+            GameObject bullet = GameManager.instance.poolManager.GetMisc(bulletPrefab);
+            //bullet.GetComponent<ShadowHeight>().Initialize(bulDir * dropForce, 50f);
 
             angle += angleStep;
         }

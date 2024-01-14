@@ -82,6 +82,18 @@ public class DropOnDestroy : MonoBehaviour
             Debug.LogWarning("DropOnDestroy, drop Last Item Prefab이 null입니다.");
             return;
         }
-        SpawnManager.instance.SpawnObject(transform.position, toDrop, false, 0);
+
+        bool isGem = false;
+
+        if (GetComponent<Enemy>() != null)
+        {
+            exp = GetComponent<Enemy>().ExperienceReward;
+        }
+        if (toDrop.GetComponent<Collectable>() != null)
+        {
+            isGem = toDrop.GetComponent<Collectable>().IsGem;
+        }
+
+        SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
     }
 }
