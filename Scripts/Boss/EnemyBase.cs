@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, Idamageable
 {
-    [field : SerializeField] public string Name {get; private set;}
+    [field : SerializeField] public string Name {get; private set;} // 체력바에 표시할 이름이 필요한 적들만 사용
     [HideInInspector] public bool IsKnockBack{get; set;}
     [HideInInspector] public bool IsStunned{get; set;}
     [HideInInspector] public Rigidbody2D Target{get; set;}
@@ -29,6 +29,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region FeedBack Variables
     [Header("Effect")]
     //[SerializeField] protected Material whiteMaterial;
+    [SerializeField] protected GameObject dieEffectPrefeab;
     [SerializeField] protected Transform hitEffectPoint;
     [SerializeField] protected float whiteFlashDuration = 0.08f;
     [SerializeField] protected float knockBackSpeed;
@@ -246,6 +247,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Die()
     {
+        if (dieEffectPrefeab != null) {
+            GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
+            dieEffect.transform.position = transform.position;
+        }
+        
         GetComponent<DropOnDestroy>().CheckDrop();
 
         StopAllCoroutines();
