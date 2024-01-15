@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class TestFinishLevel : MonoBehaviour
 {
-    [SerializeField] WinStage winStage;
-    int index = 0;
+    int index = 0; // 여러번 충돌을 방지
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -12,7 +11,7 @@ public class TestFinishLevel : MonoBehaviour
         if (collision.gameObject.GetComponent<Player>() != null)
         {
             index++;
-            winStage.OpenPanel();
+            GameManager.instance.GetComponent<WinStage>().OpenPanel();
         }
     }
 }
