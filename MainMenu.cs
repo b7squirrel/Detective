@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
@@ -38,11 +39,21 @@ public class MainMenu : MonoBehaviour
         panelAreYouSure.gameObject.SetActive(true);
     }
 
+    // 보통은 버튼의 이벤트로 호출
     public void GoToMainMenu()
     {
         panelPause.SetActive(false);
         UnPause();
         GameManager.instance.DestroyStartingData();
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+    }
+    public void GoToMainMenuAfter(float timeToWait)
+    {
+        StartCoroutine(GoToMainMenu(timeToWait));
+    }
+    IEnumerator GoToMainMenu(float timeToWait)
+    {
+        yield return new WaitForSeconds(timeToWait);
+        GoToMainMenu();
     }
 }

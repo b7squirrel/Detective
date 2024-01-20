@@ -53,7 +53,6 @@ public class ShadowHeight : MonoBehaviour
             sprRndshadow.color = new Color(0, 0, 0, .25f);
             sprRndshadow.sortingLayerName = "ShadowOver";
 
-
             isInitialized = true;
         }
         IsDone = false;

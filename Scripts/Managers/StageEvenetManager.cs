@@ -91,7 +91,7 @@ public class StageEvenetManager : MonoBehaviour
 
     IEnumerator WinStage()
     {
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(3f);
         GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
     }
     void SpawnSubBoss()
