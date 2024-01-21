@@ -77,6 +77,9 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         transform.eulerAngles += new Vector3(0, 180f, 0);
     }
+    /// <summary>
+    /// 속도 인자를 받아서 idle anim 혹은 run anim 적용. 코스튬이 있다면 코스튬에도 애님 적용
+    /// </summary>
     public void SetAnimState(float speed)
     {
         anim.SetFloat("Speed", speed);

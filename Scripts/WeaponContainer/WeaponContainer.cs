@@ -44,8 +44,10 @@ public class WeaponContainer : MonoBehaviour
         weaponContainerAnims[0].SetAnimState(1f);
         for (int i = weaponContainers.Count - 1; i > 0; i--)
         {
+            float speed = (i == 1) ? moveSpeed - 1 : moveSpeed; // 플레이어의 바로 뒤 아이는 조금 간격을 더 두자
+
             weaponContainers[i].position =
-                Vector2.Lerp(weaponContainers[i].position, weaponContainers[i - 1].position, moveSpeed * Time.deltaTime);
+                Vector2.Lerp(weaponContainers[i].position, weaponContainers[i - 1].position, speed * Time.deltaTime);
 
             weaponContainerAnims[i].FacingRight =
                 (weaponContainers[i].position.x - weaponContainers[i - 1].position.x) < 0;
