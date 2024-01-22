@@ -31,9 +31,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [Header("Effect")]
     //[SerializeField] protected Material whiteMaterial;
     [SerializeField] protected GameObject dieEffectPrefeab;
+    [SerializeField] protected GameObject dieExplosionPrefeab;
     [SerializeField] protected Transform hitEffectPoint;
     [SerializeField] protected float whiteFlashDuration = 0.08f;
     [SerializeField] protected float knockBackSpeed;
+    [SerializeField] protected float knockBackDelay;
     protected float enemyKnockBackSpeedFactor; // TakeDamage 때마다 인자로 넘어오는 knockBackSpeedFactor를 담아 두는 용도
     protected float stunnedDuration = .2f;
     //protected Material initialMat;
@@ -237,20 +239,31 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         enemyKnockBackSpeedFactor = knockBackSpeedFactor;
 
-        float knockBackDelay = 0f;
+        float _knockBackDelay = 0f;
         float chance = UnityEngine.Random.Range(0, 100);
         if (chance < knockBackChance && knockBackChance != 0)
         {
-            knockBackDelay = 0.04f;
+            _knockBackDelay = this.knockBackDelay;
         }
+
+        if (Stats.hp < 1)
+        {
+            Player.instance.transform.GetComponent<Kills>().Add(1);
+            Die();
+        }
+
         WhiteFlash(whiteFlashDuration);
-        KnockBack(target, knockBackDelay, knockBackSpeedFactor);
+        KnockBack(target, _knockBackDelay, knockBackSpeedFactor);
     }
     public virtual void Die()
     {
         if (dieEffectPrefeab != null) {
             GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
             dieEffect.transform.position = transform.position;
+        }
+        if (dieExplosionPrefeab != null) {
+            GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieExplosionPrefeab);
+            explosionEffect.transform.position = transform.position;
         }
 
         if (isSubBoss)
@@ -302,12 +315,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         yield return new WaitForSeconds(knockBackDelay);
         IsKnockBack = false;
-
-        if (Stats.hp < 1)
-        {
-            Player.instance.transform.GetComponent<Kills>().Add(1);
-            Die();
-        }
     }
 
     public virtual void Stunned(Vector2 target)
