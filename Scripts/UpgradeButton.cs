@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class UpgradeButton : MonoBehaviour
 {
@@ -47,6 +45,7 @@ public class UpgradeButton : MonoBehaviour
         anim.SetTrigger("Reset");
 
         icon.sprite = upgradeData.icon;
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 1f);
         if (upgradeData.Name != "")
         {
             upgradeName.text = upgradeData.Name;
@@ -148,6 +147,7 @@ public class UpgradeButton : MonoBehaviour
     public void UnSelected() // 선택되지 않은 카드의 행동
     {
         unSelectionPanel.SetActive(true);
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
     }
 
     public void ResetUnseletedPanel()
