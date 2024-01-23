@@ -7,8 +7,8 @@ public class UpgradeButton : MonoBehaviour
 {
     [SerializeField] Image icon;
     [SerializeField] TMPro.TextMeshProUGUI upgradeName;
-    [SerializeField] TMPro.TextMeshProUGUI description; // 설명 첫 번째 줄
-    [SerializeField] TMPro.TextMeshProUGUI description2; // 설명 두 번째 줄
+    [SerializeField] TMPro.TextMeshProUGUI upgradeNameShadow;
+    [SerializeField] TMPro.TextMeshProUGUI description; // 설명
     [SerializeField] GameObject levelBar; // 무기, 아이템 레벨 별
     [SerializeField] GameObject panel_weapon; // 무기 패널 연두색
     [SerializeField] GameObject panel_item; // 아이템 패널, 파란색
@@ -49,10 +49,10 @@ public class UpgradeButton : MonoBehaviour
         if (upgradeData.Name != "")
         {
             upgradeName.text = upgradeData.Name;
+            upgradeNameShadow.text = upgradeData.Name;
         }
 
         description.text = upgradeData.description;
-        description2.text = upgradeData.description2;
 
         levelBar.SetActive(true);
         if(upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
