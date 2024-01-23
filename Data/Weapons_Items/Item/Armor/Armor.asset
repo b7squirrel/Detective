@@ -12,8 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
   m_Name: Armor
   m_EditorClassIdentifier: 
-  Name: "\uBC29\uC5B4\uB825 \uC99D\uAC00"
-  SynergyWeapon: "\uAD74\uC808\uD14C\uC2BE\uB77C\uC624\uB9AC"
+  Name: Armour
+  grade: 0
+  charImage: {fileID: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
+  SynergyWeapon: Teslection
   stats:
     armor: 2
     magnetSize: 0
@@ -23,10 +28,13 @@ MonoBehaviour:
     projectileAmount: 0
     projectileSpeed: 0
     knockBackChance: 0
+    criticalDamageChance: 0
     coolTimeDown: 0
+    hpRegenRate: 0
     hp: 0
     coins: 0
     currentLevel: 0
   upgrades:
   - {fileID: 11400000, guid: b1182d4c50e670f419209ce248f2e72c, type: 2}
   - {fileID: 11400000, guid: 0f3074cd1b583034d9642bd77822759d, type: 2}
+  dropChance: 0

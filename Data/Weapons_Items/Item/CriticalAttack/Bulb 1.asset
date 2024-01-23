@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
   m_Name: Bulb 1
   m_EditorClassIdentifier: 
-  Name: "\uCE58\uBA85\uD0C0"
+  Name: Critical Hit
   grade: 1
-  charSprite: {fileID: 0}
-  SynergyWeapon: "\uB77D\uCEE4 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
+  SynergyWeapon: Rocker
   stats:
     armor: 0
     magnetSize: 0

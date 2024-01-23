@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: Garlic
   m_EditorClassIdentifier: 
   grade: 0
-  Name: "\uAE30\uD0C0"
+  Name: Guitar
   charImage: {fileID: 0}
-  SynergyWeapon: "\uB77D\uCEE4 \uC624\uB9AC"
+  SynergyWeapon: Rocker
   Animators:
     CardImageAnim: {fileID: 9100000, guid: 3f5e6393ee74d2647a25660d988077db, type: 2}
     InGamePlayerAnim: {fileID: 9100000, guid: 70c3689a5431d5c45bd3dd76c5a7961d, type: 2}
-  Defaults: []
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 0}
   stats:
     damage: 20

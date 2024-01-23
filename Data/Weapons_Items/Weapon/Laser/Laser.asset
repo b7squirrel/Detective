@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: Laser
   m_EditorClassIdentifier: 
   grade: 0
-  Name: "\uB808\uC774\uC838\uBE54"
+  Name: Laser
   charImage: {fileID: 0}
-  SynergyWeapon: "\uBB34\uC9C0\uAC1C \uC624\uB9AC"
+  SynergyWeapon: Rainbow Laser
   Animators:
     CardImageAnim: {fileID: 9100000, guid: 3f5e6393ee74d2647a25660d988077db, type: 2}
     InGamePlayerAnim: {fileID: 9100000, guid: 70c3689a5431d5c45bd3dd76c5a7961d, type: 2}
-  Defaults: []
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 6822868710250514242, guid: f71c0c1781d42624eae696cc65fa84fd, type: 3}
   stats:
     damage: 30

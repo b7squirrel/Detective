@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 9
   upgradeType: 0
-  Name: "\uC694\uC694"
+  Name: Yoyo
   icon: {fileID: 21300000, guid: cec4f252664138a4e8f1c8bc2021ac7d, type: 3}
-  description: "\uB354 \uB2E8\uB2E8\uD55C \uBC29\uC5B4"
+  description: Damage +10
+  description2: 
   weaponData: {fileID: 11400000, guid: eadc04a85b573634fb378f8b03541b97, type: 2}
   weaponUpgradeStats:
     damage: 10
@@ -37,7 +38,9 @@ MonoBehaviour:
     projectileAmount: 0
     projectileSpeed: 0
     knockBackChance: 0
+    criticalDamageChance: 0
     coolTimeDown: 0
+    hpRegenRate: 0
     hp: 0
     coins: 0
     currentLevel: 0

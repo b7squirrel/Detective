@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 7
   upgradeType: 0
-  Name: "\uD3ED\uD0C4"
+  Name: Cannon
   icon: {fileID: 21300000, guid: cec4f252664138a4e8f1c8bc2021ac7d, type: 3}
-  description: "\uB354 \uAC15\uB825\uD55C \uD3ED\uD0C4"
+  description: Damaga +20
+  description2: 
   weaponData: {fileID: 11400000, guid: c4f75987eebcf6243b096959b45bcea5, type: 2}
   weaponUpgradeStats:
     damage: 20
@@ -37,7 +38,9 @@ MonoBehaviour:
     projectileAmount: 0
     projectileSpeed: 0
     knockBackChance: 0
+    criticalDamageChance: 0
     coolTimeDown: 0
+    hpRegenRate: 0
     hp: 0
     coins: 0
     currentLevel: 0

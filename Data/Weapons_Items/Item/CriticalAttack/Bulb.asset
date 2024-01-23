@@ -12,8 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
   m_Name: Bulb
   m_EditorClassIdentifier: 
-  Name: "\uCE58\uBA85\uD0C0"
-  SynergyWeapon: "\uB77D\uCEE4 \uC624\uB9AC"
+  Name: Critical Hit
+  grade: 0
+  charImage: {fileID: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
+  SynergyWeapon: Rocker
   stats:
     armor: 0
     magnetSize: 0
@@ -32,3 +37,4 @@ MonoBehaviour:
   upgrades:
   - {fileID: 11400000, guid: 6972293d179f9654fba5e204aac9025d, type: 2}
   - {fileID: 11400000, guid: 5489fa5f84f9e38468a0269fa0af1ea1, type: 2}
+  dropChance: 0
