@@ -49,7 +49,7 @@ public class UpgradeButton : MonoBehaviour
         if (upgradeData.Name != "")
         {
             upgradeName.text = upgradeData.Name;
-            upgradeNameShadow.text = upgradeData.Name;
+            //upgradeNameShadow.text = upgradeData.Name;
         }
 
         description.text = upgradeData.description;
