@@ -126,6 +126,12 @@ public class CardDisp : MonoBehaviour
             }
         }
 
+        // 일단 모든 별을 비활성화. 많은 별에서 적은 별로 업데이트 하면 많은 별로 남아있기 때문
+        for (int i = 0; i < 5; i++)
+        {
+            stars[i].SetActive(false);
+        }
+
         // 등급만큼 별 활성화하고 별리스트에 넣기
         for (int i = 0; i < numStars; i++)
         {

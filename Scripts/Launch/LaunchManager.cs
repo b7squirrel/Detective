@@ -83,7 +83,7 @@ public class LaunchManager : MonoBehaviour
     IEnumerator InitCo()
     {
         startButton.SetActive(false);
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.03f);
         CardData lead = cardDataManager.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
         SetLead(lead);
         yield return new WaitForSeconds(.03f);

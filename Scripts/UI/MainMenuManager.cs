@@ -47,6 +47,7 @@ public class MainMenuManager : MonoBehaviour
         for (int i = 0; i < SIZE; i++)
         {
             Vector3 BtnTargetPos = BtnRect[i].anchoredPosition3D;
+            BtnTargetPos.y = -40f;
             Vector3 BtnTargetScale = Vector3.one;
             bool textActive = true;
 
