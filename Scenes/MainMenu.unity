@@ -498,7 +498,7 @@ Animator:
   m_GameObject: {fileID: 62741973}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: bdf6c7bb5fc6842418f0aba68ae23c71, type: 2}
+  m_Controller: {fileID: 22100000, guid: d7cc18e41a1904742bce14d268aa339f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3247,7 +3247,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 235.47}
+  m_AnchoredPosition: {x: 0, y: 137.33}
   m_SizeDelta: {x: 709.3, y: 586.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &270652234
@@ -6677,7 +6677,7 @@ Animator:
   m_GameObject: {fileID: 770947168}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5cddaba5f5092744d90f13424a548b7f, type: 2}
+  m_Controller: {fileID: 22100000, guid: 7f179f78b134ec548a820b75a57da4b2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -7077,17 +7077,17 @@ RectTransform:
   m_GameObject: {fileID: 817713476}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4285715, y: 1.4285715, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1178913244}
   - {fileID: 1885434033}
-  m_Father: {fileID: 2068133030}
-  m_RootOrder: 11
+  m_Father: {fileID: 958746579}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.74786085, y: -170.95715}
+  m_AnchoredPosition: {x: 0.000010609627, y: -262.27002}
   m_SizeDelta: {x: 628.5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &817713479
@@ -8445,6 +8445,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 817713477}
   - {fileID: 2068133030}
   - {fileID: 1524433603}
   m_Father: {fileID: 797962536}
@@ -9903,7 +9904,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 727392209883813307, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 727392209883813307, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
       propertyPath: m_AnchorMax.x
@@ -9931,11 +9932,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 727392209883813307, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.7
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 727392209883813307, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.7
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 727392209883813307, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
       propertyPath: m_LocalScale.z
@@ -9975,7 +9976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 727392209883813307, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50.53
+      value: -142.6
       objectReference: {fileID: 0}
     - target: {fileID: 727392209883813307, guid: e17798e4a437dd448b7a1a84dadebc98, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -14740,7 +14741,7 @@ RectTransform:
   - {fileID: 798718926}
   - {fileID: 1849126481}
   m_Father: {fileID: 958746579}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -19113,7 +19114,7 @@ Animator:
   m_GameObject: {fileID: 1934245869}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: c44d2b01d0ac6e443b93822e41d036ec, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -19519,7 +19520,7 @@ Animator:
   m_GameObject: {fileID: 1974708566}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: b597950dedaa48b4e92df8d831d8d69a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
