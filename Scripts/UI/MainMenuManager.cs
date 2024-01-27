@@ -31,6 +31,7 @@ public class MainMenuManager : MonoBehaviour
         for (int i = 0; i < BtnImageRect.Length; i++)
         {
             tabAnims[i] = BtnImageRect[i].GetComponent<Animator>();
+            BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(false); // 임시로 아이콘 밑의 text는 모두 숨기자
         }
     }
 
@@ -55,7 +56,7 @@ public class MainMenuManager : MonoBehaviour
 
             if (i == targetIndex)
             {
-                BtnTargetPos.y = -23f;
+                BtnTargetPos.y = -15f;
                 BtnTargetScale = new Vector3(1.7f, 1.7f, 1);
                 tabAnims[i].SetBool("Up", true);
                 tabAnims[i].SetBool("Idle", false);
@@ -64,7 +65,7 @@ public class MainMenuManager : MonoBehaviour
 
             BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, .5f);
             BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .5f);
-            BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(textActive);
+            BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(false); // setActive의 인자로 textActive를 넘기지만 임시로 모두 숨김
             tabPanels[i].SetActive(i == targetIndex);
 
         }
