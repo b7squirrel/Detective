@@ -248,7 +248,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (Stats.hp < 1)
         {
-            Player.instance.transform.GetComponent<Kills>().Add(1);
+            //Player.instance.transform.GetComponent<Kills>().Add(1);
             Die();
         }
 
@@ -280,6 +280,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         //sr.material = initialMat;
         IsGrouping = false;
         ResetFlip();
+
+        GameManager.instance.KillManager.UpdateCurrentKills(); // 처치한 적의 수 세기
+
         gameObject.SetActive(false);
     }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록

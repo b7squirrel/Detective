@@ -11,7 +11,7 @@ public class SpawnManager : MonoBehaviour
     {
         instance = this;
         character = Player.instance.GetComponent<Character>();
-        gemManager = FindObjectOfType<GemManager>();
+        gemManager = GameManager.instance.GemManager;
     }
     public void SpawnObject(Vector3 worldPosition, GameObject toSpawn, bool isGem, int experience)
     {

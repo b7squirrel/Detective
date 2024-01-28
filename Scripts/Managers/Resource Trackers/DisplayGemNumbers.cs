@@ -9,10 +9,10 @@ public class DisplayGemNumbers : MonoBehaviour
     private void Awake()
     {
         gemManager = GetComponent<GemManager>();
-        gemManager.OnGemNumberChange += updateGemNumberDisp;
+        gemManager.OnGemNumberChange += UpdateGemNumberDisp;
     }
 
-    void updateGemNumberDisp()
+    void UpdateGemNumberDisp()
     {
         gemNumbers.text = gemManager.GetGemNumbers().ToString();
     }

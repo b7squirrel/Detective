@@ -24,6 +24,10 @@ public class GameManager : MonoBehaviour
     public StartingDataContainer startingDataContainer { get; private set; }
     public PlayerDataManager stageManager { get; private set; }
 
+    [Header("Resource Tracker")]
+    public GemManager GemManager;
+    public KillManager KillManager;
+
     #region Unity CallBack Functions
     void Awake()
     {
@@ -31,6 +35,9 @@ public class GameManager : MonoBehaviour
         currentCamera = Camera.main;
         startingDataContainer = FindObjectOfType<StartingDataContainer>();
         stageManager = FindObjectOfType<PlayerDataManager>();
+
+        GemManager = GetComponent<GemManager>();
+        KillManager = GetComponent<KillManager>();
     }
 
     void Update()
