@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GemManager : MonoBehaviour
@@ -6,6 +7,8 @@ public class GemManager : MonoBehaviour
     [SerializeField] int MaxGemNumbers;
     int gemNumbers, potentialExp;
     Character character;
+
+    public event Action OnGemNumberChange; // DisplayGemNumber로 디버그 하기 위한 액션
 
     [Header("Feedback")]
     [SerializeField] AudioClip gemPickup_A;
@@ -26,8 +29,16 @@ public class GemManager : MonoBehaviour
 
     public bool IsMaxGemNumber() => gemNumbers >= MaxGemNumbers;
 
-    public void IncreaseGemCount() => gemNumbers++;
-    public void DecreaseGemCount() => gemNumbers--;
+    public void IncreaseGemCount()
+    {
+        gemNumbers++;
+        OnGemNumberChange?.Invoke();
+    }
+    public void DecreaseGemCount()
+    {
+        gemNumbers--;
+        OnGemNumberChange?.Invoke();
+    }
 
     public bool HasPotentialExp() => potentialExp > 0;
 
@@ -35,4 +46,5 @@ public class GemManager : MonoBehaviour
 
     public void ResetPotentialExp() => potentialExp = 0;
     public int GetPotentialExp() => potentialExp;
+    public int GetGemNumbers() => gemNumbers;
 }
