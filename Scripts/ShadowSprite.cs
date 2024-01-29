@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShadowSprite : MonoBehaviour
 {
-    Vector2 offset = new Vector2(.07f, -.07f);
+    Vector2 offset = new Vector2(0, -.2f);
 
     SpriteRenderer sprRndCaster;
     SpriteRenderer sprRndshadow;
@@ -12,15 +10,20 @@ public class ShadowSprite : MonoBehaviour
     Transform transCaster;
     Transform transShadow;
 
+    float shadowAlpha;
+
     public bool InAir{get; set;} // shadowHeight에서 껐다가 켰다가.
 
     void Start()
     {
+        shadowAlpha = .6f;
+
         transCaster = transform;
         transShadow = new GameObject().transform;
         transShadow.parent = transCaster;
         transShadow.gameObject.name = "Shadow";
         transShadow.localRotation = Quaternion.identity;
+        //transShadow.eulerAngles = new Vector3 (0, 0, -50f);
         transShadow.localScale = Vector2.one;
         //transShadow.localScale = transCaster.localScale;
 
@@ -28,7 +31,7 @@ public class ShadowSprite : MonoBehaviour
         sprRndshadow = transShadow.gameObject.AddComponent<SpriteRenderer>();
 
         
-        sprRndshadow.color = new Color(0, 0, .2f, .9f);
+        sprRndshadow.color = new Color(0, 0, .2f, shadowAlpha);
         // sprRndshadow.sortingLayerName = "Shadow";
         sprRndshadow.sortingLayerName = sprRndCaster.sortingLayerName;
         sprRndshadow.sortingOrder = sprRndCaster.sortingOrder - 1;
@@ -61,6 +64,6 @@ public class ShadowSprite : MonoBehaviour
     }
     public void Show()
     {
-        sprRndshadow.color = new Color(sprRndshadow.color.r, sprRndshadow.color.g, sprRndshadow.color.b, .9f);
+        sprRndshadow.color = new Color(sprRndshadow.color.r, sprRndshadow.color.g, sprRndshadow.color.b, shadowAlpha);
     }
 }

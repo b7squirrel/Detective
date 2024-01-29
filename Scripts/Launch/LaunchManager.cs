@@ -21,54 +21,19 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] StageInfoUI stageInfoUi;
     [SerializeField] StageInfo stageInfo;
 
-    [SerializeField] CanvasGroup BlackFadeIn; // 처음 시작할 때 화면이 준비될 동안 암전
-    [SerializeField] float fadeSpeed;
-    bool onStart = true; // 처음 시작할 때만 검은색에서 페이드인 되도록
-    bool shouldFadeIn; // 페이드인이 완료되거나 중간에 중단해야 할 때, 페이드인코루틴을 빠져나오기 위한 플래그.
-    Coroutine fadeInCoroutine;
-
     CardData currentLead; // 현재 리드로 선택된 오리
     OriAttribute currentAttr; // 현재 리드로 선택된 오리의 attr
-
+    
     void OnEnable()
     {
-        if(onStart)
-        {
-            BlackFadeIn.gameObject.SetActive(true);
-            BlackFadeIn.alpha = 1f;
-            //BlackFadeIn.DOFade(0, 4f).SetId(BlackFadeIn.gameObject.name);
-            fadeInCoroutine = StartCoroutine(FadeInCo());
-            onStart = false;
-        }
-
         fieldSlotPanel.SetActive(false);
         InitLead();
     }
     void OnDisable()
     {
-        StopFadeIn(fadeInCoroutine);
         CloseField();
     }
-
-    IEnumerator FadeInCo()
-    {
-        shouldFadeIn = true;
-        while(shouldFadeIn)
-        {
-            if (BlackFadeIn.alpha <= .01)
-            {
-                BlackFadeIn.alpha = 0f;
-                shouldFadeIn = false;
-            }
-            BlackFadeIn.alpha = Mathf.Lerp(BlackFadeIn.alpha, 0, fadeSpeed * Time.deltaTime);
-            yield return null;
-        }
-    }
-    void StopFadeIn(Coroutine co)
-    {
-        BlackFadeIn.alpha = 0;
-        StopCoroutine(co);
-    }
+    
     void InitStageInfo()
     {
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();

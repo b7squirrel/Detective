@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
@@ -14,9 +14,35 @@ public class MainMenuManager : MonoBehaviour
     int targetIndex;
 
     Animator[] tabAnims = new Animator[5];
-    
+
+    [Header("Sound")]
+    [SerializeField] AudioClip tabTouched;
+    [SerializeField] AudioClip startButtonTouched;
+    [SerializeField] AudioClip bgm;
+
+    [Header("Black FadeIn")]
+    [SerializeField] CanvasGroup BlackFadeIn;
+    [SerializeField] float blackOutTime;
+    [SerializeField] float fadeSpeed;
+    bool onStart = true;
+    bool shouldFadeIn;
+    Coroutine fadeInCoroutine;
+
+    [Header("Black Transition")]
+    [SerializeField] GameObject blackTransition;
+    [SerializeField] GameObject blackScreen;
+    Animator blackTransitionAnim;
+
     void Awake()
     {
+        InitBlackTransition();
+
+        if (onStart)
+        {
+            BlackFadeIn.gameObject.SetActive(true);
+            fadeInCoroutine = StartCoroutine(FadeInCo());
+        }
+
         for (int i = 0; i < SIZE; i++)
         {
             pos[i] = (1f / 4f) * i;
@@ -33,7 +59,9 @@ public class MainMenuManager : MonoBehaviour
             tabAnims[i] = BtnImageRect[i].GetComponent<Animator>();
             BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(false); // 임시로 아이콘 밑의 text는 모두 숨기자
         }
-    }
+
+        PlayBGM(); // awake에서 Music Manager가 준비가 안되어 있을 수 있으므로 코루틴으로 약간 기다린 후 재생
+;    }
 
     void Update()
     {
@@ -76,5 +104,67 @@ public class MainMenuManager : MonoBehaviour
     {
         tabSlider.value = pos[pressBtnID];
         targetIndex = pressBtnID;
+    }
+
+    public void PlayClickSound()
+    {
+        SoundManager.instance.Play(tabTouched);
+    }
+    public void PlayStartButtonClickSound()
+    {
+        SoundManager.instance.Play(startButtonTouched);
+    }
+    void PlayBGM()
+    {
+        StartCoroutine(PlayBGMCo());
+    }
+    IEnumerator PlayBGMCo()
+    {
+        yield return new WaitForSeconds(.2f);
+        MusicManager.instance.Play(bgm, true);
+    }
+
+    IEnumerator FadeInCo()
+    {
+        yield return new WaitForSeconds(blackOutTime);
+        onStart = false;
+        shouldFadeIn = true;
+        while (shouldFadeIn)
+        {
+            if (BlackFadeIn.alpha <= .01)
+            {
+                BlackFadeIn.alpha = 0f;
+                shouldFadeIn = false;
+            }
+            BlackFadeIn.alpha = Mathf.Lerp(BlackFadeIn.alpha, 0, fadeSpeed * Time.deltaTime);
+            yield return null;
+        }
+    }
+    void StopFadeIn(Coroutine co)
+    {
+        BlackFadeIn.alpha = 0;
+        if (fadeInCoroutine != null) StopCoroutine(co);
+    }
+    void InitBlackTransition()
+    {
+        blackTransition.SetActive(false);
+        blackScreen.SetActive(false);
+    }
+    public void StartTransition()
+    {
+        blackTransitionAnim = GetComponent<Animator>();
+
+        blackTransition.SetActive(true);
+        blackScreen.SetActive(true);
+
+        blackTransitionAnim.SetTrigger("Start");
+        // transition animation 이 끝나면 animation event로 StartGame 호출
+    }
+    public void StartGame()
+    {
+        int currentStage = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
+        string stageToPlay = "GamePlayStage" + currentStage.ToString();
+        SceneManager.LoadScene("Essential", LoadSceneMode.Single);
+        SceneManager.LoadScene(stageToPlay, LoadSceneMode.Additive);
     }
 }

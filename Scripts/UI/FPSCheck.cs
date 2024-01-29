@@ -6,27 +6,28 @@ public class FPSCheck : MonoBehaviour
 {
     float deltaTime = 0.0f;
 
-  GUIStyle style;
-  Rect rect;
-  float msec;
-  float fps;
-  float worstFps=100f;
-  string text;
+    GUIStyle style;
+    Rect rect;
+    float msec;
+    float fps;
+    float worstFps = 100f;
+    string text;
 
-  void Awake()
-  {
-    Application.targetFrameRate = 60;
+    void Awake()
+    {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
 
-    int w = Screen.width, h = Screen.height;
+        int w = Screen.width, h = Screen.height;
 
-    rect = new Rect(0, 0, w, h * 100 / 100);
+        rect = new Rect(0, 0, w, h * 100 / 100);
 
-    style = new GUIStyle();
-    style.alignment = TextAnchor.LowerCenter;
-    style.fontSize = h * 4 / 200;
-    style.normal.textColor = Color.red;
+        style = new GUIStyle();
+        style.alignment = TextAnchor.LowerCenter;
+        style.fontSize = h * 4 / 200;
+        style.normal.textColor = Color.red;
 
-    StartCoroutine ("worstReset");
+        StartCoroutine("worstReset");
   }
 
 
