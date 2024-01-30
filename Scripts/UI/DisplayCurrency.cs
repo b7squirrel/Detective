@@ -21,6 +21,8 @@ public class DisplayCurrency : MonoBehaviour
         coinText.text = playerDataManager.GetCurrentCandyNumber().ToString();
         goldText.text = dataContainer.gold.ToString();
         LightningText.text = dataContainer.lightning.ToString();
-        dateTimeText.text = System.DateTime.Now.ToString();
+
+        //dateTimeText.text = System.DateTime.Now.ToString();
+        dateTimeText.text = "";
     }
 }

@@ -15,6 +15,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] Image[] equipmentImages;
     [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
+    [SerializeField] protected TMPro.TextMeshProUGUI TitleShadow;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
     [SerializeField] protected GameObject starPrefab;
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
@@ -37,6 +38,12 @@ public class CardDisp : MonoBehaviour
 
         // 카드 이름 텍스트
         Title.text = weaponData.Name;
+        TitleShadow.text = Title.text;
+
+        // 임시로 타이틀을 없애보자. 작은 카드 안에 정보가 너무 많음.
+        Title.text = "";
+        TitleShadow.text = "";
+
         // 카드 레벨 텍스트
         Level.text = "LV " + cardData.Level;
 
@@ -67,6 +74,11 @@ public class CardDisp : MonoBehaviour
 
         // 카드 이름 텍스트
         Title.text= itemData.Name;
+        TitleShadow.text = Title.text;
+
+        // 임시로 타이틀을 없애보자. 작은 카드 안에 정보가 너무 많음.
+        Title.text = "";
+        TitleShadow.text = "";
 
         // 카드 레벨 텍스트
         Level.text = "LV " + cardData.Level;
@@ -159,6 +171,7 @@ public class CardDisp : MonoBehaviour
         // 카드 레벨 텍스트
         Level.text = "";
         Title.text = "";
+        TitleShadow.text = "";
 
         // 캐릭터 이미지
         cardBaseContainer.gameObject.SetActive(false);

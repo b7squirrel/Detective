@@ -39,7 +39,7 @@ public class AllField : MonoBehaviour
             slot.transform.position = Vector3.zero;
             // slot.transform.localScale = new Vector2(0, 0);
             // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
-            slot.transform.localScale = new Vector2(.5f, .5f);
+            slot.transform.localScale = new Vector2(.7f, .7f);
             slots.Add(slot);
         }
 
