@@ -67,7 +67,7 @@ public class MainMenuManager : MonoBehaviour
     {
         for (int i = 0; i < SIZE; i++)
         {
-            BtnRect[i].sizeDelta = new Vector2(i == targetIndex ? 266.666f : 133.33f, BtnRect[i].sizeDelta.y);
+            BtnRect[i].sizeDelta = new Vector2(i == targetIndex ? 360f : 180f, BtnRect[i].sizeDelta.y);
         }
 
         if (Time.time < 0.1f) return;
