@@ -49673,7 +49673,6 @@ GameObject:
   - component: {fileID: 1277960113}
   - component: {fileID: 1277960115}
   - component: {fileID: 1277960117}
-  - component: {fileID: 1277960118}
   - component: {fileID: 1277960119}
   - component: {fileID: 1277960120}
   - component: {fileID: 1277960121}
@@ -49895,7 +49894,6 @@ MonoBehaviour:
   <CriticalDamageChance>k__BackingField: 0
   hpBar: {fileID: 1316132971}
   level: {fileID: 0}
-  coin: {fileID: 0}
   dataContainer: {fileID: 11400000, guid: e597f829b2c0f754ebff28acc3882ed1, type: 2}
   hurtSound: {fileID: 8300000, guid: ab24f56a4b806cc47bf5f1fd98368af9, type: 3}
   OnDie:
@@ -49979,21 +49977,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 66ad9c3942c01bc468f94555c24d6b4e, type: 2}
   - {fileID: 11400000, guid: 274a1059eb9e66347a7bdd185ccc61a5, type: 2}
   expBarAnim: {fileID: 1777363797}
---- !u!114 &1277960118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1277960107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d6f724c5108a3c41b352815b0023eb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dataContainer: {fileID: 11400000, guid: e597f829b2c0f754ebff28acc3882ed1, type: 2}
-  candyCountText: {fileID: 574270211}
-  candyIconAnim: {fileID: 653948387}
 --- !u!114 &1277960119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70409,6 +70392,8 @@ GameObject:
   - component: {fileID: 1834188295}
   - component: {fileID: 1834188297}
   - component: {fileID: 1834188296}
+  - component: {fileID: 1834188299}
+  - component: {fileID: 1834188298}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -70655,6 +70640,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5f62c1004a5d654389a712ee9d6c46c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1834188298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f99bb823b037ce84e957a0027dc3ce2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinNumbers: {fileID: 574270211}
+  coinIconAnim: {fileID: 653948387}
+--- !u!114 &1834188299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7de9fc5854a2b84a91b165a5c210900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1834236530

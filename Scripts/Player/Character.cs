@@ -21,7 +21,6 @@ public class Character : MonoBehaviour
 
     [SerializeField] StatusBar hpBar;
     [HideInInspector] public Level level;
-    [HideInInspector] public Coins coin;
 
     [SerializeField] DataContainer dataContainer;
 
@@ -34,7 +33,6 @@ public class Character : MonoBehaviour
     void Awake()
     {
         level = GetComponent<Level>();
-        coin = GetComponent<Coins>();
     }
 
     void Start()

@@ -5,7 +5,7 @@ public class CoinPickUpObject : Collectable, IPickUpObject
     [SerializeField] int coinAmount;
     public void OnPickUp(Character character)
     {
-        character.coin.Add(coinAmount);
+        GameManager.instance.GetComponent<CoinManager>().updateCurrentCoinNumbers(coinAmount);
     }
 
     void OnTriggerEnter2D(Collider2D collision)

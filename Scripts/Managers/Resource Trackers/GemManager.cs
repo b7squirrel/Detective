@@ -8,7 +8,7 @@ public class GemManager : MonoBehaviour
     int gemNumbers, potentialExp;
     Character character;
 
-    public event Action OnGemNumberChange; // DisplayGemNumber로 디버그 하기 위한 액션
+    public event Action OnGemNumberChange; // Display Gem Number로 디버깅 하기 위한 액션
 
     [Header("Feedback")]
     [SerializeField] AudioClip gemPickup_A;

@@ -27,6 +27,8 @@ public class Level : MonoBehaviour
 
     [SerializeField] ExpBarAnimation expBarAnim;
 
+    CoinManager coinManager;
+
     int To_Level_Up
     {
         get
@@ -53,6 +55,8 @@ public class Level : MonoBehaviour
 
     void Start()
     {
+        coinManager = GameManager.instance.GetComponent<CoinManager>();
+
         experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
         experienceBar.SetLevelText(level);
         AddUpgradesIntoTheListOfAvailableUpgrades(upgradesAvailableOnStart);
@@ -133,7 +137,7 @@ public class Level : MonoBehaviour
                 GetComponent<Character>().Heal(upgradeData.itemStats.hp);
                 break;
             case UpgradeType.Coin:
-                GetComponent<Coins>().Add(upgradeData.itemStats.coins);
+                coinManager.updateCurrentCoinNumbers(upgradeData.itemStats.coins);
                 break;
             case UpgradeType.SynergyUpgrade:
                 weaponManager.UpgradeWeapon(upgradeData);

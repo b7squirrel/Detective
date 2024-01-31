@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveToUI : MonoBehaviour
@@ -12,6 +11,8 @@ public class MoveToUI : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] AudioClip hitSound;
 
+    CoinManager coinManager;
+
     void OnEnable()
     {
         TriggerMoving = false;
@@ -21,6 +22,9 @@ public class MoveToUI : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         Vector2 dir = (targetWorldPos - (Vector2)transform.position).normalized;
         moveSpeed += Random.Range(-8f, 8f);
+
+        if (coinManager == null)
+            coinManager = GameManager.instance.GetComponent<CoinManager>();
     }
     IEnumerator Trigger()
     {
@@ -47,9 +51,10 @@ public class MoveToUI : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, targetWorldPos, moveSpeed * Time.deltaTime + (0.5f * 4f * Time.deltaTime * Time.deltaTime));
             if (Vector2.Distance((Vector2)transform.position, targetWorldPos) < .2f)
             {
-                FindObjectOfType<Coins>().Add(1);
-                SoundManager.instance.Play(hitSound);
-                CoinUI.instance.PopCoinIcon();
+                coinManager.updateCurrentCoinNumbers(1);
+                //FindObjectOfType<Coins>().Add(1);
+                //SoundManager.instance.Play(hitSound);
+                //CoinUI.instance.PopCoinIcon();
                 Destroy(gameObject);
             }
         }
