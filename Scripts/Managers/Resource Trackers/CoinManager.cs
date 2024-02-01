@@ -9,10 +9,12 @@ public class CoinManager : MonoBehaviour
 
     void Start()
     {
+        // 현재 코인 갯수 가져오기
         playerDataManager = FindObjectOfType<PlayerDataManager>();
         currentCoins = playerDataManager.GetCurrentCandyNumber();
-        Debug.Log("Current coins = " + currentCoins);
-        updateCurrentCoinNumbers(0); // 현재 가지고 있는 코인의 수로 초기화
+
+        // 현재 가지고 있는 코인의 수로 초기화
+        updateCurrentCoinNumbers(0); 
     }
     
     public void updateCurrentCoinNumbers(int coinsToAdd)
