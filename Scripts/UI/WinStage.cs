@@ -9,6 +9,8 @@ public class WinStage : MonoBehaviour
     // Confirm 버튼을 클릭하면 시간을 다시 흐르게 한다
     public void OpenPanel()
     {
+        GetComponent<PauseManager>().PauseGame();
+
         PlayerDataManager stageManager = FindObjectOfType<PlayerDataManager>();
         StageInfo stageinfo = FindObjectOfType<StageInfo>();
         int currentStage = stageManager.GetCurrentStageNumber();
