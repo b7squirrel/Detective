@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.IO;
 
 [System.Serializable]
@@ -15,7 +15,7 @@ public class PlayerData
 
 public class PlayerDataManager : MonoBehaviour
 {
-    [SerializeField] PlayerData playerData; // µğ¹ö±×¸¦ À§ÇØ Á÷·ÄÈ­
+    [SerializeField] PlayerData playerData; // ë””ë²„ê·¸ë¥¼ ìœ„í•´ ì§ë ¬í™”
     string filePath;
 
     void Awake()
@@ -54,7 +54,7 @@ public class PlayerDataManager : MonoBehaviour
         {
             playerData = new PlayerData
             {
-                currentStageNumber = 1 // ÃÊ±â ½ºÅ×ÀÌÁö ³Ñ¹ö ¼³Á¤
+                currentStageNumber = 1 // ì´ˆê¸° ìŠ¤í…Œì´ì§€ ë„˜ë²„ ì„¤ì •
             };
             SaveStageNumberData();
         }
@@ -95,7 +95,7 @@ public class PlayerDataManager : MonoBehaviour
         {
             playerData = new PlayerData
             {
-                currentCandyNumber = 1 // ÃÊ±â ½ºÅ×ÀÌÁö ³Ñ¹ö ¼³Á¤
+                currentCandyNumber = 1 // ì´ˆê¸° ìŠ¤í…Œì´ì§€ ë„˜ë²„ ì„¤ì •
             };
             SaveCandyNumberData();
         }

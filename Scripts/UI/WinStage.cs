@@ -9,8 +9,6 @@ public class WinStage : MonoBehaviour
     // Confirm 버튼을 클릭하면 시간을 다시 흐르게 한다
     public void OpenPanel()
     {
-        GetComponent<PauseManager>().PauseGame();
-
         PlayerDataManager stageManager = FindObjectOfType<PlayerDataManager>();
         StageInfo stageinfo = FindObjectOfType<StageInfo>();
         int currentStage = stageManager.GetCurrentStageNumber();
@@ -23,5 +21,11 @@ public class WinStage : MonoBehaviour
         
         winStage.gameObject.SetActive(true);
         darkBG.gameObject.SetActive(true);
+
+        int killNum = GetComponent<KillManager>().GetCurrentKills();
+        int coinNum = GetComponent<CoinManager>().GetCurrentCoins();
+
+        winStage.GetComponent<VictoryPanel>().InitAwards(killNum, coinNum);
+        GetComponent<PauseManager>().PauseGame();
     }
 }
