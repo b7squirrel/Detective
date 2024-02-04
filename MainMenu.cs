@@ -45,15 +45,20 @@ public class MainMenu : MonoBehaviour
         panelPause.SetActive(false);
         UnPause();
         GameManager.instance.DestroyStartingData();
+        Debug.Log("Go to Main Menu 3");
+
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
+    // 유니티 이벤트에 붙임
     public void GoToMainMenuAfter(float timeToWait)
     {
+        Debug.Log("Go to Main Menu 1");
         StartCoroutine(GoToMainMenu(timeToWait));
     }
     IEnumerator GoToMainMenu(float timeToWait)
     {
-        yield return new WaitForSeconds(timeToWait);
+        yield return new WaitForSecondsRealtime(timeToWait);
+        Debug.Log("Go to Main Menu 2");
         GoToMainMenu();
     }
 }
