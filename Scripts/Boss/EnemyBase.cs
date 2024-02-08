@@ -234,7 +234,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         Stats.hp -= damage;
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
-        effect.transform.position = target;
+        effect.transform.position = hitEffectPoint.position;
         SoundManager.instance.Play(hit);
 
         enemyKnockBackSpeedFactor = knockBackSpeedFactor;
@@ -252,7 +252,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             Die();
         }
 
-        WhiteFlash(whiteFlashDuration);
+        //WhiteFlash(whiteFlashDuration);
         KnockBack(target, _knockBackDelay, knockBackSpeedFactor);
     }
     public virtual void Die()
