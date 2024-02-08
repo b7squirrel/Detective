@@ -29,6 +29,7 @@ public class CardDisp : MonoBehaviour
 
         int intGrade = (int)weaponData.grade;
         SetNumStar(intGrade + 1);
+        DeactivateStars();
 
         for (int i = 0; i < 5; i++)
         {
@@ -66,6 +67,7 @@ public class CardDisp : MonoBehaviour
         cardBaseContainer.gameObject.SetActive(true);
         int intGrade = (int)itemData.grade;
         SetNumStar(intGrade + 1);
+        DeactivateStars();
         for (int i = 0; i < 5; i++)
         {
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
@@ -159,14 +161,7 @@ public class CardDisp : MonoBehaviour
     public void EmptyCardDisplay()
     {
         // 별 비활성화
-        if (stars != null)
-        {
-            for (int i = 0; i < stars.Length; i++)
-            {
-                if (stars[i].activeSelf)
-                    stars[i].SetActive(false);
-            }
-        }
+        DeactivateStars();
 
         // 카드 레벨 텍스트
         Level.text = "";
@@ -189,5 +184,18 @@ public class CardDisp : MonoBehaviour
 
         // 버튼 비활성화
         button.SetActive(false);
+    }
+
+    void DeactivateStars()
+    {
+        // 별 비활성화
+        if (stars != null)
+        {
+            for (int i = 0; i < stars.Length; i++)
+            {
+                if (stars[i].activeSelf)
+                    stars[i].SetActive(false);
+            }
+        }
     }
 }

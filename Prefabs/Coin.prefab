@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8531210634115331269}
   - component: {fileID: 1695408280572103063}
-  m_Layer: 0
+  - component: {fileID: 7281533495603260900}
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,6 +85,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &7281533495603260900
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210877394546922877}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.67
 --- !u!1 &3089954493006562425
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +111,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9024913478097617490}
   - component: {fileID: 7404354614668522898}
-  - component: {fileID: 3508880822523242293}
   - component: {fileID: -51498579471568922}
   - component: {fileID: -6721317060970081831}
   - component: {fileID: 1647154091}
@@ -140,22 +156,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.73
---- !u!58 &3508880822523242293
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3089954493006562425}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.67
 --- !u!114 &-51498579471568922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882983c82ab37e54a80827961b02362b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bouncingNumbers: 1
+  bouncingNumbers: 5
   noHeightShadow: 1
   onGroundHitEvent:
     m_PersistentCalls:
@@ -257,7 +257,7 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 2.7
+          m_FloatArgument: 1.7
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -311,5 +311,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   verticalVel: 35
-  groundVel: {x: 0, y: 0}
   randomGroundVel: 1

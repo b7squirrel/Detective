@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
+//using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
@@ -68,13 +68,13 @@ public class GameManager : MonoBehaviour
             Application.Quit();
         }
     }
-    public void OnResetGame(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-    }
+    //public void OnResetGame(InputAction.CallbackContext context)
+    //{
+    //    if (context.started)
+    //    {
+    //        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    //    }
+    //}
     #endregion
 
     public void ShakeCam(float _duration, float _magnitude)

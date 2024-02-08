@@ -5,6 +5,7 @@ public class DropOnDestroy : MonoBehaviour
 {
     [SerializeField] List<GameObject> dropItemPrefab; // 맞을 때마다 떨어트리는 아이템 (chest는 그냥 이걸로 드롭)
     [SerializeField] GameObject dropLastItemPrefab; // 파괴될 때 떨어트리는 아이템
+    [SerializeField] GameObject multipleDrops; // 여러개를 떨어트릴 때
     [SerializeField][Range(0f, 1f)] float chance = 1f;
     [SerializeField] int exp;
     [SerializeField] int hp;
@@ -95,5 +96,11 @@ public class DropOnDestroy : MonoBehaviour
         }
 
         SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
+    }
+
+    public void DropMultipleObjects(int _numObjects)
+    {
+        GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
+        drops.GetComponent<MultiDrops>().Init(_numObjects, dropLastItemPrefab);
     }
 }

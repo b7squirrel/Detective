@@ -7,6 +7,8 @@ public class TriggerHeightShadow : MonoBehaviour
     Vector2 groundVel;
 
     [SerializeField] bool randomGroundVel;
+
+   
     void OnEnable()
     {
         if (randomGroundVel)
@@ -36,6 +38,5 @@ public class TriggerHeightShadow : MonoBehaviour
         }
         shadowHeight = GetComponent<ShadowHeight>();
         shadowHeight.Initialize(groundVel, verticalVel);
-        Debug.Log("Ground Velocity = " + groundVel);
     }
 }

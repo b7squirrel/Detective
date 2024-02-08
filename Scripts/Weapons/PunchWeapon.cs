@@ -13,6 +13,8 @@ public class PunchWeapon : WeaponBase
 
     [Header("Sounds")]
     [SerializeField] AudioClip punch;
+    [SerializeField] AudioClip punchSynergy;
+    
 
     protected override void Awake()
     {
@@ -42,7 +44,6 @@ public class PunchWeapon : WeaponBase
         if (enemy != null)
         {
             // Attck 할 때 damge와 knockback 값을 가져와서 저장했음
-            
         }
     }
 
@@ -58,7 +59,7 @@ public class PunchWeapon : WeaponBase
         }
         else
         {
-            enemy.TakeDamage(damage, knockback, knockbackSpeedFactor, contactPos, hitEffect);
+            enemy.TakeDamage(damage, knockback, knockbackSpeedFactor, transform.position, hitEffect);
         }
     }
 
@@ -71,12 +72,13 @@ public class PunchWeapon : WeaponBase
         if(isSynergyWeaponActivated)
         {
             anim.SetTrigger("AttackSynergy");
+            SoundManager.instance.Play(punchSynergy);
         }
         else
         {
             anim.SetTrigger("Attack");
+            SoundManager.instance.Play(punch);
         }
-        SoundManager.instance.Play(punch);
     }
 
     // IEnumerator AttackCo()
