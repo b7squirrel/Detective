@@ -10,6 +10,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public EnemyStats Stats {get; set;}
     public bool IsBoss{get; set;}
     [SerializeField] bool isSubBoss;
+    [SerializeField] bool isBoss;
+    [SerializeField] int numberOfSubBossDrops;
+    [SerializeField] int numberOfBossDrops;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir {get; set;} // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
@@ -32,6 +35,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     //[SerializeField] protected Material whiteMaterial;
     [SerializeField] protected GameObject dieEffectPrefeab;
     [SerializeField] protected GameObject dieExplosionPrefeab;
+    [SerializeField] protected GameObject knockbackEffect;
     [SerializeField] protected Transform hitEffectPoint;
     [SerializeField] protected float whiteFlashDuration = 0.08f;
     [SerializeField] protected float knockBackSpeed;
@@ -176,6 +180,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             rb.velocity = knockBackSpeed * targetDir;
             //rb.velocity = knockBackSpeed * enemyKnockBackSpeedFactor * targetDir;
+            float randomOffsetX = UnityEngine.Random.Range(-.5f, .5f);
+            float randomOffsetY = UnityEngine.Random.Range(-.5f, .5f);
+            SpawnManager.instance.SpawnObject(transform.position + new Vector3(randomOffsetX, randomOffsetY, 0), knockbackEffect, false, 0);
             return;
         }
         if (IsStunned)
@@ -268,11 +275,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (isSubBoss)
         {
-            //for (int i = 0; i < 25; i++)
-            //{
-            //    GetComponent<DropOnDestroy>().DropLastItem();
-            //}
-            GetComponent<DropOnDestroy>().DropMultipleObjects(20);
+            GetComponent<DropOnDestroy>().DropMultipleObjects(numberOfSubBossDrops);
+        }
+        if (isBoss)
+        {
+            GetComponent<DropOnDestroy>().DropMultipleBossObjects(numberOfBossDrops);
         }
         GetComponent<DropOnDestroy>().CheckDrop();
 

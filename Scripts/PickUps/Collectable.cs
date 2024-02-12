@@ -83,8 +83,14 @@ public class Collectable : MonoBehaviour
     #region 자력에 닿았을 때
     public virtual void OnHitMagnetField(Vector2 direction)
     {
+        Animator anim = GetComponent<Animator>();
+        if (anim != null)
+        {
+            GetComponent<Animator>().SetTrigger("Init");
+        }
+
         StartCoroutine(Antic(direction));
-        StartCoroutine(Blink()); // 반짝거리면서 antic 모션
+        //StartCoroutine(Blink()); // 반짝거리면서 antic 모션
     }
 
     IEnumerator Antic(Vector2 dir)

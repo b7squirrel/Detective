@@ -103,4 +103,9 @@ public class DropOnDestroy : MonoBehaviour
         GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
         drops.GetComponent<MultiDrops>().Init(_numObjects, dropLastItemPrefab);
     }
+    public void DropMultipleBossObjects(int _numObjects)
+    {
+        GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
+        drops.GetComponent<MultiDrops>().InitBossItems(_numObjects, dropLastItemPrefab);
+    }
 }

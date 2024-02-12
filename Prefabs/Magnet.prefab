@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: -1329053232516486223}
   - component: {fileID: -4169159684158140998}
   - component: {fileID: 7188308438288182909}
+  - component: {fileID: 2707425420956861415}
   m_Layer: 0
   m_Name: Magnet
   m_TagString: Untagged
@@ -332,6 +333,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2707425420956861415}
+        m_TargetAssemblyTypeName: PropSound, Assembly-CSharp
+        m_MethodName: PlayLandingSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   isGrounded: 0
 --- !u!114 &-4169159684158140998
 MonoBehaviour:
@@ -368,3 +381,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &2707425420956861415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7188308438288182905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49ac1144a50d02c49827400578bc2797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initSound: {fileID: 8300000, guid: 1e7ff74669e980140bb0b77452ae932e, type: 3}
+  landingSound: {fileID: 8300000, guid: f4ff3e5cc33ffea4eabae6516843734f, type: 3}

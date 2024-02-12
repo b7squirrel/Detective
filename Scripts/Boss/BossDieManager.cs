@@ -44,7 +44,7 @@ public class BossDieManager : MonoBehaviour
 
         RemoveAllEnemies();
         RemoveAllWalls();
-        dropCoins.Init(amountOfCoins, deadBody.transform.position);
+        //dropCoins.Init(amountOfCoins, deadBody.transform.position);
 
         FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
     }

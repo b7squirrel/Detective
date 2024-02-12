@@ -16,7 +16,6 @@ public class FireBallWeapon : WeaponBase
         List<Vector2> closestEnemyPosition = FindTarget(1);
         if (closestEnemyPosition[0] == Vector2.zero)
         {
-            Debug.Log("No ememies");
             return;
         }
         AttackCo();

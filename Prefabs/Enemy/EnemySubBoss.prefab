@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4812451687494881743}
   - component: {fileID: 2186348669325750413}
-  - component: {fileID: 6640775361162279138}
   m_Layer: 6
   m_Name: Crown
   m_TagString: Untagged
@@ -85,18 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6640775361162279138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980276572725902798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5282663631679112915
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +209,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5841538734844495885}
   - component: {fileID: 1157535045955070963}
-  - component: {fileID: 8674677323513035645}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -299,18 +285,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8674677323513035645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7892753920920310918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8170831695603223110
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,11 +449,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 
   isSubBoss: 1
+  isBoss: 0
+  numberOfSubBossDrops: 20
+  numberOfBossDrops: 0
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
   dieEffectPrefeab: {fileID: 3468807537404298050, guid: 58239f2bac9bbaa499bfcb45f527e3be, type: 3}
   dieExplosionPrefeab: {fileID: 8774143540521336711, guid: da27312d14056244ca3be2c1ff5c707f, type: 3}
+  knockbackEffect: {fileID: 1724609311885633146, guid: 83d5deb238425114e8b523d59bdecb73, type: 3}
   hitEffectPoint: {fileID: 7982681945284083134}
   whiteFlashDuration: 0.08
   knockBackSpeed: 15
@@ -506,7 +484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItemPrefab:
   - {fileID: 3118075186976557793, guid: 425332a8d877d1547936dafbb5117e22, type: 3}
-  dropLastItemPrefab: {fileID: 3089954493006562425, guid: e966530f6cd20b6438cacecd2eed29b0, type: 3}
+  dropLastItemPrefab: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
   multipleDrops: {fileID: 5007021332998522558, guid: da2101ae771dd7b4cb33300917ecdd19, type: 3}
   chance: 1
   exp: 0

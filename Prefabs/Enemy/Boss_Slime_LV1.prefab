@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2085975788}
   - component: {fileID: 2085975789}
-  - component: {fileID: 8161714110709107082}
   - component: {fileID: 5489282720295142908}
   m_Layer: 6
   m_Name: Sprite
@@ -86,18 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8161714110709107082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2085975787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5489282720295142908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,10 +325,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropItemPrefab:
-  - {fileID: 0}
+  - {fileID: 3089954493006562425, guid: e966530f6cd20b6438cacecd2eed29b0, type: 3}
+  dropLastItemPrefab: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
+  multipleDrops: {fileID: 5007021332998522558, guid: da2101ae771dd7b4cb33300917ecdd19, type: 3}
   chance: 1
   exp: 0
   hp: 0
+  isChest: 0
 --- !u!114 &271258211328832522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,12 +345,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Slime Queen
+  isSubBoss: 0
+  isBoss: 1
+  numberOfSubBossDrops: 0
+  numberOfBossDrops: 50
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
+  dieEffectPrefeab: {fileID: 0}
+  dieExplosionPrefeab: {fileID: 0}
+  knockbackEffect: {fileID: 0}
   hitEffectPoint: {fileID: 487513323129266538}
   whiteFlashDuration: 0.08
   knockBackSpeed: 12
+  knockBackDelay: 0
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}

@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class ShadowHeight : MonoBehaviour
 {
-    Vector2 shadowOffset = new Vector2(.07f, -.07f);
+    Vector2 shadowOffset = new Vector2(0f, -.2f);
     [SerializeField] int bouncingNumbers;
     [SerializeField] bool noHeightShadow;
     public bool IsDone { get; private set; }
@@ -45,7 +45,8 @@ public class ShadowHeight : MonoBehaviour
             trnsShadow = new GameObject().transform;
             trnsShadow.parent = trnsObject;
             trnsShadow.gameObject.name = "ShadowOver";
-            trnsShadow.localRotation = Quaternion.identity;
+            trnsShadow.localRotation = trnsBody.localRotation;
+            trnsShadow.localScale = trnsBody.localScale;
 
             // 그림자 만들기
             sprRndshadow = trnsShadow.gameObject.AddComponent<SpriteRenderer>();
@@ -82,12 +83,15 @@ public class ShadowHeight : MonoBehaviour
         sprRndshadow.flipX = sprRndBody.flipX;
         sprRndshadow.flipY = sprRndBody.flipY;
 
+        trnsShadow.localRotation = trnsBody.localRotation;
+        trnsShadow.localScale = trnsBody.localScale;
+
         if (isGrounded)
         {
             trnsShadow.position = new Vector2(trnsObject.position.x + shadowOffset.x,
                         trnsObject.position.y + shadowOffset.y);
 
-            sprRndBody.sortingLayerName = "Enemy";
+            sprRndBody.sortingLayerName = "Effect";
             sprRndshadow.sortingLayerName = "Shadow";
         }
         else
@@ -160,9 +164,10 @@ public class ShadowHeight : MonoBehaviour
 
     public void TriggerIdleAnim()
     {
-        if (verticalVelocity < 0.1f && bouncingNumbers == 0)
+        if (bouncingNumbers == 0)
         {
             anim.SetTrigger("Idle");
+            Debug.Log("Trigger Idle");
         }
     }
 }

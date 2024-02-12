@@ -133,7 +133,9 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public override void Die()
     {
-        GetComponent<DropOnDestroy>().CheckDrop();
+        base.Die();
+
+        //GetComponent<DropOnDestroy>().CheckDrop();
 
         SoundManager.instance.Play(dieSFX);
         anim.SetTrigger("Die");

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1241117417832612320}
   - component: {fileID: 3129286402052596449}
   - component: {fileID: 4546133853774240947}
+  - component: {fileID: 8212473618172253514}
   m_Layer: 13
   m_Name: Gem
   m_TagString: Untagged
@@ -152,6 +153,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8212473618172253514}
+        m_TargetAssemblyTypeName: PropSound, Assembly-CSharp
+        m_MethodName: PlayLandingSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   isGrounded: 0
 --- !u!114 &4546133853774240947
 MonoBehaviour:
@@ -167,6 +180,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   verticalVel: 26
   randomGroundVel: 1
+--- !u!114 &8212473618172253514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895778108224746509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49ac1144a50d02c49827400578bc2797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initSound: {fileID: 8300000, guid: 347594a7deb78244c8b888462a9bb93b, type: 3}
+  landingSound: {fileID: 8300000, guid: f4ff3e5cc33ffea4eabae6516843734f, type: 3}
 --- !u!1 &3572366808843986608
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +236,6 @@ GameObject:
   m_Component:
   - component: {fileID: 122094262005862236}
   - component: {fileID: 6849587705880178042}
-  - component: {fileID: 8638058874804043884}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -284,15 +310,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8638058874804043884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8158874912557162758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

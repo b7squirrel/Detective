@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3057631842700324658}
   - component: {fileID: 2807199921248774646}
   - component: {fileID: 1215942250466802135}
+  - component: {fileID: 7961419633968686753}
   m_Layer: 0
   m_Name: Boss_Slime_Defeated
   m_TagString: Untagged
@@ -72,6 +73,22 @@ MonoBehaviour:
   crownDropSFX: {fileID: 8300000, guid: 7b575e7cd6f4b4740960d683b5b21fd0, type: 3}
   squelchSFX: {fileID: 8300000, guid: 814f0907aa362c14db6bc46e386cd351, type: 3}
   squeackSFX: {fileID: 8300000, guid: cc34a914e85de134c98c8180674beb6a, type: 3}
+--- !u!58 &7961419633968686753
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432597800540744455}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 2.74}
+  serializedVersion: 2
+  m_Radius: 2.82
 --- !u!1 &2765205544507570892
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,7 +99,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5438113335555787711}
   - component: {fileID: 2912798422711539570}
-  - component: {fileID: 1891442322042319219}
   m_Layer: 0
   m_Name: Boss_Slime_LV1_Crown
   m_TagString: Untagged
@@ -157,18 +173,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1891442322042319219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2765205544507570892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3118988757156379814
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,7 +183,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2007011212206414875}
   - component: {fileID: 569702197125364137}
-  - component: {fileID: 5613258802549338492}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -254,18 +257,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5613258802549338492
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3118988757156379814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6561930635361452245
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,7 +267,6 @@ GameObject:
   m_Component:
   - component: {fileID: 668932617397720118}
   - component: {fileID: 2401034031880537822}
-  - component: {fileID: 6584639637176940195}
   m_Layer: 0
   m_Name: Crown
   m_TagString: Untagged
@@ -351,15 +341,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6584639637176940195
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6561930635361452245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
