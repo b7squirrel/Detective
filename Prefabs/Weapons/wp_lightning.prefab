@@ -54,6 +54,7 @@ MonoBehaviour:
     projectileSpeed: 0
     knockBackChance: 0
     currentLevel: 0
+  knockbackSpeedFactor: 0
   anim: {fileID: 0}
   animExtra: {fileID: 0}
   ShootPoint: {fileID: 0}
@@ -64,7 +65,7 @@ MonoBehaviour:
   EffectPointExtra: {fileID: 0}
   enemy:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 16576
   lightning: {fileID: 843579147421286601, guid: fa2b385939909e040bdfd7b177f6a5e9, type: 3}
   duration: 0.4
   isClean: 0

@@ -53,6 +53,7 @@ MonoBehaviour:
     projectileSpeed: 0
     knockBackChance: 0
     currentLevel: 0
+  knockbackSpeedFactor: 0
   anim: {fileID: 0}
   animExtra: {fileID: 0}
   ShootPoint: {fileID: 0}
@@ -63,7 +64,7 @@ MonoBehaviour:
   EffectPointExtra: {fileID: 0}
   enemy:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 16576
   hoopProjectile: {fileID: 5722380107684637038, guid: b78812d8cfb87e041a397806d581b79c, type: 3}
   projectiles: []
   projectilesSynergy: []

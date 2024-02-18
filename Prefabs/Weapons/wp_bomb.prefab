@@ -52,13 +52,19 @@ MonoBehaviour:
     sizeOfArea: 0
     projectileSpeed: 0
     knockBackChance: 0
+    currentLevel: 0
+  knockbackSpeedFactor: 0
   anim: {fileID: 0}
+  animExtra: {fileID: 0}
   ShootPoint: {fileID: 0}
   EffectPoint: {fileID: 0}
   weaponTools: {fileID: 0}
+  weaponToolsExtra: {fileID: 0}
+  ShootPointExtra: {fileID: 0}
+  EffectPointExtra: {fileID: 0}
   enemy:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 16576
   bomb: {fileID: 5125717824780618538, guid: 4d3cfff7ecb976d408ff076c5c9ac1cf, type: 3}
   verticalVelocity: 50
   duration: 0.4

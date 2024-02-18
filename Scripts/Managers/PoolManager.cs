@@ -157,7 +157,6 @@ public class PoolManager : MonoBehaviour
                 {
                     select = item;
                     select.SetActive(true);
-                    Debug.Log("pulled gem");
                     return select;
                 }
             }
@@ -192,10 +191,7 @@ public class PoolManager : MonoBehaviour
         select = Instantiate(gem, temp.transform);
         miscPools[poolingTag].Add(select);
 
-        Debug.Log("Created Gem and put it in Gem foler");
         return select;
     }
-
-    
     #endregion
 }

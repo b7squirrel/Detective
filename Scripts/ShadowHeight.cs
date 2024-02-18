@@ -91,7 +91,7 @@ public class ShadowHeight : MonoBehaviour
             trnsShadow.position = new Vector2(trnsObject.position.x + shadowOffset.x,
                         trnsObject.position.y + shadowOffset.y);
 
-            sprRndBody.sortingLayerName = "Effect";
+            sprRndBody.sortingLayerName = "Children";
             sprRndshadow.sortingLayerName = "Shadow";
         }
         else

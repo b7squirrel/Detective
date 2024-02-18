@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 5275309742084548411}
   - component: {fileID: 6015072912039126302}
   - component: {fileID: 6319956411407123305}
-  m_Layer: 3
+  m_Layer: 14
   m_Name: Candy Box
   m_TagString: Props
   m_Icon: {fileID: 0}
@@ -235,8 +235,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItemPrefab:
   - {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
-  dropLastItemPrefab: {fileID: 0}
-  multipleDrops: {fileID: 0}
+  dropLastItemPrefab: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
+  multipleDrops: {fileID: 5007021332998522558, guid: da2101ae771dd7b4cb33300917ecdd19, type: 3}
   chance: 1
   exp: 1000
   hp: 0

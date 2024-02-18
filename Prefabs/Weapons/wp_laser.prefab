@@ -52,13 +52,19 @@ MonoBehaviour:
     sizeOfArea: 0
     projectileSpeed: 0
     knockBackChance: 0
+    currentLevel: 0
+  knockbackSpeedFactor: 0
   anim: {fileID: 0}
+  animExtra: {fileID: 0}
   ShootPoint: {fileID: 0}
   EffectPoint: {fileID: 0}
   weaponTools: {fileID: 0}
+  weaponToolsExtra: {fileID: 0}
+  ShootPointExtra: {fileID: 0}
+  EffectPointExtra: {fileID: 0}
   enemy:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 16576
   laserProjectile: {fileID: 7658975051141258168, guid: 1c2492b973d1c5a438df34c4e64c875d, type: 3}
   projectiles: []
   muzzleFlash: {fileID: 5419914140758713295, guid: ffe4beb20f6de764297dae70b8b5ccc5, type: 3}

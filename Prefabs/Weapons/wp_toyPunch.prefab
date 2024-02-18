@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2648346363455929472}
   - component: {fileID: 8427658593984029960}
   - component: {fileID: 4209403476992097069}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Punch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,12 +322,13 @@ MonoBehaviour:
   EffectPointExtra: {fileID: 0}
   enemy:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 16576
   punchSpin: {fileID: 7542592765426272895}
   punchPrefab: {fileID: 2648346363455929472}
   sr: {fileID: 3111835266383975970}
   SynergyKnockBackSpeedFactor: 3
   punch: {fileID: 8300000, guid: c8bda19134b049f43993e013890801b7, type: 3}
+  punchSynergy: {fileID: 0}
 --- !u!95 &1470639838094529136
 Animator:
   serializedVersion: 5

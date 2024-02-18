@@ -321,6 +321,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     protected virtual void KnockBack(Vector2 target, float knockBackDelay, float knockBackSpeedFactor)
     {
+        // knockbackDelay를 0으로 설정해 두었다면 낙백이 일어나지 않음
         if (knockBackDelay != 0) // 낙백이 일어나지 않게. 낵백이 끝나야 kill이 진행된다
         {
             Vector2 fromPlayer = target - (Vector2)Target.transform.position;
