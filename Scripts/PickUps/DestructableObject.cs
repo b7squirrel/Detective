@@ -49,6 +49,6 @@ public class DestructableObject : MonoBehaviour, Idamageable
     void DestroyObject()
     {
         gameObject.SetActive(false);
-        GetComponent<DropOnDestroy>().DropLastItem();
+        GetComponent<DropOnDestroy>().DropMultipleObjects();
     }
 }

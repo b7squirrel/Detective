@@ -285,11 +285,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (isSubBoss)
         {
-            GetComponent<DropOnDestroy>().DropMultipleObjects(numberOfSubBossDrops);
+            GetComponent<DropOnDestroy>().DropMultipleObjects();
         }
         if (isBoss)
         {
-            GetComponent<DropOnDestroy>().DropMultipleBossObjects(numberOfBossDrops);
+            GetComponent<DropOnDestroy>().DropMultipleBossObjects();
         }
         GetComponent<DropOnDestroy>().CheckDrop();
 

@@ -6,6 +6,7 @@ public class ShadowHeight : MonoBehaviour
     Vector2 shadowOffset = new Vector2(0f, -.2f);
     [SerializeField] int bouncingNumbers;
     [SerializeField] bool noHeightShadow;
+    [SerializeField] string onLandingMask;
     public bool IsDone { get; private set; }
     public UnityEvent onGroundHitEvent;
 
@@ -91,7 +92,7 @@ public class ShadowHeight : MonoBehaviour
             trnsShadow.position = new Vector2(trnsObject.position.x + shadowOffset.x,
                         trnsObject.position.y + shadowOffset.y);
 
-            sprRndBody.sortingLayerName = "Children";
+            sprRndBody.sortingLayerName = onLandingMask;
             sprRndshadow.sortingLayerName = "Shadow";
         }
         else
@@ -167,7 +168,6 @@ public class ShadowHeight : MonoBehaviour
         if (bouncingNumbers == 0)
         {
             anim.SetTrigger("Idle");
-            Debug.Log("Trigger Idle");
         }
     }
 }

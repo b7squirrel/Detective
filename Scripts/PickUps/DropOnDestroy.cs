@@ -4,7 +4,9 @@ using UnityEngine;
 public class DropOnDestroy : MonoBehaviour
 {
     [SerializeField] List<GameObject> dropItemPrefab; // 맞을 때마다 떨어트리는 아이템 (chest는 그냥 이걸로 드롭)
+    [SerializeField] bool noMultipleDrops; // 파괴될 때 여러개를 드롭하지 않는다면 이 아래의 드롭 변수들은 의미가 없다
     [SerializeField] GameObject dropLastItemPrefab; // 파괴될 때 떨어트리는 아이템
+    [SerializeField] int numberOfLastDrops; // 파괴될 때 떨어트리는 아이템 갯수
     [SerializeField] GameObject multipleDrops; // 여러개를 떨어트릴 때
     [SerializeField][Range(0f, 1f)] float chance = 1f;
     [SerializeField] int exp;
@@ -83,9 +85,7 @@ public class DropOnDestroy : MonoBehaviour
             Debug.LogWarning("DropOnDestroy, drop Last Item Prefab이 null입니다.");
             return;
         }
-
         bool isGem = false;
-
         if (GetComponent<Enemy>() != null)
         {
             exp = GetComponent<Enemy>().ExperienceReward;
@@ -97,15 +97,21 @@ public class DropOnDestroy : MonoBehaviour
 
         SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
     }
-
-    public void DropMultipleObjects(int _numObjects)
+    
+    public void DropMultipleObjects()
     {
+        if(noMultipleDrops)
+        {
+            return;
+        }
         GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
-        drops.GetComponent<MultiDrops>().Init(_numObjects, dropLastItemPrefab);
+        drops.GetComponent<MultiDrops>().Init(numberOfLastDrops, dropLastItemPrefab);
     }
-    public void DropMultipleBossObjects(int _numObjects)
+
+    // 보스가 드롭하는 아이템들은 모두 플레이어에게 흡수되도록
+    public void DropMultipleBossObjects()
     {
         GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
-        drops.GetComponent<MultiDrops>().InitBossItems(_numObjects, dropLastItemPrefab);
+        drops.GetComponent<MultiDrops>().InitBossItems(numberOfLastDrops, dropLastItemPrefab);
     }
 }
