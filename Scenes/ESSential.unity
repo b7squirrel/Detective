@@ -27114,7 +27114,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   enemyGroupShape: {fileID: 4525072272467478360, guid: 8a5aab02958ecb44d87d618a6e5d9437, type: 3}
-  maxEnemyInScene: 100
+  maxEnemyInScene: 150
+  currentEnemyNumbers: 0
 --- !u!4 &686274931 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7070234756646545296, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
@@ -49986,7 +49987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  <MaxHealth>k__BackingField: 4000
+  <MaxHealth>k__BackingField: 4000000
   <Armor>k__BackingField: 0
   <HpRegenerationRate>k__BackingField: 3
   <HpRegenerationTimer>k__BackingField: 0
@@ -70775,7 +70776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a78311391190846b1bd089286f3672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxGemNumbers: 100
+  MaxGemNumbers: 550
   gemPickup_A: {fileID: 8300000, guid: d7ee7190494d8db498e56ab98d40efc7, type: 3}
 --- !u!114 &1834188295
 MonoBehaviour:

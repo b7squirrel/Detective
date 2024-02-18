@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, Idamageable
 {
+    #region Variables
     [field : SerializeField] public string Name {get; private set;} // 체력바에 표시할 이름이 필요한 적들만 사용
     [HideInInspector] public bool IsKnockBack{get; set;}
     [HideInInspector] public bool IsStunned{get; set;}
@@ -17,11 +18,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public Vector2 GroupDir {get; set;} // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
     protected bool isOffScreen; // 화면 밖에 있을 때 플레이어의 공격을 받지 않기 위한 플래그
+    protected float offScreenCoolDown; // 너무 자주 콜라이더가 활성, 비활성 되지 않도록 쿨타임 주기
     [SerializeField] LayerMask screenEdge;
 
     Coroutine flipCoroutine;
     bool isFlipping; // 더 이상 flip하고 있지 않으면 코루틴을 초기화 시키기위해
     float pastFacingDir, currentFacingDir;
+    #endregion
 
     #region Component Variables
     protected Rigidbody2D rb;
@@ -52,6 +55,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected AudioClip die;
     #endregion
 
+    #region 유니티 콜백
     protected virtual void OnEnable()
     {
         Target = GameManager.instance.player.GetComponent<Rigidbody2D>();
@@ -83,10 +87,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         pastFacingDir = currentFacingDir;
     }
 
-    void StopFlipCoroutine()
+    protected virtual void Update()
     {
-        if(flipCoroutine != null) StopCoroutine(flipCoroutine);
+        isOffScreen = sr.isVisible;
+        colEnemy.enabled = isOffScreen;
     }
+    #endregion
 
     #region Movement Functions
     public virtual void Flip()
@@ -172,6 +178,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
             transform.eulerAngles = new Vector3(0, 180f, 0);
         }
         isFlipping = false;
+    }
+    void StopFlipCoroutine()
+    {
+        if (flipCoroutine != null) StopCoroutine(flipCoroutine);
     }
 
     public virtual void ApplyMovement()
@@ -291,6 +301,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         GameManager.instance.KillManager.UpdateCurrentKills(); // 처치한 적의 수 세기
 
+        Spawner.instance.SubtractEnemyNumber();
         gameObject.SetActive(false);
     }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록

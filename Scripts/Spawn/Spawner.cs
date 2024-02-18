@@ -10,7 +10,8 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] Transform[] spawnObjectPoint; // 오브젝트 스폰 지점
     [SerializeField] GameObject enemyGroupShape;
-    [SerializeField] int maxEnemyInScene;
+    [SerializeField] int maxEnemyInScene; // 적의 수 최대치 설정
+    [SerializeField] int currentEnemyNumbers; // 현재 스폰되어 있는 적의 수
 
     int level;
     float timer;
@@ -41,13 +42,21 @@ public class Spawner : MonoBehaviour
         
         if (activeEnemies == null)
             return 0;
-            // Debug.Log("Enemy numbers = " + activeEnemies.Count);
         return activeEnemies.Count;
+    }
+
+    void AddEnemyNumber()
+    {
+        currentEnemyNumbers++;
+    }
+    public void SubtractEnemyNumber()
+    {
+        currentEnemyNumbers--;
     }
 
     public void Spawn(EnemyData enemyToSpawn, int index)
     {
-        if (GetEnemyNumbers() > maxEnemyInScene)
+        if (currentEnemyNumbers >= maxEnemyInScene)
             return;
         GetAvailablePoints();
 
@@ -55,10 +64,12 @@ public class Spawner : MonoBehaviour
         // getcomponentChildren으로 받아왔으므로 0부터 하면 Player의 위치까지 포함하게 되므로
         enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
+
+        AddEnemyNumber();
     }
     public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
     {
-        if (GetEnemyNumbers() > maxEnemyInScene)
+        if (currentEnemyNumbers >= maxEnemyInScene)
             return;
         GetAvailablePoints();
         Vector2 spawnPoint = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
@@ -73,6 +84,8 @@ public class Spawner : MonoBehaviour
             enemy.GetComponent<Enemy>().Init(enemyToSpawn);
             enemy.GetComponent<Enemy>().IsGrouping = true;
             enemy.GetComponent<Enemy>().GroupDir = groupDir;
+
+            AddEnemyNumber();
         }
         Destroy(groupShape);
     }
