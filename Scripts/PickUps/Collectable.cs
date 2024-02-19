@@ -1,11 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 // 습득 가능한 오브젝트의 행동들 정의
 public class Collectable : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public float knockBackForce = 20f;
+    public float lifeTime; 
     public bool IsFlyingToPlayer { get; private set; }
     [field : SerializeField] public bool IsGem{get; private set;}
 
@@ -18,7 +20,8 @@ public class Collectable : MonoBehaviour
     public Vector2 dir;
     public float delay = 0.05f;
 
-    protected float timeToDisapear;
+    protected float lifeTimeCount;
+    protected bool isDisappearing; // 코루틴 반복 실행 방지
 
     [Header("Effect")]
     //[SerializeField] Material whiteMaterial;
@@ -42,7 +45,7 @@ public class Collectable : MonoBehaviour
     {
         IsFlyingToPlayer = false;
         IsHit = false;
-        timeToDisapear = 60f;
+        lifeTimeCount = lifeTime;
         if (gemManager == null)
         {
             gemManager = FindAnyObjectByType<GemManager>();
@@ -77,6 +80,11 @@ public class Collectable : MonoBehaviour
     {
         sr = GetComponentInChildren<SpriteRenderer>();
         //initialMat = sr.material;
+    }
+
+    protected virtual void Update()
+    {
+        DieOnTime();
     }
     #endregion
 
@@ -172,18 +180,18 @@ public class Collectable : MonoBehaviour
     #endregion
 
     #region 일정 시간 이후 사라짐
-    protected virtual void TimeUP()
+    protected virtual void DieOnTime()
     {
-        if (IsGem == false) // 보석만 사라지도록
-            return;
-        if (IsHit) // 자력에 닿아서 움직이는 도중이라면 사라짐 취소
-            return;
-        if (timeToDisapear > 0)
+        if (isDisappearing) return; // 코루틴이 실행 중이라면 Die 취소
+        if (IsHit) return; // 자력에 닿아서 움직이는 도중이라면 사라짐 취소
+
+        if (lifeTimeCount > 0)
         {
-            timeToDisapear -= Time.deltaTime;
+            lifeTimeCount -= Time.deltaTime;
         }
         else
         {
+            isDisappearing = true;
             StartCoroutine(TimesUpBlinking());
         }
     }
@@ -193,23 +201,24 @@ public class Collectable : MonoBehaviour
         ShadowSprite shadow = GetComponentInChildren<ShadowSprite>();
 
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
-        shadow.Hide();
+        //shadow.Hide();
         yield return new WaitForSeconds(.1f);
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
-        shadow.Show();
+        //shadow.Show();
         yield return new WaitForSeconds(.1f);
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
-        shadow.Hide();
+        //shadow.Hide();
         yield return new WaitForSeconds(.1f);
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
-        shadow.Show();
+        //shadow.Show();
         yield return new WaitForSeconds(.1f);
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
-        shadow.Hide();
+        //shadow.Hide();
         yield return new WaitForSeconds(.1f);
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
-        shadow.Show();
+        //shadow.Show();
         if (!IsHit)
+            isDisappearing = false;
             gameObject.SetActive(false);
     }
     #endregion

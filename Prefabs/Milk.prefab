@@ -42,8 +42,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3213637475077025516}
   - component: {fileID: 4055280216060841603}
-  - component: {fileID: 967961916526221746}
-  m_Layer: 7
+  - component: {fileID: 6315531605969161282}
+  m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ SpriteRenderer:
   m_SortingLayerID: -556371709
   m_SortingLayer: 4
   m_SortingOrder: -100
-  m_Sprite: {fileID: 21300000, guid: 640826e68fc63c949aa602bbc1c8d34e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d9fe25c93338ac14e8eb7ae4a7442004, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -117,18 +117,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &967961916526221746
-MonoBehaviour:
+--- !u!58 &6315531605969161282
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3984598113752142270}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.12
 --- !u!1 &8884259230644267150
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,13 +144,12 @@ GameObject:
   - component: {fileID: 8884259230644267184}
   - component: {fileID: 8884259230644267149}
   - component: {fileID: -490822388464860488}
-  - component: {fileID: -3786502207025165850}
-  - component: {fileID: 6388896032119097397}
   - component: {fileID: 1362534692}
   - component: {fileID: 328928784886804876}
   - component: {fileID: 4556722193487380517}
   - component: {fileID: -4795666020089958391}
   - component: {fileID: 3464248235554703263}
+  - component: {fileID: 3566589646459201181}
   m_Layer: 0
   m_Name: Milk
   m_TagString: Untagged
@@ -184,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 30
   knockBackForce: 12
+  lifeTime: 60
   <IsGem>k__BackingField: 0
   pickupEffect: {fileID: 7021321644947753035, guid: a30259b8a80acc843b7a96a795d8db95, type: 3}
   dir: {x: 0, y: 0}
@@ -204,38 +208,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Key>k__BackingField: Milk_A
---- !u!70 &-3786502207025165850
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8884259230644267150}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.27, y: 2.22}
-  m_Direction: 0
---- !u!70 &6388896032119097397
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8884259230644267150}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.18, y: 2.07}
-  m_Direction: 0
 --- !u!95 &1362534692
 Animator:
   serializedVersion: 5
@@ -271,6 +243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bouncingNumbers: 1
   noHeightShadow: 1
+  onLandingMask: Children
   onGroundHitEvent:
     m_PersistentCalls:
       m_Calls:
@@ -396,3 +369,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initSound: {fileID: 8300000, guid: afc1a4682837fb24591cf935ffd68d72, type: 3}
   landingSound: {fileID: 8300000, guid: f4ff3e5cc33ffea4eabae6516843734f, type: 3}
+--- !u!58 &3566589646459201181
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8884259230644267150}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.99

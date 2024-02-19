@@ -54,6 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   knockBackForce: 12
+  lifeTime: 1000
   <IsGem>k__BackingField: 0
   pickupEffect: {fileID: 2101849156756093557, guid: a30259b8a80acc843b7a96a795d8db95, type: 3}
   dir: {x: 0, y: 0}
@@ -450,7 +451,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1787499019626433099}
   - component: {fileID: 2386351361003667547}
-  - component: {fileID: 6674681348527327555}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -525,18 +525,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6674681348527327555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9035259812186740460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9065846539941735755
 GameObject:
   m_ObjectHideFlags: 0

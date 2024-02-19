@@ -25,7 +25,6 @@ public class ShadowHeight : MonoBehaviour
     float lastInitaialVerticalVelocity;
     [SerializeField] bool isGrounded;
     bool isInitialized;
-
     Animator anim;
 
     void Update()
@@ -44,15 +43,20 @@ public class ShadowHeight : MonoBehaviour
             sprRndBody = GetComponentInChildren<SpriteRenderer>();
             trnsBody = sprRndBody.transform;
             trnsShadow = new GameObject().transform;
-            trnsShadow.parent = trnsObject;
-            trnsShadow.gameObject.name = "ShadowOver";
-            trnsShadow.localRotation = trnsBody.localRotation;
-            trnsShadow.localScale = trnsBody.localScale;
 
-            // 그림자 만들기
-            sprRndshadow = trnsShadow.gameObject.AddComponent<SpriteRenderer>();
-            sprRndshadow.color = new Color(0, 0, 0, .25f);
-            sprRndshadow.sortingLayerName = "ShadowOver";
+            if (noHeightShadow == false)
+            {
+                trnsShadow.parent = trnsObject;
+                trnsShadow.gameObject.name = "ShadowOver";
+                trnsShadow.localRotation = trnsBody.localRotation;
+                trnsShadow.localScale = trnsBody.localScale;
+
+                // 그림자 만들기
+                sprRndshadow = trnsShadow.gameObject.AddComponent<SpriteRenderer>();
+                sprRndshadow.color = new Color(0, 0, 0, .25f);
+                sprRndshadow.sortingLayerName = "ShadowOver";
+            }
+
 
             isInitialized = true;
         }
@@ -80,6 +84,8 @@ public class ShadowHeight : MonoBehaviour
     }
     void UpdateShadow()
     {
+        if (noHeightShadow) return;
+
         sprRndshadow.sprite = sprRndBody.sprite;
         sprRndshadow.flipX = sprRndBody.flipX;
         sprRndshadow.flipY = sprRndBody.flipY;
@@ -155,8 +161,8 @@ public class ShadowHeight : MonoBehaviour
 
     public void RemoveHeigihtShadow()
     {
-        if (noHeightShadow == false)
-            return;
+        if (noHeightShadow) return;
+
         if (verticalVelocity < 0.1f && bouncingNumbers == 0)
         {
             sprRndshadow.color = new Color(0, 0, 0, 0f);
