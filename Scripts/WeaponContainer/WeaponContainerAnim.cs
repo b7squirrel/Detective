@@ -12,7 +12,7 @@ public class WeaponContainerAnim : MonoBehaviour
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform handsGroup; // 손과 함께 움직이는 중비들은 모두 여기에 페어런트 시킨다
 
-    RuntimeAnimatorController costumeAnim; 
+    RuntimeAnimatorController costumeAnim;
     Sprite sprite; // 개별 무기들의 sprite
 
     bool _facingRight = true;
@@ -20,8 +20,9 @@ public class WeaponContainerAnim : MonoBehaviour
     public bool FacingRight
     {
         get => _facingRight;
-        set{
-            if(_facingRight == value) return;
+        set
+        {
+            if (_facingRight == value) return;
             _facingRight = value;
             FlipSpriteGroup();
         }
@@ -39,13 +40,13 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetEquipmentSprites(WeaponData wd)
     {
         Init(wd.Animators.InGamePlayerAnim);
-        
+
         if (wd.DefaultHead != null) sr[1].sprite = wd.DefaultHead;
         if (wd.DefaultChest != null) sr[2].sprite = wd.DefaultChest;
         if (wd.DefaultFace != null) sr[3].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) sr[4].sprite = wd.DefaultHands;
 
-        if(wd.costumeAnim != null)
+        if (wd.costumeAnim != null)
         {
             GameObject costumePrefab = Instantiate(costume, transform);
             costumePrefab.transform.localPosition = Vector3.zero;
@@ -83,11 +84,23 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetAnimState(float speed)
     {
         anim.SetFloat("Speed", speed);
-        if(costumeAnimator != null) costumeAnimator.SetFloat("Speed", speed);
+        if (costumeAnimator != null) costumeAnimator.SetFloat("Speed", speed);
     }
-    public void ParentWeaponObjectTo(int _index, Transform _weaponObject)
+    public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent)
     {
-        if (_index == 0 ) // 머리 부위이면
+        if (_needParent == false) // 페어런트 시킬 필요가 없는 무기라면 아무것도 하지 않는다
+        {
+            // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
+            if(_index < 4)
+            {
+                _weaponObject.position = sr[_index + 1].GetComponent<Transform>().position;
+                sr[_index + 1].gameObject.SetActive(false);
+            }
+            
+            return;
+        }
+
+        if (_index == 0) // 머리 부위이면
         {
             _weaponObject.SetParent(headGroup);
         }
@@ -103,13 +116,12 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             _weaponObject.SetParent(handsGroup);
         }
-        if ( _index == 4) // 그냥 몸에 붙여서 움직이는 무기라면
+        if (_index == 4) // 그냥 몸에 붙여서 움직이는 무기라면
         {
             // 겹치는 스프라이트가 없을테니 여기서 끝
             _weaponObject.SetParent(transform);
-            return; 
+            return;
         }
-
         // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
         _weaponObject.position = sr[_index + 1].GetComponent<Transform>().position;
         sr[_index + 1].gameObject.SetActive(false);

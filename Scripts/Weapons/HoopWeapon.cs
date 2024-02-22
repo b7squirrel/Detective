@@ -82,6 +82,7 @@ public class HoopWeapon : WeaponBase
         {
             Transform hoopObject = Instantiate(hoopProjectile, projSpin.position, Quaternion.identity).transform;
             hoopObject.parent = projSpin;
+            hoopObject.GetComponentInChildren<SpriteRenderer>().sortingLayerName = "Weapon";
             projectiles.Add(hoopObject);
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class WeaponBase : MonoBehaviour
@@ -29,6 +30,7 @@ public class WeaponBase : MonoBehaviour
 
     #region Flip
     public bool InitialWeapon{get; set;} // weapon manager에서 설정
+    [field : SerializeField] public bool NeedParent { get; private set; } // weapon container에서 무기가 생성될 때 어떤 부위에도 parent 시키지 않음 
     protected float halfHeight, halfWidth;
     protected Vector2 size;
     [SerializeField] protected LayerMask enemy;
@@ -62,6 +64,7 @@ public class WeaponBase : MonoBehaviour
         RotateExtraWeapon();
 
         FlipWeaponTools();
+        LockFlip();
 
         timer -= Time.deltaTime;
         if (timer < 0f)
@@ -313,6 +316,14 @@ public class WeaponBase : MonoBehaviour
             {
                 weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = false;
             }
+        }
+    }
+
+    protected virtual void LockFlip()
+    {
+        if(NeedParent == false) // 무기를 페어런트 시켜서 움직이지 않는다면 Flip을 막는다
+        {
+            transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z);
         }
     }
 

@@ -84,30 +84,38 @@ public class ShadowHeight : MonoBehaviour
     }
     void UpdateShadow()
     {
-        if (noHeightShadow) return;
+        if (noHeightShadow == false)
+        {
+            sprRndshadow.sprite = sprRndBody.sprite;
+            sprRndshadow.flipX = sprRndBody.flipX;
+            sprRndshadow.flipY = sprRndBody.flipY;
 
-        sprRndshadow.sprite = sprRndBody.sprite;
-        sprRndshadow.flipX = sprRndBody.flipX;
-        sprRndshadow.flipY = sprRndBody.flipY;
-
-        trnsShadow.localRotation = trnsBody.localRotation;
-        trnsShadow.localScale = trnsBody.localScale;
+            trnsShadow.localRotation = trnsBody.localRotation;
+            trnsShadow.localScale = trnsBody.localScale;
+        }
 
         if (isGrounded)
         {
-            trnsShadow.position = new Vector2(trnsObject.position.x + shadowOffset.x,
+            sprRndBody.sortingLayerName = onLandingMask;
+            if (noHeightShadow == false)
+            {
+                trnsShadow.position = new Vector2(trnsObject.position.x + shadowOffset.x,
                         trnsObject.position.y + shadowOffset.y);
 
-            sprRndBody.sortingLayerName = onLandingMask;
-            sprRndshadow.sortingLayerName = "Shadow";
+                sprRndshadow.sortingLayerName = "Shadow";
+            }
         }
         else
         {
-            trnsShadow.position = new Vector2(trnsObject.position.x,
+            sprRndBody.sortingLayerName = "FloatingOver";
+
+            if (noHeightShadow == false)
+            {
+                trnsShadow.position = new Vector2(trnsObject.position.x,
                         trnsObject.position.y);
 
-            sprRndBody.sortingLayerName = "FloatingOver";
-            sprRndshadow.sortingLayerName = "ShadowOver";
+                sprRndshadow.sortingLayerName = "ShadowOver";
+            }
         }
     }
 

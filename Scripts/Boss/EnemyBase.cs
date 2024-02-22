@@ -62,7 +62,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponentInChildren<SpriteRenderer>();
-        colEnemy = GetComponent<Collider2D>();
+        //colEnemy = GetComponent<Collider2D>();
 
         //initialMat = sr.material;
         IsKnockBack = false;
@@ -90,7 +90,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected virtual void Update()
     {
         isOffScreen = sr.isVisible;
-        colEnemy.enabled = isOffScreen;
+        //colEnemy.enabled = isOffScreen;
     }
     #endregion
 

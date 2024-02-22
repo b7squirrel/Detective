@@ -47,9 +47,11 @@ public class WeaponManager : MonoBehaviour
 
         WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
 
-        wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponGameObject.transform); // Head, Chest, Face, Hand 순서 EquipmentType
-
         WeaponBase weaponBase = weaponGameObject.GetComponent<WeaponBase>();
+
+        // Head, Chest, Face, Hand 순서 EquipmentType
+        wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponGameObject.transform, weaponBase.NeedParent); 
+
         //weaponBase.InitialWeapon = isInitialWeapon; // Player 리드 오리에게 붙는 무기인지 
         weaponBase.Init(weaponData.stats);
 
@@ -80,7 +82,7 @@ public class WeaponManager : MonoBehaviour
                 if (_index == 3) sprite = wd.DefaultHands;
             }
             wa.SetWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>(), sprite);
-            wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponTool);
+            wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponTool, weaponBase.NeedParent);
         }
 
         weaponBase.SetData(weaponData);
@@ -112,7 +114,7 @@ public class WeaponManager : MonoBehaviour
             weaponBase.animExtra = weaponTool.GetComponent<Animator>();
 
             WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
-            wa.ParentWeaponObjectTo((int)weaponData.equipmentType, weaponTool.transform);
+            wa.ParentWeaponObjectTo((int)weaponData.equipmentType, weaponTool.transform, weaponBase.NeedParent);
             wa.SetExtraWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>());
         }
     }

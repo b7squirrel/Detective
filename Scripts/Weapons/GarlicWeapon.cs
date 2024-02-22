@@ -16,6 +16,7 @@ public class GarlicWeapon : WeaponBase
         note = GetComponentInChildren<ParticleSystem>();
         
     }
+    
     protected override void Attack()
     {
         base.Attack();
