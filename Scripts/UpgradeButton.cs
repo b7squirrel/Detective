@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,6 +46,7 @@ public class UpgradeButton : MonoBehaviour
         anim.SetTrigger("Reset");
 
         icon.sprite = upgradeData.icon;
+        icon.preserveAspect = true;
         icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 1f);
         if (upgradeData.Name != "")
         {
