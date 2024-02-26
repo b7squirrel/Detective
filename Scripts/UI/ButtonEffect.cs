@@ -16,14 +16,15 @@ public class ButtonEffect : MonoBehaviour
         if (myButton != null)
         {
             myButton.onClick.AddListener(LockButton);
-            myButton.onClick.AddListener(OnpressedAnimation);
+            myButton.onClick.AddListener(PlayAnimation);
+            myButton.onClick.AddListener(PlayButtonSound);
         }
     }
     public void LockButton()
     {
         GetComponent<Button>().interactable = false;
     }
-    public void OnpressedAnimation()
+    public void PlayAnimation()
     {
         myButton.GetComponent<Animator>().SetTrigger("Pressed");
     }
@@ -32,8 +33,8 @@ public class ButtonEffect : MonoBehaviour
     {
         // 눌렀을 때 이펙트
     }
-    public void ButtonSound()
+    public void PlayButtonSound()
     {
-        // 버튼을 눌렀을 때 사운드
+        SoundManager.instance.Play(buttonSound);
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TennisBallProjectile : ProjectileBase
@@ -8,12 +6,20 @@ public class TennisBallProjectile : ProjectileBase
     [SerializeField] AudioClip hitSound;
     Rigidbody2D rb;
     Animator anim;
+    TrailRenderer trailRenderer;
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        trailRenderer = GetComponent<TrailRenderer>();
         
     }
+    // 다시 활성화 될 때 트레일이 이상하게 시작되는 문제를 해결하기 위해서
+    private void OnDisable()
+    {
+        trailRenderer.Clear();
+    }
+
     protected override void HitObject()
     {
         deflection--;
