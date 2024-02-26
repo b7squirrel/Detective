@@ -93,7 +93,7 @@ public class WeaponContainerAnim : MonoBehaviour
             // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
             if(_index < 4)
             {
-                _weaponObject.position = sr[_index + 1].GetComponent<Transform>().position;
+                //_weaponObject.position = sr[_index + 1].GetComponent<Transform>().position;
                 sr[_index + 1].gameObject.SetActive(false);
             }
             
