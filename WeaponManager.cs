@@ -104,7 +104,7 @@ public class WeaponManager : MonoBehaviour
         // 개별 무기들 부착
         if (weaponData.weaponPrefab != null)
         {
-            Transform weaponTool = Instantiate(weaponData.weaponPrefab, weaponBase.transform);
+            Transform weaponTool = Instantiate(weaponData.weaponPrefab, weaponBase.GetComponentInParent<WeaponContainerAnim>().transform);
             weaponTool.position = weaponBase.transform.position;
 
             //값을 weaponFire등에서 가져갈 수 있도록 weaponBase로 옮겨놓음
