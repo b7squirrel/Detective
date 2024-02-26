@@ -30,8 +30,8 @@ public class FireBallWeapon : WeaponBase
             GetAttackParameters(); // 총알마다 크리티컬 확률, 낙백 확률이 다르게 하기 위해
 
             SoundManager.instance.Play(shoot);
-            GameObject effect = GameManager.instance.poolManager.GetMisc(muzzleFlash);
-            effect.transform.position = EffectPoint.position;
+            //GameObject effect = GameManager.instance.poolManager.GetMisc(muzzleFlash);
+            //effect.transform.position = EffectPoint.position;
             
             GameObject fireBall = GameManager.instance.poolManager.GetMisc(weapon);
             float index = 0f;

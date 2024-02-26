@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 public class WeaponBase : MonoBehaviour
@@ -310,11 +309,11 @@ public class WeaponBase : MonoBehaviour
         {
             if (dir.x < 0)
             {
-                weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = true;
+                weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = false;
             }
             else
             {
-                weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = false;
+                weaponToolsExtra.GetComponentInChildren<SpriteRenderer>().flipY = true;
             }
         }
     }

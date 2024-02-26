@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 [System.Serializable]
 public class Serialization<T>
@@ -14,7 +13,8 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _id, string _Type, string _Grade, string _Name, string _level, string _hp, string _atk, string _equipmentType, string _essectialEquip, string _bindingTo, string _startingMember, string _defaultItem)
+    public CardData(string _id, string _Type, string _Grade, string _Name, 
+        string _level, string _hp, string _atk, string _equipmentType, string _essectialEquip, string _bindingTo, string _startingMember, string _defaultItem)
     {
         ID = _id;
         Type = _Type;
