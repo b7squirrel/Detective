@@ -184,6 +184,7 @@ public class Collectable : MonoBehaviour
     {
         if (isDisappearing) return; // 코루틴이 실행 중이라면 Die 취소
         if (IsHit) return; // 자력에 닿아서 움직이는 도중이라면 사라짐 취소
+        if (lifeTimeCount == 0) return; // 없어지지 않는 아이템이면 lifeTime을 0으로 하기로 약속
 
         if (lifeTimeCount > 0)
         {
