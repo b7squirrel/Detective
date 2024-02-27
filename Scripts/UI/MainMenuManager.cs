@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] Slider tabSlider;
+    [SerializeField] Animator tabSliderAnim; // 왼쪽, 중앙, 오른쪽에 따라 모양이 달라지도록
     [SerializeField] GameObject[] tabPanels; // 시작할 떄 모두 비활성화 시킴. 빌드할 때 켜놓든 꺼놓든 상관없음
     [SerializeField] RectTransform[] BtnRect;
     [SerializeField] RectTransform[] BtnImageRect;
@@ -104,6 +105,20 @@ public class MainMenuManager : MonoBehaviour
     {
         tabSlider.value = pos[pressBtnID];
         targetIndex = pressBtnID;
+        if (pressBtnID == 0) 
+        { 
+            tabSliderAnim.SetTrigger("Left");
+            return;
+        }
+        if (pressBtnID == 4) 
+        { 
+            tabSliderAnim.SetTrigger("Right");
+            return;
+        }
+        else
+        { 
+            tabSliderAnim.SetTrigger("Center"); 
+        }
     }
 
     public void PlayClickSound()
