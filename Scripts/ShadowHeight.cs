@@ -42,10 +42,10 @@ public class ShadowHeight : MonoBehaviour
             trnsObject = transform;
             sprRndBody = GetComponentInChildren<SpriteRenderer>();
             trnsBody = sprRndBody.transform;
-            trnsShadow = new GameObject().transform;
 
             if (noHeightShadow == false)
             {
+                trnsShadow = new GameObject().transform;
                 trnsShadow.parent = trnsObject;
                 trnsShadow.gameObject.name = "ShadowOver";
                 trnsShadow.localRotation = trnsBody.localRotation;
