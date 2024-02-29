@@ -42,5 +42,4 @@ public class MultiDrops : MonoBehaviour
         GameManager.instance.character.GetComponentInChildren<Magnetic>().MagneticField(30f);
         Destroy(gameObject);
     }
-
 }

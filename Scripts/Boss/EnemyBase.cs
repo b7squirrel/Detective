@@ -274,11 +274,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Die()
     {
-        if (dieEffectPrefeab != null) {
+        if (dieEffectPrefeab != null)
+        {
             GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
             dieEffect.transform.position = transform.position;
         }
-        if (dieExplosionPrefeab != null) {
+        if (dieExplosionPrefeab != null)
+        {
             GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieExplosionPrefeab);
             explosionEffect.transform.position = transform.position;
         }
@@ -291,11 +293,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             GetComponent<DropOnDestroy>().DropMultipleBossObjects();
         }
+
         GetComponent<DropOnDestroy>().CheckDrop();
 
         StopAllCoroutines();
 
-        //sr.material = initialMat;
+        ////sr.material = initialMat;
         IsGrouping = false;
         ResetFlip();
 
