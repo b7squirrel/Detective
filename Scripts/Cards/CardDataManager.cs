@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
-using static UnityEditor.Progress;
 
 [System.Serializable]
 public class Serialization<T>
@@ -21,6 +20,7 @@ public class CardData
     {
         ID = _id;
         Type = _Type;
+        Debug.Log(_Grade);
         Grade = int.Parse(_Grade);
         Name = _Name;
         Level = int.Parse(_level);
@@ -152,7 +152,8 @@ public class CardDataManager : MonoBehaviour
     // 새로운 카드는 아이디를 발급받는다
     public void AddNewCardToMyCardsList(CardData _cardData)
     {
-        _cardData.ID = Guid.NewGuid().ToString();
+        //_cardData.ID = Guid.NewGuid().ToString();
+        _cardData.ID = GenerateRandomId().ToString();
 
         MyCardsList.Add(_cardData);
         Save();
@@ -179,10 +180,29 @@ public class CardDataManager : MonoBehaviour
     {
         ResetCards();
     }
-    // public CardData GenNewCardData(string _type, string _grade, string _name, string _equipmentType)
-    // {
-    //     string _id = GetInstanceID().ToString();
-    //     CardData newCard = new CardData(_id, _type, _grade, _name, "1", _equipmentType);
-    //     return newCard;
-    // }
+
+    // 중복되지 않는 랜덤 아이디 생성 함수
+    int GenerateRandomId()
+    {
+        int randomId;
+        do
+        {
+            randomId = UnityEngine.Random.Range(1, 10000);
+        } while (ItemIdExists(randomId));
+
+        return randomId;
+    }
+
+    // 이미 존재하는 아이디인지 확인하는 함수
+    bool ItemIdExists(int id)
+    {
+        for (int i = 0; i < MyCardsList.Count; i++)
+        {
+            if (MyCardsList[i].ID == id.ToString())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
