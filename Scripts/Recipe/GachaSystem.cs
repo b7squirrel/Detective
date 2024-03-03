@@ -57,11 +57,6 @@ public class GachaSystem : MonoBehaviour
         }
         List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == _oriCardData.Name);
 
-        foreach (CardData item in sameItems)
-        {
-            Debug.Log(item.Name + " _ " + item.Grade);
-        }
-
         CardData defaultItem = sameItems.Find(x => x.DefaultItem == DefaultItem.Default.ToString());
 
         Debug.Log("Default Item = " + defaultItem.Name + " Grade = " + defaultItem.Grade);

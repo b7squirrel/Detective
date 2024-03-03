@@ -282,13 +282,11 @@ public class UpPanelManager : MonoBehaviour
     #region 업그레이드
     public void UpgradeCard()
     {
-        int newCardGrade = new Convert().GradeToInt(CardToUpgrade.Grade) + 1;
+        int newCardGrade = CardToUpgrade.Grade + 1;
         if (newCardGrade > 4) { newCardGrade = 4; } // 전설 등급은 합성하면 전설 등급
 
-        string newGrade = ((Grade)newCardGrade).ToString();
-
         // 생성된 카드를 내 카드 리스트에 저장
-        CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newGrade);
+        CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newCardGrade);
         newCardData.ID = CardToUpgrade.ID;
         cardDataManager.AddUpgradedCardToMyCardList(newCardData);
 
@@ -320,14 +318,10 @@ public class UpPanelManager : MonoBehaviour
     }
 
     // 아이디를 발급 받지 않은 card data 생성
-    public CardData GenUpgradeCardData(string _cardName, string _grade)
+    public CardData GenUpgradeCardData(string _cardName, int _grade)
     {
         List<CardData> newCard = new();
         newCard.AddRange(cardsDictionary.GetCardPool());
-        foreach (var item in newCard)
-        {
-            Debug.Log(item.Name);
-        }
 
         List<CardData> sameNameCardData = newCard.FindAll(x => x.Name == _cardName);
         Debug.Log("찾는 카드 = " + _cardName);

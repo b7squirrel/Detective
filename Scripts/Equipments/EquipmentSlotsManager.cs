@@ -17,7 +17,7 @@ public class EquipmentSlotsManager : MonoBehaviour
         instantCharCard = charCardData;
 
         int charAtk = cardDictionary.GetWeaponItemData(charCardData).weaponData.stats.damage;
-        int charHp = new Convert().StringToInt(charCardData.Hp);
+        int charHp = charCardData.Hp;
         currentAttribute = new OriAttribute(charAtk, charHp);
 
         EquipmentCard[] equips = cardList.GetEquipmentsCardData(charCardData);
@@ -59,8 +59,8 @@ public class EquipmentSlotsManager : MonoBehaviour
     void UpdateAttribute(CardData _equipCardData, bool isAdding)
     {
         // 장비 카드의 attribute
-        int Hp = new Convert().StringToInt(_equipCardData.Hp);
-        int Atk = new Convert().StringToInt(_equipCardData.Atk);
+        int Hp = _equipCardData.Hp;
+        int Atk = _equipCardData.Atk;
 
         int addingFactor = isAdding ? 1 : -1; // 장착이면 더하기, 해제면 빼기
 

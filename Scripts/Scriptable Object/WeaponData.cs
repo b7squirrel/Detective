@@ -47,7 +47,7 @@ public class AnimatorData
 [CreateAssetMenu]
 public class WeaponData : ScriptableObject
 {
-    public Grade grade;
+    public int grade;
     public string Name;
     public Sprite charImage;
     public string SynergyWeapon;

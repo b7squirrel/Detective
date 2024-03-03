@@ -9,7 +9,7 @@ public class CardSlot : MonoBehaviour
 
     [Header("debug")]
     [SerializeField] string ID;
-    [SerializeField] string grade;
+    [SerializeField] int grade;
     [SerializeField] string Name;
     void OnEnable()
     {

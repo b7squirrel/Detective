@@ -26,10 +26,10 @@ public class StatManager : MonoBehaviour
     /// </summary>
     public void LevelUp(CardData _cardData)
     {
-        int level = new Convert().StringToInt(_cardData.Level);
+        int level = _cardData.Level;
 
-        int.TryParse(_cardData.Hp, out int newHp);
-        int.TryParse(_cardData.Atk, out int newAtk);
+        int newHp = _cardData.Hp;
+        int newAtk = _cardData.Atk;
 
         if(_cardData.EquipmentType == "Ori") // 오리라면
         {
@@ -47,9 +47,9 @@ public class StatManager : MonoBehaviour
 
         level++;
         
-        UpdateStat(_cardData, level.ToString(), newHp.ToString(), newAtk.ToString());
+        UpdateStat(_cardData, level, newHp, newAtk);
     }
-    void UpdateStat(CardData _cardData, string _level, string _hp, string _atk)
+    void UpdateStat(CardData _cardData, int _level, int _hp, int _atk)
     {
         cardDataManager.UpgradeCardData(_cardData, _level, _hp, _atk);
 
@@ -75,8 +75,8 @@ public class StatManager : MonoBehaviour
         CharCard lead = cardList.FindCharCard(oriCard);
         EquipmentCard[] equipments = lead.equipmentCards;
 
-        int oriAtk = new Convert().StringToInt(oriCard.Atk);
-        int oriHp = new Convert().StringToInt(oriCard.Hp);
+        int oriAtk = oriCard.Atk;
+        int oriHp = oriCard.Hp;
         OriAttribute leadAttr = new OriAttribute(oriAtk, oriHp);
 
         if(lead != null)
@@ -86,8 +86,8 @@ public class StatManager : MonoBehaviour
                 if (equipments[i] == null)
                     continue;
 
-                int equipmentAtk = new Convert().StringToInt(equipments[i].CardData.Atk);
-                int equipmentHp = new Convert().StringToInt(equipments[i].CardData.Hp);
+                int equipmentAtk = equipments[i].CardData.Atk;
+                int equipmentHp = equipments[i].CardData.Hp;
                 leadAttr = new OriAttribute(oriAtk + equipmentAtk, oriHp + equipmentHp);
             }
         }

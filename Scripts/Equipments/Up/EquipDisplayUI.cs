@@ -28,7 +28,7 @@ public class EquipDisplayUI : MonoBehaviour
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
 
-        int intGrade = new Convert().GradeToInt(charCardData.Grade);
+        int intGrade = charCardData.Grade;
         SetNumStar(intGrade + 1);
 
         for (int i = 0; i < 5; i++)

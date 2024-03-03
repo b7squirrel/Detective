@@ -3,8 +3,8 @@ public class Sort
     #region 등급별 분류
     public int ByGrade(CardData cardA, CardData cardB)
     {
-        int gradeA = new Convert().GradeToInt(cardA.Grade);
-        int gardeB = new Convert().GradeToInt(cardB.Grade);
+        int gradeA = cardA.Grade;
+        int gardeB = cardB.Grade;
         int gradeComparison = CompareGrade(gradeA, gardeB);
 
         if (gradeComparison == 0)

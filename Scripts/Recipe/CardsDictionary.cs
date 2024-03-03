@@ -37,20 +37,20 @@ public class CardsDictionary : MonoBehaviour
     }
     public WeaponItemData GetWeaponItemData(CardData cardData)
     {
-        string grade = cardData.Grade;
+        int grade = cardData.Grade;
         string _name = cardData.Name;
 
         if (cardData.Type == CardType.Weapon.ToString())
         {
             List<WeaponData> wd = weaponData.FindAll(x => x.Name == _name);
-            WeaponData picked = wd.Find(x => x.grade.ToString() == grade);
+            WeaponData picked = wd.Find(x => x.grade == grade);
             WeaponItemData weaponItemData = new(picked, null);
             return weaponItemData;
         }
         else
         {
             List<Item> item = itemData.FindAll(x => x.Name == _name);
-            Item picked = item.Find(x => x.grade.ToString() == grade);
+            Item picked = item.Find(x => x.grade == grade);
             WeaponItemData weaponItemData = new(null, picked);
             return weaponItemData;
         }

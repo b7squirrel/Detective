@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class EquipInfoPanel : MonoBehaviour
 {
@@ -20,19 +21,19 @@ public class EquipInfoPanel : MonoBehaviour
     {
         this.cardDisp = _cardDisp;
         
-        grade.text = cardData.Grade;
+        grade.text = cardData.Grade.ToString();
         Name.text = cardData.Name;
-        Level.text = cardData.Level;
+        Level.text = cardData.Level.ToString();
 
-        if(cardData.Atk != "0") 
+        if(cardData.Atk != 0) 
         {
             attributeImage.sprite = atkIcon;
-            attribute.text = cardData.Atk;
+            attribute.text = cardData.Atk.ToString();
         }
-        else if(cardData.Hp != "0")
+        else if(cardData.Hp != 0)
         {
             attributeImage.sprite = hpIcon;
-            attribute.text = cardData.Hp;
+            attribute.text = cardData.Hp.ToString();
         }
         
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
@@ -51,9 +52,9 @@ public class EquipInfoPanel : MonoBehaviour
         unEquipButton.SetActive(!isEquipButton);
     }
     // 레벨업을 하면 레벨과 속성을 업데이트
-    public void UpdatePanel(string _level, string _attribute)
+    public void UpdatePanel(int _level, int _attribute)
     {
-        Level.text = new Convert().StringToInt(_level).ToString();
-        attribute.text = new Convert().StringToInt(_attribute).ToString();
+        Level.text = _level.ToString();
+        attribute.text = _attribute.ToString();
     }
 }

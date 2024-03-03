@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using static UnityEditor.Progress;
 
 [System.Serializable]
 public class Serialization<T>
@@ -14,23 +15,30 @@ public class Serialization<T>
 public class CardData
 {
     public CardData(string _id, string _Type, string _Grade, string _Name, 
-        string _level, string _hp, string _atk, string _equipmentType, string _essectialEquip, string _bindingTo, string _startingMember, string _defaultItem)
+        string _level, string _hp, string _atk, string _equipmentType, 
+        string _essectialEquip, string _bindingTo, string _startingMember, 
+        string _defaultItem, string _passiveSkill)
     {
         ID = _id;
         Type = _Type;
-        Grade = _Grade;
+        Grade = int.Parse(_Grade);
         Name = _Name;
-        Level = _level;
-        Hp = _hp;
-        Atk = _atk;
+        Level = int.Parse(_level);
+        Hp = int.Parse(_hp);
+        Atk = int.Parse(_atk);
         EquipmentType = _equipmentType;
         EssentialEquip = _essectialEquip;
         BindingTo = _bindingTo;
         StartingMember = _startingMember;
         DefaultItem = _defaultItem;
+        PassiveSkill = int.Parse(_passiveSkill);
+
     }
 
-    public string ID, Type, Grade, Name, Level, Hp, Atk, EquipmentType, EssentialEquip, BindingTo, StartingMember, DefaultItem;
+    public string ID, Type, Name, 
+            EquipmentType, EssentialEquip, BindingTo,
+            StartingMember, DefaultItem;
+    public int Grade, Level, Hp, Atk, PassiveSkill;
 }
 public class ReadCardData
 {
@@ -50,7 +58,9 @@ public class ReadCardData
                 rowList.Add(row[j]);
             }
 
-            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11]));
+            cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], 
+                                      row[5], row[6], row[7], row[8], row[9], 
+                                      row[10], row[11], row[12]));
         }
         return cardList;
     }
@@ -128,11 +138,11 @@ public class CardDataManager : MonoBehaviour
     public void RemoveCardFromMyCardList(CardData cardToRemove)
     {
         string mID = cardToRemove.ID;
-        foreach (var item in MyCardsList)
+        for (int i = 0; i < MyCardsList.Count; i++)
         {
-            if (item.ID == mID)
+            if (MyCardsList[i].ID == mID)
             {
-                MyCardsList.Remove(item);
+                MyCardsList.Remove(MyCardsList[i]);
                 return;
             }
             Save();
@@ -153,7 +163,7 @@ public class CardDataManager : MonoBehaviour
         MyCardsList.Add(_cardData);
         Save();
     }
-    public void UpgradeCardData(CardData _cardData, string _level, string _hp, string _atk)
+    public void UpgradeCardData(CardData _cardData, int _level, int _hp, int _atk)
     {
         _cardData.Level = _level;
         _cardData.Hp = _hp;

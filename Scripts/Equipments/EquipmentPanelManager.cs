@@ -80,7 +80,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.SetWeaponDisplay(oriCardDataToDisplay, equipmentSlotsManager.GetCurrentAttribute()); // 오리 카드 및 Attr
 
         // 나중에는 이 항목들을 EquipDispUI에 옮겨야 한다. SetWeaponDisplay에 포함되도록
-        int level = int.Parse(CardOnDisplay.Level);
+        int level = CardOnDisplay.Level;
         UpdateUpgradeCost(level, charUpgradeCost);
         UpdateButtonState(charUpgradeButton, true);
 
@@ -224,7 +224,7 @@ public class EquipmentPanelManager : MonoBehaviour
         warningLackCanvasGroup.alpha = 0;
         warningLMaxLevelCanvasGroup.alpha = 0;
 
-        int level = int.Parse(itemCardData.Level);
+        int level = itemCardData.Level;
         UpdateUpgradeCost(level, upgradeCost);
 
         UpdateButtonState(upgradeButton, false);
@@ -240,7 +240,7 @@ public class EquipmentPanelManager : MonoBehaviour
     /// </summary>
     public void UpgradeCardOnDisplay()
     {
-        int level = int.Parse(CardOnDisplay.Level);
+        int level = CardOnDisplay.Level;
         int amountToUpgrade = GetAmountToUpgrade(level);
         int candyNumbers = playerDataManager.GetCurrentCandyNumber();
 
@@ -263,9 +263,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.SetLevelUI(CardOnDisplay);
 
         // 레벨업 된 수치를 Atk, Hp UI에 반영
-        int.TryParse(CardOnDisplay.Hp, out int currentHp);
-        int.TryParse(CardOnDisplay.Atk, out int currentAtk);
-        equipDisplayUI.SetAtkHpStats(currentAtk, currentHp);
+        equipDisplayUI.SetAtkHpStats(CardOnDisplay.Atk, CardOnDisplay.Hp);
 
         UpdateUpgradeCost(level, charUpgradeCost);
         UpdateButtonState(charUpgradeButton, true);
@@ -275,7 +273,7 @@ public class EquipmentPanelManager : MonoBehaviour
     /// </summary>
     public void UpgradeCard()
     {
-        int level = int.Parse(cardToEquip.Level);
+        int level = cardToEquip.Level;
         int amountToUpgrade = GetAmountToUpgrade(level);
         int candyNumbers = playerDataManager.GetCurrentCandyNumber();
 
@@ -327,7 +325,7 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         if(isChar)
         {
-            if (int.Parse(CardOnDisplay.Level) == 30)
+            if (CardOnDisplay.Level == 30)
             {
                 charWarningMax = charWarningLMaxLevelCanvasGroup.DOFade(1, 1f);
                 StartCoroutine(HideWarning(charWarningLMaxLevelCanvasGroup));
@@ -338,7 +336,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
         else
         {
-            if (int.Parse(cardToEquip.Level) == 30)
+            if (cardToEquip.Level == 30)
             {
                 warningLack = warningLMaxLevelCanvasGroup.DOFade(1, 1f);
                 upgradeCost.text = "Max";

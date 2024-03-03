@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 [System.Serializable]
 public class CharCard
@@ -116,17 +117,16 @@ public class CardList : MonoBehaviour
 
         List<CardData> myCardList = cardDataManager.GetMyCardList();
 
-        foreach (var item in myCardList)
+        for (int i = 0; i < myCardList.Count; i++)
         {
-            if (item.Type == CardType.Weapon.ToString())
+            if (myCardList[i].Type == CardType.Weapon.ToString())
             {
-                CharCard _charCard = new(item);
+                CharCard _charCard = new(myCardList[i]);
                 charCards.Add(_charCard);
-
             }
-            else if (item.Type == CardType.Item.ToString())
+            else if (myCardList[i].Type == CardType.Item.ToString())
             {
-                EquipmentCard equipCard = new(item);
+                EquipmentCard equipCard = new(myCardList[i]);
                 equipmentCards.Add(equipCard);
             }
         }
@@ -169,19 +169,13 @@ public class CardList : MonoBehaviour
 
     void EquipStats(CharCard _charCard, CardData _equipCard)
     {
-        int.TryParse(_equipCard.Hp, out int equipCardHp);
-        int.TryParse(_equipCard.Atk, out int equipCardAtk);
-
-        _charCard.totalHp += equipCardHp;
-        _charCard.totalAtk += equipCardAtk;
+        _charCard.totalHp += _equipCard.Hp;
+        _charCard.totalAtk += _equipCard.Atk;
     }
     void UnEquipStats(CharCard _charCard, CardData _equipCard)
     {
-        int.TryParse(_equipCard.Hp, out int equipCardHp);
-        int.TryParse(_equipCard.Atk, out int equipCardAtk);
-
-        _charCard.totalHp -= equipCardHp;
-        _charCard.totalAtk -= equipCardAtk;
+        _charCard.totalHp -= _equipCard.Hp;
+        _charCard.totalAtk -= _equipCard.Atk;
     }
 
     public List<EquipmentCard> GetEquipmentCardsList()
