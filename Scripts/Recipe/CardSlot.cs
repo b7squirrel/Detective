@@ -8,7 +8,7 @@ public class CardSlot : MonoBehaviour
     public bool OnEquipment {get; private set;} = false; // 착용되어 있거나 장비를 착용하고 있는지 여부
 
     [Header("debug")]
-    [SerializeField] string ID;
+    [SerializeField] int ID;
     [SerializeField] int grade;
     [SerializeField] string Name;
     void OnEnable()

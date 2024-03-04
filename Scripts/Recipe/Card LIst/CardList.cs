@@ -153,7 +153,7 @@ public class CardList : MonoBehaviour
         // ID로 각각의 EquipmentCard를 찾아서 장비 카드만 모아둔 equipmentCards 리스트에서 찾아 준다
         for (int i = 0; i < 4; i++)
         {
-            if (String.IsNullOrEmpty(equipData.IDs[i]) == false) // 해당 부위에 장비카드가 있다면
+            if (equipData.IDs[i] > 0) // 해당 부위에 장비카드가 있다면 (아이디가 없으면 -1, 아이디는 1부터 부여되므로)
             {
                 EquipmentCard equipCard = FindCardDataByID(equipData.IDs[i]);
                 Equip(_charCard.CardData, equipCard.CardData);
@@ -161,7 +161,7 @@ public class CardList : MonoBehaviour
         }
         // 저장되어 있는 데이터를 가져와서 반영하는 것이므로 또 저장할 필요가 없다.
     }
-    EquipmentCard FindCardDataByID(string cardID)
+    EquipmentCard FindCardDataByID(int cardID)
     {
         EquipmentCard equipmentCard = equipmentCards.Find(x => x.CardData.ID == cardID);
         return equipmentCard;

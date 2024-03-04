@@ -12,14 +12,14 @@ public class CardEquipmentData
     public CardEquipmentData(string _ori, string _head, string _chest,
             string _legs, string _weapon)
     {
-        charID = _ori;
-        IDs[0] = _head;
-        IDs[1] = _chest;
-        IDs[2] = _legs;
-        IDs[3] = _weapon;
+        charID = int.Parse(_ori);
+        IDs[0] = int.Parse(_head);
+        IDs[1] = int.Parse(_chest);
+        IDs[2] = int.Parse(_legs);
+        IDs[3] = int.Parse(_weapon);
     }
-    public string charID;
-    public string[] IDs = new string[4];
+    public int charID;
+    public int[] IDs = new int[4];
 }
 
 [System.Serializable]
@@ -87,7 +87,7 @@ public class EquipmentDataManager : MonoBehaviour
         CardEquipmentData charEquipData = MyEquipmentsList.Find(x => x.charID == charCard.CardData.ID);
         CardData charCardData = charCard.CardData;
 
-        string[] equipmentCardID = new string[4];
+        int[] equipmentCardID = new int[4];
 
         // 쓰기 편하게 equipmentCardID 에 아이디를 저장
         for (int i = 0; i < 4; i++)
@@ -100,7 +100,11 @@ public class EquipmentDataManager : MonoBehaviour
         if (charEquipData == null)
         {
             CardEquipmentData newEquipData =
-                new CardEquipmentData(charCardData.ID, equipmentCardID[0], equipmentCardID[1], equipmentCardID[2], equipmentCardID[3]);
+                new CardEquipmentData(charCardData.ID.ToString(), 
+                                        equipmentCardID[0].ToString(), 
+                                        equipmentCardID[1].ToString(), 
+                                        equipmentCardID[2].ToString(), 
+                                        equipmentCardID[3].ToString());
 
             MyEquipmentsList.Add(newEquipData);
         }

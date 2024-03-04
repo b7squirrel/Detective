@@ -18,9 +18,17 @@ public class CardData
         string _essectialEquip, string _bindingTo, string _startingMember, 
         string _defaultItem, string _passiveSkill)
     {
-        ID = _id;
+        int intID;
+        if(int.TryParse(_id, out intID))
+        {
+            ID = intID;
+        }
+        else
+        {
+            ID = -1;
+            Debug.Log("아이디가 부여되지 않았습니다.");
+        }
         Type = _Type;
-        Debug.Log(_Grade);
         Grade = int.Parse(_Grade);
         Name = _Name;
         Level = int.Parse(_level);
@@ -35,10 +43,10 @@ public class CardData
 
     }
 
-    public string ID, Type, Name, 
+    public string Type, Name, 
             EquipmentType, EssentialEquip, BindingTo,
             StartingMember, DefaultItem;
-    public int Grade, Level, Hp, Atk, PassiveSkill;
+    public int ID, Grade, Level, Hp, Atk, PassiveSkill;
 }
 public class ReadCardData
 {
@@ -137,14 +145,21 @@ public class CardDataManager : MonoBehaviour
 
     public void RemoveCardFromMyCardList(CardData cardToRemove)
     {
-        string mID = cardToRemove.ID;
+        int mID = cardToRemove.ID;
+        int indexToRemove = -1;
+
         for (int i = 0; i < MyCardsList.Count; i++)
         {
             if (MyCardsList[i].ID == mID)
             {
-                MyCardsList.Remove(MyCardsList[i]);
-                return;
+                indexToRemove = i;
+                break;
             }
+        }
+
+        if(indexToRemove != -1)
+        {
+            MyCardsList.RemoveAt(indexToRemove);
             Save();
         }
     }
@@ -153,7 +168,7 @@ public class CardDataManager : MonoBehaviour
     public void AddNewCardToMyCardsList(CardData _cardData)
     {
         //_cardData.ID = Guid.NewGuid().ToString();
-        _cardData.ID = GenerateRandomId().ToString();
+        _cardData.ID = GenerateRandomId();
 
         MyCardsList.Add(_cardData);
         Save();
@@ -198,7 +213,7 @@ public class CardDataManager : MonoBehaviour
     {
         for (int i = 0; i < MyCardsList.Count; i++)
         {
-            if (MyCardsList[i].ID == id.ToString())
+            if (MyCardsList[i].ID == id)
             {
                 return true;
             }
