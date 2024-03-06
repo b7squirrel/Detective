@@ -40,7 +40,6 @@ public class EggPickUpObject : Collectable, IPickUpObject
         character.GetComponent<Level>().GetWeapon(upgradeToPick[index]);
 
         GameManager.instance.eggPanelManager.EggPanelUP(upgradeToPick[index].newKidAnim, upgradeToPick[index].Name);
-        Debug.Log("오리 이름 = " + upgradeToPick[index].weaponData.Name);
         GameManager.instance.eggPanelManager.SetEquipmentSprites(upgradeToPick[index].weaponData);
     }
 

@@ -24,7 +24,7 @@ public class EggPanelManager : MonoBehaviour
 
     void Init(WeaponData wd)
     {
-        rawImage.SetActive(true);
+        
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
         for (int i = 0; i < EquipmentSprites.Length; i++)
         {
@@ -41,7 +41,12 @@ public class EggPanelManager : MonoBehaviour
         if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
     }
-    public void CloseNewKidImage()
+
+    void OpenNewKidImage()
+    {
+        rawImage.SetActive(true);
+    }
+    void CloseNewKidImage()
     {
         rawImage.SetActive(false);
 
@@ -76,13 +81,14 @@ public class EggPanelManager : MonoBehaviour
     }
     void KidImageUp(bool isActive)
     {
+        OpenNewKidImage();
         //kidImage.SetActive(isActive);
 
-        //newKidText.SetActive(false);
-        //oriName.SetActive(true);
+        newKidText.SetActive(false);
+        oriName.SetActive(true);
 
         //if (isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = kidAnim;
-        //closeButton.SetActive(true);
+        closeButton.SetActive(true);
     }
     public void EggAnimFinished()
     {
@@ -92,7 +98,7 @@ public class EggPanelManager : MonoBehaviour
 
     IEnumerator CloseCo()
     {
-        yield return new WaitForSecondsRealtime(2.03f);
+        yield return new WaitForSecondsRealtime(5f);
         CloseButtonPressed();
     }
     public void CloseButtonPressed()
