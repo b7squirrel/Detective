@@ -9,6 +9,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject closeButton;
     [SerializeField] PauseManager pauseManager;
     [SerializeField] GameObject oriName;
+    [SerializeField] GameObject oriNameShadow;
     [SerializeField] GameObject newKidText;
     [SerializeField] GameObject blackBGPanel;
     RuntimeAnimatorController kidAnim;
@@ -24,7 +25,7 @@ public class EggPanelManager : MonoBehaviour
 
     void Init(WeaponData wd)
     {
-        
+        CloseNewKidImage();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
         for (int i = 0; i < EquipmentSprites.Length; i++)
         {
@@ -71,6 +72,8 @@ public class EggPanelManager : MonoBehaviour
         newKidText.SetActive(true);
         oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name;
         oriName.SetActive(false);
+        oriNameShadow.GetComponent<TMPro.TextMeshProUGUI>().text = name;
+        oriNameShadow.SetActive(false);
 
         blackBGPanel.SetActive(true);
     }
@@ -86,6 +89,7 @@ public class EggPanelManager : MonoBehaviour
 
         newKidText.SetActive(false);
         oriName.SetActive(true);
+        oriNameShadow.SetActive(true);
 
         //if (isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = kidAnim;
         closeButton.SetActive(true);
@@ -111,6 +115,7 @@ public class EggPanelManager : MonoBehaviour
         blackBGPanel.SetActive(false);
         newKidText.SetActive(false);
         oriName.SetActive(false);
+        oriNameShadow.SetActive(false);
 
         CloseNewKidImage();
 
