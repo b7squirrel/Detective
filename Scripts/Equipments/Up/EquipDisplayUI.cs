@@ -72,7 +72,8 @@ public class EquipDisplayUI : MonoBehaviour
             if (itemCardData.EssentialEquip == "Essential")
             {
                 //Debug.Log("Essential = " + data.Name);
-                //EquipmentImages[index].runtimeAnimatorController = data.CardItemAnimator.InGamePlayerAnim;
+                //EquipmentImages[index].runtimeAnimatorController
+                //                      = data.CardItemAnimator.InGamePlayerAnim;
                 EquipmentSprites[index].sprite = data.charImage;
 
             }

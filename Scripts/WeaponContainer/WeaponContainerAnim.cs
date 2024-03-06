@@ -54,7 +54,10 @@ public class WeaponContainerAnim : MonoBehaviour
             costumeAnimator.runtimeAnimatorController = wd.costumeAnim;
         }
     }
-    // GameManager의 Starting Data Container에서 weapon data, item data를 불러오니까 매개변수가 필요없다. 
+    /// <summary>
+    /// 리드 오리의 장비 초기화
+    /// GameManager의 Starting Data Container에서 weapon data, item data를 불러오니까 매개변수가 필요없다. 
+    /// </summary>
     public void SetPlayerEquipmentSprites()
     {
         WeaponData wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
