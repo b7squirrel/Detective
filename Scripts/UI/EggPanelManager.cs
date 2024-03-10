@@ -15,13 +15,23 @@ public class EggPanelManager : MonoBehaviour
     RuntimeAnimatorController kidAnim;
     Coroutine Close;
 
+    [Header("임시 오브젝트 비활성화")]
+    [SerializeField]
+    GameObject[] testEquipmentImages;
 
 
-
-
+    [SerializeField] GameObject newOriContainer;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
+
+    [Header("Sound")]
+    [SerializeField] AudioClip oriSound;
+    [SerializeField] AudioClip cheerGroup;
+    [SerializeField] AudioClip jumpUp;
+    [SerializeField] AudioClip breakingEgg;
+
+    
 
     void Init(WeaponData wd)
     {
@@ -45,12 +55,14 @@ public class EggPanelManager : MonoBehaviour
 
     void OpenNewKidImage()
     {
+        newOriContainer.SetActive(true);
         rawImage.SetActive(true);
+        anim.SetTrigger("Victory");
     }
     void CloseNewKidImage()
     {
+        newOriContainer.SetActive(false);
         rawImage.SetActive(false);
-
     }
 
 
@@ -62,6 +74,21 @@ public class EggPanelManager : MonoBehaviour
     private void Awake()
     {
         pauseManager = GetComponent<PauseManager>();
+
+        EggImageUp(false);
+        KidImageUp(false);
+        closeButton.SetActive(false);
+        eggPanel.SetActive(false);
+        blackBGPanel.SetActive(false);
+        newKidText.SetActive(false);
+        oriName.SetActive(false);
+        oriNameShadow.SetActive(false);
+        CloseNewKidImage();
+
+        for (int i = 0; i < testEquipmentImages.Length; i++)
+        {
+            testEquipmentImages[i].SetActive(false);
+        }
     }
     public void EggPanelUP(RuntimeAnimatorController anim, string name)
     {
@@ -70,9 +97,9 @@ public class EggPanelManager : MonoBehaviour
         EggImageUp(true);
         kidAnim = anim;
         newKidText.SetActive(true);
-        oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name;
+        oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name + "!";
         oriName.SetActive(false);
-        oriNameShadow.GetComponent<TMPro.TextMeshProUGUI>().text = name;
+        oriNameShadow.GetComponent<TMPro.TextMeshProUGUI>().text = name + "!";
         oriNameShadow.SetActive(false);
 
         blackBGPanel.SetActive(true);
@@ -89,7 +116,7 @@ public class EggPanelManager : MonoBehaviour
 
         newKidText.SetActive(false);
         oriName.SetActive(true);
-        oriNameShadow.SetActive(true);
+        //oriNameShadow.SetActive(true);
 
         //if (isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = kidAnim;
         closeButton.SetActive(true);
@@ -107,9 +134,9 @@ public class EggPanelManager : MonoBehaviour
     }
     public void CloseButtonPressed()
     {
+        pauseManager.UnPauseGame();
         EggImageUp(false);
         KidImageUp(false);
-        pauseManager.UnPauseGame();
         closeButton.SetActive(false);
         eggPanel.SetActive(false);
         blackBGPanel.SetActive(false);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShadowSprite : MonoBehaviour
 {
-    Vector2 offset = new Vector2(0, -0f);
+    Vector2 offset = new Vector2(0, -.1f);
 
     SpriteRenderer sprRndCaster;
     SpriteRenderer sprRndshadow;
