@@ -6,10 +6,10 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject eggPanel;
     [SerializeField] GameObject eggImage;
     [SerializeField] GameObject kidImage;
-    [SerializeField] GameObject closeButton;
     [SerializeField] PauseManager pauseManager;
     [SerializeField] GameObject oriName;
-    [SerializeField] GameObject oriNameShadow;
+    [SerializeField] GameObject yayText;
+    [SerializeField] GameObject nameBar;
     [SerializeField] GameObject newKidText;
     [SerializeField] GameObject blackBGPanel;
     RuntimeAnimatorController kidAnim;
@@ -24,12 +24,15 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] SpriteRenderer[] EquipmentSprites;
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
+    [SerializeField] Animator eggPanelAnim;
 
     [Header("Sound")]
     [SerializeField] AudioClip oriSound;
+    [SerializeField] AudioClip oriNameSound;
     [SerializeField] AudioClip cheerGroup;
     [SerializeField] AudioClip jumpUp;
     [SerializeField] AudioClip breakingEgg;
+    [SerializeField] AudioClip nameHightlight;
 
     
 
@@ -76,19 +79,20 @@ public class EggPanelManager : MonoBehaviour
         pauseManager = GetComponent<PauseManager>();
 
         EggImageUp(false);
-        KidImageUp(false);
-        closeButton.SetActive(false);
         eggPanel.SetActive(false);
         blackBGPanel.SetActive(false);
         newKidText.SetActive(false);
         oriName.SetActive(false);
-        oriNameShadow.SetActive(false);
+        nameBar.SetActive(false);
+        yayText.SetActive(false);
         CloseNewKidImage();
 
         for (int i = 0; i < testEquipmentImages.Length; i++)
         {
             testEquipmentImages[i].SetActive(false);
         }
+
+        
     }
     public void EggPanelUP(RuntimeAnimatorController anim, string name)
     {
@@ -99,8 +103,7 @@ public class EggPanelManager : MonoBehaviour
         newKidText.SetActive(true);
         oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name + "!";
         oriName.SetActive(false);
-        oriNameShadow.GetComponent<TMPro.TextMeshProUGUI>().text = name + "!";
-        oriNameShadow.SetActive(false);
+        nameBar.SetActive(false);
 
         blackBGPanel.SetActive(true);
     }
@@ -109,40 +112,50 @@ public class EggPanelManager : MonoBehaviour
     {
         eggImage.SetActive(isActive);
     }
-    void KidImageUp(bool isActive)
+    void KidImageUp()
     {
         OpenNewKidImage();
         //kidImage.SetActive(isActive);
 
         newKidText.SetActive(false);
         oriName.SetActive(true);
+        nameBar.SetActive(true);
+        yayText.SetActive(true);
         //oriNameShadow.SetActive(true);
 
         //if (isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = kidAnim;
-        closeButton.SetActive(true);
+        //closeButton.SetActive(true);
+        eggPanelAnim.SetTrigger("KidUp");
+        SoundManager.instance.Play(oriSound);
+        SoundManager.instance.Play(cheerGroup);
     }
     public void EggAnimFinished()
     {
-        KidImageUp(true);
+        KidImageUp();
         Close = StartCoroutine(CloseCo());
     }
 
     IEnumerator CloseCo()
     {
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(1.66f); // 이름 반짝 사운드 재생 지점
+        //SoundManager.instance.Play(nameHightlight);
+        SoundManager.instance.Play(oriNameSound);
+
+        yield return new WaitForSecondsRealtime(.4f); //폴짝 뛰어서 게임 안으로 들어가는 지점
+        SoundManager.instance.Play(jumpUp);
+
+        yield return new WaitForSecondsRealtime(0.22f); // 애니메이션 종료
         CloseButtonPressed();
     }
     public void CloseButtonPressed()
     {
         pauseManager.UnPauseGame();
         EggImageUp(false);
-        KidImageUp(false);
-        closeButton.SetActive(false);
         eggPanel.SetActive(false);
         blackBGPanel.SetActive(false);
         newKidText.SetActive(false);
         oriName.SetActive(false);
-        oriNameShadow.SetActive(false);
+        nameBar.SetActive(false);
 
         CloseNewKidImage();
 
