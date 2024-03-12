@@ -5,7 +5,6 @@ public class EggPanelManager : MonoBehaviour
 {
     [SerializeField] GameObject eggPanel;
     [SerializeField] GameObject eggImage;
-    [SerializeField] GameObject kidImage;
     [SerializeField] PauseManager pauseManager;
     [SerializeField] GameObject oriName;
     [SerializeField] GameObject yayText;
@@ -18,7 +17,6 @@ public class EggPanelManager : MonoBehaviour
     [Header("임시 오브젝트 비활성화")]
     [SerializeField]
     GameObject[] testEquipmentImages;
-
 
     [SerializeField] GameObject newOriContainer;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
@@ -33,8 +31,6 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] AudioClip jumpUp;
     [SerializeField] AudioClip breakingEgg;
     [SerializeField] AudioClip nameHightlight;
-
-    
 
     void Init(WeaponData wd)
     {
@@ -68,12 +64,6 @@ public class EggPanelManager : MonoBehaviour
         rawImage.SetActive(false);
     }
 
-
-
-
-
-
-
     private void Awake()
     {
         pauseManager = GetComponent<PauseManager>();
@@ -91,8 +81,6 @@ public class EggPanelManager : MonoBehaviour
         {
             testEquipmentImages[i].SetActive(false);
         }
-
-        
     }
     public void EggPanelUP(RuntimeAnimatorController anim, string name)
     {
@@ -102,8 +90,6 @@ public class EggPanelManager : MonoBehaviour
         kidAnim = anim;
         newKidText.SetActive(true);
         oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name + "!";
-        oriName.SetActive(false);
-        nameBar.SetActive(false);
 
         blackBGPanel.SetActive(true);
     }
@@ -144,7 +130,7 @@ public class EggPanelManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(.4f); //폴짝 뛰어서 게임 안으로 들어가는 지점
         SoundManager.instance.Play(jumpUp);
 
-        yield return new WaitForSecondsRealtime(0.22f); // 애니메이션 종료
+        yield return new WaitForSecondsRealtime(0.32f); // 애니메이션 종료
         CloseButtonPressed();
     }
     public void CloseButtonPressed()
@@ -156,6 +142,7 @@ public class EggPanelManager : MonoBehaviour
         newKidText.SetActive(false);
         oriName.SetActive(false);
         nameBar.SetActive(false);
+        yayText.SetActive(false);
 
         CloseNewKidImage();
 
