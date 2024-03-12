@@ -30,7 +30,6 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] AudioClip cheerGroup;
     [SerializeField] AudioClip jumpUp;
     [SerializeField] AudioClip breakingEgg;
-    [SerializeField] AudioClip nameHightlight;
 
     void Init(WeaponData wd)
     {
@@ -124,7 +123,6 @@ public class EggPanelManager : MonoBehaviour
     IEnumerator CloseCo()
     {
         yield return new WaitForSecondsRealtime(1.66f); // 이름 반짝 사운드 재생 지점
-        //SoundManager.instance.Play(nameHightlight);
         SoundManager.instance.Play(oriNameSound);
 
         yield return new WaitForSecondsRealtime(.4f); //폴짝 뛰어서 게임 안으로 들어가는 지점
