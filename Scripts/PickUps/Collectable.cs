@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 // 습득 가능한 오브젝트의 행동들 정의
 public class Collectable : MonoBehaviour
@@ -48,7 +47,7 @@ public class Collectable : MonoBehaviour
         lifeTimeCount = lifeTime;
         if (gemManager == null)
         {
-            gemManager = FindAnyObjectByType<GemManager>();
+            gemManager = GameManager.instance.GetComponent<GemManager>();
         }
 
         colliders = GetComponents<Collider2D>();

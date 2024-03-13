@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class MagnetPickUPObject : Collectable, IPickUpObject
 {
+    [SerializeField] GameObject magnetEffect;
     public void OnPickUp(Character character)
     {
+        GameObject effect = GameManager.instance.poolManager.GetMisc(magnetEffect);
+        effect.transform.position = transform.position;
+
         character.GetComponentInChildren<Magnetic>().MagneticField(60f);
     }
     
