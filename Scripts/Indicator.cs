@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 플레이어와 오브젝트 사이에 벽이 있는지 탐색
@@ -9,6 +7,7 @@ public class Indicator : MonoBehaviour
     RaycastHit2D hit;
     [SerializeField] LayerMask ScreenCollision;
     [SerializeField] GameObject indicatorPrefab;
+    [SerializeField] Sprite iconSprite;
     [SerializeField] AudioClip onSpotSFX;
     Animator anim;
     SpriteRenderer sr;
@@ -27,6 +26,7 @@ public class Indicator : MonoBehaviour
         {
             indicator = Instantiate(indicatorPrefab, transform);
             anim = indicator.GetComponentInChildren<Animator>();
+            indicator.GetComponent<BubbleIndicator>().SetIconImage(iconSprite);
             indicator.SetActive(false);
         }
 
