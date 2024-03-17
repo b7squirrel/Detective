@@ -51,6 +51,7 @@ public class WeaponData : ScriptableObject
     public string Name;
     public Sprite charImage;
     public string SynergyWeapon;
+    public Item SynergyItem;
     public AnimatorData Animators;
     public Sprite DefaultHead, DefaultChest, DefaultFace, DefaultHands;
     public RuntimeAnimatorController costumeAnim;

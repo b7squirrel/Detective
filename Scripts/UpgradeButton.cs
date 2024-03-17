@@ -8,7 +8,6 @@ public class UpgradeButton : MonoBehaviour
 {
     [SerializeField] Image icon;
     [SerializeField] TMPro.TextMeshProUGUI upgradeName;
-    [SerializeField] TMPro.TextMeshProUGUI upgradeNameShadow;
     [SerializeField] TMPro.TextMeshProUGUI description; // 설명
     [SerializeField] GameObject levelBar; // 무기, 아이템 레벨 별
     [SerializeField] GameObject panel_weapon; // 무기 패널 연두색
@@ -17,10 +16,12 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] GameObject panel_instant_items; // 동전, 도넛 패널, 노란색
     [SerializeField] GameObject[] stars; // 활성, 비활성 시킬 별
     [SerializeField] GameObject unSelectionPanel; // 선택되지 않으면 카드를 어둡게 하는 역할
+    [SerializeField] GameObject synergyText; // 시너지 아이콘 표시 텍스트
     [SerializeField] List<Image> levelOn;
     [SerializeField] List<Image> levelOff;
     [SerializeField] List<Animator> levelOnAnim;
     [SerializeField] List<Animator> starSelectedEffectAnim;
+    [SerializeField] Image synergyCouipleIcon;
     WeaponContainer weaponContainer;
     PassiveItems passiveItems;
 
@@ -55,6 +56,17 @@ public class UpgradeButton : MonoBehaviour
         }
 
         description.text = upgradeData.description;
+
+        synergyCouipleIcon.color = new Color(1, 1, 1, 0);
+        synergyText.SetActive(false);
+
+        if (upgradeData.weaponData != null) // 넘겨 받은 업그레이드 데이터가 Weapon 이라면
+        {
+            synergyCouipleIcon.color = new Color(1, 1, 1, 1);
+            synergyCouipleIcon.sprite = upgradeData.weaponData.SynergyItem.charImage;
+            synergyCouipleIcon.preserveAspect = true;
+            synergyText.SetActive(true);
+        }
 
         levelBar.SetActive(true);
         if(upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
