@@ -58,4 +58,16 @@ public class MusicManager : MonoBehaviour
 
         Play(switchTo, true);
     }
+
+    public void ToggleMusic()
+    {
+        if(audioSource.volume == 0)
+        {
+            audioSource.volume = .5f;
+        }
+        else
+        {
+            audioSource.volume = 0;
+        }
+    }
 }

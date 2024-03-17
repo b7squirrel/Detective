@@ -11,13 +11,15 @@ public class PauseManager : MonoBehaviour
     public void PauseGame()
     {
         Time.timeScale = 0;
-        Player.instance.IsPauseing = true;
+        GameManager.instance.SetPauseState(true);
+        //Player.instance.IsPauseing = true;
     }
 
     public void UnPauseGame()
     {
         Time.timeScale = 1;
-        Player.instance.IsPauseing = false;
+        GameManager.instance.SetPauseState(false);
+        //Player.instance.IsPauseing = false;
     }
     public void SetTimeScale(float timeScale, float waitingTime)
     {

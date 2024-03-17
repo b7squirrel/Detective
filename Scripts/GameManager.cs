@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject joystick;
 
     public bool IsPlayerDead { get; set; }
+    public bool IsPaused { get; private set; }
 
     public float gameTime;
     public float maxGameTime = 20f;
@@ -55,6 +56,10 @@ public class GameManager : MonoBehaviour
     public void SetPlayerDead()
     {
         IsPlayerDead = true;
+    }
+    public void SetPauseState(bool state)
+    {
+        IsPaused = state;
     }
     public void DestroyStartingData()
     {

@@ -21,7 +21,6 @@ public class Player : MonoBehaviour, IBouncable
 
     [field: SerializeField]
     public float FacingDir { get; private set; } = 1f;
-    public bool IsPauseing { get; set; }
 
     [Header("Joystic")]
     public FloatingJoystick joy;
@@ -30,7 +29,7 @@ public class Player : MonoBehaviour, IBouncable
     Vector2 bouncingForce;
     Coroutine bouncingCoroutine;
 
-    public bool IsStill { get; set; } // 메뉴, 이벤트 등 플레이어가 움직이면 안되는 상황
+    public bool ShouldBeStill { get; set; } // 메뉴, 이벤트 등 플레이어가 움직이면 안되는 상황
 
     void Awake()
     {
@@ -41,7 +40,9 @@ public class Player : MonoBehaviour, IBouncable
 
     void LateUpdate()
     {
-        if (IsStill)
+        if (ShouldBeStill || 
+            GameManager.instance.IsPaused || 
+            GameManager.instance.IsPlayerDead)
         {
             InputVec = Vector2.zero;
             return;
@@ -51,7 +52,9 @@ public class Player : MonoBehaviour, IBouncable
     }
     void FixedUpdate()
     {
-        if (GameManager.instance.IsPlayerDead)
+        if (ShouldBeStill ||
+            GameManager.instance.IsPaused ||
+            GameManager.instance.IsPlayerDead)
         {
             InputVec = Vector2.zero;
             return;
@@ -79,13 +82,12 @@ public class Player : MonoBehaviour, IBouncable
 #elif UNITY_ANDROID
         InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
 #endif
-
         Vector2 nextVec = InputVec * character.MoveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
     }
     void Flip()
     {
-        if (IsPauseing) return;
+        if (GameManager.instance.IsPaused) return;
 
         if (weaponContainerAnim == null) weaponContainerAnim = GetComponentInChildren<WeaponContainerAnim>();
 

@@ -88,6 +88,8 @@ public class PunchWeapon : WeaponBase
 
     protected override void RotateWeapon()
     {
+        if (GameManager.instance.IsPaused) return;
+
         if (isAttacking) return;
 
         // Quaternion targetAngle = Quaternion.Euler(0, 0, angle);
@@ -99,6 +101,7 @@ public class PunchWeapon : WeaponBase
 
     protected override void FlipWeaponTools()
     {
+        if(GameManager.instance.IsPaused) return;
         if (isAttacking) return;
 
         if (currentDir.x > 0)

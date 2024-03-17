@@ -51,7 +51,7 @@ public class BossDieManager : MonoBehaviour
 
     public void BossCameraOn()
     {
-        Player.instance.IsStill = true;
+        Player.instance.ShouldBeStill = true;
         // Camera.main.transform.GetComponent<CameraController>().CameraToTarget(deadBody.transform.position, true);
     }
     public void BossCameraOff()
@@ -61,7 +61,7 @@ public class BossDieManager : MonoBehaviour
     IEnumerator PlayerCamera()
     {
         yield return new WaitForSeconds(2f);
-        Player.instance.IsStill = false;
+        Player.instance.ShouldBeStill = false;
         // Camera.main.transform.GetComponent<CameraController>().CameraToTarget(Player.instance.transform.position, false);
     }
 
