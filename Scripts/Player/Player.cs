@@ -53,7 +53,6 @@ public class Player : MonoBehaviour, IBouncable
     void FixedUpdate()
     {
         if (ShouldBeStill ||
-            GameManager.instance.IsPaused ||
             GameManager.instance.IsPlayerDead)
         {
             InputVec = Vector2.zero;

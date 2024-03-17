@@ -134,7 +134,7 @@ public class Level : MonoBehaviour
                 AddUpgradesIntoTheListOfAvailableUpgrades(upgradeData.item.upgrades);
                 break;
             case UpgradeType.Heal:
-                GetComponent<Character>().Heal(upgradeData.itemStats.hp);
+                GetComponent<Character>().Heal(upgradeData.itemStats.hp, true);
                 break;
             case UpgradeType.Coin:
                 coinManager.updateCurrentCoinNumbers(upgradeData.itemStats.coins);

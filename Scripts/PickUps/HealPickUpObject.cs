@@ -6,7 +6,7 @@ public class HealPickUpObject : Collectable, IPickUpObject
 
     public void OnPickUp(Character character)
     {
-        character.GetComponent<Character>().Heal(HealAmount);
+        character.GetComponent<Character>().Heal(HealAmount, true);
     }
 
     // 알이나 우유 등은 일단 물리를 이용해서 충돌체크

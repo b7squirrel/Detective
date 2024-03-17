@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class Character : MonoBehaviour
 {
     [SerializeField] int currentHealth;
+    [SerializeField] GameObject healEffect;
 
     [field: SerializeField] public int MaxHealth { get; set; } = 3000;
     [field: SerializeField] public int Armor { get; set; } = 0;
@@ -40,6 +41,7 @@ public class Character : MonoBehaviour
         ApplyPersistantUpgrade();
         currentHealth = MaxHealth;
         hpBar.SetStatus(currentHealth, MaxHealth);
+        healEffect.SetActive(false);
     }
 
     void Update()
@@ -48,7 +50,7 @@ public class Character : MonoBehaviour
 
         if (HpRegenerationTimer > 1f)
         {
-            Heal(1);
+            Heal(1, false);
             HpRegenerationTimer -= 1f;
         }
     }
@@ -134,7 +136,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void Heal(int amount)
+    public void Heal(int amount, bool needEffect)
     {
         if (currentHealth <= 0)
             return;
@@ -144,6 +146,8 @@ public class Character : MonoBehaviour
             currentHealth = MaxHealth;
         }
         hpBar.SetStatus(currentHealth, MaxHealth);
+
+        if (needEffect) healEffect.SetActive(true);
     }
 
     public int GetCurrentHP()

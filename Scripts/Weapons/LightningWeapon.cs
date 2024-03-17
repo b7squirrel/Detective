@@ -6,6 +6,7 @@ using DigitalRuby.LightningBolt;
 public class LightningWeapon : WeaponBase
 {
     [SerializeField] GameObject lightning;
+    [SerializeField] GameObject lightningSynergy;
     [SerializeField] float duration = .4f;
     List<Vector2> targets; //번개를 내릴 지점들
     [SerializeField] bool isClean;
@@ -71,7 +72,7 @@ public class LightningWeapon : WeaponBase
         for (int i = 0; i < targets.Count; i++)
         {
             endPosition = targets[i];
-            GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
+            GameObject bolt = GameManager.instance.poolManager.GetMisc(lightningSynergy);
             LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
             boltScript.StartObject.transform.position = secondShootPoint[i];
             boltScript.EndObject.transform.position = endPosition;
