@@ -60,8 +60,6 @@ public class LightningWeapon : WeaponBase
         // 시너지 무기
         if(isSynergyWeaponActivated == false)
             return;
-        
-        FindLandingPositions();
 
         if (isClean)
         {
@@ -69,12 +67,22 @@ public class LightningWeapon : WeaponBase
             return;
         }
 
-        for (int i = 0; i < targets.Count; i++)
+        StartCoroutine(SecondaryAttack(secondShootPoint));
+        
+    }
+    IEnumerator SecondaryAttack(List<Vector2> _secondShootPoint)
+    {
+        yield return null;
+
+        FindLandingPositions(); // target 리스트 모으기
+
+        for (int i = 0; i < _secondShootPoint.Count; i++)
         {
-            endPosition = targets[i];
+            int targetIndex = Random.Range(0, targets.Count);
+            endPosition = targets[targetIndex];
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightningSynergy);
             LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
-            boltScript.StartObject.transform.position = secondShootPoint[i];
+            boltScript.StartObject.transform.position = _secondShootPoint[i];
             boltScript.EndObject.transform.position = endPosition;
 
             Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
