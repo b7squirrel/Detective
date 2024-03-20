@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject panelPause;
     [SerializeField] GameObject panelMainMenu;
     [SerializeField] GameObject panelAreYouSure;
+    [SerializeField] GameObject darkBG;
     public UnityEvent<bool> OnPauseButtonPressed;
     PauseManager pauseManager;
     bool isPaused;
@@ -25,12 +26,14 @@ public class MainMenu : MonoBehaviour
         
         pauseManager.PauseGame();
         panelPause.SetActive(true);
+        darkBG.SetActive(true);
     }
 
     public void UnPause()
     {
         pauseManager.UnPauseGame();
         panelPause.SetActive(false);
+        darkBG.SetActive(false);
         isPaused = false;
     }
 
@@ -43,6 +46,7 @@ public class MainMenu : MonoBehaviour
     public void GoToMainMenu()
     {
         panelPause.SetActive(false);
+        darkBG.SetActive(false);
         UnPause();
         GameManager.instance.DestroyStartingData();
         Debug.Log("Go to Main Menu 3");
