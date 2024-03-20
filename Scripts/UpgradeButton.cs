@@ -73,12 +73,17 @@ public class UpgradeButton : MonoBehaviour
         synergyCouipleIcon.color = new Color(1, 1, 1, 0);
         synergyText.SetActive(false);
 
+        
+
         if (upgradeData.weaponData != null) // 넘겨 받은 업그레이드 데이터가 Weapon 이라면
         {
-            synergyCouipleIcon.color = new Color(1, 1, 1, 1);
-            synergyCouipleIcon.sprite = upgradeData.weaponData.SynergyItem.charImage;
-            synergyCouipleIcon.preserveAspect = true;
-            synergyText.SetActive(true);
+            if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade) // 시너지 업그레이드가 아닌 경우에만 시너지 커플 표시
+            {
+                synergyCouipleIcon.color = new Color(1, 1, 1, 1);
+                synergyCouipleIcon.sprite = upgradeData.weaponData.SynergyItem.charImage;
+                synergyCouipleIcon.preserveAspect = true;
+                synergyText.SetActive(true);
+            }
         }
 
         levelBar.SetActive(true);
