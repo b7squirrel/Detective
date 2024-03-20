@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class UpgradeButton : MonoBehaviour
 {
-    [SerializeField] Image icon;
+    [SerializeField] Image iconWeapon;
+    [SerializeField] Image iconItem;
     [SerializeField] TMPro.TextMeshProUGUI upgradeName;
     [SerializeField] TMPro.TextMeshProUGUI description; // 설명
     [SerializeField] GameObject levelBar; // 무기, 아이템 레벨 별
@@ -45,9 +46,22 @@ public class UpgradeButton : MonoBehaviour
     {
         anim.SetTrigger("Reset");
 
-        icon.sprite = upgradeData.icon;
-        icon.preserveAspect = true;
-        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 1f);
+        if(upgradeData.weaponData != null)
+        {
+            iconWeapon.sprite = upgradeData.weaponData.charImage;
+            iconWeapon.preserveAspect = true;
+            iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 1f);
+            iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
+        }
+        else
+        {
+            iconItem.sprite = upgradeData.item.charImage;
+            iconItem.preserveAspect = true;
+            iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 1f);
+            iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0);
+            iconItem.SetNativeSize();
+
+        }
         if (upgradeData.Name != "")
         {
             upgradeName.text = upgradeData.Name;
@@ -107,7 +121,8 @@ public class UpgradeButton : MonoBehaviour
 
     internal void Clean()
     {
-        icon.sprite = null;
+        iconWeapon.sprite = null;
+        iconItem.sprite = null;
         ClearLevelstars();
         IsClicked = false;
         levelBar.SetActive(false);
@@ -160,7 +175,8 @@ public class UpgradeButton : MonoBehaviour
     public void UnSelected() // 선택되지 않은 카드의 행동
     {
         unSelectionPanel.SetActive(true);
-        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, 0f);
+        iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0f);
+        iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0f);
     }
 
     public void ResetUnseletedPanel()

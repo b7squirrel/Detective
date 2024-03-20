@@ -17,7 +17,6 @@ public class UpgradeData : ScriptableObject
     public int id;
     public UpgradeType upgradeType;
     public string Name;
-    public Sprite icon;
     [TextArea] public string description;
     public string description2;
 

@@ -20,6 +20,7 @@ public class EggPanelManager : MonoBehaviour
 
     [SerializeField] GameObject newOriContainer;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
+    [SerializeField] SpriteRenderer charEffect;
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
@@ -39,6 +40,7 @@ public class EggPanelManager : MonoBehaviour
         {
             EquipmentSprites[i].sprite = null;
         }
+        charEffect.sprite = null;
     }
     // 장비 sprite는 모두 default로
     public void SetEquipmentSprites(WeaponData wd)
@@ -49,6 +51,8 @@ public class EggPanelManager : MonoBehaviour
         if (wd.DefaultChest != null) EquipmentSprites[1].sprite = wd.DefaultChest;
         if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
+
+        if(wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
     }
 
     void OpenNewKidImage()
