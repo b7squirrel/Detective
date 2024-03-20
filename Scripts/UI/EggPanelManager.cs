@@ -11,6 +11,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject nameBar;
     [SerializeField] GameObject newKidText;
     [SerializeField] GameObject birdFlock;
+    [SerializeField] ParticleSystem twinkleStarsParticle;
     [SerializeField] GameObject blackBGPanel;
     RuntimeAnimatorController kidAnim;
     Coroutine Close;
@@ -80,6 +81,8 @@ public class EggPanelManager : MonoBehaviour
         nameBar.SetActive(false);
         yayText.SetActive(false);
         birdFlock.SetActive(false);
+        twinkleStarsParticle.Stop();
+
         CloseNewKidImage();
 
         for (int i = 0; i < testEquipmentImages.Length; i++)
@@ -120,6 +123,7 @@ public class EggPanelManager : MonoBehaviour
         SoundManager.instance.Play(oriSound);
         SoundManager.instance.Play(cheerGroup);
         birdFlock.SetActive(true);
+        twinkleStarsParticle.Play();
     }
     public void EggAnimFinished()
     {
@@ -149,6 +153,7 @@ public class EggPanelManager : MonoBehaviour
         nameBar.SetActive(false);
         yayText.SetActive(false);
         birdFlock.SetActive(false);
+        twinkleStarsParticle.Stop();
         CloseNewKidImage();
 
         // 돌아가고 있는 코루틴을 멈추지 않으면 
