@@ -11,7 +11,7 @@ public class TennisWeapon : WeaponBase
 
     protected override void Attack()
     {
-          List<Vector2> closestEnemyPosition = FindTarget(1);
+        List<Vector2> closestEnemyPosition = FindTarget(1);
         if (closestEnemyPosition[0] == Vector2.zero)
         {
             return;
@@ -22,76 +22,103 @@ public class TennisWeapon : WeaponBase
 
     void AttackCo()
     {
+        AnimShoot();
+        SoundManager.instance.Play(shoot);
+        Transform muzzleEffect =
+            GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
+        muzzleEffect.transform.position = ShootPoint.position;
+
+
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
-            AnimShoot();
-            SoundManager.instance.Play(shoot);
-            Transform muzzleEffect =
-                GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
-            muzzleEffect.transform.position = ShootPoint.position;
             GameObject tennisBall = GameManager.instance.poolManager.GetMisc(weaponTennisBall);
             tennisBall.transform.position = ShootPoint.position;
 
             float index = 0f;
-            if(i==0) 
+
+            if (i == 0)
             {
                 index = 0;
             }
-            else if(i==1)
+            else if (i == 1)
             {
                 index = -15f;
             }
-            else if(i ==2)
+            else if (i == 2)
             {
                 index = 15f;
             }
-            else if(i ==3)
+            else if (i == 3)
             {
                 index = -30f;
             }
-            else if(i==4)
+            else if (i == 4)
             {
                 index = 30f;
             }
-            else if(i==5)
+            else if (i == 5)
             {
                 index = -45f;
             }
-            else if(i==6)
+            else if (i == 6)
             {
                 index = 45f;
             }
-            else if(i==7)
+            else if (i == 7)
             {
                 index = -60f;
             }
-            else if(i==8)
+            else if (i == 8)
             {
                 index = 60f;
             }
-            else if(i==9)
+            else if (i == 9)
             {
                 index = -75f;
             }
-            else if(i==10)
+            else if (i == 10)
             {
                 index = 75f;
             }
-            else if(i==11)
+            else if (i == 11)
             {
                 index = -90f;
             }
-            else if(i==12)
+            else if (i == 12)
             {
                 index = 90f;
             }
-            else if(i==13)
+            else if (i == 13)
             {
                 index = -105f;
             }
-            else if(i==14)
+            else if (i == 14)
             {
                 index = 105f;
+            }
+            else if (i == 15)
+            {
+                index = -120f;
+            }
+            else if (i == 16)
+            {
+                index = 120f;
+            }
+            else if (i == 17)
+            {
+                index = -135f;
+            }
+            else if (i == 18)
+            {
+                index = 135f;
+            }
+            else if (i == 19)
+            {
+                index = -150f;
+            }
+            else if (i == 20)
+            {
+                index = 150f;
             }
             Vector3 direction = Quaternion.AngleAxis(index, Vector3.forward) * dir;
 
@@ -106,10 +133,10 @@ public class TennisWeapon : WeaponBase
 
     protected override void FlipWeaponTools()
     {
-        if(weaponTools == null)
-        return;
+        if (weaponTools == null)
+            return;
 
-        if(flip)
+        if (flip)
         {
             weaponTools.GetComponent<Transform>().transform.eulerAngles = new Vector3(0, 180f, 0);
         }
