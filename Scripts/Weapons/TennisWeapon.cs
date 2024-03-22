@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class TennisWeapon : WeaponBase
@@ -125,7 +126,7 @@ public class TennisWeapon : WeaponBase
             ProjectileBase projectile = tennisBall.GetComponent<ProjectileBase>();
             projectile.Speed = weaponStats.projectileSpeed;
             projectile.Direction = direction;
-            projectile.Damage = GetDamage();
+            projectile.Damage = GetDamage(); Debug.Log("Tennis ball damage = " + GetDamage());
             projectile.IsCriticalDamageProj = isCriticalDamage;
             projectile.KnockBackChance = GetKnockBackChance();
         }
