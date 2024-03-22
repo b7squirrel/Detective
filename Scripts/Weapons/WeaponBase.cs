@@ -9,6 +9,7 @@ public class WeaponBase : MonoBehaviour
 
     protected float timer;
     protected int damage; // Attack이 시작되면 GetDamage()로 얻어냄
+    protected int damageScalingFactor; // 각 무기마다 보너스 데미지로 인한 증가분을 조절는 인자 값
     protected float knockback; // Attack이 시작되면 GetKnockBackChance()로 얻어냄
     [SerializeField] protected float knockbackSpeedFactor; // 각 무기의 프리펩에서 직접 입력
 
@@ -46,6 +47,11 @@ public class WeaponBase : MonoBehaviour
         weaponContainerAnim = GetComponentInParent<WeaponContainerAnim>();
         timer = stats.timeToAttack; // Init이 실행되는 시점에서 weaponStats이 초기화 되지 않아서 stats를 넘겨받아서 timer초기화
         isSynergyWeaponActivated = false;
+    }
+    public void SetDamageScalingFactor(int _factor)
+    {
+        damageScalingFactor = _factor;
+        Debug.Log("Damage Scale Factor in init = " + damageScalingFactor);
     }
     protected virtual void Awake()
     {
@@ -117,11 +123,14 @@ public class WeaponBase : MonoBehaviour
     public int GetDamage()
     {
         // int damage = (int)(weaponData.stats.damage * wielder.DamageBonus);
-        int damage = (int)(weaponStats.damage + Wielder.DamageBonus);
+        int damage = (int)(weaponStats.damage + (Wielder.DamageBonus / damageScalingFactor));
+        Debug.Log("weaponStats Damage = " + weaponStats.damage);
+        Debug.Log("Wielder.DamageBonus = " + Wielder.DamageBonus);
+        Debug.Log("damageScalingFactor = " + damageScalingFactor);
 
         float chance = UnityEngine.Random.Range(0, 100);
 
-        if(chance < Wielder.CriticalDamageChance)
+        if (chance < Wielder.CriticalDamageChance)
         {
             int criticalCoefficient = UnityEngine.Random.Range(5, 9);
             int criticalConstant = UnityEngine.Random.Range(1,100);

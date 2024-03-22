@@ -52,6 +52,7 @@ public class WeaponData : ScriptableObject
     public Sprite charImage;
     public string SynergyWeapon;
     public Item SynergyItem;
+    public int DamageScalingFactor; // 각 무기마다 보너스 데미지로 인한 증가분을 조절하는 인자
     public AnimatorData Animators;
     public Sprite DefaultHead, DefaultChest, DefaultFace, DefaultHands;
     public Sprite charEffectImage;
