@@ -57,6 +57,7 @@ public class WeaponData : ScriptableObject
     public Sprite DefaultHead, DefaultChest, DefaultFace, DefaultHands;
     public Sprite charEffectImage;
     public RuntimeAnimatorController costumeAnim;
+    public Costume costume;
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
     public GameObject weaponBasePrefab;

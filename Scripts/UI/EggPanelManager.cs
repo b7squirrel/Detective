@@ -29,8 +29,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
 
-    Animator costumeAnim;
-    GameObject costume;
+    Costume costume;
 
     [Header("Sound")]
     [SerializeField] AudioClip oriSound;
@@ -49,6 +48,7 @@ public class EggPanelManager : MonoBehaviour
         }
         charEffect.sprite = null;
 
+        if(wd.)
         if(costume == null)
         {
             costume = Instantiate(costumePrefab, costumeGroup.transform);

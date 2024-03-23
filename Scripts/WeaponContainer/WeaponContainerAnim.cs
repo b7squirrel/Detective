@@ -5,6 +5,7 @@ public class WeaponContainerAnim : MonoBehaviour
 {
     Animator anim; // 오리의 animator
     Animator costumeAnimator; // costume animator
+    SpriteRenderer cosSR;
     [SerializeField] SpriteRenderer[] sr;
     [SerializeField] Transform spriteGroup;
     [SerializeField] GameObject costume;
@@ -96,6 +97,10 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         AnimatorStateInfo costumeAnimState = costumeAnimator.GetCurrentAnimatorStateInfo(0);
         costumeAnimator.Play(costumeAnimState.fullPathHash, 0, costumeAnimState.normalizedTime);
+    }
+    public void PlayCosSpriteAtFrame(int frame)
+    {
+
     }
     public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent)
     {
