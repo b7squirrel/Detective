@@ -22,13 +22,14 @@ public class EggPanelManager : MonoBehaviour
 
     [SerializeField] GameObject newOriContainer;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
+    [SerializeField] SpriteRenderer costumeSR;
     [SerializeField] GameObject costumeGroup;
     [SerializeField] GameObject costumePrefab;
     [SerializeField] SpriteRenderer charEffect;
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
-
+    
     Costume costume;
 
     [Header("Sound")]
@@ -47,13 +48,11 @@ public class EggPanelManager : MonoBehaviour
             EquipmentSprites[i].sprite = null;
         }
         charEffect.sprite = null;
-
-        if(wd.)
-        if(costume == null)
+         
+        if (wd.costume != null)
         {
-            costume = Instantiate(costumePrefab, costumeGroup.transform);
-            costume.transform.localPosition = Vector3.zero;
-            costumeAnim = costume.GetComponent<Animator>();
+            costume = wd.costume;
+            costumeSR.sprite = wd.costume.sprites[10];
         }
     }
     // 장비 sprite는 모두 default로
@@ -66,13 +65,7 @@ public class EggPanelManager : MonoBehaviour
         if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
 
-        if (wd.costumeAnim != null)
-        {
-            costumeAnim.runtimeAnimatorController = wd.costumeAnim;
-        }
-
         if (wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
-        // costume이 있으면 animator를 얻어오고 활성화
     }
 
     void OpenNewKidImage()
@@ -80,8 +73,6 @@ public class EggPanelManager : MonoBehaviour
         newOriContainer.SetActive(true);
         rawImage.SetActive(true);
         anim.SetTrigger("Victory");
-
-        costumeAnim.GetComponent<Animator>().SetTrigger("Victory");
     }
     void CloseNewKidImage()
     {
@@ -173,7 +164,8 @@ public class EggPanelManager : MonoBehaviour
         nameBar.SetActive(false);
         yayText.SetActive(false);
         birdFlock.SetActive(false);
-        
+        costumeSR.sprite = null;
+
         twinkleStarsParticle.Stop();
         CloseNewKidImage();
 
