@@ -27,7 +27,6 @@ public class WeaponContainerAnim : MonoBehaviour
             FlipSpriteGroup();
         }
     }
-
     void OnEnable()
     {
         anim = GetComponent<Animator>();
@@ -88,6 +87,15 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         anim.SetFloat("Speed", speed);
         if (costumeAnimator != null) costumeAnimator.SetFloat("Speed", speed);
+    }
+    
+    /// <summary>
+    /// 오리와 코스튬 애니메이션 동기화
+    /// </summary>
+    public void SyncAnimations()
+    {
+        AnimatorStateInfo costumeAnimState = costumeAnimator.GetCurrentAnimatorStateInfo(0);
+        costumeAnimator.Play(costumeAnimState.fullPathHash, 0, costumeAnimState.normalizedTime);
     }
     public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent)
     {
