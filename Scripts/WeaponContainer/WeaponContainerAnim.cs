@@ -54,9 +54,7 @@ public class WeaponContainerAnim : MonoBehaviour
             if (costumeSprites == null) costumeSprites = new Sprite[wd.costume.sprites.Length];
             for (int i = 0; i < costumeSprites.Length; i++)
             {
-                Debug.Log(i + "번째 스프라이트 이동 중");
                 costumeSprites[i] = wd.costume.sprites[i];
-                Debug.Log(costumeSprites[i].name);
             }
         }
     }
@@ -109,7 +107,7 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         if (costumeSprites != null)
         {
-            cosSR.sprite = costumeSprites[_index];
+            costumeSR.sprite = costumeSprites[_index];
         }
     }
     public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent)
