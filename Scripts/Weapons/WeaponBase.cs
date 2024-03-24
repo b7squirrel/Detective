@@ -114,14 +114,17 @@ public class WeaponBase : MonoBehaviour
         // Do Attack
     }
 
+    /// <summary>
+    /// Damage Bonus는 각 무기 damage의 퍼센테이지가 됨
+    /// </summary>
     public int GetDamage()
     {
         // int damage = (int)(weaponData.stats.damage * wielder.DamageBonus);
-        int damage = (int)(weaponStats.damage + Wielder.DamageBonus);
+        int damage = (int)(weaponStats.damage + (weaponStats.damage * Wielder.DamageBonus));
 
         float chance = UnityEngine.Random.Range(0, 100);
 
-        if(chance < Wielder.CriticalDamageChance)
+        if (chance < Wielder.CriticalDamageChance)
         {
             int criticalCoefficient = UnityEngine.Random.Range(5, 9);
             int criticalConstant = UnityEngine.Random.Range(1,100);
