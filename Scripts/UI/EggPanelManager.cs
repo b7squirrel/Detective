@@ -5,6 +5,7 @@ public class EggPanelManager : MonoBehaviour
 {
     [SerializeField] GameObject eggPanel;
     [SerializeField] GameObject eggImage;
+    [SerializeField] SpriteRenderer costumeSR;
     [SerializeField] PauseManager pauseManager;
     [SerializeField] GameObject oriName;
     [SerializeField] GameObject yayText;
@@ -14,6 +15,8 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] ParticleSystem twinkleStarsParticle;
     [SerializeField] GameObject blackBGPanel;
     RuntimeAnimatorController kidAnim;
+    Costume costume;
+
     Coroutine Close;
 
     [Header("임시 오브젝트 비활성화")]
@@ -38,6 +41,8 @@ public class EggPanelManager : MonoBehaviour
     {
         CloseNewKidImage();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
+        costume = wd.costume;
+
         for (int i = 0; i < EquipmentSprites.Length; i++)
         {
             EquipmentSprites[i].sprite = null;
@@ -54,7 +59,9 @@ public class EggPanelManager : MonoBehaviour
         if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
 
-        if(wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
+        if (costume != null) { costumeSR.sprite = costume.sprites[10]; }
+
+        if (wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
     }
 
     void OpenNewKidImage()
@@ -158,6 +165,6 @@ public class EggPanelManager : MonoBehaviour
 
         // 돌아가고 있는 코루틴을 멈추지 않으면 
         // 버튼을 누르지 않고 자동으로 창이 종료되었을 때 코루틴이 실행되어 정지된 시간을 풀어버림
-        StopCoroutine(Close); 
+        StopCoroutine(Close);
     }
 }

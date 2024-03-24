@@ -4,15 +4,14 @@ using UnityEngine;
 public class WeaponContainerAnim : MonoBehaviour
 {
     Animator anim; // 오리의 animator
-    Animator costumeAnimator; // costume animator
+    Costume costume;
     [SerializeField] SpriteRenderer[] sr;
     [SerializeField] Transform spriteGroup;
-    [SerializeField] GameObject costume;
     [SerializeField] Transform headGroup; // 머리와 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform handsGroup; // 손과 함께 움직이는 중비들은 모두 여기에 페어런트 시킨다
+    [SerializeField] SpriteRenderer costumeSR;
 
-    RuntimeAnimatorController costumeAnim;
     Sprite sprite; // 개별 무기들의 sprite
 
     bool _facingRight = true;
@@ -46,12 +45,14 @@ public class WeaponContainerAnim : MonoBehaviour
         if (wd.DefaultFace != null) sr[3].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) sr[4].sprite = wd.DefaultHands;
 
-        if (wd.costumeAnim != null)
+        if (wd.costume != null)
         {
-            GameObject costumePrefab = Instantiate(costume, transform);
-            costumePrefab.transform.localPosition = Vector3.zero;
-            costumeAnimator = costumePrefab.GetComponent<Animator>();
-            costumeAnimator.runtimeAnimatorController = wd.costumeAnim;
+            costume = wd.costume;
+            Debug.Log("costume name = " + costume.name);
+        }
+        else
+        {
+            costume = null;
         }
     }
     /// <summary>
@@ -87,7 +88,12 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetAnimState(float speed)
     {
         anim.SetFloat("Speed", speed);
-        if (costumeAnimator != null) costumeAnimator.SetFloat("Speed", speed);
+    }
+    // 애니메이션 이벤트
+    public void SetCostumeSprite(int _index)
+    {
+        if (costume == null) return;
+        costumeSR.sprite = costume.sprites[_index];
     }
     public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent)
     {
