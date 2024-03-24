@@ -48,11 +48,12 @@ public class WeaponContainerAnim : MonoBehaviour
         if (wd.costume != null)
         {
             costume = wd.costume;
+            costumeSR.color = new Color(1, 1, 1, 1);
             Debug.Log("costume name = " + costume.name);
         }
         else
         {
-            costume = null;
+            costumeSR.color = new Color(1, 1, 1, 0);
         }
     }
     /// <summary>
@@ -76,6 +77,18 @@ public class WeaponContainerAnim : MonoBehaviour
             }
 
             sr[i + 1].sprite = iDatas[i].charImage;
+        }
+
+        Debug.Log("Costume Name = " + wd.costume.name);
+        if (wd.costume != null)
+        {
+            costume = wd.costume;
+            costumeSR.color = new Color(1, 1, 1, 1);
+            Debug.Log("costume name = " + costume.name);
+        }
+        else
+        {
+            costumeSR.color = new Color(1, 1, 1, 0);
         }
     }
     void FlipSpriteGroup()

@@ -59,6 +59,7 @@ public class EggPanelManager : MonoBehaviour
         if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
 
+        Debug.Log("Ori = " + wd.Name);
         if (costume != null) { costumeSR.sprite = costume.sprites[10]; }
 
         if (wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
@@ -122,6 +123,8 @@ public class EggPanelManager : MonoBehaviour
         oriName.SetActive(true);
         nameBar.SetActive(true);
         yayText.SetActive(true);
+        costumeSR.color = new Color(1, 1, 1, 1);
+
         //oriNameShadow.SetActive(true);
 
         //if (isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = kidAnim;
@@ -161,6 +164,7 @@ public class EggPanelManager : MonoBehaviour
         yayText.SetActive(false);
         birdFlock.SetActive(false);
         twinkleStarsParticle.Stop();
+        costumeSR.color = new Color(1, 1, 1, 0);
         CloseNewKidImage();
 
         // 돌아가고 있는 코루틴을 멈추지 않으면 
