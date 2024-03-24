@@ -22,15 +22,10 @@ public class EggPanelManager : MonoBehaviour
 
     [SerializeField] GameObject newOriContainer;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
-    [SerializeField] SpriteRenderer costumeSR;
-    [SerializeField] GameObject costumeGroup;
-    [SerializeField] GameObject costumePrefab;
     [SerializeField] SpriteRenderer charEffect;
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
-    
-    Costume costume;
 
     [Header("Sound")]
     [SerializeField] AudioClip oriSound;
@@ -48,12 +43,6 @@ public class EggPanelManager : MonoBehaviour
             EquipmentSprites[i].sprite = null;
         }
         charEffect.sprite = null;
-         
-        if (wd.costume != null)
-        {
-            costume = wd.costume;
-            costumeSR.sprite = wd.costume.sprites[10];
-        }
     }
     // 장비 sprite는 모두 default로
     public void SetEquipmentSprites(WeaponData wd)
@@ -65,7 +54,7 @@ public class EggPanelManager : MonoBehaviour
         if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
 
-        if (wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
+        if(wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
     }
 
     void OpenNewKidImage()
@@ -164,8 +153,6 @@ public class EggPanelManager : MonoBehaviour
         nameBar.SetActive(false);
         yayText.SetActive(false);
         birdFlock.SetActive(false);
-        costumeSR.sprite = null;
-
         twinkleStarsParticle.Stop();
         CloseNewKidImage();
 

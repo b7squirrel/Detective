@@ -5,16 +5,12 @@ public class WeaponContainerAnim : MonoBehaviour
 {
     Animator anim; // 오리의 animator
     Animator costumeAnimator; // costume animator
-    SpriteRenderer cosSR;
     [SerializeField] SpriteRenderer[] sr;
     [SerializeField] Transform spriteGroup;
     [SerializeField] GameObject costume;
     [SerializeField] Transform headGroup; // 머리와 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform handsGroup; // 손과 함께 움직이는 중비들은 모두 여기에 페어런트 시킨다
-
-    [SerializeField] SpriteRenderer costumeSR;
-    Sprite[] costumeSprites;
 
     RuntimeAnimatorController costumeAnim;
     Sprite sprite; // 개별 무기들의 sprite
@@ -31,6 +27,7 @@ public class WeaponContainerAnim : MonoBehaviour
             FlipSpriteGroup();
         }
     }
+
     void OnEnable()
     {
         anim = GetComponent<Animator>();
@@ -49,13 +46,12 @@ public class WeaponContainerAnim : MonoBehaviour
         if (wd.DefaultFace != null) sr[3].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) sr[4].sprite = wd.DefaultHands;
 
-        if (wd.costume != null)
+        if (wd.costumeAnim != null)
         {
-            if (costumeSprites == null) costumeSprites = new Sprite[wd.costume.sprites.Length];
-            for (int i = 0; i < costumeSprites.Length; i++)
-            {
-                costumeSprites[i] = wd.costume.sprites[i];
-            }
+            GameObject costumePrefab = Instantiate(costume, transform);
+            costumePrefab.transform.localPosition = Vector3.zero;
+            costumeAnimator = costumePrefab.GetComponent<Animator>();
+            costumeAnimator.runtimeAnimatorController = wd.costumeAnim;
         }
     }
     /// <summary>
@@ -92,23 +88,6 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         anim.SetFloat("Speed", speed);
         if (costumeAnimator != null) costumeAnimator.SetFloat("Speed", speed);
-    }
-    
-    /// <summary>
-    /// 오리와 코스튬 애니메이션 동기화
-    /// </summary>
-    public void SyncAnimations()
-    {
-        AnimatorStateInfo costumeAnimState = costumeAnimator.GetCurrentAnimatorStateInfo(0);
-        costumeAnimator.Play(costumeAnimState.fullPathHash, 0, costumeAnimState.normalizedTime);
-    }
-    // 애니메이션 이벤트로 매 프레임마다 호출해서 몸의 움직임과 싱크를 맞춤
-    public void PlayCosSprite(int _index)
-    {
-        if (costumeSprites != null)
-        {
-            costumeSR.sprite = costumeSprites[_index];
-        }
     }
     public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent)
     {

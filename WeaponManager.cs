@@ -54,7 +54,6 @@ public class WeaponManager : MonoBehaviour
 
         //weaponBase.InitialWeapon = isInitialWeapon; // Player 리드 오리에게 붙는 무기인지 
         weaponBase.Init(weaponData.stats);
-        weaponBase.SetDamageScalingFactor(wd.DamageScalingFactor);
 
         // 개별 무기들 부착
         if (weaponData.weaponPrefab != null)

@@ -17,7 +17,6 @@ MonoBehaviour:
   charImage: {fileID: 21300000, guid: 3bafff59f3f379c41b65e97e6ae1f871, type: 3}
   SynergyWeapon: Tennis King
   SynergyItem: {fileID: 11400000, guid: 7a64f5031e72cd64581e534d57086656, type: 2}
-  DamageScalingFactor: 10
   Animators:
     CardImageAnim: {fileID: 9100000, guid: 3f5e6393ee74d2647a25660d988077db, type: 2}
     InGamePlayerAnim: {fileID: 22100000, guid: d3fc247569af14d4b96f5a3e972af7bb, type: 2}
@@ -27,14 +26,13 @@ MonoBehaviour:
   DefaultHands: {fileID: -460708083, guid: 302dcf9506e1f77418b2cb742135d63f, type: 3}
   charEffectImage: {fileID: 0}
   costumeAnim: {fileID: 22100000, guid: 934fe9c232971c24e8c8e2a58eb266a3, type: 2}
-  costume: {fileID: 11400000, guid: a6f3910015ef16c4e945224aaadfb0f0, type: 2}
   weaponPrefab: {fileID: 1322226256919037930, guid: a41f421e8582c424d94aaa1115e0914d, type: 3}
   stats:
-    damage: 5
+    damage: 1
     timeToAttack: 2
     numberOfAttacks: 1
     sizeOfArea: 0
-    projectileSpeed: 15
+    projectileSpeed: 25
     knockBackChance: 20
     currentLevel: 0
   weaponBasePrefab: {fileID: 5958538054296379712, guid: 7abd89f57795ae747851e4ad7d13ea7a, type: 3}
