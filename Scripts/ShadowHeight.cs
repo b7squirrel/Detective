@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class ShadowHeight : MonoBehaviour
 {
-    Vector2 shadowOffset = new Vector2(-.4f, .3f);
+    Vector2 shadowOffset = new Vector2(0, .2f);
     [SerializeField] int bouncingNumbers;
     [SerializeField] bool noHeightShadow;
     [SerializeField] string onLandingMask;
