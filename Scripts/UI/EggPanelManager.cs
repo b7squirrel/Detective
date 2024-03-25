@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EggPanelManager : MonoBehaviour
@@ -14,7 +15,6 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject birdFlock;
     [SerializeField] ParticleSystem twinkleStarsParticle;
     [SerializeField] GameObject blackBGPanel;
-    RuntimeAnimatorController kidAnim;
     Costume costume;
 
     Coroutine Close;
@@ -41,7 +41,15 @@ public class EggPanelManager : MonoBehaviour
     {
         CloseNewKidImage();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
-        costume = wd.costume;
+        if (wd.costume != null)
+        {
+            costume = wd.costume;
+            Debug.Log("Init wd.costume = " + wd.costume.name);
+        }
+        else
+        {
+            costume = null;
+        }
 
         for (int i = 0; i < EquipmentSprites.Length; i++)
         {
@@ -103,7 +111,6 @@ public class EggPanelManager : MonoBehaviour
         pauseManager.PauseGame();
         eggPanel.SetActive(true);
         EggImageUp(true);
-        kidAnim = anim;
         newKidText.SetActive(true);
         oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name + "!";
 
@@ -165,6 +172,9 @@ public class EggPanelManager : MonoBehaviour
         birdFlock.SetActive(false);
         twinkleStarsParticle.Stop();
         costumeSR.color = new Color(1, 1, 1, 0);
+        costume = null;
+        costumeSR.sprite = null;
+        Debug.Log("Close");
         CloseNewKidImage();
 
         // 돌아가고 있는 코루틴을 멈추지 않으면 

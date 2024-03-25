@@ -79,7 +79,6 @@ public class WeaponContainerAnim : MonoBehaviour
             sr[i + 1].sprite = iDatas[i].charImage;
         }
 
-        Debug.Log("Costume Name = " + wd.costume.name);
         if (wd.costume != null)
         {
             costume = wd.costume;

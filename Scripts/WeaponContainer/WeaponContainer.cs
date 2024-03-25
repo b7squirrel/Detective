@@ -75,7 +75,7 @@ public class WeaponContainer : MonoBehaviour
         if (isInitialWeapon)
         {
             container.SetParent(transform);
-            container.transform.localScale = Vector2.one;
+            container.transform.localScale = Vector2.one * 1.2f;
             wa.SetPlayerEquipmentSprites();
         }
         else
