@@ -9,6 +9,7 @@ public class DestructableObject : MonoBehaviour, Idamageable
 {
     [SerializeField] int hp;
     [SerializeField] GameObject hitEffect;
+    [SerializeField] GameObject destructableDieEffect;
     int currentHp;
     Animator anim;
 
@@ -48,6 +49,8 @@ public class DestructableObject : MonoBehaviour, Idamageable
 
     void DestroyObject()
     {
+        GameObject dieEffect = GameManager.instance.poolManager.GetMisc(destructableDieEffect);
+        dieEffect.transform.position = transform.position;
         gameObject.SetActive(false);
         GetComponent<DropOnDestroy>().DropMultipleObjects();
     }

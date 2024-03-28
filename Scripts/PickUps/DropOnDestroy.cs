@@ -39,8 +39,7 @@ public class DropOnDestroy : MonoBehaviour
 
             if (isChest)
             {
-                Character character = FindObjectOfType<Character>();
-                Debug.Log("character = " + character.gameObject.name);
+                Character character = Player.instance.GetComponent<Character>();
                 if ((float)character.GetCurrentHP() / (float)character.MaxHealth < .3f)
                 {
                     Debug.Log("체력 비율 = " + (float)character.GetCurrentHP() / (float)character.MaxHealth);

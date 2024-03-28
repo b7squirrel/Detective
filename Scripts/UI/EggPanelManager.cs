@@ -8,11 +8,13 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject eggImage;
     [SerializeField] SpriteRenderer costumeSR;
     [SerializeField] PauseManager pauseManager;
+    [SerializeField] GameObject oriNameGroup;
     [SerializeField] GameObject oriName;
     [SerializeField] GameObject yayText;
     [SerializeField] GameObject nameBar;
     [SerializeField] GameObject newKidText;
     [SerializeField] GameObject birdFlock;
+    [SerializeField] GameObject flashEffect;
     [SerializeField] ParticleSystem twinkleStarsParticle;
     [SerializeField] GameObject blackBGPanel;
     Costume costume;
@@ -36,7 +38,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] AudioClip cheerGroup;
     [SerializeField] AudioClip jumpUp;
     [SerializeField] AudioClip breakingEgg;
-
+    
     void Init(WeaponData wd)
     {
         CloseNewKidImage();
@@ -44,7 +46,6 @@ public class EggPanelManager : MonoBehaviour
         if (wd.costume != null)
         {
             costume = wd.costume;
-            Debug.Log("Init wd.costume = " + wd.costume.name);
         }
         else
         {
@@ -77,12 +78,14 @@ public class EggPanelManager : MonoBehaviour
     {
         newOriContainer.SetActive(true);
         rawImage.SetActive(true);
+        flashEffect.SetActive(true);
         anim.SetTrigger("Victory");
     }
     void CloseNewKidImage()
     {
         newOriContainer.SetActive(false);
         rawImage.SetActive(false);
+        flashEffect.SetActive(false);
     }
 
     private void Awake()
@@ -93,10 +96,12 @@ public class EggPanelManager : MonoBehaviour
         eggPanel.SetActive(false);
         blackBGPanel.SetActive(false);
         newKidText.SetActive(false);
+        oriNameGroup.SetActive(false);
         oriName.SetActive(false);
         nameBar.SetActive(false);
         yayText.SetActive(false);
         birdFlock.SetActive(false);
+        flashEffect.SetActive(false);
         twinkleStarsParticle.Stop();
 
         CloseNewKidImage();
@@ -124,18 +129,13 @@ public class EggPanelManager : MonoBehaviour
     void KidImageUp()
     {
         OpenNewKidImage();
-        //kidImage.SetActive(isActive);
-
         newKidText.SetActive(false);
+        oriNameGroup.SetActive(true);
         oriName.SetActive(true);
         nameBar.SetActive(true);
         yayText.SetActive(true);
         costumeSR.color = new Color(1, 1, 1, 1);
 
-        //oriNameShadow.SetActive(true);
-
-        //if (isActive) kidImage.GetComponent<Animator>().runtimeAnimatorController = kidAnim;
-        //closeButton.SetActive(true);
         eggPanelAnim.SetTrigger("KidUp");
         SoundManager.instance.Play(oriSound);
         SoundManager.instance.Play(cheerGroup);

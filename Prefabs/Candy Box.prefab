@@ -221,6 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 10
   hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
+  destructableDieEffect: {fileID: 8774143540521336711, guid: da27312d14056244ca3be2c1ff5c707f, type: 3}
 --- !u!114 &1466966063343220527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItemPrefab:
   - {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
+  noMultipleDrops: 0
   dropLastItemPrefab: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
   numberOfLastDrops: 10
   multipleDrops: {fileID: 5007021332998522558, guid: da2101ae771dd7b4cb33300917ecdd19, type: 3}

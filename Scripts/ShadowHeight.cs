@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class ShadowHeight : MonoBehaviour
 {
-    Vector2 shadowOffset = new Vector2(0, .2f);
+    Vector2 shadowOffset = new Vector2(.1f, -.2f);
     [SerializeField] int bouncingNumbers;
     [SerializeField] bool noHeightShadow;
     [SerializeField] string onLandingMask;
@@ -41,6 +41,7 @@ public class ShadowHeight : MonoBehaviour
             // trnsObject, trnsBody, trnsShadow 초기화
             trnsObject = transform;
             sprRndBody = GetComponentInChildren<SpriteRenderer>();
+            
             trnsBody = sprRndBody.transform;
 
             if (noHeightShadow == false)
@@ -174,6 +175,14 @@ public class ShadowHeight : MonoBehaviour
         if (verticalVelocity < 0.1f && bouncingNumbers == 0)
         {
             sprRndshadow.color = new Color(0, 0, 0, 0f);
+        }
+    }
+
+    public void SetToKinematic()
+    {
+        if (IsDone)
+        {
+            GetComponent<Rigidbody2D>().isKinematic = true;
         }
     }
 

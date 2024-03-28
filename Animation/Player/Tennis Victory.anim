@@ -35,7 +35,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0, y: 0, z: 7.76}
+        value: {x: 0, y: 0, z: -6.118}
         inSlope: {x: Infinity, y: 0, z: 0}
         outSlope: {x: Infinity, y: 0, z: 0}
         tangentMode: 0
@@ -109,7 +109,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: -0.12, y: -0.117, z: 0}
+        value: {x: -0.07, y: -0.11700135, z: 0}
         inSlope: {x: Infinity, y: 0, z: 0}
         outSlope: {x: Infinity, y: 0, z: 0}
         tangentMode: 0
@@ -141,7 +141,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0.05, y: -0.02, z: 0}
+        value: {x: -0.02, y: -0.05, z: 0}
         inSlope: {x: Infinity, y: 0, z: 0}
         outSlope: {x: Infinity, y: 0, z: 0}
         tangentMode: 0
@@ -371,7 +371,7 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 903612324, guid: df00243301b6a904d92257a86ebfe907, type: 3}
+      value: {fileID: 21300000, guid: b48f4159e3aa194488daf5a61f80f0aa, type: 3}
     attribute: m_Sprite
     path: Sprites/BaseBody
     classID: 212
@@ -496,7 +496,7 @@ AnimationClip:
       customType: 0
       isPPtrCurve: 0
     pptrCurveMapping:
-    - {fileID: 903612324, guid: df00243301b6a904d92257a86ebfe907, type: 3}
+    - {fileID: 21300000, guid: b48f4159e3aa194488daf5a61f80f0aa, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -580,7 +580,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.12
+        value: -0.07
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -599,7 +599,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.117
+        value: -0.11700135
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -675,7 +675,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 7.76
+        value: -6.118
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -808,7 +808,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.05
+        value: -0.02
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -827,7 +827,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.02
+        value: -0.05
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -1382,7 +1382,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Sprites/Chest Group
+    path: Sprites/Head Group/Face Equipment
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -1392,7 +1392,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Sprites/Chest Group
+    path: Sprites/Head Group/Face Equipment
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -1402,7 +1402,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Sprites/Chest Group
+    path: Sprites/Head Group/Face Equipment
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -1502,7 +1502,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Sprites/Head Group/Face Equipment
+    path: Sprites/Chest Group
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -1512,7 +1512,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Sprites/Head Group/Face Equipment
+    path: Sprites/Chest Group
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -1522,7 +1522,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Sprites/Head Group/Face Equipment
+    path: Sprites/Chest Group
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0
