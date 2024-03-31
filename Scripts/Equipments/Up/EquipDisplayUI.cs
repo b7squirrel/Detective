@@ -29,7 +29,8 @@ public class EquipDisplayUI : MonoBehaviour
         cardBaseContainer.gameObject.SetActive(true);
 
         int intGrade = charCardData.Grade;
-        SetNumStar(intGrade + 1);
+        int intEvoStage = charCardData.EvoStage;
+        SetNumStar(intEvoStage + 1);
 
         for (int i = 0; i < 5; i++)
         {
@@ -123,6 +124,7 @@ public class EquipDisplayUI : MonoBehaviour
         // 등급만큼 별 활성화하고 별리스트에 넣기
         for (int i = 0; i < numStars; i++)
         {
+            Debug.Log("num stars to make = " + numStars + " 1개 추가");
             stars[i].SetActive(true);
         }
     }

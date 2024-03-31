@@ -74,6 +74,7 @@ public class EquipmentPanelManager : MonoBehaviour
     // 오리 카드를 equip display에 보여준다
     public void InitDisplay(CardData oriCardDataToDisplay)
     {
+        Debug.Log("star numbers = " + oriCardDataToDisplay.EvoStage);
         equipDisplayUI.OnDisplay(oriCardDataToDisplay); // 디스플레이 활성
         CardOnDisplay = oriCardDataToDisplay; // 디스플레이 되는 카드의 card data
         equipmentSlotsManager.InitEquipSlots(oriCardDataToDisplay); // 오리 카드의 Data대로 장비 슬롯 설정 

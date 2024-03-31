@@ -30,7 +30,6 @@ public class CardDisp : MonoBehaviour
         int intGrade = (int)weaponData.grade;
         int evoStage = cardData.EvoStage;
         SetNumStar(evoStage + 1);
-        //DeactivateStars();
 
         for (int i = 0; i < StaticValues.MaxGrade; i++)
         {
@@ -69,7 +68,6 @@ public class CardDisp : MonoBehaviour
         int intGrade = (int)itemData.grade;
         int intEvoStage = cardData.EvoStage;
         SetNumStar(intEvoStage + 1);
-        //DeactivateStars();
         for (int i = 0; i < StaticValues.MaxGrade; i++)
         {
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
@@ -151,8 +149,6 @@ public class CardDisp : MonoBehaviour
         // 등급만큼 별 활성화하고 별리스트에 넣기
         for (int i = 0; i < numStars; i++)
         {
-            Debug.Log("star is activated");
-
             stars[i].SetActive(true);
         }
     }
