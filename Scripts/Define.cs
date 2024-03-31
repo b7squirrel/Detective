@@ -14,7 +14,6 @@ public enum EssentialEquip { Head, Chest, Face, Hand, Essential }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
 public enum DefaultItem { Default }
 
-
 // Slot Pooling
 public enum Slots { CardSlot, EquipSlot, LaunchSlot }
 public class MyGrade
@@ -24,5 +23,11 @@ public class MyGrade
     public static int Epic = 2;
     public static int Unique = 3;
     public static int Legendary = 4;
+}
 
+public class StaticValues
+{
+    public static int MaxLevel = 30;
+    public static int MaxEvoStage = 3; // 1, 2, 3 
+    public static int MaxGrade = 5; // 1, 2, 3, 4, 5
 }

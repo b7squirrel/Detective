@@ -28,10 +28,11 @@ public class CardDisp : MonoBehaviour
         cardBaseContainer.gameObject.SetActive(true);
 
         int intGrade = (int)weaponData.grade;
-        SetNumStar(intGrade + 1);
-        DeactivateStars();
+        int evoStage = cardData.EvoStage;
+        SetNumStar(evoStage + 1);
+        //DeactivateStars();
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < StaticValues.MaxGrade; i++)
         {
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
         }
@@ -66,9 +67,10 @@ public class CardDisp : MonoBehaviour
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
         int intGrade = (int)itemData.grade;
-        SetNumStar(intGrade + 1);
-        DeactivateStars();
-        for (int i = 0; i < 5; i++)
+        int intEvoStage = cardData.EvoStage;
+        SetNumStar(intEvoStage + 1);
+        //DeactivateStars();
+        for (int i = 0; i < StaticValues.MaxGrade; i++)
         {
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
         }
@@ -131,8 +133,8 @@ public class CardDisp : MonoBehaviour
     {
         if (stars == null)
         {
-            // 5개 만들어서 비활성화
-            stars = new GameObject[5];
+            // 최대 합성 레벨만큼 만들어서 비활성화
+            stars = new GameObject[StaticValues.MaxEvoStage];
             for (int i = 0; i < stars.Length; i++)
             {
                 stars[i] = Instantiate(starPrefab, starContainer);
@@ -141,7 +143,7 @@ public class CardDisp : MonoBehaviour
         }
 
         // 일단 모든 별을 비활성화. 많은 별에서 적은 별로 업데이트 하면 많은 별로 남아있기 때문
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < StaticValues.MaxEvoStage; i++)
         {
             stars[i].SetActive(false);
         }
@@ -149,6 +151,8 @@ public class CardDisp : MonoBehaviour
         // 등급만큼 별 활성화하고 별리스트에 넣기
         for (int i = 0; i < numStars; i++)
         {
+            Debug.Log("star is activated");
+
             stars[i].SetActive(true);
         }
     }

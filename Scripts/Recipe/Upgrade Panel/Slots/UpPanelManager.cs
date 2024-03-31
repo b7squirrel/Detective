@@ -110,7 +110,13 @@ public class UpPanelManager : MonoBehaviour
     public void CheckIsEquipped(CardData _cardData)
     {
         // 업그레이드 카드의 경우
-        if (upCardSlot.IsEmpty) // 슬롯 위에 카드가 없다면 무조건 올릴 수 있다
+        if (_cardData.Level != StaticValues.MaxLevel) // 최고 레벨이 아니면 합성 불가
+        {
+            Debug.Log("최고 레벨의 카드만 합성이 가능합니다");
+            return;
+        }
+
+        if (upCardSlot.IsEmpty) // 슬롯 위에 카드가 없고 최고 레벨이라면 무조건 올릴 수 있다
         {
             CardToUpgrade = _cardData;
 
@@ -139,6 +145,10 @@ public class UpPanelManager : MonoBehaviour
         {
             Debug.Log("같은 이름의 카드를 합쳐줘야 합니다.");
             return;
+        }
+        if (CardToUpgrade.Level != StaticValues.MaxLevel)
+        {
+            Debug.Log("최고 레벨의 카드만 합성이 가능합니다");
         }
 
         // 장착을 하고 있는지, 장착이 되어 있는지 확인
@@ -180,14 +190,14 @@ public class UpPanelManager : MonoBehaviour
             EquipmentCard equipCard = cardList.FindEquipmentCard(_cardData);
 
             // 장비가 장착되어 있지 않다면 무조건 Acquire
-            if(equipCard.IsEquipped == false)
+            if (equipCard.IsEquipped == false)
             {
                 AcquireCard(_cardData);
                 return;
             }
 
             // 다른 오리에 장착되어 있지만 그것이 필수 장비라면
-            if(equipCard.IsEquipped)
+            if (equipCard.IsEquipped)
             {
                 if (_cardData.EquipmentType == equipCard.EquippedWho.EssentialEquip)
                 {
@@ -221,7 +231,6 @@ public class UpPanelManager : MonoBehaviour
         //     Debug.Log("최고 레벨 카드는 업그레이드 할 수 없습니다");
         //     return;
         // }
-
 
         // 나머지는 재료 카드일 경우 뿐이다.
         cardToFeed = cardData; ; // 비어 있지 않다면 지금 카드는 재료 카드임
@@ -282,12 +291,28 @@ public class UpPanelManager : MonoBehaviour
     #region 업그레이드
     public void UpgradeCard()
     {
-        int newCardGrade = CardToUpgrade.Grade + 1;
-        if (newCardGrade > 4) { newCardGrade = 4; } // 전설 등급은 합성하면 전설 등급
+        int newCardGrade = CardToUpgrade.Grade;
+        int newCardEvoStage = CardToUpgrade.EvoStage + 1;
+
+        if (newCardEvoStage > StaticValues.MaxEvoStage - 1) // Evo 레벨이 최고 레벨을 초과하면
+        {
+            newCardGrade++; // 다음 등급으로
+
+            if (newCardGrade > StaticValues.MaxGrade - 1) // Grade가 최고 등급을 초과하면
+            {
+                newCardGrade = StaticValues.MaxGrade - 1;
+                newCardEvoStage = StaticValues.MaxEvoStage - 1;
+            }
+            else
+            {
+                newCardEvoStage = 0; // 다음 등급이 되면 evo 레벨은 초기화
+            }
+        }
 
         // 생성된 카드를 내 카드 리스트에 저장
         CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newCardGrade);
         newCardData.ID = CardToUpgrade.ID;
+        newCardData.EvoStage = newCardEvoStage;
         cardDataManager.AddUpgradedCardToMyCardList(newCardData);
 
         cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제

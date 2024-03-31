@@ -1,5 +1,4 @@
 using UnityEngine;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class EquipInfoPanel : MonoBehaviour
 {

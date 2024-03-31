@@ -325,7 +325,7 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         if(isChar)
         {
-            if (CardOnDisplay.Level == 30)
+            if (CardOnDisplay.Level == StaticValues.MaxLevel)
             {
                 charWarningMax = charWarningLMaxLevelCanvasGroup.DOFade(1, 1f);
                 StartCoroutine(HideWarning(charWarningLMaxLevelCanvasGroup));
@@ -336,7 +336,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
         else
         {
-            if (cardToEquip.Level == 30)
+            if (cardToEquip.Level == StaticValues.MaxLevel)
             {
                 warningLack = warningLMaxLevelCanvasGroup.DOFade(1, 1f);
                 upgradeCost.text = "Max";

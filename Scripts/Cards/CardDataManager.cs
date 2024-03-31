@@ -13,8 +13,8 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _id, string _Type, string _Grade, string _Name, 
-        string _level, string _hp, string _atk, string _equipmentType, 
+    public CardData(string _id, string _Type, string _Grade, string _EvoStage, 
+        string _Name, string _level, string _hp, string _atk, string _equipmentType, 
         string _essectialEquip, string _bindingTo, string _startingMember, 
         string _defaultItem, string _passiveSkill)
     {
@@ -30,6 +30,7 @@ public class CardData
         }
         Type = _Type;
         Grade = int.Parse(_Grade);
+        EvoStage = int.Parse(_EvoStage);
         Name = _Name;
         Level = int.Parse(_level);
         Hp = int.Parse(_hp);
@@ -46,7 +47,7 @@ public class CardData
     public string Type, Name, 
             EquipmentType, EssentialEquip, BindingTo,
             StartingMember, DefaultItem;
-    public int ID, Grade, Level, Hp, Atk, PassiveSkill;
+    public int ID, Grade, EvoStage, Level, Hp, Atk, PassiveSkill;
 }
 public class ReadCardData
 {
@@ -68,7 +69,7 @@ public class ReadCardData
 
             cardList.Add(new CardData(row[0], row[1], row[2], row[3], row[4], 
                                       row[5], row[6], row[7], row[8], row[9], 
-                                      row[10], row[11], row[12]));
+                                      row[10], row[11], row[12], row[13]));
         }
         return cardList;
     }
@@ -91,6 +92,7 @@ public class CardDataManager : MonoBehaviour
             Directory.CreateDirectory(Application.persistentDataPath + "/PlayerData");
 
         filePath = Application.persistentDataPath + "/PlayerData/" + myCards;
+        Debug.Log("file path = " + filePath);
 
         Load();
     }
