@@ -92,8 +92,6 @@ public class CardDataManager : MonoBehaviour
             Directory.CreateDirectory(Application.persistentDataPath + "/PlayerData");
 
         filePath = Application.persistentDataPath + "/PlayerData/" + myCards;
-        Debug.Log("file path = " + filePath);
-
         Load();
     }
 
