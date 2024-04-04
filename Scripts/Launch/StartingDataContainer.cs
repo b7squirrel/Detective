@@ -8,6 +8,8 @@ public class StartingDataContainer : MonoBehaviour
     List<Item> itemDatas = new();
     int essectialEquipmentIndex;
 
+    string skillName;
+
     [Header("Debugging")]
     [SerializeField] int hp = 0;
     [SerializeField] int atk = 0;
@@ -51,6 +53,8 @@ public class StartingDataContainer : MonoBehaviour
                 essectialIndexDebug = i;
             }
         }
+
+        skillName = lead.PassiveSkill;
     }
     public void DestroyStartingDataContainer()
     {
@@ -62,4 +66,5 @@ public class StartingDataContainer : MonoBehaviour
     public WeaponData GetLeadWeaponData() => this.leadWd;
     public List<Item> GetItemDatas() => this.itemDatas;
     public int GetEssectialIndex() => this.essectialEquipmentIndex;
+    public string GetSkillName() => this.skillName;
 }

@@ -40,14 +40,14 @@ public class CardData
         BindingTo = _bindingTo;
         StartingMember = _startingMember;
         DefaultItem = _defaultItem;
-        PassiveSkill = int.Parse(_passiveSkill);
+        PassiveSkill = _passiveSkill;
 
     }
 
     public string Type, Name, 
             EquipmentType, EssentialEquip, BindingTo,
-            StartingMember, DefaultItem;
-    public int ID, Grade, EvoStage, Level, Hp, Atk, PassiveSkill;
+            StartingMember, DefaultItem, PassiveSkill;
+    public int ID, Grade, EvoStage, Level, Hp, Atk;
 }
 public class ReadCardData
 {
