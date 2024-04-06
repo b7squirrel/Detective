@@ -8,7 +8,7 @@ public class StartingDataContainer : MonoBehaviour
     List<Item> itemDatas = new();
     int essectialEquipmentIndex;
 
-    string skillName;
+    int skillName;
 
     [Header("Debugging")]
     [SerializeField] int hp = 0;
@@ -54,7 +54,10 @@ public class StartingDataContainer : MonoBehaviour
             }
         }
 
-        skillName = lead.PassiveSkill;
+        // 세자리 수로 스킬을 구분
+        skillName = lead.PassiveSkill * 100
+                    + lead.Grade * 10
+                    + lead.EvoStage;
     }
     public void DestroyStartingDataContainer()
     {
@@ -66,5 +69,5 @@ public class StartingDataContainer : MonoBehaviour
     public WeaponData GetLeadWeaponData() => this.leadWd;
     public List<Item> GetItemDatas() => this.itemDatas;
     public int GetEssectialIndex() => this.essectialEquipmentIndex;
-    public string GetSkillName() => this.skillName;
+    public int GetSkillName() => this.skillName;
 }

@@ -40,14 +40,14 @@ public class CardData
         BindingTo = _bindingTo;
         StartingMember = _startingMember;
         DefaultItem = _defaultItem;
-        PassiveSkill = _passiveSkill;
+        PassiveSkill = int.Parse(_passiveSkill);
 
     }
 
     public string Type, Name, 
             EquipmentType, EssentialEquip, BindingTo,
-            StartingMember, DefaultItem, PassiveSkill;
-    public int ID, Grade, EvoStage, Level, Hp, Atk;
+            StartingMember, DefaultItem;
+    public int ID, Grade, EvoStage, Level, Hp, Atk, PassiveSkill;
 }
 public class ReadCardData
 {
@@ -164,11 +164,15 @@ public class CardDataManager : MonoBehaviour
         }
     }
 
-    // 새로운 카드는 아이디를 발급받는다
+    /// <summary>
+    /// 새로운 카드에는 아이디 부여, 랜덤 스킬 부여
+    /// </summary>
     public void AddNewCardToMyCardsList(CardData _cardData)
     {
         //_cardData.ID = Guid.NewGuid().ToString();
         _cardData.ID = GenerateRandomId();
+
+        AddRandomSkill(_cardData);
 
         MyCardsList.Add(_cardData);
         Save();
@@ -178,6 +182,11 @@ public class CardDataManager : MonoBehaviour
     {
         MyCardsList.Add(_cardData);
         Save();
+    }
+    void AddRandomSkill(CardData _cardData)
+    {
+        int skill = UnityEngine.Random.Range(1, StaticValues.MaxSkillNumbers + 1);
+        _cardData.PassiveSkill = skill;
     }
     public void UpgradeCardData(CardData _cardData, int _level, int _hp, int _atk)
     {
@@ -220,4 +229,5 @@ public class CardDataManager : MonoBehaviour
         }
         return false;
     }
+
 }

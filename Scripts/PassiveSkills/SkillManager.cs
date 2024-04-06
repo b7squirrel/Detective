@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 플레이어에 붙여서 사용. 
+/// 플레이어에 붙여서 사용.
+/// 스킬을 검색해서 쿨다운을 설정하고 UseSkill을 이벤트에 등록
 /// </summary>
 public class SkillManager : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class SkillManager : MonoBehaviour
     {
         skills = GetComponentsInChildren<ISkill>();
         Debug.Log("Number of skills = " + skills.Length);
-        string skillName = GameManager.instance.startingDataContainer.GetSkillName();
+        int skillName = GameManager.instance.startingDataContainer.GetSkillName();
         Init(skillName);
         Debug.Log("Skill Name = " + skillName);
 
@@ -38,7 +39,7 @@ public class SkillManager : MonoBehaviour
     /// <summary>
     /// 이름으로 스킬을 찾아서 등록시킴
     /// </summary>
-    public void Init(string _Name)
+    public void Init(int _Name)
     {
         for (int i = 0; i < skills.Length; i++)
         {

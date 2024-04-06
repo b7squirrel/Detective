@@ -1,4 +1,4 @@
-// Slot Action
+﻿// Slot Action
 public enum SlotType { Field, Up, Mat, None };
 public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
 public enum LaunchSlotType { Field, Up, None }
@@ -28,6 +28,7 @@ public class MyGrade
 public class StaticValues
 {
     public static int MaxLevel = 30;
-    public static int MaxEvoStage = 3; // 1, 2, 3 
-    public static int MaxGrade = 5; // 1, 2, 3, 4, 5
+    public static int MaxEvoStage = 3; // evo stage 0, 1, 2
+    public static int MaxGrade = 5; // grade 0, 1, 2, 3, 4
+    public static int MaxSkillNumbers = 5; // skill 1, 2, 3, 4, 5 : 3자리수의 백자리가 0이 될 수 없음
 }
