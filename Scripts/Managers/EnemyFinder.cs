@@ -9,6 +9,9 @@ public class EnemyFinder : MonoBehaviour
     public static EnemyFinder instance;
     float halfHeight, halfWidth;
     Vector2 size;
+
+    List<Vector2> allEnemies;
+
     [SerializeField] LayerMask enemy;
 
     List<Vector2> pickedEnemies;
@@ -23,6 +26,7 @@ public class EnemyFinder : MonoBehaviour
         size = new Vector2(halfWidth * 1.6f, halfHeight * 1.6f);
 
         pickedEnemies = new List<Vector2>();
+        allEnemies = new();
     }
 
     void Update()
@@ -39,20 +43,21 @@ public class EnemyFinder : MonoBehaviour
         // 화면 안에서 공격 가능한 개체들 검색
         Collider2D[] hits =
             Physics2D.OverlapBoxAll(transform.position, size, 0f, enemy);
-        List<Transform> allEnemies = new List<Transform>();
+
+        allEnemies.Clear();
 
         for (int i = 0; i < hits.Length; i++)
         {
             Idamageable Idamage = hits[i].GetComponent<Idamageable>();
             if (Idamage != null)
             {
-                allEnemies.Add(hits[i].GetComponent<Transform>());
+                allEnemies.Add(hits[i].GetComponent<Transform>().position);
             }
         }
 
         // 순회하면서 원하는 갯수만큼 공격 가능한 개체들을 수집
         float distanceToclosestEnemy = 20f;
-        Transform closestEnemy = null;
+        Vector2 closestEnemy = Vector2.zero;
 
         for (int i = 0; i < numberOfTargets; i++)
         {
@@ -60,7 +65,7 @@ public class EnemyFinder : MonoBehaviour
             for (int y = 0; y < allEnemies.Count; y++)
             {
                 float distanceToEnmey =
-                Vector3.Distance(allEnemies[y].position, transform.position);
+                Vector3.Distance(allEnemies[y], transform.position);
 
                 if (distanceToEnmey < distanceToclosestEnemy)
                 {
@@ -71,9 +76,9 @@ public class EnemyFinder : MonoBehaviour
 
             // foreach가 다 돌고 나서 가장 가까운 적이 존재하면
             // 반환할 pickedEnemies에 추가하고, 그 적을 제외하고 다시 순회검색 
-            if (closestEnemy != null)
+            if (closestEnemy != Vector2.zero)
             {
-                pickedEnemies.Add(closestEnemy.position);
+                pickedEnemies.Add(closestEnemy);
                 allEnemies.Remove(closestEnemy);
             }
             else
@@ -89,6 +94,16 @@ public class EnemyFinder : MonoBehaviour
         {
             enemies.Add(pickedEnemies[i]);
         }
+        return enemies;
+    }
+
+    public Collider2D[] GetAllEnemies()
+    {
+        Vector2 center = GameManager.instance.player.transform.position;
+
+        Collider2D[] enemies =
+                Physics2D.OverlapAreaAll(center - new Vector2(halfWidth * .8f, halfHeight * .8f),
+                                            center + new Vector2(halfWidth * .8f, halfHeight * .8f), enemy);
         return enemies;
     }
 }

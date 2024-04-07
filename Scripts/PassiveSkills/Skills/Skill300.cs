@@ -11,19 +11,55 @@ public class Skill300 : MonoBehaviour, ISkill
     float skillCounter;
     float rate = .3f; // 등급, 스킬 레벨에 따라 얼마만큼 쿨타임에 영향을 미치게 할 지 정하는 비율
 
-    [SerializeField] int defaultDamage;
+    float realCoolDownTime;
 
+    [SerializeField] int defaultDamage;
+    int realDamage; // 디폴트 데미지에서 계산이 적용된 후의 데미지, 실제로 적에게 드러가는 데미지
+
+    private void Awake()
+    {
+        realCoolDownTime = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
+        realDamage = new Equation().GetSkillDamage(rate, Grade, EvoStage, defaultDamage);
+    }
     public void UseSkill()
     {
         skillCounter += Time.deltaTime;
 
-        if (skillCounter > new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime))
+        if (skillCounter > realCoolDownTime)
         {
-            defaultDamage = new Equation().GetSkillDamage(rate, Grade, EvoStage, defaultDamage);
-
-            Debug.Log($"Skill Damage {defaultDamage}");
-
             skillCounter = 0;
+            Debug.Log($"Skill Damage {realDamage}");
+            Vector2 center = GameManager.instance.player.transform.position;
+
+            Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
+            if(allEnemies.Length != 0)
+            {
+                ApplyDamages(allEnemies);
+            }
         }
+    }
+    void ApplyDamages(Collider2D[] colliders)
+    {
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Idamageable enemy = colliders[i].transform.GetComponent<Idamageable>();
+            GameObject enemyObject = colliders[i].gameObject;
+
+            if (enemy != null && enemyObject.activeSelf)
+            {
+                PostMessage(realDamage, colliders[i].transform.position);
+
+                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+                enemy.TakeDamage(realDamage,
+                                 0,
+                                 0,
+                                 Player.instance.transform.position,
+                                 hitEffect);
+            }
+        }
+    }
+    void PostMessage(int damage, Vector3 targetPosition)
+    {
+        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, false);
     }
 }

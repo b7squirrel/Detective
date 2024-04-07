@@ -12272,6 +12272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 476222714}
   - component: {fileID: 476222715}
+  - component: {fileID: 476222716}
   m_Layer: 8
   m_Name: Skill200
   m_TagString: Untagged
@@ -12306,7 +12307,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2257d9f48eab649bfda9a99d5e19ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 0
+  defaultDamage: 10
+--- !u!114 &476222716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476222713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2b5b6949a005f4a916124cd7751081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
 --- !u!1001 &482118989
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22713,6 +22727,7 @@ GameObject:
   m_Component:
   - component: {fileID: 907458527}
   - component: {fileID: 907458528}
+  - component: {fileID: 907458529}
   m_Layer: 8
   m_Name: Skill100
   m_TagString: Untagged
@@ -22747,7 +22762,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dbc6027e11b6c44da3aed71b0783484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 0
+  defaultDamage: 10
+--- !u!114 &907458529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907458526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2b5b6949a005f4a916124cd7751081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
 --- !u!1001 &914017061
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30979,6 +31007,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1254871724}
   - component: {fileID: 1254871725}
+  - component: {fileID: 1254871726}
   m_Layer: 8
   m_Name: Skill300
   m_TagString: Untagged
@@ -31013,7 +31042,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46959d99d8f262541bde1299b02f282f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 0
+  defaultDamage: 10
+--- !u!114 &1254871726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254871723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2b5b6949a005f4a916124cd7751081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
 --- !u!1001 &1255798377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33118,6 +33160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1324124389}
   - component: {fileID: 1324124390}
+  - component: {fileID: 1324124391}
   m_Layer: 8
   m_Name: Skill400
   m_TagString: Untagged
@@ -33152,7 +33195,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 957b67c215055c24fa580716bd4b73e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 0
+  defaultDamage: 10
+--- !u!114 &1324124391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324124388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2b5b6949a005f4a916124cd7751081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
 --- !u!1001 &1324146673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47644,6 +47700,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1751664327}
   - component: {fileID: 1751664326}
+  - component: {fileID: 1751664328}
   m_Layer: 8
   m_Name: Skill500
   m_TagString: Untagged
@@ -47663,7 +47720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859ebafc18970ae4aa49e55fccf8b633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 0
+  defaultDamage: 10
 --- !u!4 &1751664327
 Transform:
   m_ObjectHideFlags: 0
@@ -47679,6 +47736,19 @@ Transform:
   m_Father: {fileID: 1928552426}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1751664328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751664325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2b5b6949a005f4a916124cd7751081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
 --- !u!1001 &1755306165
 PrefabInstance:
   m_ObjectHideFlags: 0
