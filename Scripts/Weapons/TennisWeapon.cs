@@ -12,7 +12,7 @@ public class TennisWeapon : WeaponBase
 
     protected override void Attack()
     {
-        List<Vector2> closestEnemyPosition = FindTarget(1);
+        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(1);
         if (closestEnemyPosition[0] == Vector2.zero)
         {
             return;

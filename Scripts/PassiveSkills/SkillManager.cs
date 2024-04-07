@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -8,45 +7,46 @@ using UnityEngine;
 /// </summary>
 public class SkillManager : MonoBehaviour
 {
-    ISkill[] skills;
+    [SerializeField] GameObject[] skillObject;
+    ISkill[] skills = new ISkill[5];
     event Action onSkill;
     float cooldownTime;
     float skillTimeCounter;
 
     void Start()
     {
-        skills = GetComponentsInChildren<ISkill>();
+        for (int i = 0; i < skillObject.Length; i++)
+        {
+            skills[i] = skillObject[i].GetComponent<ISkill>();
+        }
         Debug.Log("Number of skills = " + skills.Length);
         int skillName = GameManager.instance.startingDataContainer.GetSkillName();
-        Init(skillName);
+        CardData playerCardData = GameManager.instance.startingDataContainer.GetPlayerCardData();
+        Init(skillName, playerCardData);
         Debug.Log("Skill Name = " + skillName);
-
     }
     void Update()
     {
         if (onSkill == null) return;
 
-        if (skillTimeCounter > cooldownTime)
-        {
-            onSkill?.Invoke();
-            skillTimeCounter = 0;
-        }
-        else
-        {
-            skillTimeCounter += Time.deltaTime;
-        }
+        onSkill?.Invoke();
     }
     /// <summary>
     /// 이름으로 스킬을 찾아서 등록시킴
     /// </summary>
-    public void Init(int _Name)
+    public void Init(int _Name, CardData _playerCardData)
     {
+        int skill = (_Name / 100) % 10; // 100의 자리수를 얻어 낸다.
+        Debug.Log($"받은 스킬 이름 {skill}");
+
         for (int i = 0; i < skills.Length; i++)
         {
-            if (skills[i].Name == _Name)
+            Debug.Log($"가지고 있는 스킬 {(skills[i].Name / 100) % 10 }");
+
+            if ((skills[i].Name / 100) % 10 == skill)
             {
-                cooldownTime = skills[i].CoolDownTime;
                 onSkill += skills[i].UseSkill;
+                Debug.Log($"skill Init {skills[i].Name}");
                 return;
             }
         }

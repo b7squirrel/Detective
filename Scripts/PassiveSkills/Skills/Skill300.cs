@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Skill100 : MonoBehaviour, ISkill
+public class Skill300 : MonoBehaviour, ISkill
 {
-    public int Name { get; set; } = 100;
+    public int Name { get; set; } = 300;
     public float CoolDownTime { get; set; } = 5f;
     public int Grade { get; set; }
     public int EvoStage { get; set; }
@@ -13,11 +15,15 @@ public class Skill100 : MonoBehaviour, ISkill
 
     public void UseSkill()
     {
+        skillCounter += Time.deltaTime;
+
         if (skillCounter > new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime))
         {
             defaultDamage = new Equation().GetSkillDamage(rate, Grade, EvoStage, defaultDamage);
 
             Debug.Log($"Skill Damage {defaultDamage}");
+
+            skillCounter = 0;
         }
     }
 }

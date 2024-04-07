@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Skill100 : MonoBehaviour, ISkill
+public class Skill200 : MonoBehaviour, ISkill
 {
-    public int Name { get; set; } = 100;
+    public int Name { get; set; } = 200;
     public float CoolDownTime { get; set; } = 5f;
     public int Grade { get; set; }
     public int EvoStage { get; set; }

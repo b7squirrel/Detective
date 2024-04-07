@@ -51,7 +51,7 @@ public class WeaponBase : MonoBehaviour
     {
         halfHeight = Camera.main.orthographicSize;
         halfWidth = Camera.main.aspect * halfHeight;
-        size = new Vector2(halfWidth * 2f, halfHeight * 2f);
+        size = new Vector2(halfWidth * 1.4f, halfHeight * 1.4f);
     }
 
     protected virtual void Update()
@@ -75,7 +75,7 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void SetAngle()
     {
-        List<Vector2> closestEnemyPosition = FindTarget(2);
+        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(2);
         dir = GetDirection(closestEnemyPosition[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 

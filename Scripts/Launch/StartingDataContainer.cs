@@ -9,6 +9,7 @@ public class StartingDataContainer : MonoBehaviour
     int essectialEquipmentIndex;
 
     int skillName;
+    CardData playerCardData;
 
     [Header("Debugging")]
     [SerializeField] int hp = 0;
@@ -58,6 +59,8 @@ public class StartingDataContainer : MonoBehaviour
         skillName = lead.PassiveSkill * 100
                     + lead.Grade * 10
                     + lead.EvoStage;
+
+        playerCardData = lead;
     }
     public void DestroyStartingDataContainer()
     {
@@ -70,4 +73,5 @@ public class StartingDataContainer : MonoBehaviour
     public List<Item> GetItemDatas() => this.itemDatas;
     public int GetEssectialIndex() => this.essectialEquipmentIndex;
     public int GetSkillName() => this.skillName;
+    public CardData GetPlayerCardData() => this.playerCardData;
 }

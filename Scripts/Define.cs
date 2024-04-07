@@ -31,4 +31,19 @@ public class StaticValues
     public static int MaxEvoStage = 3; // evo stage 0, 1, 2
     public static int MaxGrade = 5; // grade 0, 1, 2, 3, 4
     public static int MaxSkillNumbers = 5; // skill 1, 2, 3, 4, 5 : 3자리수의 백자리가 0이 될 수 없음
+    public static int MaxEnemyNumbers;
+    public static int MaxGemNumbers;
+}
+
+public class Equation
+{
+    public float GetCoolDownTime(float _rate, int _grade, int _evoStage, float _defaultCoolDownTime)
+    {
+        return _defaultCoolDownTime - (_rate * ((_grade + 4) + _evoStage));
+    }
+
+    public int GetSkillDamage(float _rate, int _grade, int _evoStage, float _defaultDamage)
+    {
+        return (int)(_defaultDamage * (int)(_rate * ((_grade + 4) + _evoStage)));
+    }
 }
