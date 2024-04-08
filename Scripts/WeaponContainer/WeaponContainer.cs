@@ -61,11 +61,11 @@ public class WeaponContainer : MonoBehaviour
     {
         if(GameManager.instance.IsPlayerInvincible)
         {
-            weaponContainers[0].localScale = 2f * Vector2.one;
+            Player.instance.transform.localScale = 2f * Vector2.one;
         }
         else
         {
-            weaponContainers[0].localScale = Vector2.one;
+            Player.instance.transform.localScale = Vector2.one;
         }    
     }
 
