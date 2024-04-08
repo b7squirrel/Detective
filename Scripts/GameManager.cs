@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject joystick;
 
     public bool IsPlayerDead { get; set; }
+    public bool IsPlayerInvincible { get; set; }
     public bool IsPaused { get; private set; }
 
     public float gameTime;

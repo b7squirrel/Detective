@@ -28,6 +28,7 @@ public class WeaponContainer : MonoBehaviour
     void Update()
     {
         ApplyMovements();
+        ScaleOnInvincible();
     }
 
     void ApplyMovements()
@@ -54,6 +55,18 @@ public class WeaponContainer : MonoBehaviour
 
             weaponContainerAnims[i].SetAnimState(1f);
         }
+    }
+
+    void ScaleOnInvincible()
+    {
+        if(GameManager.instance.IsPlayerInvincible)
+        {
+            weaponContainers[0].localScale = 2f * Vector2.one;
+        }
+        else
+        {
+            weaponContainers[0].localScale = Vector2.one;
+        }    
     }
 
     public Transform CreateContainer(WeaponData wd, bool isInitialWeapon)

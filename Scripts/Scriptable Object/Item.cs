@@ -21,7 +21,7 @@ public class ItemStats
     public int hp;
     public int coins;
 
-    public int currentLevel;
+    public int currentLevel; // 해당 업그레이드의 레벨
 
     // coin과 hp는 Equip 같은 것들을 거치지 않고 바로 Level에서 적용되므로 Sum에 포함되지 않는다.
     // 최대치를 넘어서면 값을 최대치로 다시 정해준다

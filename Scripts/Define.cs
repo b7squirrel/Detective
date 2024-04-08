@@ -46,4 +46,9 @@ public class Equation
     {
         return (int)(_defaultDamage * (int)(_rate * ((_grade + 4) + _evoStage)));
     }
+
+    public float GetSkillDuration(float _rate, int _grade, int _evoStage, float _defaultDuration)
+    {
+        return _defaultDuration + (_rate * ((_grade + 4) + _evoStage));
+    }
 }
