@@ -51,4 +51,9 @@ public class Equation
     {
         return _defaultDuration + (_rate * ((_grade + 4) + _evoStage));
     }
+
+    public float GetSkillDamageBonus(float _rate, int _grade, int _evoStage, float _defaultDamageBonus)
+    {
+        return (int)(_defaultDamageBonus * (int)(8 * ((_grade * 1.5f) + _evoStage)));
+    }
 }
