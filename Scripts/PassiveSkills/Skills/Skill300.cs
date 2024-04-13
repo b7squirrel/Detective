@@ -35,8 +35,6 @@ public class Skill300 : MonoBehaviour, ISkill
         {
             skillCounter = 0;
             Debug.Log($"Skill Damage {realDamage}");
-            Vector2 center = GameManager.instance.player.transform.position;
-
             Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
             if(allEnemies.Length != 0)
             {

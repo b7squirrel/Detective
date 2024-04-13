@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 일정 시간동안 무적
@@ -27,6 +26,7 @@ public class Skill400 : MonoBehaviour, ISkill
         realCoolDown = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
         Debug.Log($" 디폴트 Duration = {defaultInvincibleDuration}");
         realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultInvincibleDuration);
+        Debug.Log($" Real Duration = {realDuration}");
     }
     public void UseSkill()
     {
