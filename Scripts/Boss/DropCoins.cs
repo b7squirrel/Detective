@@ -6,7 +6,6 @@ public class DropCoins : MonoBehaviour
 {
     [SerializeField] int bulletsAmount;
     [SerializeField] GameObject bulletPrefab;
-    [SerializeField] float dropForce = 10f; 
     float startAngle = 0f, endAngle = 360f;
     Vector2 bulletMoveDirection;
     Vector3 initialPosition;

@@ -81,7 +81,7 @@ public class MainMenuManager : MonoBehaviour
             Vector3 BtnTargetPos = BtnRect[i].anchoredPosition3D;
             BtnTargetPos.y = -40f;
             Vector3 BtnTargetScale = Vector3.one;
-            bool textActive = true;
+            //bool textActive = true;
 
             tabAnims[i].SetBool("Up", false);
             tabAnims[i].SetBool("Idle", true);
@@ -93,7 +93,7 @@ public class MainMenuManager : MonoBehaviour
                 BtnTargetScale = new Vector3(1.7f, 1.7f, 1);
                 tabAnims[i].SetBool("Up", true);
                 tabAnims[i].SetBool("Idle", false);
-                textActive = false;
+                //textActive = false;
             }
 
             BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, .5f);

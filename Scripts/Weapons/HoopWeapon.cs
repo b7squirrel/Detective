@@ -13,8 +13,7 @@ public class HoopWeapon : WeaponBase
     [SerializeField] Transform projSpinSynergy;
     float projectileHealth;
     bool isProjectileActive;
-    float duration;
-
+    //float duration;
 
     public override void Init(WeaponStats stats)
     {
@@ -102,7 +101,7 @@ public class HoopWeapon : WeaponBase
             hoopProjectile.Init(this);
         }
         isProjectileActive = true;
-        duration = 5f;
+        //duration = 5f;
     }
 
     public void TakeDamageProjectile()

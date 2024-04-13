@@ -5,7 +5,6 @@ public class BombWeapon : WeaponBase
 {
     [SerializeField] GameObject bomb;
     [SerializeField] float verticalVelocity;
-    [SerializeField] float duration = .4f;
     Vector2 target; //폭탄을 던질 지점
     [SerializeField] bool isClean;
     [SerializeField] AudioClip shootSFX;
