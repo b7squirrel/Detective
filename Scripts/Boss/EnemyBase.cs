@@ -9,6 +9,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [HideInInspector] public bool IsStunned{get; set;}
     [HideInInspector] public Rigidbody2D Target{get; set;}
     public EnemyStats Stats {get; set;}
+    public bool IsSlowed {get; set;} // 슬로우 스킬을 
     public bool IsBoss{get; set;}
     [SerializeField] bool isSubBoss;
     [SerializeField] bool isBoss;
@@ -305,12 +306,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
         GameManager.instance.KillManager.UpdateCurrentKills(); // 처치한 적의 수 세기
 
         Spawner.instance.SubtractEnemyNumber();
+        
+        IsSlowed = false;
         gameObject.SetActive(false);
     }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록
     {
         //sr.material = initialMat;
         IsGrouping = false;
+        IsSlowed = false;
+
         gameObject.SetActive(false);
     }
     public virtual void DieWithoutDrop()
@@ -319,6 +324,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             StopCoroutine(whiteFlashCoroutine);
 
         //sr.material = initialMat;
+        IsSlowed = false;
         gameObject.SetActive(false);
     }
 

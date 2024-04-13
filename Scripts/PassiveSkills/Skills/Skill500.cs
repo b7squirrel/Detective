@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 모든 오리들의 공격력 증가.
+/// Spicy Booster, 모든 오리들의 공격력 증가.
 /// </summary>
 public class Skill500 : MonoBehaviour, ISkill
 {

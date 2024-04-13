@@ -96,7 +96,7 @@ public class LightningWeapon : WeaponBase
     // 볼트가 pool에서 나오면 pool에 들어가기 전 위치로 번개를 발사한다. 1프레임 정도 동안.
     IEnumerator DisableBolt(LightningBoltScript boltScript)
     {
-        yield return new WaitForSeconds(.4f);
+        yield return new WaitForSeconds(duration);
         boltScript.StartObject.transform.position = Vector2.zero;
         boltScript.EndObject.transform.position = Vector2.zero;
         boltScript.gameObject.SetActive(false);

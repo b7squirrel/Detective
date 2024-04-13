@@ -12070,7 +12070,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2257d9f48eab649bfda9a99d5e19ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 10
+  defaultDuration: 0
+  _cooldownCounter: 0
+  _realCoolDownTime: 0
+  _realDuration: 0
+  _durationTImer: 0
 --- !u!114 &476222716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22298,7 +22302,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dbc6027e11b6c44da3aed71b0783484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 10
+  defaultDuration: 0
+  _defaultDamageBonus: 0
+  _realDamageBonus: 0
+  _cooldownCounter: 0
+  _realCoolDownTime: 0
+  _realDuration: 0
+  _durationTImer: 0
+  _characterDamageBonus: 0
 --- !u!114 &907458529
 MonoBehaviour:
   m_ObjectHideFlags: 0

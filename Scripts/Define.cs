@@ -70,4 +70,10 @@ public class Equation
     {
         return (int)(_defaultDamageBonus * (int)(8 * (((_grade + 1) * 1.5f) + _evoStage)));
     }
+
+    public float GetSlowSpeedFactor(int _grade, int _evoStage)
+    {
+        int slownessFactor = 5;
+        return .01f * (slownessFactor * ((_grade * 5) + (_evoStage * 2)) + 90f);
+    }
 }

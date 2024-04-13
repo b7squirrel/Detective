@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 화면 상의 모든 적에게 데미지
+/// Flash Damage, 화면 상의 모든 적에게 데미지
 /// </summary>
 public class Skill300 : MonoBehaviour, ISkill
 {

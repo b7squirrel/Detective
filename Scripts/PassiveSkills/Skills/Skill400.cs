@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 일정 시간동안 무적
+/// Invincible Body, 일정 시간동안 무적
 /// </summary>
 public class Skill400 : MonoBehaviour, ISkill
 {
