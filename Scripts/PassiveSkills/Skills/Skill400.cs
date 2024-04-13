@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// 일정 시간동안 무적
+/// </summary>
 public class Skill400 : MonoBehaviour, ISkill
 {
     public int Name { get; set; } = 400;
@@ -15,18 +18,21 @@ public class Skill400 : MonoBehaviour, ISkill
     float realDuration;
     float durationTImer;
 
-
-    public void Init(Action _event)
+    public void Init(SkillManager _skillManager, CardData _cardData)
     {
-        _event += UseSkill;
+        Grade = _cardData.Grade;
+        EvoStage = _cardData.EvoStage;
+
+        _skillManager.onSkill += UseSkill;
         realCoolDown = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
+        Debug.Log($" 디폴트 Duration = {defaultInvincibleDuration}");
         realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultInvincibleDuration);
     }
     public void UseSkill()
     {
         if (skillCounter > 2)
         {
-            if (durationTImer > 10)
+            if (durationTImer > realDuration)
             {
                 skillCounter = 0;
                 durationTImer = 0;
@@ -34,7 +40,7 @@ public class Skill400 : MonoBehaviour, ISkill
                 return;
             }
             durationTImer += Time.deltaTime;
-            Debug.Log($"skill Duartion {defaultInvincibleDuration}");
+            Debug.Log($"skill Duartion {realDuration}");
             GameManager.instance.IsPlayerInvincible = true;
             return;
         }

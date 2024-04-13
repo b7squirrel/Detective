@@ -12,7 +12,13 @@ public class Skill200 : MonoBehaviour, ISkill
     float rate = .3f; // 등급, 스킬 레벨에 따라 얼마만큼 쿨타임에 영향을 미치게 할 지 정하는 비율
 
     [SerializeField] int defaultDamage;
+    public void Init(SkillManager _skillManager, CardData _cardData)
+    {
+        Grade = _cardData.Grade;
+        EvoStage = _cardData.EvoStage;
 
+        _skillManager.onSkill += UseSkill;
+    }
     public void UseSkill()
     {
         if (skillCounter > new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime))

@@ -120,15 +120,12 @@ public class WeaponBase : MonoBehaviour
     public int GetDamage()
     {
         // int damage = (int)(weaponData.stats.damage * wielder.DamageBonus);
-        int damage = (int)(weaponStats.damage + (weaponStats.damage * Wielder.DamageBonus/100));
-
+        int damage = (int)new Equation().GetDamage(weaponStats.damage, Wielder.DamageBonus);
         float chance = UnityEngine.Random.Range(0, 100);
 
         if (chance < Wielder.CriticalDamageChance)
         {
-            int criticalCoefficient = UnityEngine.Random.Range(5, 9);
-            int criticalConstant = UnityEngine.Random.Range(1,100);
-            damage = (damage * criticalCoefficient) + criticalConstant; 
+            damage = new Equation().GetCriticalDamage(damage);
             isCriticalDamage = true;
         }
         else

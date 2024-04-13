@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 모든 오리들의 공격력 증가.
@@ -17,15 +15,24 @@ public class Skill500 : MonoBehaviour, ISkill
     float realCoolDownTime;
 
     [SerializeField] int defaultDamageBonus;
-    int realDamageBonus; // 디폴트 데미지에서 계산이 적용된 후의 데미지, 실제로 적에게 드러가는 데미지
+    int realDamageBonus; // 디폴트 데미지에서 계산이 적용된 후의 데미지, 실제로 적에게 들어가는 데미지
+
+    public void Init(SkillManager _skillManager, CardData _cardData)
+    {
+        Grade = _cardData.Grade;
+        EvoStage = _cardData.EvoStage;
+
+        _skillManager.onSkill += UseSkill;
+        realCoolDownTime = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
+        realDamageBonus = new Equation().GetSkillDamageBonus(rate, Grade, EvoStage, defaultDamageBonus);
+        Debug.Log($"Skill Damage Bonus  {realDamageBonus}");
+    }
 
     public void UseSkill()
     {
         if (skillCounter > new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime))
         {
             realDamageBonus += 20;
-
-            Debug.Log($"Skill Damage Bonus  {realDamageBonus}");
         }
     }
 }

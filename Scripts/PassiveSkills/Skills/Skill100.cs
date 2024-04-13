@@ -11,6 +11,16 @@ public class Skill100 : MonoBehaviour, ISkill
 
     [SerializeField] int defaultDamage;
 
+    public void Init(SkillManager _skillManager, CardData _cardData)
+    {
+        Grade = _cardData.Grade;
+        EvoStage = _cardData.EvoStage;
+
+        _skillManager.onSkill += UseSkill;
+        //realCoolDown = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
+        //realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultInvincibleDuration);
+    }
+
     public void UseSkill()
     {
         if (skillCounter > new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime))

@@ -10,7 +10,7 @@ public class ItemStats
     public int magnetSize;
     public float moveSpeed;
     public int maxHp;
-    public float damage;
+    public int damage;
     public int projectileAmount;
     public int projectileSpeed;
     public float knockBackChance;

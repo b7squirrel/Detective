@@ -17,7 +17,7 @@ public class Character : MonoBehaviour
     [field: SerializeField] public float ProjectileSpeed { get; set; }
     [field: SerializeField] public float Area { get; set; }
     [field: SerializeField] public float knockBackChance { get; set; }
-    [field: SerializeField] public float DamageBonus { get; set; }
+    [field: SerializeField] public int DamageBonus { get; set; }
     [field: SerializeField] public float CriticalDamageChance { get; set; }
 
     [SerializeField] StatusBar hpBar;

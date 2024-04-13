@@ -37,6 +37,20 @@ public class StaticValues
 
 public class Equation
 {
+    public int GetDamage(int _originalDamage, int _damageBonus)
+    {
+        int damage = (int)(_originalDamage + (_originalDamage * _damageBonus / 100));
+        return damage;
+    }
+
+    public int GetCriticalDamage(int _damage)
+    {
+        int criticalCoefficient = UnityEngine.Random.Range(5, 9);
+        int criticalConstant = UnityEngine.Random.Range(1, 100);
+        int _cDamage = (_damage * criticalCoefficient) + criticalConstant;
+        return _cDamage;
+    }
+
     public float GetCoolDownTime(float _rate, int _grade, int _evoStage, float _defaultCoolDownTime)
     {
         return _defaultCoolDownTime - (_rate * ((_grade + 4) + _evoStage));
@@ -52,7 +66,7 @@ public class Equation
         return _defaultDuration + (_rate * ((_grade + 4) + _evoStage));
     }
 
-    public float GetSkillDamageBonus(float _rate, int _grade, int _evoStage, float _defaultDamageBonus)
+    public int GetSkillDamageBonus(float _rate, int _grade, int _evoStage, float _defaultDamageBonus)
     {
         return (int)(_defaultDamageBonus * (int)(8 * ((_grade * 1.5f) + _evoStage)));
     }

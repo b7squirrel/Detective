@@ -9,7 +9,7 @@ public class SkillManager : MonoBehaviour
 {
     [SerializeField] GameObject[] skillObject;
     ISkill[] skills = new ISkill[5];
-    event Action onSkill;
+    public event Action onSkill;
     float cooldownTime;
     float skillTimeCounter;
 
@@ -19,11 +19,9 @@ public class SkillManager : MonoBehaviour
         {
             skills[i] = skillObject[i].GetComponent<ISkill>();
         }
-        Debug.Log("Number of skills = " + skills.Length);
         int skillName = GameManager.instance.startingDataContainer.GetSkillName();
         CardData playerCardData = GameManager.instance.startingDataContainer.GetPlayerCardData();
         Init(skillName, playerCardData);
-        Debug.Log("Skill Name = " + skillName);
     }
     void Update()
     {
@@ -41,12 +39,9 @@ public class SkillManager : MonoBehaviour
 
         for (int i = 0; i < skills.Length; i++)
         {
-            Debug.Log($"가지고 있는 스킬 {(skills[i].Name / 100) % 10 }");
-
             if ((skills[i].Name / 100) % 10 == skill)
             {
-                onSkill += skills[i].UseSkill;
-                Debug.Log($"skill Init {skills[i].Name}");
+                skills[i].Init(this, _playerCardData);
                 return;
             }
         }
