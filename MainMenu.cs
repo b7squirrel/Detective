@@ -47,22 +47,25 @@ public class MainMenu : MonoBehaviour
     {
         panelPause.SetActive(false);
         darkBG.SetActive(false);
+
+        // 재화 저장
+        PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
+        playerData.SaveResourcesBeforeQuitting();
+        int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
+
         UnPause();
         GameManager.instance.DestroyStartingData();
-        Debug.Log("Go to Main Menu 3");
 
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
     // 유니티 이벤트에 붙임
     public void GoToMainMenuAfter(float timeToWait)
     {
-        Debug.Log("Go to Main Menu 1");
         StartCoroutine(GoToMainMenu(timeToWait));
     }
     IEnumerator GoToMainMenu(float timeToWait)
     {
         yield return new WaitForSecondsRealtime(timeToWait);
-        Debug.Log("Go to Main Menu 2");
         GoToMainMenu();
     }
 }

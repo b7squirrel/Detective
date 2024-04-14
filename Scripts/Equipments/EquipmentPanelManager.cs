@@ -255,8 +255,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         // 가지고 있는 재화에서 업그레이드 비용 빼주고 데이터 저장
-        candyNumbers -= amountToUpgrade;
-        playerDataManager.SetCurrentCandyNumber(candyNumbers);
+        playerDataManager.AddCandyNumber(-amountToUpgrade);
 
         // 레벨업 하고 card data에 저장
         statManager.LevelUp(CardOnDisplay);
@@ -288,8 +287,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         // 가지고 있는 재화에서 업그레이드 비용 빼주고 데이터 저장
-        candyNumbers -= amountToUpgrade;
-        playerDataManager.SetCurrentCandyNumber(candyNumbers);
+        playerDataManager.AddCandyNumber(-amountToUpgrade);
 
         // 레벨업 하고 card data에 저장
         statManager.LevelUp(cardToEquip);

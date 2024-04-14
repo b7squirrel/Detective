@@ -8,6 +8,7 @@ public class PlayerData
     public bool isNewStage;
 
     public int currentCandyNumber;
+    public int currentHighCoinNumber;
 
     public int currentLightningNumber;
     public int currentKillNumber;
@@ -17,6 +18,8 @@ public class PlayerDataManager : MonoBehaviour
 {
     [SerializeField] PlayerData playerData; // 디버그를 위해 직렬화
     string filePath;
+
+    bool isStageCleared;
 
     void Awake()
     {
@@ -35,14 +38,14 @@ public class PlayerDataManager : MonoBehaviour
     {
         playerData.currentStageNumber = stageNumber;
 
-        SaveStageNumberData();
+        SavePlayerData();
     }
-    void SaveStageNumberData()
+
+    void SavePlayerData()
     {
         string jsonData = JsonUtility.ToJson(playerData);
         File.WriteAllText(filePath, jsonData);
     }
-
     void LoadStageNumberData()
     {
         if (File.Exists(filePath))
@@ -56,34 +59,49 @@ public class PlayerDataManager : MonoBehaviour
             {
                 currentStageNumber = 1 // 초기 스테이지 넘버 설정
             };
-            SaveStageNumberData();
+            SavePlayerData();
         }
     }
     public bool IsNewStage() { return playerData.isNewStage; }
     public void SetIsNewStage(bool isNew)
     {
         playerData.isNewStage = isNew;
-        SaveStageNumberData();
+        SavePlayerData();
+    }
+    public void SetCurrentStageCleared()
+    {
+        isStageCleared = true;
     }
     #endregion
+
+    public int GetCurrentHighCoinNumber()
+    {
+        return playerData.currentHighCoinNumber; ;
+    }
+    public void SetCurrentHighCoinNumber(int highCoinNumToAdd)
+    {
+        playerData.currentHighCoinNumber += highCoinNumToAdd;
+        SavePlayerData();
+    }
 
     #region Candy
     public int GetCurrentCandyNumber()
     {
         return playerData.currentCandyNumber;
     }
-    public void SetCurrentCandyNumber(int candyNumber)
+    public void AddCandyNumber(int candyNumberToAdd)
     {
-        playerData.currentCandyNumber = candyNumber;
+        playerData.currentCandyNumber += candyNumberToAdd;
 
-        SaveCandyNumberData();
+        SavePlayerData();
+    }
+    public void SetCandyNumberAs(int candyNumberToSet)
+    {
+        playerData.currentCandyNumber = candyNumberToSet;
+
+        SavePlayerData();
     }
 
-    void SaveCandyNumberData()
-    {
-        string jsonData = JsonUtility.ToJson(playerData);
-        File.WriteAllText(filePath, jsonData);
-    }
     void LoadCandyNumberData()
     {
         if (File.Exists(filePath))
@@ -98,8 +116,34 @@ public class PlayerDataManager : MonoBehaviour
             {
                 currentCandyNumber = 1 // 초기 스테이지 넘버 설정
             };
-            SaveCandyNumberData();
+            SavePlayerData();
         }
+    }
+    #endregion
+
+    #region 나가기 전 재화 저장
+    /// <summary>
+    /// 동전과 스테이지 저장
+    /// </summary>
+    public void SaveResourcesBeforeQuitting()
+    {
+        StageInfo stageinfo = GetComponent<StageInfo>();
+        int currentStage = GetCurrentStageNumber();
+
+        // 스테이지 저장
+        if (stageinfo.IsFinalStage(currentStage) == false)
+        {
+            if(isStageCleared)
+            {
+                currentStage++;
+                SetCurrentStageNumber(currentStage);
+            }
+        }
+
+        // 동전 갯수 저장
+        int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
+        SetCandyNumberAs(coinNum);
+        FindObjectOfType<PauseManager>().PauseGame();
     }
     #endregion
 }
