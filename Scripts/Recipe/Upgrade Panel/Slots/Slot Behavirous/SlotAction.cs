@@ -2,7 +2,9 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 
-
+/// <summary>
+/// 업그레이드 슬롯
+/// </summary>
 public class SlotAction : MonoBehaviour
 {
     [SerializeField] protected SlotType currentSlotType;
@@ -40,7 +42,7 @@ public class SlotAction : MonoBehaviour
         }
         if (currentSlotType == SlotType.Up)
         {
-            upPanelManager.GetIntoAllField();
+            upPanelManager.GetIntoAllField(GetComponent<CardSlot>().GetCardData().Type);
             GetComponent<CardSlot>().EmptySlot();
             return;
         }

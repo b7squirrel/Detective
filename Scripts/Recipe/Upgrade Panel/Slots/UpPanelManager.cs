@@ -42,13 +42,13 @@ public class UpPanelManager : MonoBehaviour
 
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
-        GetIntoAllField();
+        GetIntoAllField("Weapon");
 
         CloseAskUnequipPopup();
     }
     void OnEnable()
     {
-        GetIntoAllField();
+        GetIntoAllField("Weapon");
     }
     #endregion
 
@@ -68,7 +68,10 @@ public class UpPanelManager : MonoBehaviour
         matField.GenerateMatCardsList(CardToUpgrade);
     }
 
-    public void GetIntoAllField()
+    /// <summary>
+    /// Characters 혹은 Items 탭을 보여준다
+    /// </summary>
+    public void GetIntoAllField(string _thisCardType)
     {
         ClearAllFieldSlots(); // allField, matField의 슬롯들을 모두 파괴
         allField.gameObject.SetActive(true);
@@ -80,9 +83,25 @@ public class UpPanelManager : MonoBehaviour
 
         upPanelUI.UpSlotCanceled();
         upPanelUI.ResetScrollContent();
-        allField.GenerateAllCardsOfType(cardDataManager.GetMyCardList());
+        allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(_thisCardType));
 
         upPanelUI.Init();
+    }
+    /// <summary>
+    /// 인자로 넘겨받은 카드와 같은 타입의 카드만 추려내기
+    /// </summary>
+    List<CardData> GetMyCardsListOnCardType(string _cardType)
+    {
+        List<CardData> myCardsList = cardDataManager.GetMyCardList();
+        List<CardData> pickedCardsList = new();
+        for (int i = 0; i < myCardsList.Count; i++)
+        {
+            if (myCardsList[i].Type == _cardType)
+            {
+                pickedCardsList.Add(myCardsList[i]);
+            }
+        }
+        return pickedCardsList;
     }
 
     public void GetIntoConfirmation()
