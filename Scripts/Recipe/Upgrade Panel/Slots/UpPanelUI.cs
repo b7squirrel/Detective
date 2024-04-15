@@ -24,8 +24,8 @@ public class UpPanelUI : MonoBehaviour
         confirmationButtonContainer.SetActive(false);
         upgradeSuccessPanel.SetActive(false);
 
-        fieldSlotPanel.transform.localScale = new Vector2(.8f, .8f);
-        fieldSlotPanel.transform.DOScale(1, .15f).SetEase(Ease.OutBack);
+        fieldSlotPanel.transform.localScale = new Vector2(.95f, 1f);
+        fieldSlotPanel.transform.DOScale(1, .3f).SetEase(Ease.OutBack);
         UpSlotInitAnimtion();
         BGInitAnimation();
     }
