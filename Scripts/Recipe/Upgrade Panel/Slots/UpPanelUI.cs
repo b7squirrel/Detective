@@ -33,13 +33,12 @@ public class UpPanelUI : MonoBehaviour
     #region Animation
     void BGInitAnimation() // 배경 초기화 애님
     {
-        // UpPanelBG.GetComponentInParent<Animator>().SetTrigger("Init");
-        UpPanelBG.transform.rotation = Quaternion.Euler(0, 0, -10f);
-        UpPanelBG.anchoredPosition = new Vector2(0, -70);
-        UpPanelBG.DOAnchorPosY(0, .2f).SetEase(Ease.OutElastic);
-        UpPanelBG.DORotate(new Vector3(0, 0, -30f), .2f).SetEase(Ease.OutBack);
-        UpPanelBG.transform.localScale = Vector2.zero;
-        UpPanelBG.DOScale(1.5f, .2f).SetEase(Ease.OutBack);
+        //UpPanelBG.transform.rotation = Quaternion.Euler(0, 0, -10f);
+        //UpPanelBG.anchoredPosition = new Vector2(0, -70);
+        //UpPanelBG.DOAnchorPosY(0, .2f).SetEase(Ease.OutElastic);
+        //UpPanelBG.DORotate(new Vector3(0, 0, -30f), .2f).SetEase(Ease.OutBack);
+        //UpPanelBG.transform.localScale = Vector2.zero;
+        //UpPanelBG.DOScale(1.5f, .2f).SetEase(Ease.OutBack);
     }
     void UpSlotInitAnimtion() // 업그레이드 슬롯 초기화 애님
     {
