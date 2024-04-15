@@ -58,6 +58,9 @@ public class PlayerDataManager : MonoBehaviour
             playerData = new PlayerData
             {
                 currentStageNumber = 1 // 초기 스테이지 넘버 설정
+                , currentLightningNumber = 60
+                , currentCandyNumber = 100
+                , currentHighCoinNumber = 50
             };
             SavePlayerData();
         }
@@ -78,9 +81,19 @@ public class PlayerDataManager : MonoBehaviour
     {
         return playerData.currentHighCoinNumber; ;
     }
-    public void SetCurrentHighCoinNumber(int highCoinNumToAdd)
+    public void AddHighCoin(int highCoinNumToAdd)
     {
         playerData.currentHighCoinNumber += highCoinNumToAdd;
+        SavePlayerData();
+    }
+
+    public int GetCurrentLightningNumber()
+    {
+        return playerData.currentLightningNumber;
+    }
+    public void AddLightning(int lightningToAdd)
+    {
+        playerData.currentLightningNumber += lightningToAdd;
         SavePlayerData();
     }
 

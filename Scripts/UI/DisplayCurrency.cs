@@ -6,7 +6,6 @@ public class DisplayCurrency : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI coinText;
     [SerializeField] TMPro.TextMeshProUGUI goldText;
     [SerializeField] TMPro.TextMeshProUGUI LightningText;
-    [SerializeField] TMPro.TextMeshProUGUI dateTimeText;
 
     PlayerDataManager playerDataManager;
 
@@ -19,10 +18,9 @@ public class DisplayCurrency : MonoBehaviour
     {
         //coinText.text = dataContainer.coins.ToString();
         coinText.text = playerDataManager.GetCurrentCandyNumber().ToString();
-        goldText.text = dataContainer.gold.ToString();
-        LightningText.text = dataContainer.lightning.ToString();
+        goldText.text = playerDataManager.GetCurrentHighCoinNumber().ToString();
+        LightningText.text = playerDataManager.GetCurrentLightningNumber().ToString() + "/ 60";
 
         //dateTimeText.text = System.DateTime.Now.ToString();
-        dateTimeText.text = "";
     }
 }
