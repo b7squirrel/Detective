@@ -83,7 +83,16 @@ public class UpPanelManager : MonoBehaviour
 
         upPanelUI.UpSlotCanceled();
         upPanelUI.ResetScrollContent();
-        allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(_thisCardType));
+
+        // 카드타입 인자를 비워 놓는다면 up slot에 올라가 있는 카드 타입들만 필드에 진열하기
+        if (_thisCardType == "")
+        {
+            allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(upCardSlot.GetCardData().Type));
+        }
+        else
+        {
+            allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(_thisCardType));
+        }
 
         upPanelUI.Init();
     }
