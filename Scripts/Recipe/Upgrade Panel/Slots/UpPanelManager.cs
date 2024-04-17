@@ -32,7 +32,7 @@ public class UpPanelManager : MonoBehaviour
     [SerializeField] GameObject askUnequipPopup;
     CardData pendingCardData; // 장착 해제 팝업이 띄워져 있는 동안 카드 데이터를 임시 저장
 
-    UpTabManager upTabManager; // 탭을 업데이트 하기 위한 참조
+    [SerializeField] UpTabManager upTabManager; // 탭을 업데이트 하기 위한 참조
     #endregion
 
     #region Unity Callback 함수

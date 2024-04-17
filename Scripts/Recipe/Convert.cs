@@ -46,7 +46,7 @@ public class CardClassifier
 
         foreach (CardData card in myCardsExceptUpCard)
         {
-            if (card.Grade == upCard.Grade && card.Name == upCard.Name)
+            if (card.Grade == upCard.Grade && card.Name == upCard.Name && card.EvoStage == upCard.EvoStage)
             {
                 cardsPicked.Add(card);
             }
