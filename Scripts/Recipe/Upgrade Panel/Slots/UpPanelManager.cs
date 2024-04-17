@@ -48,7 +48,6 @@ public class UpPanelManager : MonoBehaviour
 
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
-        GetIntoAllField("Weapon");
 
         CloseAskUnequipPopup();
     }
