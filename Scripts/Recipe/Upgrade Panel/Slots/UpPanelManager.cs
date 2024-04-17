@@ -10,6 +10,8 @@ public class UpPanelManager : MonoBehaviour
     CardData cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
 
     bool isMergeDone; // 머지 된 후에는 OnEnable에서 강제로 Weapon으로 초기화 되는 것을 피하려고
+    bool activated; // 다른 탭에 갔다가 오는지 체크하기 위해
+    string currentTabType; // 탭이 바뀌는지 바뀌지 않는지 체크하기 위해
     #endregion
 
     #region 참조 변수
@@ -53,16 +55,9 @@ public class UpPanelManager : MonoBehaviour
     }
     void OnEnable()
     {
-        if (isMergeDone)
-        {
-            GetIntoAllField("");
-            Debug.Log("Merge Done in Up Panel Manager");
-        }
-        else
-        {
-            GetIntoAllField("Weapon");
-            Debug.Log("Weapon in Up Panel Manager");
-        }
+        activated = true;
+        GetIntoAllField("Weapon");
+        currentTabType = "Weapon";
     }
     #endregion
 
@@ -87,6 +82,12 @@ public class UpPanelManager : MonoBehaviour
     /// </summary>
     public void GetIntoAllField(string _thisCardType)
     {
+        // 새로 패널로 들어오거나, 머지를 했거나 탭이 바뀌었다면 리프레시
+        if (!isMergeDone && currentTabType == _thisCardType && !activated) return;
+        currentTabType = _thisCardType;
+        SetMergeDoneState(false);
+        activated = false;
+
         ClearAllFieldSlots(); // allField, matField의 슬롯들을 모두 파괴
         allField.gameObject.SetActive(true);
         matField.gameObject.SetActive(false);
