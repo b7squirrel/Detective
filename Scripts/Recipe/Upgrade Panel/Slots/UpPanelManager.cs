@@ -8,6 +8,8 @@ public class UpPanelManager : MonoBehaviour
     [field: SerializeField]
     CardData CardToUpgrade { get; set; } // 업그레이드 슬롯에 올라가 있는 카드
     CardData cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
+
+    bool isMergeDone; // 머지 된 후에는 OnEnable에서 강제로 Weapon으로 초기화 되는 것을 피하려고
     #endregion
 
     #region 참조 변수
@@ -29,6 +31,8 @@ public class UpPanelManager : MonoBehaviour
     // 다른 카드에 장착되어 있거나, 이미 장착을 하고 있을 때
     [SerializeField] GameObject askUnequipPopup;
     CardData pendingCardData; // 장착 해제 팝업이 띄워져 있는 동안 카드 데이터를 임시 저장
+
+    UpTabManager upTabManager; // 탭을 업데이트 하기 위한 참조
     #endregion
 
     #region Unity Callback 함수
@@ -40,6 +44,8 @@ public class UpPanelManager : MonoBehaviour
         cardList = FindObjectOfType<CardList>();
         upPanelUI = GetComponent<UpPanelUI>();
 
+        upTabManager = GetComponentInChildren<UpTabManager>();
+
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
         GetIntoAllField("Weapon");
@@ -48,7 +54,16 @@ public class UpPanelManager : MonoBehaviour
     }
     void OnEnable()
     {
-        GetIntoAllField("Weapon");
+        if (isMergeDone)
+        {
+            GetIntoAllField("");
+            Debug.Log("Merge Done in Up Panel Manager");
+        }
+        else
+        {
+            GetIntoAllField("Weapon");
+            Debug.Log("Weapon in Up Panel Manager");
+        }
     }
     #endregion
 
@@ -85,17 +100,28 @@ public class UpPanelManager : MonoBehaviour
         upPanelUI.ResetScrollContent();
 
         // 카드타입 인자를 비워 놓는다면 up slot에 올라가 있는 카드 타입들만 필드에 진열하기
+        // 머지에 성공하면 항상 ""를 인자로 가지고 온다.
         if (_thisCardType == "")
         {
             allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(upCardSlot.GetCardData().Type));
+            upTabManager.SetTab(upCardSlot.GetCardData().Type);
+            SetMergeDoneState(false);
         }
         else
         {
             allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(_thisCardType));
+            upTabManager.SetTab(_thisCardType);
         }
 
         upPanelUI.Init();
     }
+
+    // 머지 후 탭 해서 계속하기 버튼을 클릭하면 실행
+    public void SetMergeDoneState(bool _isMergeDone)
+    {
+        isMergeDone = _isMergeDone;
+    }
+
     /// <summary>
     /// 인자로 넘겨받은 카드와 같은 타입의 카드만 추려내기
     /// </summary>
