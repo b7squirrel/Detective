@@ -203,6 +203,12 @@ public class UpPanelManager : MonoBehaviour
         if (CardToUpgrade.Level != StaticValues.MaxLevel)
         {
             Debug.Log("최고 레벨의 카드만 합성이 가능합니다");
+            return;
+        }
+        if(CardToUpgrade.EvoStage != _cardData.EvoStage)
+        {
+            Debug.Log("같은 합성 등급의 카드만 합성이 가능합니다.");
+            return;
         }
 
         // 장착을 하고 있는지, 장착이 되어 있는지 확인
