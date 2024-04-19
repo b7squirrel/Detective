@@ -23,6 +23,9 @@ public class LaunchManager : MonoBehaviour
 
     CardData currentLead; // 현재 리드로 선택된 오리
     OriAttribute currentAttr; // 현재 리드로 선택된 오리의 attr
+
+    bool isInitialized; // 한 번 초기화 된 후에는 코루틴으로 리드를 초기화 할 필요가 없으므로 
+    float initDelayTime = .3f; // 코루틴으로 리드를 초기화 할 때 얼마만큼 딜레이 할 것인지.
     
     void OnEnable()
     {
@@ -43,12 +46,14 @@ public class LaunchManager : MonoBehaviour
 
     void InitLead()
     {
+        if (isInitialized) initDelayTime = 0;
+        isInitialized = true;
         StartCoroutine(InitCo());
     }
     IEnumerator InitCo()
     {
         startButton.SetActive(false);
-        yield return new WaitForSeconds(.03f);
+        yield return new WaitForSeconds(initDelayTime);
         CardData lead = cardDataManager.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
         SetLead(lead);
         yield return new WaitForSeconds(.03f);

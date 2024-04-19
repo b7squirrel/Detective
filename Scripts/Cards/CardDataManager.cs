@@ -230,4 +230,15 @@ public class CardDataManager : MonoBehaviour
         return false;
     }
 
+    #region Debug
+    public void SetAllToMaxLevel()
+    {
+        List<CardData> cards = GetMyCardList();
+        for (int i = 0; i < cards.Count; i++)
+        {
+            cards[i].Level = StaticValues.MaxLevel;
+        }
+        Save();
+    }
+    #endregion
 }

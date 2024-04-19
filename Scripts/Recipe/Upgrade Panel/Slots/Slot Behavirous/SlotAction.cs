@@ -12,7 +12,7 @@ public class SlotAction : MonoBehaviour
 
     void Awake()
     {
-        upPanelManager = FindAnyObjectByType<UpPanelManager>();
+        
     }
 
     public void Onclick()
@@ -29,6 +29,11 @@ public class SlotAction : MonoBehaviour
 
         yield return new WaitForSeconds(.066f);
 
+        if (upPanelManager == null)
+        {
+            upPanelManager = FindAnyObjectByType<UpPanelManager>();
+        }
+
         ActionType();
     }
 
@@ -42,6 +47,7 @@ public class SlotAction : MonoBehaviour
         }
         if (currentSlotType == SlotType.Up)
         {
+            upPanelManager.SetUpSlotCanceled(true);
             upPanelManager.GetIntoAllField(GetComponent<CardSlot>().GetCardData().Type);
             GetComponent<CardSlot>().EmptySlot();
             return;

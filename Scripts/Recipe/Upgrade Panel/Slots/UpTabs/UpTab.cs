@@ -5,10 +5,6 @@ public class UpTab : MonoBehaviour
     Animator anim;
     [SerializeField] string tabType;
 
-    void Awake()
-    {
-        anim = GetComponent<Animator>();
-    }
     public string GetTabType()
     {
         return tabType;
@@ -16,7 +12,9 @@ public class UpTab : MonoBehaviour
 
     public void SetTabActive(bool _isActive)
     {
-        if(_isActive)
+        if (anim == null)
+            anim = GetComponent<Animator>();
+        if (_isActive)
         {
             anim.SetTrigger("On");
         }

@@ -5,6 +5,8 @@ public class EquipDisplayUI : MonoBehaviour
 {
     [SerializeField] Transform cardBaseContainer; // 5레벨
     [SerializeField] Transform starContainer;
+    [SerializeField] GameObject halo;
+    [SerializeField] GameObject titleRibbon;
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
     [SerializeField] protected GameObject starPrefab;
@@ -39,9 +41,13 @@ public class EquipDisplayUI : MonoBehaviour
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
         // 카드 이름 텍스트
+        titleRibbon.SetActive(true);
         Title.text = charCardData.Name;
         // 카드 레벨 텍스트
         Level.text = "LV " + charCardData.Level;
+
+        // Halo
+        halo.SetActive(true);
 
         // 캐릭터 이미지
         charImage.gameObject.SetActive(true);
@@ -144,7 +150,12 @@ public class EquipDisplayUI : MonoBehaviour
             }
         }
 
+        // Halo
+        halo.SetActive(false);
+
         // 카드 레벨 텍스트
+        titleRibbon.SetActive(false);
+
         Level.text = "";
         Title.text = "";
 

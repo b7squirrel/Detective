@@ -12,6 +12,7 @@ public class UpPanelManager : MonoBehaviour
     bool isMergeDone; // 머지 된 후에는 OnEnable에서 강제로 Weapon으로 초기화 되는 것을 피하려고
     bool activated; // 다른 탭에 갔다가 오는지 체크하기 위해
     string currentTabType; // 탭이 바뀌는지 바뀌지 않는지 체크하기 위해
+    bool isUpSlotCanceled; // 업 슬롯에 있던 카드를 클릭해서 취소하면
     #endregion
 
     #region 참조 변수
@@ -83,7 +84,11 @@ public class UpPanelManager : MonoBehaviour
     public void GetIntoAllField(string _thisCardType)
     {
         // 새로 패널로 들어오거나, 머지를 했거나 탭이 바뀌었다면 리프레시
-        if (!isMergeDone && currentTabType == _thisCardType && !activated) return;
+        if (!isMergeDone &&
+            currentTabType == _thisCardType &&
+            !activated && !isUpSlotCanceled) return;
+        SetUpSlotCanceled(false);
+
         currentTabType = _thisCardType;
         SetMergeDoneState(false);
         activated = false;
@@ -109,11 +114,18 @@ public class UpPanelManager : MonoBehaviour
         }
         else
         {
-            allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(_thisCardType));
+            Debug.Log("_thisCardType = " + _thisCardType);
+            List<CardData> cards = GetMyCardsListOnCardType(_thisCardType);
+            allField.GenerateAllCardsOfType(cards);
             upTabManager.SetTab(_thisCardType);
         }
 
         upPanelUI.Init();
+    }
+
+    public void SetUpSlotCanceled(bool _isCanceled)
+    {
+        isUpSlotCanceled = _isCanceled;
     }
 
     // 머지 후 탭 해서 계속하기 버튼을 클릭하면 실행
