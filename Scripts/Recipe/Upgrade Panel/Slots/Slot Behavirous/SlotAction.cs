@@ -24,8 +24,8 @@ public class SlotAction : MonoBehaviour
         // 터치하면 일단 또잉또잉
         RectTransform slotRec = GetComponent<RectTransform>();
         float initialValue = slotRec.transform.localScale.x;
-        slotRec.transform.localScale = new Vector2(initialValue * 1.3f, initialValue * 1.3f);
-        slotRec.DOScale(initialValue, .07f).SetEase(Ease.InBack);
+        slotRec.transform.localScale = new Vector2(initialValue * 1.1f, initialValue * 1.1f);
+        slotRec.DOScale(initialValue, .04f).SetEase(Ease.InBack);
 
         yield return new WaitForSeconds(.066f);
 

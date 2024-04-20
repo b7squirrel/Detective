@@ -385,6 +385,7 @@ public class UpPanelManager : MonoBehaviour
         CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newCardGrade);
         newCardData.ID = CardToUpgrade.ID;
         newCardData.EvoStage = newCardEvoStage;
+        newCardData.Level = 1;
         cardDataManager.AddUpgradedCardToMyCardList(newCardData);
 
         cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제
