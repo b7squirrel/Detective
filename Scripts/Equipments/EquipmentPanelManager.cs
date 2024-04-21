@@ -307,7 +307,7 @@ public class EquipmentPanelManager : MonoBehaviour
     /// </summary>
     void UpdateUpgradeCost(int _level, TMPro.TextMeshProUGUI _upgradeCost)
     {
-        _upgradeCost.text = GetAmountToUpgrade(_level).ToString();
+        _upgradeCost.text = "X " + GetAmountToUpgrade(_level).ToString();
     }
 
     /// <summary>

@@ -5,6 +5,7 @@ public class EquipDisplayUI : MonoBehaviour
 {
     [SerializeField] Transform cardBaseContainer; // 5레벨
     [SerializeField] Transform starContainer;
+    [SerializeField] Transform ribbon;
     [SerializeField] GameObject halo;
     [SerializeField] GameObject titleRibbon;
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
@@ -29,6 +30,7 @@ public class EquipDisplayUI : MonoBehaviour
     {
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
+        transform.gameObject.SetActive(true);
 
         int intGrade = charCardData.Grade;
         int intEvoStage = charCardData.EvoStage;
@@ -36,9 +38,15 @@ public class EquipDisplayUI : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
+            if(i == intGrade)
+            {
+                cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
+                ribbon.GetChild(intGrade).gameObject.SetActive(true);
+                continue;
+            }
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
+            ribbon.GetChild(i).gameObject.SetActive(false);
         }
-        cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
         // 카드 이름 텍스트
         titleRibbon.SetActive(true);
