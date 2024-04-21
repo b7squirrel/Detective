@@ -25,8 +25,6 @@ public class Level : MonoBehaviour
 
     [SerializeField] List<UpgradeData> instantUpgrade = new List<UpgradeData>();
 
-    [SerializeField] ExpBarAnimation expBarAnim;
-
     CoinManager coinManager;
 
     int To_Level_Up
@@ -96,7 +94,6 @@ public class Level : MonoBehaviour
             return;
 
         upgradeManager.OpenPanel(selectedUpgrads);
-        expBarAnim.ExpBarEffect();
     }
 
     // 알을 통해 무기를 얻을 경우

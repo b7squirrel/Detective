@@ -9,7 +9,7 @@ public class UpgradePanelManager : MonoBehaviour
     [SerializeField] GameObject greyBase;
     [SerializeField] GameObject PanelWaitingPopUp;
     PauseManager pauseManager;
-    [SerializeField] ExpBarAnimation expBarAnim;
+    [SerializeField] ExperienceBar experienceBar;
 
     [SerializeField] List<UpgradeButton> upgradeButtons;
 
@@ -37,6 +37,8 @@ public class UpgradePanelManager : MonoBehaviour
 
         greyBase.SetActive(true);
         panel.SetActive(true);
+
+        experienceBar.ExpBarBlink();
 
         for (int i = 0; i < upgradeData.Count; i++)
         {
@@ -74,7 +76,7 @@ public class UpgradePanelManager : MonoBehaviour
     // Skip 버튼을 누르면 한 번 더 물어보기
     public void ClosePanel()
     {
-        expBarAnim.DisableExpFillBar();
+        experienceBar.ExpBarIdle();
         StartCoroutine(VanishPanel());
     }
 

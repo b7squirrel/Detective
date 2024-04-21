@@ -16,13 +16,25 @@ public class ExperienceBar : MonoBehaviour
         slider.maxValue = target;
         slider.value = current;
 
+        Debug.Log("Add");
         fillSliderAnim.SetTrigger("Add");
         // SetFillImage();
     }
 
+    public void ExpBarBlink()
+    {
+        Debug.Log("Blink");
+        fillSliderAnim.SetTrigger("Blink");
+    }
+    public void ExpBarIdle()
+    {
+        Debug.Log("Idle");
+        fillSliderAnim.SetTrigger("Idle");
+    }
+
     public void SetLevelText(int level)
     {
-        levelText.text = "LEVEL  " + level.ToString();
+        levelText.text = level.ToString();
     }
 
     // void SetFillImage()
