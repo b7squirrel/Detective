@@ -10,11 +10,13 @@ public class ExperienceBar : MonoBehaviour
     [SerializeField] Sprite fillImage;
     [SerializeField] Image sliderFillImage;
     [SerializeField] Animator fillSliderAnim;
+    int nextExp; // 블링크 애님에서는 exp바가 100%가 되어야 하므로. 임시로 저장해 두고 애니메이션이 끝나면 적용
 
     public void UpdateExperienceSlider(int current, int target)
     {
         slider.maxValue = target;
         slider.value = current;
+        nextExp = current;
 
         Debug.Log("Add");
         fillSliderAnim.SetTrigger("Add");
