@@ -32,7 +32,6 @@ public class MainMenuManager : MonoBehaviour
     Coroutine fadeInCoroutine;
 
     [Header("Black Transition")]
-    [SerializeField] GameObject blackTransition;
     [SerializeField] GameObject blackScreen;
     Animator blackTransitionAnim;
 
@@ -165,14 +164,12 @@ public class MainMenuManager : MonoBehaviour
     }
     void InitBlackTransition()
     {
-        blackTransition.SetActive(false);
         blackScreen.SetActive(false);
     }
     public void StartTransition()
     {
         blackTransitionAnim = GetComponent<Animator>();
 
-        blackTransition.SetActive(true);
         blackScreen.SetActive(true);
 
         blackTransitionAnim.SetTrigger("Start");
