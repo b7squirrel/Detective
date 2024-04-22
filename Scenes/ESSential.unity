@@ -55561,6 +55561,7 @@ GameObject:
   - component: {fileID: 5169138812183227460}
   - component: {fileID: 5169138812183227514}
   - component: {fileID: 5169138812183227461}
+  - component: {fileID: 5169138812183227515}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -55576,6 +55577,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5169138812183227463}
   m_CullTransparentMesh: 0
+--- !u!95 &5169138812183227515
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5169138812183227463}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ec7ea040d81455f4daa5512795053ba8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5169138812776823881
 GameObject:
   m_ObjectHideFlags: 0
@@ -55725,6 +55747,7 @@ MonoBehaviour:
   fillImage: {fileID: 21300000, guid: 079e16bce45e14ab2b4512c4e4d08d4a, type: 3}
   sliderFillImage: {fileID: 5169138811218385591}
   fillSliderAnim: {fileID: 5169138812776823888}
+  levelTextAnim: {fileID: 5169138812183227515}
 --- !u!1 &5169138813012849160
 GameObject:
   m_ObjectHideFlags: 0

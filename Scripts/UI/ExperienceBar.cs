@@ -10,6 +10,7 @@ public class ExperienceBar : MonoBehaviour
     [SerializeField] Sprite fillImage;
     [SerializeField] Image sliderFillImage;
     [SerializeField] Animator fillSliderAnim;
+    [SerializeField] Animator levelTextAnim;
     int nextExp; // 블링크 애님에서는 exp바가 100%가 되어야 하므로. 임시로 저장해 두고 애니메이션이 끝나면 적용
 
     public void UpdateExperienceSlider(int current, int target)
@@ -23,15 +24,17 @@ public class ExperienceBar : MonoBehaviour
         // SetFillImage();
     }
 
-    public void ExpBarBlink()
+    public void ExpBarBlink(int _expToLevelUp)
     {
         Debug.Log("Blink");
         fillSliderAnim.SetTrigger("Blink");
+        slider.value = _expToLevelUp;
     }
     public void ExpBarIdle()
     {
         Debug.Log("Idle");
         fillSliderAnim.SetTrigger("Idle");
+        levelTextAnim.SetTrigger("Up");
     }
 
     public void SetLevelText(int level)

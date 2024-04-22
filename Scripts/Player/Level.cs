@@ -64,7 +64,7 @@ public class Level : MonoBehaviour
     {
         experience += expAmount;
         CheckLevelUp();
-        experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
+        
     }
 
     public void CheckLevelUp()
@@ -74,6 +74,10 @@ public class Level : MonoBehaviour
         if (experience >= To_Level_Up) 
         {
             LevelUp();
+        }
+        else
+        {
+            experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
         }
     }
 
@@ -86,14 +90,22 @@ public class Level : MonoBehaviour
 
         selectedUpgrads.Clear();
         selectedUpgrads.AddRange(GetRandomUpgrades());
-        experience -= To_Level_Up;
-        level++;
-        experienceBar.SetLevelText(level);
 
         if (NoMoreUpgrade)
             return;
 
         upgradeManager.OpenPanel(selectedUpgrads);
+    }
+    public int GetExpToLevelUp()
+    {
+        return To_Level_Up;
+    }
+    public void ApplyUpdatedLevel()
+    {
+        experience -= To_Level_Up;
+        level++;
+        experienceBar.SetLevelText(level);
+        experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
     }
 
     // 알을 통해 무기를 얻을 경우

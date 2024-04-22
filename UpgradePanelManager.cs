@@ -14,6 +14,7 @@ public class UpgradePanelManager : MonoBehaviour
     [SerializeField] List<UpgradeButton> upgradeButtons;
 
     Animator anim;
+    Level level;
 
     // 사운드
     [SerializeField] AudioClip clickSound;
@@ -22,6 +23,7 @@ public class UpgradePanelManager : MonoBehaviour
     {
         pauseManager = GetComponent<PauseManager>();
         anim = panel.GetComponent<Animator>();
+        level = FindObjectOfType<Level>();
     }
 
     void Start()
@@ -38,7 +40,8 @@ public class UpgradePanelManager : MonoBehaviour
         greyBase.SetActive(true);
         panel.SetActive(true);
 
-        experienceBar.ExpBarBlink();
+        int expToLevelUp = level.GetExpToLevelUp();
+        experienceBar.ExpBarBlink(expToLevelUp);
 
         for (int i = 0; i < upgradeData.Count; i++)
         {
@@ -77,6 +80,7 @@ public class UpgradePanelManager : MonoBehaviour
     public void ClosePanel()
     {
         experienceBar.ExpBarIdle();
+        level.ApplyUpdatedLevel();
         StartCoroutine(VanishPanel());
     }
 
