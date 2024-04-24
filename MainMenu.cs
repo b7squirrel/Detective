@@ -6,7 +6,6 @@ using System.Collections;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject panelPause;
-    [SerializeField] GameObject panelMainMenu;
     [SerializeField] GameObject panelAreYouSure;
     [SerializeField] GameObject darkBG;
     public UnityEvent<bool> OnPauseButtonPressed;
