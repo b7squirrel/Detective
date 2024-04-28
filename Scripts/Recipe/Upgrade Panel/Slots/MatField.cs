@@ -128,27 +128,6 @@ public class MatField : MonoBehaviour
             }
         }
     }
-    void SetAnimController(CardData charCard, CardSlot targetSlot)
-    {
-        CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
-        EquipmentCard[] equipCards = cardList.GetEquipmentsCardData(charCard);
-        for (int i = 0; i < 4; i++)
-        {
-            if (equipCards[i] == null)
-            {
-                cardDisp.SetRunTimeAnimController(i, null);
-                continue;
-            }
-
-            // 장비의 runtimeAnimatorController 구하기
-            CardData equipCardData = equipCards[i].CardData;
-            WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(equipCardData);
-
-            if (weaponItemData.itemData == null) continue;
-
-            cardDisp.SetRunTimeAnimController(i, weaponItemData.itemData.CardItemAnimator.CardImageAnim);
-        }
-    }
 
     public void ClearSlots()
     {

@@ -2,31 +2,37 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// weapon manager¿¡¼­ ¹«±â¸¦ Ãß°¡ÇÒ ¶§ È£ÃâÇØ¼­ ÃÊ±âÈ­ 
-/// ¾÷±×·¹ÀÌµå ÇÒ ¶§µµ È£ÃâÇØ¼­ ¾÷µ¥ÀÌÆ®
+/// weapon managerì—ì„œ ë¬´ê¸°ë¥¼ ì¶”ê°€í•  ë–„ í˜¸ì¶œí•´ì„œ ì´ˆê¸°í™”.
+/// ë¬´ê¸°ë¥¼ ì—…ê·¸ë ˆì´ë“œ í•  ë•Œë„ í˜¸ì¶œí•´ì„œ ì—…ë°ì´íŠ¸.
 /// </summary>
 public class PausePanel : MonoBehaviour
 {
-    [SerializeField] GameObject cardSlot; // ¿À¸® Ä«µå ½½·Ô ÇÁ¸®Æé
-    [SerializeField] Transform weaponContents; // ½½·ÔµéÀ» Áı¾î ³ÖÀ» ·¹ÀÌ¾Æ¿ô
-    [SerializeField] Transform itemContents; // ½½·ÔµéÀ» Áı¾î ³ÖÀ» ·¹ÀÌ¾Æ¿ô
+    [SerializeField] GameObject cardSlot; // ì˜¤ë¦¬ ì¹´ë“œ ìŠ¬ë¡¯ í”„ë¦¬í©
+    [SerializeField] Transform weaponContents; // ë¬´ê¸° ìŠ¬ë¡¯ë“¤ì„ ì§‘ì–´ë„£ì„ ë ˆì´ì•„ì›ƒ
+    [SerializeField] Transform itemContents; // ì•„ì´í…œ ìŠ¬ë¡¯ë“¤ì„ ì§‘ì–´ë„£ì„ ë ˆì´ì•„ì›ƒ
     List<WeaponData> weaponDatas;
 
-    public void InitWeaponSlot(WeaponData wd)
+    public void InitWeaponSlot(WeaponData wd, bool isLead)
     {
         if (weaponDatas == null) weaponDatas = new();
         weaponDatas.Add(wd);
         GameObject wSlot = Instantiate(cardSlot, weaponContents.transform);
-        wSlot.GetComponent<PauseCardDisp>().InitWeaponCardDisplay(wd);
-        Debug.Log($"{wd.Name} is added.");
+        if(isLead)
+        {
+            wSlot.GetComponent<PauseCardDisp>().InitLeadWeaponCardDisplay(wd);
+        }
+        else
+        {
+            wSlot.GetComponent<PauseCardDisp>().InitWeaponCardDisplay(wd);
+        }
     }
     public void InitLeadWeaponSlot(WeaponData wd)
     {
-
+        
     }
     public void UpdateWeaponLevel(WeaponData wd)
     {
-        // wd.weaponStats.currentLevelÀ» ¹Ş¾Æ¼­ Pause Card Disp¿¡ ³Ñ°ÜÁÖ±â
+        // wd.weaponStats.currentLevelì„ ë°›ì•„ì„œ Pause Card Dispì— ë„˜ê²¨ì£¼ê¸°
         Debug.Log($"{wd.Name} Level = {wd.stats.currentLevel}");
     }
 }

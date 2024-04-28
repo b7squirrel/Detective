@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,16 +16,51 @@ public class PauseCardDisp : MonoBehaviour
     [SerializeField] protected GameObject starPrefab;
     GameObject[] stars;
 
-    public void InitWeaponCardDisplay(WeaponData _wd)
+    public void InitLeadWeaponCardDisplay(WeaponData _wd)
     {
-        // º°
+        // ë³„
         SetNumStar(1);
 
-        // ¿À¸® base ÀÌ¹ÌÁö, ¾Ö´Ï¸ŞÀÌ¼Ç
+        // ì˜¤ë¦¬ base ì´ë¯¸ì§€, ì• ë‹ˆë©”ì´ì…˜
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = _wd.Animators.CardImageAnim;
 
-        // ±âº» Àåºñ ÀåÂø
+        // ì¥ë¹„ ì¥ì°©
+        List<Item> items = new();
+        items = FindObjectOfType<StartingDataContainer>().GetItemDatas();
+        for (int i = 0; i < 4; i++)
+        {
+            if (items[i] != null)
+            {
+                equipSR[i].sprite = items[i].charImage;
+                equipSR[i].gameObject.SetActive(true);
+                continue;
+            }
+            equipSR[i].sprite = null;
+            equipSR[i].gameObject.SetActive(false);
+
+            if (_wd.costume != null)
+            {
+                costume = _wd.costume;
+                costumeImage.color = new Color(1, 1, 1, 1);
+                Debug.Log("costume name = " + costume.name);
+            }
+            else
+            {
+                costumeImage.color = new Color(1, 1, 1, 0);
+            }
+        }
+    }
+    public void InitWeaponCardDisplay(WeaponData _wd)
+    {
+        // ë³„
+        SetNumStar(1);
+
+        // ì˜¤ë¦¬ base ì´ë¯¸ì§€, ì• ë‹ˆë©”ì´ì…˜
+        charAnim.gameObject.SetActive(true);
+        charAnim.runtimeAnimatorController = _wd.Animators.CardImageAnim;
+
+        // ê¸°ë³¸ ì¥ë¹„ ì¥ì°©
         if (_wd.DefaultHead != null)
         {
             equipSR[0].sprite = _wd.DefaultHead;
@@ -58,23 +94,7 @@ public class PauseCardDisp : MonoBehaviour
         }
     }
 
-    public void SetRunTimeAnimController(int index, RuntimeAnimatorController animatorController)
-    {
-        equipmentAnimators[index].gameObject.SetActive(true);
-        equipmentAnimators[index].runtimeAnimatorController = animatorController;
-        if (animatorController == null)
-        {
-            equipmentAnimators[index].gameObject.SetActive(false);
-        }
-        charAnim.Rebind();
-        for (int i = 0; i < 4; i++)
-        {
-            if (equipmentAnimators[i].gameObject.activeSelf)
-            {
-                equipmentAnimators[i].Rebind();
-            }
-        }
-    }
+    // ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸ë¡œ í•´ë‹¹ í”„ë ˆì„ë§ˆë‹¤ ìŠ¤í”„ë¼ì´íŠ¸ êµì²´
     public void SetEquipCardImage(int index, Sprite equipmentImage)
     {
         if (equipmentImage == null)
@@ -89,7 +109,7 @@ public class PauseCardDisp : MonoBehaviour
     {
         if (stars == null)
         {
-            // ÃÖ´ë ÇÕ¼º ·¹º§¸¸Å­ ¸¸µé¾î¼­ ºñÈ°¼ºÈ­
+            // ìµœëŒ€ í•©ì„± ë ˆë²¨ë§Œí¼ ë§Œë“¤ì–´ì„œ ë¹„í™œì„±í™”
             stars = new GameObject[StaticValues.MaxEvoStage];
             for (int i = 0; i < stars.Length; i++)
             {
@@ -98,13 +118,13 @@ public class PauseCardDisp : MonoBehaviour
             }
         }
 
-        // ÀÏ´Ü ¸ğµç º°À» ºñÈ°¼ºÈ­. ¸¹Àº º°¿¡¼­ ÀûÀº º°·Î ¾÷µ¥ÀÌÆ® ÇÏ¸é ¸¹Àº º°·Î ³²¾ÆÀÖ±â ¶§¹®
+        // ì¼ë‹¨ ëª¨ë“  ë³„ì„ ë¹„í™œì„±í™”. ë§ì€ ë³„ì—ì„œ ì ì€ ë³„ë¡œ ì—…ë°ì´íŠ¸ í•˜ë©´ ë§ì€ ë³„ë¡œ ë‚¨ì•„ìˆê¸° ë–„ë¬¸
         for (int i = 0; i < StaticValues.MaxEvoStage; i++)
         {
             stars[i].SetActive(false);
         }
 
-        // µî±Ş¸¸Å­ º° È°¼ºÈ­ÇÏ°í º°¸®½ºÆ®¿¡ ³Ö±â
+        // ë“±ê¸‰ë§Œí¼ ë³„ í™œì„±í™”. ë³„ ë¦¬ìŠ¤íŠ¸ì— ë„£ê¸°
         for (int i = 0; i < numStars; i++)
         {
             stars[i].SetActive(true);
@@ -113,13 +133,13 @@ public class PauseCardDisp : MonoBehaviour
 
     public void EmptyCardDisplay()
     {
-        // º° ºñÈ°¼ºÈ­
+        // ë³„ ë¹„í™œì„±í™”
         DeactivateStars();
 
-        // Ä³¸¯ÅÍ ÀÌ¹ÌÁö
+        // ì˜¤ë¦¬ ì´ë¯¸ì§€ ë¹„í™œì„±í™”
         charImage.gameObject.SetActive(false);
 
-        // Àåºñ ÀÌ¹ÌÁö
+        // ì¥ë¹„ ì´ë¯¸ì§€ ë¹„í™œì„±í™”
         for (int i = 0; i < 4; i++)
         {
             if (equipmentAnimators[i] == null)
@@ -130,7 +150,7 @@ public class PauseCardDisp : MonoBehaviour
 
     void DeactivateStars()
     {
-        // º° ºñÈ°¼ºÈ­
+        // ë³„ ë¹„í™œì„±í™”
         if (stars != null)
         {
             for (int i = 0; i < stars.Length; i++)

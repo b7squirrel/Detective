@@ -35,7 +35,7 @@ public class WeaponManager : MonoBehaviour
             container = weaponContainer.CreateContainer(wd, isInitialWeapon);
 
             // Pause Panel. 플레이어는 
-            GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd);
+            GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, true);
 
         }
         else
@@ -44,8 +44,7 @@ public class WeaponManager : MonoBehaviour
             container = weaponContainer.CreateContainer(weaponData, isInitialWeapon);
 
             // Pause Panel
-            GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd);
-
+            GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, false);
         }
 
         // WeaponBase Prefab - 특정 오리 (Punch, Tesla..)
