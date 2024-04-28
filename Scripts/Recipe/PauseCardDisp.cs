@@ -25,10 +25,26 @@ public class PauseCardDisp : MonoBehaviour
         charAnim.runtimeAnimatorController = _wd.Animators.CardImageAnim;
 
         // 기본 장비 장착
-        if (_wd.DefaultHead != null) equipSR[0].sprite = _wd.DefaultHead;
-        if (_wd.DefaultChest != null) equipSR[1].sprite = _wd.DefaultChest;
-        if (_wd.DefaultFace != null) equipSR[2].sprite = _wd.DefaultFace;
-        if (_wd.DefaultHands != null) equipSR[3].sprite = _wd.DefaultHands;
+        if (_wd.DefaultHead != null)
+        {
+            equipSR[0].sprite = _wd.DefaultHead;
+            equipSR[0].gameObject.SetActive(true);
+        }
+        if (_wd.DefaultChest != null)
+        {
+            equipSR[1].sprite = _wd.DefaultChest;
+            equipSR[1].gameObject.SetActive(true);
+        }
+        if (_wd.DefaultFace != null)
+        {
+            equipSR[2].sprite = _wd.DefaultFace;
+            equipSR[2].gameObject.SetActive(true);
+        }
+        if (_wd.DefaultHands != null)
+        {
+            equipSR[3].sprite = _wd.DefaultHands;
+            equipSR[3].gameObject.SetActive(true);
+        }
 
         if (_wd.costume != null)
         {
