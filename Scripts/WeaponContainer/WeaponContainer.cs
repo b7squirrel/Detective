@@ -180,4 +180,6 @@ public class WeaponContainer : MonoBehaviour
             weaponContainers[i].GetComponent<SpriteRenderer>().sortingOrder = -i;
         }
     }
+
+    // Puase Panel에서 
 }

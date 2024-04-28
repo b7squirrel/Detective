@@ -90,7 +90,7 @@ public class UpgradeButton : MonoBehaviour
         if(upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
         {
             // 별 5개, 연두 패널
-            SetLevelStarAlpha(weaponContainer.GetWeaponLevel(upgradeData.weaponData), 5);
+            SetLevelStarAlpha(weaponContainer.GetWeaponLevel(upgradeData.weaponData), StaticValues.MaxGrade);
             panel_item.SetActive(false);
             panel_synergy.SetActive(false);
             panel_weapon.SetActive(true);
@@ -99,7 +99,7 @@ public class UpgradeButton : MonoBehaviour
         else if(upgradeData.upgradeType == UpgradeType.ItemUpgrade || upgradeData.upgradeType == UpgradeType.ItemGet)
         {
             // 별 3개, 파란 패널
-            SetLevelStarAlpha(passiveItems.GetItemLevel(upgradeData.item), 3);
+            SetLevelStarAlpha(passiveItems.GetItemLevel(upgradeData.item), StaticValues.MaxItemGrade);
             panel_item.SetActive(true);
             panel_synergy.SetActive(false);
             panel_weapon.SetActive(false);

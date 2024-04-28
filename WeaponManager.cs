@@ -33,11 +33,19 @@ public class WeaponManager : MonoBehaviour
         {
             wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
             container = weaponContainer.CreateContainer(wd, isInitialWeapon);
+
+            // Pause Panel. 플레이어는 
+            GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd);
+
         }
         else
         {
             wd = weaponData;
             container = weaponContainer.CreateContainer(weaponData, isInitialWeapon);
+
+            // Pause Panel
+            GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd);
+
         }
 
         // WeaponBase Prefab - 특정 오리 (Punch, Tesla..)

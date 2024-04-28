@@ -17,9 +17,7 @@ public class ExperienceBar : MonoBehaviour
         slider.value = current;
         nextExp = current;
 
-        Debug.Log("Add");
         fillSliderAnim.SetTrigger("Add");
-        // SetFillImage();
     }
 
     public void ExpBarBlink(int _expToLevelUp)
