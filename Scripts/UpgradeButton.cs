@@ -145,7 +145,7 @@ public class UpgradeButton : MonoBehaviour
         // baseNumber 갯수만큼 활성화
         for (int i = 0; i < baseNumbers; i++)
         {
-            levelOff[i].color = new Color(levelOff[i].color.r, levelOff[i].color.g, levelOff[i].color.b, 1f);
+            levelOff[i].color = new Color(levelOff[i].color.r, levelOff[i].color.g, levelOff[i].color.b, .2f);
             levelOn[i].gameObject.SetActive(false);
             stars[i].SetActive(true);
         }
