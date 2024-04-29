@@ -14,12 +14,17 @@ public class PauseCardDisp : MonoBehaviour
     [SerializeField] Animator[] equipmentAnimators;
     [SerializeField] Image[] equipmentImages;
     [SerializeField] protected GameObject starPrefab;
+    [SerializeField] protected GameObject focusImage;
+
     GameObject[] stars;
 
     public void InitLeadWeaponCardDisplay(WeaponData _wd)
     {
         // 별
         SetNumStar(1);
+
+        // Focus Image 활성화
+        focusImage.gameObject.SetActive(true);
 
         // 오리 base 이미지, 애니메이션
         charAnim.gameObject.SetActive(true);
@@ -130,6 +135,12 @@ public class PauseCardDisp : MonoBehaviour
             stars[i].SetActive(true);
         }
     }
+    // 애니메이션 이벤트
+    public void SetCostumeSprite(int _index)
+    {
+        if (costume == null) return;
+        costumeImage.sprite = costume.sprites[_index];
+    }
 
     public void EmptyCardDisplay()
     {
@@ -159,5 +170,7 @@ public class PauseCardDisp : MonoBehaviour
                     stars[i].SetActive(false);
             }
         }
+
+        focusImage.gameObject.SetActive(false);
     }
 }
