@@ -39,13 +39,13 @@ public class PausePanel : MonoBehaviour
 
         iSlot.GetComponent<PauseCardDisp>().InitItemCardDisplay(_item);
     }
-    public void UpdateWeaponLevel(string _weaponName, int _levelToUpdate)
+    public void UpdateWeaponLevel(string _weaponName, int _levelToUpdate, bool _isSynergy)
     {
         for (int i = 0; i < weaponCards.Count; i++)
         {
             if (weaponCards[i].Name == _weaponName)
             {
-                weaponCards[i].UpdatePauseCardLevel(_levelToUpdate, true);
+                weaponCards[i].UpdatePauseCardLevel(_levelToUpdate, true, _isSynergy);
                 return;
             }
         }
@@ -57,7 +57,7 @@ public class PausePanel : MonoBehaviour
         {
             if (itemCards[i].Name == _item.Name)
             {
-                itemCards[i].UpdatePauseCardLevel(_item.stats.currentLevel,false);
+                itemCards[i].UpdatePauseCardLevel(_item.stats.currentLevel,false, false);
                 return;
             }
         }

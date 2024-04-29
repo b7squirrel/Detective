@@ -134,6 +134,8 @@ public class WeaponManager : MonoBehaviour
         WeaponData wd = weaponUpgrade.weaponData;
         string weaponName = wd.Name;
         int level = weaponContainer.GetWeaponLevel(upgradeData.weaponData);
-        GameManager.instance.GetComponent<PausePanel>().UpdateWeaponLevel(weaponName, level);
+
+        bool isSynergy = upgradeData.upgradeType == UpgradeType.SynergyUpgrade ? true : false;
+        GameManager.instance.GetComponent<PausePanel>().UpdateWeaponLevel(weaponName, level, isSynergy);
     }
 }

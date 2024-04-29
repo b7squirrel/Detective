@@ -179,9 +179,14 @@ public class PauseCardDisp : MonoBehaviour
         leaderIcon.gameObject.SetActive(false);
 
     }
-    public void UpdatePauseCardLevel(int _level, bool _isWeapon)
+    public void UpdatePauseCardLevel(int _level, bool _isWeapon, bool _isSynergy)
     {
         Debug.Log("Upgraded Level = " + _level);
+        if(_isSynergy)
+        {
+            SetNumStar(0, _isWeapon);
+            return;
+        }
         SetNumStar(_level, _isWeapon);
     }
     #endregion
