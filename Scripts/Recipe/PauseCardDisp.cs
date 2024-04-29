@@ -26,7 +26,7 @@ public class PauseCardDisp : MonoBehaviour
     public void InitLeadWeaponCardDisplay(WeaponData _wd)
     {
         // 별
-        SetNumStar(currentLevel);
+        SetNumStar(currentLevel, true);
 
         // 이름
         Name = _wd.Name;
@@ -64,7 +64,7 @@ public class PauseCardDisp : MonoBehaviour
     public void InitWeaponCardDisplay(WeaponData _wd)
     {
         // 별
-        SetNumStar(currentLevel);
+        SetNumStar(currentLevel, true);
 
         // 이름
         Name = _wd.Name;
@@ -114,15 +114,17 @@ public class PauseCardDisp : MonoBehaviour
         equipmentImages[index].gameObject.SetActive(true);
         equipmentImages[index].sprite = equipmentImage;
     }
-    
+
     #endregion
     #region 공통
-    void SetNumStar(int numStars)
+    void SetNumStar(int numStars, bool _isWeapon)
     {
+        int maxStarNum = _isWeapon ? 5 : 3;
+
         if (stars == null)
         {
             // 최대 합성 레벨만큼 만들어서 비활성화
-            stars = new GameObject[StaticValues.MaxEvoStage];
+            stars = new GameObject[maxStarNum];
             for (int i = 0; i < stars.Length; i++)
             {
                 stars[i] = Instantiate(starPrefab, starContainer);
@@ -131,7 +133,7 @@ public class PauseCardDisp : MonoBehaviour
         }
 
         // 일단 모든 별을 비활성화. 많은 별에서 적은 별로 업데이트 하면 많은 별로 남아있기 떄문
-        for (int i = 0; i < StaticValues.MaxEvoStage; i++)
+        for (int i = 0; i < maxStarNum; i++)
         {
             stars[i].SetActive(false);
         }
@@ -177,17 +179,17 @@ public class PauseCardDisp : MonoBehaviour
         leaderIcon.gameObject.SetActive(false);
 
     }
-    public void UpdatePauseCardLevel()
+    public void UpdatePauseCardLevel(int _level, bool _isWeapon)
     {
-        currentLevel++;
-        SetNumStar(currentLevel);
+        Debug.Log("Upgraded Level = " + _level);
+        SetNumStar(_level, _isWeapon);
     }
     #endregion
     #region 아이템
     public void InitItemCardDisplay(Item _item)
     {
         // 별
-        SetNumStar(currentLevel);
+        SetNumStar(currentLevel, false);
 
         // 이름
         Name = _item.Name;

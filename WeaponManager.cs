@@ -132,6 +132,8 @@ public class WeaponManager : MonoBehaviour
         weaponUpgrade.Upgrade(upgradeData);
 
         WeaponData wd = weaponUpgrade.weaponData;
-        GameManager.instance.GetComponent<PausePanel>().UpdateWeaponLevel(wd);
+        string weaponName = wd.Name;
+        int level = weaponContainer.GetWeaponLevel(upgradeData.weaponData);
+        GameManager.instance.GetComponent<PausePanel>().UpdateWeaponLevel(weaponName, level);
     }
 }

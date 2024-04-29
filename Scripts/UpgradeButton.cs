@@ -139,7 +139,7 @@ public class UpgradeButton : MonoBehaviour
         // 별을 모두 비활성화 한 후
         for (int i = 0; i < stars.Length; i++)
         {
-            stars[i].SetActive(false);
+            stars[i].SetActive(false); // stars는 별 하나의 요소를 모두 담고 있는 그룹이다.
         }
 
         // baseNumber 갯수만큼 활성화
