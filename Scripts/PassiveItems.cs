@@ -87,5 +87,7 @@ public class PassiveItems : MonoBehaviour
         // Debug.Log(itemToUpgrade.stats.armor);
         itemToUpgrade.stats.SetStats(upgradeData.itemStats);
         itemToUpgrade.UpdateStats(character);
+
+        GameManager.instance.GetComponent<PausePanel>().UpdateItemLevel(itemToUpgrade);
     }
 }

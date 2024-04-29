@@ -130,5 +130,8 @@ public class WeaponManager : MonoBehaviour
     {
         WeaponBase weaponUpgrade = weapons.Find(wb => wb.weaponData == upgradeData.weaponData);
         weaponUpgrade.Upgrade(upgradeData);
+
+        WeaponData wd = weaponUpgrade.weaponData;
+        GameManager.instance.GetComponent<PausePanel>().UpdateWeaponLevel(wd);
     }
 }

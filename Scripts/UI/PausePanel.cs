@@ -11,13 +11,16 @@ public class PausePanel : MonoBehaviour
     [SerializeField] GameObject itemSlot; // 아이템 카드 슬롯 프리펩
     [SerializeField] Transform weaponContents; // 무기 슬롯들을 집어넣을 레이아웃
     [SerializeField] Transform itemContents; // 아이템 슬롯들을 집어넣을 레이아웃
-    List<WeaponData> weaponDatas;
+    List<PauseCardDisp> weaponCards;
+    List<PauseCardDisp> itemCards;
 
     public void InitWeaponSlot(WeaponData wd, bool isLead)
     {
-        if (weaponDatas == null) weaponDatas = new();
-        weaponDatas.Add(wd);
+        if (weaponCards == null) weaponCards = new();
+
         GameObject wSlot = Instantiate(cardSlot, weaponContents.transform);
+        weaponCards.Add(wSlot.GetComponent<PauseCardDisp>());
+
         if(isLead)
         {
             wSlot.GetComponent<PauseCardDisp>().InitLeadWeaponCardDisplay(wd);
@@ -27,14 +30,36 @@ public class PausePanel : MonoBehaviour
             wSlot.GetComponent<PauseCardDisp>().InitWeaponCardDisplay(wd);
         }
     }
-    public void InitItemSlot(Item item)
+    public void InitItemSlot(Item _item)
     {
+        if (itemCards == null) itemCards = new();
+
         GameObject iSlot = Instantiate(itemSlot, itemContents.transform);
-        iSlot.GetComponent<PauseCardDisp>().InitItemCardDisplay(item);
+        itemCards.Add(iSlot.GetComponent<PauseCardDisp>());
+
+        iSlot.GetComponent<PauseCardDisp>().InitItemCardDisplay(_item);
     }
-    public void UpdateWeaponLevel(WeaponData wd)
+    public void UpdateWeaponLevel(WeaponData _wd)
     {
-        // wd.weaponStats.currentLevel을 받아서 Pause Card Disp에 넘겨주기
-        Debug.Log($"{wd.Name} Level = {wd.stats.currentLevel}");
+        for (int i = 0; i < weaponCards.Count; i++)
+        {
+            if (weaponCards[i].Name == _wd.Name)
+            {
+                weaponCards[i].UpdatePauseCardLevel();
+                return;
+            }
+        }
+
+    }
+    public void UpdateItemLevel(Item _item)
+    {
+        for (int i = 0; i < itemCards.Count; i++)
+        {
+            if (itemCards[i].Name == _item.Name)
+            {
+                itemCards[i].UpdatePauseCardLevel();
+                return;
+            }
+        }
     }
 }

@@ -19,12 +19,17 @@ public class PauseCardDisp : MonoBehaviour
     [SerializeField] protected GameObject leaderIcon;
 
     GameObject[] stars;
+    public string Name { get; private set; }
+    int currentLevel;
 
     #region 오리
     public void InitLeadWeaponCardDisplay(WeaponData _wd)
     {
         // 별
-        SetNumStar(1);
+        SetNumStar(currentLevel);
+
+        // 이름
+        Name = _wd.Name;
 
         // Focus Image 활성화
         // focusImage.gameObject.SetActive(true);
@@ -59,7 +64,10 @@ public class PauseCardDisp : MonoBehaviour
     public void InitWeaponCardDisplay(WeaponData _wd)
     {
         // 별
-        SetNumStar(1);
+        SetNumStar(currentLevel);
+
+        // 이름
+        Name = _wd.Name;
 
         // 오리 base 이미지, 애니메이션
         charAnim.gameObject.SetActive(true);
@@ -106,9 +114,10 @@ public class PauseCardDisp : MonoBehaviour
         equipmentImages[index].gameObject.SetActive(true);
         equipmentImages[index].sprite = equipmentImage;
     }
+    
     #endregion
     #region 공통
-    protected virtual void SetNumStar(int numStars)
+    void SetNumStar(int numStars)
     {
         if (stars == null)
         {
@@ -168,16 +177,25 @@ public class PauseCardDisp : MonoBehaviour
         leaderIcon.gameObject.SetActive(false);
 
     }
+    public void UpdatePauseCardLevel()
+    {
+        currentLevel++;
+        SetNumStar(currentLevel);
+    }
     #endregion
     #region 아이템
     public void InitItemCardDisplay(Item _item)
     {
         // 별
-        SetNumStar(1);
+        SetNumStar(currentLevel);
+
+        // 이름
+        Name = _item.Name;
 
         charImage.sprite = _item.charImage;
         charImage.SetNativeSize();
         charImage.rectTransform.localScale = 1.2f * Vector2.one;
     }
+    
     #endregion
 }
