@@ -8,6 +8,7 @@ using UnityEngine;
 public class PausePanel : MonoBehaviour
 {
     [SerializeField] GameObject cardSlot; // 오리 카드 슬롯 프리펩
+    [SerializeField] GameObject itemSlot; // 아이템 카드 슬롯 프리펩
     [SerializeField] Transform weaponContents; // 무기 슬롯들을 집어넣을 레이아웃
     [SerializeField] Transform itemContents; // 아이템 슬롯들을 집어넣을 레이아웃
     List<WeaponData> weaponDatas;
@@ -26,9 +27,10 @@ public class PausePanel : MonoBehaviour
             wSlot.GetComponent<PauseCardDisp>().InitWeaponCardDisplay(wd);
         }
     }
-    public void InitLeadWeaponSlot(WeaponData wd)
+    public void InitItemSlot(Item item)
     {
-        
+        GameObject iSlot = Instantiate(itemSlot, itemContents.transform);
+        iSlot.GetComponent<PauseCardDisp>().InitItemCardDisplay(item);
     }
     public void UpdateWeaponLevel(WeaponData wd)
     {

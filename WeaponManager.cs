@@ -34,7 +34,7 @@ public class WeaponManager : MonoBehaviour
             wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
             container = weaponContainer.CreateContainer(wd, isInitialWeapon);
 
-            // Pause Panel. 플레이어는 
+            // Pause Panel for Player
             GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, true);
 
         }

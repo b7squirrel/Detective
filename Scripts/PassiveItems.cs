@@ -30,6 +30,9 @@ public class PassiveItems : MonoBehaviour
 
         items.Add(newItemInstance);
         newItemInstance.UpdateStats(character);
+
+        // Pause Panel에 전달
+        GameManager.instance.GetComponent<PausePanel>().InitItemSlot(itemToEquip);
     }
 
     public Item GetSynergyCouple(string synergyWeapon)

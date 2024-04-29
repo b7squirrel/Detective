@@ -20,13 +20,14 @@ public class PauseCardDisp : MonoBehaviour
 
     GameObject[] stars;
 
+    #region 오리
     public void InitLeadWeaponCardDisplay(WeaponData _wd)
     {
         // 별
         SetNumStar(1);
 
         // Focus Image 활성화
-        focusImage.gameObject.SetActive(true);
+        // focusImage.gameObject.SetActive(true);
         // leaderText.gameObject.SetActive(true);
         leaderIcon.gameObject.SetActive(true);
 
@@ -52,8 +53,6 @@ public class PauseCardDisp : MonoBehaviour
             {
                 costume = _wd.costume;
                 setCostumeImage.SetCostumeData(costume);
-                Debug.Log("costume name = " + costume.name);
-                Debug.Log("costume length = " + costume.sprites.Length);
             }
         }
     }
@@ -107,6 +106,8 @@ public class PauseCardDisp : MonoBehaviour
         equipmentImages[index].gameObject.SetActive(true);
         equipmentImages[index].sprite = equipmentImage;
     }
+    #endregion
+    #region 공통
     protected virtual void SetNumStar(int numStars)
     {
         if (stars == null)
@@ -167,4 +168,16 @@ public class PauseCardDisp : MonoBehaviour
         leaderIcon.gameObject.SetActive(false);
 
     }
+    #endregion
+    #region 아이템
+    public void InitItemCardDisplay(Item _item)
+    {
+        // 별
+        SetNumStar(1);
+
+        charImage.sprite = _item.charImage;
+        charImage.SetNativeSize();
+        charImage.rectTransform.localScale = 1.2f * Vector2.one;
+    }
+    #endregion
 }
