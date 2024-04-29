@@ -17,6 +17,7 @@ public class PauseCardDisp : MonoBehaviour
     [SerializeField] protected GameObject focusImage;
     [SerializeField] protected GameObject leaderText;
     [SerializeField] protected GameObject leaderIcon;
+    [SerializeField] protected TMPro.TextMeshProUGUI synergyText;
 
     GameObject[] stars;
     public string Name { get; private set; }
@@ -35,6 +36,7 @@ public class PauseCardDisp : MonoBehaviour
         // focusImage.gameObject.SetActive(true);
         // leaderText.gameObject.SetActive(true);
         leaderIcon.gameObject.SetActive(true);
+        synergyText.gameObject.SetActive(false);
 
         // 오리 base 이미지, 애니메이션
         charAnim.gameObject.SetActive(true);
@@ -152,6 +154,7 @@ public class PauseCardDisp : MonoBehaviour
 
         // 오리 이미지 비활성화
         charImage.gameObject.SetActive(false);
+        if(synergyText != null) synergyText.gameObject.SetActive(false);
 
         // 장비 이미지 비활성화
         for (int i = 0; i < 4; i++)
@@ -185,6 +188,7 @@ public class PauseCardDisp : MonoBehaviour
         if(_isSynergy)
         {
             SetNumStar(0, _isWeapon);
+            synergyText.gameObject.SetActive(true);
             return;
         }
         SetNumStar(_level, _isWeapon);
