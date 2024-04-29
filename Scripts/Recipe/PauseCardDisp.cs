@@ -8,13 +8,15 @@ public class PauseCardDisp : MonoBehaviour
     [SerializeField] protected Image charImage;
     [SerializeField] Image[] equipSR;
     Costume costume;
-    [SerializeField] Image costumeImage;
+    [SerializeField] SetCostumeImage setCostumeImage;
 
     [SerializeField] Animator charAnim;
     [SerializeField] Animator[] equipmentAnimators;
     [SerializeField] Image[] equipmentImages;
     [SerializeField] protected GameObject starPrefab;
     [SerializeField] protected GameObject focusImage;
+    [SerializeField] protected GameObject leaderText;
+    [SerializeField] protected GameObject leaderIcon;
 
     GameObject[] stars;
 
@@ -25,10 +27,12 @@ public class PauseCardDisp : MonoBehaviour
 
         // Focus Image 활성화
         focusImage.gameObject.SetActive(true);
+        // leaderText.gameObject.SetActive(true);
+        leaderIcon.gameObject.SetActive(true);
 
         // 오리 base 이미지, 애니메이션
         charAnim.gameObject.SetActive(true);
-        charAnim.runtimeAnimatorController = _wd.Animators.CardImageAnim;
+        charAnim.runtimeAnimatorController = _wd.Animators.PauseCardAnim;
 
         // 장비 장착
         List<Item> items = new();
@@ -47,12 +51,9 @@ public class PauseCardDisp : MonoBehaviour
             if (_wd.costume != null)
             {
                 costume = _wd.costume;
-                costumeImage.color = new Color(1, 1, 1, 1);
+                setCostumeImage.SetCostumeData(costume);
                 Debug.Log("costume name = " + costume.name);
-            }
-            else
-            {
-                costumeImage.color = new Color(1, 1, 1, 0);
+                Debug.Log("costume length = " + costume.sprites.Length);
             }
         }
     }
@@ -63,7 +64,7 @@ public class PauseCardDisp : MonoBehaviour
 
         // 오리 base 이미지, 애니메이션
         charAnim.gameObject.SetActive(true);
-        charAnim.runtimeAnimatorController = _wd.Animators.CardImageAnim;
+        charAnim.runtimeAnimatorController = _wd.Animators.PauseCardAnim;
 
         // 기본 장비 장착
         if (_wd.DefaultHead != null)
@@ -90,12 +91,8 @@ public class PauseCardDisp : MonoBehaviour
         if (_wd.costume != null)
         {
             costume = _wd.costume;
-            costumeImage.color = new Color(1, 1, 1, 1);
+            setCostumeImage.SetCostumeData(costume);
             Debug.Log("costume name = " + costume.name);
-        }
-        else
-        {
-            costumeImage.color = new Color(1, 1, 1, 0);
         }
     }
 
@@ -135,12 +132,6 @@ public class PauseCardDisp : MonoBehaviour
             stars[i].SetActive(true);
         }
     }
-    // 애니메이션 이벤트
-    public void SetCostumeSprite(int _index)
-    {
-        if (costume == null) return;
-        costumeImage.sprite = costume.sprites[_index];
-    }
 
     public void EmptyCardDisplay()
     {
@@ -172,5 +163,8 @@ public class PauseCardDisp : MonoBehaviour
         }
 
         focusImage.gameObject.SetActive(false);
+        leaderText.gameObject.SetActive(false);
+        leaderIcon.gameObject.SetActive(false);
+
     }
 }

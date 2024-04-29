@@ -42,6 +42,7 @@ public class AnimatorData
 {
     public RuntimeAnimatorController CardImageAnim;
     public RuntimeAnimatorController InGamePlayerAnim;
+    public RuntimeAnimatorController PauseCardAnim;
 }
 
 [CreateAssetMenu]
