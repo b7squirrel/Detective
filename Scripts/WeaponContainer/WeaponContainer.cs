@@ -45,7 +45,7 @@ public class WeaponContainer : MonoBehaviour
         weaponContainerAnims[0].SetAnimState(1f);
         for (int i = weaponContainers.Count - 1; i > 0; i--)
         {
-            float speed = (i == 1) ? moveSpeed - 1 : moveSpeed; // 플레이어의 바로 뒤 아이는 조금 간격을 더 두자
+            float speed = (i == 1) ? moveSpeed - 1.6f : moveSpeed; // 플레이어의 바로 뒤 아이는 조금 간격을 더 두자
 
             weaponContainers[i].position =
                 Vector2.Lerp(weaponContainers[i].position, weaponContainers[i - 1].position, speed * Time.deltaTime);
@@ -88,13 +88,13 @@ public class WeaponContainer : MonoBehaviour
         if (isInitialWeapon)
         {
             container.SetParent(transform);
-            container.transform.localScale = Vector2.one * 1.2f /1.2f;
+            container.transform.localScale = Vector2.one * 1f;
             wa.SetPlayerEquipmentSprites();
         }
         else
         {
             container.SetParent(weaponContainerGroup.transform);
-            container.transform.localScale = .7f /.7f * Vector2.one;
+            container.transform.localScale = .8f * Vector2.one;
             //container.transform.localScale = Vector2.one;
             wa.SetEquipmentSprites(wd);
         }
