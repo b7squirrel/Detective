@@ -76,7 +76,7 @@ public class LaunchManager : MonoBehaviour
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
         //card.Remove(currentLeadOri);
 
-        field.GenerateAllCardsOfType(card);
+        field.GenerateAllLaunchCardOfType(card, currentLeadOri);
         SetHalo(true);
     }
     void SetLead(CardData lead)
