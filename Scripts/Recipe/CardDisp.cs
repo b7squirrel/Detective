@@ -20,6 +20,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected GameObject starPrefab;
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
     [SerializeField] GameObject button; // 버튼을 활성, 비활성 하기 위해
+    [SerializeField] GameObject haloSelected; // 선택된 카드 주변 Halo
     GameObject[] stars;
 
     public void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
@@ -158,6 +159,11 @@ public class CardDisp : MonoBehaviour
         equippedText.SetActive(_isActive);
     }
 
+    public void SetHalo(bool _isActive)
+    {
+        if (haloSelected == null) return;
+        haloSelected.SetActive(_isActive);
+    }
     public void EmptyCardDisplay()
     {
         // 별 비활성화

@@ -46,4 +46,8 @@ public class LaunchSlotAction : MonoBehaviour
     {
         currentSlotType = launchSlotType;
     }
+    public LaunchSlotType GetSlotType()
+    {
+        return currentSlotType;
+    }
 }

@@ -74,9 +74,10 @@ public class LaunchManager : MonoBehaviour
         card = cardDataManager.GetMyCardList().FindAll(x => x.Type == oriType);
 
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
-        card.Remove(currentLeadOri);
+        //card.Remove(currentLeadOri);
 
         field.GenerateAllCardsOfType(card);
+        SetHalo(true);
     }
     void SetLead(CardData lead)
     {
@@ -98,6 +99,18 @@ public class LaunchManager : MonoBehaviour
         
         CloseField();
         SetLead(newLead);
+    }
+    public void SetHalo(bool _isActive)
+    {
+        CardSlot[] _cardSlot = field.GetComponentsInChildren<CardSlot>();
+        for (int i = 0; i < _cardSlot.Length; i++)
+        {
+            if (_cardSlot[i].GetCardData().ID == currentLead.ID)
+            {
+                _cardSlot[i].GetComponent<CardDisp>().SetHalo(true);
+                return;
+            }
+        }
     }
     public void CloseField()
     {
