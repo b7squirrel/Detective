@@ -76,6 +76,7 @@ public class WeaponBase : MonoBehaviour
     protected virtual void SetAngle()
     {
         List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(2);
+        if (closestEnemyPosition == null) return;
         dir = GetDirection(closestEnemyPosition[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 

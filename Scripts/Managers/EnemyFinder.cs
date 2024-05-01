@@ -90,6 +90,7 @@ public class EnemyFinder : MonoBehaviour
     public List<Vector2> GetEnemies(int _enemyNumbers)
     {
         List<Vector2> enemies = new();
+        if (pickedEnemies.Count == 0) return null;
         for (int i = 0; i < _enemyNumbers; i++)
         {
             enemies.Add(pickedEnemies[i]);

@@ -128,7 +128,9 @@ public class WeaponManager : MonoBehaviour
 
     internal void UpgradeWeapon(UpgradeData upgradeData)
     {
-        WeaponBase weaponUpgrade = weapons.Find(wb => wb.weaponData == upgradeData.weaponData);
+        // weapon data를 비교하지 않고 weapon data의 이름을 비교
+        // 등급이 높은 오리를 리드로 했을 때도 업그레이드가 잘 될 수 있도록
+        WeaponBase weaponUpgrade = weapons.Find(wb => wb.weaponData.Name == upgradeData.weaponData.Name);
         weaponUpgrade.Upgrade(upgradeData);
 
         WeaponData wd = weaponUpgrade.weaponData;
