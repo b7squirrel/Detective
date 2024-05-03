@@ -189,9 +189,22 @@ public class Level : MonoBehaviour
 
             for (int i = randomPool.Count - 1; i > index; i--)
             {
-                if (randomPool[i].id == randomPool[index].id)
+                // 무기 업그레이드라면 무기 업그레이드끼리만 비교
+                if(randomPool[i].weaponData != null && randomPool[index].weaponData != null)
                 {
-                    randomPool.Remove(randomPool[i]);
+                    if (randomPool[i].weaponData.Name == randomPool[index].weaponData.Name)
+                    {
+                        randomPool.Remove(randomPool[i]);
+                        continue;
+                    }
+                }
+                // 아이템 업그레이드라면 아이템 업그레이드끼리만 비교
+                if (randomPool[i].item != null && randomPool[index].item != null)
+                {
+                    if (randomPool[i].item.Name == randomPool[index].item.Name)
+                    {
+                        randomPool.Remove(randomPool[i]);
+                    }
                 }
             }
 
@@ -233,7 +246,8 @@ public class Level : MonoBehaviour
     // 알에서 중복되는 무기가 나오지 않도록 하기위한 플래그
     public bool HavingWeapon(UpgradeData item)
     {
-        UpgradeData identicalWeapon = acquiredUpgrades.Find(x => x.id == item.id);
+        UpgradeData identicalWeapon = 
+            acquiredUpgrades.Find(x => x.weaponData.Name == item.weaponData.Name);
         if (identicalWeapon == null)
             return false;
 

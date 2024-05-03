@@ -14,7 +14,6 @@ public enum UpgradeType
 [CreateAssetMenu]
 public class UpgradeData : ScriptableObject
 {
-    public int id;
     public UpgradeType upgradeType;
     public string Name;
     [TextArea] public string description;
