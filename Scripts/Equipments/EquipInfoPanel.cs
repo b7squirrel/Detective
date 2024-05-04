@@ -6,6 +6,7 @@ public class EquipInfoPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI Name;
     [SerializeField] TMPro.TextMeshProUGUI Level;
     [SerializeField] TMPro.TextMeshProUGUI attribute;
+    [SerializeField] UnityEngine.UI.Image NameLabel;
     [SerializeField] UnityEngine.UI.Image itemImage;
     [SerializeField] Animator anim;
     [SerializeField] UnityEngine.UI.Image attributeImage;
@@ -20,19 +21,21 @@ public class EquipInfoPanel : MonoBehaviour
     {
         this.cardDisp = _cardDisp;
         
-        grade.text = cardData.Grade.ToString();
+        grade.text = MyGrade.mGrades[cardData.Grade].ToString();
+        grade.color = MyGrade.GradeColors[cardData.Grade];
+        NameLabel.color = MyGrade.GradeColors[cardData.Grade];
         Name.text = cardData.Name;
-        Level.text = cardData.Level.ToString();
+        Level.text = "LV " + StaticValues.MaxLevel.ToString() + " / " + cardData.Level.ToString();
 
         if(cardData.Atk != 0) 
         {
             attributeImage.sprite = atkIcon;
-            attribute.text = cardData.Atk.ToString();
+            attribute.text = "+ " + cardData.Atk.ToString();
         }
         else if(cardData.Hp != 0)
         {
             attributeImage.sprite = hpIcon;
-            attribute.text = cardData.Hp.ToString();
+            attribute.text = "+ " + cardData.Hp.ToString();
         }
         
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);

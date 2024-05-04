@@ -1,4 +1,6 @@
 ﻿// Slot Action
+using UnityEngine;
+
 public enum SlotType { Field, Up, Mat, None };
 public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
 public enum LaunchSlotType { Field, Up, None }
@@ -23,6 +25,17 @@ public class MyGrade
     public static int Epic = 2;
     public static int Unique = 3;
     public static int Legendary = 4;
+
+    public static string[] mGrades = { "Common", "Rare", "Epic", "Unique", "Legendary" };
+
+    public static Color[] GradeColors = new Color[]
+    {
+        new Color(.9f,.9f,.9f), // white
+        new Color(1,0.7f,0), // yellow
+        new Color(0,0.8f,1), // blue
+        new Color(0.2f,1,0), // green
+        new Color(1,0.3f,0.9f) // purple
+    };
 }
 
 public class StaticValues
