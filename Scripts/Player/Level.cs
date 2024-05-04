@@ -246,8 +246,16 @@ public class Level : MonoBehaviour
     // 알에서 중복되는 무기가 나오지 않도록 하기위한 플래그
     public bool HavingWeapon(UpgradeData item)
     {
+        List<UpgradeData> weaponUpgrade = new();
+        for (int i = 0; i < acquiredUpgrades.Count; i++)
+        {
+            if (acquiredUpgrades[i].weaponData != null)
+            {
+                weaponUpgrade.Add(acquiredUpgrades[i]);
+            }
+        }
         UpgradeData identicalWeapon = 
-            acquiredUpgrades.Find(x => x.weaponData.Name == item.weaponData.Name);
+            weaponUpgrade.Find(x => x.weaponData.Name == item.weaponData.Name);
         if (identicalWeapon == null)
             return false;
 

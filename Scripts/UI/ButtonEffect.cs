@@ -8,6 +8,8 @@ public class ButtonEffect : MonoBehaviour
 {
     [SerializeField] AudioClip buttonSound;
     [SerializeField] GameObject buttonEffect;
+    [SerializeField] bool shouldBeLocked;
+    [SerializeField] bool ignoreButtonEffectAnim;
     Button myButton;
     void Start()
     {
@@ -22,10 +24,13 @@ public class ButtonEffect : MonoBehaviour
     }
     public void LockButton()
     {
+        if(shouldBeLocked == false) { return; }
         GetComponent<Button>().interactable = false;
     }
     public void PlayAnimation()
     {
+        if (ignoreButtonEffectAnim) return;
+        if (myButton.GetComponent<Animator>() == null) return;
         myButton.GetComponent<Animator>().SetTrigger("Pressed");
     }
 

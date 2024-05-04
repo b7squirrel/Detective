@@ -79,6 +79,8 @@ public class LightningWeapon : WeaponBase
         for (int i = 0; i < _secondShootPoint.Count; i++)
         {
             int targetIndex = Random.Range(0, targets.Count);
+            Debug.Log("target count = " + targets.Count + " targetIndex = " + targetIndex);
+            if (targets.Count == 0) continue;
             endPosition = targets[targetIndex];
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightningSynergy);
             LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();

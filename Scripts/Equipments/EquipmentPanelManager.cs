@@ -40,7 +40,6 @@ public class EquipmentPanelManager : MonoBehaviour
     Tween charWarningLack;
     Tween charWarningMax;
 
-
     void Awake()
     {
         cardDataManager = FindObjectOfType<CardDataManager>();

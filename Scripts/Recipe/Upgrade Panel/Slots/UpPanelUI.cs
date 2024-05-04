@@ -72,8 +72,8 @@ public class UpPanelUI : MonoBehaviour
 
     void UpgradeConfirmationAnimation() // 강화 확인 애님
     {
-        fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(0, 0), .15f).SetEase(Ease.InBack);
         upgradeConfirmationButton.localScale = Vector2.zero;
+        fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(0, 0), .15f).SetEase(Ease.InBack);
         upgradeConfirmationButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -560f);
         StartCoroutine(UpgradeConfirmationAnimationCo());
     }
@@ -81,7 +81,7 @@ public class UpPanelUI : MonoBehaviour
     {
         yield return new WaitForSeconds(.15f);
         upgradeConfirmationButton.localScale = .7f * Vector2.one;
-        upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -520), .15f).SetEase(Ease.OutBack);
+        upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -560f), .15f).SetEase(Ease.OutBack);
         upgradeConfirmationButton.DOScale(1f, .15f).SetEase(Ease.OutBack);
     }
     void DeactivateUpgradeConfimation()
