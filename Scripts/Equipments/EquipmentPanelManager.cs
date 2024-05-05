@@ -95,6 +95,7 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         cardToEquip = null;
 
+
         ClearAllFieldSlots();
         List<CardData> card = new();
 

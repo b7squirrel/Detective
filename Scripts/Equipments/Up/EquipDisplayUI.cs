@@ -8,8 +8,11 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] Transform ribbon;
     [SerializeField] GameObject halo;
     [SerializeField] GameObject titleRibbon;
+    [SerializeField] GameObject SkillDescriptionPanel;
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
+    [SerializeField] protected TMPro.TextMeshProUGUI SkillName;
+    [SerializeField] protected TMPro.TextMeshProUGUI SkillDescription;
     [SerializeField] protected GameObject starPrefab;
     GameObject[] stars;
     [SerializeField] Animator charImage;
@@ -36,9 +39,13 @@ public class EquipDisplayUI : MonoBehaviour
         int intEvoStage = charCardData.EvoStage;
         SetNumStar(intEvoStage + 1);
 
+        SkillDescriptionPanel.SetActive(true);
+        SkillName.text = Skills.SkillNames[charCardData.PassiveSkill - 1];
+        SkillDescription.text = Skills.SkillDescriptions[charCardData.PassiveSkill - 1];
+
         for (int i = 0; i < 5; i++)
         {
-            if(i == intGrade)
+            if (i == intGrade)
             {
                 cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
                 ribbon.GetChild(intGrade).gameObject.SetActive(true);
@@ -146,6 +153,12 @@ public class EquipDisplayUI : MonoBehaviour
     {
         // Base Container 비활성화
         cardBaseContainer.gameObject.SetActive(false);
+
+        // 스킬 설명 패널 비활성화
+        SkillDescriptionPanel.SetActive(false);
+
+        // 뒤로 가기 버튼 비 활성화
+        backButton.SetActive(false);
 
         // 별 비활성화
         if (stars != null)
