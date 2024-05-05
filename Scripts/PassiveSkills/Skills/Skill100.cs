@@ -1,5 +1,10 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 모든 오리들의 방어 콜라이더 100% (아직 구현 안했음)
+/// 지금은 skill500을 복제해 놓았음
+/// Steel Body
+/// </summary>
 public class Skill100 : MonoBehaviour, ISkill
 {
     public int Name { get; set; } = 100;

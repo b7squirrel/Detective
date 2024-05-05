@@ -30,11 +30,39 @@ public class MyGrade
 
     public static Color[] GradeColors = new Color[]
     {
-        new Color(.9f,.9f,.9f), // white
-        new Color(1,0.7f,0), // yellow
+        new Color(.6f,.6f,.6f), // white
+        new Color(1,0.8f,0), // yellow
         new Color(0,0.8f,1), // blue
-        new Color(0.2f,1,0), // green
-        new Color(1,0.3f,0.9f) // purple
+        new Color(0.5f,1,0), // green
+        new Color(.7f,0.3f,1) // purple
+    };
+
+    public static Color[] GradeGlowColors = new Color[]
+    {
+        new Color(1f,1f,1f,0.25f), // white
+        new Color(1,0.9f,0.6f,0.25f), // yellow
+        new Color(0.5f,0.9f,0.7f,0.25f), // blue
+        new Color(1,0.9f,0.7f, 0.25f), // green
+        new Color(1,0.5f,0.9f, 0.25f) // purple
+    };
+}
+public class Skills
+{
+    public static string[] SkillNames = new string[]
+    {
+        "Steel Body",
+        "Sluggish Slumber",
+        "Flash Damage",
+        "Invincible Body",
+        "Spicy Booster"
+    };
+    public static string[] SkillDescriptions = new string[]
+    {
+        "Your friends' body shield you from enemies.",
+        "Temporarily slow down all enemies on the screen for a duration.",
+        "Inflict periodic damage to all enemies on the screen.",
+        "Grant periodic invincibility to the player.",
+        "Periodically boost the attack power of both the player and allies."
     };
 }
 

@@ -15,19 +15,22 @@ MonoBehaviour:
   grade: 2
   Name: Cowboy
   charImage: {fileID: 21300000, guid: a6589f57e09bb324ebca7250d7412b28, type: 3}
+  costume: {fileID: 0}
   SynergyWeapon: Akimbo
   SynergyItem: {fileID: 11400000, guid: 6fed794634024654c8c2ee88559e9bae, type: 2}
   Animators:
     CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
     InGamePlayerAnim: {fileID: 9100000, guid: 70c3689a5431d5c45bd3dd76c5a7961d, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: f29159a2137803c4c8a44c194b3b8790, type: 2}
   DefaultHead: {fileID: 1591285406, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
   DefaultChest: {fileID: 735485920, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
   DefaultFace: {fileID: 664530602, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
   DefaultHands: {fileID: -441495344, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
+  charEffectImage: {fileID: 0}
   costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 5831665795245939412, guid: 291aed483e7745e40b52be27fc10bc5a, type: 3}
   stats:
-    damage: 20
+    damage: 40
     timeToAttack: 1.1
     numberOfAttacks: 1
     sizeOfArea: 0

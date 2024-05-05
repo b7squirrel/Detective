@@ -138,7 +138,6 @@ public class EquipDisplayUI : MonoBehaviour
         // 등급만큼 별 활성화하고 별리스트에 넣기
         for (int i = 0; i < numStars; i++)
         {
-            Debug.Log("num stars to make = " + numStars + " 1개 추가");
             stars[i].SetActive(true);
         }
     }

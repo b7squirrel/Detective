@@ -16,7 +16,8 @@ public class EquipmentSlotsManager : MonoBehaviour
     {
         instantCharCard = charCardData;
 
-        int charAtk = cardDictionary.GetWeaponItemData(charCardData).weaponData.stats.damage;
+        //int charAtk = cardDictionary.GetWeaponItemData(charCardData).weaponData.stats.damage;
+        int charAtk = charCardData.Atk;
         int charHp = charCardData.Hp;
         currentAttribute = new OriAttribute(charAtk, charHp);
 

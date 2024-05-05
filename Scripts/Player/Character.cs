@@ -97,6 +97,7 @@ public class Character : MonoBehaviour
         }
         MaxHealth = GameManager.instance.startingDataContainer.GetLeadAttr().Hp;
         DamageBonus = GameManager.instance.startingDataContainer.GetLeadAttr().Atk;
+        Debug.Log("In Character, Damage Bonus = " + DamageBonus);
     }
 
     public void TakeDamage(int damage)

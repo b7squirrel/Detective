@@ -78,6 +78,7 @@ public class StatManager : MonoBehaviour
         int oriAtk = oriCard.Atk;
         int oriHp = oriCard.Hp;
         OriAttribute leadAttr = new OriAttribute(oriAtk, oriHp);
+        Debug.Log("Ori Atk = " + oriAtk + " Ori HP = " +  oriHp);
 
         if(lead != null)
         {
