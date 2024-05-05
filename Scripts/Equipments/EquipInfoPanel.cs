@@ -61,7 +61,7 @@ public class EquipInfoPanel : MonoBehaviour
 
         unEquipButton.SetActive(!isEquipButton);
     }
-    public SetWeaponInfoPanel(CardData _cardData)
+    public void SetWeaponInfoPanel(CardData _cardData)
     {
 
     }
