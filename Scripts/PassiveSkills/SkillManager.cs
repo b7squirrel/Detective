@@ -4,6 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 플레이어에 붙여서 사용.
 /// 스킬을 검색해서 쿨다운을 설정하고 UseSkill을 이벤트에 등록
+/// 100자리 Skill, 10자리 Evo Level, 1자리 Grade
 /// </summary>
 public class SkillManager : MonoBehaviour
 {

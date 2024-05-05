@@ -58,11 +58,11 @@ public class Skills
     };
     public static string[] SkillDescriptions = new string[]
     {
-        "Your friends' body shield you from enemies.",
-        "Temporarily slow down all enemies on the screen for a duration.",
-        "Inflict periodic damage to all enemies on the screen.",
-        "Grant periodic invincibility to the player.",
-        "Periodically boost the attack power of both the player and allies."
+        "-Your friends' body shield you from enemies.",
+        "-Temporarily slow down all enemies on the screen for a duration.",
+        "-Inflict periodic damage to all enemies on the screen.",
+        "-Grant periodic invincibility to the player.",
+        "-Periodically boost the attack power of both the player and allies."
     };
 }
 

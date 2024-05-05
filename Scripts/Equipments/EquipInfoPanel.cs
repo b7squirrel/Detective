@@ -6,9 +6,13 @@ public class EquipInfoPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI Name;
     [SerializeField] TMPro.TextMeshProUGUI Level;
     [SerializeField] TMPro.TextMeshProUGUI attribute;
+    [SerializeField] TMPro.TextMeshProUGUI skillName;
+    [SerializeField] TMPro.TextMeshProUGUI skillDescription;
+    [SerializeField] TMPro.TextMeshProUGUI skillEvoLevel;
     [SerializeField] UnityEngine.UI.Image NameLabel;
     [SerializeField] UnityEngine.UI.Image NameLabelGlow;
     [SerializeField] UnityEngine.UI.Image itemImage;
+    [SerializeField] UnityEngine.UI.Image skillLabel;
     [SerializeField] Animator anim;
     [SerializeField] UnityEngine.UI.Image attributeImage;
     [SerializeField] Sprite atkIcon, hpIcon;
@@ -35,7 +39,6 @@ public class EquipInfoPanel : MonoBehaviour
         {
             attributeImage.sprite = atkIcon;
             attribute.text = "+ " + cardData.Atk.ToString();
-            Debug.Log("ATK = " + cardData.Atk.ToString());
         }
         else if (cardData.Hp != 0)
         {
@@ -58,6 +61,11 @@ public class EquipInfoPanel : MonoBehaviour
 
         unEquipButton.SetActive(!isEquipButton);
     }
+    public SetWeaponInfoPanel(CardData _cardData)
+    {
+
+    }
+    
     // 레벨업을 하면 레벨과 속성을 업데이트
     public void UpdatePanel(int _level, int _attribute)
     {
@@ -74,6 +82,28 @@ public class EquipInfoPanel : MonoBehaviour
                 continue;
             }
             itemCardBase[i].SetActive(false);
+        }
+    }
+    void GetPassiveSkillLevel(CardData _cardData)
+    {
+        if (_cardData.PassiveSkill >= 0 && _cardData.PassiveSkill < Skills.SkillNames.Length)
+        {
+            skillName.text = Skills.SkillNames[_cardData.PassiveSkill].ToString();
+            skillDescription.text = Skills.SkillDescriptions[_cardData.PassiveSkill];
+            skillLabel.color = MyGrade.GradeColors[_cardData.Grade];
+            int skillFullNumber = GameManager.instance.startingDataContainer.GetSkillName();
+            if (skillFullNumber % 10 == 0)
+            {
+                skillEvoLevel.text = "I";
+            }
+            if (skillFullNumber % 10 == 1)
+            {
+                skillEvoLevel.text = "II";
+            }
+            if (skillFullNumber % 10 == 2)
+            {
+                skillEvoLevel.text = "III";
+            }
         }
     }
 }
