@@ -383,21 +383,17 @@ public class UpPanelManager : MonoBehaviour
         }
 
         // 생성된 카드를 내 카드 리스트에 저장
-        CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newCardGrade);
-        newCardData.ID = CardToUpgrade.ID;
-        newCardData.EvoStage = newCardEvoStage;
-        newCardData.Level = 1;
-        newCardData.PassiveSkill = CardToUpgrade.PassiveSkill;
-        cardDataManager.AddUpgradedCardToMyCardList(newCardData);
+        //CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newCardGrade);
+        CardToUpgrade.EvoStage = newCardEvoStage;
+        CardToUpgrade.Level = 1;
 
-        cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제
         cardDataManager.RemoveCardFromMyCardList(cardToFeed);
 
         cardList.InitCardList(); // 장비 슬롯들 업데이트
 
         // 합성 연출 후 강화 성공 패널로
         matField.gameObject.SetActive(false);
-        StartCoroutine(UpgradeUICo(newCardData));
+        StartCoroutine(UpgradeUICo(CardToUpgrade));
     }
 
     IEnumerator UpgradeUICo(CardData upgradedCardData)
