@@ -27,7 +27,6 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject charUpgradeButton; // 디스플레이되는 오리카드 업그레이드 버튼
 
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
-    [SerializeField] CanvasGroup charWarningLMaxLevelCanvasGroup;
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr)
     {
@@ -193,7 +192,6 @@ public class EquipDisplayUI : MonoBehaviour
 
         GetComponentInParent<EquipmentPanelManager>().TempKillAllTweens();
         charWarningLackCanvasGroup.gameObject.SetActive(false);
-        charWarningLMaxLevelCanvasGroup.gameObject.SetActive(false);
 
 
     }
@@ -204,7 +202,6 @@ public class EquipDisplayUI : MonoBehaviour
         charUpgradeButton.SetActive(true);
 
         charWarningLackCanvasGroup.gameObject.SetActive(true);
-        charWarningLMaxLevelCanvasGroup.gameObject.SetActive(true);
         // charImage.color = new Color(1, 1, 1, 1);
     }
 }

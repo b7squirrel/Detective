@@ -27,18 +27,22 @@ public class EquipmentPanelManager : MonoBehaviour
     PlayerDataManager playerDataManager;
     [SerializeField] TMPro.TextMeshProUGUI upgradeCost;
     [SerializeField] CanvasGroup warningLackCanvasGroup;
-    [SerializeField] CanvasGroup warningLMaxLevelCanvasGroup;
     [SerializeField] Button upgradeButton;
+    [SerializeField] GameObject EquipCoinImage;
     Tween warningLack;
     Tween warningMax;
 
     [Header("Char Card Slot")]
     [SerializeField] TMPro.TextMeshProUGUI charUpgradeCost;
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
-    [SerializeField] CanvasGroup charWarningLMaxLevelCanvasGroup;
     [SerializeField] Button charUpgradeButton;
+    [SerializeField] GameObject CharCoinImage;
     Tween charWarningLack;
     Tween charWarningMax;
+    float textOffset = 23.5f;
+    Coroutine hideCoroutine;
+
+    [SerializeField] AudioClip maxLevelSound;
 
     void Awake()
     {
@@ -54,9 +58,7 @@ public class EquipmentPanelManager : MonoBehaviour
         playerDataManager = FindObjectOfType<PlayerDataManager>();
 
         warningLackCanvasGroup.alpha = 0;
-        warningLMaxLevelCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
-        charWarningLMaxLevelCanvasGroup.alpha = 0;
     }
 
     void OnEnable()
@@ -224,11 +226,11 @@ public class EquipmentPanelManager : MonoBehaviour
         this.cardDisp = cardDisp;
 
         warningLackCanvasGroup.alpha = 0;
-        warningLMaxLevelCanvasGroup.alpha = 0;
 
         int level = itemCardData.Level;
         UpdateUpgradeCost(level, upgradeCost);
 
+        UpdateButtonState(charUpgradeButton, true);
         UpdateButtonState(upgradeButton, false);
     }
 
@@ -242,15 +244,22 @@ public class EquipmentPanelManager : MonoBehaviour
     /// </summary>
     public void UpgradeCardOnDisplay()
     {
+        charUpgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = true;
+
         int level = CardOnDisplay.Level;
         int amountToUpgrade = GetAmountToUpgrade(level);
         int candyNumbers = playerDataManager.GetCurrentCandyNumber();
 
         if (amountToUpgrade > candyNumbers)
         {
-            // 업그레이드가 가능하지 않게 하기
+            // 업그레이드 버튼 사운드 다르게 
+            charUpgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = false;
+
+            // 코인 부족 경고 메시지 띄우고 종료해서 업그레이드가 되지 않도록 하기
             charWarningLack = charWarningLackCanvasGroup.DOFade(1, 1f);
-            StartCoroutine(HideWarning(charWarningLackCanvasGroup));
+
+            if (hideCoroutine != null) StopCoroutine(hideCoroutine);
+            hideCoroutine = StartCoroutine(HideWarning(charWarningLackCanvasGroup));
             return;
         }
 
@@ -274,15 +283,23 @@ public class EquipmentPanelManager : MonoBehaviour
     /// </summary>
     public void UpgradeCard()
     {
+        upgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = true;
+
         int level = cardToEquip.Level;
         int amountToUpgrade = GetAmountToUpgrade(level);
         int candyNumbers = playerDataManager.GetCurrentCandyNumber();
 
+        // 코인이 부족하면 경고 메시지를 띄우고 종료
         if (amountToUpgrade > candyNumbers)
         {
+            // 업그레이드 버튼 사운드 다르게 
+            upgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = false;
+
             // 업그레이드가 가능하지 않게 하기
             warningLack = warningLackCanvasGroup.DOFade(1, 1f);
-            StartCoroutine(HideWarning(warningLackCanvasGroup));
+
+            if (hideCoroutine != null) StopCoroutine(hideCoroutine);
+            hideCoroutine = StartCoroutine(HideWarning(warningLackCanvasGroup));
             return;
         }
 
@@ -323,14 +340,18 @@ public class EquipmentPanelManager : MonoBehaviour
     /// </summary>
     void UpdateButtonState(Button button, bool isChar)
     {
+        CharCoinImage.SetActive(true);
+        EquipCoinImage.SetActive(true);
+
         if (isChar)
         {
             if (CardOnDisplay.Level == StaticValues.MaxLevel)
             {
-                charWarningMax = charWarningLMaxLevelCanvasGroup.DOFade(1, 1f);
-                StartCoroutine(HideWarning(charWarningLMaxLevelCanvasGroup));
-                charUpgradeCost.text = "Max";
+                charUpgradeCost.text = "Max Level";
                 button.interactable = false;
+
+                //CharCoinImage.SetActive(false);
+                SoundManager.instance.Play(maxLevelSound);
                 return;
             }
         }
@@ -338,19 +359,20 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             if (cardToEquip.Level == StaticValues.MaxLevel)
             {
-                warningLack = warningLMaxLevelCanvasGroup.DOFade(1, 1f);
-                upgradeCost.text = "Max";
+                upgradeCost.text = "Max Level";
                 button.interactable = false;
+
+                //EquipCoinImage.SetActive(false);
+                SoundManager.instance.Play(maxLevelSound);
                 return;
             }
         }
-
         button.interactable = true;
     }
 
     IEnumerator HideWarning(CanvasGroup canvasGroupToHide)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         canvasGroupToHide.DOFade(0, 1f);
     }
     public void TempKillAllTweens()

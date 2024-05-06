@@ -1,15 +1,19 @@
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// 실제 버튼의 행동과는 상관 없는 기능들. 실제 행동들은 모두 유니티 이벤트로 등록
+/// 코인이 부족하다든지 할 때는 shouldBeInitialSound를 false로 만들어서 두 번째 사운드 재생
 /// </summary>
 public class ButtonEffect : MonoBehaviour
 {
     [SerializeField] AudioClip buttonSound;
+    [SerializeField] AudioClip buttonSoundAlt;
     [SerializeField] GameObject buttonEffect;
     [SerializeField] bool shouldBeLocked;
     [SerializeField] bool ignoreButtonEffectAnim;
+    public bool ShoutldBeInitialSound { get; set; } = true;
     Button myButton;
     void Start()
     {
@@ -40,6 +44,15 @@ public class ButtonEffect : MonoBehaviour
     }
     public void PlayButtonSound()
     {
-        SoundManager.instance.Play(buttonSound);
+        Debug.Log("Button Flag = " + ShoutldBeInitialSound);
+        if (ShoutldBeInitialSound)
+        {
+            SoundManager.instance.Play(buttonSound);
+        }
+        else
+        {
+            SoundManager.instance.Play(buttonSoundAlt);
+
+        }
     }
 }
