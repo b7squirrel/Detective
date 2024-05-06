@@ -372,6 +372,7 @@ public class UpPanelManager : MonoBehaviour
 
             if (newCardGrade > StaticValues.MaxGrade - 1) // Grade가 최고 등급을 초과하면
             {
+                // Grade와 EvoStage를 최고 등급으로 되돌림
                 newCardGrade = StaticValues.MaxGrade - 1;
                 newCardEvoStage = StaticValues.MaxEvoStage - 1;
             }
@@ -386,6 +387,7 @@ public class UpPanelManager : MonoBehaviour
         newCardData.ID = CardToUpgrade.ID;
         newCardData.EvoStage = newCardEvoStage;
         newCardData.Level = 1;
+        newCardData.PassiveSkill = CardToUpgrade.PassiveSkill;
         cardDataManager.AddUpgradedCardToMyCardList(newCardData);
 
         cardDataManager.RemoveCardFromMyCardList(CardToUpgrade);// 카드 데이터 삭제
