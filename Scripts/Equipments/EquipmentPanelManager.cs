@@ -26,7 +26,8 @@ public class EquipmentPanelManager : MonoBehaviour
     [Header("Equipment Slots")]
     PlayerDataManager playerDataManager;
     [SerializeField] TMPro.TextMeshProUGUI upgradeCost;
-    [SerializeField] CanvasGroup warningLackCanvasGroup;
+    [SerializeField] TMPro.TextMeshProUGUI itemMaxLevel;
+    [SerializeField] CanvasGroup warningLackCanvasGroup; // 아이템 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button upgradeButton;
     [SerializeField] GameObject EquipCoinImage;
     Tween warningLack;
@@ -34,7 +35,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
     [Header("Char Card Slot")]
     [SerializeField] TMPro.TextMeshProUGUI charUpgradeCost;
-    [SerializeField] CanvasGroup charWarningLackCanvasGroup;
+    [SerializeField] TMPro.TextMeshProUGUI charMaxLevel;
+    [SerializeField] CanvasGroup charWarningLackCanvasGroup; // 오리 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button charUpgradeButton;
     [SerializeField] GameObject CharCoinImage;
     Tween charWarningLack;
@@ -57,6 +59,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
         playerDataManager = FindObjectOfType<PlayerDataManager>();
 
+
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
     }
@@ -69,6 +72,11 @@ public class EquipmentPanelManager : MonoBehaviour
         CardOnDisplay = null;
         charUpgradeButton.gameObject.SetActive(false);
         ClearAllEquipmentSlots(); // logic, UI 모두 처리
+
+        if (hideCoroutine != null) StopCoroutine(hideCoroutine); // 경고 메시지 표시 도중 패널을 나갔다면, 돌아왔을 때 메시지를 없애기
+
+        warningLackCanvasGroup.alpha = 0;
+        charWarningLackCanvasGroup.alpha = 0;
     }
 
     // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출
@@ -276,6 +284,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.SetAtkHpStats(CardOnDisplay.Atk, CardOnDisplay.Hp);
 
         UpdateUpgradeCost(level, charUpgradeCost);
+        if (CheckIfMaxLevel(CardOnDisplay)) SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
         UpdateButtonState(charUpgradeButton, true);
     }
     /// <summary>
@@ -316,6 +325,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         UpdateUpgradeCost(level, upgradeCost);
+        if(CheckIfMaxLevel(cardToEquip)) SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
         UpdateButtonState(upgradeButton, false);
     }
 
@@ -351,7 +361,6 @@ public class EquipmentPanelManager : MonoBehaviour
                 button.interactable = false;
 
                 //CharCoinImage.SetActive(false);
-                SoundManager.instance.Play(maxLevelSound);
                 return;
             }
         }
@@ -363,11 +372,16 @@ public class EquipmentPanelManager : MonoBehaviour
                 button.interactable = false;
 
                 //EquipCoinImage.SetActive(false);
-                SoundManager.instance.Play(maxLevelSound);
                 return;
             }
         }
         button.interactable = true;
+    }
+    bool CheckIfMaxLevel(CardData _cardData)
+    {
+        if (_cardData.Level == StaticValues.MaxLevel)
+            return true;
+        return false;
     }
 
     IEnumerator HideWarning(CanvasGroup canvasGroupToHide)

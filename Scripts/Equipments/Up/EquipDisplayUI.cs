@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -80,6 +81,16 @@ public class EquipDisplayUI : MonoBehaviour
     {
         atk.text = _currentAtk.ToString();
         hp.text = _currnetHp.ToString();
+
+        StartCoroutine(PopFontSize(atk));
+        StartCoroutine(PopFontSize(hp));
+    }
+    IEnumerator PopFontSize(TMPro.TMP_Text _text)
+    {
+        float initFontSize = _text.fontSize;
+        _text.fontSize = _text.fontSize + 7f;
+        yield return new WaitForSeconds(.1f);
+        _text.fontSize = initFontSize;
     }
     // 오리 위에 장착된 장비 표시/ 숨기기
     public void SetEquipmentDisplay(CardData itemCardData, bool isAdding)

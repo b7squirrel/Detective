@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EquipInfoPanel : MonoBehaviour
@@ -61,16 +62,24 @@ public class EquipInfoPanel : MonoBehaviour
 
         unEquipButton.SetActive(!isEquipButton);
     }
-    public void SetWeaponInfoPanel(CardData _cardData)
-    {
-
-    }
     
     // 레벨업을 하면 레벨과 속성을 업데이트
     public void UpdatePanel(int _level, int _attribute)
     {
-        Level.text = _level.ToString();
+        Level.text = "LV " + _level.ToString() + " / " + StaticValues.MaxLevel.ToString();
         attribute.text = _attribute.ToString();
+
+        Debug.Log("Ugraded");
+        StartCoroutine(PopFontSize(Level));
+        StartCoroutine(PopFontSize(attribute));
+
+    }
+    IEnumerator PopFontSize(TMPro.TMP_Text _text)
+    {
+        float initFontSize = _text.fontSize;
+        _text.fontSize = _text.fontSize + 7f;
+        yield return new WaitForSeconds(.1f);
+        _text.fontSize = initFontSize;
     }
     void SetItemCardBase(int _index)
     {
