@@ -1,58 +1,45 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BombWeapon : WeaponBase
 {
     [SerializeField] GameObject bomb;
     [SerializeField] float verticalVelocity;
-    Vector2 target; //폭탄을 던질 지점
     [SerializeField] bool isClean;
     [SerializeField] AudioClip shootSFX;
 
-    Vector3[] targetDir = new Vector3[2];
+    Vector3[] targetDir = new Vector3[6]; //폭탄을 던질 지점
     [SerializeField] GameObject dot;
     Vector3 enemyDir;
 
     #region Attack
     protected override void Attack()
     {
-        FindLandingPositions(); // number Of Attacks 만큼 target을 잡음
+        List<Vector2> _enemyPos = EnemyFinder.instance.GetEnemies(1);
+        if (_enemyPos.Count == 0) { return; }
 
-        if (isClean) // 화면 상에 적이 없으면
-        {
-            isClean = false;
-            return;
-        }
         Vector3 axisVec = Vector3.forward;
-        enemyDir = (target - (Vector2)transform.position);
-        Debug.DrawLine(transform.position, target, Color.red);
+        enemyDir = (_enemyPos[0] - (Vector2)transform.position);
+        Debug.DrawLine(transform.position, _enemyPos[0], Color.red);
 
-        for (int i = 0; i < 2; i++)
+        float _degree = 360 / weaponStats.numberOfAttacks;
+        for (int i = 0; i < weaponStats.numberOfAttacks - 1; i++)
         {
-            targetDir[i] = Quaternion.AngleAxis((float)(120 * (i + 1)), axisVec) * enemyDir + transform.position;
-            // Debug.DrawLine(transform.position, targetDir[i], Color.yellow);
+            targetDir[i] = Quaternion.AngleAxis((float)(_degree * (i + 1)), axisVec) * enemyDir + transform.position;
             Debug.DrawLine(transform.position, targetDir[i], Color.yellow);
         }
 
-        GenProjectile(target);
-        
-        StartCoroutine(AttackCo());
+        GenProjectile(_enemyPos[0]);
 
-        // for (int i = 0; i < weaponStats.numberOfAttacks -1; i++)
-        // {
-        //     // targetDir[i] = Quaternion.AngleAxis((float)(120 * (i + 1)), axisVec) * enemyDir + transform.position;
-        //     GenProjectile(targetDir[i]);
-        // }
+        StartCoroutine(AttackCo());
     }
 
     IEnumerator AttackCo()
     {
-        // GenProjectile(target);
-        
-        for (int i = 0; i < weaponStats.numberOfAttacks -1; i++)
+        for (int i = 0; i < weaponStats.numberOfAttacks - 1; i++)
         {
             yield return new WaitForSeconds(.2f);
-            // targetDir[i] = Quaternion.AngleAxis((float)(120 * (i + 1)), axisVec) * enemyDir + transform.position;
             GenProjectile(targetDir[i]);
         }
     }
@@ -75,26 +62,4 @@ public class BombWeapon : WeaponBase
 
         SoundManager.instance.Play(shootSFX);
     }
-
-    #region Find Landing Position
-    void FindLandingPositions()
-    {
-        Vector2 center = Player.instance.transform.position;
-
-        Collider2D[] enemies =
-                Physics2D.OverlapAreaAll(center - new Vector2(halfWidth * .8f, halfHeight * .8f),
-                                            center + new Vector2(halfWidth * .8f, halfHeight * .8f), enemy);
-
-        if (enemies.Length == 0)
-        {
-            isClean = true;
-            return;
-        }
-
-        isClean = false;
-        int index = Random.Range(0, enemies.Length);
-        target = enemies[index].transform.position;
-        // Instantiate(dot, target, Quaternion.identity);
-    }
-    #endregion
 }
