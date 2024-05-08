@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// sizeOfArea를 지속 시간으로 사용하자
+/// <summary>
+/// sizeOfArea를 지속 시간으로 사용하자
+/// </summary>
 public class BeamWeapon : WeaponBase
 {
     [SerializeField] GameObject laserProjectile;
     [SerializeField] List<Transform> projectiles;
     bool isProjectileActive;
     float duration; // projectile 지속 시간
+    float normalDuration = .5f;
+    float synergyDuration = 1f;
 
     [SerializeField] GameObject muzzleFlash;
     GameObject muzzle; // muzzleFlash를 생성해서 담아두는 곳
@@ -22,6 +26,8 @@ public class BeamWeapon : WeaponBase
     protected override void Update()
     {
         base.Update();
+
+        // 회전판 회전
         transform.Rotate(Vector3.forward * weaponStats.projectileSpeed * Time.deltaTime);
 
         // 레이져가 비활성화 된 상태에서만 쿨타임이 돌아감
@@ -30,7 +36,7 @@ public class BeamWeapon : WeaponBase
             timer -= Time.deltaTime;
             if (timer < 0f)
             {
-                Attack();
+                Attack(); // attack 파라미터를 얻어옴. 
                 timer = weaponStats.timeToAttack;
             }
             return;
@@ -74,6 +80,7 @@ public class BeamWeapon : WeaponBase
         for (int i = 0; i < numberOfProjectilesToGen; i++)
         {
             Transform laserObject = Instantiate(laserProjectile, transform.position, Quaternion.identity).transform;
+            //GameObject laserObject = GameManager.instance.poolManager.GetMisc(laserProjectile);
             laserObject.parent = transform;
             projectiles.Add(laserObject);
         }
@@ -107,7 +114,9 @@ public class BeamWeapon : WeaponBase
         muzzle.gameObject.SetActive(true);
 
         isProjectileActive = true;
-        duration = .5f; // 레이져 애니메이션 길이
+
+        duration = isSynergyWeaponActivated ? synergyDuration : normalDuration;
+        Debug.Log("Duration = " + duration);
 
         // sound
         SoundManager.instance.Play(laserShoot);
@@ -123,5 +132,14 @@ public class BeamWeapon : WeaponBase
         timer = weaponStats.timeToAttack;
 
         muzzle.gameObject.SetActive(false);
+    }
+    public override void ActivateSynergyWeapon()
+    {
+        base.ActivateSynergyWeapon();
+        for (int i = 0; i < projectiles.Count; i++)
+        {
+            projectiles[i].GetComponent<BeamProjectile>().SetAnimToSynergy();
+        }
+        duration = synergyDuration; // 레이져 애니메이션 길이
     }
 }

@@ -155,6 +155,7 @@ public class WeaponContainer : MonoBehaviour
             if (wb.weaponData.Name == weaponData.Name)
             {
                 wb.ActivateSynergyWeapon();
+                Debug.Log("weapon name = " +  weaponData.Name + " synergy Activated");
             }
         }
     }

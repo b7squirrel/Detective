@@ -4,14 +4,18 @@ using UnityEngine;
 public class BeamProjectile : ProjectileBase
 {
     Animator[] anim;
+    int frameCount = 1; // 몇 프레임 간격으로 데미지를 입힐지 정하는 변수 
+    bool isSynergyActivated;
 
     void OnEnable()
     {
         if(anim == null) anim = GetComponentsInChildren<Animator>();
-
-        foreach (var item in anim)
+        if(isSynergyActivated )
         {
-            item.Play("LV1");
+            for( int i = 0; i < anim.Length; i++ )
+            {
+                anim[i].SetTrigger("Synergy");
+            }
         }
     }
 
@@ -27,7 +31,7 @@ public class BeamProjectile : ProjectileBase
 
     void CastDamage(Collider2D other)
     {
-        if (Time.frameCount % 3 != 0) // 3프레임 간격으로 데미지를 입힘
+        if (Time.frameCount % frameCount != 0) // 3프레임 간격으로 데미지를 입힘
             return;
 
         if (other.GetComponent<Idamageable>() == null)
@@ -57,5 +61,10 @@ public class BeamProjectile : ProjectileBase
     protected override void Update()
     {
         // do nothing
+    }
+    public void SetAnimToSynergy()
+    {
+        isSynergyActivated = true;
+        frameCount = 1;
     }
 }
