@@ -119,7 +119,8 @@ public class Spawner : MonoBehaviour
     public void SpawnObject(GameObject toSpawn)
     {
         Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
-        pickUP.position = spawnObjectPoint[Random.Range(0, spawnObjectPoint.Length)].position;
+        if (pickUP != null)
+            pickUP.position = spawnObjectPoint[Random.Range(0, spawnObjectPoint.Length)].position;
     }
 
     void GetAvailablePoints()

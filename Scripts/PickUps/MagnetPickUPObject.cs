@@ -6,11 +6,11 @@ public class MagnetPickUPObject : Collectable, IPickUpObject
     public void OnPickUp(Character character)
     {
         GameObject effect = GameManager.instance.poolManager.GetMisc(magnetEffect);
-        effect.transform.position = transform.position;
+        if (effect != null) effect.transform.position = transform.position;
 
         character.GetComponentInChildren<Magnetic>().MagneticField(60f);
     }
-    
+
     public override void OnHitMagnetField(Vector2 direction)
     {
         // 자력에 영향을 받지 않는다

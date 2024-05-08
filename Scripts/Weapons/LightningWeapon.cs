@@ -41,16 +41,19 @@ public class LightningWeapon : WeaponBase
         {
             endPosition = targets[i];
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
-            LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
-            boltScript.StartObject.transform.parent = ShootPoint;
-            boltScript.StartObject.transform.position = ShootPoint.position;
-            boltScript.EndObject.transform.position = endPosition;
+            if( bolt != null)
+            {
+                LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
+                boltScript.StartObject.transform.parent = ShootPoint;
+                boltScript.StartObject.transform.position = ShootPoint.position;
+                boltScript.EndObject.transform.position = endPosition;
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
-            ApplyDamage(colliders);
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
+                ApplyDamage(colliders);
 
-            SoundManager.instance.Play(strike);
-            StartCoroutine(DisableBolt(boltScript));
+                SoundManager.instance.Play(strike);
+                StartCoroutine(DisableBolt(boltScript));
+            }
         }
 
         List<Vector2> secondShootPoint = new List<Vector2>();
@@ -83,15 +86,18 @@ public class LightningWeapon : WeaponBase
             if (targets.Count == 0) continue;
             endPosition = targets[targetIndex];
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightningSynergy);
-            LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
-            boltScript.StartObject.transform.position = _secondShootPoint[i];
-            boltScript.EndObject.transform.position = endPosition;
+            if(bolt != null)
+            {
+                LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
+                boltScript.StartObject.transform.position = _secondShootPoint[i];
+                boltScript.EndObject.transform.position = endPosition;
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
-            ApplyDamage(colliders);
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
+                ApplyDamage(colliders);
 
-            SoundManager.instance.Play(strike);
-            StartCoroutine(DisableBolt(boltScript));
+                SoundManager.instance.Play(strike);
+                StartCoroutine(DisableBolt(boltScript));
+            }
         }
     }
 

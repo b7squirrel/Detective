@@ -435,6 +435,7 @@ GameObject:
   - component: {fileID: 843516042}
   - component: {fileID: 843516044}
   - component: {fileID: 843516043}
+  - component: {fileID: 6706297612598449107}
   m_Layer: 0
   m_Name: LV1_Laser
   m_TagString: Untagged
@@ -530,6 +531,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6706297612598449107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843516041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823b4dbe937f4d847b13dd41830bb0c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7658975051141258168
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,6 +625,7 @@ MonoBehaviour:
   <Speed>k__BackingField: 0
   <KnockBackSpeedFactor>k__BackingField: 0.7
   <TimeToLive>k__BackingField: 6
+  laserSprites: []
 --- !u!114 &249120600953712323
 MonoBehaviour:
   m_ObjectHideFlags: 0

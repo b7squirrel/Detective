@@ -93,6 +93,7 @@ public class PoolManager : MonoBehaviour
         if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
 
         string poolingTag = prefab.GetComponent<PoolingKey>().Key;
+        int maxNum = prefab.GetComponent<PoolingKey>().maxNum;
 
         if (miscPools.ContainsKey(poolingTag)) // 해당 key의 pool이 있다면
         {
@@ -124,17 +125,20 @@ public class PoolManager : MonoBehaviour
 
         // pool안의 오브젝트가 모두 사용중이라면 
         // pooling 태그 이름이 같은 폴더를 찾아서 자식으로 넣어줌
-
-        for (int i = 0; i < itemFolders.Count; i++)
+        if(miscPools[poolingTag].Count < maxNum || maxNum == 0) // maxNum == 0이면 갯수 제한 없음.
         {
-            if (itemFolders[i].name == poolingTag)
+            for (int i = 0; i < itemFolders.Count; i++)
             {
-                temp = itemFolders[i];
+                if (itemFolders[i].name == poolingTag)
+                {
+                    temp = itemFolders[i];
+                }
             }
+            select = Instantiate(prefab, temp.transform);
+            miscPools[poolingTag].Add(select);
+            return select;
         }
-        select = Instantiate(prefab, temp.transform);
-        miscPools[poolingTag].Add(select);
-        return select;
+        return null;
     }
 
     public GameObject GetGem(GameObject gem, int exp)

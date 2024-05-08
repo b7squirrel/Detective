@@ -29,8 +29,11 @@ public class DestructableObject : MonoBehaviour, Idamageable
 
         DropItem();
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
-        effect.transform.position = transform.position;
-        effect.transform.localScale = Vector2.one * 1.3f;
+        if (effect != null)
+        {
+            effect.transform.position = transform.position;
+            effect.transform.localScale = Vector2.one * 1.3f;
+        }
 
         if (currentHp <= 0)
         {

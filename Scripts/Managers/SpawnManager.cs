@@ -29,8 +29,9 @@ public class SpawnManager : MonoBehaviour
         }
         else
         {
-            pickup = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
-
+            GameObject o = GameManager.instance.poolManager.GetMisc(toSpawn);
+            if (o == null) return;
+            pickup = o.transform;
         }
 
         if (pickup.GetComponent<GemPickUpObject>() != null)

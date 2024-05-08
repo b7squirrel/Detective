@@ -34,6 +34,8 @@ public class TennisWeapon : WeaponBase
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
             GameObject tennisBall = GameManager.instance.poolManager.GetMisc(weaponTennisBall);
+            if (tennisBall == null) return;
+            
             tennisBall.transform.position = ShootPoint.position;
 
             float index = 0f;

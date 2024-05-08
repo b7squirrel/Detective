@@ -109,13 +109,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 
+  isSubBoss: 0
+  isBoss: 0
+  numberOfSubBossDrops: 0
+  numberOfBossDrops: 0
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
-  whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
+  dieEffectPrefeab: {fileID: 0}
+  dieExplosionPrefeab: {fileID: 0}
+  knockbackEffect: {fileID: 0}
   hitEffectPoint: {fileID: 6414451162540868825}
   whiteFlashDuration: 0.08
   knockBackSpeed: 0
+  knockBackDelay: 0
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
@@ -138,10 +145,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItemPrefab:
   - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+  noMultipleDrops: 0
+  dropLastItemPrefab: {fileID: 0}
+  numberOfLastDrops: 0
+  multipleDrops: {fileID: 0}
   chance: 1
   exp: 0
   hp: 0
-  isGem: 1
+  isChest: 0
 --- !u!114 &5812712469324551067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,7 +238,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -252,7 +263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.3, y: -0.17}
 --- !u!114 &3955730630534591613
 MonoBehaviour:
   m_ObjectHideFlags: 0

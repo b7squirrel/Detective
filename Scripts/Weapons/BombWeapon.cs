@@ -48,18 +48,20 @@ public class BombWeapon : WeaponBase
     void GenProjectile(Vector3 targetVec)
     {
         GameObject bombObject = GameManager.instance.poolManager.GetMisc(bomb);
-        bombObject.transform.position = transform.position;
+        if(bombObject != null)
+        {
+            bombObject.transform.position = transform.position;
 
-        ProjectileBase projectileBase = bombObject.GetComponent<ProjectileBase>();
-        projectileBase.Damage = GetDamage(); // projectile마다 각각의 critical damage나 knock back 확률을 가지도록
-        projectileBase.KnockBackChance = GetKnockBackChance();
-        projectileBase.IsCriticalDamageProj = isCriticalDamage;
+            ProjectileBase projectileBase = bombObject.GetComponent<ProjectileBase>();
+            projectileBase.Damage = GetDamage(); // projectile마다 각각의 critical damage나 knock back 확률을 가지도록
+            projectileBase.KnockBackChance = GetKnockBackChance();
+            projectileBase.IsCriticalDamageProj = isCriticalDamage;
 
-        BombProjectile proj = bombObject.GetComponent<BombProjectile>();
-        proj.Init(targetVec, weaponStats);
-        ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
-        projHeight.Initialize(verticalVelocity);
-
+            BombProjectile proj = bombObject.GetComponent<BombProjectile>();
+            proj.Init(targetVec, weaponStats);
+            ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();
+            projHeight.Initialize(verticalVelocity);
+        }
         SoundManager.instance.Play(shootSFX);
     }
 }

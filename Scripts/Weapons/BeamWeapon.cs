@@ -108,8 +108,11 @@ public class BeamWeapon : WeaponBase
         if(muzzle == null)
         {
             muzzle = GameManager.instance.poolManager.GetMisc(muzzleFlash);
-            muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
-            muzzle.transform.position = ShootPoint.position;
+            if(muzzle != null)
+            {
+                muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+                muzzle.transform.position = ShootPoint.position;
+            }
         }
         muzzle.gameObject.SetActive(true);
 

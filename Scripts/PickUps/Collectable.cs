@@ -104,7 +104,7 @@ public class Collectable : MonoBehaviour
     {
         IsHit = true;
         GameObject effect = GameManager.instance.poolManager.GetMisc(pickupEffect);
-        effect.transform.position = transform.position;
+        if (effect != null) effect.transform.position = transform.position;
 
         float anticTime = .3f;
         float currentSpeed = 15;

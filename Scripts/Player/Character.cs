@@ -73,7 +73,7 @@ public class Character : MonoBehaviour
 
         int ProJAmountUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.ProjectileAmount);
         ProjectileAmount += ProJAmountUpgradeLevel;
-        
+
         int MagneticArea = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.MagnetRange);
         MagnetSize += 0.25f * MagneticArea * MagnetSize; // 레벨업 당 25% 증가
 
@@ -85,11 +85,11 @@ public class Character : MonoBehaviour
 
         int AreaUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.Area);
         this.Area += 0.05f * AreaUpgradeLevel * this.Area; // 레벱업 당 5% 증가
-        
+
         int KnockBackChanceLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.knockBackChance);
         this.knockBackChance += 0.1f * KnockBackChanceLevel * this.knockBackChance; // 레벱업 당 10% 증가
 
-        if(GameManager.instance.startingDataContainer == null)
+        if (GameManager.instance.startingDataContainer == null)
         {
             MaxHealth = 3000;
             DamageBonus = 0;
@@ -106,9 +106,9 @@ public class Character : MonoBehaviour
             return;
         if (GameManager.instance.IsPlayerInvincible)
             return;
-            
+
         // 슬로우 모션 상태에서 TakeDamage가 일어나지 않게 하기
-        if (BossDieManager.instance.IsBossDead) 
+        if (BossDieManager.instance.IsBossDead)
             return;
         ApplyArmor(ref damage);
 
@@ -117,6 +117,8 @@ public class Character : MonoBehaviour
         if (anim == null) anim = GetComponentInChildren<WeaponContainerAnim>().GetComponent<Animator>();
 
         anim.SetTrigger("Hurt");
+
+        if (Time.frameCount % 3 != 0) return; // 3프레임 간격으로 데미지를 입도록
 
         currentHealth -= damage;
         if (currentHealth < 0)

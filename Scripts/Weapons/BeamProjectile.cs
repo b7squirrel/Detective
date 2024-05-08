@@ -6,6 +6,7 @@ public class BeamProjectile : ProjectileBase
     Animator[] anim;
     int frameCount = 1; // 몇 프레임 간격으로 데미지를 입힐지 정하는 변수 
     bool isSynergyActivated;
+    [SerializeField] Sprite[] laserSprites; // 인스펙터에서 넣기 (6개)
 
     void OnEnable()
     {
@@ -66,5 +67,13 @@ public class BeamProjectile : ProjectileBase
     {
         isSynergyActivated = true;
         frameCount = 1;
+    }
+    public void SetSpriteToSynergy()
+    {
+
+    }
+    public void SetSpriteToNormal()
+    {
+
     }
 }

@@ -252,7 +252,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         Stats.hp -= damage;
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
-        effect.transform.position = hitEffectPoint.position;
+        if (effect != null) effect.transform.position = hitEffectPoint.position;
         SoundManager.instance.Play(hit);
 
         enemyKnockBackSpeedFactor = knockBackSpeedFactor;
@@ -278,12 +278,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (dieEffectPrefeab != null)
         {
             GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
-            dieEffect.transform.position = transform.position;
+            if (dieEffect != null) dieEffect.transform.position = transform.position;
         }
         if (dieExplosionPrefeab != null)
         {
             GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieExplosionPrefeab);
-            explosionEffect.transform.position = transform.position;
+            if (explosionEffect != null) explosionEffect.transform.position = transform.position;
         }
 
         if (isSubBoss)
