@@ -13,10 +13,12 @@ public class InitCanvas : MonoBehaviour
     {
         for (int i = 0; i < ActiveOnStart.Length; i++)
         {
+            if (ActiveOnStart[i] == null) continue;
             ActiveOnStart[i].SetActive(true);
         }
-        for (int i = 0;i < inActiveOnStart.Length; i++)
+        for (int i = 0; i < inActiveOnStart.Length; i++)
         {
+            if (inActiveOnStart[i] == null) continue;
             inActiveOnStart[i].SetActive(false);
         }
     }

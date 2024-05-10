@@ -132,6 +132,7 @@ public class TennisWeapon : WeaponBase
             projectile.Damage = GetDamage(); Debug.Log("Tennis ball damage = " + GetDamage());
             projectile.IsCriticalDamageProj = isCriticalDamage;
             projectile.KnockBackChance = GetKnockBackChance();
+            projectile.TimeToLive = 1.5f;
         }
     }
 

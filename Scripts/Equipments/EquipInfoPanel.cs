@@ -11,6 +11,7 @@ public class EquipInfoPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI skillDescription;
     [SerializeField] TMPro.TextMeshProUGUI skillEvoLevel;
     [SerializeField] UnityEngine.UI.Image NameLabel;
+    [SerializeField] UnityEngine.UI.Image GradeLabel;
     [SerializeField] UnityEngine.UI.Image NameLabelGlow;
     [SerializeField] UnityEngine.UI.Image itemImage;
     [SerializeField] UnityEngine.UI.Image skillLabel;
@@ -31,6 +32,7 @@ public class EquipInfoPanel : MonoBehaviour
         grade.text = MyGrade.mGrades[cardData.Grade].ToString();
         grade.color = MyGrade.GradeColors[cardData.Grade];
         NameLabel.color = MyGrade.GradeColors[cardData.Grade];
+        GradeLabel.color = MyGrade.GradeColors[cardData.Grade];
         NameLabelGlow.color = MyGrade.GradeGlowColors[cardData.Grade];
         Name.text = cardData.Name;
         SetItemCardBase(cardData.Grade);

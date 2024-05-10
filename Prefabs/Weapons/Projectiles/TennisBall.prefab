@@ -120,7 +120,7 @@ MonoBehaviour:
   <Direction>k__BackingField: {x: 0, y: 0, z: 0}
   <Speed>k__BackingField: 17
   <KnockBackSpeedFactor>k__BackingField: 1.3
-  <TimeToLive>k__BackingField: 5
+  <TimeToLive>k__BackingField: 1
   deflection: 0
   hitSound: {fileID: 8300000, guid: 2d3151fb217f9e74e93f004b8ce50fa6, type: 3}
 --- !u!50 &6509680528379666173
@@ -232,7 +232,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.44736862
+        value: 0.19394302
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -240,8 +240,8 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.08581829
-        value: 0
+        time: 0.46533346
+        value: 0.19863012
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -270,7 +270,7 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
+      atime1: 31611
       atime2: 0
       atime3: 0
       atime4: 0
@@ -328,3 +328,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Key>k__BackingField: TennisBall_A
+  maxNum: 20

@@ -53,6 +53,10 @@ public class Spawner : MonoBehaviour
     {
         currentEnemyNumbers--;
     }
+    public int GetCurrentEnemyNums()
+    {
+        return currentEnemyNumbers;
+    }
 
     public void Spawn(EnemyData enemyToSpawn, int index)
     {
@@ -101,13 +105,17 @@ public class Spawner : MonoBehaviour
     IEnumerator SpawnBossCo(EnemyData enemyToSpawn)
     {
         Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
+        GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform);
+        enemy.transform.position = spawnPoint;
+        EnemyBoss boss = enemy.GetComponent<EnemyBoss>();
+        enemy.SetActive(false);
+
+        GameManager.instance.bossWarningPanel.Init(boss.Name);
+        yield return new WaitForSecondsRealtime(2f);
+
         GameManager.instance.poolManager.GetBossSpawnEffect(0, spawnPoint);
         yield return new WaitForSeconds(.25f);
-
-        GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform) ;
-        enemy.transform.position = spawnPoint;
-        GameManager.instance.GetComponent<BossHealthBarManager>().ActivateBossHealthBar(); // Init에서 bossHealth바를 참조하므로 Init보다 앞에 위치
-        EnemyBoss boss = enemy.GetComponent<EnemyBoss>();
+        enemy.SetActive(true);
         boss.Init(enemyToSpawn);
     }
 

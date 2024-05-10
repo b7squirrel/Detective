@@ -27,7 +27,6 @@ public class BossDieManager : MonoBehaviour
         dropCoins = GetComponent<DropCoins>();
 
         MusicManager.instance.Stop();
-        GameManager.instance.GetComponent<BossHealthBarManager>().DeActivateBossHealthBar();
 
         BossCameraOn();
 

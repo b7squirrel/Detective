@@ -33,8 +33,6 @@ public class EnemyBoss : EnemyBase, Idamageable
     public Coroutine shootCoroutine;
     bool wallCreated;
 
-    [SerializeField] BossHealthBar bossHealthBar;
-
     [SerializeField] float landingImpactSize;
     [SerializeField] float landingImpactForce;
     [SerializeField] LayerMask landingHit;
@@ -49,18 +47,20 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     public void Init(EnemyData data)
     {
-        IsBoss = true;
         this.Stats = new EnemyStats(data.stats);
+        IsBoss = true;
         spawner = FindObjectOfType<Spawner>();
         generateWalls = GetComponent<GenerateWalls>();
         col = GetComponent<CapsuleCollider2D>();
         spriteRen = GetComponentInChildren<SpriteRenderer>();
 
-        bossHealthBar = FindObjectOfType<BossHealthBar>();
-        bossHealthBar.InitHealthBar(Stats.hp, Name);
+        maxHealth = Stats.hp;
+        hpBar.SetStatus(Stats.hp, maxHealth);
+        anim.SetTrigger("Spawn");
 
         SoundManager.instance.Play(spawnSFX);
     }
+    
     public void ShootTimer()
     {
         if (timer < timeToAttack)
@@ -129,7 +129,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         if (IsInAir)
             return;
         base.TakeDamage(damage, knockBackChance, knockBackSpeedFactor, target, hitEffect);
-        bossHealthBar.UpdateBossHealthSlider(Stats.hp);
+        hpBar.SetStatus(Stats.hp, maxHealth);
     }
     public override void Die()
     {

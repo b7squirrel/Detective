@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public Character character;
     public PoolManager poolManager;
     public EggPanelManager eggPanelManager;
+    public BossWarningPanel bossWarningPanel;
+    public PauseManager pauseManager;
 
     public GameObject joystick;
 
@@ -41,6 +43,9 @@ public class GameManager : MonoBehaviour
 
         GemManager = GetComponent<GemManager>();
         KillManager = GetComponent<KillManager>();
+
+        bossWarningPanel = GetComponent<BossWarningPanel>();
+        pauseManager = GetComponent<PauseManager>();
     }
 
     void Update()

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Net.Sockets;
 using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, Idamageable
@@ -54,6 +55,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [Header("Sounds")]
     [SerializeField] protected AudioClip hit;
     [SerializeField] protected AudioClip die;
+
+    [Header("HP Bar")]
+    [SerializeField] protected StatusBar hpBar;
+    [SerializeField] protected Transform hpBarGroup; // 플립을 위해
+    protected int maxHealth;
     #endregion
 
     #region 유니티 콜백
@@ -86,6 +92,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         pastFacingDir = currentFacingDir;
+
+        
+    }
+    protected void InitHpBar()
+    {
+        if (hpBar == null) return; // HP Bar가 없다면 아래는 실행할 필요가 없다.
+        maxHealth = Stats.hp;
+        hpBar.SetStatus(Stats.hp, maxHealth);
     }
 
     protected virtual void Update()
@@ -134,10 +148,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         isFlipping = true;
         int index = 0;
-        while(index < 2) // 120도까지는 60도씩 2번 회전
+        while (index < 2) // 120도까지는 60도씩 2번 회전
         {
             yield return new WaitForSeconds(.03f); // 0.03초 간격으로
             transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 60f, 0));
+            if (hpBarGroup != null)
+                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
             index++;
             yield return null;
         }
@@ -146,6 +162,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             yield return new WaitForSeconds(.03f);
             transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 20f, 0));
+            if (hpBarGroup != null)
+                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
             index++;
             yield return null;
         }
@@ -156,11 +174,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
+            if (hpBarGroup != null)
+                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
         }
         else
         {
             currentFacingDir = -1f;
             transform.eulerAngles = new Vector3(0, 180f, 0);
+            if (hpBarGroup != null)
+                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
         }
         isFlipping = false;
     }
@@ -177,6 +199,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             currentFacingDir = -1f;
             transform.eulerAngles = new Vector3(0, 180f, 0);
+            if (hpBarGroup != null)
+                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
         }
         isFlipping = false;
     }
@@ -268,6 +292,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             //Player.instance.transform.GetComponent<Kills>().Add(1);
             Die();
+        }
+        else
+        {
+            if (hpBar != null)
+            {
+                hpBar.SetStatus(Stats.hp, maxHealth);
+            }
         }
 
         //WhiteFlash(whiteFlashDuration);

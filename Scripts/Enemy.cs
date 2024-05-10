@@ -33,6 +33,7 @@ public class Enemy : EnemyBase
 
     [SerializeField] LayerMask playerLayer;
     [SerializeField] bool isDetectingPlayer;
+    
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -88,6 +89,8 @@ public class Enemy : EnemyBase
         anim.runtimeAnimatorController = data.animController;
         this.Stats = new EnemyStats(data.stats);
         ExperienceReward = this.Stats.experience_reward;
+
+        InitHpBar();
     }
     public void SetFlying(Vector2 target)
     {
