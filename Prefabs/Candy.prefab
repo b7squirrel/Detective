@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Key>k__BackingField: Candy_A
+  maxNum: 0
 --- !u!114 &2715346215656313131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,8 +146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882983c82ab37e54a80827961b02362b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bouncingNumbers: 5
-  noHeightShadow: 0
+  bouncingNumbers: 4
+  noHeightShadow: 1
   onLandingMask: Player
   onGroundHitEvent:
     m_PersistentCalls:
