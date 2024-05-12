@@ -58,10 +58,12 @@ public class BombProjectile : ProjectileBase
     }
     void GenerateHitEffect()
     {
-        GameObject smoke = Instantiate(hitEffect, transform.position, Quaternion.identity);
-        GameObject stars = Instantiate(starEffect, transform.position, Quaternion.identity);
-        
-        smoke.transform.localScale *= sizeOfArea;
-        stars.transform.localScale *= sizeOfArea;
+        GameObject smoke = GameManager.instance.poolManager.GetMisc(hitEffect);
+        smoke.transform.position = transform.position;
+        GameObject stars = GameManager.instance.poolManager.GetMisc(starEffect);
+        stars.transform.position = transform.position;
+
+        smoke.transform.localScale = Vector2.one * sizeOfArea;
+        stars.transform.localScale = Vector2.one * sizeOfArea;
     }
 }

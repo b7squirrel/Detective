@@ -69,7 +69,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponentInChildren<SpriteRenderer>();
-        //colEnemy = GetComponent<Collider2D>();
+        colEnemy = GetComponent<Collider2D>();
 
         //initialMat = sr.material;
         IsKnockBack = false;
@@ -104,7 +104,17 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     protected virtual void Update()
     {
-        isOffScreen = sr.isVisible;
+        //isOffScreen = !(sr.isVisible);
+        //if (isOffScreen)
+        //{
+        //    colEnemy.enabled = false;
+        //    Debug.Log("Col disabled");
+        //}
+        //else
+        //{
+        //    colEnemy.enabled = true;
+        //    Debug.Log("Col enabled");
+        //}
         //colEnemy.enabled = isOffScreen;
     }
     #endregion
