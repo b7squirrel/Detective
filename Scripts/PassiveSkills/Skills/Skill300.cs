@@ -3,33 +3,26 @@
 /// <summary>
 /// Flash Damage, 화면 상의 모든 적에게 데미지
 /// </summary>
-public class Skill300 : MonoBehaviour, ISkill
+public class Skill300 : SkillBase
 {
-    public int Name { get; set; } = 300;
-    public float CoolDownTime { get; set; } = 5f;
-    public int Grade { get; set; }
-    public int EvoStage { get; set; }
-    float skillCounter;
-    float rate = .3f; // 등급, 스킬 레벨에 따라 얼마만큼 쿨타임에 영향을 미치게 할 지 정하는 비율
-
-    float realCoolDownTime;
-
     [SerializeField] int defaultDamage;
     int realDamage; // 디폴트 데미지에서 계산이 적용된 후의 데미지, 실제로 적에게 들어가는 데미지
-
-    public void Init(SkillManager _skillManager, CardData _cardData)
+    private void Awake()
     {
-        Grade = _cardData.Grade;
-        EvoStage = _cardData.EvoStage;
+        Name = 300;
+        CoolDownTime = 5f;
+    }
 
-        _skillManager.onSkill += UseSkill;
-        realCoolDownTime = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
+    public override void Init(SkillManager _skillManager, CardData _cardData)
+    {
+        base.Init(_skillManager, _cardData);
+
         realDamage = new Equation().GetSkillDamage(rate, Grade, EvoStage, defaultDamage);
     }
 
-    public void UseSkill()
+    public override void UseSkill()
     {
-        skillCounter += Time.deltaTime;
+        base.UseSkill(); // 스킬 카운터 증가. 증가분을 UI 슬라이더에 반영
 
         if (skillCounter > realCoolDownTime)
         {
@@ -40,6 +33,8 @@ public class Skill300 : MonoBehaviour, ISkill
             {
                 ApplyDamages(allEnemies);
             }
+
+            skillUi.BadgeUpAnim();
         }
     }
     void ApplyDamages(Collider2D[] colliders)

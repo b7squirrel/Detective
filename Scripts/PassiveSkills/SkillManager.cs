@@ -33,7 +33,7 @@ public class SkillManager : MonoBehaviour
     /// <summary>
     /// 이름으로 스킬을 찾아서 등록시킴
     /// </summary>
-    public void Init(int _Name, CardData _playerCardData)
+    void Init(int _Name, CardData _playerCardData)
     {
         int skill = (_Name / 100) % 10; // 100의 자리수를 얻어 낸다.
         Debug.Log($"받은 스킬 이름 {skill}");
@@ -42,6 +42,7 @@ public class SkillManager : MonoBehaviour
         {
             if ((skills[i].Name / 100) % 10 == skill)
             {
+                Debug.Log("Skill Name = " + skills[i].Name);
                 skills[i].Init(this, _playerCardData);
                 return;
             }
