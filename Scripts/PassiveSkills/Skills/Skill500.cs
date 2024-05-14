@@ -3,19 +3,11 @@
 /// <summary>
 /// Spicy Booster, 모든 오리들의 공격력 증가.
 /// </summary>
-public class Skill500 : MonoBehaviour, ISkill
+public class Skill500 : SkillBase
 {
-    public int Name { get; set; } = 500;
-    public float CoolDownTime { get; set; } = 5f;
-    public int Grade { get; set; }
-    public int EvoStage { get; set; }
-    float rate = .3f; // 등급, 스킬 레벨에 따라 얼마만큼 쿨타임에 영향을 미치게 할 지 정하는 비율
-
     int defaultDamageBonus;
     int realDamageBonus; // 디폴트 데미지에서 계산이 적용된 후의 데미지, 실제로 적에게 들어가는 데미지
 
-    float cooldownCounter;
-    float realCoolDownTime;
     [SerializeField] float defaultDuration; // 인스펙터에서 입력
     float realDuration;
     float durationTImer;
@@ -28,28 +20,32 @@ public class Skill500 : MonoBehaviour, ISkill
     [SerializeField] float _realDuration;
     [SerializeField] float _durationTImer;
     [SerializeField] float _characterDamageBonus;
-    public void Init(SkillManager _skillManager, CardData _cardData)
-    {
-        Grade = _cardData.Grade;
-        EvoStage = _cardData.EvoStage;
 
+    private void Awake()
+    {
+        Name = 500;
+        CoolDownTime = 5f;
+    }
+    public override void Init(SkillManager _skillManager, CardData _cardData)
+    {
+        base.Init(_skillManager, _cardData);
         defaultDamageBonus = GameManager.instance.character.DamageBonus;
 
-        _skillManager.onSkill += UseSkill;
-        realCoolDownTime = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
         realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultDuration);
         realDamageBonus = new Equation().GetSkillDamageBonus(rate, Grade, EvoStage, defaultDamageBonus);
     }
 
-    public void UseSkill()
+    public override void UseSkill()
     {
+        base.UseSkill();
+
         //DebugValues();
-        if (cooldownCounter > realCoolDownTime)
+        if (skillCounter > realCoolDownTime)
         {
             // 스킬 발동 시간 끝나면 초기화
             if (durationTImer > realDuration)
             {
-                cooldownCounter = 0;
+                skillCounter = 0;
                 durationTImer = 0;
                 GameManager.instance.character.DamageBonus = defaultDamageBonus;
                 return;
@@ -59,13 +55,12 @@ public class Skill500 : MonoBehaviour, ISkill
             GameManager.instance.character.DamageBonus = realDamageBonus;
             return;
         }
-        cooldownCounter += Time.deltaTime;
     }
     void DebugValues()
     {
         _defaultDamageBonus = defaultDamageBonus;
         _realDamageBonus = realDamageBonus;
-        _cooldownCounter = cooldownCounter;
+        _cooldownCounter = skillCounter;
         _realCoolDownTime = realCoolDownTime;
         _realDuration = realDuration;
         _durationTImer = durationTImer;

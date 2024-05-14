@@ -3,16 +3,8 @@
 /// <summary>
 /// Sluggish Slumber. 적을 느리게 만드는 스킬
 /// </summary>
-public class Skill200 : MonoBehaviour, ISkill
+public class Skill200 : SkillBase
 {
-    public int Name { get; set; } = 200;
-    public float CoolDownTime { get; set; } = 5f;
-    public int Grade { get; set; }
-    public int EvoStage { get; set; }
-    float rate = .3f; // 등급, 스킬 레벨에 따라 얼마만큼 쿨타임에 영향을 미치게 할 지 정하는 비율
-
-    float cooldownCounter;
-    float realCoolDownTime;
     [SerializeField] float defaultDuration; // 인스펙터에서 입력
     float realDuration;
     float durationTImer;
@@ -24,10 +16,14 @@ public class Skill200 : MonoBehaviour, ISkill
     [SerializeField] float _realCoolDownTime;
     [SerializeField] float _realDuration;
     [SerializeField] float _durationTImer;
-    public void Init(SkillManager _skillManager, CardData _cardData)
+    private void Awake()
     {
-        Grade = _cardData.Grade;
-        EvoStage = _cardData.EvoStage;
+        Name = 300;
+        CoolDownTime = 5f;
+    }
+    public override void Init(SkillManager _skillManager, CardData _cardData)
+    {
+        base.Init(_skillManager, _cardData);
 
         _skillManager.onSkill += UseSkill;
         realCoolDownTime = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
@@ -36,11 +32,14 @@ public class Skill200 : MonoBehaviour, ISkill
         Debug.Log($"Slowness Factor = {slownessFactor}");
     }
 
-    public void UseSkill()
+    public override void UseSkill()
     {
+        base.UseSkill();
         //DebugValues();
-        if (cooldownCounter > realCoolDownTime)
+        if (skillCounter > realCoolDownTime)
         {
+            skillCounter = 0;
+
             Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
             if (allEnemies == null) return;
             for (int i = 0; i < allEnemies.Length; i++)
@@ -51,15 +50,14 @@ public class Skill200 : MonoBehaviour, ISkill
                     if (enemy.IsSlowed) continue;
 
                     enemy.IsSlowed = true;
-                    enemy.Stats.speed += enemy.Stats.speed * slownessFactor;
+                    enemy.Stats.speed -= enemy.Stats.speed * slownessFactor;
                 }
             }
         }
-        cooldownCounter += Time.deltaTime;
     }
     void DebugValues()
     {
-        _cooldownCounter = cooldownCounter;
+        _cooldownCounter = skillCounter;
         _realCoolDownTime = realCoolDownTime;
         _realDuration = realDuration;
         _durationTImer = durationTImer;
