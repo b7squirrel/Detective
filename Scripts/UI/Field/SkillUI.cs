@@ -7,7 +7,11 @@ public class SkillUI : MonoBehaviour
     [SerializeField] GameObject starPrefab;
     [SerializeField] GameObject[] stars;
     [SerializeField] Transform starContainer;
-    [SerializeField] Animator badgeAnim;
+    [SerializeField] GameObject badge;
+    Animator Anim;
+    Image badgeImage;
+    Material badgeMat;
+    [SerializeField] Material white;
     Slider skillSlider;
 
     public void Init(string _skillName, int _evoStage, float _maxSliderValue)
@@ -19,6 +23,10 @@ public class SkillUI : MonoBehaviour
 
         skillSlider.maxValue = 1;
         skillSlider.value = 0;
+
+        Anim = GetComponent<Animator>();
+        badgeImage = badge.GetComponent<Image>();
+        badgeMat = badgeImage.material;
     }
     
     public void SetSlider(float _coolTime)
@@ -46,6 +54,16 @@ public class SkillUI : MonoBehaviour
     }
     public void BadgeUpAnim()
     {
-        badgeAnim.SetTrigger("Up");
+        Anim.SetTrigger("Up");
     }
+    // animation event
+    public void SetBadgeMatToWhite()
+    {
+        badgeImage.material = white;
+    }
+    public void SetBadgeMatToInit()
+    {
+        badgeImage.material = badgeMat;
+    }
+
 }

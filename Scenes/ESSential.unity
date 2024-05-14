@@ -88373,6 +88373,7 @@ GameObject:
   - component: {fileID: 6801641557484305423}
   - component: {fileID: 6801641557484305422}
   - component: {fileID: 6801641557484305424}
+  - component: {fileID: 6801641557484305425}
   m_Layer: 5
   m_Name: Slider_Level03_Blue
   m_TagString: Untagged
@@ -88469,7 +88470,29 @@ MonoBehaviour:
   starPrefab: {fileID: 3764076669932085183, guid: 4b8d1816b41606a4a9137ac22fe85660, type: 3}
   stars: []
   starContainer: {fileID: 2041546476}
-  badgeAnim: {fileID: 6801641557968161066}
+  badge: {fileID: 6801641557968161047}
+  white: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
+--- !u!95 &6801641557484305425
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801641557484305420}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 21ec9ed1c26d73b42a4d30a3bb957abe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!224 &6801641557968161046
 RectTransform:
   m_ObjectHideFlags: 0
@@ -88502,7 +88525,6 @@ GameObject:
   - component: {fileID: 6801641557968161046}
   - component: {fileID: 6801641557968161064}
   - component: {fileID: 6801641557968161065}
-  - component: {fileID: 6801641557968161066}
   m_Layer: 5
   m_Name: Badge
   m_TagString: Untagged
@@ -88548,27 +88570,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &6801641557968161066
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6801641557968161047}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 21ec9ed1c26d73b42a4d30a3bb957abe, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6801641558465034784
 GameObject:
   m_ObjectHideFlags: 0
