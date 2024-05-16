@@ -50,10 +50,14 @@ public class Skill500 : SkillBase
                 GameManager.instance.character.DamageBonus = defaultDamageBonus;
                 return;
             }
-            // 스킬 계속 유지
-            durationTImer += Time.deltaTime;
-            GameManager.instance.character.DamageBonus = realDamageBonus;
-            return;
+            else
+            {
+                // 스킬 계속 유지
+                durationTImer += Time.deltaTime;
+                GameManager.instance.character.DamageBonus = realDamageBonus;
+                return;
+            }
+            
         }
     }
     void DebugValues()

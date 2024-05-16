@@ -102,13 +102,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public void CastSlownessToEnemy(float _slownessFactor)
     {
         currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
-        Debug.Log("Is Slowed = " + IsSlowed + " In Cast" + " Current Speed = " + currentSpeed);
     }
     public void ResetCurrentSpeedToDefault()
     {
         currentSpeed = DefaultSpeed;
-        Debug.Log("Is Slowed = " + IsSlowed + " In Reset" + " Current Speed = " + currentSpeed);
-
     }
     protected void InitHpBar()
     {

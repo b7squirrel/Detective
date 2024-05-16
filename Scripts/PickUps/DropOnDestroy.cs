@@ -69,6 +69,16 @@ public class DropOnDestroy : MonoBehaviour
             {
                 isGem = toDrop.GetComponent<Collectable>().IsGem;
             }
+            // 보석이라면 확률에 따라 드롭
+            
+            if (isGem)
+            {
+                Debug.Log("is gem = " + isGem);
+                float randomDrop = Random.Range(0f, 1f);
+                Debug.Log("Drop Value = " + randomDrop);
+                if (randomDrop > StaticValues.GemDropRate)
+                    return;
+            }
             SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
         }
     }
@@ -93,7 +103,7 @@ public class DropOnDestroy : MonoBehaviour
         {
             isGem = toDrop.GetComponent<Collectable>().IsGem;
         }
-
+        
         SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
     }
     

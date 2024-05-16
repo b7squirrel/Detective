@@ -77,7 +77,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: -100
   m_Sprite: {fileID: 21300000, guid: 7727f2b8d675bb243afcb6801829315e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -133,12 +133,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   knockBackForce: 12
+  lifeTime: 0
+  <IsGem>k__BackingField: 1
   pickupEffect: {fileID: 2101849156756093557, guid: a30259b8a80acc843b7a96a795d8db95, type: 3}
   dir: {x: 0, y: 0}
   delay: 0.05
-  whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   whiteFlashDuration: 0
-  acc: 5
+  pickup: {fileID: 0}
   <ExpAmount>k__BackingField: 1000
 --- !u!50 &8364821195247663785
 Rigidbody2D:
@@ -201,7 +202,7 @@ TrailRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 327865993
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Time: 5
   m_Parameters:
@@ -281,4 +282,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae67f2f2eecb0c4d988241c00b1eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.3, y: -0.17}

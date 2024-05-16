@@ -75,6 +75,8 @@ public class StaticValues
     public static int MaxSkillNumbers = 5; // skill 1, 2, 3, 4, 5 : 3자리수의 백자리가 0이 될 수 없음
     public static int MaxEnemyNumbers;
     public static int MaxGemNumbers;
+
+    public static float GemDropRate = .5f; // 보석 드롭 확률 60%
 }
 
 public class Equation

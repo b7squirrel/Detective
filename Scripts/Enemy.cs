@@ -92,7 +92,6 @@ public class Enemy : EnemyBase
 
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
-        Debug.Log("dSpeed = " + DefaultSpeed + " cSpeed = " + currentSpeed);
 
         InitHpBar();
     }

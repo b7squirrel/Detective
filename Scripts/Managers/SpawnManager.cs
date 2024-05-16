@@ -16,7 +16,6 @@ public class SpawnManager : MonoBehaviour
     public void SpawnObject(Vector3 worldPosition, GameObject toSpawn, bool isGem, int experience)
     {
         Transform pickup = null;
-
         if (isGem)
         {
             if (gemManager.IsMaxGemNumber()) // 보석이 일정량 이상 늘어나면
@@ -35,7 +34,9 @@ public class SpawnManager : MonoBehaviour
         }
 
         if (pickup.GetComponent<GemPickUpObject>() != null)
+        {
             pickup.GetComponent<GemPickUpObject>().ExpAmount = experience;
+        }
 
         pickup.position = worldPosition;
     }
