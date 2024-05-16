@@ -18,7 +18,7 @@ public class Skill200 : SkillBase
     [SerializeField] float _durationTImer;
     private void Awake()
     {
-        Name = 300;
+        Name = 200;
         CoolDownTime = 5f;
     }
     public override void Init(SkillManager _skillManager, CardData _cardData)
@@ -29,7 +29,6 @@ public class Skill200 : SkillBase
         realCoolDownTime = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
         realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultDuration);
         slownessFactor = new Equation().GetSlowSpeedFactor(Grade, EvoStage);
-        Debug.Log($"Slowness Factor = {slownessFactor}");
     }
 
     public override void UseSkill()
@@ -38,20 +37,42 @@ public class Skill200 : SkillBase
         //DebugValues();
         if (skillCounter > realCoolDownTime)
         {
-            skillCounter = 0;
-
-            Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
-            if (allEnemies == null) return;
-            for (int i = 0; i < allEnemies.Length; i++)
+            if (durationTImer > realDuration)
             {
-                if(allEnemies[i].GetComponent<EnemyBase>() != null)
+                skillCounter = 0;
+                durationTImer = 0;
+                Collider2D[] allSlowEnemies = EnemyFinder.instance.GetAllEnemies();
+                if (allSlowEnemies == null) return;
+                for (int i = 0; i < allSlowEnemies.Length; i++)
                 {
-                    EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
-                    if (enemy.IsSlowed) continue;
+                    if (allSlowEnemies[i].GetComponent<EnemyBase>() != null)
+                    {
+                        EnemyBase enemy = allSlowEnemies[i].GetComponent<EnemyBase>();
+                        if (enemy.IsSlowed == false) continue; // 느려지지 않은 적은 건너뛰기
 
-                    enemy.IsSlowed = true;
-                    enemy.Stats.speed -= enemy.Stats.speed * slownessFactor;
+                        enemy.IsSlowed = false; 
+                        enemy.ResetCurrentSpeedToDefault();
+                    }
                 }
+            }
+            else
+            {
+                // duration 쿨타임이 끝나지 않았다면 계속 느리게 만들기
+                Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
+                if (allEnemies == null) return;
+                for (int i = 0; i < allEnemies.Length; i++)
+                {
+                    if (allEnemies[i].GetComponent<EnemyBase>() != null)
+                    {
+                        EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
+                        if (enemy.IsSlowed) continue;
+
+                        enemy.IsSlowed = true;
+                        enemy.CastSlownessToEnemy(slownessFactor);
+                    }
+                }
+                durationTImer += Time.deltaTime;
+                return;
             }
         }
     }

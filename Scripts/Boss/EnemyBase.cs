@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Net.Sockets;
 using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, Idamageable
@@ -9,7 +8,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [HideInInspector] public bool IsKnockBack{get; set;}
     [HideInInspector] public bool IsStunned{get; set;}
     [HideInInspector] public Rigidbody2D Target{get; set;}
-    public EnemyStats Stats {get; set;}
+    public EnemyStats Stats {get; set; }
+    protected float DefaultSpeed; // 속도를 외부에서 변경할 때 원래 속도를 저장해 두기 위해
+    protected float currentSpeed;
     public bool IsSlowed {get; set;} // 슬로우 스킬을 
     public bool IsBoss{get; set;}
     [SerializeField] bool isSubBoss;
@@ -93,7 +94,21 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         pastFacingDir = currentFacingDir;
 
-        
+        if(Stats != null)
+        {
+            
+        }
+    }
+    public void CastSlownessToEnemy(float _slownessFactor)
+    {
+        currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
+        Debug.Log("Is Slowed = " + IsSlowed + " In Cast" + " Current Speed = " + currentSpeed);
+    }
+    public void ResetCurrentSpeedToDefault()
+    {
+        currentSpeed = DefaultSpeed;
+        Debug.Log("Is Slowed = " + IsSlowed + " In Reset" + " Current Speed = " + currentSpeed);
+
     }
     protected void InitHpBar()
     {
@@ -240,11 +255,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if(IsGrouping)
         {
             // dirVec = groupDir;
-            rb.velocity = Stats.speed * GroupDir;
+            //rb.velocity = Stats.speed * GroupDir;
+            rb.velocity = currentSpeed * GroupDir;
             return;
         }
 
-        Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
+        //Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
+        Vector2 nextVec = dirVec.normalized * currentSpeed * Time.fixedDeltaTime;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
@@ -374,7 +391,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // knockbackDelay를 0으로 설정해 두었다면 낙백이 일어나지 않음
         if (knockBackDelay != 0) // 낙백이 일어나지 않게. 낵백이 끝나야 kill이 진행된다
         {
-            Vector2 fromPlayer = target - (Vector2)Target.transform.position;
             IsKnockBack = true;
             targetDir = ((Vector2)transform.position - target).normalized;
         }

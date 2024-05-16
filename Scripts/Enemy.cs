@@ -90,6 +90,10 @@ public class Enemy : EnemyBase
         this.Stats = new EnemyStats(data.stats);
         ExperienceReward = this.Stats.experience_reward;
 
+        DefaultSpeed = Stats.speed;
+        currentSpeed = DefaultSpeed;
+        Debug.Log("dSpeed = " + DefaultSpeed + " cSpeed = " + currentSpeed);
+
         InitHpBar();
     }
     public void SetFlying(Vector2 target)

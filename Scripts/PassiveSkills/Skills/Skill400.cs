@@ -17,9 +17,7 @@ public class Skill400 : SkillBase
     public override void Init(SkillManager _skillManager, CardData _cardData)
     {
         base.Init(_skillManager, _cardData);
-        Debug.Log($" 디폴트 Duration = {defaultInvincibleDuration}");
         realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultInvincibleDuration);
-        Debug.Log($" Real Duration = {realDuration}");
     }
     public override void UseSkill()
     {
@@ -37,7 +35,6 @@ public class Skill400 : SkillBase
             }
             // 스킬 계속 유지
             durationTImer += Time.deltaTime;
-            Debug.Log($"skill Duartion {realDuration}");
             GameManager.instance.IsPlayerInvincible = true;
             return;
         }

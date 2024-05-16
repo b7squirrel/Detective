@@ -25,6 +25,9 @@ public class SkillBase : MonoBehaviour, ISkill
         string skillName = Skills.SkillNames[skillIndex];
         skillUi.Init(skillName, EvoStage, realCoolDownTime);
     }
+    /// <summary>
+    /// Skill Counter를 증가시키고, UI에 반영
+    /// </summary>
     public virtual void UseSkill()
     {
         skillCounter += Time.deltaTime;
