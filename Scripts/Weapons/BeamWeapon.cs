@@ -87,7 +87,6 @@ public class BeamWeapon : WeaponBase
             //GameObject laserObject = GameManager.instance.poolManager.GetMisc(laserProjectile);
             laserObject.parent = transform;
             projectiles.Add(laserObject);
-            Debug.Log("Projectile Added");
         }
 
         if(isSynergyWeaponActivated)

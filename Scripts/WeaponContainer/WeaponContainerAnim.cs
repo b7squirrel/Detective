@@ -13,6 +13,7 @@ public class WeaponContainerAnim : MonoBehaviour
     [SerializeField] SpriteRenderer costumeSR;
 
     Sprite sprite; // 개별 무기들의 sprite
+    static int indexSortingOrder = 100; // 소팅오더를 정하기 위한 인덱스
 
     bool _facingRight = true;
     int essentialIndex;
@@ -68,8 +69,14 @@ public class WeaponContainerAnim : MonoBehaviour
         Init(wd.Animators.InGamePlayerAnim);
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
+        sr[0].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
         for (int i = 0; i < 4; i++)
         {
+            sr[i + 1].sortingOrder = indexSortingOrder;
+            indexSortingOrder--;
+
             if (iDatas[i] == null)
             {
                 sr[i + 1].gameObject.SetActive(false);

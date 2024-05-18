@@ -55,6 +55,9 @@ public class UpgradeButton : MonoBehaviour
         }
         else
         {
+            if (upgradeData == null) Debug.Log("upgrade Data를 넘겨받지 못했습니다.");
+            if (upgradeData.item == null) Debug.Log("upgrade Data의 item이 Null입니다..");
+            if (upgradeData.item.charImage == null) Debug.Log("upgrade Data의 item의 charImage가 Null입니다...");
             iconItem.sprite = upgradeData.item.charImage;
             iconItem.preserveAspect = true;
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 1f);

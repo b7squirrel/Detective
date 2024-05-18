@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 6414451162540868807}
   - component: {fileID: 6414451162540868643}
   - component: {fileID: 6414451162540868667}
-  - component: {fileID: 5812712469324551067}
   m_Layer: 6
   m_Name: EnemyGroup
   m_TagString: Enemy
@@ -126,6 +125,8 @@ MonoBehaviour:
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
+  hpBar: {fileID: 0}
+  hpBarGroup: {fileID: 0}
   flyingSpeed: 15
   playerLayer:
     serializedVersion: 2
@@ -153,18 +154,6 @@ MonoBehaviour:
   exp: 0
   hp: 0
   isChest: 0
---- !u!114 &5812712469324551067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6414451162540868822}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4630c03b0e85c644fa573ab48038fbf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7401670693113262515
 GameObject:
   m_ObjectHideFlags: 0

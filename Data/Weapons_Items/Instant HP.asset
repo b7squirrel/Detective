@@ -9,25 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf90a9f90ceec5489381a9b162b5d31, type: 3}
-  m_Name: Coins Get instant
+  m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
+  m_Name: Instant HP
   m_EditorClassIdentifier: 
-  upgradeType: 5
-  Name: Get instant Coins
-  description: 
-  description2: 
-  weaponData: {fileID: 0}
-  weaponUpgradeStats:
-    damage: 0
-    timeToAttack: 0
-    numberOfAttacks: 0
-    sizeOfArea: 0
-    projectileSpeed: 0
-    knockBackChance: 0
-    currentLevel: 0
-  newKidAnim: {fileID: 0}
-  item: {fileID: 11400000, guid: e254b1c3cfb361a439ac2df56bdc939d, type: 2}
-  itemStats:
+  Name: Instant HP
+  grade: 0
+  charImage: {fileID: 535364885, guid: d47678e53a10e8c45a5483d7a5105f73, type: 3}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
+    PauseCardAnim: {fileID: 0}
+  SynergyWeapon: 
+  stats:
     armor: 0
     magnetSize: 0
     moveSpeed: 0
@@ -40,5 +33,8 @@ MonoBehaviour:
     coolTimeDown: 0
     hpRegenRate: 0
     hp: 0
-    coins: 50
+    coins: 0
     currentLevel: 0
+  upgrades:
+  - {fileID: 11400000, guid: 274a1059eb9e66347a7bdd185ccc61a5, type: 2}
+  dropChance: 0
