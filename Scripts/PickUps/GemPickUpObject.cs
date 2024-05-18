@@ -7,7 +7,7 @@ public class GemPickUpObject : Collectable, IPickUpObject
     public void OnPickUp(Character character)
     {
         // 보석의 경험치를 플레이어에게 넘겨줄 때, 임시 경험치가 저장되어 있다면 같이 넘겨줌
-        if (ExpAmount == 0) ExpAmount = 400;
+        if (ExpAmount == 0) ExpAmount = 2000;
 
         int potentialEXP = 0;
 

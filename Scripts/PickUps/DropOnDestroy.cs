@@ -73,9 +73,7 @@ public class DropOnDestroy : MonoBehaviour
             
             if (isGem)
             {
-                Debug.Log("is gem = " + isGem);
                 float randomDrop = Random.Range(0f, 1f);
-                Debug.Log("Drop Value = " + randomDrop);
                 if (randomDrop > StaticValues.GemDropRate)
                     return;
             }

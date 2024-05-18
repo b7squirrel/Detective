@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,9 +15,12 @@ public class BeamWeapon : WeaponBase
     float normalDuration = .5f;
     float synergyDuration = 1f;
 
+    bool isProjectilesSetToSynergy; // 무기들의 애니메이터가 시너지로 되어 있는지 여부
+
     [SerializeField] GameObject muzzleFlash;
     GameObject muzzle; // muzzleFlash를 생성해서 담아두는 곳
     [SerializeField] AudioClip laserShoot;
+
     protected override void Attack()
     {
         base.Attack();
@@ -83,6 +87,15 @@ public class BeamWeapon : WeaponBase
             //GameObject laserObject = GameManager.instance.poolManager.GetMisc(laserProjectile);
             laserObject.parent = transform;
             projectiles.Add(laserObject);
+            Debug.Log("Projectile Added");
+        }
+
+        if(isSynergyWeaponActivated)
+        {
+            for(int i = 0;i < projectiles.Count;i++)
+            {
+                projectiles[i].GetComponent<BeamProjectile>().SetAnimToSynergy();
+            }
         }
 
         //배치, stat 리셋
@@ -139,10 +152,6 @@ public class BeamWeapon : WeaponBase
     public override void ActivateSynergyWeapon()
     {
         base.ActivateSynergyWeapon();
-        for (int i = 0; i < projectiles.Count; i++)
-        {
-            projectiles[i].GetComponent<BeamProjectile>().SetAnimToSynergy();
-        }
         duration = synergyDuration; // 레이져 애니메이션 길이
     }
 }

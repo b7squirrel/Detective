@@ -3,20 +3,16 @@ using UnityEngine;
 // 재활용해서 계속 사용하는 projectile의 경우 active여부를 weapon단계에서 관리하도록 한다
 public class BeamProjectile : ProjectileBase
 {
-    Animator[] anim;
+    Animator anim;
     int frameCount = 1; // 몇 프레임 간격으로 데미지를 입힐지 정하는 변수 
     bool isSynergyActivated;
-    [SerializeField] Sprite[] laserSprites; // 인스펙터에서 넣기 (6개)
 
     void OnEnable()
     {
-        if(anim == null) anim = GetComponentsInChildren<Animator>();
-        if(isSynergyActivated )
+        if (anim == null) anim = GetComponentInChildren<Animator>();
+        if (isSynergyActivated)
         {
-            for( int i = 0; i < anim.Length; i++ )
-            {
-                anim[i].SetTrigger("Synergy");
-            }
+            anim.SetTrigger("Synergy");
         }
     }
 
@@ -47,17 +43,25 @@ public class BeamProjectile : ProjectileBase
         PostMessage(Damage, enmey.position);
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
         hitEffect.transform.position = enmey.position;
-        enmey.GetComponent<Idamageable>().TakeDamage(Damage, 
-                                                     KnockBackChance, 
+        enmey.GetComponent<Idamageable>().TakeDamage(Damage,
+                                                     KnockBackChance,
                                                      KnockBackSpeedFactor,
-                                                     other.ClosestPoint(transform.position), 
+                                                     other.ClosestPoint(transform.position),
                                                      hitEffect);
         hitDetected = true;
     }
 
     protected override void DieProjectile()
     {
-        // do nothing
+        //TimeToLive = 3f;
+        //transform.localScale = new Vector3(1, 1, 1);
+        gameObject.SetActive(false);
+    }
+    protected override void HitObject()
+    {
+        //TimeToLive = 3f;
+        //transform.localScale = new Vector3(1, 1, 1);
+        gameObject.SetActive(false);
     }
     protected override void Update()
     {
@@ -65,15 +69,8 @@ public class BeamProjectile : ProjectileBase
     }
     public void SetAnimToSynergy()
     {
-        isSynergyActivated = true;
+        anim.SetTrigger("Synergy");
         frameCount = 1;
-    }
-    public void SetSpriteToSynergy()
-    {
-
-    }
-    public void SetSpriteToNormal()
-    {
-
+        isSynergyActivated = true;
     }
 }
