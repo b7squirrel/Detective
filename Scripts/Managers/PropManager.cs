@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 무한맵일 때 사용했지만 이제 사용하지 않음.
 public class PropManager : MonoBehaviour
 {
     [SerializeField] Transform[] spawnAreas; // 4개

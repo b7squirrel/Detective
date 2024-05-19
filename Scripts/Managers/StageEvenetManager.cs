@@ -66,7 +66,7 @@ public class StageEvenetManager : MonoBehaviour
                 case StageEventType.SpawnObject:
                     for (int i = 0; i < stageEvents[eventIndexer].count; i++)
                     {
-                        spawner.SpawnObject(stageEvents[eventIndexer].objectToSpawn);
+                        //spawner.SpawnObject(stageEvents[eventIndexer].objectToSpawn);
                     }
                     break;
 

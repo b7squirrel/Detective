@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    #region 변수
     public static Spawner instance;
     Transform[] spawnPoints;
     List<Transform> availableSpawnPoints;
@@ -16,6 +17,11 @@ public class Spawner : MonoBehaviour
     int level;
     float timer;
 
+    //[SerializeField] int numPoints;
+    //[SerializeField] float circleRadius;
+    #endregion
+
+    #region 유니티 콜백 함수
     void Awake()
     {
         instance = this;
@@ -27,6 +33,9 @@ public class Spawner : MonoBehaviour
         if (GameManager.instance.IsPlayerDead)
             return;
     }
+    #endregion
+
+    #region 적의 수
     int GetEnemyNumbers()
     {
         List<Enemy> activeEnemies = new List<Enemy>();
@@ -44,7 +53,6 @@ public class Spawner : MonoBehaviour
             return 0;
         return activeEnemies.Count;
     }
-
     void AddEnemyNumber()
     {
         currentEnemyNumbers++;
@@ -57,7 +65,9 @@ public class Spawner : MonoBehaviour
     {
         return currentEnemyNumbers;
     }
+    #endregion
 
+    #region 스폰
     public void Spawn(EnemyData enemyToSpawn, int index)
     {
         if (currentEnemyNumbers >= maxEnemyInScene)
@@ -124,13 +134,20 @@ public class Spawner : MonoBehaviour
         StartCoroutine(SpawnBossCo(enemyToSpawn));
     }
 
-    public void SpawnObject(GameObject toSpawn)
-    {
-        Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
-        if (pickUP != null)
-            pickUP.position = spawnObjectPoint[Random.Range(0, spawnObjectPoint.Length)].position;
-    }
+    //void SpawnObject(GameObject toSpawn)
+    //{
+    //    for (int i = 0; i < numPoints; i++)
+    //    {
+    //        Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
+    //        if (pickUP != null)
+    //        {
+    //            pickUP.position = GetRandomSpawnPoint();
+    //        }
+    //    }
+    //}
+    #endregion
 
+    #region 스폰 포인트
     void GetAvailablePoints()
     {
         if (availableSpawnPoints == null)
@@ -148,10 +165,23 @@ public class Spawner : MonoBehaviour
             }
         }
     }
-    public Vector2 GetRandomSpawnPoint()
-    {
-        int index = Random.Range(1, spawnPoints.Length); // 플레이어가 포함되지 않게 1부터
-        Vector2 point = spawnPoints[index].position;
-        return point;
-    }
+    //public Vector2 GetRandomSpawnPoint()
+    //{
+    //    // 랜덤한 반지름과 각도 생성
+    //    float r = circleRadius * Mathf.Sqrt(Random.value);
+    //    float theta = Random.value * 2 * Mathf.PI;
+
+    //    // 극좌표를 직교좌표로 변환
+    //    float x = r * Mathf.Cos(theta);
+    //    float y = r * Mathf.Sin(theta);
+
+    //    return new Vector2(x, y);
+    //}
+
+    //public void InitSpawnPoints(int _numPoints, float _radius)
+    //{
+    //    numPoints = _numPoints;
+    //    circleRadius = _radius;
+    //}
+    #endregion
 }

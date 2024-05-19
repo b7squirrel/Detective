@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0fc79a2b7a163cc4d8b2edfa12e8928a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 95144d3dd118f2b4d9a794ab9645da0f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -195,8 +195,7 @@ GameObject:
   - component: {fileID: 4206027803553759455}
   - component: {fileID: 5275309742084548411}
   - component: {fileID: 6015072912039126302}
-  - component: {fileID: 6319956411407123305}
-  m_Layer: 14
+  m_Layer: 7
   m_Name: Candy Box
   m_TagString: Props
   m_Icon: {fileID: 0}
@@ -308,24 +307,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 1.11}
   serializedVersion: 2
   m_Radius: 2.5672529
---- !u!95 &6319956411407123305
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8101259182395795704}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 54777ac2d0ed994408a1c6be4092946f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
