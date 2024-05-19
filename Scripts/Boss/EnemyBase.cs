@@ -267,6 +267,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 닿으면 player HP 감소
     protected void OnCollisionStay2D(Collision2D collision)
     {
+        if(IsGrouping && collision.gameObject.CompareTag("Wall"))
+        {
+            GroupDir = (Player.instance.transform.position - transform.position).normalized;
+        }
+
         if (GameManager.instance.player == null)
             return;
         if (collision.gameObject == Target.gameObject)
