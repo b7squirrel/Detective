@@ -114,7 +114,7 @@ public class Spawner : MonoBehaviour
         yield return new WaitForSecondsRealtime(2f);
 
         GameManager.instance.poolManager.GetBossSpawnEffect(0, spawnPoint);
-        yield return new WaitForSeconds(.25f);
+        yield return new WaitForSeconds(1.45f);
         enemy.SetActive(true);
         boss.Init(enemyToSpawn);
     }

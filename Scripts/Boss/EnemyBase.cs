@@ -274,12 +274,23 @@ public class EnemyBase : MonoBehaviour, Idamageable
             Attack();
         }
     }
+    
+    private void OnCollisionExit(Collision collision)
+    {
+        if (GameManager.instance.player == null)
+            return;
+        if (collision.gameObject == Target.gameObject)
+        {
+            anim.SetBool("Attack", false);
+        }
+    }
 
     protected void Attack()
     {
         if (Target.gameObject == null)
             return;
 
+        anim.SetBool("Attack", true);
         Target.gameObject.GetComponent<Character>().TakeDamage(Stats.damage);
     }
     #endregion

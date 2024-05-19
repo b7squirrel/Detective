@@ -64,15 +64,6 @@ public class Enemy : EnemyBase
 
         isDetectingPlayer = false;
 
-        Collider2D player = Physics2D.OverlapCircle(transform.position, 3f, playerLayer);
-        if (player != null)
-        {
-            isDetectingPlayer = true;
-            anim.SetBool("Attack", true);
-            return;
-        }
-        anim.SetBool("Attack", false);
-
         // 벽에 끼거나 해서 walking으로 돌아오지 못하면 빠져나오도록
         if (flyingTimeCounter > 0 && IsFlying)
         {
@@ -83,6 +74,7 @@ public class Enemy : EnemyBase
             SetWalking();
         }
     }
+    
 
     public void Init(EnemyData data)
     {
