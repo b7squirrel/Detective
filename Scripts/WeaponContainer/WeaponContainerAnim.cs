@@ -6,6 +6,7 @@ public class WeaponContainerAnim : MonoBehaviour
     Animator anim; // 오리의 animator
     Costume costume;
     [SerializeField] SpriteRenderer[] sr;
+    [SerializeField] SpriteRenderer face;
     [SerializeField] Transform spriteGroup;
     [SerializeField] Transform headGroup; // 머리와 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
@@ -13,7 +14,7 @@ public class WeaponContainerAnim : MonoBehaviour
     [SerializeField] SpriteRenderer costumeSR;
 
     Sprite sprite; // 개별 무기들의 sprite
-    static int indexSortingOrder = 100; // 소팅오더를 정하기 위한 인덱스
+    public static int indexSortingOrder = 100; // 소팅오더를 정하기 위한 인덱스
 
     bool _facingRight = true;
     int essentialIndex;
@@ -32,6 +33,10 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         anim = GetComponent<Animator>();
     }
+    private void Update()
+    {
+        Debug.Log("current = " + face.sortingOrder);
+    }
     void Init(RuntimeAnimatorController animCon)
     {
         anim.runtimeAnimatorController = animCon;
@@ -41,10 +46,46 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         Init(wd.Animators.InGamePlayerAnim);
 
-        if (wd.DefaultHead != null) sr[1].sprite = wd.DefaultHead;
-        if (wd.DefaultChest != null) sr[2].sprite = wd.DefaultChest;
-        if (wd.DefaultFace != null) sr[3].sprite = wd.DefaultFace;
-        if (wd.DefaultHands != null) sr[4].sprite = wd.DefaultHands;
+        costumeSR.sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        sr[1].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        sr[2].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        sr[3].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        sr[4].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        face.sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        sr[0].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        if (wd.DefaultHead != null)
+        {
+            sr[1].sprite = wd.DefaultHead;
+            
+        }
+        if (wd.DefaultChest != null)
+        {
+            sr[2].sprite = wd.DefaultChest;
+            
+        }
+        if (wd.DefaultFace != null)
+        {
+            sr[3].sprite = wd.DefaultFace;
+            
+        }
+        if (wd.DefaultHands != null)
+        {
+            sr[4].sprite = wd.DefaultHands;
+        }
 
         if (wd.costume != null)
         {
@@ -69,8 +110,18 @@ public class WeaponContainerAnim : MonoBehaviour
         Init(wd.Animators.InGamePlayerAnim);
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
-        sr[0].sortingOrder = indexSortingOrder;
-        indexSortingOrder--;
+        if (wd.costume != null)
+        {
+            costume = wd.costume;
+            costumeSR.color = new Color(1, 1, 1, 1);
+
+            costumeSR.sortingOrder = indexSortingOrder;
+            indexSortingOrder--;
+        }
+        else
+        {
+            costumeSR.color = new Color(1, 1, 1, 0);
+        }
 
         for (int i = 0; i < 4; i++)
         {
@@ -86,16 +137,12 @@ public class WeaponContainerAnim : MonoBehaviour
             sr[i + 1].sprite = iDatas[i].charImage;
         }
 
-        if (wd.costume != null)
-        {
-            costume = wd.costume;
-            costumeSR.color = new Color(1, 1, 1, 1);
-            Debug.Log("costume name = " + costume.name);
-        }
-        else
-        {
-            costumeSR.color = new Color(1, 1, 1, 0);
-        }
+        Debug.Log("face sorting order = " + indexSortingOrder);
+        face.sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        sr[0].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
     }
     void FlipSpriteGroup()
     {

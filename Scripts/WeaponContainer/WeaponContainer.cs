@@ -61,7 +61,7 @@ public class WeaponContainer : MonoBehaviour
     {
         if(GameManager.instance.IsPlayerInvincible)
         {
-            Player.instance.transform.localScale = 2f * Vector2.one;
+            Player.instance.transform.localScale = 1.6f * Vector2.one;
         }
         else
         {
@@ -94,12 +94,11 @@ public class WeaponContainer : MonoBehaviour
         else
         {
             container.SetParent(weaponContainerGroup.transform);
-            container.transform.localScale = .8f * Vector2.one;
+            container.transform.localScale = .7f * Vector2.one;
             //container.transform.localScale = Vector2.one;
             wa.SetEquipmentSprites(wd);
         }
 
-        SetSortingOrder();
         return container;
     }
 
@@ -173,14 +172,4 @@ public class WeaponContainer : MonoBehaviour
 
         return false;
     }
-
-    void SetSortingOrder()
-    {
-        for (int i = weaponContainers.Count - 1; i > 0; i--)
-        {
-            weaponContainers[i].GetComponent<SpriteRenderer>().sortingOrder = -i;
-        }
-    }
-
-    // Puase Panel에서 
 }
