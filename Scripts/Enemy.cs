@@ -101,6 +101,7 @@ public class Enemy : EnemyBase
         LandingTarget = target;
         gameObject.layer = LayerMask.NameToLayer("InAir");
         sr.sortingLayerName = "InAir";
+        sr.sortingOrder = 100;
 
         flyingTimeCounter = flyingTimeThreshold;
     }

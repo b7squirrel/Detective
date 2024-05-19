@@ -25,6 +25,5 @@ public class WallManager : MonoBehaviour
             Debug.Log("Game Over");
             isGameOver = true;
         }
-            
     }
 }
