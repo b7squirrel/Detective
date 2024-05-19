@@ -86,6 +86,7 @@ public class BeamProjectile : ProjectileBase
     }
     void DealDamage(RaycastHit2D _object)
     {
+        if (_object == null) return;
         if (_object.transform.GetComponent<Idamageable>() == null) 
             return;
 
