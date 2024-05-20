@@ -26,4 +26,8 @@ public class WallManager : MonoBehaviour
             isGameOver = true;
         }
     }
+    public float GetSpawnAreaConstant()
+    {
+        return walls[1].position.x;
+    }
 }

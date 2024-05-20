@@ -17,6 +17,8 @@ public class Spawner : MonoBehaviour
     int level;
     float timer;
 
+    WallManager wallManager;
+
     //[SerializeField] int numPoints;
     //[SerializeField] float circleRadius;
     #endregion
@@ -26,6 +28,8 @@ public class Spawner : MonoBehaviour
     {
         instance = this;
         spawnPoints = GetComponentsInChildren<Transform>();
+
+        
     }
 
     void Update()
@@ -75,8 +79,11 @@ public class Spawner : MonoBehaviour
         GetAvailablePoints();
 
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
-        // getcomponentChildren으로 받아왔으므로 0부터 하면 Player의 위치까지 포함하게 되므로
-        enemy.transform.position = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
+        // 벽 안쪽에서 2 unit 더 안쪽에 스폰 
+        if(wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float posX = Random.Range(0, 1f) > .5f ? wallManager.GetSpawnAreaConstant() - 2f : -wallManager.GetSpawnAreaConstant() + 2f;
+        float posY = Random.Range(0, 1f) > .5f ? wallManager.GetSpawnAreaConstant() - 2f : -wallManager.GetSpawnAreaConstant() + 2f;
+        enemy.transform.position = new Vector2(posX, posY);
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
 
         AddEnemyNumber();
@@ -133,18 +140,6 @@ public class Spawner : MonoBehaviour
     {
         StartCoroutine(SpawnBossCo(enemyToSpawn));
     }
-
-    //void SpawnObject(GameObject toSpawn)
-    //{
-    //    for (int i = 0; i < numPoints; i++)
-    //    {
-    //        Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
-    //        if (pickUP != null)
-    //        {
-    //            pickUP.position = GetRandomSpawnPoint();
-    //        }
-    //    }
-    //}
     #endregion
 
     #region 스폰 포인트
@@ -164,6 +159,8 @@ public class Spawner : MonoBehaviour
                 availableSpawnPoints.Add(spawnPoints[i]);
             }
         }
+
+
     }
     //public Vector2 GetRandomSpawnPoint()
     //{

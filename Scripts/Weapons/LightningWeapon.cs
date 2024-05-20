@@ -44,15 +44,7 @@ public class LightningWeapon : WeaponBase
             if( bolt != null)
             {
                 LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
-                boltScript.StartObject.transform.parent = ShootPoint;
-                boltScript.StartObject.transform.position = ShootPoint.position;
-                boltScript.EndObject.transform.position = endPosition;
-
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
-                ApplyDamage(colliders);
-
-                SoundManager.instance.Play(strike);
-                StartCoroutine(DisableBolt(boltScript));
+                StartCoroutine(GenerateBolt(boltScript, ShootPoint, Vector2.zero, endPosition, false));
             }
         }
 
@@ -89,16 +81,34 @@ public class LightningWeapon : WeaponBase
             if(bolt != null)
             {
                 LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
-                boltScript.StartObject.transform.position = _secondShootPoint[i];
-                boltScript.EndObject.transform.position = endPosition;
 
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
-                ApplyDamage(colliders);
-
-                SoundManager.instance.Play(strike);
-                StartCoroutine(DisableBolt(boltScript));
+                StartCoroutine(GenerateBolt(boltScript, null, _secondShootPoint[i], endPosition, true));
             }
         }
+    }
+    IEnumerator GenerateBolt(LightningBoltScript _boltScript, Transform _startPoint, Vector2 _secondaryStart,Vector2 _endPoint, bool _isSecondary)
+    {
+        if(_isSecondary)
+        {
+            _boltScript.StartObject.transform.position = _secondaryStart;
+        }
+        else
+        {
+            _boltScript.StartObject.transform.parent = _startPoint;
+            _boltScript.StartObject.transform.position = _startPoint.position;
+        }
+        
+        _boltScript.EndObject.transform.position = _endPoint;
+        LineRenderer lr = _boltScript.GetComponent<LineRenderer>();
+        Color startColor = lr.startColor;
+        Color endColor = lr.endColor;
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(_endPoint, weaponStats.sizeOfArea);
+        ApplyDamage(colliders);
+
+        SoundManager.instance.Play(strike);
+        yield return new WaitForSeconds(duration);
+        _boltScript.gameObject.SetActive(false);
     }
 
     // 볼트가 pool에서 나오면 pool에 들어가기 전 위치로 번개를 발사한다. 1프레임 정도 동안.
@@ -107,7 +117,7 @@ public class LightningWeapon : WeaponBase
         yield return new WaitForSeconds(duration);
         boltScript.StartObject.transform.position = Vector2.zero;
         boltScript.EndObject.transform.position = Vector2.zero;
-        boltScript.gameObject.SetActive(false);
+        
     }
 
     void ApplyDamage(Collider2D[] colliders)

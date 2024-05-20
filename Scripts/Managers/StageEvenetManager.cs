@@ -8,9 +8,13 @@ public class StageEvenetManager : MonoBehaviour
 {
     [SerializeField] List <StageEvent> stageEvents;
     [SerializeField] AudioClip stageMusic;
+    [SerializeField] float eventFrequency; // 몇 초 간격으로 이벤트를 발동시키려고 할 것인지
+    [SerializeField] int enemyNumForNextEvent; // 다음 이벤트를 시작하기 위한 최대 적 수
     ReadStageData readStageData;
     Spawner spawner;
     SpawnItem spawnItem;
+
+    float nextEventTime;
 
     StageTime stageTime;
     int eventIndexer;
@@ -19,7 +23,7 @@ public class StageEvenetManager : MonoBehaviour
     public bool IsWinningStage {get; set;}
     Coroutine winStageCoroutine;
 
-    void Awake()
+    void Start()
     {
         readStageData = GetComponent<ReadStageData>();
         foreach (var item in readStageData.GetStageEventsList())
@@ -44,11 +48,13 @@ public class StageEvenetManager : MonoBehaviour
             }
             return;
         }
-        if (eventIndexer >= stageEvents.Count)
-            return;
 
-        if (stageTime.time > stageEvents[eventIndexer].time)
+        if (Time.time >= nextEventTime)
         {
+            nextEventTime += 2f;
+
+            if (spawner.GetCurrentEnemyNums() > enemyNumForNextEvent) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
+            if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.
 
             switch (stageEvents[eventIndexer].eventType)
             {
@@ -63,17 +69,6 @@ public class StageEvenetManager : MonoBehaviour
                     SpawnEnemyGroup(stageEvents[eventIndexer].count);
                     break;
 
-                case StageEventType.SpawnObject:
-                    for (int i = 0; i < stageEvents[eventIndexer].count; i++)
-                    {
-                        //spawner.SpawnObject(stageEvents[eventIndexer].objectToSpawn);
-                    }
-                    break;
-
-                case StageEventType.WinStage:
-                    WinStage();
-                    break;
-
                 case StageEventType.SpawnSubBoss:
                     SpawnSubBoss();
                     break;
@@ -81,10 +76,11 @@ public class StageEvenetManager : MonoBehaviour
                 case StageEventType.SpawnEnemyBoss:
                     spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
                     break;
-                    
+
                 default:
                     break;
             }
+
             eventIndexer++;
         }
     }
