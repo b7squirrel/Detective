@@ -23,7 +23,7 @@ public class Enemy : EnemyBase
 {
     public int ExperienceReward { get; private set; }
     bool isLive;
-
+    Vector2 currentPosition; // 현재 위치를 기록해서 박으로 튀어나갔을 때, 위치를 되돌리기 위해서
     
     public bool IsFlying { get; set; }
     public Vector2 LandingTarget { get; set; }
@@ -33,6 +33,8 @@ public class Enemy : EnemyBase
 
     [SerializeField] LayerMask playerLayer;
     [SerializeField] bool isDetectingPlayer;
+
+    WallManager wallManager;
     
     protected override void OnEnable()
     {
@@ -48,6 +50,25 @@ public class Enemy : EnemyBase
             return;
         if (GameManager.instance.player == null)
             return;
+
+        if (isSubBoss || isBoss) // 보스나 서브보스는 매프레임마다 벽 안쪽에 있는지 체크
+        {
+            if(IsOutOfRange())
+            {
+                transform.position = currentPosition;
+            }
+            currentPosition = transform.position;
+        }
+        else // 일반 적이라면 10초마다 한번씩 체크해서 벽 바깥이면 비활성화
+        {
+            if(Time.time % 10 == 0)
+            {
+                if(IsOutOfRange() )
+                {
+                    Die();
+                }
+            }
+        }
 
         // col.enabled = sr.isVisible;
 
@@ -116,5 +137,21 @@ public class Enemy : EnemyBase
             return;
         }
         base.ApplyMovement();
+    }
+
+    bool IsOutOfRange()
+    {
+        // 벽 안쪽에서 2 unit 더 안쪽에 스폰
+        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float spawnArea = wallManager.GetSpawnAreaConstant();
+        float offset = 2f;
+
+        if (transform.position.x > spawnArea + offset || transform.position.x < -spawnArea - offset
+            || transform.position.y > spawnArea + offset || transform.position.y < -spawnArea - offset)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

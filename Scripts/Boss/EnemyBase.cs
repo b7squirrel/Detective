@@ -13,8 +13,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected float currentSpeed;
     public bool IsSlowed {get; set;} // 슬로우 스킬을 
     public bool IsBoss{get; set;}
-    [SerializeField] bool isSubBoss;
-    [SerializeField] bool isBoss;
+    [SerializeField] protected bool isSubBoss;
+    [SerializeField] protected bool isBoss;
     [SerializeField] int numberOfSubBossDrops;
     [SerializeField] int numberOfBossDrops;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부

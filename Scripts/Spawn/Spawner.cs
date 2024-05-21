@@ -82,23 +82,9 @@ public class Spawner : MonoBehaviour
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         // 벽 안쪽에서 2 unit 더 안쪽에 스폰
 
-        Vector2 position = new Vector2();
-        float f = Random.value > .5f ? 1f : -1f;
-        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnArea = wallManager.GetSpawnAreaConstant();
-        float offset = 2f;
-
-        if (Random.value > .5f)
-        {
-            position.x = Random.Range(-spawnArea + offset, spawnArea - offset);
-            position.y = spawnArea * f;
-        }
-        else
-        {
-            position.y = Random.Range(-spawnArea + offset, spawnArea - offset);
-            position.x = spawnArea * f;
-        }
-        enemy.transform.position = new Vector2(position.x, position.y);
+        Vector2 spawnPoint = GetAvailablePoints();
+        
+        enemy.transform.position = new Vector2(spawnPoint.x, spawnPoint.y);
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
 
         AddEnemyNumber();
@@ -107,8 +93,7 @@ public class Spawner : MonoBehaviour
     {
         if (currentEnemyNumbers >= maxEnemyInScene)
             return;
-        GetAvailablePoints();
-        Vector2 spawnPoint = availableSpawnPoints[Random.Range(1, availableSpawnPoints.Count)].position;
+        Vector2 spawnPoint = GetAvailablePoints();
         GameObject groupShape = Instantiate(enemyGroupShape, spawnPoint, Quaternion.identity);
         groupShape.transform.eulerAngles = new Vector3(0, 0, Random.Range(0, 360f));
         Vector2 groupDir = ((Vector2)Player.instance.transform.position - spawnPoint).normalized;
@@ -158,24 +143,27 @@ public class Spawner : MonoBehaviour
     #endregion
 
     #region 스폰 포인트
-    void GetAvailablePoints()
+    Vector2 GetAvailablePoints()
     {
-        if (availableSpawnPoints == null)
+        // 벽 안쪽에서 2 unit 더 안쪽에 스폰
+        Vector2 position = new Vector2();
+        float f = Random.value > .5f ? 1f : -1f;
+        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float spawnArea = wallManager.GetSpawnAreaConstant();
+        float offset = 2f;
+
+        if (Random.value > .5f)
         {
-            availableSpawnPoints = new List<Transform>();
+            position.x = Random.Range(-spawnArea + offset, spawnArea - offset);
+            position.y = spawnArea * f;
+        }
+        else
+        {
+            position.y = Random.Range(-spawnArea + offset, spawnArea - offset);
+            position.x = spawnArea * f;
         }
 
-        availableSpawnPoints.Clear();
-
-        for (int i = 1; i < spawnPoints.Length - 1; i++)
-        {
-            if (spawnPoints[i].GetComponent<SpawnPoint>().IsAvailable)
-            {
-                availableSpawnPoints.Add(spawnPoints[i]);
-            }
-        }
-
-
+        return position;
     }
     //public Vector2 GetRandomSpawnPoint()
     //{
