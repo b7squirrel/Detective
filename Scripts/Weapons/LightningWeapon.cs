@@ -63,7 +63,6 @@ public class LightningWeapon : WeaponBase
         }
 
         StartCoroutine(SecondaryAttack(secondShootPoint));
-        
     }
     IEnumerator SecondaryAttack(List<Vector2> _secondShootPoint)
     {
@@ -99,9 +98,6 @@ public class LightningWeapon : WeaponBase
         }
         
         _boltScript.EndObject.transform.position = _endPoint;
-        LineRenderer lr = _boltScript.GetComponent<LineRenderer>();
-        Color startColor = lr.startColor;
-        Color endColor = lr.endColor;
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(_endPoint, weaponStats.sizeOfArea);
         ApplyDamage(colliders);
@@ -109,15 +105,6 @@ public class LightningWeapon : WeaponBase
         SoundManager.instance.Play(strike);
         yield return new WaitForSeconds(duration);
         _boltScript.gameObject.SetActive(false);
-    }
-
-    // 볼트가 pool에서 나오면 pool에 들어가기 전 위치로 번개를 발사한다. 1프레임 정도 동안.
-    IEnumerator DisableBolt(LightningBoltScript boltScript)
-    {
-        yield return new WaitForSeconds(duration);
-        boltScript.StartObject.transform.position = Vector2.zero;
-        boltScript.EndObject.transform.position = Vector2.zero;
-        
     }
 
     void ApplyDamage(Collider2D[] colliders)

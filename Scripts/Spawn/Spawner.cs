@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -29,7 +30,7 @@ public class Spawner : MonoBehaviour
         instance = this;
         spawnPoints = GetComponentsInChildren<Transform>();
 
-        
+
     }
 
     void Update()
@@ -47,12 +48,12 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < enemies.Length; i++)
         {
-            if(enemies[i].gameObject.activeSelf)
+            if (enemies[i].gameObject.activeSelf)
             {
                 activeEnemies.Add(enemies[i]);
             }
         }
-        
+
         if (activeEnemies == null)
             return 0;
         return activeEnemies.Count;
@@ -79,11 +80,25 @@ public class Spawner : MonoBehaviour
         GetAvailablePoints();
 
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
-        // 벽 안쪽에서 2 unit 더 안쪽에 스폰 
-        if(wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float posX = Random.Range(0, 1f) > .5f ? wallManager.GetSpawnAreaConstant() - 2f : -wallManager.GetSpawnAreaConstant() + 2f;
-        float posY = Random.Range(0, 1f) > .5f ? wallManager.GetSpawnAreaConstant() - 2f : -wallManager.GetSpawnAreaConstant() + 2f;
-        enemy.transform.position = new Vector2(posX, posY);
+        // 벽 안쪽에서 2 unit 더 안쪽에 스폰
+
+        Vector2 position = new Vector2();
+        float f = Random.value > .5f ? 1f : -1f;
+        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float spawnArea = wallManager.GetSpawnAreaConstant();
+        float offset = 2f;
+
+        if (Random.value > .5f)
+        {
+            position.x = Random.Range(-spawnArea + offset, spawnArea - offset);
+            position.y = spawnArea * f;
+        }
+        else
+        {
+            position.y = Random.Range(-spawnArea + offset, spawnArea - offset);
+            position.x = spawnArea * f;
+        }
+        enemy.transform.position = new Vector2(position.x, position.y);
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
 
         AddEnemyNumber();
