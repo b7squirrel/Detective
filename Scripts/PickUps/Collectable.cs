@@ -22,6 +22,8 @@ public class Collectable : MonoBehaviour
     protected float lifeTimeCount;
     protected bool isDisappearing; // 코루틴 반복 실행 방지
 
+    WallManager wallManager;
+
     [Header("Effect")]
     //[SerializeField] Material whiteMaterial;
     [SerializeField] float whiteFlashDuration;
@@ -84,6 +86,7 @@ public class Collectable : MonoBehaviour
     protected virtual void Update()
     {
         DieOnTime();
+        DieOnWall();
     }
     #endregion
 
@@ -178,7 +181,7 @@ public class Collectable : MonoBehaviour
     }
     #endregion
 
-    #region 일정 시간 이후 사라짐
+    #region 특정 조건에서 사라짐(시간 경과, 벽에 덮쳐짐)
     protected virtual void DieOnTime()
     {
         if (isDisappearing) return; // 코루틴이 실행 중이라면 Die 취소
@@ -220,6 +223,21 @@ public class Collectable : MonoBehaviour
         if (!IsHit)
             isDisappearing = false;
             gameObject.SetActive(false);
+    }
+
+    void DieOnWall()
+    {
+        if(IsOutOfRange())
+        {
+            gameObject.SetActive(false);
+        }
+    }
+    bool IsOutOfRange()
+    {
+        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float spawnConst = wallManager.GetSpawnAreaConstant();
+
+        return new Equation().IsOutOfRange(transform.position, spawnConst);
     }
     #endregion
 }

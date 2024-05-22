@@ -136,22 +136,11 @@ public class Spawner : MonoBehaviour
     Vector2 GetAvailablePoints()
     {
         // 벽 안쪽에서 2 unit 더 안쪽에 스폰
-        Vector2 position = new Vector2();
-        float f = Random.value > .5f ? 1f : -1f;
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnArea = wallManager.GetSpawnAreaConstant();
+        float spawnConst = wallManager.GetSpawnAreaConstant();
         float offset = 2f;
 
-        if (Random.value > .5f)
-        {
-            position.x = Random.Range(-spawnArea + offset, spawnArea - offset);
-            position.y = f > 0 ? (spawnArea  * f) - offset : (spawnArea * f) + offset;
-        }
-        else
-        {
-            position.y = Random.Range(-spawnArea + offset, spawnArea - offset);
-            position.x = f > 0 ? (spawnArea * f) - offset : (spawnArea * f) + offset;
-        }
+        Vector2 position = new Equation().GetSpawnablePos(spawnConst, offset);
 
         return position;
     }

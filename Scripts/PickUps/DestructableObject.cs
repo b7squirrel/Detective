@@ -13,12 +13,22 @@ public class DestructableObject : MonoBehaviour, Idamageable
     int currentHp;
     Animator anim;
 
+    WallManager wallManager;
+
     void OnEnable()
     {
         currentHp = hp;
         if (anim == null)
         {
             anim = GetComponent<Animator>();
+        }
+    }
+
+    private void Update()
+    {
+        if (IsOutOfRange())
+        {
+            DestroyObjectWithoutDrop();
         }
     }
 
@@ -54,7 +64,19 @@ public class DestructableObject : MonoBehaviour, Idamageable
     {
         GameObject dieEffect = GameManager.instance.poolManager.GetMisc(destructableDieEffect);
         dieEffect.transform.position = transform.position;
-        gameObject.SetActive(false);
         GetComponent<DropOnDestroy>().DropMultipleObjects();
+        gameObject.SetActive(false);
+    }
+    void DestroyObjectWithoutDrop()
+    {
+        gameObject.SetActive(false);
+    }
+
+    bool IsOutOfRange()
+    {
+        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float spawnConst = wallManager.GetSpawnAreaConstant();
+
+        return new Equation().IsOutOfRange(transform.position, spawnConst);
     }
 }

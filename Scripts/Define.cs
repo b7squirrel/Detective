@@ -120,4 +120,32 @@ public class Equation
         int slownessFactor = 5;
         return .01f * (slownessFactor * ((_grade * 5) + (_evoStage * 2)) + 90f);
     }
+
+    public Vector2 GetSpawnablePos(float _spawnConst, float _offset)
+    {
+        Vector2 position = new Vector2();
+        float f = Random.value > .5f ? 1f : -1f;
+
+        if (Random.value > .5f)
+        {
+            position.x = Random.Range(-_spawnConst + _offset, _spawnConst - _offset);
+            position.y = f > 0 ? (_spawnConst * f) - _offset : (_spawnConst * f) + _offset;
+        }
+        else
+        {
+            position.y = Random.Range(-_spawnConst + _offset, _spawnConst - _offset);
+            position.x = f > 0 ? (_spawnConst * f) - _offset : (_spawnConst * f) + _offset;
+        }
+
+        return position;
+    }
+    public bool IsOutOfRange(Vector2 posToCheck, float _spawnConst)
+    {
+        if (posToCheck.x > _spawnConst || posToCheck.x < -_spawnConst
+            || posToCheck.y > _spawnConst || posToCheck.y < -_spawnConst)
+        {
+            return true;
+        }
+        return false;
+    }
 }

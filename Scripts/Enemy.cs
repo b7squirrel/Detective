@@ -146,16 +146,9 @@ public class Enemy : EnemyBase
 
     bool IsOutOfRange()
     {
-        // 벽 안쪽에서 2 unit 더 안쪽에 스폰
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnArea = wallManager.GetSpawnAreaConstant();
+        float spawnConst = wallManager.GetSpawnAreaConstant();
 
-        if (transform.position.x > spawnArea || transform.position.x < -spawnArea
-            || transform.position.y > spawnArea || transform.position.y < -spawnArea)
-        {
-            return true;
-        }
-
-        return false;
+        return new Equation().IsOutOfRange(transform.position, spawnConst);
     }
 }

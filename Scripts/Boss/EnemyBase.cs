@@ -58,6 +58,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected AudioClip die;
 
     [Header("HP Bar")]
+    [SerializeField] GameObject HPbarPrefab;
+    GameObject HPbar;
     [SerializeField] protected StatusBar hpBar;
     [SerializeField] protected Transform hpBarGroup; // 플립을 위해
     protected int maxHealth;
@@ -109,6 +111,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     protected void InitHpBar()
     {
+        if (HPbarPrefab == null) return;
+        if (HPbar == null) HPbar = Instantiate(HPbarPrefab, transform.position, Quaternion.identity);
         if (hpBar == null) return; // HP Bar가 없다면 아래는 실행할 필요가 없다.
         maxHealth = Stats.hp;
         hpBar.SetStatus(Stats.hp, maxHealth);
