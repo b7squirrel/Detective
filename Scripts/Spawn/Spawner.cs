@@ -1,16 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
     #region 변수
     public static Spawner instance;
-    Transform[] spawnPoints;
-    List<Transform> availableSpawnPoints;
 
-    [SerializeField] Transform[] spawnObjectPoint; // 오브젝트 스폰 지점
     [SerializeField] GameObject enemyGroupShape;
     [SerializeField] int maxEnemyInScene; // 적의 수 최대치 설정
     [SerializeField] int currentEnemyNumbers; // 현재 스폰되어 있는 적의 수
@@ -19,18 +15,12 @@ public class Spawner : MonoBehaviour
     float timer;
 
     WallManager wallManager;
-
-    //[SerializeField] int numPoints;
-    //[SerializeField] float circleRadius;
     #endregion
 
     #region 유니티 콜백 함수
     void Awake()
     {
         instance = this;
-        spawnPoints = GetComponentsInChildren<Transform>();
-
-
     }
 
     void Update()
@@ -155,33 +145,15 @@ public class Spawner : MonoBehaviour
         if (Random.value > .5f)
         {
             position.x = Random.Range(-spawnArea + offset, spawnArea - offset);
-            position.y = spawnArea * f;
+            position.y = f > 0 ? (spawnArea  * f) - offset : (spawnArea * f) + offset;
         }
         else
         {
             position.y = Random.Range(-spawnArea + offset, spawnArea - offset);
-            position.x = spawnArea * f;
+            position.x = f > 0 ? (spawnArea * f) - offset : (spawnArea * f) + offset;
         }
 
         return position;
     }
-    //public Vector2 GetRandomSpawnPoint()
-    //{
-    //    // 랜덤한 반지름과 각도 생성
-    //    float r = circleRadius * Mathf.Sqrt(Random.value);
-    //    float theta = Random.value * 2 * Mathf.PI;
-
-    //    // 극좌표를 직교좌표로 변환
-    //    float x = r * Mathf.Cos(theta);
-    //    float y = r * Mathf.Sin(theta);
-
-    //    return new Vector2(x, y);
-    //}
-
-    //public void InitSpawnPoints(int _numPoints, float _radius)
-    //{
-    //    numPoints = _numPoints;
-    //    circleRadius = _radius;
-    //}
     #endregion
 }

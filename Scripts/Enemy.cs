@@ -35,6 +35,7 @@ public class Enemy : EnemyBase
     [SerializeField] bool isDetectingPlayer;
 
     WallManager wallManager;
+    float nextOutOfRangeCheckingTime;
     
     protected override void OnEnable()
     {
@@ -61,12 +62,16 @@ public class Enemy : EnemyBase
         }
         else // 일반 적이라면 10초마다 한번씩 체크해서 벽 바깥이면 비활성화
         {
-            if(Time.time % 10 == 0)
+            if (Time.time > nextOutOfRangeCheckingTime)
             {
-                if(IsOutOfRange() )
-                {
-                    Die();
-                }
+                nextOutOfRangeCheckingTime += 10f;
+                return;
+            }
+
+            if(IsOutOfRange())
+            {
+                Debug.Log("Out of Area");
+                Die();
             }
         }
 
@@ -144,10 +149,9 @@ public class Enemy : EnemyBase
         // 벽 안쪽에서 2 unit 더 안쪽에 스폰
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
         float spawnArea = wallManager.GetSpawnAreaConstant();
-        float offset = 2f;
 
-        if (transform.position.x > spawnArea + offset || transform.position.x < -spawnArea - offset
-            || transform.position.y > spawnArea + offset || transform.position.y < -spawnArea - offset)
+        if (transform.position.x > spawnArea || transform.position.x < -spawnArea
+            || transform.position.y > spawnArea || transform.position.y < -spawnArea)
         {
             return true;
         }

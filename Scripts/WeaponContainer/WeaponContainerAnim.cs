@@ -33,10 +33,6 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         anim = GetComponent<Animator>();
     }
-    private void Update()
-    {
-        Debug.Log("current = " + face.sortingOrder);
-    }
     void Init(RuntimeAnimatorController animCon)
     {
         anim.runtimeAnimatorController = animCon;

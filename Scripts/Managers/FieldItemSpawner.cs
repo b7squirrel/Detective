@@ -8,15 +8,11 @@ public class FieldItemSpawner : MonoBehaviour
     [SerializeField] float frequency;
     [SerializeField] float coinBoxPercentage;
     float nextSpawnTime;
-    Player player;
+    WallManager wallManager;
 
     private void Start()
     {
         nextSpawnTime = Time.time + frequency;
-        if (player == null)
-        {
-            player = FindObjectOfType<Player>();
-        }
     }
     private void Update()
     {
@@ -40,15 +36,13 @@ public class FieldItemSpawner : MonoBehaviour
     }
     Vector2 GetRandomSpawnPoint()
     {
-        // 랜덤한 반지름과 각도 생성
-        float r = circleRadius * Mathf.Sqrt(Random.value);
-        float theta = Random.value * 2 * Mathf.PI;
-
-        // 극좌표를 직교좌표로 변환
-        float x = r * Mathf.Cos(theta);
-        float y = r * Mathf.Sin(theta);
-
-        return new Vector2(x, y) + (Vector2)player.transform.position;
+        if(wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float spawnConst = wallManager.GetSpawnAreaConstant();
+        float offset = 2f;
+        Vector2 spawnArea = 
+            new Vector2(Random.Range(-spawnConst + offset, spawnConst - offset), 
+                        Random.Range(-spawnConst + offset, spawnConst - offset));
+        return spawnArea;
     }
 
     void InitSpawnPoints(int _numPoints, float _radius)
