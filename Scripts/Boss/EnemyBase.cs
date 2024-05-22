@@ -59,9 +59,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     [Header("HP Bar")]
     [SerializeField] GameObject HPbarPrefab;
-    GameObject HPbar;
+    protected GameObject HPbar;
+    [SerializeField] Transform HpBarPos;
     [SerializeField] protected StatusBar hpBar;
-    [SerializeField] protected Transform hpBarGroup; // 플립을 위해
     protected int maxHealth;
     #endregion
 
@@ -112,14 +112,22 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected void InitHpBar()
     {
         if (HPbarPrefab == null) return;
-        if (HPbar == null) HPbar = Instantiate(HPbarPrefab, transform.position, Quaternion.identity);
-        if (hpBar == null) return; // HP Bar가 없다면 아래는 실행할 필요가 없다.
+        if (HPbar == null) HPbar = Instantiate(HPbarPrefab, HpBarPos.position, Quaternion.identity);
+        HPbar.transform.localScale = HpBarPos.localScale;
+        Debug.Log("Scale = " + HpBarPos.localScale.x);
+        if (hpBar == null) hpBar = HPbar.GetComponentInChildren<StatusBar>();
+
         maxHealth = Stats.hp;
         hpBar.SetStatus(Stats.hp, maxHealth);
+    }
+    protected void DestroyHPbar()
+    {
+        Destroy(HPbar);
     }
 
     protected virtual void Update()
     {
+        if (HPbar != null) HPbar.transform.position = HpBarPos.position;
         //isOffScreen = !(sr.isVisible);
         //if (isOffScreen)
         //{
@@ -178,8 +186,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             yield return new WaitForSeconds(.03f); // 0.03초 간격으로
             transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 60f, 0));
-            if (hpBarGroup != null)
-                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
             index++;
             yield return null;
         }
@@ -188,8 +194,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             yield return new WaitForSeconds(.03f);
             transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 20f, 0));
-            if (hpBarGroup != null)
-                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
             index++;
             yield return null;
         }
@@ -200,15 +204,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
-            if (hpBarGroup != null)
-                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
         }
         else
         {
             currentFacingDir = -1f;
             transform.eulerAngles = new Vector3(0, 180f, 0);
-            if (hpBarGroup != null)
-                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
         }
         isFlipping = false;
     }
@@ -225,8 +225,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             currentFacingDir = -1f;
             transform.eulerAngles = new Vector3(0, 180f, 0);
-            if (hpBarGroup != null)
-                hpBarGroup.eulerAngles = new Vector3(0, 0, 0);
         }
         isFlipping = false;
     }
@@ -260,9 +258,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
             rb.velocity = currentSpeed * GroupDir;
             return;
         }
-
+        //Debug.Log("Target Position = " + GameManager.instance.player.transform.position + " dir Vec = " + dirVec);
         //Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
-        Vector2 nextVec = dirVec.normalized * currentSpeed * Time.fixedDeltaTime;
+        Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
@@ -383,6 +381,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Spawner.instance.SubtractEnemyNumber();
         
         IsSlowed = false;
+        DestroyHPbar();
         gameObject.SetActive(false);
     }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록

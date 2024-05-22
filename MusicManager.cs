@@ -18,10 +18,12 @@ public class MusicManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void Start()
+    public void InitBGM(AudioClip _music)
     {
+        MusicOnStart = _music;
         Play(MusicOnStart, true);
     }
+
 
     public void Play(AudioClip music, bool interrupt = false)
     {

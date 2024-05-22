@@ -33,7 +33,7 @@ public class StageEvenetManager : MonoBehaviour
         stageTime = GetComponent<StageTime>();
         spawner = FindObjectOfType<Spawner>();
         musicManager = FindObjectOfType<MusicManager>();
-        musicManager.MusicOnStart = stageMusic; // Mucic manager.Start에서 Play하므로 this.awake에서 초기화 
+        musicManager.InitBGM(stageMusic); 
         IsWinningStage = false;
         winStageCoroutine = null;
     }
@@ -51,7 +51,7 @@ public class StageEvenetManager : MonoBehaviour
 
         if (Time.time >= nextEventTime)
         {
-            nextEventTime += 2f;
+            //nextEventTime += 2f;
 
             if (spawner.GetCurrentEnemyNums() > enemyNumForNextEvent) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
             if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.

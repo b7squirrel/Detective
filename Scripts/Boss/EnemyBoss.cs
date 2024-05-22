@@ -51,8 +51,10 @@ public class EnemyBoss : EnemyBase, Idamageable
         col = GetComponent<CapsuleCollider2D>();
         spriteRen = GetComponentInChildren<SpriteRenderer>();
 
-        maxHealth = Stats.hp;
-        hpBar.SetStatus(Stats.hp, maxHealth);
+        DefaultSpeed = Stats.speed;
+        currentSpeed = DefaultSpeed;
+
+        InitHpBar();
         anim.SetTrigger("Spawn");
 
         SoundManager.instance.Play(spawnSFX);
@@ -168,6 +170,14 @@ public class EnemyBoss : EnemyBase, Idamageable
     public void DisableCollier()
     {
         col.enabled = false;
+    }
+    public void EnbleHPbar()
+    {
+        HPbar.SetActive(true);
+    }
+    public void DisableHPbar()
+    {
+        HPbar.SetActive(false);
     }
     public void CamShake()
     {
