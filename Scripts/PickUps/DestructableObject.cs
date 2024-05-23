@@ -63,6 +63,7 @@ public class DestructableObject : MonoBehaviour, Idamageable
     void DestroyObject()
     {
         GameObject dieEffect = GameManager.instance.poolManager.GetMisc(destructableDieEffect);
+        if (dieEffect == null) return; // 갯수 제한에 걸려서 더 이상 풀에서 꺼낼 수 없으면 이펙트 표시 안함
         dieEffect.transform.position = transform.position;
         GetComponent<DropOnDestroy>().DropMultipleObjects();
         gameObject.SetActive(false);

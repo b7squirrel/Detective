@@ -23,6 +23,7 @@ public class Collectable : MonoBehaviour
     protected bool isDisappearing; // 코루틴 반복 실행 방지
 
     WallManager wallManager;
+    Vector2 pastPos;
 
     [Header("Effect")]
     //[SerializeField] Material whiteMaterial;
@@ -227,7 +228,7 @@ public class Collectable : MonoBehaviour
 
     void DieOnWall()
     {
-        if(IsOutOfRange())
+        if (IsOutOfRange())
         {
             gameObject.SetActive(false);
         }

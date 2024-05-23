@@ -3,7 +3,6 @@ using UnityEngine;
 public class FieldItemSpawner : MonoBehaviour
 {
     [SerializeField] int numPoints;
-    [SerializeField] float circleRadius;
     [SerializeField] GameObject[] objectsToSpawn;
     [SerializeField] float frequency;
     [SerializeField] float coinBoxPercentage;
@@ -43,11 +42,5 @@ public class FieldItemSpawner : MonoBehaviour
             new Vector2(Random.Range(-spawnConst + offset, spawnConst - offset), 
                         Random.Range(-spawnConst + offset, spawnConst - offset));
         return spawnArea;
-    }
-
-    void InitSpawnPoints(int _numPoints, float _radius)
-    {
-        numPoints = _numPoints;
-        circleRadius = _radius;
     }
 }
