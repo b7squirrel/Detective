@@ -33,7 +33,7 @@ public class Skill100 : SkillBase
         slownessFactor = new Equation().GetSlowSpeedFactor(Grade, EvoStage);
     }
 
-    public override void UseSkill()
+    public void UseSkill()
     {
         //DebugValues();
         base.UseSkill();
