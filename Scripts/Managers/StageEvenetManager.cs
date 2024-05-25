@@ -15,6 +15,7 @@ public class StageEvenetManager : MonoBehaviour
     SpawnItem spawnItem;
 
     float nextEventTime;
+    float currentTime;
 
     StageTime stageTime;
     int eventIndexer;
@@ -49,10 +50,8 @@ public class StageEvenetManager : MonoBehaviour
             return;
         }
 
-        if (Time.time >= nextEventTime)
+        if (currentTime >= nextEventTime)
         {
-            //nextEventTime += 2f;
-
             if (spawner.GetCurrentEnemyNums() > enemyNumForNextEvent) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
             if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.
 
@@ -81,8 +80,10 @@ public class StageEvenetManager : MonoBehaviour
                     break;
             }
 
+            nextEventTime += stageEvents[eventIndexer].time;
             eventIndexer++;
         }
+        currentTime += Time.deltaTime;
     }
 
     IEnumerator WinStage()
