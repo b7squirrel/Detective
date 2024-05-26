@@ -335,7 +335,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 200
+  m_Mass: 20000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -393,6 +393,7 @@ MonoBehaviour:
   whiteFlashDuration: 0.08
   knockBackSpeed: 12
   knockBackDelay: 0
+  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
@@ -410,7 +411,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b2847e7a689436843802ca6ca60536fb, type: 3}
   - {fileID: 8300000, guid: 220425e348b6f454f94046ff3c09f704, type: 3}
   numberOfProjectile: 2
-  maxProjectile: 10
+  maxProjectile: 50
   timeToAttack: 5
   ShootPoint: {fileID: 487513323129266538}
   dustPoint: {fileID: 1199690674249790336}
