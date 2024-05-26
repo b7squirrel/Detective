@@ -65,8 +65,8 @@ public class Spawner : MonoBehaviour
     #region 스폰
     public void Spawn(EnemyData enemyToSpawn, int index)
     {
-        if (currentEnemyNumbers >= maxEnemyInScene)
-            return;
+        //if (currentEnemyNumbers >= maxEnemyInScene)
+        //    return;
         GetAvailablePoints();
 
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);

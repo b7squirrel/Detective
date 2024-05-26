@@ -8,15 +8,13 @@ public class StageEvenetManager : MonoBehaviour
 {
     [SerializeField] List <StageEvent> stageEvents;
     [SerializeField] AudioClip stageMusic;
-    [SerializeField] float eventFrequency; // 몇 초 간격으로 이벤트를 발동시키려고 할 것인지
     [SerializeField] int enemyNumForNextEvent; // 다음 이벤트를 시작하기 위한 최대 적 수
     ReadStageData readStageData;
     Spawner spawner;
-    SpawnItem spawnItem;
 
-    float nextEventTime;
+    float duration;
+    bool isWaiting;
 
-    StageTime stageTime;
     int eventIndexer;
 
     MusicManager musicManager;
@@ -30,7 +28,6 @@ public class StageEvenetManager : MonoBehaviour
         {
             this.stageEvents.Add(item);
         } 
-        stageTime = GetComponent<StageTime>();
         spawner = FindObjectOfType<Spawner>();
         musicManager = FindObjectOfType<MusicManager>();
         musicManager.InitBGM(stageMusic); 
@@ -49,40 +46,47 @@ public class StageEvenetManager : MonoBehaviour
             return;
         }
 
-        if (Time.time >= nextEventTime)
+        if (spawner.GetCurrentEnemyNums() > enemyNumForNextEvent) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
+        if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.
+
+        if (isWaiting) return;
+        duration = stageEvents[eventIndexer].time;
+        StartCoroutine(TriggerEvent(duration));
+    }
+    IEnumerator TriggerEvent(float _duration)
+    {
+        isWaiting = true;
+        yield return new WaitForSeconds(_duration);
+        isWaiting = false;
+
+        Debug.Log("INDEX = " + eventIndexer);
+
+        switch (stageEvents[eventIndexer].eventType)
         {
-            //nextEventTime += 2f;
+            case StageEventType.SpawnEnemy:
+                for (int i = 0; i < stageEvents[eventIndexer].count; i++)
+                {
+                    spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy);
+                }
+                break;
 
-            if (spawner.GetCurrentEnemyNums() > enemyNumForNextEvent) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
-            if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.
+            case StageEventType.SpawnEnemyGroup:
+                SpawnEnemyGroup(stageEvents[eventIndexer].count);
+                break;
 
-            switch (stageEvents[eventIndexer].eventType)
-            {
-                case StageEventType.SpawnEnemy:
-                    for (int i = 0; i < stageEvents[eventIndexer].count; i++)
-                    {
-                        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy);
-                    }
-                    break;
+            case StageEventType.SpawnSubBoss:
+                SpawnSubBoss();
+                break;
 
-                case StageEventType.SpawnEnemyGroup:
-                    SpawnEnemyGroup(stageEvents[eventIndexer].count);
-                    break;
+            case StageEventType.SpawnEnemyBoss:
+                spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
+                break;
 
-                case StageEventType.SpawnSubBoss:
-                    SpawnSubBoss();
-                    break;
-
-                case StageEventType.SpawnEnemyBoss:
-                    spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
-                    break;
-
-                default:
-                    break;
-            }
-
-            eventIndexer++;
+            default:
+                break;
         }
+
+        eventIndexer++;
     }
 
     IEnumerator WinStage()
