@@ -29962,6 +29962,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOverPanel: {fileID: 2013472476}
   weaponsGroup: {fileID: 1014603021}
+  gameOverSound: {fileID: 8300000, guid: 9d2931c55a59a0c4ead2ad2330b639eb, type: 3}
+  gameOverPanelSound: {fileID: 8300000, guid: 294282d439da8804ea7e2e2351eb1b6e, type: 3}
 --- !u!114 &1277960121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48096,7 +48098,6 @@ GameObject:
   - component: {fileID: 1834188285}
   - component: {fileID: 1834188283}
   - component: {fileID: 1834188300}
-  - component: {fileID: 1834188286}
   - component: {fileID: 1834188289}
   - component: {fileID: 1834188290}
   - component: {fileID: 1834188292}
@@ -48220,18 +48221,6 @@ MonoBehaviour:
   - {fileID: 255018334}
   - {fileID: 1331826210}
   clickSound: {fileID: 8300000, guid: 89c520ce4ccd52d4482ffdc37d56a319, type: 3}
---- !u!114 &1834188286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1834188279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aaa3c2f5ca917640a2e432d8cfc2082, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1834188289
 MonoBehaviour:
   m_ObjectHideFlags: 0

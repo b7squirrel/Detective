@@ -6,7 +6,7 @@ public class WallManager : MonoBehaviour
     [SerializeField] Transform[] walls;
     [SerializeField] Transform[] starts;
     [SerializeField] Transform[] ends;
-    [SerializeField] float duration = 300f; // 5Ка
+    [SerializeField] float duration;
     float elapsedTime;
     bool isGameOver;
 
@@ -23,11 +23,16 @@ public class WallManager : MonoBehaviour
         if (elapsedTime > duration)
         {
             Debug.Log("Game Over");
+            FindObjectOfType<CharacterGameOver>().GameOver();
             isGameOver = true;
         }
     }
     public float GetSpawnAreaConstant()
     {
         return walls[1].position.x;
+    }
+    public void SetStageDuration(float _duration)
+    {
+        duration = _duration;
     }
 }

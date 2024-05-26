@@ -5,17 +5,29 @@ using UnityEngine;
 /// </summary>
 public class StageTime : MonoBehaviour
 {
-    public float time { get; set; }
+    [SerializeField] float stageDuration;
     TimerUI timerUI;
 
     private void Awake()
     {
         timerUI = FindObjectOfType<TimerUI>();
     }
+    private void Start()
+    {
+        Init();
+    }
+    void Init()
+    {
+        FindObjectOfType<WallManager>().SetStageDuration(stageDuration);
+    }
 
     void Update()
     {
-        time += Time.deltaTime;
-        timerUI.UpdateTime(time);
+        if(stageDuration < 0)
+        {
+            stageDuration = 0;
+        }
+        stageDuration -= Time.deltaTime;
+        timerUI.UpdateTime(stageDuration);
     }
 }
