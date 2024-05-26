@@ -27,6 +27,9 @@ public class Character : MonoBehaviour
 
     [SerializeField] AudioClip hurtSound;
 
+    [SerializeField] ParticleSystem wallCollisionParticle;
+    [SerializeField] float wallColParticleDuration; // 벽 충돌 파티클이 보여지는 시간
+
     // public event Action OnDie;
     public UnityEvent OnDie;
     Animator anim;
@@ -42,6 +45,9 @@ public class Character : MonoBehaviour
         currentHealth = MaxHealth;
         hpBar.SetStatus(currentHealth, MaxHealth);
         healEffect.SetActive(false);
+
+        wallCollisionParticle = GetComponentInChildren<ParticleSystem>();
+        wallCollisionParticle.Stop();
     }
 
     void Update()
