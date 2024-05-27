@@ -70,6 +70,7 @@ public class BeamProjectile : ProjectileBase
     }
     void CastRayToDestructables()
     {
+        if (Time.timeScale == 0) return;
         Vector2 startPos = new Vector2(transform.position.x, transform.position.y+ .5f);
         RaycastHit2D hit = Physics2D.Linecast(startPos, endPoint.position, destructables);
         if(Time.frameCount % frameCount != 0) // 일정 프레임 간격으로 데미지를 입힘. 반면에 레이져 그림은 계속 업데이트 됨.
