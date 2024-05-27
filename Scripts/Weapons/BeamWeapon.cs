@@ -19,6 +19,7 @@ public class BeamWeapon : WeaponBase
 
     [SerializeField] GameObject muzzleFlash;
     GameObject muzzle; // muzzleFlash를 생성해서 담아두는 곳
+    GameObject muzzle2; // muzzleFlash를 생성해서 담아두는 곳
     [SerializeField] AudioClip laserShoot;
 
     protected override void Attack()
@@ -120,13 +121,21 @@ public class BeamWeapon : WeaponBase
         if(muzzle == null)
         {
             muzzle = GameManager.instance.poolManager.GetMisc(muzzleFlash);
+            muzzle2 = GameManager.instance.poolManager.GetMisc(muzzleFlash);
+
             if(muzzle != null)
             {
                 muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
-                muzzle.transform.position = ShootPoint.position;
+                muzzle.transform.position = ShootPoint.position - new Vector3(.2f, 0, 0);
+            }
+            if (muzzle2 != null)
+            {
+                muzzle2.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+                muzzle2.transform.position = ShootPoint.position - new Vector3(-.2f, 0, 0);
             }
         }
         muzzle.gameObject.SetActive(true);
+        muzzle2.gameObject.SetActive(true);
 
         isProjectileActive = true;
 
@@ -147,6 +156,7 @@ public class BeamWeapon : WeaponBase
         timer = weaponStats.timeToAttack;
 
         muzzle.gameObject.SetActive(false);
+        muzzle2.gameObject.SetActive(false);
     }
     public override void ActivateSynergyWeapon()
     {
