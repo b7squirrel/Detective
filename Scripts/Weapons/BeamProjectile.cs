@@ -8,6 +8,8 @@ public class BeamProjectile : ProjectileBase
     [SerializeField] LayerMask walls;
     [SerializeField] LayerMask screenEdges;
     [SerializeField] Transform hitWallEffect;
+
+    Transform startPoint; // 오리의 눈 부위에 있는 로케이터
     Animator anim;
     int frameCount = 7; // 몇 프레임 간격으로 데미지를 입힐지 정하는 변수 
     bool isSynergyActivated;
@@ -27,8 +29,8 @@ public class BeamProjectile : ProjectileBase
     private void OnDisable()
     {
         disableLaser = true;
-        laserLine.startColor = new Color(1, 1, 1, 0);
-        laserLine.endColor = new Color(1, 1, 1, 0);
+        laserLine.startColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 0);
+        laserLine.endColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 0);
         hitWallEffect.gameObject.SetActive(false);
     }
 
@@ -58,17 +60,18 @@ public class BeamProjectile : ProjectileBase
     void DrawLaser(Vector2 _endPos)
     {
         //if (laserLine == null) GetComponent<LineRenderer>();
-        
-        laserLine.SetPosition(0, transform.position);
+        Vector2 startPos = new Vector2(transform.position.x, transform.position.y + .5f);
+        laserLine.SetPosition(0, startPos);
         laserLine.SetPosition(1, _endPos);
         hitWallEffect.position = _endPos;
-        laserLine.widthMultiplier = .2f;
+        laserLine.widthMultiplier = Random.Range(.1f, .4f);
         hitWallEffect.gameObject.SetActive(true);
 
     }
     void CastRayToDestructables()
     {
-        RaycastHit2D hit = Physics2D.Linecast(transform.position, endPoint.position, destructables);
+        Vector2 startPos = new Vector2(transform.position.x, transform.position.y+ .5f);
+        RaycastHit2D hit = Physics2D.Linecast(startPos, endPoint.position, destructables);
         if(Time.frameCount % frameCount != 0) // 일정 프레임 간격으로 데미지를 입힘. 반면에 레이져 그림은 계속 업데이트 됨.
         {
             DealDamage(hit);
@@ -78,8 +81,8 @@ public class BeamProjectile : ProjectileBase
             disableLaser = false;
             return;
         }
-        laserLine.startColor = new Color(1, 1, 1, 1);
-        laserLine.endColor = new Color(1, 1, 1, 1);
+        laserLine.startColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 1);
+        laserLine.endColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 1);
         DrawLaser(hit.point);
         
 
