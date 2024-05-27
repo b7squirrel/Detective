@@ -8,21 +8,30 @@ public class WallManager : MonoBehaviour
     [SerializeField] Transform[] starts;
     [SerializeField] Transform[] ends;
 
+    [Header("Wall Position in order of Left, right, Up, Down")]
+    [SerializeField] Vector2[] startPositions = new Vector2[4];
+    [SerializeField] Vector2[] endPositions = new Vector2[4];
+
     [SerializeField] bool isMovingWall;
     float duration;
     float elapsedTime;
     bool isGameOver;
-
+    
     public void SetStageDuration(float _duration)
     {
+        for (int i = 0; i < starts.Length; i++)
+        {
+            starts[i].parent = null;
+            ends[i].parent = null;
+
+            starts[i].position = startPositions[i];
+            ends[i].position = endPositions[i];
+
+            walls[i].position = starts[i].position;
+        }
+
         if (isMovingWall)
         {
-            for (int i = 0; i < starts.Length; i++)
-            {
-                starts[i].parent = null;
-                ends[i].parent = null;
-            }
-
             duration = _duration;
             StartCoroutine(MoveWalls());
         }
