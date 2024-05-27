@@ -8,6 +8,7 @@ public class CharacterGameOver : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] AudioClip gameOverSound;
+    [SerializeField] AudioClip gameOverVocalSound;
     [SerializeField] AudioClip gameOverPanelSound;
 
     public void GameOver()
@@ -20,8 +21,10 @@ public class CharacterGameOver : MonoBehaviour
     IEnumerator GameOverCo()
     {
         GameManager.instance.pauseManager.PauseGame();
-        yield return new WaitForSecondsRealtime(1.2f);
+        yield return new WaitForSecondsRealtime(.5f);
+        SoundManager.instance.Play(gameOverVocalSound);
 
+        yield return new WaitForSecondsRealtime(1.2f);
         SoundManager.instance.Play(gameOverPanelSound);
 
         gameOverPanel.SetActive(true);

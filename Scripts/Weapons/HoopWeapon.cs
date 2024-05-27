@@ -7,6 +7,7 @@ using UnityEngine;
 public class HoopWeapon : WeaponBase
 {
     [SerializeField] GameObject hoopProjectile;
+    [SerializeField] GameObject hoopSynergyProjectile;
     [SerializeField] List<Transform> projectiles;
     [SerializeField] List<Transform> projectilesSynergy;
     [SerializeField] Transform projSpin;
