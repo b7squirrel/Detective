@@ -6,6 +6,7 @@ using UnityEngine;
 public class StageTime : MonoBehaviour
 {
     [SerializeField] float stageDuration;
+    float elaspedTime;
     TimerUI timerUI;
 
     private void Awake()
@@ -23,11 +24,7 @@ public class StageTime : MonoBehaviour
 
     void Update()
     {
-        if(stageDuration < 0)
-        {
-            stageDuration = 0;
-        }
-        stageDuration -= Time.deltaTime;
-        timerUI.UpdateTime(stageDuration);
+        elaspedTime += Time.deltaTime;
+        timerUI.UpdateTime(elaspedTime);
     }
 }
