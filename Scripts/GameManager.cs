@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public EggPanelManager eggPanelManager;
     public BossWarningPanel bossWarningPanel;
     public PauseManager pauseManager;
+    public FieldItemSpawner fieldItemSpawner;
 
     public GameObject joystick;
 
@@ -46,6 +47,8 @@ public class GameManager : MonoBehaviour
 
         bossWarningPanel = GetComponent<BossWarningPanel>();
         pauseManager = GetComponent<PauseManager>();
+
+        fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
     }
 
     void Update()

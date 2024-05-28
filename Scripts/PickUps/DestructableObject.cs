@@ -37,7 +37,6 @@ public class DestructableObject : MonoBehaviour, Idamageable
         // knockBackChance값을 받아오지만 쓰지는 않는다
         currentHp--;
 
-        DropItem();
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
         if (effect != null)
         {
@@ -48,11 +47,13 @@ public class DestructableObject : MonoBehaviour, Idamageable
         if (currentHp <= 0)
         {
             DestroyObject();
+            return;
         }
         if(anim != null)
         {
             anim.SetTrigger("Hit");
         }
+        DropItem();
     }
 
     void DropItem()
@@ -65,7 +66,8 @@ public class DestructableObject : MonoBehaviour, Idamageable
         GameObject dieEffect = GameManager.instance.poolManager.GetMisc(destructableDieEffect);
         if (dieEffect == null) return; // 갯수 제한에 걸려서 더 이상 풀에서 꺼낼 수 없으면 이펙트 표시 안함
         dieEffect.transform.position = transform.position;
-        GetComponent<DropOnDestroy>().DropMultipleObjects();
+        //GetComponent<DropOnDestroy>().DropMultipleObjects();
+        DropItem();
         gameObject.SetActive(false);
     }
     void DestroyObjectWithoutDrop()

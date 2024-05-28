@@ -1,24 +1,23 @@
+using System.Collections;
 using UnityEngine;
 
 public class FieldItemSpawner : MonoBehaviour
 {
     [SerializeField] int numPoints;
-    [SerializeField] GameObject[] objectsToSpawn;
+    [SerializeField] GameObject objectsToSpawn;
     [SerializeField] float frequency;
-    [SerializeField] float coinBoxPercentage;
     float nextSpawnTime;
     WallManager wallManager;
 
-    private void Start()
+    void Start()
     {
         nextSpawnTime = Time.time + frequency;
     }
-    private void Update()
+    void Update()
     {
         if (Time.time >= nextSpawnTime)
         {
-            int index = Random.Range(0, 100f) > coinBoxPercentage ? 0 : 1;
-            SpawnObject(objectsToSpawn[index]);
+            SpawnObject(objectsToSpawn);
             nextSpawnTime = Time.time + frequency;
         }
     }
@@ -42,5 +41,32 @@ public class FieldItemSpawner : MonoBehaviour
             new Vector2(Random.Range(-spawnConst + offset, spawnConst - offset), 
                         Random.Range(-spawnConst + offset, spawnConst - offset));
         return spawnArea;
+    }
+
+    public void SpawnMultipleObjects(int _nums, GameObject _toSpawn, Vector2 _position, int _exp)
+    {
+        StartCoroutine(GenItems(_nums, _toSpawn, _position, _exp));
+    }
+    IEnumerator GenItems(int _nums, GameObject _toSpawn, Vector2 _position, int _exp)
+    {
+        int numberOfItems = _nums;
+        bool _isGem = false;
+        if (_toSpawn.GetComponent<GemPickUpObject>() != null)
+        {
+            _isGem = true;
+        }
+        else
+        {
+            _isGem = false;
+        }
+         
+        
+        while (numberOfItems > 0)
+        {
+            SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);
+            numberOfItems--;
+            yield return null;
+        }
+        yield break;
     }
 }

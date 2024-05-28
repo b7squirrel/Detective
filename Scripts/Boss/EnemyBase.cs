@@ -117,7 +117,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (HPbarPrefab == null) return;
         if (HPbar == null) HPbar = Instantiate(HPbarPrefab, HpBarPos.position, Quaternion.identity);
         HPbar.transform.localScale = HpBarPos.localScale;
-        Debug.Log("Scale = " + HpBarPos.localScale.x);
         if (hpBar == null) hpBar = HPbar.GetComponentInChildren<StatusBar>();
 
         maxHealth = Stats.hp;

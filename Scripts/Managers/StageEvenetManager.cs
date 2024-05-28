@@ -59,8 +59,6 @@ public class StageEvenetManager : MonoBehaviour
         yield return new WaitForSeconds(_duration);
         isWaiting = false;
 
-        Debug.Log("INDEX = " + eventIndexer);
-
         switch (stageEvents[eventIndexer].eventType)
         {
             case StageEventType.SpawnEnemy:

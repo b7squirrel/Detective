@@ -5,13 +5,14 @@ public class DropOnDestroy : MonoBehaviour
 {
     [SerializeField] List<GameObject> dropItemPrefab; // 맞을 때마다 떨어트리는 아이템 (chest는 그냥 이걸로 드롭)
     [SerializeField] bool noMultipleDrops; // 파괴될 때 여러개를 드롭하지 않는다면 이 아래의 드롭 변수들은 의미가 없다
-    [SerializeField] GameObject dropLastItemPrefab; // 파괴될 때 떨어트리는 아이템
+    //[SerializeField] GameObject dropLastItemPrefab; // 파괴될 때 떨어트리는 아이템
     [SerializeField] int numberOfLastDrops; // 파괴될 때 떨어트리는 아이템 갯수
     [SerializeField] GameObject multipleDrops; // 여러개를 떨어트릴 때
-    [SerializeField][Range(0f, 1f)] float chance = 1f;
+    [SerializeField] GameObject specialDrop; // 특수 아이템 드롭
     [SerializeField] int exp;
     [SerializeField] int hp;
     [SerializeField] bool isChest; // 상자는 플레이어의 체력에 따라 우유를 떨어트려야 하므로 구별해야 함
+    [SerializeField] float multiDropRate; // 무더기를 드롭할 확률
 
     bool isQuiting;
 
@@ -20,6 +21,9 @@ public class DropOnDestroy : MonoBehaviour
     //    isQuiting = true;
     //}
 
+    /// <summary>
+    /// 일반 드롭
+    /// </summary>
     public void CheckDrop()
     {
         //if (isQuiting) return;
@@ -31,54 +35,64 @@ public class DropOnDestroy : MonoBehaviour
         }
 
         bool isGem = false;
+        Debug.Log("Is Chest = " + isChest);
 
         // 체력이 30%이하로 내려가면 무조건 힐링을 할 수 있는 아이템이 드롭되도록
-        if (Random.value < chance)
-        {
-            GameObject toDrop = dropItemPrefab[Random.Range(0, dropItemPrefab.Count)];
+        GameObject toDrop = dropItemPrefab[Random.Range(0, dropItemPrefab.Count)];
 
-            if (isChest)
+        if (isChest)
+        {
+            Character character = Player.instance.GetComponent<Character>();
+            if ((float)character.GetCurrentHP() / (float)character.MaxHealth < .3f)
             {
-                Character character = Player.instance.GetComponent<Character>();
-                if ((float)character.GetCurrentHP() / (float)character.MaxHealth < .3f)
+                Debug.Log("체력 비율 = " + (float)character.GetCurrentHP() / (float)character.MaxHealth);
+                for (int i = 0; i < dropItemPrefab.Count; i++)
                 {
-                    Debug.Log("체력 비율 = " + (float)character.GetCurrentHP() / (float)character.MaxHealth);
-                    for (int i = 0; i < dropItemPrefab.Count; i++)
+                    if (dropItemPrefab[i].GetComponent<HealPickUpObject>() != null)
                     {
-                        if (dropItemPrefab[i].GetComponent<HealPickUpObject>() != null)
-                        {
-                            toDrop = dropItemPrefab[i];
-                            break;
-                        }
+                        toDrop = dropItemPrefab[i];
+                        break;
                     }
                 }
             }
 
-            if (toDrop == null)
+            // 상자일 때는 무더기 드롭의 확률도 고려
+            bool isMultiDrop = Random.Range(0f, 1f) > multiDropRate ? false : true;
+            if (isMultiDrop)
             {
-                Debug.LogWarning("DropOnDestroy, drop Item Prefab이 null입니다.");
-                return;
+                if (toDrop.GetComponent<MagnetPickUPObject>() == null) // 자석은 무더기 드롭이 의미가 없어보인다.
+                {
+                    toDrop = specialDrop;
+                    
+                }
             }
-
-            if (GetComponent<Enemy>() != null)
-            {
-                exp = GetComponent<Enemy>().ExperienceReward;
-            }
-
-            if(toDrop.GetComponent<Collectable>() != null)
-            {
-                isGem = toDrop.GetComponent<Collectable>().IsGem;
-            }
-            // 보석이라면 확률에 따라 드롭
-            
-            if (isGem)
-            {
-                float randomDrop = Random.Range(0f, 1f);
-                if (randomDrop > StaticValues.GemDropRate)
-                    return;
-            }
-            SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
         }
+
+        if (toDrop == null)
+        {
+            Debug.LogWarning("DropOnDestroy, drop Item Prefab이 null입니다.");
+            return;
+        }
+
+        if (GetComponent<Enemy>() != null)
+        {
+            exp = GetComponent<Enemy>().ExperienceReward;
+        }
+
+        if (toDrop.GetComponent<Collectable>() != null)
+        {
+            isGem = toDrop.GetComponent<Collectable>().IsGem;
+        }
+
+        // 보석이라면 확률에 따라 드롭
+        if (isGem)
+        {
+            float randomDrop = Random.Range(0f, 1f);
+            if (randomDrop > StaticValues.GemDropRate)
+                return;
+        }
+
+        SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
     }
 
     /// <summary>
@@ -86,39 +100,44 @@ public class DropOnDestroy : MonoBehaviour
     /// </summary>
     public void DropLastItem()
     {
-        GameObject toDrop = dropLastItemPrefab;
-        if (toDrop == null)
-        {
-            Debug.LogWarning("DropOnDestroy, drop Last Item Prefab이 null입니다.");
-            return;
-        }
-        bool isGem = false;
-        if (GetComponent<Enemy>() != null)
-        {
-            exp = GetComponent<Enemy>().ExperienceReward;
-        }
-        if (toDrop.GetComponent<Collectable>() != null)
-        {
-            isGem = toDrop.GetComponent<Collectable>().IsGem;
-        }
+        //GameObject toDrop = dropLastItemPrefab;
+        //if (toDrop == null)
+        //{
+        //    Debug.LogWarning("DropOnDestroy, drop Last Item Prefab이 null입니다.");
+        //    return;
+        //}
+        //bool isGem = false;
+        //if (GetComponent<Enemy>() != null)
+        //{
+        //    exp = GetComponent<Enemy>().ExperienceReward;
+        //}
+        //if (toDrop.GetComponent<Collectable>() != null)
+        //{
+        //    isGem = toDrop.GetComponent<Collectable>().IsGem;
+        //}
         
-        SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
+        //SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
     }
     
     public void DropMultipleObjects()
     {
-        if(noMultipleDrops)
+        if (GetComponent<Enemy>() != null)
         {
-            return;
+            exp = GetComponent<Enemy>().ExperienceReward;
         }
-        GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
-        drops.GetComponent<MultiDrops>().Init(numberOfLastDrops, dropLastItemPrefab);
+        Debug.Log("numberOfLastDrops = " + numberOfLastDrops);
+        GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(numberOfLastDrops, multipleDrops, transform.position, exp);
+        //GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
+        //drops.GetComponent<MultiDrops>().Init(numberOfLastDrops, dropLastItemPrefab);
     }
-
     // 보스가 드롭하는 아이템들은 모두 플레이어에게 흡수되도록
     public void DropMultipleBossObjects()
     {
+        GameObject toDrop = dropItemPrefab[Random.Range(0, dropItemPrefab.Count)];
+
         GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
-        drops.GetComponent<MultiDrops>().InitBossItems(numberOfLastDrops, dropLastItemPrefab);
+        drops.GetComponent<MultiDrops>().InitBossItems(numberOfLastDrops, toDrop);
     }
+
+
 }

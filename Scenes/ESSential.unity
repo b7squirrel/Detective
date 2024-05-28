@@ -6329,11 +6329,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numPoints: 2
-  objectsToSpawn:
-  - {fileID: 1519986380285838769, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-  - {fileID: 8101259182395795704, guid: 7838f182db0ac3746aa94d1ab3b8f19c, type: 3}
-  frequency: 30
-  coinBoxPercentage: 10
+  objectsToSpawn: {fileID: 1519986380285838769, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
+  frequency: 5
 --- !u!1 &260368070
 GameObject:
   m_ObjectHideFlags: 0
@@ -48135,6 +48132,7 @@ MonoBehaviour:
   eggPanelManager: {fileID: 1834188289}
   bossWarningPanel: {fileID: 0}
   pauseManager: {fileID: 0}
+  fieldItemSpawner: {fileID: 0}
   joystick: {fileID: 277539638}
   gameTime: 0
   maxGameTime: 20

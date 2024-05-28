@@ -19,7 +19,6 @@ public class BubbleIndicator : MonoBehaviour
 
     public void SetIconImage(Sprite _iconSprite)
     {
-        Debug.Log("스프라이트 이름 = " +  _iconSprite.name);
         iconSR.sprite = _iconSprite;
     }
 }
