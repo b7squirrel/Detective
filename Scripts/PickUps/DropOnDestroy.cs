@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DropOnDestroy : MonoBehaviour
@@ -35,7 +36,6 @@ public class DropOnDestroy : MonoBehaviour
         }
 
         bool isGem = false;
-        Debug.Log("Is Chest = " + isChest);
 
         // 체력이 30%이하로 내려가면 무조건 힐링을 할 수 있는 아이템이 드롭되도록
         GameObject toDrop = dropItemPrefab[Random.Range(0, dropItemPrefab.Count)];
@@ -57,13 +57,20 @@ public class DropOnDestroy : MonoBehaviour
             }
 
             // 상자일 때는 무더기 드롭의 확률도 고려
-            bool isMultiDrop = Random.Range(0f, 1f) > multiDropRate ? false : true;
+            bool isMultiDrop = Random.Range(0f, 100f) > multiDropRate ? false : true;
             if (isMultiDrop)
             {
                 if (toDrop.GetComponent<MagnetPickUPObject>() == null) // 자석은 무더기 드롭이 의미가 없어보인다.
                 {
+                    if(toDrop.name == "Gem" || toDrop.name == "Candy") // 동전, 보석은 무더기로 
+                    {
+                        multipleDrops = toDrop;
+                        DropMultipleObjects();
+                        return;
+                    }
+                    // 우유는 특수 우유
                     toDrop = specialDrop;
-                    
+                    Debug.Log("Special Drop name = " + toDrop.name);
                 }
             }
         }
