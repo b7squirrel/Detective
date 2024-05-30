@@ -107,4 +107,8 @@ public class EnemyFinder : MonoBehaviour
                                             center + new Vector2(halfWidth * .8f, halfHeight * .8f), enemy);
         return enemies;
     }
+    public Transform GetAllEnemyTransform()
+    {
+        return null;
+    }
 }

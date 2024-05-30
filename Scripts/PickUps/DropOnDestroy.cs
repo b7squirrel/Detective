@@ -60,7 +60,9 @@ public class DropOnDestroy : MonoBehaviour
             bool isMultiDrop = Random.Range(0f, 100f) > multiDropRate ? false : true;
             if (isMultiDrop)
             {
-                if (toDrop.GetComponent<MagnetPickUPObject>() == null) // 자석은 무더기 드롭이 의미가 없어보인다.
+                if (toDrop.GetComponent<MagnetPickUPObject>() == null &&
+                        toDrop.GetComponent<ClockPickUpObject>() == null &&
+                        toDrop.GetComponent<InvinciblePickUpObject>() == null) // 자석은 무더기 드롭이 의미가 없어보인다.
                 {
                     if(toDrop.name == "Gem" || toDrop.name == "Candy") // 동전, 보석은 무더기로 
                     {

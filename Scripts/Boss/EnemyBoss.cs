@@ -205,6 +205,7 @@ public class EnemyBoss : EnemyBase, Idamageable
             {
                 if (hits[i].CompareTag("Enemy"))
                 {
+                    Debug.Log("Enemy on boss landing " + hits[i].name);
                     hit.Stunned(transform.position);
                 }
             }

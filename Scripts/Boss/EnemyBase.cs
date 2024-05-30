@@ -148,6 +148,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region Movement Functions
     public virtual void Flip()
     {
+        if (anim.speed == 0) return; // 스탑워치가 작동하고 있다면 플립되지 않음
         if(isFlipping == false)
         {
             if (flipCoroutine != null) StopCoroutine(flipCoroutine);
@@ -453,4 +454,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
         sr.material = initialMat;
     }
     #endregion
+
+    public void PauseEnemy()
+    {
+        anim.speed = 0f;
+        CastSlownessToEnemy(1f);
+    }
+    public void ResumeEnemy()
+    {
+        anim.speed = 1;
+        ResetCurrentSpeedToDefault();
+    }
 }

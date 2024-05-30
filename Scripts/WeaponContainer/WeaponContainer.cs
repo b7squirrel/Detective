@@ -62,11 +62,13 @@ public class WeaponContainer : MonoBehaviour
         if(GameManager.instance.IsPlayerInvincible)
         {
             Player.instance.transform.localScale = 1.6f * Vector2.one;
+            weaponContainerAnims[0].SetSpritesInvincible(true);
         }
         else
         {
             Player.instance.transform.localScale = Vector2.one;
-        }    
+            weaponContainerAnims[0].SetSpritesInvincible(false);
+        }
     }
 
     public Transform CreateContainer(WeaponData wd, bool isInitialWeapon)
@@ -94,7 +96,7 @@ public class WeaponContainer : MonoBehaviour
         else
         {
             container.SetParent(weaponContainerGroup.transform);
-            container.transform.localScale = .7f * Vector2.one;
+            container.transform.localScale = .8f * Vector2.one;
             //container.transform.localScale = Vector2.one;
             wa.SetEquipmentSprites(wd);
         }

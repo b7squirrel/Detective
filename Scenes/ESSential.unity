@@ -6294,6 +6294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 259608700}
   - component: {fileID: 259608701}
+  - component: {fileID: 259608702}
   m_Layer: 0
   m_Name: Field Item Spawner
   m_TagString: Untagged
@@ -6330,7 +6331,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numPoints: 1
   objectsToSpawn: {fileID: 1519986380285838769, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-  frequency: 30
+  frequency: 17
+--- !u!114 &259608702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259608699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa233938080abc742b78342662734c5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stopDuration: 10
+  invincibaleDuration: 15
+  bombDamage: 1200
+  bombHitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
 --- !u!1 &260368070
 GameObject:
   m_ObjectHideFlags: 0
@@ -6437,7 +6454,7 @@ PrefabInstance:
     - target: {fileID: 3118075186976557800, guid: c9bef7141df0d4b4eb7f847536e5fa1a, type: 3}
       propertyPath: upgradeToPick.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 5836482e39c69b44b95694d14838502f, type: 2}
+      objectReference: {fileID: 11400000, guid: ce1e985d91dd0fa49b5630851d047610, type: 2}
     - target: {fileID: 3118075186976557802, guid: c9bef7141df0d4b4eb7f847536e5fa1a, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -29990,7 +30007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   containerPrefab: {fileID: 5984554558459288612, guid: bfac2899e58946246937f7087de7632d, type: 3}
-  moveSpeed: 6
+  moveSpeed: 5
   weaponContainers: []
 --- !u!70 &1277960123
 CapsuleCollider2D:
@@ -37343,7 +37360,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1614274335
 RectTransform:
   m_ObjectHideFlags: 0

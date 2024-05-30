@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponContainerAnim : MonoBehaviour
@@ -18,6 +19,10 @@ public class WeaponContainerAnim : MonoBehaviour
 
     bool _facingRight = true;
     int essentialIndex;
+
+    [Header("Invincible Effects")]
+    Coroutine invincibleSpriteChange;
+    Color[] colors = { Color.red, Color.green, Color.blue, Color.yellow, Color.magenta, Color.cyan };
     public bool FacingRight
     {
         get => _facingRight;
@@ -62,6 +67,7 @@ public class WeaponContainerAnim : MonoBehaviour
 
         sr[0].sortingOrder = indexSortingOrder;
         indexSortingOrder--;
+
 
         if (wd.DefaultHead != null)
         {
@@ -119,6 +125,12 @@ public class WeaponContainerAnim : MonoBehaviour
             costumeSR.color = new Color(1, 1, 1, 0);
         }
 
+        face.sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        sr[0].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
         for (int i = 0; i < 4; i++)
         {
             sr[i + 1].sortingOrder = indexSortingOrder;
@@ -132,13 +144,6 @@ public class WeaponContainerAnim : MonoBehaviour
 
             sr[i + 1].sprite = iDatas[i].charImage;
         }
-
-        Debug.Log("face sorting order = " + indexSortingOrder);
-        face.sortingOrder = indexSortingOrder;
-        indexSortingOrder--;
-
-        sr[0].sortingOrder = indexSortingOrder;
-        indexSortingOrder--;
     }
     void FlipSpriteGroup()
     {
@@ -169,21 +174,31 @@ public class WeaponContainerAnim : MonoBehaviour
             return;
         }
 
+        SpriteRenderer _sr = null;
+        if (_weaponObject.GetComponentInChildren<Weapon>() != null)
+        {
+            _sr = _weaponObject.GetComponentInChildren<Weapon>().GetWeaponSprite();
+        }
+
         if (_index == 0) // 머리 부위이면
         {
             _weaponObject.SetParent(headGroup);
+            if(_sr != null) { _sr.sortingOrder = sr[1].sortingOrder; }
         }
         if (_index == 1) // 가슴 부위이면
         {
             _weaponObject.SetParent(chestGroup);
+            if (_sr != null) { _sr.sortingOrder = sr[2].sortingOrder; }
         }
         if (_index == 2) // 얼굴 부위이면
         {
             _weaponObject.SetParent(headGroup);
+            if (_sr != null) { _sr.sortingOrder = sr[3].sortingOrder; }
         }
         if (_index == 3) // 손 부위이면
         {
             _weaponObject.SetParent(handsGroup);
+            if (_sr != null) { _sr.sortingOrder = sr[4].sortingOrder; }
         }
         if (_index == 4) // 그냥 몸에 붙여서 움직이는 무기라면
         {
@@ -206,4 +221,44 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         _sp.sprite = sprite;
     }
+    #region Invincible
+    public void SetSpritesInvincible(bool _isInvincible)
+    {
+        // 먼저 진행되고 있던 코루틴이 있다면 종료
+        if (invincibleSpriteChange != null) StopCoroutine(invincibleSpriteChange);
+
+        if (_isInvincible)
+        {
+            invincibleSpriteChange = StartCoroutine(InvincibleSpriteChangeCo());
+        }
+        else
+        {
+            SetSpriteColorToDefault();
+        }
+    }
+    IEnumerator InvincibleSpriteChangeCo()
+    {
+        while(true)
+        {
+            Color randomColor = colors[Random.Range(0, colors.Length)];
+            for (int i = 0; i < sr.Length; i++)
+            {
+                sr[i].color = randomColor;
+            }
+            if (costumeSR != null) costumeSR.color = randomColor;
+            if (face != null) face.color = randomColor;
+            yield return null;
+        }
+    }
+    void SetSpriteColorToDefault()
+    {
+        Color defaultColor = new Color(1, 1, 1, 1);
+        for (int i = 0; i < sr.Length; i++)
+        {
+            sr[i].color = defaultColor;
+        }
+        if (costumeSR != null) costumeSR.color = defaultColor;
+        if (face != null) face.color = defaultColor;
+    }
+    #endregion
 }
