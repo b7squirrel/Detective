@@ -38,7 +38,7 @@ public class StageEvenetManager : MonoBehaviour
 
     void Update()
     {
-        if (onStopWatchEffect) return; // 스톱위치가 작동 중이면 이벤트 홀드
+        //if (onStopWatchEffect) return; // 스톱위치가 작동 중이면 이벤트 홀드
 
         if (IsWinningStage)
         {
@@ -61,6 +61,8 @@ public class StageEvenetManager : MonoBehaviour
         isWaiting = true;
         yield return new WaitForSeconds(_duration);
         isWaiting = false;
+
+        if (onStopWatchEffect) yield break; // 스톱위치가 작동 중이면 이벤트 홀드
 
         switch (stageEvents[eventIndexer].eventType)
         {
