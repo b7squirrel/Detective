@@ -86,6 +86,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         StopFlipCoroutine();
         isFlipping = false;
 
+        anim.speed = 1f;
+        //rb.bodyType = RigidbodyType2D.Dynamic;
+
         if (Target.position.x - rb.transform.position.x > 0) 
         {
             currentFacingDir = 1f;
@@ -407,6 +410,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     protected virtual void KnockBack(Vector2 target, float knockBackDelay, float knockBackSpeedFactor)
     {
+        if (anim.speed == 0) return;
         // knockbackDelay를 0으로 설정해 두었다면 낙백이 일어나지 않음
         if (knockBackDelay != 0) // 낙백이 일어나지 않게. 낵백이 끝나야 kill이 진행된다
         {
@@ -459,10 +463,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         anim.speed = 0f;
         CastSlownessToEnemy(1f);
+        //rb.bodyType = RigidbodyType2D.Static;
     }
     public void ResumeEnemy()
     {
         anim.speed = 1;
         ResetCurrentSpeedToDefault();
+        //rb.bodyType = RigidbodyType2D.Dynamic;
     }
 }

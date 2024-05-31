@@ -17,6 +17,10 @@ public class DropOnDestroy : MonoBehaviour
 
     bool isQuiting;
 
+    [Header("Debug")]
+    [SerializeField] bool isChestDebuggingOn;
+    [SerializeField] int dropItemIndex;
+
     //void OnApplicationQuit()
     //{
     //    isQuiting = true;
@@ -75,6 +79,8 @@ public class DropOnDestroy : MonoBehaviour
                     Debug.Log("Special Drop name = " + toDrop.name);
                 }
             }
+
+            if (isChestDebuggingOn) toDrop = dropItemPrefab[dropItemIndex];
         }
 
         if (toDrop == null)

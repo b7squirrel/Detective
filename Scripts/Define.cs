@@ -79,6 +79,11 @@ public class StaticValues
     public static float GemDropRate = .5f; // 보석 드롭 확률 60%
 }
 
+public class Colors
+{
+    public static Color[] randomColors = 
+        { Color.red, Color.blue, Color.yellow, Color.magenta, Color.cyan, Color.white };
+}
 public class Equation
 {
     public int GetDamage(int _originalDamage, int _damageBonus)

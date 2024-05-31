@@ -6,7 +6,7 @@ public enum SpawnItem {enemy, subBoss, enemyGroup, bossSlime}
 
 public class StageEvenetManager : MonoBehaviour
 {
-    [SerializeField] List <StageEvent> stageEvents;
+    [SerializeField] List<StageEvent> stageEvents;
     [SerializeField] AudioClip stageMusic;
     [SerializeField] int enemyNumForNextEvent; // 다음 이벤트를 시작하기 위한 최대 적 수
     ReadStageData readStageData;
@@ -14,11 +14,12 @@ public class StageEvenetManager : MonoBehaviour
 
     float duration;
     bool isWaiting;
+    bool onStopWatchEffect;
 
     int eventIndexer;
 
     MusicManager musicManager;
-    public bool IsWinningStage {get; set;}
+    public bool IsWinningStage { get; set; }
     Coroutine winStageCoroutine;
 
     void Start()
@@ -27,16 +28,18 @@ public class StageEvenetManager : MonoBehaviour
         foreach (var item in readStageData.GetStageEventsList())
         {
             this.stageEvents.Add(item);
-        } 
+        }
         spawner = FindObjectOfType<Spawner>();
         musicManager = FindObjectOfType<MusicManager>();
-        musicManager.InitBGM(stageMusic); 
+        musicManager.InitBGM(stageMusic);
         IsWinningStage = false;
         winStageCoroutine = null;
     }
 
     void Update()
     {
+        if (onStopWatchEffect) return; // 스톱위치가 작동 중이면 이벤트 홀드
+
         if (IsWinningStage)
         {
             if (winStageCoroutine == null)
@@ -90,7 +93,7 @@ public class StageEvenetManager : MonoBehaviour
     IEnumerator WinStage()
     {
         yield return new WaitForSeconds(3f);
-        GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
+        GameManager.instance.GetComponent<WinStage>().OpenPanel();
     }
     void SpawnSubBoss()
     {
@@ -99,5 +102,10 @@ public class StageEvenetManager : MonoBehaviour
     void SpawnEnemyGroup(int number)
     {
         spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup, number);
+    }
+
+    public void PasueStageEvent(bool _pause)
+    {
+        onStopWatchEffect = _pause;
     }
 }

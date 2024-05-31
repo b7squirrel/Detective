@@ -22,7 +22,6 @@ public class WeaponContainerAnim : MonoBehaviour
 
     [Header("Invincible Effects")]
     Coroutine invincibleSpriteChange;
-    Color[] colors = { Color.red, Color.green, Color.blue, Color.yellow, Color.magenta, Color.cyan };
     public bool FacingRight
     {
         get => _facingRight;
@@ -240,7 +239,7 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         while(true)
         {
-            Color randomColor = colors[Random.Range(0, colors.Length)];
+            Color randomColor = Colors.randomColors[Random.Range(0, Colors.randomColors.Length)];
             for (int i = 0; i < sr.Length; i++)
             {
                 sr[i].color = randomColor;

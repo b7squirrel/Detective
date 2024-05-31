@@ -7,6 +7,7 @@ public class FieldItemEffect : MonoBehaviour
     [SerializeField] float invincibaleDuration;
     [SerializeField] int bombDamage;
     [SerializeField] GameObject bombHitEffect;
+    StageEvenetManager stageEventManager;
     #region ½ºÅé¿öÄ¡
     public void StopEnemies()
     {
@@ -17,6 +18,9 @@ public class FieldItemEffect : MonoBehaviour
     }
     IEnumerator StopEnemiesCo(EnemyBase[] _allEnemies, float _stopDuration)
     {
+        if(stageEventManager == null) stageEventManager = FindObjectOfType<StageEvenetManager>();
+        stageEventManager.PasueStageEvent(true);
+
         for (int i = 0; i < _allEnemies.Length; i++)
         {
             if (_allEnemies[i] != null)
@@ -25,6 +29,8 @@ public class FieldItemEffect : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(_stopDuration);
+
+        stageEventManager.PasueStageEvent(false);
 
         for (int i = 0; i < _allEnemies.Length; i++)
         {
