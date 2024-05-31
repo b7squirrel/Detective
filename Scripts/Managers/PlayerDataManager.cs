@@ -121,7 +121,6 @@ public class PlayerDataManager : MonoBehaviour
         {
             string jsonData = File.ReadAllText(filePath);
             playerData = JsonUtility.FromJson<PlayerData>(jsonData);
-            Debug.Log("Coins = " + playerData.currentCandyNumber);
         }
         else
         {

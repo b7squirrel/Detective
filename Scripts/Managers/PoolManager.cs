@@ -30,7 +30,6 @@ public class PoolManager : MonoBehaviour
     void InitEnemyPools()
     {
         stageAssetManager = FindAnyObjectByType<StageAssetManager>();
-        Debug.Log("적 갯수 = " + stageAssetManager.enemies.Length);
         this.enemies = new GameObject[stageAssetManager.enemies.Length];
 
         for (int i = 0; i < this.enemies.Length; i++)

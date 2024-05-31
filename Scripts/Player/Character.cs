@@ -130,7 +130,6 @@ public class Character : MonoBehaviour
         if (currentHealth < 0)
         {
             Die();
-            Debug.Log("Dead");
         }
         else
         {

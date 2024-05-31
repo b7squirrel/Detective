@@ -140,7 +140,6 @@ public class DropOnDestroy : MonoBehaviour
         {
             exp = GetComponent<Enemy>().ExperienceReward;
         }
-        Debug.Log("numberOfLastDrops = " + numberOfLastDrops);
         GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(numberOfLastDrops, multipleDrops, transform.position, exp);
         //GameObject drops = Instantiate(multipleDrops, transform.position, Quaternion.identity);
         //drops.GetComponent<MultiDrops>().Init(numberOfLastDrops, dropLastItemPrefab);

@@ -52,28 +52,7 @@ public class Enemy : EnemyBase
         if (GameManager.instance.player == null)
             return;
 
-        if (isSubBoss || isBoss) // 보스나 서브보스는 매프레임마다 벽 안쪽에 있는지 체크
-        {
-            if(IsOutOfRange())
-            {
-                transform.position = currentPosition;
-            }
-            currentPosition = transform.position;
-        }
-        else // 일반 적이라면 10초마다 한번씩 체크해서 벽 바깥이면 비활성화
-        {
-            if (Time.time > nextOutOfRangeCheckingTime)
-            {
-                nextOutOfRangeCheckingTime += 10f;
-                return;
-            }
-
-            if(IsOutOfRange())
-            {
-                Debug.Log("Out of Area");
-                Die();
-            }
-        }
+        
 
         // col.enabled = sr.isVisible;
 
@@ -86,6 +65,32 @@ public class Enemy : EnemyBase
             return;
         if (GameManager.instance.player == null)
             return;
+
+        if (isSubBoss || isBoss) // 보스나 서브보스는 매프레임마다 벽 안쪽에 있는지 체크
+        {
+            if (IsOutOfRange())
+            {
+                Debug.Log(gameObject.name + " is out of range");
+                transform.position = currentPosition;
+                return;
+            }
+            currentPosition = transform.position;
+        }
+        else // 일반 적이라면 10초마다 한번씩 체크해서 벽 바깥이면 비활성화
+        {
+            if (Time.time > nextOutOfRangeCheckingTime)
+            {
+                nextOutOfRangeCheckingTime += 10f;
+                return;
+            }
+
+            if (IsOutOfRange())
+            {
+                Debug.Log("Out of Area");
+                Die();
+            }
+        }
+
         Flip();
 
         isDetectingPlayer = false;

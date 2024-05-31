@@ -151,6 +151,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region Movement Functions
     public virtual void Flip()
     {
+        if (gameObject.activeSelf == false) return;
+        
         if (anim.speed == 0) return; // 스탑워치가 작동하고 있다면 플립되지 않음
         if(isFlipping == false)
         {
