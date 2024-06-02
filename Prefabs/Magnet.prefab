@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4608330200255746176}
   - component: {fileID: 7437624994343007031}
+  - component: {fileID: 2891452915315858710}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -85,6 +86,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!210 &2891452915315858710
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271970017588172365}
+  m_Enabled: 1
+  m_SortingLayerID: -231762679
+  m_SortingLayer: 10
+  m_SortingOrder: 0
 --- !u!1 &1399360912934819334
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,6 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Key>k__BackingField: Magnet_A
+  maxNum: 0
 --- !u!58 &-5513009917536080079
 CircleCollider2D:
   m_ObjectHideFlags: 0

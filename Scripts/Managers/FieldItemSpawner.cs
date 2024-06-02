@@ -9,6 +9,8 @@ public class FieldItemSpawner : MonoBehaviour
     float nextSpawnTime;
     WallManager wallManager;
 
+    int sortingLayerID;
+
     void Start()
     {
         nextSpawnTime = Time.time + frequency;
@@ -50,7 +52,7 @@ public class FieldItemSpawner : MonoBehaviour
     IEnumerator GenItems(int _nums, GameObject _toSpawn, Vector2 _position, int _exp)
     {
         int numberOfItems = _nums;
-        bool _isGem = false;
+        bool _isGem;
         if (_toSpawn.GetComponent<GemPickUpObject>() != null)
         {
             _isGem = true;

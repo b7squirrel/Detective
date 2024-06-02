@@ -24,6 +24,7 @@ public class SpawnManager : MonoBehaviour
             //    return;
             //}
             pickup = GameManager.instance.poolManager.GetGem(toSpawn, experience).transform;
+
             gemManager.IncreaseGemCount(); // 보석 수 증가
         }
         else
