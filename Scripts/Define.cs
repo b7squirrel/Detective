@@ -16,6 +16,12 @@ public enum EssentialEquip { Head, Chest, Face, Hand, Essential }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
 public enum DefaultItem { Default }
 
+// 필드에서 플레이어의 위치
+public enum Region
+{
+    None, TopLeft, TopRight, BottomLeft, BottomRight
+}
+
 // Slot Pooling
 public enum Slots { CardSlot, EquipSlot, LaunchSlot }
 public class MyGrade
@@ -153,4 +159,5 @@ public class Equation
         }
         return false;
     }
+    
 }

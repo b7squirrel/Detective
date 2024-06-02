@@ -289,14 +289,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
             Attack();
         }
     }
-    
-    private void OnCollisionExit(Collision collision)
+    protected void OnCollisionExit2D(Collision2D collision)
     {
         if (GameManager.instance.player == null)
             return;
         if (collision.gameObject == Target.gameObject)
         {
             anim.SetBool("Attack", false);
+            Debug.Log("Exit Attack");
         }
     }
 
