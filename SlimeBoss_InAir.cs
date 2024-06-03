@@ -8,6 +8,10 @@ public class SlimeBoss_InAir : StateMachineBehaviour
     float moveSpeed;
     [SerializeField] LayerMask noCollisionLayer;
 
+    WallManager wallManager;
+    Transform bossTransform;
+    EnemyBoss enemeyBoss;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // collider는 aniamtion event로 껐음
@@ -15,13 +19,16 @@ public class SlimeBoss_InAir : StateMachineBehaviour
         target = Player.instance.transform.position;
         moveSpeed = animator.GetComponent<EnemyBoss>().moveSpeedInAir;
         animator.GetComponent<EnemyBoss>().SetLayer("InAir");
+        bossTransform = animator.GetComponent<Transform>();
+        enemeyBoss = animator.GetComponent<EnemyBoss>();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.GetComponent<Transform>().position = Vector2.MoveTowards(animator.GetComponent<Transform>().position, target, moveSpeed * Time.deltaTime);
+        enemeyBoss.RePosition();
+        bossTransform.position = Vector2.MoveTowards(bossTransform.position, target, moveSpeed * Time.deltaTime);
 
-        if (Vector2.Distance(animator.GetComponent<Transform>().position, target) < 1f)
+        if (Vector2.Distance(bossTransform.position, target) < 1f)
         {
             animator.SetTrigger("IsClose");
         }

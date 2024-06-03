@@ -30,6 +30,9 @@ public class EnemyBoss : EnemyBase, Idamageable
     public Coroutine shootCoroutine;
     bool wallCreated;
 
+    WallManager wallManager;
+    Vector2 currentPosition;
+
     [SerializeField] float landingImpactSize;
     [SerializeField] float landingImpactForce;
     [SerializeField] LayerMask landingHit;
@@ -210,6 +213,26 @@ public class EnemyBoss : EnemyBase, Idamageable
                 }
             }
         }
+    }
+
+    bool IsOutOfRange()
+    {
+        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float spawnConst = wallManager.GetSpawnAreaConstant();
+
+        return new Equation().IsOutOfRange(transform.position, spawnConst);
+    }
+
+    public void RePosition()
+    {
+        if (IsOutOfRange())
+        {
+            Debug.Log(gameObject.name + " is out of range");
+            transform.position = currentPosition;
+            return;
+        }
+        Debug.Log("Yes, I am inside the wall");
+        currentPosition = transform.position;
     }
     #endregion
 }
