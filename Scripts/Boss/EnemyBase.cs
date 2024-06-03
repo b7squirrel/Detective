@@ -66,6 +66,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] Transform HpBarPos;
     [SerializeField] protected StatusBar hpBar;
     protected int maxHealth;
+
+    EnemyFinder enemyFinder;
     #endregion
 
     #region 유니티 콜백
@@ -387,6 +389,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         GameManager.instance.KillManager.UpdateCurrentKills(); // 처치한 적의 수 세기
 
         Spawner.instance.SubtractEnemyNumber();
+        if(enemyFinder == null) enemyFinder = FindObjectOfType<EnemyFinder>();
+        enemyFinder.RemoveEnemyFromList(transform);
         
         IsSlowed = false;
         DestroyHPbar();

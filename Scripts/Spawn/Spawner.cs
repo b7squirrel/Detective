@@ -15,6 +15,7 @@ public class Spawner : MonoBehaviour
     float timer;
 
     WallManager wallManager;
+    EnemyFinder enemyFinder;
     #endregion
 
     #region 유니티 콜백 함수

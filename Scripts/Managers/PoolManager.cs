@@ -15,6 +15,7 @@ public class PoolManager : MonoBehaviour
     List<GameObject> itemFolders;
     GameObject temp; // 임시 폴더를 매번 생성하지 않게 하기 위해서
 
+    EnemyFinder enemyFinder;
     void Start()
     {
         InitEnemyPools();
@@ -25,6 +26,8 @@ public class PoolManager : MonoBehaviour
         enemyFolder.transform.parent = transform;
         
         itemFolders = new List<GameObject>();
+
+        enemyFinder = FindObjectOfType<EnemyFinder>();
     }
 
     void InitEnemyPools()
@@ -65,6 +68,7 @@ public class PoolManager : MonoBehaviour
             enemyPools[index].Add(select);
         }
 
+        enemyFinder.AddEnemyToList(select.transform);
         return select;
     }
 
@@ -72,6 +76,8 @@ public class PoolManager : MonoBehaviour
     {
         GameObject boss = null;
         boss = bossPrefabs.Find(x => x.GetComponent<EnemyBase>().Name == enemyData.Name);
+        enemyFinder.AddEnemyToList(boss.transform);
+
         return boss;
     }
     public GameObject GetBossSpawnEffect(int index, Vector2 spawnPos)

@@ -16,7 +16,12 @@ public class EnemyFinder : MonoBehaviour
 
     List<Vector2> pickedEnemies;
 
+    List<Transform> fieldEnemies;
+
     int delay; // 적을 찾는 함수를 얼마나 자주 할 것인지
+
+    [Header("Debug")]
+    [SerializeField] List<string> enemyNames;
 
     void Awake()
     {
@@ -27,6 +32,8 @@ public class EnemyFinder : MonoBehaviour
 
         pickedEnemies = new List<Vector2>();
         allEnemies = new();
+
+        enemyNames = new();
     }
 
     void Update()
@@ -111,4 +118,22 @@ public class EnemyFinder : MonoBehaviour
     {
         return null;
     }
+
+    #region 적 등록, 제거, Get
+    public void AddEnemyToList(Transform _enemyToAdd)
+    {
+        if (fieldEnemies == null) fieldEnemies = new List<Transform>();
+        fieldEnemies.Add(_enemyToAdd);
+        enemyNames.Add(_enemyToAdd.name);
+    }
+    public void RemoveEnemyFromList(Transform _enemyToRemove)
+    {
+        fieldEnemies.Remove(_enemyToRemove);
+        enemyNames.Remove(_enemyToRemove.name);
+    }
+    public List<Transform> GetEnemy()
+    {
+        return fieldEnemies;
+    }
+    #endregion
 }
