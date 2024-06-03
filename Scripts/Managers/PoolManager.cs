@@ -68,7 +68,7 @@ public class PoolManager : MonoBehaviour
             enemyPools[index].Add(select);
         }
 
-        enemyFinder.AddEnemyToList(select.transform);
+        //enemyFinder.AddEnemyToList(select.transform);
         return select;
     }
 
@@ -76,7 +76,7 @@ public class PoolManager : MonoBehaviour
     {
         GameObject boss = null;
         boss = bossPrefabs.Find(x => x.GetComponent<EnemyBase>().Name == enemyData.Name);
-        enemyFinder.AddEnemyToList(boss.transform);
+        //enemyFinder.AddEnemyToList(boss.transform);
 
         return boss;
     }

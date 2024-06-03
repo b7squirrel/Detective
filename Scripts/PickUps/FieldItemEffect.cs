@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FieldItemEffect : MonoBehaviour
@@ -59,18 +60,25 @@ public class FieldItemEffect : MonoBehaviour
     public void Explode(Vector2 _pos)
     {
         Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
+        Debug.Log("Enmey number = " + allEnemies.Length);
         if (allEnemies.Length == 0) return;
-        
 
+        int number = 1;
+        int nullNumbers = 0;
+        int notActiveNumbers = 0;
         for (int i = 0; i < allEnemies.Length; i++)
         {
-            Idamageable enemy = allEnemies[i].transform.GetComponent<Idamageable>();
+            Idamageable enemy = allEnemies[i].GetComponent<Idamageable>();
             GameObject enemyObject = allEnemies[i].gameObject;
+
+            if (enemy == null) nullNumbers++;
+            if (enemyObject == null) notActiveNumbers++;
 
             if (enemy != null && enemyObject.activeSelf)
             {
                 PostMessage(bombDamage, allEnemies[i].transform.position);
 
+                number++;
                 enemy.TakeDamage(bombDamage,
                                  0,
                                  0,
@@ -78,6 +86,9 @@ public class FieldItemEffect : MonoBehaviour
                                  bombHitEffect);
             }
         }
+        Debug.Log("Number = " + number);
+        Debug.Log("null Numbers = " + nullNumbers);
+        Debug.Log("not aCtive = " + notActiveNumbers);
     }
     void PostMessage(int damage, Vector3 targetPosition)
     {

@@ -16,12 +16,7 @@ public class EnemyFinder : MonoBehaviour
 
     List<Vector2> pickedEnemies;
 
-    List<Transform> fieldEnemies;
-
     int delay; // 적을 찾는 함수를 얼마나 자주 할 것인지
-
-    [Header("Debug")]
-    [SerializeField] List<string> enemyNames;
 
     void Awake()
     {
@@ -32,8 +27,6 @@ public class EnemyFinder : MonoBehaviour
 
         pickedEnemies = new List<Vector2>();
         allEnemies = new();
-
-        enemyNames = new();
     }
 
     void Update()
@@ -110,8 +103,8 @@ public class EnemyFinder : MonoBehaviour
         Vector2 center = GameManager.instance.player.transform.position;
 
         Collider2D[] enemies =
-                Physics2D.OverlapAreaAll(center - new Vector2(halfWidth * .8f, halfHeight * .8f),
-                                            center + new Vector2(halfWidth * .8f, halfHeight * .8f), enemy);
+                Physics2D.OverlapAreaAll(center - new Vector2(halfWidth * 1f, halfHeight * 1f),
+                                            center + new Vector2(halfWidth * 1f, halfHeight * 1f), enemy);
         return enemies;
     }
     public Transform GetAllEnemyTransform()
@@ -120,20 +113,20 @@ public class EnemyFinder : MonoBehaviour
     }
 
     #region 적 등록, 제거, Get
-    public void AddEnemyToList(Transform _enemyToAdd)
-    {
-        if (fieldEnemies == null) fieldEnemies = new List<Transform>();
-        fieldEnemies.Add(_enemyToAdd);
-        enemyNames.Add(_enemyToAdd.name);
-    }
-    public void RemoveEnemyFromList(Transform _enemyToRemove)
-    {
-        fieldEnemies.Remove(_enemyToRemove);
-        enemyNames.Remove(_enemyToRemove.name);
-    }
-    public List<Transform> GetEnemy()
-    {
-        return fieldEnemies;
-    }
+    //public void AddEnemyToList(Transform _enemyToAdd)
+    //{
+    //    if (fieldEnemies == null) fieldEnemies = new List<Transform>();
+    //    fieldEnemies.Add(_enemyToAdd);
+    //    enemyNames.Add(_enemyToAdd.name);
+    //}
+    //public void RemoveEnemyFromList(Transform _enemyToRemove)
+    //{
+    //    fieldEnemies.Remove(_enemyToRemove);
+    //    enemyNames.Remove(_enemyToRemove.name);
+    //}
+    //public List<Transform> GetEnemyList()
+    //{
+    //    return fieldEnemies;
+    //}
     #endregion
 }

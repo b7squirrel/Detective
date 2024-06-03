@@ -390,7 +390,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         Spawner.instance.SubtractEnemyNumber();
         if(enemyFinder == null) enemyFinder = FindObjectOfType<EnemyFinder>();
-        enemyFinder.RemoveEnemyFromList(transform);
+        //enemyFinder.RemoveEnemyFromList(transform);
         
         IsSlowed = false;
         DestroyHPbar();
