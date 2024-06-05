@@ -88,7 +88,7 @@ public class StaticValues
 public class Colors
 {
     public static Color[] randomColors = 
-        { Color.red, Color.blue, Color.yellow, Color.magenta, Color.cyan, Color.white };
+        { Color.red, Color.yellow, Color.magenta, Color.white };
 }
 public class Equation
 {

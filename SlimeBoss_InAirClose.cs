@@ -8,12 +8,16 @@ public class SlimeBoss_InAirClose : StateMachineBehaviour
     float moveSpeed;
     float timer;
     bool isReadyToLand;
+    EnemyBoss enemyBoss;
+
+    float debugAlpha;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         target = Player.instance.transform.position;
-        moveSpeed = animator.GetComponent<EnemyBoss>().moveSpeedInAir;
-        animator.GetComponent<EnemyBoss>().SetLayer("InAir");
+        if (enemyBoss == null ) enemyBoss = animator.GetComponent<EnemyBoss>();
+        moveSpeed = enemyBoss.moveSpeedInAir;
+        enemyBoss.SetLayer("InAir");
         timer = .5f;
     }
 
@@ -22,6 +26,7 @@ public class SlimeBoss_InAirClose : StateMachineBehaviour
         if (timer > 0)
         {
             timer -= Time.deltaTime;
+            
         }
         else
         {

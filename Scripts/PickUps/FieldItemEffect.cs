@@ -8,6 +8,7 @@ public class FieldItemEffect : MonoBehaviour
     [SerializeField] float invincibaleDuration;
     [SerializeField] int bombDamage;
     [SerializeField] GameObject bombHitEffect;
+    [SerializeField] GameObject bombExplosionEffect;
     StageEvenetManager stageEventManager;
     #region ½ºÅé¿öÄ¡
     public void StopEnemies()
@@ -59,6 +60,9 @@ public class FieldItemEffect : MonoBehaviour
     #region ÆøÅº
     public void Explode(Vector2 _pos)
     {
+        GameObject effect = GameManager.instance.poolManager.GetMisc(bombExplosionEffect);
+        effect.transform.position = _pos;
+
         Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
         Debug.Log("Enmey number = " + allEnemies.Length);
         if (allEnemies.Length == 0) return;

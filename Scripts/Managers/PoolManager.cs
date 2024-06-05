@@ -5,7 +5,6 @@ public class PoolManager : MonoBehaviour
 {
     [SerializeField] GameObject[] enemies;
     [SerializeField] List<GameObject> bossPrefabs;
-    [SerializeField] GameObject[] bossSpawnEffectPrefabs;
     List<GameObject>[] enemyPools;
 
     StageAssetManager stageAssetManager;
@@ -79,13 +78,6 @@ public class PoolManager : MonoBehaviour
         //enemyFinder.AddEnemyToList(boss.transform);
 
         return boss;
-    }
-    public GameObject GetBossSpawnEffect(int index, Vector2 spawnPos)
-    {
-        // 보스 등장 이펙트
-        GameObject effect = Instantiate(bossSpawnEffectPrefabs[index], spawnPos, Quaternion.identity);
-        effect.transform.parent = transform;
-        return effect;
     }
     #endregion
 

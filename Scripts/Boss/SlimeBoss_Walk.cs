@@ -17,6 +17,8 @@ public class SlimeBoss_Walk : StateMachineBehaviour
         enemyBoss = animator.GetComponent<EnemyBoss>();
         stats = enemyBase.Stats;
         isKnockBack = enemyBase.IsKnockBack;
+
+        enemyBoss.ActivateLandingIndicator(false);
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

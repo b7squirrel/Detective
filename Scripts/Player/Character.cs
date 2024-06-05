@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,6 +35,9 @@ public class Character : MonoBehaviour
     public UnityEvent OnDie;
     Animator anim;
 
+    [Header("Debug")]
+    [SerializeField] TMPro.TextMeshProUGUI HitMessage;
+
     void Awake()
     {
         level = GetComponent<Level>();
@@ -48,6 +52,8 @@ public class Character : MonoBehaviour
 
         wallCollisionParticle = GetComponentInChildren<ParticleSystem>();
         wallCollisionParticle.Stop();
+
+        HitMessage.text = "";
     }
 
     void Update()
@@ -106,6 +112,17 @@ public class Character : MonoBehaviour
         Debug.Log("In Character, Damage Bonus = " + DamageBonus);
     }
 
+    public void TempDebug()
+    {
+        StartCoroutine(HitMessageCo());
+        
+    }
+    IEnumerator HitMessageCo()
+    {
+        HitMessage.text = "HIT";
+        yield return new WaitForSeconds(1f);
+        HitMessage.text = "";
+    }    
     public void TakeDamage(int damage)
     {
         if (GameManager.instance.IsPlayerDead)

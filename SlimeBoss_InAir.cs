@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SlimeBoss_InAir : StateMachineBehaviour
@@ -10,7 +8,7 @@ public class SlimeBoss_InAir : StateMachineBehaviour
 
     WallManager wallManager;
     Transform bossTransform;
-    EnemyBoss enemeyBoss;
+    EnemyBoss enemyBoss;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -20,12 +18,15 @@ public class SlimeBoss_InAir : StateMachineBehaviour
         moveSpeed = animator.GetComponent<EnemyBoss>().moveSpeedInAir;
         animator.GetComponent<EnemyBoss>().SetLayer("InAir");
         bossTransform = animator.GetComponent<Transform>();
-        enemeyBoss = animator.GetComponent<EnemyBoss>();
+        enemyBoss = animator.GetComponent<EnemyBoss>();
+
+        enemyBoss.ActivateLandingIndicator(true);
+        Debug.Log("Start In AIR");
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemeyBoss.RePosition();
+        enemyBoss.RePosition();
         bossTransform.position = Vector2.MoveTowards(bossTransform.position, target, moveSpeed * Time.deltaTime);
 
         if (Vector2.Distance(bossTransform.position, target) < 1f)

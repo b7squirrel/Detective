@@ -324,7 +324,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if(isOffScreen)
             return;
 
-        // anim.SetTrigger("Hit");
+        anim.SetTrigger("Hit");
 
         Stats.hp -= damage;
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);

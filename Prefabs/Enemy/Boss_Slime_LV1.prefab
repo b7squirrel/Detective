@@ -359,13 +359,15 @@ MonoBehaviour:
   dropItemPrefab:
   - {fileID: 3089954493006562425, guid: e966530f6cd20b6438cacecd2eed29b0, type: 3}
   noMultipleDrops: 0
-  dropLastItemPrefab: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
   numberOfLastDrops: 50
   multipleDrops: {fileID: 5007021332998522558, guid: da2101ae771dd7b4cb33300917ecdd19, type: 3}
-  chance: 1
+  specialDrop: {fileID: 0}
   exp: 0
   hp: 0
   isChest: 0
+  multiDropRate: 0
+  isChestDebuggingOn: 0
+  dropItemIndex: 0
 --- !u!114 &271258211328832522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,23 +418,26 @@ MonoBehaviour:
   ShootPoint: {fileID: 487513323129266538}
   dustPoint: {fileID: 1199690674249790336}
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
-  teleportEffect: {fileID: 3660852464054620627, guid: 91f1402b450da31478c225bdbf64610e, type: 3}
+  teleportEffectPrefab: {fileID: 0}
   halfWallBouncerNumber: 13
   col: {fileID: 0}
   deadBody: {fileID: 1432597800540744455, guid: 5c1f04be75c8cde4ab66104ee2865cbb, type: 3}
-  landingImpactSize: 5
+  landingImpactSize: 15
   landingImpactForce: 2000
   landingHit:
     serializedVersion: 2
-    m_Bits: 64
-  SpawnTeleportEffect: {fileID: 2404059689411940086, guid: 2447cdc0fe735fb4ca925d3751119a15, type: 3}
-  landingEffect: {fileID: 1103442776217505441, guid: 0c2268cb369424d40a09601e680f80d5, type: 3}
+    m_Bits: 256
+  LandingIndicatorPrefab: {fileID: 7198432278835588730, guid: bae365300aeb8e14ba6c97ce0ded657c, type: 3}
+  LandingIndicator: {fileID: 0}
+  landingEffect: {fileID: 1173874411322581133, guid: 3e1ea46bad9ec4a428c1ac76eafe33c2, type: 3}
+  teleEffectPrefab: {fileID: 7859877589049841246, guid: 8b66f8564ea641f4eb1c3e89e508d665, type: 3}
   spawnSFX: {fileID: 8300000, guid: ce6f6a6e8f75e9f46b9f87093a89d730, type: 3}
   landingSFX: {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
   shootAnticSFX: {fileID: 8300000, guid: a1af138c927954c44a2210880a230bfb, type: 3}
   jumpupSFX: {fileID: 8300000, guid: 73ebcf72e51b0b74c8f039502ab32a96, type: 3}
   fallDownSFX: {fileID: 8300000, guid: 65c88103c5dfa4d4a942bfc6a70e604c, type: 3}
   dieSFX: {fileID: 8300000, guid: 8c325d52ceb15424eb350b25efcd946a, type: 3}
+  dot: {fileID: 534593963739121254, guid: 5d384957a642c924b8656c26eb946e34, type: 3}
 --- !u!114 &588927070903608866
 MonoBehaviour:
   m_ObjectHideFlags: 0

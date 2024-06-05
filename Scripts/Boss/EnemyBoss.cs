@@ -17,7 +17,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] Transform dustPoint;
     [SerializeField] GameObject dustEffect;
     GameObject dust;
-    [SerializeField] GameObject teleportEffect;
+    [SerializeField] GameObject teleportEffectPrefab;
     [SerializeField] int halfWallBouncerNumber;
     GenerateWalls generateWalls;
     float timer; // shoot coolTime counter
@@ -36,14 +36,20 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] float landingImpactSize;
     [SerializeField] float landingImpactForce;
     [SerializeField] LayerMask landingHit;
-    [SerializeField] GameObject SpawnTeleportEffect;
+    [SerializeField] GameObject LandingIndicatorPrefab;
+    [SerializeField] GameObject LandingIndicator;
     [SerializeField] GameObject landingEffect;
+    [SerializeField] GameObject teleEffectPrefab;
     [SerializeField] AudioClip spawnSFX;
     [SerializeField] AudioClip landingSFX;
     [SerializeField] AudioClip shootAnticSFX;
     [SerializeField] AudioClip jumpupSFX;
     [SerializeField] AudioClip fallDownSFX;
     [SerializeField] AudioClip dieSFX;
+
+    [Header("Debug")]
+    [SerializeField] GameObject dot;
+    float debugAlpha;
 
     public void Init(EnemyData data)
     {
@@ -57,9 +63,18 @@ public class EnemyBoss : EnemyBase, Idamageable
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
 
+        StartCoroutine(InitCo());
+    }
+    IEnumerator InitCo()
+    {
+        ActivateLandingIndicator(true);
+
+        yield return new WaitForSeconds(1.45f);
+
         InitHpBar();
         anim.SetTrigger("Spawn");
 
+        GenTeleportEffect();
         SoundManager.instance.Play(spawnSFX);
     }
     
@@ -193,26 +208,69 @@ public class EnemyBoss : EnemyBase, Idamageable
     #endregion
 
     #region State Functions
+    //public GameObject GenLandingIndicator()
+    //{
+    //    GameObject landingIndicaotr = Instantiate(SpawnTeleportIndicator, transform.position, Quaternion.identity);
+    //    return landingIndicaotr;
+    //}
+    //void OnDrawGizmos()
+    //{
+    //    // Gizmos.color를 통해 원의 색상을 설정합니다.
+    //    Gizmos.color = Color.red;
+    //    // Gizmos.DrawWireSphere를 사용하여 원의 외곽선을 그립니다.
+    //    Gizmos.DrawWireSphere(transform.position, 15f / 2f);
+    //}
     public void LandingImpact()
     {
-        GameObject effect = Instantiate(landingEffect);
+        //GameObject effect = Instantiate(landingEffect, transform.position, Quaternion.identity);
         SoundManager.instance.Play(landingSFX);
-        effect.transform.position = transform.position;
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, landingImpactSize, landingHit);
+        //effect.transform.position = transform.position;
+        Vector2 landingEffectPos = (Vector2)transform.position + new Vector2(0, 3f);
+        //Collider2D[] hits = Physics2D.OverlapCircleAll(landingEffectPos, landingImpactSize, landingHit);
+        Collider2D hit = Physics2D.OverlapCircle(landingEffectPos, 15f/2f, landingHit);
+        //GameObject debugGo = Instantiate(dot, landingEffectPos, Quaternion.identity);
+        //debugGo.transform.localScale = 15f * Vector2.one;
 
-        for (int i = 0; i < hits.Length; i++)
+        if (hit != null)
         {
-            EnemyBase hit = hits[i].GetComponent<EnemyBase>();
-
-            if (hit != null && !hit.IsBoss) // 보스 랜딩 공격에 자신까지 포함시키지 않기
-            {
-                if (hits[i].CompareTag("Enemy"))
-                {
-                    Debug.Log("Enemy on boss landing " + hits[i].name);
-                    hit.Stunned(transform.position);
-                }
-            }
+            Character character = GameManager.instance.character;
+            character.TempDebug();
+            GameManager.instance.character.TakeDamage(1200);
         }
+        //for (int i = 0; i < hits.Length; i++)
+        //{
+        //    EnemyBase hit = hits[i].GetComponent<EnemyBase>();
+        //    Character character = hits[i].GetComponent<Character>();
+
+        //    if (hit != null && !hit.IsBoss) // 보스 랜딩 공격에 자신까지 포함시키지 않기
+        //    {
+        //        if (hits[i].CompareTag("Enemy"))
+        //        {
+        //            Debug.Log("Enemy on boss landing " + hits[i].name);
+        //            hit.Stunned(transform.position);
+        //        }
+        //        if (hits[i].CompareTag("Player")) 
+        //        {
+        //            Debug.Log("Hit Player with Landing Attack");
+        //            character.TakeDamage(Stats.damage);
+        //        }
+        //    }
+        //}
+    }
+    public void ActivateLandingIndicator(bool _activate)
+    {
+        if (LandingIndicator == null)
+        {
+            LandingIndicator = Instantiate(LandingIndicatorPrefab, transform);
+            LandingIndicator.transform.localPosition = Vector2.zero;
+            LandingIndicator.transform.localScale = .8f * Vector2.one;
+        }
+        Debug.Log("Indicator");
+        LandingIndicator.SetActive(_activate);
+    }
+    public void GenTeleportEffect()
+    {
+        GameObject teleEffect = Instantiate(teleEffectPrefab, transform.position, Quaternion.identity);
     }
 
     bool IsOutOfRange()
