@@ -465,6 +465,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     #endregion
 
+    public void SpeedUpEnemy()
+    {
+        float speed = 2f;
+        anim.speed = speed;
+        CastSlownessToEnemy(-speed);
+    }
     public void PauseEnemy()
     {
         anim.speed = 0f;

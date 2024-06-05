@@ -14,7 +14,6 @@ public class FieldItemEffect : MonoBehaviour
     public void StopEnemies()
     {
         EnemyBase[] allEnemies = FindObjectsOfType<EnemyBase>();
-        Debug.Log("ALL ENEMY NUM = " + allEnemies.Length);
         if (allEnemies == null) return;
         StartCoroutine(StopEnemiesCo(allEnemies, stopDuration));
     }
@@ -27,7 +26,8 @@ public class FieldItemEffect : MonoBehaviour
         {
             if (_allEnemies[i] != null)
             {
-                _allEnemies[i].PauseEnemy();
+                //_allEnemies[i].PauseEnemy();
+                _allEnemies[i].SpeedUpEnemy();
             }
         }
         yield return new WaitForSeconds(_stopDuration);
