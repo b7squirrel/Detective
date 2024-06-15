@@ -159,5 +159,4 @@ public class Equation
         }
         return false;
     }
-    
 }

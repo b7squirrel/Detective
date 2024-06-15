@@ -324,7 +324,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if(isOffScreen)
             return;
 
-        anim.SetTrigger("Hit");
+        AnimatorStateInfo stageInfo = anim.GetCurrentAnimatorStateInfo(0);
+        if (!stageInfo.IsName("SlimeLV1Hurt"))
+        {
+            anim.SetTrigger("Hit");
+            Debug.Log("Hit Anim Playing");
+        }
+
 
         Stats.hp -= damage;
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
