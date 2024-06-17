@@ -7,6 +7,7 @@ public class EnemyStats
     public int hp = 999;
     public float speed = 5;
     public int damage = 1;
+    public int rangedDamage = 1;
     public int experience_reward = 0;
 
     public EnemyStats(EnemyStats stats)
@@ -14,6 +15,7 @@ public class EnemyStats
         this.hp = stats.hp;
         this.speed = stats.speed;
         this.damage = stats.damage;
+        this.rangedDamage = stats.rangedDamage;
         this.speed = stats.speed;
         this.experience_reward = stats.experience_reward;
     }
@@ -24,7 +26,12 @@ public class Enemy : EnemyBase
     public int ExperienceReward { get; private set; }
     bool isLive;
     Vector2 currentPosition; // 현재 위치를 기록해서 박으로 튀어나갔을 때, 위치를 되돌리기 위해서
-    
+
+    // 범위 공격 관련 변수
+    float attackInterval;
+    float nextAttackTime;
+    float distanceToPlayer;
+
     public bool IsFlying { get; set; }
     public Vector2 LandingTarget { get; set; }
     [SerializeField] float flyingSpeed;
@@ -32,7 +39,6 @@ public class Enemy : EnemyBase
     float flyingTimeCounter;
 
     [SerializeField] LayerMask playerLayer;
-    [SerializeField] bool isDetectingPlayer;
 
     WallManager wallManager;
     float nextOutOfRangeCheckingTime;
@@ -42,8 +48,6 @@ public class Enemy : EnemyBase
         base.OnEnable();
         isLive = true;
         SetWalking(); // 날으는 상태로 소환되지 않도록
-        isDetectingPlayer = false;
-
     }
     void FixedUpdate()
     {
@@ -51,8 +55,6 @@ public class Enemy : EnemyBase
             return;
         if (GameManager.instance.player == null)
             return;
-
-        
 
         // col.enabled = sr.isVisible;
 
@@ -93,8 +95,6 @@ public class Enemy : EnemyBase
 
         Flip();
 
-        isDetectingPlayer = false;
-
         // 벽에 끼거나 해서 walking으로 돌아오지 못하면 빠져나오도록
         if (flyingTimeCounter > 0 && IsFlying)
         {
@@ -104,8 +104,10 @@ public class Enemy : EnemyBase
         {
             SetWalking();
         }
+
+        // 범위 공격
+        if (enemyType == EnemyType.Ranged) AttackCoolDown();
     }
-    
 
     public void Init(EnemyData data)
     {
@@ -116,7 +118,15 @@ public class Enemy : EnemyBase
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
 
+        //범위 공격 변수 초기화
+        attackInterval = data.attackInterval;
+        distanceToPlayer = data.distanceToPlayer;
+
         InitHpBar();
+
+        enemyType = data.enemyType;
+        enemyProjectile = data.projectilePrefab;
+        dieEffectPrefeab = data.dieEffectPrefab; // 자폭 죽음과 일반 죽음을 구별하기 위해서 
     }
     public void SetFlying(Vector2 target)
     {
@@ -156,4 +166,46 @@ public class Enemy : EnemyBase
 
         return new Equation().IsOutOfRange(transform.position, spawnConst);
     }
+
+    protected override void AttackMelee(int _damage)
+    {
+        Target.gameObject.GetComponent<Character>().TakeDamage(Stats.damage, EnemyType.Melee);
+        Debug.Log("Melee Damage = " + Stats.damage);
+    }
+    protected override void AttackRange(int _damage)
+    {
+        if (enemyProjectile == null) return;
+        GameObject projectile = GameManager.instance.poolManager.GetMisc(enemyProjectile);
+        if(projectile == null) return; // pooling key에서 개수 제한에 걸려서 더 이상 생성되지 않았다면
+        projectile.transform.position = transform.position;
+
+        // enemyProjectile의 damage값을 _damage 값으로 초기화 시키기
+        EnemyProjectile proj = projectile.GetComponent<EnemyProjectile>();
+        if (proj == null) return;
+        proj.Init(_damage);
+    }
+    protected override void AttackExplode(int _damage)
+    {
+        AttackMelee(_damage);
+        Die();
+    }
+    void AttackCoolDown()
+    {
+        if (Time.time >= nextAttackTime)
+        {
+            if (DetectingPlayer())
+            {
+                Attack(EnemyType.Ranged);
+            }
+            nextAttackTime = Time.time + attackInterval;
+        }
+    }
+    bool DetectingPlayer()
+    {
+        float squDist = (Target.position - (Vector2)transform.position).sqrMagnitude;
+        if (squDist < MathF.Pow(distanceToPlayer,2f))
+            return true;
+        return false;
+    }
+    
 }

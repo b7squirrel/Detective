@@ -35,8 +35,7 @@ public class Character : MonoBehaviour
     public UnityEvent OnDie;
     Animator anim;
 
-    [Header("Debug")]
-    [SerializeField] TMPro.TextMeshProUGUI HitMessage;
+    DebugCharacter debugCharacter;
 
     void Awake()
     {
@@ -52,8 +51,6 @@ public class Character : MonoBehaviour
 
         wallCollisionParticle = GetComponentInChildren<ParticleSystem>();
         wallCollisionParticle.Stop();
-
-        HitMessage.text = "";
     }
 
     void Update()
@@ -112,18 +109,7 @@ public class Character : MonoBehaviour
         Debug.Log("In Character, Damage Bonus = " + DamageBonus);
     }
 
-    public void TempDebug()
-    {
-        StartCoroutine(HitMessageCo());
-        
-    }
-    IEnumerator HitMessageCo()
-    {
-        HitMessage.text = "HIT";
-        yield return new WaitForSeconds(1f);
-        HitMessage.text = "";
-    }    
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, EnemyType enemyType)
     {
         if (GameManager.instance.IsPlayerDead)
             return;
@@ -133,6 +119,7 @@ public class Character : MonoBehaviour
         // 슬로우 모션 상태에서 TakeDamage가 일어나지 않게 하기
         if (BossDieManager.instance.IsBossDead)
             return;
+
         ApplyArmor(ref damage);
 
         SoundManager.instance.PlaySingle(hurtSound);
@@ -141,7 +128,8 @@ public class Character : MonoBehaviour
 
         anim.SetTrigger("Hurt");
 
-        if (Time.frameCount % 3 != 0) return; // 3프레임 간격으로 데미지를 입도록
+        //if (Time.frameCount % 3 != 0 && 
+        //        enemyType == EnemyType.Melee) return; // Melee공격은 3프레임 간격으로 데미지를 입도록
 
         currentHealth -= damage;
         if (currentHealth < 0)
@@ -152,6 +140,9 @@ public class Character : MonoBehaviour
         {
             hpBar.SetStatus(currentHealth, MaxHealth);
         }
+
+        if(debugCharacter == null) debugCharacter = FindObjectOfType<DebugCharacter>();
+        debugCharacter.HitMessage(damage);
     }
 
     void ApplyArmor(ref int damage)

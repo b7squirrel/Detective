@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SpawnItem {enemy, subBoss, enemyGroup, bossSlime}
 
 public class StageEvenetManager : MonoBehaviour
 {

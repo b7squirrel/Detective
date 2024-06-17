@@ -22,6 +22,10 @@ public enum Region
     None, TopLeft, TopRight, BottomLeft, BottomRight
 }
 
+public enum SpawnItem { enemy, subBoss, enemyGroup, bossSlime } // Stage Event Manager 에서 사용
+
+public enum EnemyType { Melee, Ranged, Explode } // 적을 스폰할 때 어떤 타입의 적을 스폰할지 정하기 위해
+
 // Slot Pooling
 public enum Slots { CardSlot, EquipSlot, LaunchSlot }
 public class MyGrade

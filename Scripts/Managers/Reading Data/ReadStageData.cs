@@ -49,20 +49,24 @@ public class ReadStageData : MonoBehaviour
             return stageEnemyData.enemyData[6];
         if (enemyType == "LV4_SubBoss")
             return stageEnemyData.enemyData[7];
-        if (enemyType == "Boss")
+        if (enemyType == "LV5")
             return stageEnemyData.enemyData[8];
-        if (enemyType == "Special_1")
+        if (enemyType == "LV5_SubBoss")
             return stageEnemyData.enemyData[9];
-        if (enemyType == "Special_2")
+        if (enemyType == "Boss")
             return stageEnemyData.enemyData[10];
-        if (enemyType == "Special_3")
+        if (enemyType == "Special_1")
             return stageEnemyData.enemyData[11];
-        if (enemyType == "Special_4")
+        if (enemyType == "Special_2")
             return stageEnemyData.enemyData[12];
-        if (enemyType == "Special_5")
+        if (enemyType == "Special_3")
             return stageEnemyData.enemyData[13];
-        if (enemyType == "Special_6")
+        if (enemyType == "Special_4")
             return stageEnemyData.enemyData[14];
+        if (enemyType == "Special_5")
+            return stageEnemyData.enemyData[15];
+        if (enemyType == "Special_6")
+            return stageEnemyData.enemyData[16];
         return stageEnemyData.enemyData[0]; // 일단 채워넣었음
     }
 

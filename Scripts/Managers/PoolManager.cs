@@ -5,7 +5,7 @@ public class PoolManager : MonoBehaviour
 {
     [SerializeField] GameObject[] enemies;
     [SerializeField] List<GameObject> bossPrefabs;
-    List<GameObject>[] enemyPools;
+    [SerializeField] List<GameObject>[] enemyPools;
 
     StageAssetManager stageAssetManager;
 
@@ -29,6 +29,9 @@ public class PoolManager : MonoBehaviour
         enemyFinder = FindObjectOfType<EnemyFinder>();
     }
 
+    /// <summary>
+    /// 레벨의 Stage Asset Manager에서 적들의 종류를 가져옴
+    /// </summary>
     void InitEnemyPools()
     {
         stageAssetManager = FindAnyObjectByType<StageAssetManager>();
@@ -51,11 +54,11 @@ public class PoolManager : MonoBehaviour
     {
         GameObject select = null;
 
-        foreach (GameObject item in enemyPools[index])
+        for (int i = 0;i < enemyPools[index].Count;i++)
         {
-            if (!item.activeSelf)
+            if (!enemyPools[index][i].activeSelf)
             {
-                select = item;
+                select = enemyPools[index][i];
                 select.SetActive(true);
                 break;
             }

@@ -3,7 +3,17 @@ using UnityEngine;
 [CreateAssetMenu]
 public class EnemyData : ScriptableObject
 {
+    [Header("Common")]
     public string Name;
     public RuntimeAnimatorController animController;
     public EnemyStats stats;
+    public EnemyType enemyType;
+
+    [Header("Prefabs")]
+    public GameObject projectilePrefab;
+    public GameObject dieEffectPrefab;
+
+    [Header("Ranged")]
+    public float distanceToPlayer; // 플레이어에게 공격을 시작할 거리
+    public float attackInterval; // 범위 공격 시간 간격
 }

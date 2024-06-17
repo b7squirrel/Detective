@@ -19,7 +19,7 @@ public class Wall : MonoBehaviour
             playerEffects.PlayWallDust();
 
             if(character == null) character = collision.gameObject.GetComponent<Character>();
-            character.TakeDamage(wallDamage);
+            character.TakeDamage(wallDamage, EnemyType.Melee);
         }
     }
 }

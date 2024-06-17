@@ -234,8 +234,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         if (hit != null)
         {
             Character character = GameManager.instance.character;
-            character.TempDebug();
-            GameManager.instance.character.TakeDamage(1200);
+            GameManager.instance.character.TakeDamage(1200, EnemyType.Ranged); // 플레이어가 무조건 데미지를 입도록 임시로 ranged
         }
         //for (int i = 0; i < hits.Length; i++)
         //{

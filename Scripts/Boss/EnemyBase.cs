@@ -4,21 +4,23 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour, Idamageable
 {
     #region Variables
-    [field : SerializeField] public string Name {get; private set;} // 체력바에 표시할 이름이 필요한 적들만 사용
-    [HideInInspector] public bool IsKnockBack{get; set;}
-    [HideInInspector] public bool IsStunned{get; set;}
-    [HideInInspector] public Rigidbody2D Target{get; set;}
-    public EnemyStats Stats {get; set; }
+    [field: SerializeField] public string Name { get; private set; } // 체력바에 표시할 이름이 필요한 적들만 사용
+    [HideInInspector] public bool IsKnockBack { get; set; }
+    [HideInInspector] public bool IsStunned { get; set; }
+    [HideInInspector] public Rigidbody2D Target { get; set; }
+    public EnemyStats Stats { get; set; }
     protected float DefaultSpeed; // 속도를 외부에서 변경할 때 원래 속도를 저장해 두기 위해
     protected float currentSpeed;
-    public bool IsSlowed {get; set;} // 슬로우 스킬을 
-    public bool IsBoss{get; set;}
+    public bool IsSlowed { get; set; } // 슬로우 스킬을 
+    public bool IsBoss { get; set; }
     [SerializeField] protected bool isSubBoss;
     [SerializeField] protected bool isBoss;
     [SerializeField] int numberOfSubBossDrops;
     [SerializeField] int numberOfBossDrops;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
-    public Vector2 GroupDir {get; set;} // spawn 할 떄 spawn 포인트 값과 player위치로 결정
+    public Vector2 GroupDir { get; set; } // spawn 할 떄 spawn 포인트 값과 player위치로 결정
+
+    protected EnemyType enemyType; // Melee, Explode 공격만 EnemyBase에서 정의하고 Ranged는 Enemy에서 정의
 
     protected bool isOffScreen; // 화면 밖에 있을 때 플레이어의 공격을 받지 않기 위한 플래그
     protected float offScreenCoolDown; // 너무 자주 콜라이더가 활성, 비활성 되지 않도록 쿨타임 주기
@@ -27,6 +29,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     Coroutine flipCoroutine;
     bool isFlipping; // 더 이상 flip하고 있지 않으면 코루틴을 초기화 시키기위해
     float pastFacingDir, currentFacingDir;
+
+    bool initDone;
     #endregion
 
     #region Component Variables
@@ -46,6 +50,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected float whiteFlashDuration = 0.08f;
     [SerializeField] protected float knockBackSpeed;
     [SerializeField] protected float knockBackDelay;
+    protected GameObject enemyProjectile;
     protected float enemyKnockBackSpeedFactor; // TakeDamage 때마다 인자로 넘어오는 knockBackSpeedFactor를 담아 두는 용도
     protected float stunnedDuration = .2f;
 
@@ -73,11 +78,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 유니티 콜백
     protected virtual void OnEnable()
     {
-        Target = GameManager.instance.player.GetComponent<Rigidbody2D>();
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        sr = GetComponentInChildren<SpriteRenderer>();
-        colEnemy = GetComponent<Collider2D>();
+        if (initDone == false)
+        {
+            Target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody2D>();
+            anim = GetComponent<Animator>();
+            sr = GetComponentInChildren<SpriteRenderer>();
+            colEnemy = GetComponent<Collider2D>();
+
+            initDone = true;
+        }
 
         initialMat = sr.material;
         IsKnockBack = false;
@@ -91,7 +101,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         anim.speed = 1f;
         //rb.bodyType = RigidbodyType2D.Dynamic;
 
-        if (Target.position.x - rb.transform.position.x > 0) 
+        if (Target.position.x - rb.transform.position.x > 0)
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -104,9 +114,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         pastFacingDir = currentFacingDir;
 
-        if(Stats != null)
+        if (Stats != null)
         {
-            
+
         }
     }
     public void CastSlownessToEnemy(float _slownessFactor)
@@ -154,14 +164,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public virtual void Flip()
     {
         if (gameObject.activeSelf == false) return;
-        
+
         if (anim.speed == 0) return; // 스탑워치가 작동하고 있다면 플립되지 않음
-        if(isFlipping == false)
+        if (isFlipping == false)
         {
             if (flipCoroutine != null) StopCoroutine(flipCoroutine);
         }
 
-        if (Target.position.x - transform.position.x > 0) 
+        if (Target.position.x - transform.position.x > 0)
         {
             currentFacingDir = 1f;
         }
@@ -169,7 +179,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             currentFacingDir = -1f;
         }
-        
+
         if (currentFacingDir != pastFacingDir && isFlipping == false)
             flipCoroutine = StartCoroutine(FlipCo());
 
@@ -200,7 +210,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             yield return null;
         }
         index = 0;
-        while(index < 3) // 120도부터는 20도씩 3번 회전
+        while (index < 3) // 120도부터는 20도씩 3번 회전
         {
             yield return new WaitForSeconds(.03f);
             transform.eulerAngles = transform.eulerAngles + (currentFacingDir * new Vector3(0, 20f, 0));
@@ -210,7 +220,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         // 모르겠다. 일단 뒤집고 나서는 방향을 플레이어쪽으로 바꿔줘서 
         // 뒤집히거나 뒤집히다 말거나 하는 현상을 없애자
-        if (Target.position.x - rb.position.x > 0) 
+        if (Target.position.x - rb.position.x > 0)
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -226,7 +236,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     void ResetFlip()
     {
         StopFlipCoroutine();
-        if (Target.position.x - rb.transform.position.x > 0) 
+        if (Target.position.x - rb.transform.position.x > 0)
         {
             currentFacingDir = 1f;
             transform.eulerAngles = new Vector3(0, 0, 0);
@@ -261,7 +271,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         Vector2 dirVec = Target.position - (Vector2)rb.transform.position;
-        if(IsGrouping)
+        if (IsGrouping)
         {
             // dirVec = groupDir;
             //rb.velocity = Stats.speed * GroupDir;
@@ -279,36 +289,77 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 닿으면 player HP 감소
     protected void OnCollisionStay2D(Collision2D collision)
     {
-        if(IsGrouping && collision.gameObject.CompareTag("Wall"))
+        if (IsGrouping && collision.gameObject.CompareTag("Wall"))
         {
             GroupDir = (Player.instance.transform.position - transform.position).normalized;
         }
 
         if (GameManager.instance.player == null)
             return;
+
+        //if (enemyType != EnemyType.Melee && 
+        //            enemyType != EnemyType.Explode) return; // 근접 공격, 폭발 적들만 플레이어와 충돌했을 때 공격한다.
         if (collision.gameObject == Target.gameObject)
         {
-            Attack();
+            if(enemyType == EnemyType.Ranged || enemyType == EnemyType.Melee)
+            {
+                Attack(EnemyType.Melee);
+            }
+            else
+            {
+                Attack(EnemyType.Explode);
+            }
         }
     }
     protected void OnCollisionExit2D(Collision2D collision)
     {
         if (GameManager.instance.player == null)
             return;
+        //if (enemyType != EnemyType.Melee) return; // 근접 공격 적들만 플레이어에서 벗어났을 때 공격모션을 해제한다
+
         if (collision.gameObject == Target.gameObject)
         {
             anim.SetBool("Attack", false);
-            Debug.Log("Exit Attack");
         }
     }
 
-    protected void Attack()
+    protected void Attack(EnemyType _enemyType)
     {
         if (Target.gameObject == null)
             return;
 
         anim.SetBool("Attack", true);
-        Target.gameObject.GetComponent<Character>().TakeDamage(Stats.damage);
+
+        switch (_enemyType)
+        {
+            case EnemyType.Melee:
+                AttackMelee(Stats.damage);
+
+                break;
+            case EnemyType.Ranged:
+                AttackRange(Stats.rangedDamage);
+
+                break;
+            case EnemyType.Explode:
+                AttackExplode(Stats.damage);
+                Debug.Log("Explode Attack");
+                break;
+            default:
+                throw new System.ArgumentOutOfRangeException(nameof(enemyType), enemyType, "정의되지 않은 enemyType입니다");
+        }
+    }
+
+    protected virtual void AttackMelee(int _damage)
+    {
+        // Enemy에서 오버라이드
+    }
+    protected virtual void AttackRange(int _damage)
+    {
+        // Enemy에서 오버라이드
+    }
+    protected virtual void AttackExplode(int _damage)
+    {
+        // Enemy에서 오버라이드
     }
     #endregion
 
@@ -321,16 +372,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public virtual void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
     {
         CheckOffScreen();
-        if(isOffScreen)
+        if (isOffScreen)
             return;
 
         AnimatorStateInfo stageInfo = anim.GetCurrentAnimatorStateInfo(0);
         if (!stageInfo.IsName("SlimeLV1Hurt"))
         {
             anim.SetTrigger("Hit");
-            Debug.Log("Hit Anim Playing");
         }
-
 
         Stats.hp -= damage;
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
@@ -395,9 +444,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         GameManager.instance.KillManager.UpdateCurrentKills(); // 처치한 적의 수 세기
 
         Spawner.instance.SubtractEnemyNumber();
-        if(enemyFinder == null) enemyFinder = FindObjectOfType<EnemyFinder>();
+        if (enemyFinder == null) enemyFinder = FindObjectOfType<EnemyFinder>();
         //enemyFinder.RemoveEnemyFromList(transform);
-        
+
         IsSlowed = false;
         DestroyHPbar();
         gameObject.SetActive(false);
