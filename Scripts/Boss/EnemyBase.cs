@@ -520,6 +520,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     #endregion
 
+    #region 스킬
     public void SpeedUpEnemy()
     {
         float speed = 2f;
@@ -538,4 +539,5 @@ public class EnemyBase : MonoBehaviour, Idamageable
         ResetCurrentSpeedToDefault();
         //rb.bodyType = RigidbodyType2D.Dynamic;
     }
+    #endregion
 }
