@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject joystick;
 
+    public AudioCreditData AudioCreditData;
+
     public bool IsPlayerDead { get; set; }
     public bool IsPlayerInvincible { get; set; }
     public bool IsPaused { get; private set; }

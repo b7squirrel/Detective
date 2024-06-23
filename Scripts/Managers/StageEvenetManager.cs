@@ -6,7 +6,6 @@ using UnityEngine;
 public class StageEvenetManager : MonoBehaviour
 {
     [SerializeField] List<StageEvent> stageEvents;
-    [SerializeField] AudioClip stageMusic;
     [SerializeField] int enemyNumForNextEvent; // 다음 이벤트를 시작하기 위한 최대 적 수
     ReadStageData readStageData;
     Spawner spawner;
@@ -29,8 +28,7 @@ public class StageEvenetManager : MonoBehaviour
             this.stageEvents.Add(item);
         }
         spawner = FindObjectOfType<Spawner>();
-        musicManager = FindObjectOfType<MusicManager>();
-        musicManager.InitBGM(stageMusic);
+
         IsWinningStage = false;
         winStageCoroutine = null;
     }
