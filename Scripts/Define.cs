@@ -1,6 +1,7 @@
 ﻿// Slot Action
 using UnityEngine;
 
+#region 메인 메뉴 관련
 public enum SlotType { Field, Up, Mat, None };
 public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
 public enum LaunchSlotType { Field, Up, None }
@@ -15,7 +16,9 @@ public enum EquipmentType { Head, Chest, Face, Hand, Ori }
 public enum EssentialEquip { Head, Chest, Face, Hand, Essential }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
 public enum DefaultItem { Default }
+#endregion
 
+#region 필드 관련
 // 필드에서 플레이어의 위치
 public enum Region
 {
@@ -25,6 +28,9 @@ public enum Region
 public enum SpawnItem { enemy, subBoss, enemyGroup, bossSlime } // Stage Event Manager 에서 사용
 
 public enum EnemyType { Melee, Ranged, Explode } // 적을 스폰할 때 어떤 타입의 적을 스폰할지 정하기 위해
+#endregion
+
+#region 음악 관련
 public enum StageMusicType
 {
     GhostAlley,
@@ -33,7 +39,9 @@ public enum StageMusicType
     WhereverAnliens,
     Temp
 }
-// Slot Pooling
+#endregion
+
+#region 슬롯 관련
 public enum Slots { CardSlot, EquipSlot, LaunchSlot }
 public class MyGrade
 {
@@ -63,6 +71,9 @@ public class MyGrade
         new Color(1,0.5f,0.9f, 0.25f) // purple
     };
 }
+#endregion
+
+#region 스킬 관련
 public class Skills
 {
     public static string[] SkillNames = new string[]
@@ -95,12 +106,17 @@ public class StaticValues
 
     public static float GemDropRate = .5f; // 보석 드롭 확률 60%
 }
+#endregion
 
+#region 색깔 관련
 public class Colors
 {
     public static Color[] randomColors = 
         { Color.red, Color.yellow, Color.magenta, Color.white };
 }
+#endregion
+
+#region 공식 관련
 public class Equation
 {
     public int GetDamage(int _originalDamage, int _damageBonus)
@@ -170,6 +186,5 @@ public class Equation
         }
         return false;
     }
-
-    
 }
+#endregion
