@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 /// <summary>
 /// 음악 크레딧 관리, 해당 스테이지의 음악 재생
@@ -15,18 +16,27 @@ public class MusicCreditManager : MonoBehaviour
     {
         // 스테이지 넘버 가져오기
         PlayerDataManager playerDataManager = FindObjectOfType<PlayerDataManager>();
-        int index = playerDataManager.GetCurrentStageNumber();
+        StageEvenetManager eventManager = FindObjectOfType<StageEvenetManager>();
+        StageMusicType musicType = eventManager.GetStageMusicType();
+        int index = 0;
+        for (int i = 0; i < creditData.AudioCredits.Length; i++)
+        {
+            if (creditData.AudioCredits[i].MusicType == musicType)
+                index = i;
+        }
+
+        //int index = playerDataManager.GetCurrentStageNumber();
 
         // 음악 크레딧 UI 표시
         if (creditUI == null) creditUI = FindObjectOfType<MusicCreditUI>();
-        string title = creditData.AudioCredits[index - 1].Title;
-        string credit = title + " - " + creditData.AudioCredits[index - 1].Credit;
+        string title = creditData.AudioCredits[index].Title;
+        string credit = title + " - " + creditData.AudioCredits[index].Credit;
         StartCoroutine(ShowCreditUI(credit, index));
     }
 
     void PlayBGM(int _index)
     {
-        AudioClip stageMusic = creditData.AudioCredits[_index - 1].Clip;
+        AudioClip stageMusic = creditData.AudioCredits[_index].Clip;
         MusicManager musicManager = FindObjectOfType<MusicManager>();
         musicManager.InitBGM(stageMusic);
     }

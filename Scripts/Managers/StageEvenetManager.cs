@@ -7,6 +7,8 @@ public class StageEvenetManager : MonoBehaviour
 {
     [SerializeField] List<StageEvent> stageEvents;
     [SerializeField] int enemyNumForNextEvent; // 다음 이벤트를 시작하기 위한 최대 적 수
+    [SerializeField] StageMusicType stageMusicType;
+
     ReadStageData readStageData;
     Spawner spawner;
 
@@ -108,5 +110,9 @@ public class StageEvenetManager : MonoBehaviour
     public void PasueStageEvent(bool _pause)
     {
         onStopWatchEffect = _pause;
+    }
+    public StageMusicType GetStageMusicType()
+    {
+        return stageMusicType;
     }
 }

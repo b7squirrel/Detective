@@ -4,9 +4,10 @@ using UnityEngine;
 [Serializable]
 public class AudioCredit
 {
-    [field: SerializeField] public AudioClip Clip;
-    [field: SerializeField] public string Title;
-    [field: SerializeField] public string Credit;
+    [SerializeField] public AudioClip Clip;
+    [SerializeField] public StageMusicType MusicType;
+    [SerializeField] public string Title;
+    [SerializeField] public string Credit;
 }
 
 /// <summary>
