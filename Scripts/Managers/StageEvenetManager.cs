@@ -31,6 +31,8 @@ public class StageEvenetManager : MonoBehaviour
 
         IsWinningStage = false;
         winStageCoroutine = null;
+
+        GameManager.instance.musicCreditManager.Init();
     }
 
     void Update()

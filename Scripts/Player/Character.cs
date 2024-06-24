@@ -142,7 +142,7 @@ public class Character : MonoBehaviour
         }
 
         if(debugCharacter == null) debugCharacter = FindObjectOfType<DebugCharacter>();
-        debugCharacter.HitMessage(damage);
+        debugCharacter?.HitMessage(damage);
     }
 
     void ApplyArmor(ref int damage)

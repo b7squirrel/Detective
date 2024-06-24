@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject joystick;
 
-    public AudioCreditData AudioCreditData;
+    public MusicCreditManager musicCreditManager;
 
     public bool IsPlayerDead { get; set; }
     public bool IsPlayerInvincible { get; set; }
@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
 
         fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
         playerRegion = GetComponent<PlayerRegion>();
+
+        musicCreditManager = GetComponent<MusicCreditManager>();
     }
 
     void Update()

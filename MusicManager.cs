@@ -72,4 +72,9 @@ public class MusicManager : MonoBehaviour
             audioSource.volume = 0;
         }
     }
+
+    public AudioSource GetAudioSource()
+    {
+        return audioSource;
+    }
 }
