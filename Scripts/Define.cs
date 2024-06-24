@@ -28,6 +28,9 @@ public enum EnemyType { Melee, Ranged, Explode } // 적을 스폰할 때 어떤 
 public enum StageMusicType
 {
     GhostAlley,
+    GoGoGO,
+    GoGoFasterFaster,
+    WhereverAnliens,
     Temp
 }
 // Slot Pooling

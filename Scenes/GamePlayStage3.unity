@@ -1154,7 +1154,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageEvents: []
-  stageMusic: {fileID: 8300000, guid: fb38d898297a0b34f9282998e7d92689, type: 3}
+  enemyNumForNextEvent: 0
+  stageMusicType: 2
 --- !u!114 &1203505527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1167,6 +1168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aaa3c2f5ca917640a2e432d8cfc2082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stageDuration: 0
 --- !u!114 &1203505529
 MonoBehaviour:
   m_ObjectHideFlags: 0
