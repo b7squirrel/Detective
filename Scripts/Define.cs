@@ -1,4 +1,8 @@
 ﻿// Slot Action
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 using UnityEngine;
 
 #region 메인 메뉴 관련
@@ -33,11 +37,17 @@ public enum EnemyType { Melee, Ranged, Explode } // 적을 스폰할 때 어떤 
 #region 음악 관련
 public enum StageMusicType
 {
+    [Description("Ghost Alley")]
     GhostAlley,
-    GoGoGO,
+
+    [Description("Go Go Go")]
+    GoGoGo,
+
+    [Description("Go Go Faster Faster")]
     GoGoFasterFaster,
-    WhereverAnliens,
-    Temp
+
+    [Description("Wherever Anliens!!!")]
+    WhereverAnliens
 }
 #endregion
 
@@ -162,16 +172,16 @@ public class Equation
     public Vector2 GetSpawnablePos(float _spawnConst, float _offset)
     {
         Vector2 position = new Vector2();
-        float f = Random.value > .5f ? 1f : -1f;
+        float f = UnityEngine.Random.value > .5f ? 1f : -1f;
 
-        if (Random.value > .5f)
+        if (UnityEngine.Random.value > .5f)
         {
-            position.x = Random.Range(-_spawnConst + _offset, _spawnConst - _offset);
+            position.x = UnityEngine.Random.Range(-_spawnConst + _offset, _spawnConst - _offset);
             position.y = f > 0 ? (_spawnConst * f) - _offset : (_spawnConst * f) + _offset;
         }
         else
         {
-            position.y = Random.Range(-_spawnConst + _offset, _spawnConst - _offset);
+            position.y = UnityEngine.Random.Range(-_spawnConst + _offset, _spawnConst - _offset);
             position.x = f > 0 ? (_spawnConst * f) - _offset : (_spawnConst * f) + _offset;
         }
 
@@ -185,6 +195,27 @@ public class Equation
             return true;
         }
         return false;
+    }
+}
+#endregion
+
+#region 확장 함수
+public static class EnumExtensions
+{
+    private static readonly Dictionary<Enum, string> _descriptionCache = new Dictionary<Enum, string>();
+
+    public static string GetDescription(this Enum value)
+    {
+        if (_descriptionCache.TryGetValue(value, out string description))
+        {
+            return description;
+        }
+
+        FieldInfo field = value.GetType().GetField(value.ToString());
+        DescriptionAttribute attribute = (DescriptionAttribute)field.GetCustomAttribute(typeof(DescriptionAttribute));
+        description = attribute == null ? value.ToString() : attribute.Description;
+        _descriptionCache[value] = description;
+        return description;
     }
 }
 #endregion

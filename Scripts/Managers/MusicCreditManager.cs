@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+using System.ComponentModel;
+using System.Reflection;
+using System;
 
 /// <summary>
 /// 음악 크레딧 관리, 해당 스테이지의 음악 재생
@@ -29,7 +31,7 @@ public class MusicCreditManager : MonoBehaviour
 
         // 음악 크레딧 UI 표시
         if (creditUI == null) creditUI = FindObjectOfType<MusicCreditUI>();
-        string title = creditData.AudioCredits[index].Title;
+        string title = musicType.GetDescription();
         string credit = title + " - " + creditData.AudioCredits[index].Credit;
         StartCoroutine(ShowCreditUI(credit, index));
     }
@@ -51,7 +53,7 @@ public class MusicCreditManager : MonoBehaviour
         yield return new WaitForSeconds(1f); // 패널 사운드와 음악이 동시에 겹치면서 나오지 않게
         PlayBGM(_index);
 
-        yield return new WaitForSeconds(5f); // 5초 후에 패널 내림
+        yield return new WaitForSeconds(3.5f); // 5초 후에 패널 내림
         HideCreditUI();
     }
     void HideCreditUI()

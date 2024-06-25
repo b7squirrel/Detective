@@ -14,9 +14,9 @@ public class BombPickUpObject : Collectable, IPickUpObject
         if (character != null)
         {
             OnPickUp(character);
-            SoundManager.instance.Play(pickup);
+            //SoundManager.instance.Play(pickup);
+            SoundManager.instance.PlayAtPosition(pickup, transform.position); // 수정된 부분
             gameObject.SetActive(false);
         }
     }
-    
 }

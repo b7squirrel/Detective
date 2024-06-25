@@ -6,7 +6,6 @@ public class AudioCredit
 {
     [SerializeField] public AudioClip Clip;
     [SerializeField] public StageMusicType MusicType;
-    [SerializeField] public string Title;
     [SerializeField] public string Credit;
 }
 

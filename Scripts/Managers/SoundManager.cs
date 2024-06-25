@@ -101,4 +101,14 @@ public class SoundManager : MonoBehaviour
         }
         return -1;
     }
+    // 추가: 독립적인 AudioSource 객체 생성 및 관리
+    public void PlayAtPosition(AudioClip audioClip, Vector3 position)
+    {
+        GameObject tempAudioSource = new GameObject("TempAudio");
+        tempAudioSource.transform.position = position;
+        AudioSource audioSource = tempAudioSource.AddComponent<AudioSource>();
+        audioSource.clip = audioClip;
+        audioSource.Play();
+        Destroy(tempAudioSource, audioClip.length);
+    }
 }
