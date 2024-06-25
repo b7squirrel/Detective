@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    public static CameraShake insstance;
+    public static CameraShake instance;
     [SerializeField] Camera mainCamera;
     [SerializeField][Range(.01f, 2f)] float shakeRange = .05f;
     [SerializeField][Range(.1f, 1f)] float duration = .5f;
@@ -13,7 +13,7 @@ public class CameraShake : MonoBehaviour
 
     void Awake()
     {
-        insstance = this;
+        instance = this;
     }
     public void Shake()
     {

@@ -199,7 +199,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public void CamShake()
     {
-        CameraShake.insstance.Shake();
+        CameraShake.instance.Shake();
     }
     public void StartLanding()
     {

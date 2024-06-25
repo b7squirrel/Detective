@@ -1,8 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using System.ComponentModel;
-using System.Reflection;
-using System;
 
 /// <summary>
 /// 음악 크레딧 관리, 해당 스테이지의 음악 재생
@@ -13,6 +10,7 @@ public class MusicCreditManager : MonoBehaviour
     [SerializeField] AudioClip panelUpSound;
     [SerializeField] AudioClip panelDownSound;
     MusicCreditUI creditUI;
+    MusicVisualizer musicVisualizer;
 
     public void Init()
     {
@@ -34,6 +32,8 @@ public class MusicCreditManager : MonoBehaviour
         string title = musicType.GetDescription();
         string credit = title + " - " + creditData.AudioCredits[index].Credit;
         StartCoroutine(ShowCreditUI(credit, index));
+
+        if(musicVisualizer == null) musicVisualizer = GetComponent<MusicVisualizer>();
     }
 
     void PlayBGM(int _index)
@@ -52,9 +52,13 @@ public class MusicCreditManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f); // 패널 사운드와 음악이 동시에 겹치면서 나오지 않게
         PlayBGM(_index);
+        musicVisualizer.Init(MusicManager.instance.GetAudioSource());
 
         yield return new WaitForSeconds(3.5f); // 5초 후에 패널 내림
         HideCreditUI();
+
+        yield return new WaitForSeconds(2f); // 적당히 2초 정도 후부터는 음악이 싱크되지 않도롤
+        musicVisualizer.FinishSync();
     }
     void HideCreditUI()
     {

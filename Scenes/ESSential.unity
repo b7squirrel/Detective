@@ -25982,7 +25982,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 993905462}
   m_RootOrder: 1
@@ -49129,6 +49129,7 @@ GameObject:
   - component: {fileID: 1834188298}
   - component: {fileID: 1834188301}
   - component: {fileID: 1834188302}
+  - component: {fileID: 1834188303}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -49451,6 +49452,23 @@ MonoBehaviour:
   creditData: {fileID: 11400000, guid: d6fef485205e3534f933f418ba3d7e85, type: 2}
   panelUpSound: {fileID: 8300000, guid: b21167347052e4a4ba0a2e2adc7fc07e, type: 3}
   panelDownSound: {fileID: 8300000, guid: 177fa7c4f2077df46b317c05b4442393, type: 3}
+--- !u!114 &1834188303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e76ca4260d92244948a8465dd4b413, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteTransform: {fileID: 1755587683}
+  updateStep: 0.01
+  sampleDataLength: 2048
+  scaleMultiplier: 0.5
+  scaleDuration: 0.01
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0
