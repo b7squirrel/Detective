@@ -15,7 +15,13 @@ MonoBehaviour:
   Name: Slime LV2
   animController: {fileID: 22100000, guid: e528fe5e406fa644a9a7f95329c2b329, type: 2}
   stats:
-    hp: 205
+    hp: 160
     speed: 3
     damage: 6
+    rangedDamage: 0
     experience_reward: 450
+  enemyType: 0
+  projectilePrefab: {fileID: 0}
+  dieEffectPrefab: {fileID: 0}
+  distanceToPlayer: 0
+  attackInterval: 0

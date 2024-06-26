@@ -48,10 +48,6 @@ public class Collectable : MonoBehaviour
         IsFlyingToPlayer = false;
         IsHit = false;
         lifeTimeCount = lifeTime;
-        if (gemManager == null)
-        {
-            gemManager = GameManager.instance.GetComponent<GemManager>();
-        }
 
         colliders = GetComponents<Collider2D>();
         DeactivateColliders();
@@ -177,6 +173,7 @@ public class Collectable : MonoBehaviour
 
         GetComponent<IPickUpObject>().OnPickUp(character);
 
+        if (gemManager == null) gemManager = GameManager.instance.GetComponent<GemManager>();
         gemManager.PlayGemSound();
         gameObject.SetActive(false);
     }

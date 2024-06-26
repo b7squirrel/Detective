@@ -15,11 +15,12 @@ public class SoundManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+        Init();
     }
 
     private void Start()
     {
-        Init();
+
     }
 
     void Update()
@@ -44,6 +45,7 @@ public class SoundManager : MonoBehaviour
     public void Play(AudioClip audioClip)
     {
         AudioSource audioSource = GetAudio();
+        if (audioSource == null) return;
         audioSource.clip = audioClip;
 
         audioSource.Play();
@@ -68,6 +70,7 @@ public class SoundManager : MonoBehaviour
     {
         for (int i = 0; i < audioSources.Count; i++)
         {
+            if (audioSources[i] == null) return null;
             if (audioSources[i].isPlaying == false)
             {
                 audioSources[i].volume = 1f;
@@ -95,7 +98,7 @@ public class SoundManager : MonoBehaviour
         if (audioClip == null) return -1;
         for (int i = 0; i < audioSources.Count; i++)
         {
-            if(audioSources[i].clip == null) continue;
+            if (audioSources[i].clip == null) continue;
             if (audioSources[i].clip.name == audioClip.name)
                 return i;
         }
