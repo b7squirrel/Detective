@@ -44,11 +44,12 @@ public class MusicCreditManager : MonoBehaviour
     }
     IEnumerator ShowCreditUI(string _credit, int _index)
     {
-        yield return new WaitForSeconds(2f);
         PlayBGM(_index);
+        //yield return new WaitForSeconds(2f);
+        //PlayBGM(_index);
 
         yield return new WaitForSeconds(.5f); // 패널이 올라오고 나서 사운드 재생
-        PlayPanelUpSound();
+        //PlayPanelUpSound();
 
         yield return new WaitForSeconds(1f); // 패널 사운드와 음악이 동시에 겹치면서 나오지 않게
         creditUI.CreditFadeIn(_credit);
@@ -62,7 +63,7 @@ public class MusicCreditManager : MonoBehaviour
     }
     void HideCreditUI()
     {
-        PlayPanelDownSound();
+        //PlayPanelDownSound();
         creditUI.CreditFadeOut();
     }
     void PlayPanelUpSound()
