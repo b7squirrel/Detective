@@ -154,18 +154,28 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void Heal(int amount, bool needEffect)
+    public void Heal(int _amount, bool _healingByItem)
     {
         if (currentHealth <= 0)
             return;
-        currentHealth += amount;
+        // 자동 힐링은 이펙트 없음. 아이템 힐링은 이펙트
+        // 아이템 힐링은 퍼센테이지. 자동 힐링은 정해진 양을 채운다
+        if (_healingByItem)
+        {
+            healEffect.SetActive(true);
+            currentHealth += (int)(_amount * MaxHealth / 100);
+        }
+        else
+        {
+            currentHealth += _amount;
+        }
+
         if (currentHealth > MaxHealth)
         {
             currentHealth = MaxHealth;
         }
         hpBar.SetStatus(currentHealth, MaxHealth);
 
-        if (needEffect) healEffect.SetActive(true);
     }
 
     public int GetCurrentHP()

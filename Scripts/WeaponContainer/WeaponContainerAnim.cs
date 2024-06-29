@@ -124,12 +124,6 @@ public class WeaponContainerAnim : MonoBehaviour
             costumeSR.color = new Color(1, 1, 1, 0);
         }
 
-        face.sortingOrder = indexSortingOrder;
-        indexSortingOrder--;
-
-        sr[0].sortingOrder = indexSortingOrder;
-        indexSortingOrder--;
-
         for (int i = 0; i < 4; i++)
         {
             sr[i + 1].sortingOrder = indexSortingOrder;
@@ -143,6 +137,12 @@ public class WeaponContainerAnim : MonoBehaviour
 
             sr[i + 1].sprite = iDatas[i].charImage;
         }
+
+        face.sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
+
+        sr[0].sortingOrder = indexSortingOrder;
+        indexSortingOrder--;
     }
     void FlipSpriteGroup()
     {

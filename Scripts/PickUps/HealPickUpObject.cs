@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class HealPickUpObject : Collectable, IPickUpObject
 {
-    [field: SerializeField] public int HealAmount { get; set; }
+    [Tooltip("Max Health에 대한 비율")]
+    [Range(0, 100)]
+    [SerializeField] public int HealAmount;
 
     public void OnPickUp(Character character)
     {
