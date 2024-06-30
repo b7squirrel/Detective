@@ -66,18 +66,15 @@ public class Spawner : MonoBehaviour
     #region 스폰
     public void Spawn(EnemyData enemyToSpawn, int index)
     {
-        //if (currentEnemyNumbers >= maxEnemyInScene)
-        //    return;
-        GetAvailablePoints();
-
+        // 스폰 가능한 지점 탐색하고 벽 안쪽에서 2 unit 더 안쪽에 스폰
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
-        // 벽 안쪽에서 2 unit 더 안쪽에 스폰
-
         Vector2 spawnPoint = GetAvailablePoints();
-        
         enemy.transform.position = new Vector2(spawnPoint.x, spawnPoint.y);
+
+        // 초기화
         enemy.GetComponent<Enemy>().Init(enemyToSpawn);
 
+        // 적 수 계산
         AddEnemyNumber();
     }
     public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
@@ -112,17 +109,22 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnBossCo(EnemyData enemyToSpawn)
     {
+        // 스폰 위치 정하기
         Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
         GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform);
         enemy.transform.position = spawnPoint;
-        EnemyBoss boss = enemy.GetComponent<EnemyBoss>();
+
+        // 스폰 한 후 일단 비활성화
+        EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemy.SetActive(false);
 
-        GameManager.instance.bossWarningPanel.Init(boss.Name);
+        // 보스 경고 메시지. 보스의 이름을 얻어내려고 비활성/활성을 하는 것
+        GameManager.instance.bossWarningPanel.Init(enemyBase.Name);
         yield return new WaitForSecondsRealtime(2f);
 
+        // 보스를 다시 활성화 한 후 초기화
         enemy.SetActive(true);
-        boss.Init(enemyToSpawn);
+        enemyBase.InitEnemy(enemyToSpawn);
     }
 
     public void SpawnBoss(EnemyData enemyToSpawn)

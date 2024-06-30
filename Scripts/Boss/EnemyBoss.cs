@@ -51,11 +51,27 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] GameObject dot;
     float debugAlpha;
 
+    public override void InitEnemy(EnemyData _enemyToSpawn)
+    {
+        this.Stats = new EnemyStats(_enemyToSpawn.stats);
+        IsBoss = true;
+        spawner = FindObjectOfType<Spawner>(); // 입에서 enemy를 발사하기 위해서
+        generateWalls = GetComponent<GenerateWalls>();
+        col = GetComponent<CapsuleCollider2D>();
+        spriteRen = GetComponentInChildren<SpriteRenderer>();
+
+        Name = _enemyToSpawn.name;
+
+        DefaultSpeed = Stats.speed;
+        currentSpeed = DefaultSpeed;
+
+        StartCoroutine(InitCo());
+    }
     public void Init(EnemyData data)
     {
         this.Stats = new EnemyStats(data.stats);
         IsBoss = true;
-        spawner = FindObjectOfType<Spawner>();
+        spawner = FindObjectOfType<Spawner>(); // 입에서 enemy를 발사하기 위해서
         generateWalls = GetComponent<GenerateWalls>();
         col = GetComponent<CapsuleCollider2D>();
         spriteRen = GetComponentInChildren<SpriteRenderer>();

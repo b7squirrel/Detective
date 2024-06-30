@@ -12,10 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608ab2ae7154af4429ee6ffc8873925f, type: 3}
   m_Name: Slime LV1_SubBoss
   m_EditorClassIdentifier: 
-  Name: Slime LV3_SubBoss
+  Name: Prince Yellowbelly
   animController: {fileID: 22100000, guid: b2f1e9d0a8138b744900a2e5ad277722, type: 2}
   stats:
     hp: 2000
     speed: 6
     damage: 9
+    rangedDamage: 0
     experience_reward: 130
+  enemyType: 0
+  projectilePrefab: {fileID: 0}
+  dieEffectPrefab: {fileID: 0}
+  distanceToPlayer: 0
+  attackInterval: 0

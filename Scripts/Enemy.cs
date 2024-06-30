@@ -42,7 +42,8 @@ public class Enemy : EnemyBase
 
     WallManager wallManager;
     float nextOutOfRangeCheckingTime;
-    
+
+    #region 유니티 콜백 함수
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -108,7 +109,30 @@ public class Enemy : EnemyBase
         // 범위 공격
         if (enemyType == EnemyType.Ranged) AttackCoolDown();
     }
+    #endregion
 
+    #region 초기화
+    public override void InitEnemy(EnemyData _data)
+    {
+        // 일반 적은 이름이 필요하지 않기 때문에 초기화 하지 않음.
+
+        anim.runtimeAnimatorController = _data.animController;
+        this.Stats = new EnemyStats(_data.stats);
+        ExperienceReward = this.Stats.experience_reward;
+
+        DefaultSpeed = Stats.speed;
+        currentSpeed = DefaultSpeed;
+
+        //범위 공격 변수 초기화
+        attackInterval = _data.attackInterval;
+        distanceToPlayer = _data.distanceToPlayer;
+
+        InitHpBar();
+
+        enemyType = _data.enemyType;
+        enemyProjectile = _data.projectilePrefab;
+        dieEffectPrefeab = _data.dieEffectPrefab; // 자폭 죽음과 일반 죽음을 구별하기 위해서 
+    }
     public void Init(EnemyData data)
     {
         anim.runtimeAnimatorController = data.animController;
@@ -144,6 +168,7 @@ public class Enemy : EnemyBase
         gameObject.layer = LayerMask.NameToLayer("Enemy");
         sr.sortingLayerName = "Enemy";
     }
+    #endregion
 
     public override void ApplyMovement()
     {

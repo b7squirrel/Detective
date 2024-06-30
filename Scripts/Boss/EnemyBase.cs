@@ -4,7 +4,9 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour, Idamageable
 {
     #region Variables
-    [field: SerializeField] public string Name { get; private set; } // 체력바에 표시할 이름이 필요한 적들만 사용
+    // 체력바에 표시할 이름이 필요한 적들만 사용. 일반 적들은 배열 순서로 스폰.
+    // enemy, enemyBoss 에서 InitEnemy로 이름을 enemyData에서 받아옴
+    [field: SerializeField] public string Name { get;  set; } 
     [HideInInspector] public bool IsKnockBack { get; set; }
     [HideInInspector] public bool IsStunned { get; set; }
     [HideInInspector] public Rigidbody2D Target { get; set; }
@@ -158,6 +160,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
         //}
         //colEnemy.enabled = isOffScreen;
     }
+    #endregion
+
+    #region 초기화
+    public virtual void InitEnemy(EnemyData _enemyToSpawn)
+    {
+        // 적과 보스 공통으로 사용하기 위해서 virtual로 했음
+        // 각자 덮어쓰기 하면 됨
+    }
+
     #endregion
 
     #region Movement Functions
