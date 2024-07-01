@@ -49349,6 +49349,7 @@ GameObject:
   - component: {fileID: 1834188301}
   - component: {fileID: 1834188302}
   - component: {fileID: 1834188303}
+  - component: {fileID: 1834188304}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -49688,6 +49689,20 @@ MonoBehaviour:
   sampleDataLength: 2048
   scaleMultiplier: 1.5
   scaleDuration: 0.01
+--- !u!114 &1834188304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7bcfb87032c2544e9870650aa50961e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportEffectPrefab: {fileID: 7859877589049841246, guid: 8b66f8564ea641f4eb1c3e89e508d665, type: 3}
+  teleportSound: {fileID: 8300000, guid: ce6f6a6e8f75e9f46b9f87093a89d730, type: 3}
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0

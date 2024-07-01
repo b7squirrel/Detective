@@ -65,33 +65,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
 
-        StartCoroutine(InitCo());
-    }
-    public void Init(EnemyData data)
-    {
-        this.Stats = new EnemyStats(data.stats);
-        IsBoss = true;
-        spawner = FindObjectOfType<Spawner>(); // 입에서 enemy를 발사하기 위해서
-        generateWalls = GetComponent<GenerateWalls>();
-        col = GetComponent<CapsuleCollider2D>();
-        spriteRen = GetComponentInChildren<SpriteRenderer>();
-
-        DefaultSpeed = Stats.speed;
-        currentSpeed = DefaultSpeed;
-
-        StartCoroutine(InitCo());
-    }
-    IEnumerator InitCo()
-    {
-        ActivateLandingIndicator(true);
-
-        yield return new WaitForSeconds(1.45f);
-
         InitHpBar();
         anim.SetTrigger("Spawn");
-
-        GenTeleportEffect();
-        SoundManager.instance.Play(spawnSFX);
     }
     
     public void ShootTimer()

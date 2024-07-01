@@ -133,25 +133,6 @@ public class Enemy : EnemyBase
 
         Name = _data.Name;
     }
-    public void Init(EnemyData data)
-    {
-        anim.runtimeAnimatorController = data.animController;
-        this.Stats = new EnemyStats(data.stats);
-        ExperienceReward = this.Stats.experience_reward;
-
-        DefaultSpeed = Stats.speed;
-        currentSpeed = DefaultSpeed;
-
-        //범위 공격 변수 초기화
-        attackInterval = data.attackInterval;
-        distanceToPlayer = data.distanceToPlayer;
-
-        InitHpBar();
-
-        enemyType = data.enemyType;
-        enemyProjectile = data.projectilePrefab;
-        dieEffectPrefeab = data.dieEffectPrefab; // 자폭 죽음과 일반 죽음을 구별하기 위해서 
-    }
     public void SetFlying(Vector2 target)
     {
         IsFlying = true;

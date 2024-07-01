@@ -72,7 +72,7 @@ public class Spawner : MonoBehaviour
         enemy.transform.position = new Vector2(spawnPoint.x, spawnPoint.y);
 
         // 초기화
-        enemy.GetComponent<Enemy>().Init(enemyToSpawn);
+        enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
 
         // 적 수 계산
         AddEnemyNumber();
@@ -90,7 +90,7 @@ public class Spawner : MonoBehaviour
         {
             GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
             enemy.transform.position = groupShape.GetComponent<EnemyGroupShape>().SpawnPoints[i].position;
-            enemy.GetComponent<Enemy>().Init(enemyToSpawn);
+            enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
             enemy.GetComponent<Enemy>().IsGrouping = true;
             enemy.GetComponent<Enemy>().GroupDir = groupDir;
 
@@ -103,7 +103,7 @@ public class Spawner : MonoBehaviour
     {
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         enemy.transform.position = start;
-        enemy.GetComponent<Enemy>().Init(enemyToSpawn);
+        enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
         enemy.GetComponent<Enemy>().SetFlying(target);
     }
 
@@ -118,14 +118,17 @@ public class Spawner : MonoBehaviour
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemyBase.InitEnemy(enemyToSpawn);
         string enemyName = enemyToSpawn.Name;
-        Debug.Log("Enemy Name = " + enemyName + " data name = " + enemyToSpawn.Name);
         enemy.SetActive(false);
 
         // 보스 경고 메시지. 보스의 이름을 얻어내려고 비활성/활성을 하는 것
         GameManager.instance.bossWarningPanel.Init(enemyName);
         yield return new WaitForSecondsRealtime(2f);
 
+        // 텔레포트 이펙트
+        GameManager.instance.GetComponent<TeleportEffect>().GenTeleportEffect(spawnPoint);
+
         // 보스를 다시 활성화 한 후 초기화
+        yield return new WaitForSeconds(.26f);
         enemy.SetActive(true);
     }
 

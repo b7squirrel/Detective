@@ -33,6 +33,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     float pastFacingDir, currentFacingDir;
 
     bool initDone;
+    public bool finishedSpawn; // 스폰이 끝나면 적이 이동하도록 하려고
     #endregion
 
     #region Component Variables
@@ -266,6 +267,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public virtual void ApplyMovement()
     {
+        if (finishedSpawn == false) return; // 스폰이 완료되지 않았다면 이동 금지. 스폰 애니메이션에서 이벤트로 설정
         if (IsKnockBack)
         {
             rb.velocity = knockBackSpeed * targetDir;
@@ -294,6 +296,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
+    }
+
+    // animation events
+    public void TriggerFinishedSpawn()
+    {
+        finishedSpawn = true;
     }
     #endregion
 
@@ -459,6 +467,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         //enemyFinder.RemoveEnemyFromList(transform);
 
         IsSlowed = false;
+        finishedSpawn = false;
         DestroyHPbar();
         gameObject.SetActive(false);
     }
