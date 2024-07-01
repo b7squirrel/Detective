@@ -213,5 +213,4 @@ public class Enemy : EnemyBase
             return true;
         return false;
     }
-    
 }

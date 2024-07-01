@@ -9,6 +9,7 @@ public enum StageEventType
     SpawnEnemyGroup,
     SpawnSubBoss,
     SpawnEnemyBoss,
+    SpawnEgggulp,
     SpawnObject,
     WinStage
 }

@@ -82,6 +82,10 @@ public class StageEvenetManager : MonoBehaviour
                 SpawnSubBoss();
                 break;
 
+            case StageEventType.SpawnEgggulp:
+                SpawnEgggulp();
+                break;
+
             case StageEventType.SpawnEnemyBoss:
                 spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
                 break;
@@ -101,6 +105,10 @@ public class StageEvenetManager : MonoBehaviour
     void SpawnSubBoss()
     {
         spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss);
+    }
+    void SpawnEgggulp()
+    {
+        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.egggulp);
     }
     void SpawnEnemyGroup(int number)
     {

@@ -18,6 +18,8 @@ public class ReadStageData : MonoBehaviour
             return StageEventType.SpawnEnemyGroup;
         if (stageEventType == "SubBoss")
             return StageEventType.SpawnSubBoss;
+        if (stageEventType == "Egggulp")
+            return StageEventType.SpawnEgggulp;
         if (stageEventType == "Boss")
             return StageEventType.SpawnEnemyBoss;
         if (stageEventType == "Object")
@@ -50,17 +52,17 @@ public class ReadStageData : MonoBehaviour
             return stageEnemyData.enemyData[9];
         if (enemyType == "Boss")
             return stageEnemyData.enemyData[10];
-        if (enemyType == "Special_1")
+        if (enemyType == "Egggulp_LV1") 
             return stageEnemyData.enemyData[11];
-        if (enemyType == "Special_2")
+        if (enemyType == "Egggulp_LV2") 
             return stageEnemyData.enemyData[12];
-        if (enemyType == "Special_3")
+        if (enemyType == "Egggulp_LV3") 
             return stageEnemyData.enemyData[13];
-        if (enemyType == "Special_4")
+        if (enemyType == "Egggulp_LV4") 
             return stageEnemyData.enemyData[14];
-        if (enemyType == "Special_5")
+        if (enemyType == "Egggulp_LV5") 
             return stageEnemyData.enemyData[15];
-        if (enemyType == "Special_6")
+        if (enemyType == "Group") 
             return stageEnemyData.enemyData[16];
         return stageEnemyData.enemyData[0]; // 일단 채워넣었음
     }

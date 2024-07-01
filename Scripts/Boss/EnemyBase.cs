@@ -302,6 +302,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public void TriggerFinishedSpawn()
     {
         finishedSpawn = true;
+        //Debug.Log("FinishedSpawn = " + finishedSpawn);
+        Debug.Log("Triggered Finished Spawn");
     }
     #endregion
 
