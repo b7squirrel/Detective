@@ -114,8 +114,6 @@ public class Enemy : EnemyBase
     #region 초기화
     public override void InitEnemy(EnemyData _data)
     {
-        // 일반 적은 이름이 필요하지 않기 때문에 초기화 하지 않음.
-
         anim.runtimeAnimatorController = _data.animController;
         this.Stats = new EnemyStats(_data.stats);
         ExperienceReward = this.Stats.experience_reward;
@@ -132,6 +130,8 @@ public class Enemy : EnemyBase
         enemyType = _data.enemyType;
         enemyProjectile = _data.projectilePrefab;
         dieEffectPrefeab = _data.dieEffectPrefab; // 자폭 죽음과 일반 죽음을 구별하기 위해서 
+
+        Name = _data.Name;
     }
     public void Init(EnemyData data)
     {

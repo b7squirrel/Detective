@@ -10,11 +10,6 @@ public class ReadStageData : MonoBehaviour
     List <StageEvent> stageEvents;
     StageEnemyData stageEnemyData;
 
-    void Awake()
-    {
-        
-    }
-
     StageEventType GetStageEventType(string stageEventType)
     {
         if (stageEventType == "Enemy")

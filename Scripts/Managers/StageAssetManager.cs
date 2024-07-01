@@ -6,4 +6,9 @@ public class StageAssetManager : MonoBehaviour
     public GameObject bossPrefab;
     public GameObject[] effects;
     public GameObject[] bossEffects;
+
+    public GameObject GetBoss()
+    {
+        return bossPrefab;
+    }
 }

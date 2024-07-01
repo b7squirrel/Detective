@@ -109,22 +109,24 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnBossCo(EnemyData enemyToSpawn)
     {
-        // 스폰 위치 정하기
+        // 스폰 위치 정하기, 보스 프리펩 얻어오기
         Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
-        GameObject enemy = Instantiate(GameManager.instance.poolManager.GetBoss(enemyToSpawn), GameManager.instance.poolManager.transform);
+        GameObject enemy = Instantiate(FindObjectOfType<StageAssetManager>().GetBoss(), GameManager.instance.poolManager.transform);
         enemy.transform.position = spawnPoint;
 
         // 스폰 한 후 일단 비활성화
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
+        enemyBase.InitEnemy(enemyToSpawn);
+        string enemyName = enemyToSpawn.Name;
+        Debug.Log("Enemy Name = " + enemyName + " data name = " + enemyToSpawn.Name);
         enemy.SetActive(false);
 
         // 보스 경고 메시지. 보스의 이름을 얻어내려고 비활성/활성을 하는 것
-        GameManager.instance.bossWarningPanel.Init(enemyBase.Name);
+        GameManager.instance.bossWarningPanel.Init(enemyName);
         yield return new WaitForSecondsRealtime(2f);
 
         // 보스를 다시 활성화 한 후 초기화
         enemy.SetActive(true);
-        enemyBase.InitEnemy(enemyToSpawn);
     }
 
     public void SpawnBoss(EnemyData enemyToSpawn)

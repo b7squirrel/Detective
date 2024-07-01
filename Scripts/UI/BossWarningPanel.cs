@@ -10,7 +10,7 @@ public class BossWarningPanel : MonoBehaviour
 
     public void Init(string _name)
     {
-        bossName.text = "The " + _name + " is coming!";
+        bossName.text = _name + " !!!";
         bossWarningPanel.SetActive(true);
         StartCoroutine(ActivateBossWarning());
     }
