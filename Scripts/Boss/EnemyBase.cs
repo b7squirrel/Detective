@@ -382,6 +382,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         // Enemy에서 오버라이드
     }
+    public StatusBar GetHpBar()
+    {
+        return hpBar;
+    }
     #endregion
 
     #region Take Damage

@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using DG;
 
 public class BossDieManager : MonoBehaviour
 {
@@ -11,11 +10,16 @@ public class BossDieManager : MonoBehaviour
     Animator anim;
     DropCoins dropCoins;
     [SerializeField] LayerMask testLayer;
+    StatusBar statusBar; // 스테이지 보스의 hpbar
 
     void Awake()
     {
         instance = this;
         IsBossDead = false;
+    }
+    public void SetBossHpStatusBar(StatusBar _statusBar)
+    {
+        statusBar = _statusBar;
     }
     public void Init(GameObject deadBody, Transform boss, int amountOfCoins)
     {
