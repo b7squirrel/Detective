@@ -117,6 +117,7 @@ public class Spawner : MonoBehaviour
         // 스폰 한 후 일단 비활성화
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemyBase.InitEnemy(enemyToSpawn);
+        enemyBase.IsBoss = true;
         string enemyName = enemyToSpawn.Name;
         enemy.SetActive(false);
 

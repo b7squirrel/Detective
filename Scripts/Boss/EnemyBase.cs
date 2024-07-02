@@ -18,7 +18,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected bool isSubBoss;
     [SerializeField] protected bool isBoss;
     [SerializeField] int numberOfSubBossDrops;
-    [SerializeField] int numberOfBossDrops;
+    [SerializeField] int numberOfBossDrops
+        ;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir { get; set; } // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
@@ -475,6 +476,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         IsSlowed = false;
         finishedSpawn = false;
         DestroyHPbar();
+
+        if(IsBoss)
+        {
+            FindObjectOfType<BossDieManager>().DieEvent(.1f, 2f);
+        }
+
         gameObject.SetActive(false);
     }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록

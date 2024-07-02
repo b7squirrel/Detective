@@ -54,7 +54,6 @@ public class EnemyBoss : EnemyBase, Idamageable
     public override void InitEnemy(EnemyData _enemyToSpawn)
     {
         this.Stats = new EnemyStats(_enemyToSpawn.stats);
-        IsBoss = true;
         spawner = FindObjectOfType<Spawner>(); // 입에서 enemy를 발사하기 위해서
         generateWalls = GetComponent<GenerateWalls>();
         col = GetComponent<CapsuleCollider2D>();
@@ -148,7 +147,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         SoundManager.instance.Play(dieSFX);
         anim.SetTrigger("Die");
 
-        BossDieManager.instance.Init(deadBody, transform, 25);
+        BossDieManager.instance.InitDeadBody(deadBody, transform, 25);
+        BossDieManager.instance.DieEvent(.1f, 2f);
         gameObject.SetActive(false);
     }
     #endregion

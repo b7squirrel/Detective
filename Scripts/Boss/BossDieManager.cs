@@ -10,40 +10,34 @@ public class BossDieManager : MonoBehaviour
     Animator anim;
     DropCoins dropCoins;
     [SerializeField] LayerMask testLayer;
-    StatusBar statusBar; // 스테이지 보스의 hpbar
 
     void Awake()
     {
         instance = this;
         IsBossDead = false;
     }
-    public void SetBossHpStatusBar(StatusBar _statusBar)
-    {
-        statusBar = _statusBar;
-    }
-    public void Init(GameObject deadBody, Transform boss, int amountOfCoins)
+    
+    public void InitDeadBody(GameObject deadBody, Transform boss, int amountOfCoins)
     {
         IsBossDead = true;
         this.deadBody = Instantiate(deadBody, boss.position, boss.rotation);
         anim = this.deadBody.GetComponent<Animator>();
-        this.amountOfCoins = amountOfCoins;
-
-        dropCoins = GetComponent<DropCoins>();
-
+        //this.amountOfCoins = amountOfCoins;
+    }
+    public void DieEvent(float desiredTimeScale, float waitingTime)
+    {
+        StartCoroutine(DieEventCo(desiredTimeScale, waitingTime));
+    }
+    IEnumerator DieEventCo(float desiredTimeScale, float waitingTime)
+    {
         MusicManager.instance.Stop();
-
         BossCameraOn();
 
-        StartCoroutine(DieEvent(.1f, 2f));
-    }
-
-    IEnumerator DieEvent(float desiredTimeScale, float waitingTime)
-    {
         Time.timeScale = desiredTimeScale;
 
         yield return new WaitForSecondsRealtime(waitingTime);
         FindObjectOfType<PauseManager>().UnPauseGame();
-        anim.SetTrigger("Die");
+        if (anim != null) anim.SetTrigger("Die");
 
         RemoveAllEnemies();
         RemoveAllWalls();
