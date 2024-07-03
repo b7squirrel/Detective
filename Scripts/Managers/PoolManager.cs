@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
+    [Header("Enemies")]
     [SerializeField] GameObject[] enemies;
     [SerializeField] List<GameObject> bossPrefabs;
     [SerializeField] List<GameObject>[] enemyPools;
@@ -15,6 +16,10 @@ public class PoolManager : MonoBehaviour
     GameObject temp; // 임시 폴더를 매번 생성하지 않게 하기 위해서
 
     EnemyFinder enemyFinder;
+
+    [Header("Egg Box")]
+    [SerializeField] GameObject eggBox;
+
     void Start()
     {
         InitEnemyPools();

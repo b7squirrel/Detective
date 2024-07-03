@@ -6332,6 +6332,7 @@ MonoBehaviour:
   numPoints: 2
   objectsToSpawn: {fileID: 1519986380285838769, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
   frequency: 17
+  EggBoxPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
 --- !u!114 &259608702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6446,7 +6447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3118075186976557793, guid: c9bef7141df0d4b4eb7f847536e5fa1a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3118075186976557800, guid: c9bef7141df0d4b4eb7f847536e5fa1a, type: 3}
       propertyPath: upgradeToPick.Array.size
@@ -16164,63 +16165,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7070234756646545296, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
   m_PrefabInstance: {fileID: 669394563}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &670436801
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1519986380285838769, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_Name
-      value: Chest
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_RootOrder
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3.67
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.28
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519986380285838771, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6eeb61aba6ce6c740af4c8fd1ecdd0a7, type: 3}
 --- !u!1001 &678675730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37786,8 +37730,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190335
-  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -50995,6 +50939,7 @@ MonoBehaviour:
   enemies: []
   bossPrefabs:
   - {fileID: 7200239369209826798, guid: b03cd8e79a0e3bd43b1e62e82649d45f, type: 3}
+  eggBox: {fileID: 0}
 --- !u!4 &1920186226
 Transform:
   m_ObjectHideFlags: 0

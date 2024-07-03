@@ -48,7 +48,7 @@ public class BossDieManager : MonoBehaviour
 
     public void BossCameraOn()
     {
-        Player.instance.ShouldBeStill = true;
+        //Player.instance.ShouldBeStill = true;
         // Camera.main.transform.GetComponent<CameraController>().CameraToTarget(deadBody.transform.position, true);
     }
     public void BossCameraOff()

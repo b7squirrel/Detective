@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class FieldItemSpawner : MonoBehaviour
 {
+    [Header("Item Box")]
     [SerializeField] int numPoints;
     [SerializeField] GameObject objectsToSpawn;
     [SerializeField] float frequency;
@@ -10,6 +11,9 @@ public class FieldItemSpawner : MonoBehaviour
     WallManager wallManager;
 
     int sortingLayerID;
+
+    [Header("Egg Box")]
+    [SerializeField] GameObject EggBoxPrefab;
 
     void Start()
     {
@@ -32,6 +36,14 @@ public class FieldItemSpawner : MonoBehaviour
             {
                 pickUP.position = GetRandomSpawnPoint();
             }
+        }
+    }
+    public void SpawnEggBox()
+    {
+        Transform eggBox = GameManager.instance.poolManager.GetMisc(EggBoxPrefab).transform;
+        if (eggBox != null)
+        {
+            eggBox.position = GetRandomSpawnPoint();
         }
     }
     Vector2 GetRandomSpawnPoint()

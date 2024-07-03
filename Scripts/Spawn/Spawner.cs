@@ -137,6 +137,10 @@ public class Spawner : MonoBehaviour
     {
         StartCoroutine(SpawnBossCo(enemyToSpawn));
     }
+    public void SpawnEggBox()
+    {
+        GameManager.instance.fieldItemSpawner.SpawnEggBox();
+    }
     #endregion
 
     #region 스폰 포인트
