@@ -122,11 +122,12 @@ public class Character : MonoBehaviour
 
         ApplyArmor(ref damage);
 
-        SoundManager.instance.PlaySingle(hurtSound);
-
         if (anim == null) anim = GetComponentInChildren<WeaponContainerAnim>().GetComponent<Animator>();
 
+        //if (Time.frameCount % 3 != 0) return;
+
         anim.SetTrigger("Hurt");
+        SoundManager.instance.PlaySingle(hurtSound);
 
         //if (Time.frameCount % 3 != 0 && 
         //        enemyType == EnemyType.Melee) return; // Melee공격은 3프레임 간격으로 데미지를 입도록
@@ -141,7 +142,7 @@ public class Character : MonoBehaviour
             hpBar.SetStatus(currentHealth, MaxHealth);
         }
 
-        if(debugCharacter == null) debugCharacter = FindObjectOfType<DebugCharacter>();
+        if (debugCharacter == null) debugCharacter = FindObjectOfType<DebugCharacter>();
         debugCharacter?.HitMessage(damage);
     }
 

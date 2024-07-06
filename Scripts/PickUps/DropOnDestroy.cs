@@ -61,7 +61,7 @@ public class DropOnDestroy : MonoBehaviour
 
             // 상자일 때는 무더기 드롭의 확률도 고려
             bool isMultiDrop = Random.Range(0f, 100f) > multiDropRate ? false : true;
-            if (isMultiDrop)
+            if (noMultipleDrops == false && isMultiDrop) // 멀티플 드롭을 하는 상자이면서, 확률로 멀티드롭이 뽑혔다면
             {
                 if (toDrop.GetComponent<MagnetPickUPObject>() == null &&
                         toDrop.GetComponent<ClockPickUpObject>() == null &&

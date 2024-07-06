@@ -47,6 +47,7 @@ public class SoundManager : MonoBehaviour
         AudioSource audioSource = GetAudio();
         if (audioSource == null) return;
         audioSource.clip = audioClip;
+        audioSource.pitch = UnityEngine.Random.Range(1f, 1.1f);
 
         audioSource.Play();
     }
@@ -58,12 +59,12 @@ public class SoundManager : MonoBehaviour
                 continue;
             if (audioSources[i].clip.name == audioClip.name)
             {
-                return;
+                return; // 클립이 이미 재생 중이면 함수 종료
             }
         }
 
-        Play(audioClip);
-        singleSound = audioClip;
+        Play(audioClip); // 클립이 재생 중이지 않으면 Play 함수 호출
+        singleSound = audioClip; // 현재 재생 중인 클립을 singleSound에 저장
     }
 
     AudioSource GetAudio()

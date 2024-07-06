@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class StageEvenetManager : MonoBehaviour
 {
     [SerializeField] List<StageEvent> stageEvents;
@@ -21,6 +20,9 @@ public class StageEvenetManager : MonoBehaviour
     MusicManager musicManager;
     public bool IsWinningStage { get; set; }
     Coroutine winStageCoroutine;
+
+    [Header("Egg Spawn Time")]
+    [SerializeField] float[] eggSpawnTimes;
 
     void Start()
     {
@@ -82,10 +84,6 @@ public class StageEvenetManager : MonoBehaviour
                 SpawnSubBoss();
                 break;
 
-            case StageEventType.SpawnEggBox:
-                SpawnEggBox();
-                break;
-
             case StageEventType.SpawnEnemyBoss:
                 spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
                 break;
@@ -106,10 +104,7 @@ public class StageEvenetManager : MonoBehaviour
     {
         spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss);
     }
-    void SpawnEggBox()
-    {
-        spawner.SpawnEggBox();
-    }
+    
     void SpawnEnemyGroup(int number)
     {
         spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup, number);
@@ -122,5 +117,10 @@ public class StageEvenetManager : MonoBehaviour
     public StageMusicType GetStageMusicType()
     {
         return stageMusicType;
+    }
+
+    public float[] GetEggSpawnTimes()
+    {
+        return eggSpawnTimes;
     }
 }

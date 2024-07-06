@@ -14,10 +14,14 @@ public class FieldItemSpawner : MonoBehaviour
 
     [Header("Egg Box")]
     [SerializeField] GameObject EggBoxPrefab;
+    float[] eggSpawnTime;
+    float eggSpawnCoolDown;
+    int eggSpawnIndex;
 
     void Start()
     {
         nextSpawnTime = Time.time + frequency;
+        eggSpawnTime = FindObjectOfType<StageEvenetManager>().GetEggSpawnTimes();
     }
     void Update()
     {
@@ -25,6 +29,14 @@ public class FieldItemSpawner : MonoBehaviour
         {
             SpawnObject(objectsToSpawn);
             nextSpawnTime = Time.time + frequency;
+        }
+
+        if (eggSpawnIndex > eggSpawnTime.Length - 1) return;
+        eggSpawnCoolDown += Time.deltaTime;
+        if (eggSpawnCoolDown > eggSpawnTime[eggSpawnIndex])
+        {
+            SpawnEggBox();
+            eggSpawnIndex++;
         }
     }
     void SpawnObject(GameObject toSpawn)
@@ -48,11 +60,11 @@ public class FieldItemSpawner : MonoBehaviour
     }
     Vector2 GetRandomSpawnPoint()
     {
-        if(wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
         float spawnConst = wallManager.GetSpawnAreaConstant();
         float offset = 2f;
-        Vector2 spawnArea = 
-            new Vector2(Random.Range(-spawnConst + offset, spawnConst - offset), 
+        Vector2 spawnArea =
+            new Vector2(Random.Range(-spawnConst + offset, spawnConst - offset),
                         Random.Range(-spawnConst + offset, spawnConst - offset));
         return spawnArea;
     }
@@ -73,8 +85,8 @@ public class FieldItemSpawner : MonoBehaviour
         {
             _isGem = false;
         }
-         
-        
+
+
         while (numberOfItems > 0)
         {
             SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);

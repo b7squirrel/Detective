@@ -35,19 +35,27 @@ public enum EnemyType { Melee, Ranged, Explode } // 적을 스폰할 때 어떤 
 #endregion
 
 #region 음악 관련
+/// <summary>
+/// 드롭다운 메뉴로 만들어서 선택하기 위해서 enum으로 
+/// </summary>
 public enum StageMusicType
 {
     [Description("Ghost Alley")]
     GhostAlley,
-
     [Description("Go Go Go")]
     GoGoGo,
-
     [Description("Go Go Faster Faster")]
     GoGoFasterFaster,
-
-    [Description("Wherever Anliens!!!")]
-    WhereverAnliens
+    [Description("Whenever Aliens!!!")]
+    WhereverAnliens,
+    [Description("I've Got Your Back!")]
+    IveGotYourBack,
+    [Description("Battle Mage")]
+    BattleMage,
+    [Description("Battle with Beasts")]
+    BattleWithBeasts,
+    [Description("Final Showdown")]
+    FinalShowdown
 }
 #endregion
 

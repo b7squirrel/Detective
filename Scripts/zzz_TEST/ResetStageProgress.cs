@@ -2,15 +2,35 @@ using UnityEngine;
 
 public class ResetStageProgress : MonoBehaviour
 {
+    PlayerDataManager playerDataManager;
     public void CLearStageProgress()
     {
-        PlayerDataManager stageManager = FindObjectOfType<PlayerDataManager>();
-        stageManager.SetCurrentStageNumber(1);
-        Debug.Log("Stage number = " + stageManager.GetCurrentStageNumber());
+        if (playerDataManager == null)
+            playerDataManager = FindObjectOfType<PlayerDataManager>();
+
+        playerDataManager.SetCurrentStageNumber(1);
+        Debug.Log("Stage number = " + playerDataManager.GetCurrentStageNumber());
     }
     public void GetStageNumber()
     {
-        PlayerDataManager stageManager = FindObjectOfType<PlayerDataManager>();
-        Debug.Log("Stage number is " + stageManager.GetCurrentStageNumber());
+        if (playerDataManager == null)
+            playerDataManager = FindObjectOfType<PlayerDataManager>();
+        Debug.Log("Stage number is " + playerDataManager.GetCurrentStageNumber());
+    }
+    public void NextStage()
+    {
+        if (playerDataManager == null)
+            playerDataManager = FindObjectOfType<PlayerDataManager>();
+
+        int index = playerDataManager.GetCurrentStageNumber() + 1;
+        playerDataManager.SetCurrentStageNumber(index);
+    }
+    public void PreviousStage()
+    {
+        if (playerDataManager == null)
+            playerDataManager = FindObjectOfType<PlayerDataManager>();
+
+        int index = playerDataManager.GetCurrentStageNumber() - 1;
+        playerDataManager.SetCurrentStageNumber(index);
     }
 }

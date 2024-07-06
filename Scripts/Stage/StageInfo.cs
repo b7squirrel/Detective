@@ -5,6 +5,7 @@ using UnityEngine;
 public class Stages
 {
     public string Title;
+    public RuntimeAnimatorController bossImage;
 }
 
 public class StageInfo : MonoBehaviour

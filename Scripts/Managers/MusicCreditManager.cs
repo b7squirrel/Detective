@@ -17,7 +17,9 @@ public class MusicCreditManager : MonoBehaviour
         // 스테이지 넘버 가져오기
         PlayerDataManager playerDataManager = FindObjectOfType<PlayerDataManager>();
         StageEvenetManager eventManager = FindObjectOfType<StageEvenetManager>();
-        StageMusicType musicType = eventManager.GetStageMusicType();
+        StageMusicType musicType = eventManager.GetStageMusicType(); // 각 스테이지에서 음악 크레딧 데이터 가져옴
+        
+        // 크레딧 제목으로 음악 파일 찾기
         int index = 0;
         for (int i = 0; i < creditData.AudioCredits.Length; i++)
         {
@@ -30,8 +32,8 @@ public class MusicCreditManager : MonoBehaviour
         // 음악 크레딧 UI 표시
         if (creditUI == null) creditUI = FindObjectOfType<MusicCreditUI>();
         string title = musicType.GetDescription();
-        string credit = title + " - " + creditData.AudioCredits[index].Credit;
-        StartCoroutine(ShowCreditUI(credit, index));
+        string credit = "Composed by " + creditData.AudioCredits[index].Credit;
+        StartCoroutine(ShowCreditUI(title, credit, index));
 
         if(musicVisualizer == null) musicVisualizer = GetComponent<MusicVisualizer>();
     }
@@ -42,7 +44,7 @@ public class MusicCreditManager : MonoBehaviour
         MusicManager musicManager = FindObjectOfType<MusicManager>();
         musicManager.InitBGM(stageMusic);
     }
-    IEnumerator ShowCreditUI(string _credit, int _index)
+    IEnumerator ShowCreditUI(string _title, string _credit, int _index)
     {
         PlayBGM(_index);
         //yield return new WaitForSeconds(2f);
@@ -52,7 +54,7 @@ public class MusicCreditManager : MonoBehaviour
         //PlayPanelUpSound();
 
         yield return new WaitForSeconds(1f); // 패널 사운드와 음악이 동시에 겹치면서 나오지 않게
-        creditUI.CreditFadeIn(_credit);
+        creditUI.CreditFadeIn(_title, _credit);
         musicVisualizer.Init(MusicManager.instance.GetAudioSource());
 
         yield return new WaitForSeconds(3.5f); // 5초 후에 패널 내림
