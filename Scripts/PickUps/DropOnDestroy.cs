@@ -40,15 +40,15 @@ public class DropOnDestroy : MonoBehaviour
 
         bool isGem = false;
 
-        // 체력이 30%이하로 내려가면 무조건 힐링을 할 수 있는 아이템이 드롭되도록
         GameObject toDrop = dropItemPrefab[Random.Range(0, dropItemPrefab.Count)];
 
+        // 체력이 30%이하로 내려가면 무조건 힐링을 할 수 있는 아이템이 드롭되도록
         if (isChest)
         {
             Character character = Player.instance.GetComponent<Character>();
             if ((float)character.GetCurrentHP() / (float)character.MaxHealth < .3f)
             {
-                Debug.Log("체력 비율 = " + (float)character.GetCurrentHP() / (float)character.MaxHealth);
+                //Debug.Log("체력 비율 = " + (float)character.GetCurrentHP() / (float)character.MaxHealth);
                 for (int i = 0; i < dropItemPrefab.Count; i++)
                 {
                     if (dropItemPrefab[i].GetComponent<HealPickUpObject>() != null)

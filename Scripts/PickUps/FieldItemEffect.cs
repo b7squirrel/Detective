@@ -10,12 +10,14 @@ public class FieldItemEffect : MonoBehaviour
     [SerializeField] GameObject bombHitEffect;
     [SerializeField] GameObject bombExplosionEffect;
     StageEvenetManager stageEventManager;
+    Coroutine coStopWatch, coInvincible;
     #region 스톱워치
     public void StopEnemies()
     {
         EnemyBase[] allEnemies = FindObjectsOfType<EnemyBase>();
         if (allEnemies == null) return;
-        StartCoroutine(StopEnemiesCo(allEnemies, stopDuration));
+        if(coStopWatch != null) StopCoroutine(coStopWatch);
+        coStopWatch = StartCoroutine(StopEnemiesCo(allEnemies, stopDuration));
     }
     IEnumerator StopEnemiesCo(EnemyBase[] _allEnemies, float _stopDuration)
     {
@@ -26,8 +28,8 @@ public class FieldItemEffect : MonoBehaviour
         {
             if (_allEnemies[i] != null)
             {
-                //_allEnemies[i].PauseEnemy();
-                _allEnemies[i].SpeedUpEnemy();
+                _allEnemies[i].PauseEnemy();
+                //_allEnemies[i].SpeedUpEnemy();
             }
         }
         yield return new WaitForSeconds(_stopDuration);
@@ -39,7 +41,6 @@ public class FieldItemEffect : MonoBehaviour
             if (_allEnemies[i].gameObject.activeSelf)
             {
                 //enemy.ResumeEnemy();
-                Debug.Log("ENEMY " + i);
                 _allEnemies[i].ResumeEnemy();
             }
         }
@@ -48,7 +49,9 @@ public class FieldItemEffect : MonoBehaviour
     #region 무적
     public void SetPlayerInvincible()
     {
-        StartCoroutine(PlayerInvincibleCo());
+        if (coInvincible != null) StopCoroutine(coInvincible);
+
+        coInvincible = StartCoroutine(PlayerInvincibleCo());
     }   
     IEnumerator PlayerInvincibleCo()
     {
@@ -64,7 +67,6 @@ public class FieldItemEffect : MonoBehaviour
         effect.transform.position = _pos;
 
         Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
-        Debug.Log("Enmey number = " + allEnemies.Length);
         if (allEnemies.Length == 0) return;
 
         int number = 1;
@@ -90,9 +92,6 @@ public class FieldItemEffect : MonoBehaviour
                                  bombHitEffect);
             }
         }
-        Debug.Log("Number = " + number);
-        Debug.Log("null Numbers = " + nullNumbers);
-        Debug.Log("not aCtive = " + notActiveNumbers);
     }
     void PostMessage(int damage, Vector3 targetPosition)
     {

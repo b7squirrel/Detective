@@ -3,6 +3,7 @@ using UnityEngine;
 public class ResetStageProgress : MonoBehaviour
 {
     PlayerDataManager playerDataManager;
+    StageInfo stageInfo;
     public void CLearStageProgress()
     {
         if (playerDataManager == null)
@@ -22,8 +23,15 @@ public class ResetStageProgress : MonoBehaviour
         if (playerDataManager == null)
             playerDataManager = FindObjectOfType<PlayerDataManager>();
 
+        if(stageInfo == null) stageInfo = FindObjectOfType<StageInfo>();
+
+        
         int index = playerDataManager.GetCurrentStageNumber() + 1;
-        playerDataManager.SetCurrentStageNumber(index);
+        if (index > stageInfo.GetMaxStage())
+        {
+            index = stageInfo.GetMaxStage();
+        }
+            playerDataManager.SetCurrentStageNumber(index);
     }
     public void PreviousStage()
     {
@@ -31,6 +39,7 @@ public class ResetStageProgress : MonoBehaviour
             playerDataManager = FindObjectOfType<PlayerDataManager>();
 
         int index = playerDataManager.GetCurrentStageNumber() - 1;
+        if (index < 1) index = 1;
         playerDataManager.SetCurrentStageNumber(index);
     }
 }

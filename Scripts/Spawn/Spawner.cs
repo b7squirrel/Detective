@@ -109,8 +109,24 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnBossCo(EnemyData enemyToSpawn)
     {
-        // 스폰 위치 정하기, 보스 프리펩 얻어오기
+        // 보스 이름 얻어오기
+        StageInfo stageInfo = FindObjectOfType<StageInfo>();
+        PlayerDataManager playerDataManager = FindObjectOfType<PlayerDataManager>();
+        int stageIndex = playerDataManager.GetCurrentStageNumber();
+        string enemyName = stageInfo.GetStageInfo(stageIndex).Title;
+
+        // 보스 경고 메시지
+        GameManager.instance.bossWarningPanel.Init(enemyName);
+        yield return new WaitForSecondsRealtime(2f);
+
+        // 텔레포트 이펙트
         Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
+        GameManager.instance.GetComponent<TeleportEffect>().GenTeleportEffect(spawnPoint);
+
+        // 보스 스폰
+        yield return new WaitForSeconds(.26f);
+
+        // 스폰 위치 정하기, 보스 프리펩 얻어오기
         GameObject enemy = Instantiate(FindObjectOfType<StageAssetManager>().GetBoss(), GameManager.instance.poolManager.transform);
         enemy.transform.position = spawnPoint;
 
@@ -118,19 +134,6 @@ public class Spawner : MonoBehaviour
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemyBase.InitEnemy(enemyToSpawn);
         enemyBase.IsBoss = true;
-        string enemyName = enemyToSpawn.Name;
-        enemy.SetActive(false);
-
-        // 보스 경고 메시지. 보스의 이름을 얻어내려고 비활성/활성을 하는 것
-        GameManager.instance.bossWarningPanel.Init(enemyName);
-        yield return new WaitForSecondsRealtime(2f);
-
-        // 텔레포트 이펙트
-        GameManager.instance.GetComponent<TeleportEffect>().GenTeleportEffect(spawnPoint);
-
-        // 보스를 다시 활성화 한 후 초기화
-        yield return new WaitForSeconds(.26f);
-        enemy.SetActive(true);
     }
 
     public void SpawnBoss(EnemyData enemyToSpawn)

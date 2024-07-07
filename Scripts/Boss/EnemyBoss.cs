@@ -63,11 +63,10 @@ public class EnemyBoss : EnemyBase, Idamageable
 
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
-
         InitHpBar();
-        anim.SetTrigger("Spawn");
     }
     
+
     public void ShootTimer()
     {
         if (timer < timeToAttack)

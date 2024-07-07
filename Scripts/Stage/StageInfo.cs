@@ -19,4 +19,8 @@ public class StageInfo : MonoBehaviour
     {
         return stages.Count == stageIndex;
     }
+    public int GetMaxStage()
+    {
+        return stages.Count;
+    }
 }

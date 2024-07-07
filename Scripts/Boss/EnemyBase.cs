@@ -287,24 +287,19 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Vector2 dirVec = Target.position - (Vector2)rb.transform.position;
         if (IsGrouping)
         {
-            // dirVec = groupDir;
-            //rb.velocity = Stats.speed * GroupDir;
             rb.velocity = currentSpeed * GroupDir;
             return;
         }
-        //Debug.Log("Target Position = " + GameManager.instance.player.transform.position + " dir Vec = " + dirVec);
-        //Vector2 nextVec = dirVec.normalized * Stats.speed * Time.fixedDeltaTime;
         Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
 
     // animation events
+    // 스폰 애니메이션이 끝나는 지점에 이벤트
     public void TriggerFinishedSpawn()
     {
         finishedSpawn = true;
-        //Debug.Log("FinishedSpawn = " + finishedSpawn);
-        Debug.Log("Triggered Finished Spawn");
     }
     #endregion
 

@@ -23,7 +23,7 @@ public class FPSCheck : MonoBehaviour
         rect = new Rect(0, 0, w, h * 100 / 100);
 
         style = new GUIStyle();
-        style.alignment = TextAnchor.UpperCenter;
+        style.alignment = TextAnchor.UpperLeft;
         style.fontSize = h * 4 / 200;
         style.normal.textColor = Color.red;
 

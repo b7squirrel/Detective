@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4056005053656988688}
   - component: {fileID: 2451556510503288373}
   - component: {fileID: 6653244738968789576}
+  - component: {fileID: 5996623520424493420}
   m_Layer: 7
   m_Name: Egg Box
   m_TagString: Props
@@ -149,6 +150,24 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5996623520424493420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76857048987349971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c9b751aa4cfe7428ade22536fa0f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenCollision:
+    serializedVersion: 2
+    m_Bits: 1024
+  indicatorPrefab: {fileID: 7141555531057633907, guid: 3477d7e6cb348f844971662a0b9ba746, type: 3}
+  iconSprite: {fileID: 21300000, guid: 285ece9605284f940bf2aa971e26f5ea, type: 3}
+  onSpotSFX: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}
 --- !u!1 &6128416485384886840
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,7 +242,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 95144d3dd118f2b4d9a794ab9645da0f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 96418715b31b8e94798656b823d5741c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
