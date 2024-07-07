@@ -11,7 +11,7 @@ public class StageTitleUI : MonoBehaviour
 
     private void Start()
     {
-        Init();
+        //Init();
     }
     public void Init()
     {
