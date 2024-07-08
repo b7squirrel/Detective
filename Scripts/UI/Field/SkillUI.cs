@@ -35,6 +35,7 @@ public class SkillUI : MonoBehaviour
     }
     void SetNumStar(int numStars)
     {
+        stars = null;
         if (stars == null)
         {
             // 5개 만들어서 비활성화

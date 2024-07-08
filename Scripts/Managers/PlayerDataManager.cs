@@ -105,7 +105,7 @@ public class PlayerDataManager : MonoBehaviour
     public void AddCandyNumber(int candyNumberToAdd)
     {
         playerData.currentCandyNumber += candyNumberToAdd;
-
+        Debug.Log("Add Candy Number " + candyNumberToAdd);
         SavePlayerData();
     }
     public void SetCandyNumberAs(int candyNumberToSet)
