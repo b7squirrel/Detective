@@ -9,7 +9,7 @@ public class ButtonEffect : MonoBehaviour
 {
     [SerializeField] AudioClip buttonSound;
     [SerializeField] AudioClip buttonSoundAlt;
-    [SerializeField] GameObject buttonEffect;
+    [SerializeField] GameObject buttonEffect; // 버튼이 눌러지면 이펙트 발생
     [SerializeField] bool shouldBeLocked;
     [SerializeField] bool ignoreButtonEffectAnim;
     public bool ShoutldBeInitialSound { get; set; } = true;
@@ -35,11 +35,15 @@ public class ButtonEffect : MonoBehaviour
         if (ignoreButtonEffectAnim) return;
         if (myButton.GetComponent<Animator>() == null) return;
         myButton.GetComponent<Animator>().SetTrigger("Pressed");
+        ButtonParticleEffect();
     }
 
     public void ButtonParticleEffect()
     {
         // 눌렀을 때 이펙트
+        if(buttonEffect == null) return;
+
+        buttonEffect.GetComponent<Animator>().SetTrigger("On");
     }
     public void PlayButtonSound()
     {
