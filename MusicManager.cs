@@ -12,10 +12,12 @@ public class MusicManager : MonoBehaviour
     float volume = 1f;
     [SerializeField] float timeToSwitch;
 
+    bool isMuted;
+    [SerializeField] float defautVolume = .5f;
+
     private void Awake()
     {
         instance = this;
-        audioSource = GetComponent<AudioSource>();
     }
 
     public void InitBGM(AudioClip _music)
@@ -24,12 +26,12 @@ public class MusicManager : MonoBehaviour
         Play(MusicOnStart, true);
     }
 
-
     public void Play(AudioClip music, bool interrupt = false)
     {
+
         if (interrupt == true)
         {
-            volume = .5f;
+            volume = defautVolume;
             audioSource.volume = volume;
             audioSource.clip = music;
             audioSource.Play();
@@ -63,18 +65,27 @@ public class MusicManager : MonoBehaviour
 
     public void ToggleMusic()
     {
-        if(audioSource.volume == 0)
+        isMuted = !isMuted;
+        if (isMuted)
         {
-            audioSource.volume = .5f;
+            audioSource.volume = 0f;
         }
         else
         {
-            audioSource.volume = 0;
+            audioSource.volume = defautVolume;
         }
     }
 
     public AudioSource GetAudioSource()
     {
         return audioSource;
+    }
+
+    public void SetState(bool _state)
+    {
+        isMuted = _state;
+        
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        audioSource.mute = isMuted;
     }
 }
