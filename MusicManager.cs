@@ -83,7 +83,7 @@ public class MusicManager : MonoBehaviour
 
     public void SetState(bool _state)
     {
-        isMuted = _state;
+        isMuted = !_state;
         
         if (audioSource == null) audioSource = GetComponent<AudioSource>();
         audioSource.mute = isMuted;

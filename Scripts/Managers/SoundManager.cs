@@ -25,6 +25,9 @@ public class SoundManager : MonoBehaviour
         RemoveSingleAudio(singleSound);
     }
 
+    /// <summary>
+    /// AudioSource들을 만들어서 리스트로 저장
+    /// </summary>
     public void Init()
     {
         audioSources = new List<AudioSource>();
@@ -130,7 +133,7 @@ public class SoundManager : MonoBehaviour
 
     public void SetState(bool _state)
     {
-        isMuted = _state;
+        isMuted = !_state;
         foreach (var audioSource in audioSources)
         {
             if (audioSource != null)
