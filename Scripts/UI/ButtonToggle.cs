@@ -11,6 +11,6 @@ public class ButtonToggle : MonoBehaviour
     public void SetImage(bool soundState)
     {
         buttonImage.sprite = soundState ? soundOnSprite : soundOffSprite;
-        text.text = soundState ? "Sound On" : "Sound Off";
+        text.text = soundState ? "Sound Off" : "Sound On";
     }
 }
