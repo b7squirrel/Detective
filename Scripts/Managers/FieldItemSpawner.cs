@@ -76,6 +76,7 @@ public class FieldItemSpawner : MonoBehaviour
     IEnumerator GenItems(int _nums, GameObject _toSpawn, Vector2 _position, int _exp)
     {
         int numberOfItems = _nums;
+        Debug.Log("Number Of Items to drop = " + numberOfItems);
         bool _isGem;
         if (_toSpawn.GetComponent<GemPickUpObject>() != null)
         {
@@ -85,7 +86,6 @@ public class FieldItemSpawner : MonoBehaviour
         {
             _isGem = false;
         }
-
 
         while (numberOfItems > 0)
         {

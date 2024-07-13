@@ -356,11 +356,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropItemProperty: []
   dropItemPrefab:
-  - {fileID: 3089954493006562425, guid: e966530f6cd20b6438cacecd2eed29b0, type: 3}
+  - {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
   noMultipleDrops: 0
   numberOfLastDrops: 50
-  multipleDrops: {fileID: 5007021332998522558, guid: da2101ae771dd7b4cb33300917ecdd19, type: 3}
   specialDrop: {fileID: 0}
   exp: 0
   hp: 0
@@ -388,6 +388,7 @@ MonoBehaviour:
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
+  finishedSpawn: 0
   dieEffectPrefeab: {fileID: 0}
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}

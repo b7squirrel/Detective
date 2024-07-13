@@ -66,11 +66,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropItemPrefab:
-  - {fileID: 3118075186976557793, guid: c9bef7141df0d4b4eb7f847536e5fa1a, type: 3}
-  noMultipleDrops: 1
+  dropItemProperty:
+  - Item: {fileID: 3118075186976557793, guid: c9bef7141df0d4b4eb7f847536e5fa1a, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
   numberOfLastDrops: 50
-  multipleDrops: {fileID: 0}
   specialDrop: {fileID: 6179955831385797629, guid: 06dd908a0d93b21409f0ee49ccbf4944, type: 3}
   exp: 1000
   hp: 0

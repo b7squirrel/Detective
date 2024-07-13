@@ -1,42 +1,30 @@
 using UnityEngine;
 
+/// <summary>
+/// 튀어오르는 물체의 방향을 랜덤하게 정해주는 클래스
+/// </summary>
 public class TriggerHeightShadow : MonoBehaviour
 {
     ShadowHeight shadowHeight;
     [SerializeField] float verticalVel;
-    Vector2 groundVel;
 
-    [SerializeField] bool randomGroundVel;
-
+    // 랜덤 좌표 관련 변수
+    [SerializeField] float radius;
    
     void OnEnable()
     {
-        if (randomGroundVel)
-        {
-            float x = Random.Range(-1.1f, 1.1f);
-            if (x > 0)
-            {
-                x += 1f;
-            }
-            else
-            {
-                x -= 1f;
-            }
-            float y = Random.Range(-1.1f, 1.1f);
-            if (y > 0)
-            {
-                y += 1f;
-            }
-            else
-            {
-                y -= 1f;
-            }
-            groundVel = new Vector2(x, y).normalized;
-
-            groundVel *= 3f;
-            //groundVel = groundVel.normalized;
-        }
+        Vector2 randomVec = GetRandomPositionWithinRadius();
         shadowHeight = GetComponent<ShadowHeight>();
-        shadowHeight.Initialize(groundVel, verticalVel);
+        shadowHeight.Initialize(randomVec, verticalVel);
+    }
+
+    Vector2 GetRandomPositionWithinRadius()
+    {
+        float angle = Random.Range(0f, Mathf.PI * 2);
+        float distance = Random.Range(0f, radius);
+        float x = distance * Mathf.Cos(angle);
+        float y = distance * Mathf.Sin(angle);
+
+        return new Vector2(x, y);
     }
 }

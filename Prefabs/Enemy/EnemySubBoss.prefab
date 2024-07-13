@@ -413,16 +413,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropItemProperty:
+  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
   dropItemPrefab:
   - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-  noMultipleDrops: 0
   numberOfLastDrops: 30
-  multipleDrops: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
   specialDrop: {fileID: 0}
   exp: 0
   hp: 0
   isChest: 0
-  multiDropRate: 0
+  multiDropRate: 100
   isChestDebuggingOn: 0
   dropItemIndex: 0
 --- !u!114 &4172382219901582434

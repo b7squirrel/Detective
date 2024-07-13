@@ -445,15 +445,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             if (explosionEffect != null) explosionEffect.transform.position = transform.position;
         }
 
-        if (isSubBoss)
-        {
-            GetComponent<DropOnDestroy>().DropMultipleObjects();
-        }
-        if (isBoss)
-        {
-            GetComponent<DropOnDestroy>().DropMultipleBossObjects();
-        }
-
         GetComponent<DropOnDestroy>().CheckDrop();
 
         StopAllCoroutines();

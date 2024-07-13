@@ -65,24 +65,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropItemPrefab:
-  - {fileID: 6656604424298050648, guid: 58138677c8288834aa35ee7cb6738cc8, type: 3}
-  - {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
-  - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-  - {fileID: 7188308438288182905, guid: 7055ff343fdbd5a4d9783a4ec9861b2c, type: 3}
-  - {fileID: 8884259230644267150, guid: e3c3d9b88e9ead441aefd7102fd9764a, type: 3}
-  - {fileID: 4051083721211608503, guid: f6456d9834f62ab4b924aa29bbda56bf, type: 3}
-  - {fileID: 6285321386345570014, guid: 4861f09f8920d47459768701a84685bb, type: 3}
-  noMultipleDrops: 0
+  dropItemProperty:
+  - Item: {fileID: 6656604424298050648, guid: 58138677c8288834aa35ee7cb6738cc8, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
+  - Item: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
+    hasSpecialItem: 0
+  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
+    hasSpecialItem: 0
+  - Item: {fileID: 7188308438288182905, guid: 7055ff343fdbd5a4d9783a4ec9861b2c, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
+  - Item: {fileID: 8884259230644267150, guid: e3c3d9b88e9ead441aefd7102fd9764a, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 1
+  - Item: {fileID: 4051083721211608503, guid: f6456d9834f62ab4b924aa29bbda56bf, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
   numberOfLastDrops: 50
-  multipleDrops: {fileID: 0}
   specialDrop: {fileID: 6179955831385797629, guid: 06dd908a0d93b21409f0ee49ccbf4944, type: 3}
   exp: 1000
   hp: 0
   isChest: 1
   multiDropRate: 10
   isChestDebuggingOn: 0
-  dropItemIndex: 6
+  dropItemIndex: 1
 --- !u!114 &6857776902098202006
 MonoBehaviour:
   m_ObjectHideFlags: 0
