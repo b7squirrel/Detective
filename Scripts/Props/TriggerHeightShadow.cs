@@ -13,18 +13,8 @@ public class TriggerHeightShadow : MonoBehaviour
    
     void OnEnable()
     {
-        Vector2 randomVec = GetRandomPositionWithinRadius();
+        Vector2 randomVec = new GeneralFuctions().GetRandomPosInCircle(radius);
         shadowHeight = GetComponent<ShadowHeight>();
         shadowHeight.Initialize(randomVec, verticalVel);
-    }
-
-    Vector2 GetRandomPositionWithinRadius()
-    {
-        float angle = Random.Range(0f, Mathf.PI * 2);
-        float distance = Random.Range(0f, radius);
-        float x = distance * Mathf.Cos(angle);
-        float y = distance * Mathf.Sin(angle);
-
-        return new Vector2(x, y);
     }
 }

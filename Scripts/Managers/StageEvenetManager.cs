@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class StageEvenetManager : MonoBehaviour
 {
@@ -93,6 +94,9 @@ public class StageEvenetManager : MonoBehaviour
         }
 
         eventIndexer++;
+
+        // 디버깅
+        SendStageEventIndex(eventIndexer);
     }
 
     IEnumerator WinStage()
@@ -123,4 +127,12 @@ public class StageEvenetManager : MonoBehaviour
     {
         return eggSpawnTimes;
     }
+
+    #region 디버깅
+    void SendStageEventIndex(int _index)
+    {
+        DebugManager debugManager = FindObjectOfType<DebugManager>();
+        debugManager.SetStageEventIndex(_index);
+    }
+    #endregion
 }

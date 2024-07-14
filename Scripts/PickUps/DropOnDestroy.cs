@@ -9,12 +9,11 @@ public class DropItemProperty
     public GameObject SpecialDrop;
     public bool isMultipleDropable;
     public bool hasSpecialItem;
+    public int numMultiple; // 몇 개를 한꺼번에 생성할 것인지.
 }
 public class DropOnDestroy : MonoBehaviour
 {
     [SerializeField] List<DropItemProperty> dropItemProperty;
-    [SerializeField] int numberOfLastDrops; // 파괴될 때 떨어트리는 아이템 갯수
-    [SerializeField] GameObject specialDrop; // 특수 아이템 드롭
     [SerializeField] int exp;
     [SerializeField] int hp;
     [SerializeField] bool isChest; // 상자는 플레이어의 체력에 따라 우유를 떨어트려야 하므로 구별해야 함
@@ -72,7 +71,7 @@ public class DropOnDestroy : MonoBehaviour
 
         if (dropItemProperty[itemIndex].isMultipleDropable && isMultiDrop) // 멀티플 드롭이 가능한 아이템이고, 확률로 멀티드롭이 뽑혔다면
         {
-            DropMultipleObjects(toDrop);
+            DropMultipleObjects(toDrop, dropItemProperty[itemIndex].numMultiple);
             return;
         }
 
@@ -115,12 +114,12 @@ public class DropOnDestroy : MonoBehaviour
         SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
     }
     
-    public void DropMultipleObjects(GameObject _toDrop)
+    public void DropMultipleObjects(GameObject _toDrop, int _numberOfDrops)
     {
         if (GetComponent<Enemy>() != null)
         {
             exp = GetComponent<Enemy>().ExperienceReward;
         }
-        GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(numberOfLastDrops, _toDrop, transform.position, exp);
+        GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(_numberOfDrops, _toDrop, transform.position, exp);
     }
 }

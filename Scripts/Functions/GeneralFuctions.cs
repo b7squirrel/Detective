@@ -19,4 +19,25 @@ public class GeneralFuctions
         }
         return new Vector2(randomX, randomY);
     }
+
+    public Vector2 GetRandomPosInCircle(float _radius)
+    {
+        float angle = Random.Range(0f, Mathf.PI * 2);
+        float distance = Random.Range(0f, _radius);
+        float x = distance * Mathf.Cos(angle);
+        float y = distance * Mathf.Sin(angle);
+
+        return new Vector2(x, y);
+    }
+
+    public Vector2 GetRandomPointInRing(Vector2 center, float outerRadius, float innerRadius)
+    {
+        float angle = Random.Range(0f, Mathf.PI * 2);
+        float radius = Random.Range(innerRadius, outerRadius);
+
+        float x = center.x + radius * Mathf.Cos(angle);
+        float y = center.y + radius * Mathf.Sin(angle);
+
+        return new Vector2(x, y);
+    }
 }

@@ -1203,6 +1203,7 @@ GameObject:
   - component: {fileID: 1203505531}
   - component: {fileID: 1203505530}
   - component: {fileID: 1203505532}
+  - component: {fileID: 1203505533}
   m_Layer: 0
   m_Name: ---WORLD---
   m_TagString: Untagged
@@ -1333,6 +1334,25 @@ MonoBehaviour:
   bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
   effects: []
   bossEffects: []
+--- !u!114 &1203505533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203505524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79319ff6bb73f284c874b4393ea93ddf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numbersOfGemToSpawn: 10
+  gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+  innerRadius: 5
+  outerRadius: 10
+  chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+  innerRadiusForChest: 5
+  outerRadiusForChest: 18
 --- !u!1 &1293872645
 GameObject:
   m_ObjectHideFlags: 0

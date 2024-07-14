@@ -70,28 +70,32 @@ MonoBehaviour:
     SpecialDrop: {fileID: 0}
     isMultipleDropable: 0
     hasSpecialItem: 0
+    numMultiple: 0
   - Item: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
     SpecialDrop: {fileID: 0}
     isMultipleDropable: 1
     hasSpecialItem: 0
+    numMultiple: 40
   - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
     SpecialDrop: {fileID: 0}
     isMultipleDropable: 1
     hasSpecialItem: 0
+    numMultiple: 30
   - Item: {fileID: 7188308438288182905, guid: 7055ff343fdbd5a4d9783a4ec9861b2c, type: 3}
     SpecialDrop: {fileID: 0}
     isMultipleDropable: 0
     hasSpecialItem: 0
+    numMultiple: 0
   - Item: {fileID: 8884259230644267150, guid: e3c3d9b88e9ead441aefd7102fd9764a, type: 3}
-    SpecialDrop: {fileID: 0}
+    SpecialDrop: {fileID: 6179955831385797629, guid: 06dd908a0d93b21409f0ee49ccbf4944, type: 3}
     isMultipleDropable: 0
     hasSpecialItem: 1
+    numMultiple: 0
   - Item: {fileID: 4051083721211608503, guid: f6456d9834f62ab4b924aa29bbda56bf, type: 3}
     SpecialDrop: {fileID: 0}
     isMultipleDropable: 0
     hasSpecialItem: 0
-  numberOfLastDrops: 50
-  specialDrop: {fileID: 6179955831385797629, guid: 06dd908a0d93b21409f0ee49ccbf4944, type: 3}
+    numMultiple: 0
   exp: 1000
   hp: 0
   isChest: 1
@@ -159,7 +163,7 @@ Animator:
   m_GameObject: {fileID: 1519986380285838769}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 54777ac2d0ed994408a1c6be4092946f, type: 2}
+  m_Controller: {fileID: 22100000, guid: 4a02c043fdb8beb479193137bd7091cc, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

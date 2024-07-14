@@ -61,9 +61,9 @@ public class Level : MonoBehaviour
 
     public void AddExperience(int expAmount)
     {
+        Debug.Log("얻은 경험치 = " + expAmount);
         experience += expAmount;
         CheckLevelUp();
-        
     }
 
     public void CheckLevelUp()
@@ -105,6 +105,8 @@ public class Level : MonoBehaviour
         level++;
         experienceBar.SetLevelText(level);
         experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
+
+        Debug.Log("다음 업그레이드를 위해 필요한 경험치 = " + To_Level_Up);
     }
 
     // 알을 통해 무기를 얻을 경우

@@ -10,7 +10,11 @@ public class FieldItemSpawner : MonoBehaviour
     float nextSpawnTime;
     WallManager wallManager;
 
-    int sortingLayerID;
+    [Header("MSB / Multiple Spawn Box")]
+    [SerializeField] int numPointsMSB;
+    [SerializeField] GameObject MSBToSpawn;
+    [SerializeField] float frequencyMSB;
+    float nextSpawnTimeMSB;
 
     [Header("Egg Box")]
     [SerializeField] GameObject EggBoxPrefab;
@@ -18,9 +22,12 @@ public class FieldItemSpawner : MonoBehaviour
     float eggSpawnCoolDown;
     int eggSpawnIndex;
 
+    int sortingLayerID;
+
     void Start()
     {
         nextSpawnTime = Time.time + frequency;
+        nextSpawnTimeMSB = Time.time + frequencyMSB;
         eggSpawnTime = FindObjectOfType<StageEvenetManager>().GetEggSpawnTimes();
     }
     void Update()
@@ -29,6 +36,12 @@ public class FieldItemSpawner : MonoBehaviour
         {
             SpawnObject(objectsToSpawn);
             nextSpawnTime = Time.time + frequency;
+        }
+
+        if (Time.time >= nextSpawnTimeMSB)
+        {
+            SpawnObject(MSBToSpawn);
+            nextSpawnTimeMSB = Time.time + frequencyMSB;
         }
 
         if (eggSpawnIndex > eggSpawnTime.Length - 1) return;
@@ -89,6 +102,8 @@ public class FieldItemSpawner : MonoBehaviour
 
         while (numberOfItems > 0)
         {
+            SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);
+            numberOfItems--;
             SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);
             numberOfItems--;
             yield return null;
