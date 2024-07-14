@@ -59,6 +59,46 @@ public enum StageMusicType
 }
 #endregion
 
+#region 보석 관련
+public class GemProperties
+{
+    public Sprite gemSprite;
+    public float gemSize;
+    public int gemExp;
+
+    public GemProperties(Sprite _gemSprite, float _gemSize, int _gemExp)
+    {
+        gemSprite = _gemSprite;
+        gemSize = _gemSize;
+        gemExp = _gemExp; 
+    }
+}
+public class GemExp
+{
+    static int expBlue = 10000;
+    static int expGreen = 20000;
+    static int expPurple = 30000;
+    static int expBigBlue = 55000;
+    static int expBigGreen = 95000;
+    static int expBigPurple = 135000;
+
+    int[] expValues = new int[] { expBlue, expGreen, expPurple, expBigBlue, expBigGreen, expBigPurple };
+
+    public int GetGemIndex(int _exp)
+    {
+        for (int i = 0; i < expValues.Length; i++)
+        {
+            if (_exp < expValues[i])
+            {
+                return i;
+            }
+        }
+        return expValues.Length; // 모든 값보다 클 경우
+    }
+}
+
+#endregion
+
 #region 슬롯 관련
 public enum Slots { CardSlot, EquipSlot, LaunchSlot }
 public class MyGrade
@@ -208,6 +248,7 @@ public class Equation
 #endregion
 
 #region 확장 함수
+// enum description 사용
 public static class EnumExtensions
 {
     private static readonly Dictionary<Enum, string> _descriptionCache = new Dictionary<Enum, string>();

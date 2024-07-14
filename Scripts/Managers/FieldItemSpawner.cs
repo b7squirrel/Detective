@@ -34,13 +34,14 @@ public class FieldItemSpawner : MonoBehaviour
     {
         if (Time.time >= nextSpawnTime)
         {
-            SpawnObject(objectsToSpawn);
+            SpawnObject(objectsToSpawn, numPoints);
             nextSpawnTime = Time.time + frequency;
         }
 
         if (Time.time >= nextSpawnTimeMSB)
         {
-            SpawnObject(MSBToSpawn);
+            Debug.Log("Time = " + Time.time + " next Spawn Time = " + nextSpawnTimeMSB);
+            SpawnObject(MSBToSpawn, numPointsMSB);
             nextSpawnTimeMSB = Time.time + frequencyMSB;
         }
 
@@ -52,11 +53,12 @@ public class FieldItemSpawner : MonoBehaviour
             eggSpawnIndex++;
         }
     }
-    void SpawnObject(GameObject toSpawn)
+    void SpawnObject(GameObject toSpawn, int _numbersToSpawn)
     {
-        for (int i = 0; i < numPoints; i++)
+        for (int i = 0; i < _numbersToSpawn; i++)
         {
             Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
+            Debug.Log("Asset Name = " + pickUP.name);
             if (pickUP != null)
             {
                 pickUP.position = GetRandomSpawnPoint();
@@ -102,10 +104,11 @@ public class FieldItemSpawner : MonoBehaviour
 
         while (numberOfItems > 0)
         {
-            SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);
-            numberOfItems--;
-            SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);
-            numberOfItems--;
+            for (int i = 0; i < 10; i++)
+            {
+                SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);
+                numberOfItems--;
+            }
             yield return null;
         }
         yield break;

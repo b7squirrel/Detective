@@ -23,9 +23,9 @@ public class SpawnManager : MonoBehaviour
             //    gemManager.IncreasePotentialExp(experience); // 임시로 경험치를 저장해 둠
             //    return;
             //}
-            pickup = GameManager.instance.poolManager.GetGem(toSpawn, experience).transform;
+            pickup = GameManager.instance.poolManager.GetGem(toSpawn).transform;
 
-            gemManager.IncreaseGemCount(); // 보석 수 증가
+            //gemManager.IncreaseGemCount(); // 보석 수 증가
         }
         else
         {
@@ -38,6 +38,12 @@ public class SpawnManager : MonoBehaviour
         {
             pickup.GetComponent<GemPickUpObject>().ExpAmount = experience;
         }
+
+        //GemProperties gemProperties = GemManager.instance.GetGemProperties(experience);
+        //pickup.GetComponentInChildren<SpriteRenderer>().sprite = gemProperties.gemSprite;
+
+        //pickup.localScale = Vector2.one; // 스케일을 초기화
+        //pickup.localScale = gemProperties.gemSize * Vector2.one;
 
         pickup.position = worldPosition;
     }

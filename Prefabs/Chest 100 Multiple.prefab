@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropItemProperty:
-  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+  - Item: {fileID: 3119977414029841460, guid: efcb30d628bf2a24f9e2bcc119fe0c3d, type: 3}
     SpecialDrop: {fileID: 0}
     isMultipleDropable: 1
     hasSpecialItem: 0
@@ -172,6 +172,7 @@ MonoBehaviour:
   hp: 0
   isChest: 1
   multiDropRate: 100
+  specialDropRate: 100
   isChestDebuggingOn: 0
   dropItemIndex: 1
 --- !u!114 &332794545555257985
@@ -186,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad10bd374ff11e34faf5438b72bd3a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Key>k__BackingField: Chest_A
+  <Key>k__BackingField: Chest_B
   maxNum: 0
 --- !u!50 &8643859737066364261
 Rigidbody2D:

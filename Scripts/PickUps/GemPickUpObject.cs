@@ -4,21 +4,21 @@ using UnityEngine;
 public class GemPickUpObject : Collectable, IPickUpObject
 {
     [field: SerializeField] public int ExpAmount { get; set; }
-    [SerializeField] Sprite[] gemSprites;
     public void OnPickUp(Character character)
     {
         // 보석의 경험치를 플레이어에게 넘겨줄 때, 임시 경험치가 저장되어 있다면 같이 넘겨줌
         if (ExpAmount == 0) ExpAmount = 2000;
+        Debug.Log("EXP Amount = " + ExpAmount);
+        //int potentialEXP = 0;
 
-        int potentialEXP = 0;
-
-        if (GemManager.instance.HasPotentialExp())
-        {
-            potentialEXP += GemManager.instance.GetPotentialExp();
-            GemManager.instance.ResetPotentialExp(); // 임시 경험치 비우기
-        }
-        character.level.AddExperience(potentialEXP + ExpAmount);
-        GemManager.instance.DecreaseGemCount();
+        //if (GemManager.instance.HasPotentialExp())
+        //{
+        //    potentialEXP += GemManager.instance.GetPotentialExp();
+        //    GemManager.instance.ResetPotentialExp(); // 임시 경험치 비우기
+        //}
+        //character.level.AddExperience(potentialEXP + ExpAmount);
+        //GemManager.instance.DecreaseGemCount();
+        character.level.AddExperience(ExpAmount);
     }
 
     void OnTriggerEnter2D(Collider2D collision)

@@ -17,6 +17,9 @@ public class PoolManager : MonoBehaviour
 
     EnemyFinder enemyFinder;
 
+    [Header("Gems")]
+    [SerializeField] Sprite[] gemSprites;
+
     [Header("Egg Box")]
     [SerializeField] GameObject eggBox;
 
@@ -145,8 +148,10 @@ public class PoolManager : MonoBehaviour
         }
         return null;
     }
+    #endregion
 
-    public GameObject GetGem(GameObject gem, int exp)
+    #region Get Gems
+    public GameObject GetGem(GameObject gem)
     {
         
         // GameObject gemToUI = Instantiate(gem, transform);

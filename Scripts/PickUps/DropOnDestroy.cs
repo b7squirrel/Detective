@@ -77,7 +77,7 @@ public class DropOnDestroy : MonoBehaviour
         }
 
         float specialRandomValue = UnityEngine.Random.Range(0f, 100f);
-        bool isSpecialDrop = randomValue > specialDropRate ? false : true;
+        bool isSpecialDrop = specialRandomValue > specialDropRate ? false : true;
         if (dropItemProperty[itemIndex].hasSpecialItem && isSpecialDrop) // 스페셜 드롭이 가능하고, 확률로 스페셜 드롭이 뽑혔다면
         {
             // 특수 우유처럼 특수한 아이템 드롭
@@ -97,7 +97,7 @@ public class DropOnDestroy : MonoBehaviour
         {
             exp = GetComponent<Enemy>().ExperienceReward;
         }
-
+        
         if (toDrop.GetComponent<Collectable>() != null)
         {
             isGem = toDrop.GetComponent<Collectable>().IsGem;
@@ -107,8 +107,16 @@ public class DropOnDestroy : MonoBehaviour
         if (isGem)
         {
             float randomDrop = UnityEngine.Random.Range(0f, 1f);
+            if (isChest)
+            {
+                randomDrop = 0; // 상자에서 보석이 나오는 경우라면 무조건 나오도록
+                exp = toDrop.GetComponent<GemPickUpObject>().ExpAmount;
+            }
+
             if (randomDrop > StaticValues.GemDropRate)
                 return;
+
+            
         }
 
         // 디버깅
@@ -122,6 +130,10 @@ public class DropOnDestroy : MonoBehaviour
         if (GetComponent<Enemy>() != null)
         {
             exp = GetComponent<Enemy>().ExperienceReward;
+        }
+        else
+        {
+            exp =  _toDrop.GetComponent<GemPickUpObject>().ExpAmount;
         }
         GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(_numberOfDrops, _toDrop, transform.position, exp);
     }
