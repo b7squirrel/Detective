@@ -18,6 +18,7 @@ public class DropOnDestroy : MonoBehaviour
     [SerializeField] int hp;
     [SerializeField] bool isChest; // 상자는 플레이어의 체력에 따라 우유를 떨어트려야 하므로 구별해야 함
     [SerializeField] float multiDropRate; // 무더기를 드롭할 확률
+    [SerializeField] float specialDropRate; // 스페셜 드롭할 확률
 
     bool isQuiting;
 
@@ -75,7 +76,9 @@ public class DropOnDestroy : MonoBehaviour
             return;
         }
 
-        if(dropItemProperty[itemIndex].hasSpecialItem)
+        float specialRandomValue = UnityEngine.Random.Range(0f, 100f);
+        bool isSpecialDrop = randomValue > specialDropRate ? false : true;
+        if (dropItemProperty[itemIndex].hasSpecialItem && isSpecialDrop) // 스페셜 드롭이 가능하고, 확률로 스페셜 드롭이 뽑혔다면
         {
             // 특수 우유처럼 특수한 아이템 드롭
             if (dropItemProperty[itemIndex].SpecialDrop != null)

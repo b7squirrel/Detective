@@ -306,6 +306,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 닿으면 player HP 감소
     protected void OnCollisionStay2D(Collision2D collision)
     {
+        if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
+            return;
+
         if (IsGrouping && collision.gameObject.CompareTag("Wall"))
         {
             GroupDir = (Player.instance.transform.position - transform.position).normalized;
@@ -332,6 +335,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         if (GameManager.instance.player == null)
             return;
+
+        if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
+            return;
         //if (enemyType != EnemyType.Melee) return; // 근접 공격 적들만 플레이어에서 벗어났을 때 공격모션을 해제한다
 
         if (collision.gameObject == Target.gameObject)
@@ -343,6 +349,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected void Attack(EnemyType _enemyType)
     {
         if (Target.gameObject == null)
+            return;
+
+        if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
             return;
 
         anim.SetBool("Attack", true);
