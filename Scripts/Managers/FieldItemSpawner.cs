@@ -7,14 +7,14 @@ public class FieldItemSpawner : MonoBehaviour
     [SerializeField] int numPoints;
     [SerializeField] GameObject objectsToSpawn;
     [SerializeField] float frequency;
-    float nextSpawnTime;
+    float itemBoxSpawnCounter;
     WallManager wallManager;
 
     [Header("MSB / Multiple Spawn Box")]
     [SerializeField] int numPointsMSB;
     [SerializeField] GameObject MSBToSpawn;
     [SerializeField] float frequencyMSB;
-    float nextSpawnTimeMSB;
+    float MSBspawnCounter;
 
     [Header("Special Box")]
     [SerializeField] GameObject[] gemPrefabs; 
@@ -29,25 +29,31 @@ public class FieldItemSpawner : MonoBehaviour
 
     void Start()
     {
-        nextSpawnTime = Time.time + frequency;
-        nextSpawnTimeMSB = Time.time + frequencyMSB;
+        itemBoxSpawnCounter = 0;
+        MSBspawnCounter = 0;
+
         eggSpawnTime = FindObjectOfType<StageEvenetManager>().GetEggSpawnTimes();
     }
     void Update()
     {
-        if (Time.time >= nextSpawnTime)
+        if (itemBoxSpawnCounter >= frequency)
         {
             SpawnObject(objectsToSpawn, numPoints);
-            nextSpawnTime = Time.time + frequency;
+            itemBoxSpawnCounter = 0f;
         }
 
-        if (Time.time >= nextSpawnTimeMSB)
+        if (MSBspawnCounter >= frequencyMSB)
         {
-            
+            float[] timeIntervals = { 60f, 120f, 180f, 240f, 280f, 320f };
+            int index = Mathf.Clamp((int)(MSBspawnCounter / 60f), 0, timeIntervals.Length - 1);
+            MSBToSpawn = gemPrefabs[index];
 
             SpawnObject(MSBToSpawn, numPointsMSB);
-            nextSpawnTimeMSB = Time.time + frequencyMSB;
+            MSBspawnCounter = 0f;
         }
+
+        itemBoxSpawnCounter += Time.deltaTime;
+        MSBspawnCounter += Time.deltaTime;
 
         if (eggSpawnIndex > eggSpawnTime.Length - 1) return;
         eggSpawnCoolDown += Time.deltaTime;
