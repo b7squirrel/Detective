@@ -16,6 +16,9 @@ public class FieldItemSpawner : MonoBehaviour
     [SerializeField] float frequencyMSB;
     float nextSpawnTimeMSB;
 
+    [Header("Special Box")]
+    [SerializeField] GameObject[] gemPrefabs; 
+
     [Header("Egg Box")]
     [SerializeField] GameObject EggBoxPrefab;
     float[] eggSpawnTime;
@@ -40,7 +43,8 @@ public class FieldItemSpawner : MonoBehaviour
 
         if (Time.time >= nextSpawnTimeMSB)
         {
-            Debug.Log("Time = " + Time.time + " next Spawn Time = " + nextSpawnTimeMSB);
+            
+
             SpawnObject(MSBToSpawn, numPointsMSB);
             nextSpawnTimeMSB = Time.time + frequencyMSB;
         }
