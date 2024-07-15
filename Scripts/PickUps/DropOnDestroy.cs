@@ -133,7 +133,12 @@ public class DropOnDestroy : MonoBehaviour
         }
         else
         {
-            exp =  _toDrop.GetComponent<GemPickUpObject>().ExpAmount;
+            GemPickUpObject gemPick = _toDrop.GetComponent<GemPickUpObject>();
+            if (gemPick != null)
+            {
+                exp = gemPick.ExpAmount;
+            }
+            
         }
         GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(_numberOfDrops, _toDrop, transform.position, exp);
     }
