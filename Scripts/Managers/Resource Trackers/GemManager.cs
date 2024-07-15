@@ -6,7 +6,7 @@ public class GemManager : MonoBehaviour
 {
     public static GemManager instance;
     [SerializeField] int MaxGemNumbers;
-    [SerializeField] Sprite[] gemSprites; // b, g, p, big b, big g, big p
+    //[SerializeField] Sprite[] gemSprites; // b, g, p, big b, big g, big p
     int gemNumbers, potentialExp;
     Character character;
 
@@ -20,15 +20,15 @@ public class GemManager : MonoBehaviour
         instance = this;
         character = FindObjectOfType<Character>();
     }
-    public GemProperties GetGemProperties(int _exp)
-    {
-        GemExp gemExp = new GemExp();
-        int gemIndex = gemExp.GetGemIndex(_exp);
-        float size = gemIndex < 3 ? 1f : 2f;
+    //public GemProperties GetGemProperties(int _exp)
+    //{
+    //    GemExp gemExp = new GemExp();
+    //    int gemIndex = gemExp.GetGemIndex(_exp);
+    //    float size = gemIndex < 3 ? 1f : 2f;
 
-        // 스프라이트, 사이즈, 경험치를 담는 클래스 반환
-        return new GemProperties(gemSprites[gemIndex], size, _exp);
-    }
+    //    // 스프라이트, 사이즈, 경험치를 담는 클래스 반환
+    //    return new GemProperties(gemSprites[gemIndex], size, _exp);
+    //}
 
 
     public void PutExpToPlayer(int exp)

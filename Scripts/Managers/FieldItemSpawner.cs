@@ -41,7 +41,7 @@ public class FieldItemSpawner : MonoBehaviour
             SpawnObject(objectsToSpawn, numPoints);
             itemBoxSpawnCounter = 0f;
         }
-
+        
         if (MSBspawnCounter >= frequencyMSB)
         {
             float[] timeIntervals = { 60f, 120f, 180f, 240f, 280f, 320f };
@@ -49,7 +49,7 @@ public class FieldItemSpawner : MonoBehaviour
             MSBToSpawn = gemPrefabs[index];
 
             SpawnObject(MSBToSpawn, numPointsMSB);
-            MSBspawnCounter = 0f;
+            frequencyMSB += timeIntervals[index];
         }
 
         itemBoxSpawnCounter += Time.deltaTime;
