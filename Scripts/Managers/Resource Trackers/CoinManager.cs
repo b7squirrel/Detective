@@ -4,6 +4,7 @@ using UnityEngine;
 public class CoinManager : MonoBehaviour
 {
     int currentCoins;
+    int coinNumsPickedup;
     public event Action OnCoinAcquired;
     PlayerDataManager playerDataManager;
 
@@ -15,12 +16,15 @@ public class CoinManager : MonoBehaviour
 
         // 현재 가지고 있는 코인의 수로 초기화
         updateCurrentCoinNumbers(0); 
+        coinNumsPickedup = 0;
     }
     
     public void updateCurrentCoinNumbers(int coinsToAdd)
     {
         currentCoins += coinsToAdd;
+        coinNumsPickedup += coinsToAdd;
         OnCoinAcquired?.Invoke();
     }
     public int GetCurrentCoins() => currentCoins;
+    public int GetCoinNumPickedup() => coinNumsPickedup;
 }

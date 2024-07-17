@@ -4,10 +4,12 @@ public class VictoryPanel : MonoBehaviour
 {
     [SerializeField] TMPro.TextMeshProUGUI killText;
     [SerializeField] TMPro.TextMeshProUGUI coinText;
+    [SerializeField] TMPro.TextMeshProUGUI stageNumber;
 
-    public void InitAwards(int killNum, int coinNum)
+    public void InitAwards(int _killNum, int _coinNum, int _stageNum)
     {
-        killText.text = killNum.ToString();
-        coinText.text = coinNum.ToString();
+        killText.text = _killNum.ToString();
+        coinText.text = _coinNum.ToString();
+        stageNumber.text = _stageNum.ToString();
     }
 }

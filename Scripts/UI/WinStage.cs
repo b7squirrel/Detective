@@ -12,10 +12,14 @@ public class WinStage : MonoBehaviour
         winStage.gameObject.SetActive(true);
         darkBG.gameObject.SetActive(true);
 
+        // 스테이지에서 획득한 코인만 표시.
         int killNum = GetComponent<KillManager>().GetCurrentKills();
-        int coinNum = GetComponent<CoinManager>().GetCurrentCoins();
+        int coinNum = GetComponent<CoinManager>().GetCoinNumPickedup();
 
-        winStage.GetComponent<VictoryPanel>().InitAwards(killNum, coinNum);
+        // 보스가 죽는 순간 이미 스테이지가 올라갔으니까 1을 빼준 수를 넘겨준다.
+        int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber() - 1;
+
+        winStage.GetComponent<VictoryPanel>().InitAwards(killNum, coinNum, stageNum);
 
         GetComponent<PauseManager>().PauseGame();
     }

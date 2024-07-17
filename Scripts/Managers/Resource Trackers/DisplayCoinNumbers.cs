@@ -9,12 +9,15 @@ public class DisplayCoinNumbers : MonoBehaviour
     void Start()
     {
         coinManager = GetComponent<CoinManager>();
-        coinManager.OnCoinAcquired += UpdateKillNumberDisp;
+        coinManager.OnCoinAcquired += UpdateCoinNumberDisp;
     }
 
-    void UpdateKillNumberDisp()
+    /// <summary>
+    /// 스테이지에서 습득한 코인만 표시
+    /// </summary>
+    void UpdateCoinNumberDisp()
     {
-        coinNumbers.text = coinManager.GetCurrentCoins().ToString();
+        coinNumbers.text = coinManager.GetCoinNumPickedup().ToString();
         coinIconAnim.SetTrigger("Pop");
     }
 }
