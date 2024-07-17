@@ -23,7 +23,7 @@ public class FieldItemSpawner : MonoBehaviour
 
     [Header("Special Box")]
     [SerializeField] GameObject[] gemPrefabs;
-    float[] timeIntervals = { 60f, 120f, 180f, 240f, 280f, 320f };
+    float[] timeIntervals = { 180f, 240f, 280f, 320f, 380f, 420f };
 
     [Header("Egg Box")]
     [SerializeField] GameObject EggBoxPrefab;
