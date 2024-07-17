@@ -149,6 +149,7 @@ public class PlayerDataManager : MonoBehaviour
             {
                 currentStage++;
                 SetCurrentStageNumber(currentStage);
+                isStageCleared = false;
             }
         }
 
