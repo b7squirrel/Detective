@@ -17,10 +17,6 @@ public class WinStage : MonoBehaviour
 
         winStage.GetComponent<VictoryPanel>().InitAwards(killNum, coinNum);
 
-        // 재화 저장
-        PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
-        playerData.SetCurrentStageCleared(); // 스테이지가 클리어 된 것을 기록
-
         GetComponent<PauseManager>().PauseGame();
     }
 }

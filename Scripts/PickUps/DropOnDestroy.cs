@@ -115,12 +115,12 @@ public class DropOnDestroy : MonoBehaviour
 
             if (randomDrop > StaticValues.GemDropRate)
                 return;
-
-            
         }
 
         // 디버깅
         if (isChestDebuggingOn) toDrop = dropItemProperty[dropItemIndex].Item;
+
+        
 
         SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
     }
@@ -141,5 +141,10 @@ public class DropOnDestroy : MonoBehaviour
             
         }
         GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(_numberOfDrops, _toDrop, transform.position, exp);
+    }
+
+    public bool isThisChest()
+    {
+        return isChest;
     }
 }

@@ -21,6 +21,7 @@ public class HealPickUpObject : Collectable, IPickUpObject
         {
             OnPickUp(character);
             SoundManager.instance.Play(pickup);
+
             gameObject.SetActive(false);
         }
     }

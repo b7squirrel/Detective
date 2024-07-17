@@ -1,13 +1,18 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Game Manager¿¡¼­ Ä³½Ì
+/// </summary>
 public class FieldItemSpawner : MonoBehaviour
 {
     [Header("Item Box")]
     [SerializeField] int numPoints;
     [SerializeField] GameObject objectsToSpawn;
     [SerializeField] float frequency;
+    [SerializeField] int maxFieldItemNum;
     float itemBoxSpawnCounter;
+
     WallManager wallManager;
 
     [Header("MSB / Multiple Spawn Box")]
@@ -17,15 +22,14 @@ public class FieldItemSpawner : MonoBehaviour
     float MSBspawnCounter;
 
     [Header("Special Box")]
-    [SerializeField] GameObject[] gemPrefabs; 
+    [SerializeField] GameObject[] gemPrefabs;
+    float[] timeIntervals = { 60f, 120f, 180f, 240f, 280f, 320f };
 
     [Header("Egg Box")]
     [SerializeField] GameObject EggBoxPrefab;
     float[] eggSpawnTime;
     float eggSpawnCoolDown;
     int eggSpawnIndex;
-
-    int sortingLayerID;
 
     void Start()
     {
@@ -44,7 +48,6 @@ public class FieldItemSpawner : MonoBehaviour
         
         if (MSBspawnCounter >= frequencyMSB)
         {
-            float[] timeIntervals = { 60f, 120f, 180f, 240f, 280f, 320f };
             int index = Mathf.Clamp((int)(MSBspawnCounter / 60f), 0, timeIntervals.Length - 1);
             MSBToSpawn = gemPrefabs[index];
 
@@ -68,7 +71,6 @@ public class FieldItemSpawner : MonoBehaviour
         for (int i = 0; i < _numbersToSpawn; i++)
         {
             Transform pickUP = GameManager.instance.poolManager.GetMisc(toSpawn).transform;
-            Debug.Log("Asset Name = " + pickUP.name);
             if (pickUP != null)
             {
                 pickUP.position = GetRandomSpawnPoint();
@@ -101,7 +103,6 @@ public class FieldItemSpawner : MonoBehaviour
     IEnumerator GenItems(int _nums, GameObject _toSpawn, Vector2 _position, int _exp)
     {
         int numberOfItems = _nums;
-        Debug.Log("Number Of Items to drop = " + numberOfItems);
         bool _isGem;
         if (_toSpawn.GetComponent<GemPickUpObject>() != null)
         {
@@ -118,6 +119,7 @@ public class FieldItemSpawner : MonoBehaviour
             {
                 SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);
                 numberOfItems--;
+                if (numberOfItems < 0) break;
             }
             yield return null;
         }

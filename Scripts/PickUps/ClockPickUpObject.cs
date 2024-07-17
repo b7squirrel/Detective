@@ -19,6 +19,7 @@ public class ClockPickUpObject : Collectable, IPickUpObject
         {
             OnPickUp(character);
             SoundManager.instance.Play(pickup);
+
             gameObject.SetActive(false);
         }
     }

@@ -49,7 +49,7 @@ public class MainMenu : MonoBehaviour
 
         // 재화 저장
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
-        playerData.SaveResourcesBeforeQuitting();
+        playerData.SaveResourcesBeforeQuitting(); // 스테이지와 동전 저장
         int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
 
         UnPause();

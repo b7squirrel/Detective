@@ -146,6 +146,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         SoundManager.instance.Play(dieSFX);
         anim.SetTrigger("Die");
 
+        
+
         BossDieManager.instance.InitDeadBody(deadBody, transform, 25);
         BossDieManager.instance.DieEvent(.1f, 2f);
         gameObject.SetActive(false);

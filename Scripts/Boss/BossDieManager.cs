@@ -31,7 +31,13 @@ public class BossDieManager : MonoBehaviour
     IEnumerator DieEventCo(float desiredTimeScale, float waitingTime)
     {
         MusicManager.instance.Stop();
-        BossCameraOn();
+
+        // 스테이지와 동전 저장
+        PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
+
+        // 스테이지가 클리어 된 것을 기록
+        playerData.SetCurrentStageCleared(); 
+        playerData.SaveResourcesBeforeQuitting();
 
         Time.timeScale = desiredTimeScale;
 
@@ -45,22 +51,16 @@ public class BossDieManager : MonoBehaviour
 
         FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
     }
-
-    public void BossCameraOn()
-    {
-        //Player.instance.ShouldBeStill = true;
-        // Camera.main.transform.GetComponent<CameraController>().CameraToTarget(deadBody.transform.position, true);
-    }
+    
     public void BossCameraOff()
     {
-        StartCoroutine(PlayerCamera());
+        //StartCoroutine(PlayerCamera());
     }
-    IEnumerator PlayerCamera()
-    {
-        yield return new WaitForSeconds(2f);
-        Player.instance.ShouldBeStill = false;
-        // Camera.main.transform.GetComponent<CameraController>().CameraToTarget(Player.instance.transform.position, false);
-    }
+    //IEnumerator PlayerCamera()
+    //{
+    //    yield return new WaitForSeconds(2f);
+    //    Player.instance.ShouldBeStill = false;
+    //}
 
     //IEnumerator WinMessage()
     //{

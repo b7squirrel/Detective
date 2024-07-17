@@ -58,6 +58,8 @@ public class DestructableObject : MonoBehaviour, Idamageable
 
     void DropItem()
     {
+        DropOnDestroy dropOnDestroy = GetComponent<DropOnDestroy>();
+        
         GetComponent<DropOnDestroy>().CheckDrop();
     }
 

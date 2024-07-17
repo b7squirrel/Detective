@@ -188,6 +188,11 @@ public class Character : MonoBehaviour
     {
         hpBar.gameObject.SetActive(false);
         OnDie?.Invoke();
+
+        // 스테이지와 동전 저장
+        PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
+        playerData.SaveResourcesBeforeQuitting(); 
+
         GetComponent<CharacterGameOver>().GameOver();
     }
 }
