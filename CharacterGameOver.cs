@@ -29,5 +29,14 @@ public class CharacterGameOver : MonoBehaviour
 
         gameOverPanel.SetActive(true);
         weaponsGroup.SetActive(false);
+
+        // 스테이지에서 획득한 코인만 표시.
+        int killNum = GameManager.instance.GetComponent<KillManager>().GetCurrentKills();
+        int coinNum = GameManager.instance.GetComponent<CoinManager>().GetCoinNumPickedup();
+
+        // 현재 스테이지
+        int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
+
+        gameOverPanel.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum);
     }
 }
