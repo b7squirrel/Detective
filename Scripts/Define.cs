@@ -99,6 +99,10 @@ public class GemExp
 
 #endregion
 
+#region 힌트 관련
+
+#endregion
+
 #region 슬롯 관련
 public enum Slots { CardSlot, EquipSlot, LaunchSlot }
 public class MyGrade

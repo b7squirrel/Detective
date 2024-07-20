@@ -17,13 +17,13 @@ public class FieldItemSpawner : MonoBehaviour
 
     [Header("MSB / Multiple Spawn Box")]
     [SerializeField] int numPointsMSB;
-    [SerializeField] GameObject MSBToSpawn;
     [SerializeField] float frequencyMSB;
+    GameObject MSBToSpawn;
     float MSBspawnCounter;
 
     [Header("Special Box")]
     [SerializeField] GameObject[] gemPrefabs;
-    float[] timeIntervals = { 180f, 240f, 280f, 320f, 380f, 420f };
+    float[] timeIntervals = { 120f, 180f, 240f, 280f, 320f, 380f };
 
     [Header("Egg Box")]
     [SerializeField] GameObject EggBoxPrefab;
