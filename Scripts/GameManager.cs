@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-//using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
@@ -23,9 +22,6 @@ public class GameManager : MonoBehaviour
     public bool IsPlayerInvincible { get; set; }
     public bool IsPaused { get; private set; }
 
-    public float gameTime;
-    public float maxGameTime = 20f;
-
     [SerializeField] Camera currentCamera;
     public Collider2D cameraBoundary;
 
@@ -36,6 +32,13 @@ public class GameManager : MonoBehaviour
     [Header("Resource Tracker")]
     public GemManager GemManager;
     public KillManager KillManager;
+
+    [Header("Confirmation Button")]
+    [SerializeField] GameObject confimationButton;
+    
+    [Header("BG")]
+    public GameObject darkBG;
+    public GameObject lightBG;
 
     #region Unity CallBack Functions
     void Awake()
@@ -55,16 +58,8 @@ public class GameManager : MonoBehaviour
         playerRegion = GetComponent<PlayerRegion>();
 
         musicCreditManager = GetComponent<MusicCreditManager>();
-    }
 
-    void Update()
-    {
-        gameTime += Time.deltaTime;
-
-        if (gameTime > maxGameTime)
-        {
-            gameTime = maxGameTime;
-        }
+        confimationButton.SetActive(false);
     }
     #endregion
 
@@ -116,4 +111,17 @@ public class GameManager : MonoBehaviour
         }
         currentCamera.transform.position = originalPos;
     }
+
+    #region 확인 버튼
+    public void ActivateConfirmationButton(float _delayToActivate)
+    {
+        StartCoroutine(ActivateButton(_delayToActivate));
+    }
+    IEnumerator ActivateButton(float _delayToActivate)
+    {
+        // 일단은 0.8초 후에 나오도록 함.
+        yield return new WaitForSecondsRealtime(_delayToActivate);
+        confimationButton.SetActive(true);
+    }
+    #endregion
 }

@@ -11,5 +11,8 @@ public class ResultPanel : MonoBehaviour
         killText.text = _killNum.ToString();
         coinText.text = _coinNum.ToString();
         stageNumber.text = _stageNum.ToString();
+
+        GameManager.instance.darkBG.SetActive(true);
+        GameManager.instance.ActivateConfirmationButton(1.31f);
     }
 }
