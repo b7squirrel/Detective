@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] GameObject panelPause;
     [SerializeField] GameObject panelAreYouSure;
-    [SerializeField] GameObject darkBG;
+    [SerializeField] GameObject BG;
     public UnityEvent<bool> OnPauseButtonPressed;
     PauseManager pauseManager;
     bool isPaused;
@@ -25,14 +25,14 @@ public class MainMenu : MonoBehaviour
         
         pauseManager.PauseGame();
         panelPause.SetActive(true);
-        darkBG.SetActive(true);
+        BG.SetActive(true);
     }
 
     public void UnPause()
     {
         pauseManager.UnPauseGame();
         panelPause.SetActive(false);
-        darkBG.SetActive(false);
+        BG.SetActive(false);
         isPaused = false;
     }
 
@@ -45,7 +45,7 @@ public class MainMenu : MonoBehaviour
     public void GoToMainMenu()
     {
         panelPause.SetActive(false);
-        darkBG.SetActive(false);
+        BG.SetActive(false);
 
         // 재화 저장
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();

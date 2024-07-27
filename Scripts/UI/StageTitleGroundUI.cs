@@ -3,16 +3,10 @@ using UnityEngine;
 
 public class StageTitleGroundUI : MonoBehaviour
 {
-    [SerializeField] GameObject stageTitleObject;
-    [SerializeField] GameObject title;
-    [SerializeField] GameObject bossName;
-    [SerializeField] TMPro.TextMeshPro[] decorations;
+    [SerializeField] TMPro.TextMeshProUGUI titleText;
+    [SerializeField] TMPro.TextMeshProUGUI bossNameText;
     [SerializeField] float titleDuration;
     [SerializeField] float fadeDuration;
-
-    TMPro.TextMeshPro titleText;
-    TMPro.TextMeshPro bossNameText;
-
 
     private void Start()
     {
@@ -24,13 +18,10 @@ public class StageTitleGroundUI : MonoBehaviour
         StageInfo stageInfo = FindObjectOfType<StageInfo>();
         int index = playerData.GetCurrentStageNumber();
 
-        titleText = title.GetComponentInChildren<TMPro.TextMeshPro>();
-        bossNameText = bossName.GetComponentInChildren<TMPro.TextMeshPro>();
-
         titleText.text = "STAGE " + index.ToString();
         bossNameText.text = stageInfo.GetStageInfo(index).Title;
 
-        //StartCoroutine(StageTitleUpCo());
+        StartCoroutine(StageTitleUpCo());
     }
 
     IEnumerator StageTitleUpCo()
@@ -58,10 +49,10 @@ public class StageTitleGroundUI : MonoBehaviour
 
             titleText.color = new Color(titleInitialColor.r, titleInitialColor.g, titleInitialColor.b, alpha);
             bossNameText.color = new Color(NameInitialColor.r, NameInitialColor.g, NameInitialColor.b, alpha);
-            for (int i = 0; i < decorations.Length; i++)
-            {
-                decorations[i].color = new Color(decorations[i].color.r, decorations[i].color.g, decorations[i].color.b, alpha);
-            }
+            //for (int i = 0; i < decorations.Length; i++)
+            //{
+            //    decorations[i].color = new Color(decorations[i].color.r, decorations[i].color.g, decorations[i].color.b, alpha);
+            //}
             yield return null;
         }
     }
