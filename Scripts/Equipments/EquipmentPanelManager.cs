@@ -26,7 +26,7 @@ public class EquipmentPanelManager : MonoBehaviour
     [Header("Equipment Slots")]
     PlayerDataManager playerDataManager;
     [SerializeField] TMPro.TextMeshProUGUI upgradeCost;
-    [SerializeField] TMPro.TextMeshProUGUI itemMaxLevel;
+    [SerializeField] GameObject itemMaxLevel;
     [SerializeField] CanvasGroup warningLackCanvasGroup; // 아이템 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button upgradeButton;
     [SerializeField] GameObject EquipCoinImage;
@@ -35,7 +35,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
     [Header("Char Card Slot")]
     [SerializeField] TMPro.TextMeshProUGUI charUpgradeCost;
-    [SerializeField] TMPro.TextMeshProUGUI charMaxLevel;
+    [SerializeField] GameObject charMaxLevel;
     [SerializeField] CanvasGroup charWarningLackCanvasGroup; // 오리 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button charUpgradeButton;
     [SerializeField] GameObject CharCoinImage;
@@ -353,14 +353,17 @@ public class EquipmentPanelManager : MonoBehaviour
         CharCoinImage.SetActive(true);
         EquipCoinImage.SetActive(true);
 
+        charMaxLevel.SetActive(false);
+        itemMaxLevel.SetActive(false);
+
         if (isChar)
         {
             if (CardOnDisplay.Level == StaticValues.MaxLevel)
             {
-                charUpgradeCost.text = "Max Level";
+                charMaxLevel.SetActive(true);
+                charUpgradeCost.text = "";
+                CharCoinImage.SetActive(false);
                 button.interactable = false;
-
-                //CharCoinImage.SetActive(false);
                 return;
             }
         }
@@ -368,10 +371,10 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             if (cardToEquip.Level == StaticValues.MaxLevel)
             {
-                upgradeCost.text = "Max Level";
+                itemMaxLevel.SetActive(true);
+                upgradeCost.text = "";
+                EquipCoinImage.SetActive(false);
                 button.interactable = false;
-
-                //EquipCoinImage.SetActive(false);
                 return;
             }
         }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FPSCheck : MonoBehaviour
@@ -23,13 +22,12 @@ public class FPSCheck : MonoBehaviour
         rect = new Rect(0, 0, w, h * 100 / 100);
 
         style = new GUIStyle();
-        style.alignment = TextAnchor.UpperLeft;
+        style.alignment = TextAnchor.LowerRight;
         style.fontSize = h * 4 / 200;
         style.normal.textColor = Color.red;
 
         StartCoroutine("worstReset");
   }
-
 
   IEnumerator worstReset() //코루틴으로 15초 간격으로 최저 프레임 리셋해줌.
   {
@@ -39,7 +37,6 @@ public class FPSCheck : MonoBehaviour
     }
   }
 
-
   void Update()
   {
     deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
@@ -47,13 +44,13 @@ public class FPSCheck : MonoBehaviour
  
   void OnGUI()//소스로 GUI 표시.
   {
-
     msec = deltaTime * 1000.0f;
     fps = 1.0f / deltaTime;  //초당 프레임 - 1초에
 
     if (fps < worstFps)  //새로운 최저 fps가 나왔다면 worstFps 바꿔줌.
       worstFps = fps;
-    text = msec.ToString ("F1") + "ms (" + fps.ToString ("F1") + ") //worst : " + worstFps.ToString ("F1");
+    //text = msec.ToString ("F1") + "ms (" + fps.ToString ("F1") + ") //worst : " + worstFps.ToString ("F1");
+    text = fps.ToString ("F1") + "worst : " + worstFps.ToString ("F1");
     GUI.Label(rect, text, style);
   }
 }

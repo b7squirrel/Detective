@@ -28,6 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6414451162540868822}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.40072656, y: -1.9262758, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -35,7 +36,6 @@ Transform:
   m_Children:
   - {fileID: 1541536094707130497}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6414451162540868813
 Animator:
@@ -68,6 +68,25 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -86,11 +105,17 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 7e3d80462619424498e70a08a7373539, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -115,6 +140,7 @@ MonoBehaviour:
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
+  finishedSpawn: 0
   dieEffectPrefeab: {fileID: 0}
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
@@ -133,7 +159,6 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
-  isDetectingPlayer: 0
 --- !u!114 &6414451162540868667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,16 +171,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropItemPrefab:
-  - {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-  noMultipleDrops: 0
-  dropLastItemPrefab: {fileID: 0}
-  numberOfLastDrops: 0
-  multipleDrops: {fileID: 0}
-  chance: 1
+  dropItemProperty: []
   exp: 0
   hp: 0
   isChest: 0
+  multiDropRate: 0
+  specialDropRate: 0
+  isChestDebuggingOn: 0
+  dropItemIndex: 0
 --- !u!1 &7401670693113262515
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,13 +204,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7401670693113262515}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6414451162540868825}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8129609524095065627
 SpriteRenderer:
