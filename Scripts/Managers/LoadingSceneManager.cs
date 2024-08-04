@@ -1,15 +1,25 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LoadingSceneManager : MonoBehaviour
 {
+    [SerializeField] Slider progressBar;
+    [SerializeField] TMPro.TextMeshProUGUI progressText;
+
+    /// <summary>
+    /// canvas의 애니메이션에서 호출
+    /// </summary>
     public void LoadScenes()
     {
+        Debug.Log("Load Scenes");
+        progressBar.value = 0;
+        SetProgressText();
         StartCoroutine(LoadSceneCo());
     }
 
-    // 적어도 2초간 로딩하도록
+    // 적어도 3초간 로딩하도록
     IEnumerator LoadSceneCo()
     {
         yield return null;
@@ -29,11 +39,14 @@ public class LoadingSceneManager : MonoBehaviour
             {
                 Debug.Log("OP1 Progress = " + op1.progress);
                 // 그래프 등 표시
+                progressBar.value = Mathf.MoveTowards(progressBar.value, 1f, Time.deltaTime);
             }
             else
             {
                 timer += Time.unscaledDeltaTime;
-                if(timer > 2f)
+                progressBar.value = Mathf.MoveTowards(progressBar.value, 1f, Time.deltaTime);
+                SetProgressText();
+                if (timer > 3f)
                 {
                     op1.allowSceneActivation = true;
                     SceneManager.LoadScene(stageToPlay, LoadSceneMode.Additive);
@@ -41,5 +54,12 @@ public class LoadingSceneManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    void SetProgressText()
+    {
+        float progress = progressBar.value * 100f;
+        int progressInt = Mathf.FloorToInt(progress);
+        progressText.text = progressInt.ToString() + "%";
     }
 }
