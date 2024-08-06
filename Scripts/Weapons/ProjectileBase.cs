@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ProjectileBase : MonoBehaviour
 {
-    
     [field : SerializeField] public Vector3 Direction { get; set; }
     [field : SerializeField] public float Speed {get; set;}
     protected bool hitDetected = false;

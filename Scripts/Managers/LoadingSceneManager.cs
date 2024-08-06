@@ -13,7 +13,6 @@ public class LoadingSceneManager : MonoBehaviour
     /// </summary>
     public void LoadScenes()
     {
-        Debug.Log("Load Scenes");
         progressBar.value = 0;
         SetProgressText();
         StartCoroutine(LoadSceneCo());
@@ -22,7 +21,7 @@ public class LoadingSceneManager : MonoBehaviour
     // 적어도 3초간 로딩하도록
     IEnumerator LoadSceneCo()
     {
-        yield return null;
+        //yield return null;
 
         int currentStage = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
         string stageToPlay = "GamePlayStage" + currentStage.ToString();
@@ -34,13 +33,16 @@ public class LoadingSceneManager : MonoBehaviour
 
         while (!op1.isDone)
         {
-            yield return null;
+            Debug.Log("OP1 Progress = " + op1.progress);
+
+            // 90%까지는 씬로딩에 따라 로딩바 증가
             if (op1.progress < 0.9f)
             {
-                Debug.Log("OP1 Progress = " + op1.progress);
                 // 그래프 등 표시
                 progressBar.value = Mathf.MoveTowards(progressBar.value, 1f, Time.deltaTime);
+                SetProgressText();
             }
+            // 그 이후로는 100%까지 페이크 로딩
             else
             {
                 timer += Time.unscaledDeltaTime;
@@ -53,6 +55,7 @@ public class LoadingSceneManager : MonoBehaviour
                     yield break;
                 }
             }
+            yield return null;
         }
     }
 
