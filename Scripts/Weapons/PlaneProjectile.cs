@@ -7,9 +7,10 @@ public class PlaneProjectile : ProjectileBase
     [SerializeField] float speed = 10f; // 미사일의 이동 속도
     [SerializeField] float rotateSpeed = 600f; // 회전 속도
     Vector3 offsetDirection; // 초기 옵셋 방향
-    float sizeOfArea; // 타격 범위
+    float sizeOfArea = 1f; // 타격 범위
 
     TrailRenderer trailRenderer;
+    int frameCount = 0;
 
     // 다시 활성화 될 때 트레일이 이상하게 시작되는 문제를 해결하기 위해서
     private void OnDisable()
@@ -20,6 +21,14 @@ public class PlaneProjectile : ProjectileBase
     protected override void Update()
     {
         ApplyMovement();
+
+        frameCount++;
+        if(frameCount > 30) frameCount = 0;
+
+        if(frameCount % 3 == 0)
+        {
+            CastDamage();
+        }
     }
     protected override void ApplyMovement()
     {
@@ -34,7 +43,7 @@ public class PlaneProjectile : ProjectileBase
         transform.position += transform.up * speed * Time.deltaTime;
 
         // 목표물에 도착하면 데미지 띄우고 비활성화
-        if (Vector3.Distance(transform.position, target) < 2f)
+        if (Vector3.Distance(transform.position, target) < 1f)
         {
             CastDamage();
             DieProjectile();
@@ -44,10 +53,24 @@ public class PlaneProjectile : ProjectileBase
     {
         // 타겟과의 초기 각도 오프셋을 설정합니다.
         target = _taget;
-        offsetDirection = Quaternion.Euler(0, 0, 70) * (target - transform.position).normalized;
+
+        float randomAngle = UnityEngine.Random.Range(-70f, 70f);
+        offsetDirection = Quaternion.Euler(0, 0, randomAngle) * (target - transform.position).normalized;
         //offsetDirection = (target - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, offsetDirection);
+        transform.localScale = .5f * Vector3.one;
     }
+
+    protected override void AttackCoolTimer()
+    {
+        TimeToLive -= Time.deltaTime;
+        if (TimeToLive < 0f)
+        {
+            CastDamage();
+            DieProjectile();
+        }
+    }
+
     protected override void CastDamage()
     {
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, sizeOfArea, targetLayer);
