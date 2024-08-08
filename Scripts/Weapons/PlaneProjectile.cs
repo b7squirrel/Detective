@@ -20,12 +20,14 @@ public class PlaneProjectile : ProjectileBase
     }
     protected override void Update()
     {
+        if (Time.timeScale == 0f) return;
+        AttackCoolTimer();
         ApplyMovement();
 
         frameCount++;
         if(frameCount > 30) frameCount = 0;
 
-        if(frameCount % 3 == 0)
+        if(frameCount % 8 == 0)
         {
             CastDamage();
         }
@@ -66,9 +68,13 @@ public class PlaneProjectile : ProjectileBase
         TimeToLive -= Time.deltaTime;
         if (TimeToLive < 0f)
         {
-            CastDamage();
             DieProjectile();
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        CastDamage();
     }
 
     protected override void CastDamage()
