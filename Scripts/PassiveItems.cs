@@ -25,7 +25,8 @@ public class PassiveItems : MonoBehaviour
         newItemInstance.Init(itemToEquip.Name);
         newItemInstance.stats.SetStats(itemToEquip.stats);
         // newItemInstance.name = itemToEquip.Name; // Init에서 이름을 정해주니까 필요없어 보인다
-        newItemInstance.SynergyWeapon = itemToEquip.SynergyWeapon;
+        //newItemInstance.SynergyWeapon = itemToEquip.SynergyWeapon;
+        newItemInstance.SynergyWeapons.AddRange(itemToEquip.SynergyWeapons);
         newItemInstance.upgrades.AddRange(itemToEquip.upgrades);
 
         items.Add(newItemInstance);
@@ -37,8 +38,37 @@ public class PassiveItems : MonoBehaviour
 
     public Item GetSynergyCouple(string synergyWeapon)
     {
-        Item couple = items.Find(x => x.SynergyWeapon == synergyWeapon);
-        return couple;
+        // synergyWeapon과 일치하는 무기가 있는지 확인
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i] == null)
+            {
+                Debug.Log($"Item at index {i} is null");
+                continue;
+            }
+
+            if (items[i].SynergyWeapons == null)
+            {
+                Debug.Log($"SynergyWeapons list for item at index {i} is null");
+                continue;
+            }
+
+            if (items[i].SynergyWeapons.Count == 0)
+            {
+                Debug.Log($"SynergyWeapons list for item at index {i} is empty");
+                continue;
+            }
+
+            for (int j = 0; j < items[i].SynergyWeapons.Count; j++)
+            {
+                if (synergyWeapon == items[i].SynergyWeapons[j])
+                {
+                    return items[i];
+                }
+            }
+        }
+
+        return null;
     }
 
     public void CheckIfMaxLevel(Item item)
@@ -46,7 +76,18 @@ public class PassiveItems : MonoBehaviour
         // if (item.stats.currentLevel == item.upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
         if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
         {
-            WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(item.SynergyWeapon);
+            WeaponData wd = null;
+
+            // SynergyWeapons 리스트를 순회하며 해당하는 무기 데이터 찾기
+            foreach (string synergyWeapon in item.SynergyWeapons)
+            {
+                wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(synergyWeapon);
+                if (wd != null)
+                {
+                    break; // 유효한 무기를 찾으면 루프를 나감
+                }
+            }
+
             if (wd == null)
             {
                 // Debug.Log("시너지 커플 웨폰이 없습니다");

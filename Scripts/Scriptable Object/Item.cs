@@ -54,7 +54,8 @@ public class Item : ScriptableObject
     public int grade;
     public Sprite charImage;
     public AnimatorData CardItemAnimator;
-    public string SynergyWeapon;
+    //public string SynergyWeapon;
+    public List<string> SynergyWeapons; // 여러 시너지 무기를 저장하는 리스트
     public ItemStats stats;
     public List<UpgradeData> upgrades;
     public float dropChance; // 아이템 드랍 확률
@@ -65,6 +66,8 @@ public class Item : ScriptableObject
         this.name = Name; // 스크립터블 오브젝트의 이름
         stats = new ItemStats();
         upgrades = new List<UpgradeData>(); // UpgradeData들을 끌어다 놓기
+
+        SynergyWeapons = new List<string>();
 
         stats.currentLevel = 0;
     }
@@ -95,7 +98,17 @@ public class Item : ScriptableObject
         {
             Debug.Log(Name + " is Max Level");
 
-            WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(SynergyWeapon);
+            WeaponData wd = null;
+            for (int i=0;i < SynergyWeapons.Count;i++)
+            {
+                WeaponData tempWd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(SynergyWeapons[i]);
+                if (tempWd != null)
+                {
+                    wd = tempWd;
+                    break;
+                }
+            }
+            
             if (wd == null)
             {
                 // Debug.Log("시너지 커플 웨폰이 없습니다");
