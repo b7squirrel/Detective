@@ -124,7 +124,7 @@ public class Character : MonoBehaviour
 
         if (anim == null) anim = GetComponentInChildren<WeaponContainerAnim>().GetComponent<Animator>();
 
-        //if (Time.frameCount % 3 != 0) return;
+        if (Time.frameCount % 3 != 0) return;
 
         anim.SetTrigger("Hurt");
         SoundManager.instance.PlaySingle(hurtSound);
