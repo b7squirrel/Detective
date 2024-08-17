@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class SoundManager : MonoBehaviour
     AudioClip singleSound; // 한 번만 재생되는 사운드를 리스트에서 빼기 위해
 
     private bool isMuted; // 현재 Mute 상태를 추적하기 위한 변수
+    bool isPlayingHurtSound; // hurt Sound가 재생 중이면 재생하지 않기 위한 플래그
 
     void Awake()
     {
@@ -65,6 +67,18 @@ public class SoundManager : MonoBehaviour
 
         Play(audioClip); // 클립이 재생 중이지 않으면 Play 함수 호출
         singleSound = audioClip; // 현재 재생 중인 클립을 singleSound에 저장
+    }
+
+    public void PlayHurtSound(AudioClip _hurtSound)
+    {
+        AudioSource audioSource = GetAudio();
+        if (audioSource == null) return;
+        audioSource.clip = _hurtSound;
+        audioSource.pitch = UnityEngine.Random.Range(1f, 1.1f);
+        audioSource.volume = .4f;
+        audioSource.mute = isMuted; // 현재 Mute 상태에 따라 설정
+
+        audioSource.Play();
     }
 
     AudioSource GetAudio()

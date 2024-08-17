@@ -31,6 +31,8 @@ public class Character : MonoBehaviour
     [SerializeField] ParticleSystem wallCollisionParticle;
     [SerializeField] float wallColParticleDuration; // 벽 충돌 파티클이 보여지는 시간
 
+    bool isHurtSoundPlaying; // hurt sound가 재생 중이면 재생하지 않기 위한 플래그
+
     // public event Action OnDie;
     public UnityEvent OnDie;
     Animator anim;
@@ -127,7 +129,7 @@ public class Character : MonoBehaviour
         if (Time.frameCount % 3 != 0) return;
 
         anim.SetTrigger("Hurt");
-        SoundManager.instance.PlaySingle(hurtSound);
+        PlayHurtSound(hurtSound);
 
         //if (Time.frameCount % 3 != 0 && 
         //        enemyType == EnemyType.Melee) return; // Melee공격은 3프레임 간격으로 데미지를 입도록
@@ -144,6 +146,19 @@ public class Character : MonoBehaviour
 
         if (debugCharacter == null) debugCharacter = FindObjectOfType<DebugCharacter>();
         debugCharacter?.HitMessage(damage);
+    }
+    void PlayHurtSound(AudioClip _hurtSound)
+    {
+        if (isHurtSoundPlaying) return;
+        SoundManager.instance.PlayHurtSound(_hurtSound);
+        StartCoroutine(WaitHurtSoundFinished());
+    }
+    IEnumerator WaitHurtSoundFinished()
+    {
+        float counter = .4f; // hurt sound를 1초 동안 재생
+        isHurtSoundPlaying = true;
+        yield return new WaitForSeconds(counter);
+        isHurtSoundPlaying = false;
     }
 
     void ApplyArmor(ref int damage)
