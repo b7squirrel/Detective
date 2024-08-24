@@ -6,6 +6,7 @@ public class PlaySoundOnEvent : MonoBehaviour
     [SerializeField] AudioClip assetUpSound;
     [SerializeField] AudioClip resultPanelUpSound;
     [SerializeField] AudioClip stampSound;
+    [SerializeField] AudioClip music;
 
     public void PlayAssetUpSound()
     {
@@ -18,5 +19,10 @@ public class PlaySoundOnEvent : MonoBehaviour
     public void PlayStampSound()
     {
         SoundManager.instance.Play(stampSound);
+    }
+    public void PlayMusic()
+    {
+        if (music == null) return;
+        SoundManager.instance.Play(music);
     }
 }

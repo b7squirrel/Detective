@@ -152,19 +152,19 @@ public class EggPanelManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1.66f); // 이름 반짝 사운드 재생 지점
         SoundManager.instance.Play(oriNameSound);
-
+        blackBGPanel.SetActive(false);
         yield return new WaitForSecondsRealtime(.4f); //폴짝 뛰어서 게임 안으로 들어가는 지점
         SoundManager.instance.Play(jumpUp);
+        
 
         yield return new WaitForSecondsRealtime(0.32f); // 애니메이션 종료
         CloseButtonPressed();
     }
-    public void CloseButtonPressed()
+    void CloseButtonPressed()
     {
         pauseManager.UnPauseGame();
         EggImageUp(false);
         eggPanel.SetActive(false);
-        blackBGPanel.SetActive(false);
         newKidText.SetActive(false);
         oriName.SetActive(false);
         nameBar.SetActive(false);

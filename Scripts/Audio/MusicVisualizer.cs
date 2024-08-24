@@ -34,7 +34,7 @@ public class MusicVisualizer : MonoBehaviour
         if (initDone == false) return;
         if (isFinished) return;
 
-        currentUpdateTime += Time.deltaTime;
+        currentUpdateTime += Time.unscaledDeltaTime;
         if (currentUpdateTime >= updateStep)
         {
             currentUpdateTime = 0f;
@@ -48,7 +48,9 @@ public class MusicVisualizer : MonoBehaviour
             float targetScale = 1 + currentVolume * scaleMultiplier;
 
             // DOTween을 사용하여 스케일 애니메이션 적용
-            spriteTransform.DOScale(new Vector3(targetScale, targetScale, targetScale), scaleDuration).SetEase(Ease.OutQuad);
+            spriteTransform.DOScale(new Vector3(targetScale, targetScale, targetScale), scaleDuration)
+                           .SetEase(Ease.OutQuad)
+                           .SetUpdate(true); // SetUpdate(true)로 timeScale의 영향을 받지 않도록 설정
         }
     }
 }
