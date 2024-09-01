@@ -45,6 +45,7 @@ public class BossBase : EnemyBase, Idamageable
 
     protected override void Update()
     {
+        base.Update();
         ChangeStateTImer();
     }
 
@@ -98,8 +99,6 @@ public class BossBase : EnemyBase, Idamageable
 
         SoundManager.instance.Play(dieSFX);
         anim.SetTrigger("Die");
-
-
 
         BossDieManager.instance.InitDeadBody(deadBody, transform, 25);
         BossDieManager.instance.DieEvent(.1f, 2f);

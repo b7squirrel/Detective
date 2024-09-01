@@ -268,7 +268,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public virtual void ApplyMovement()
     {
-        Debug.Log("is finished spawn = " + finishedSpawn);
         if (finishedSpawn == false) return; // 스폰이 완료되지 않았다면 이동 금지. 스폰 애니메이션에서 이벤트로 설정
         if (IsKnockBack)
         {
