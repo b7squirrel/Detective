@@ -330,6 +330,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
             {
                 Attack(EnemyType.Explode);
             }
+            rb.velocity = .5f * Vector2.one;
+            rb.angularVelocity = 0f;
         }
     }
     protected void OnCollisionExit2D(Collision2D collision)
