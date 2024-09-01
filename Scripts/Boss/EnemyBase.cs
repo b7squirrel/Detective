@@ -268,6 +268,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public virtual void ApplyMovement()
     {
+        Debug.Log("is finished spawn = " + finishedSpawn);
         if (finishedSpawn == false) return; // 스폰이 완료되지 않았다면 이동 금지. 스폰 애니메이션에서 이벤트로 설정
         if (IsKnockBack)
         {
@@ -292,6 +293,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
         Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
+        Debug.Log("Movement");
         rb.velocity = Vector2.zero;
     }
 

@@ -43,12 +43,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5492162822942016413}
-  - component: {fileID: 6832536551723710132}
   - component: {fileID: 3228607862382687121}
   - component: {fileID: 6115460380130525128}
   - component: {fileID: -4006016277820106944}
   - component: {fileID: 2854337660073372146}
   - component: {fileID: 2813042868136878295}
+  - component: {fileID: 6053259173109289213}
   m_Layer: 0
   m_Name: Boss_Moss_LV1
   m_TagString: Untagged
@@ -73,45 +73,6 @@ Transform:
   - {fileID: 2311901689898295604}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6832536551723710132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2705715447378663266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7fc5b74540eca4db664c608ceafa76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
-  isSubBoss: 0
-  isBoss: 0
-  numberOfSubBossDrops: 0
-  numberOfBossDrops: 50
-  screenEdge:
-    serializedVersion: 2
-    m_Bits: 1024
-  finishedSpawn: 0
-  dieEffectPrefeab: {fileID: 0}
-  dieExplosionPrefeab: {fileID: 0}
-  knockbackEffect: {fileID: 0}
-  hitEffectPoint: {fileID: 4755730283230535138}
-  whiteFlashDuration: 0.08
-  knockBackSpeed: 12
-  knockBackDelay: 0
-  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
-  targetDir: {x: 0, y: 0}
-  hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
-  die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
-  HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
-  HpBarPos: {fileID: 4755730283230535138}
-  hpBar: {fileID: 0}
-  timeToChangeState: 4
-  col: {fileID: 0}
-  deadBody: {fileID: 0}
-  numberOfStates: 2
 --- !u!95 &3228607862382687121
 Animator:
   serializedVersion: 5
@@ -267,6 +228,71 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6053259173109289213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2705715447378663266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1193f99ab13f9e2488e5e3adf3b85656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: 
+  isSubBoss: 0
+  isBoss: 1
+  numberOfSubBossDrops: 0
+  numberOfBossDrops: 50
+  screenEdge:
+    serializedVersion: 2
+    m_Bits: 1024
+  finishedSpawn: 0
+  dieEffectPrefeab: {fileID: 0}
+  dieExplosionPrefeab: {fileID: 0}
+  knockbackEffect: {fileID: 0}
+  hitEffectPoint: {fileID: 4755730283230535138}
+  whiteFlashDuration: 0.08
+  knockBackSpeed: 12
+  knockBackDelay: 0
+  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
+  targetDir: {x: 0, y: 0}
+  hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
+  die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
+  HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
+  HpBarPos: {fileID: 4755730283230535138}
+  hpBar: {fileID: 0}
+  timeToChangeState: 4
+  col: {fileID: 0}
+  deadBody: {fileID: 0}
+  numberOfStates: 2
+  <moveSpeedInAir>k__BackingField: 0
+  <IsInAir>k__BackingField: 0
+  projectiles: []
+  projectileSFX: []
+  numberOfProjectile: 0
+  maxProjectile: 0
+  timeToAttack: 0
+  ShootPoint: {fileID: 0}
+  dustPoint: {fileID: 0}
+  dustEffect: {fileID: 0}
+  teleportEffectPrefab: {fileID: 0}
+  landingImpactSize: 0
+  landingImpactForce: 0
+  landingHit:
+    serializedVersion: 2
+    m_Bits: 0
+  LandingIndicatorPrefab: {fileID: 0}
+  LandingIndicator: {fileID: 0}
+  landingEffect: {fileID: 0}
+  teleEffectPrefab: {fileID: 0}
+  spawnSFX: {fileID: 0}
+  landingSFX: {fileID: 0}
+  shootAnticSFX: {fileID: 0}
+  jumpupSFX: {fileID: 0}
+  fallDownSFX: {fileID: 0}
+  dieSFX: {fileID: 0}
 --- !u!1 &3245813727125651972
 GameObject:
   m_ObjectHideFlags: 0

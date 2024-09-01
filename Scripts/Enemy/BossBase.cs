@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossMoss : EnemyBase, Idamageable
+public class BossBase : EnemyBase, Idamageable
 {
     [Header("Boss Properties")]
     [SerializeField] float timeToChangeState;
@@ -45,6 +45,7 @@ public class BossMoss : EnemyBase, Idamageable
 
     protected override void Update()
     {
+        ChangeStateTImer();
     }
 
     public override void InitEnemy(EnemyData _enemyToSpawn)
@@ -60,6 +61,7 @@ public class BossMoss : EnemyBase, Idamageable
         InitHpBar();
     }
 
+    #region 상태 변경
     public void ChangeStateTImer()
     {
         if (timer < timeToChangeState)
@@ -70,9 +72,10 @@ public class BossMoss : EnemyBase, Idamageable
         timer = 0f;
 
         int stateIndex = UnityEngine.Random.Range(0, numberOfStates);
-        
+
         anim.SetTrigger(stateIndex.ToString());
     }
+    #endregion
 
     public float GetDefaultSpeed()
     {
