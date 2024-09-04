@@ -31,7 +31,7 @@ public enum Region
 
 public enum SpawnItem { enemy, subBoss, egggulp, enemyGroup, bossSlime } // Stage Event Manager 에서 사용
 
-public enum EnemyType { Melee, Ranged, Explode } // 적을 스폰할 때 어떤 타입의 적을 스폰할지 정하기 위해
+public enum EnemyType { Melee, Ranged, Explode, Projectile } // 적을 스폰할 때 어떤 타입의 적을 스폰할지 정하기 위해
 #endregion
 
 #region 음악 관련

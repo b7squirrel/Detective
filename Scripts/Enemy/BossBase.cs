@@ -13,19 +13,18 @@ public class BossBase : EnemyBase, Idamageable
     [field: SerializeField] public float moveSpeedInAir { get; private set; }
     [field: SerializeField] public bool IsInAir { get; set; }
 
+    [Header("Shoot")]
     [SerializeField] EnemyData[] projectiles;
     [SerializeField] AudioClip[] projectileSFX;
     [SerializeField] int numberOfProjectile;
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
-
-    [SerializeField] Transform ShootPoint;
-    [SerializeField] Transform dustPoint;
-    [SerializeField] GameObject dustEffect;
-    GameObject dust;
-    [SerializeField] GameObject teleportEffectPrefab;
-
+    [SerializeField] protected Transform ShootPoint;
+    [SerializeField] protected Transform dustPoint;
+    [SerializeField] protected GameObject dustEffect;
+    [SerializeField] protected GameObject teleportEffectPrefab;
     public Coroutine shootCoroutine;
+    protected GameObject dust;
 
     Vector2 currentPosition;
 
@@ -62,6 +61,13 @@ public class BossBase : EnemyBase, Idamageable
         InitHpBar();
     }
 
+    #region 보스 스킬
+    public virtual void ShootMultiProjectiles()
+    {
+
+    }
+    #endregion
+
     #region 상태 변경
     public void ChangeStateTImer()
     {
@@ -77,11 +83,6 @@ public class BossBase : EnemyBase, Idamageable
         anim.SetTrigger(stateIndex.ToString());
     }
     #endregion
-
-    public float GetDefaultSpeed()
-    {
-        return DefaultSpeed;
-    }
 
     #region TakeDamage Funcitons
     public override void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
@@ -107,5 +108,9 @@ public class BossBase : EnemyBase, Idamageable
     #endregion
 
     #region 애니메이션 이벤트
+    public float GetDefaultSpeed()
+    {
+        return DefaultSpeed;
+    }
     #endregion
 }

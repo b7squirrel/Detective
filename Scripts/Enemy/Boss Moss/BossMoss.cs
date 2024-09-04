@@ -1,109 +1,44 @@
+using System.Collections;
 using UnityEngine;
 
-public class BossMoss : EnemyBase, Idamageable
+public class BossMoss : BossBase
 {
-    [Header("Boss Properties")]
-    [SerializeField] float timeToChangeState;
-    [SerializeField] Collider2D col;
-    [SerializeField] GameObject deadBody;
-    [SerializeField] int numberOfStates; // 보스의 총 상태 수. 
-    Spawner spawner;
-    float timer; // shoot coolTime counter
+    [Header("Boss Moth")]
+    [SerializeField] GameObject powderPrefabs;
+    [SerializeField] int projectileNums;
+    [SerializeField] int powderDamage;
 
-    [field: SerializeField] public float moveSpeedInAir { get; private set; }
-    [field: SerializeField] public bool IsInAir { get; set; }
-
-    [SerializeField] EnemyData[] projectiles;
-    [SerializeField] AudioClip[] projectileSFX;
-    [SerializeField] int numberOfProjectile;
-    [SerializeField] int maxProjectile;
-    [SerializeField] float timeToAttack;
-
-    [SerializeField] Transform ShootPoint;
-    [SerializeField] Transform dustPoint;
-    [SerializeField] GameObject dustEffect;
-    GameObject dust;
-    [SerializeField] GameObject teleportEffectPrefab;
-
-    public Coroutine shootCoroutine;
-
-    Vector2 currentPosition;
-
-    [SerializeField] float landingImpactSize;
-    [SerializeField] float landingImpactForce;
-    [SerializeField] LayerMask landingHit;
-    [SerializeField] GameObject LandingIndicatorPrefab;
-    [SerializeField] GameObject LandingIndicator;
-    [SerializeField] GameObject landingEffect;
-    [SerializeField] GameObject teleEffectPrefab;
-    [SerializeField] AudioClip spawnSFX;
-    [SerializeField] AudioClip landingSFX;
-    [SerializeField] AudioClip shootAnticSFX;
-    [SerializeField] AudioClip jumpupSFX;
-    [SerializeField] AudioClip fallDownSFX;
-    [SerializeField] AudioClip dieSFX;
-
-    protected override void Update()
+    public override void ShootMultiProjectiles()
     {
+        StartCoroutine(ShootCo());
     }
-
-    public override void InitEnemy(EnemyData _enemyToSpawn)
+    IEnumerator ShootCo()
     {
-        this.Stats = new EnemyStats(_enemyToSpawn.stats);
-        spawner = FindObjectOfType<Spawner>(); // 입에서 enemy를 발사하기 위해서
-        col = GetComponent<CapsuleCollider2D>();
-
-        Name = _enemyToSpawn.name;
-
-        DefaultSpeed = Stats.speed;
-        currentSpeed = DefaultSpeed;
-        InitHpBar();
-    }
-
-    public void ChangeStateTImer()
-    {
-        if (timer < timeToChangeState)
+        int shootCounter = projectileNums;
+        while (shootCounter > 0)
         {
-            timer += Time.deltaTime;
-            return;
+            GameObject powder = GameManager.instance.poolManager.GetMisc(powderPrefabs);
+            powder.transform.position = ShootPoint.position;
+            powder.GetComponent<EnemyProjectile>().Init(powderDamage, GetProjectileDir());
+            shootCounter--;
+            yield return new WaitForSeconds(.1f);
         }
-        timer = 0f;
-
-        int stateIndex = UnityEngine.Random.Range(0, numberOfStates);
-        
-        anim.SetTrigger(stateIndex.ToString());
     }
-
-    public float GetDefaultSpeed()
+    Vector2 GetProjectileDir()
     {
-        return DefaultSpeed;
+        // shooter가 player를 바라보는 방향 벡터 계산
+        Vector2 directionToPlayer =
+                 (GameManager.instance.player.transform.position - transform.position).normalized;
+
+        // 랜덤한 각도를 계산하기 위해 +15도와 -15도 사이에서 무작위 각도 선택
+        float randomAngle = Random.Range(-30f, 30f);
+
+        // directionToPlayer 벡터를 기준으로 randomAngle만큼 회전하는 Quaternion 생성
+        Quaternion randomRotation = Quaternion.Euler(0, 0, randomAngle);
+
+        // shooter가 player를 바라보는 방향에 randomRotation 적용
+        Vector2 randomDirection = randomRotation * directionToPlayer;
+
+        return randomDirection;
     }
-
-    #region TakeDamage Funcitons
-    public override void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
-    {
-        if (IsInAir)
-            return;
-        base.TakeDamage(damage, knockBackChance, knockBackSpeedFactor, target, hitEffect);
-        hpBar.SetStatus(Stats.hp, maxHealth);
-    }
-    public override void Die()
-    {
-        base.Die();
-
-        //GetComponent<DropOnDestroy>().CheckDrop();
-
-        SoundManager.instance.Play(dieSFX);
-        anim.SetTrigger("Die");
-
-
-
-        BossDieManager.instance.InitDeadBody(deadBody, transform, 25);
-        BossDieManager.instance.DieEvent(.1f, 2f);
-        gameObject.SetActive(false);
-    }
-    #endregion
-
-    #region 애니메이션 이벤트
-    #endregion
 }

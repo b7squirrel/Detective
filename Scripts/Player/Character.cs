@@ -126,13 +126,11 @@ public class Character : MonoBehaviour
 
         if (anim == null) anim = GetComponentInChildren<WeaponContainerAnim>().GetComponent<Animator>();
 
-        if (Time.frameCount % 3 != 0) return;
+        // 투사체가 아닐 때만 3프레임에 한 번씩 데미지를 받기
+        if (Time.frameCount % 3 != 0 && enemyType != EnemyType.Projectile) return;
 
         anim.SetTrigger("Hurt");
         PlayHurtSound(hurtSound);
-
-        //if (Time.frameCount % 3 != 0 && 
-        //        enemyType == EnemyType.Melee) return; // Melee공격은 3프레임 간격으로 데미지를 입도록
 
         currentHealth -= damage;
         if (currentHealth < 0)

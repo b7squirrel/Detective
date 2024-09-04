@@ -65,7 +65,6 @@ public class EnemyBoss : EnemyBase, Idamageable
         currentSpeed = DefaultSpeed;
         InitHpBar();
     }
-    
 
     public void ShootTimer()
     {

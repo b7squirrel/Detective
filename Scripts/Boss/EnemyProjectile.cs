@@ -4,19 +4,34 @@ public class EnemyProjectile : MonoBehaviour
 {
     [SerializeField] float speed;
     [SerializeField] float timeToLive = 3f;
+    float hitRange;
     int damage;
     Vector3 dir;
     bool initDone;
-    Character character;
 
     [Header("Feedback")]
     [SerializeField] GameObject hitEffectPrefab;
 
-    public void Init(int _damage)
+    /// <summary>
+    /// _dir 인자를 Vector3.zero 로 넣으면 캐릭터를 향해 나아감.
+    /// </summary>
+    public virtual void Init(int _damage, Vector3 _dir)
     {
-        dir = (GameManager.instance.player.transform.position - transform.position).normalized;
+        if(_dir == Vector3.zero)
+        {
+            dir = (GameManager.instance.player.transform.position - transform.position).normalized;
+        }
+        else
+        {
+            dir = _dir;
+        }
+
         damage = _damage;
         initDone = true;
+        Debug.Log("Damage = " + damage + "dir = " +  dir);
+
+        hitRange = GetComponentInChildren<SpriteRenderer>().transform.localScale.x;
+
     }
     void Update()
     {
@@ -41,18 +56,17 @@ public class EnemyProjectile : MonoBehaviour
     }
     void CastDamage()
     {
-        //if (Time.frameCount % 2 != 0) // 2프레임에 한 번 충돌 체크
-        //    return;
+        if (Time.frameCount % 2 != 0) // 2프레임에 한 번 충돌 체크
+            return;
 
         float sqrDist = (GameManager.instance.player.transform.position - transform.position).sqrMagnitude;
-        if( sqrDist < .5f )
+        if (sqrDist < hitRange)
         {
-            if (character == null) character = GameManager.instance.character;
-            character.TakeDamage(damage, EnemyType.Ranged);
-            Debug.Log("projectile Damage = " + damage);
+            GameManager.instance.character.TakeDamage(damage, EnemyType.Projectile);
             DieProjectile();
         }
     }
+    
     void DieProjectile()
     {
         GameObject hitEffect =  GameManager.instance.poolManager.GetMisc(hitEffectPrefab);

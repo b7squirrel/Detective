@@ -35,7 +35,7 @@ public class MessageSystem : MonoBehaviour
         messagePool[count].gameObject.SetActive(true);
         messagePool[count].transform.position = worldPosition;
         messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().text = text;
-        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, .7f, 0, 1); // 노란색
+        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, 1, 1, 1); // 노란색
         messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().sortingOrder = 50;
         if (isCritical)
         {

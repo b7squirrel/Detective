@@ -188,7 +188,7 @@ public class Enemy : EnemyBase
         // enemyProjectile의 damage값을 _damage 값으로 초기화 시키기
         EnemyProjectile proj = projectile.GetComponent<EnemyProjectile>();
         if (proj == null) return;
-        proj.Init(_damage);
+        proj.Init(_damage, Vector3.zero);
     }
     protected override void AttackExplode(int _damage)
     {

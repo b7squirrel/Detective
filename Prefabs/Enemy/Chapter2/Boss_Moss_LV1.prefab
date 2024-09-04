@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 5078457465061612818}
   - {fileID: 4244623480589771218}
+  - {fileID: 8219504281062482352}
   - {fileID: 4755730283230535138}
   m_Father: {fileID: 5492162822942016413}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,7 +49,7 @@ GameObject:
   - component: {fileID: -4006016277820106944}
   - component: {fileID: 2854337660073372146}
   - component: {fileID: 2813042868136878295}
-  - component: {fileID: 6053259173109289213}
+  - component: {fileID: 9174040119741890242}
   m_Layer: 0
   m_Name: Boss_Moss_LV1
   m_TagString: Untagged
@@ -228,7 +229,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6053259173109289213
+--- !u!114 &9174040119741890242
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -237,22 +238,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 2705715447378663266}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1193f99ab13f9e2488e5e3adf3b85656, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e7fc5b74540eca4db664c608ceafa76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
+  <Name>k__BackingField: Moth Queen
   isSubBoss: 0
   isBoss: 1
-  numberOfSubBossDrops: 0
-  numberOfBossDrops: 50
+  numberOfSubBossDrops: 50
+  numberOfBossDrops: 0
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
-  finishedSpawn: 0
+  finishedSpawn: 1
   dieEffectPrefeab: {fileID: 0}
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
-  hitEffectPoint: {fileID: 4755730283230535138}
+  hitEffectPoint: {fileID: 8219504281062482352}
   whiteFlashDuration: 0.08
   knockBackSpeed: 12
   knockBackDelay: 0
@@ -266,7 +267,7 @@ MonoBehaviour:
   timeToChangeState: 4
   col: {fileID: 0}
   deadBody: {fileID: 0}
-  numberOfStates: 2
+  numberOfStates: 1
   <moveSpeedInAir>k__BackingField: 0
   <IsInAir>k__BackingField: 0
   projectiles: []
@@ -274,7 +275,7 @@ MonoBehaviour:
   numberOfProjectile: 0
   maxProjectile: 0
   timeToAttack: 0
-  ShootPoint: {fileID: 0}
+  ShootPoint: {fileID: 5078457465061612818}
   dustPoint: {fileID: 0}
   dustEffect: {fileID: 0}
   teleportEffectPrefab: {fileID: 0}
@@ -293,6 +294,9 @@ MonoBehaviour:
   jumpupSFX: {fileID: 0}
   fallDownSFX: {fileID: 0}
   dieSFX: {fileID: 0}
+  powderPrefabs: {fileID: 7908969164944023627, guid: 04e9c1a23d02c7d4f8f13b98d4d3b47d, type: 3}
+  projectileNums: 20
+  powderDamage: 1000
 --- !u!1 &3245813727125651972
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,6 +390,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2311901689898295604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8253467458678507116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8219504281062482352}
+  m_Layer: 0
+  m_Name: Hit Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8219504281062482352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8253467458678507116}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2311901689898295604}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8797986942583688163
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +448,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5492162822942016413}
