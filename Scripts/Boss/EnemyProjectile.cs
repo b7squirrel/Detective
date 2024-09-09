@@ -28,7 +28,6 @@ public class EnemyProjectile : MonoBehaviour
 
         damage = _damage;
         initDone = true;
-        Debug.Log("Damage = " + damage + "dir = " +  dir);
 
         hitRange = GetComponentInChildren<SpriteRenderer>().transform.localScale.x;
 

@@ -3,11 +3,13 @@ using UnityEngine;
 
 public class BossMoss : BossBase
 {
+    #region Variables
     [Header("Boss Moth")]
     [SerializeField] GameObject powderPrefabs;
     [SerializeField] int projectileNums;
     [SerializeField] int powderDamage;
-
+    #endregion
+    #region Shoot
     public override void ShootMultiProjectiles()
     {
         StartCoroutine(ShootCo());
@@ -41,4 +43,5 @@ public class BossMoss : BossBase
 
         return randomDirection;
     }
+    #endregion
 }

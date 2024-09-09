@@ -292,7 +292,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
         Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
-        Debug.Log("Movement");
         rb.velocity = Vector2.zero;
     }
 
@@ -318,8 +317,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (GameManager.instance.player == null)
             return;
 
-        //if (enemyType != EnemyType.Melee && 
-        //            enemyType != EnemyType.Explode) return; // 근접 공격, 폭발 적들만 플레이어와 충돌했을 때 공격한다.
         if (collision.gameObject == Target.gameObject)
         {
             if(enemyType == EnemyType.Ranged || enemyType == EnemyType.Melee)
@@ -356,6 +353,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
             return;
+
+        if (Time.frameCount % 3 != 0) return; // 3프레임에 한 번씩만 공격
 
         anim.SetBool("Attack", true);
 
