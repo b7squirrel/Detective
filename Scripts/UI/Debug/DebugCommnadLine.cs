@@ -29,6 +29,15 @@ public class DebugCommnadLine : MonoBehaviour
             case "levelup":
                 LevelUp();
                 break;
+            case "win":
+                Debug.Log("디버그 커멘드 라인에서 호출");
+
+                FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
+                PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
+                // 스테이지가 클리어 된 것을 기록
+                playerData.SetCurrentStageCleared();
+                playerData.SaveResourcesBeforeQuitting();
+                break;
             default:
                 if (outputText != null)
                     outputText.text += "\n" + "Unknown command: " + input;

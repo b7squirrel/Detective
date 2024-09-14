@@ -199,6 +199,8 @@ public class Character : MonoBehaviour
 
     void Die()
     {
+        Debug.Log("캐릭터에서 호출");
+
         hpBar.gameObject.SetActive(false);
         OnDie?.Invoke();
 

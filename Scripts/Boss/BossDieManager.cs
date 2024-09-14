@@ -30,6 +30,8 @@ public class BossDieManager : MonoBehaviour
     }
     IEnumerator DieEventCo(float desiredTimeScale, float waitingTime)
     {
+        Debug.Log("보스 다이 매니져에서 호출");
+
         MusicManager.instance.Stop();
 
         // 스테이지와 동전 저장

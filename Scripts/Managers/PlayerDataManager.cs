@@ -142,13 +142,15 @@ public class PlayerDataManager : MonoBehaviour
         StageInfo stageinfo = GetComponent<StageInfo>();
         int currentStage = GetCurrentStageNumber();
 
-        // 스테이지 저장
+        // 스테이지 저장. 최종 스테이지가 아니라면 스테이지 수를 올리기
         if (stageinfo.IsFinalStage(currentStage) == false)
         {
             if(isStageCleared)
             {
+                Debug.Log("현재 스테이지 = " + currentStage);
                 currentStage++;
                 SetCurrentStageNumber(currentStage);
+                Debug.Log("다음 스테이지 = " + currentStage);
                 isStageCleared = false;
             }
         }
