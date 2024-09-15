@@ -5,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class StageTime : MonoBehaviour
 {
-    [SerializeField] float stageDuration;
+    [SerializeField] float wallDuration; // 벽이 마지막 지점까지 가는데 걸리는 시간
     float elaspedTime;
     TimerUI timerUI;
 
@@ -19,7 +19,7 @@ public class StageTime : MonoBehaviour
     }
     void Init()
     {
-        FindObjectOfType<WallManager>().SetStageDuration(stageDuration);
+        FindObjectOfType<WallManager>().SetStageDuration(wallDuration);
     }
 
     void Update()

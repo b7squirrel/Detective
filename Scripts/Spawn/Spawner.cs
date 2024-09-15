@@ -134,6 +134,9 @@ public class Spawner : MonoBehaviour
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemyBase.InitEnemy(enemyToSpawn);
         enemyBase.IsBoss = true;
+
+        // 줄어드는 벽 활성화
+
     }
 
     public void SpawnBoss(EnemyData enemyToSpawn)

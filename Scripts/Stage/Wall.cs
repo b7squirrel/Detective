@@ -5,13 +5,16 @@ public class Wall : MonoBehaviour
     int wallDamage = 2;
     PlayerEffects playerEffects;
     Character character;
+
+    Vector2 targetPos;
+
     public void Init(int _damage)
     {
         wallDamage = _damage;
     }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
-
         if (collision == null) return;
         if (collision.gameObject.CompareTag("Player"))
         {

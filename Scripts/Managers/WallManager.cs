@@ -12,11 +12,12 @@ public class WallManager : MonoBehaviour
     [SerializeField] Vector2[] startPositions = new Vector2[4];
     [SerializeField] Vector2[] endPositions = new Vector2[4];
 
-    [SerializeField] bool isMovingWall;
+    [SerializeField] bool isMovingFromStart;
     float duration;
     float elapsedTime;
     bool isGameOver;
     
+    // StageTime의 Start에서 호출
     public void SetStageDuration(float _duration)
     {
         for (int i = 0; i < starts.Length; i++)
@@ -30,12 +31,19 @@ public class WallManager : MonoBehaviour
             walls[i].position = starts[i].position;
         }
 
-        if (isMovingWall)
+        duration = _duration;
+
+        if (isMovingFromStart)
         {
-            duration = _duration;
             StartCoroutine(MoveWalls());
         }
     }
+    
+    public void ActivateMovingWalls()
+    {
+        StartCoroutine(MoveWalls());
+    }
+
     IEnumerator MoveWalls()
     {
         while (isGameOver == false)

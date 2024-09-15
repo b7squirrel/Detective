@@ -11,6 +11,8 @@ public class StageEvenetManager : MonoBehaviour
     ReadStageData readStageData;
     Spawner spawner;
 
+    WallManager wallManager;
+
     float duration;
     bool isWaiting;
     bool onStopWatchEffect;
@@ -37,6 +39,8 @@ public class StageEvenetManager : MonoBehaviour
         winStageCoroutine = null;
 
         GameManager.instance.musicCreditManager.Init();
+
+        wallManager = FindObjectOfType<WallManager>();
     }
 
     void Update()
@@ -86,6 +90,7 @@ public class StageEvenetManager : MonoBehaviour
 
             case StageEventType.SpawnEnemyBoss:
                 spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
+                wallManager.ActivateMovingWalls();
                 break;
 
             default:
