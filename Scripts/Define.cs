@@ -251,6 +251,10 @@ public class Equation
 }
 #endregion
 
+#region 피드백 관련
+public enum EnemyColor { yellow, green, red, blue, purple, pink}
+#endregion
+
 #region 확장 함수
 // enum description 사용
 public static class EnumExtensions

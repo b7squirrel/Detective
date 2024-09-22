@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public PauseManager pauseManager;
     public FieldItemSpawner fieldItemSpawner;
     public PlayerRegion playerRegion;
+    public FeedbackManager feedbackManager;
 
     public GameObject joystick;
 
@@ -58,6 +59,8 @@ public class GameManager : MonoBehaviour
         playerRegion = GetComponent<PlayerRegion>();
 
         musicCreditManager = GetComponent<MusicCreditManager>();
+
+        feedbackManager = GetComponent<FeedbackManager>();
 
         confimationButton.SetActive(false);
     }

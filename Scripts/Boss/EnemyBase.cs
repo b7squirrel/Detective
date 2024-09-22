@@ -64,6 +64,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [HideInInspector] public Vector2 targetDir;
     protected float stunnedSpeed = 14f;
     Coroutine whiteFlashCoroutine;
+    Color enemyColor; // die effect의 색깔을 정하기 위해서.
 
     [Header("Sounds")]
     [SerializeField] protected AudioClip hit;
@@ -167,6 +168,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 초기화
     public virtual void InitEnemy(EnemyData _enemyToSpawn)
     {
+        enemyColor = _enemyToSpawn.enemyColor;
         // 적과 보스 공통으로 사용하기 위해서 virtual로 했음
         // 각자 덮어쓰기 하면 됨
     }
@@ -415,6 +417,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         Stats.hp -= damage;
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
+
         if (effect != null) effect.transform.position = hitEffectPoint.position;
         SoundManager.instance.Play(hit);
 
@@ -447,13 +450,30 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         if (dieEffectPrefeab != null)
         {
+            Debug.Log("Die Effect Prefab is Not Null");
+
             GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
             if (dieEffect != null) dieEffect.transform.position = transform.position;
         }
+        else
+        {
+            Debug.Log("Die Effect Prefab is Null");
+        }
+
         if (dieExplosionPrefeab != null)
         {
-            GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieExplosionPrefeab);
-            if (explosionEffect != null) explosionEffect.transform.position = transform.position;
+            Debug.Log("Die Explosion");
+            //GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieExplosionPrefeab);
+            GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
+            if (explosionEffect != null)
+            {
+                explosionEffect.transform.position = transform.position;
+                SpriteRenderer[] sr = explosionEffect.GetComponentsInChildren<SpriteRenderer>();
+                for (int i = 0; i < sr.Length; i++)
+                {
+                    sr[i].color = enemyColor;
+                }
+            }
         }
 
         GetComponent<DropOnDestroy>().CheckDrop();

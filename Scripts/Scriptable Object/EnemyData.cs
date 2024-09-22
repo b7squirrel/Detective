@@ -12,6 +12,9 @@ public class EnemyData : ScriptableObject
     [Header("Prefabs")]
     public GameObject projectilePrefab;
     public GameObject dieEffectPrefab;
+    //public EnemyColor enemyColor;
+    public Color enemyColor;
+    public Color enemyColorHighlight;
 
     [Header("Ranged")]
     public float distanceToPlayer; // 플레이어에게 공격을 시작할 거리

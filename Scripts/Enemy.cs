@@ -114,6 +114,7 @@ public class Enemy : EnemyBase
     #region 초기화
     public override void InitEnemy(EnemyData _data)
     {
+        base.InitEnemy(_data);
         anim.runtimeAnimatorController = _data.animController;
         this.Stats = new EnemyStats(_data.stats);
         ExperienceReward = this.Stats.experience_reward;
