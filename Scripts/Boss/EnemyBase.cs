@@ -448,33 +448,26 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Die()
     {
-        if (dieEffectPrefeab != null)
-        {
-            Debug.Log("Die Effect Prefab is Not Null");
-
-            GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
-            if (dieEffect != null) dieEffect.transform.position = transform.position;
-        }
-        else
+        if (dieEffectPrefeab == null)
         {
             Debug.Log("Die Effect Prefab is Null");
         }
-
-        if (dieExplosionPrefeab != null)
+        else
         {
-            Debug.Log("Die Explosion");
-            //GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieExplosionPrefeab);
-            GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
-            if (explosionEffect != null)
-            {
-                explosionEffect.transform.position = transform.position;
-                SpriteRenderer[] sr = explosionEffect.GetComponentsInChildren<SpriteRenderer>();
-                for (int i = 0; i < sr.Length; i++)
-                {
-                    sr[i].color = enemyColor;
-                }
-            }
+            GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
+            if (dieEffect != null) dieEffect.transform.position = transform.position;
         }
+
+        // 데칼
+        GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
+        Debug.Log("Explosion Effect Name = " + explosionEffect.name);
+        explosionEffect.transform.position = transform.position;
+        SpriteRenderer[] effectSr = explosionEffect.GetComponentsInChildren<SpriteRenderer>();
+        for (int i = 0; i < effectSr.Length; i++)
+        {
+            effectSr[i].color = enemyColor;
+        }
+
 
         GetComponent<DropOnDestroy>().CheckDrop();
 
