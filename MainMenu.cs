@@ -44,7 +44,6 @@ public class MainMenu : MonoBehaviour
     // 보통은 버튼의 이벤트로 호출
     public void GoToMainMenu()
     {
-        Debug.Log("메인 메뉴에서 호출");
         panelPause.SetActive(false);
         BG.SetActive(false);
 

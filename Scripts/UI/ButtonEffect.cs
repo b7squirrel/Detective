@@ -42,7 +42,6 @@ public class ButtonEffect : MonoBehaviour
     {
         // ¥≠∑∂¿ª ∂ß ¿Ã∆Â∆Æ
         if(buttonEffect == null) return;
-
         buttonEffect.GetComponent<Animator>().SetTrigger("On");
     }
     public void PlayButtonSound()
