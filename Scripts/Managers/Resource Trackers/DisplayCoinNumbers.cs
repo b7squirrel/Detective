@@ -18,6 +18,16 @@ public class DisplayCoinNumbers : MonoBehaviour
     void UpdateCoinNumberDisp()
     {
         coinNumbers.text = coinManager.GetCoinNumPickedup().ToString();
+        if (IsPopAnimPlaying()) 
+            return;
         coinIconAnim.SetTrigger("Pop");
+    }
+    bool IsPopAnimPlaying()
+    {
+        if (coinIconAnim.GetCurrentAnimatorStateInfo(0).IsName("Pop"))
+        {
+            return true;
+        }
+        return false;
     }
 }

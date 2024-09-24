@@ -43,19 +43,16 @@ public class MoveToUI : MonoBehaviour
         {
             StartCoroutine(Trigger());
         }
+        if (isMovementTriggered == false)
+            return;
 
-        if (isMovementTriggered)
-        {
-            SetTargetPos();
-            transform.position = Vector2.MoveTowards(transform.position, targetWorldPos, moveSpeed * Time.deltaTime + (0.5f * 4f * Time.deltaTime * Time.deltaTime));
-            if (Vector2.Distance((Vector2)transform.position, targetWorldPos) < .2f)
-            {
-                coinManager.updateCurrentCoinNumbers(1);
-                //FindObjectOfType<Coins>().Add(1);
-                SoundManager.instance.Play(hitSound);
-                CoinUI.instance.PopCoin();
-                gameObject.SetActive(false);
-            }
-        }
+        SetTargetPos();
+        transform.position = Vector2.MoveTowards(transform.position, targetWorldPos, moveSpeed * Time.deltaTime + (0.5f * 4f * Time.deltaTime * Time.deltaTime));
+        if (Vector2.Distance((Vector2)transform.position, targetWorldPos) > .2f)
+            return;
+
+        coinManager.updateCurrentCoinNumbers(1);
+        SoundManager.instance.Play(hitSound);
+        gameObject.SetActive(false);
     }
 }

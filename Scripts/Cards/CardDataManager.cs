@@ -26,7 +26,6 @@ public class CardData
         else
         {
             ID = -1;
-            Debug.Log("아이디가 부여되지 않았습니다.");
         }
         Type = _Type;
         Grade = int.Parse(_Grade);

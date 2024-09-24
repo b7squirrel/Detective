@@ -16,7 +16,6 @@ public class ShadowHeight : MonoBehaviour
 
     SpriteRenderer sprRndBody;
     SpriteRenderer sprRndshadow;
-    Rigidbody2D rb;
 
     float gravity = -100f;
     Vector2 groundVelocity;
@@ -57,7 +56,6 @@ public class ShadowHeight : MonoBehaviour
                 sprRndshadow.color = new Color(0, 0, 0, .25f);
                 sprRndshadow.sortingLayerName = "ShadowOver";
             }
-
 
             isInitialized = true;
         }

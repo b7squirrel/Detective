@@ -33,8 +33,6 @@ public class LoadingSceneManager : MonoBehaviour
 
         while (!op1.isDone)
         {
-            Debug.Log("OP1 Progress = " + op1.progress);
-
             // 90%까지는 씬로딩에 따라 로딩바 증가
             if (op1.progress < 0.9f)
             {

@@ -13,7 +13,6 @@ public class CharacterGameOver : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("HERE!");
         SoundManager.instance.Play(gameOverSound);
         MusicManager.instance.Stop();
         StartCoroutine(GameOverCo());

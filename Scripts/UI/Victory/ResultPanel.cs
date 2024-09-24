@@ -10,7 +10,6 @@ public class ResultPanel : MonoBehaviour
 
     public void InitAwards(int _killNum, int _coinNum, int _stageNum)
     {
-        Debug.Log("Here!");
         killText.text = _killNum.ToString();
         coinText.text = _coinNum.ToString();
         stageNumber.text = _stageNum.ToString();

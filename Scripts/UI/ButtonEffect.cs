@@ -47,7 +47,6 @@ public class ButtonEffect : MonoBehaviour
     }
     public void PlayButtonSound()
     {
-        Debug.Log("Button Flag = " + ShoutldBeInitialSound);
         if (ShoutldBeInitialSound)
         {
             SoundManager.instance.Play(buttonSound);
