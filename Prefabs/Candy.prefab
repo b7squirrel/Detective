@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 2715346215656313131}
   - component: {fileID: 1406523275245128429}
   - component: {fileID: 3822949884837445922}
+  - component: {fileID: 7417351492102949385}
   m_Layer: 13
   m_Name: Candy
   m_TagString: Untagged
@@ -171,9 +172,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882983c82ab37e54a80827961b02362b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bouncingNumbers: 4
+  bouncingNumbers: 0
   noHeightShadow: 0
-  onLandingMask: Player
+  onLandingMask: FloatingOver
   onGroundHitEvent:
     m_PersistentCalls:
       m_Calls:
@@ -198,18 +199,6 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 2.7
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 405180058971750508}
-        m_TargetAssemblyTypeName: Collectable, Assembly-CSharp
-        m_MethodName: ActivateColliders
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -254,6 +243,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initSound: {fileID: 8300000, guid: aa2e0c803358ad34abf8fe2cbafca302, type: 3}
   landingSound: {fileID: 8300000, guid: f4ff3e5cc33ffea4eabae6516843734f, type: 3}
+--- !u!114 &7417351492102949385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5780315627234978803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2a275a2a8cc74429742650d40790d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 40
+  hitSound: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}
+  waitingTimeBeforeMoving: 0
 --- !u!1 &8663615696361274103
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,9 +329,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1556187351
-  m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingLayerID: -231762679
+  m_SortingLayer: 10
+  m_SortingOrder: 100
   m_Sprite: {fileID: 21300000, guid: 520f1b9aa4cb6d24aa8de0320688e44b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

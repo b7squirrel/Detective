@@ -3,24 +3,23 @@ using UnityEngine;
 
 public class MoveToUI : MonoBehaviour
 {
-    bool TriggerMoving;
+    [SerializeField] float moveSpeed;
+    [SerializeField] AudioClip hitSound;
+    [SerializeField] float waitingTimeBeforeMoving;
+
+    bool isMovementTriggered; // 트리거 되어서 이동 중인지를 알려주는 변수
     ShadowHeight shadowHeight;
     Vector2 targetScrnPos;
     Vector2 targetWorldPos;
-    Rigidbody2D rb;
-    [SerializeField] float moveSpeed;
-    [SerializeField] AudioClip hitSound;
 
     CoinManager coinManager;
 
     void OnEnable()
     {
-        TriggerMoving = false;
+        isMovementTriggered = false;
         shadowHeight = GetComponent<ShadowHeight>();
         SetTargetPos();
 
-        rb = GetComponent<Rigidbody2D>();
-        Vector2 dir = (targetWorldPos - (Vector2)transform.position).normalized;
         moveSpeed += Random.Range(-8f, 8f);
 
         if (coinManager == null)
@@ -28,8 +27,8 @@ public class MoveToUI : MonoBehaviour
     }
     IEnumerator Trigger()
     {
-        yield return new WaitForSeconds(1.5f);
-        TriggerMoving = true;
+        yield return new WaitForSeconds(waitingTimeBeforeMoving);
+        isMovementTriggered = true;
     }
 
     void SetTargetPos()
@@ -45,7 +44,7 @@ public class MoveToUI : MonoBehaviour
             StartCoroutine(Trigger());
         }
 
-        if (TriggerMoving)
+        if (isMovementTriggered)
         {
             SetTargetPos();
             transform.position = Vector2.MoveTowards(transform.position, targetWorldPos, moveSpeed * Time.deltaTime + (0.5f * 4f * Time.deltaTime * Time.deltaTime));
@@ -53,9 +52,9 @@ public class MoveToUI : MonoBehaviour
             {
                 coinManager.updateCurrentCoinNumbers(1);
                 //FindObjectOfType<Coins>().Add(1);
-                //SoundManager.instance.Play(hitSound);
-                //CoinUI.instance.PopCoinIcon();
-                Destroy(gameObject);
+                SoundManager.instance.Play(hitSound);
+                CoinUI.instance.PopCoin();
+                gameObject.SetActive(false);
             }
         }
     }
