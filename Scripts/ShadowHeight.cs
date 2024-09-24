@@ -25,6 +25,7 @@ public class ShadowHeight : MonoBehaviour
     [SerializeField] bool isGrounded;
     bool isInitialized;
     Animator anim;
+    CircleCollider2D col;
 
     void Update()
     {
@@ -56,7 +57,6 @@ public class ShadowHeight : MonoBehaviour
                 sprRndshadow.color = new Color(0, 0, 0, .25f);
                 sprRndshadow.sortingLayerName = "ShadowOver";
             }
-
             isInitialized = true;
         }
         IsDone = false;
@@ -67,6 +67,8 @@ public class ShadowHeight : MonoBehaviour
         lastInitaialVerticalVelocity = verticalVelocity;
 
         anim = GetComponent<Animator>();
+        col = GetComponent<CircleCollider2D>();
+        col.enabled = true;
     }
 
     void UpdatePosition()
@@ -174,6 +176,11 @@ public class ShadowHeight : MonoBehaviour
         {
             sprRndshadow.color = new Color(0, 0, 0, 0f);
         }
+    }
+
+    public void DeactivateCollider()
+    {
+        col.enabled = false;
     }
 
     public void SetToKinematic()
