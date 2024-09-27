@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2462116282299986100}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4693117447808085588
 MonoBehaviour:
@@ -53,7 +53,7 @@ MonoBehaviour:
     projectileSpeed: 0
     knockBackChance: 0
     currentLevel: 0
-  knockbackSpeedFactor: 0
+  knockbackSpeedFactor: 1
   anim: {fileID: 0}
   animExtra: {fileID: 0}
   ShootPoint: {fileID: 0}
@@ -68,7 +68,6 @@ MonoBehaviour:
     m_Bits: 16576
   bomb: {fileID: 5125717824780618538, guid: 4d3cfff7ecb976d408ff076c5c9ac1cf, type: 3}
   verticalVelocity: 50
-  duration: 0.4
   isClean: 0
   shootSFX: {fileID: 8300000, guid: 6b2a97005f21800428c4a767cc75a423, type: 3}
   dot: {fileID: 3346168019641469629, guid: a18d6881fa492ac44b1f7c71440de18e, type: 3}

@@ -6,7 +6,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region Variables
     // 체력바에 표시할 이름이 필요한 적들만 사용. 일반 적들은 배열 순서로 스폰.
     // enemy, enemyBoss 에서 InitEnemy로 이름을 enemyData에서 받아옴
-    [field: SerializeField] public string Name { get;  set; } 
+    [field: SerializeField] public string Name { get; set; }
     [HideInInspector] public bool IsKnockBack { get; set; }
     [HideInInspector] public bool IsStunned { get; set; }
     [HideInInspector] public Rigidbody2D Target { get; set; }
@@ -18,7 +18,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected bool isSubBoss;
     [SerializeField] protected bool isBoss;
     [SerializeField] int numberOfSubBossDrops;
-    [SerializeField] int numberOfBossDrops
+    [SerializeField]
+    int numberOfBossDrops
         ;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir { get; set; } // spawn 할 떄 spawn 포인트 값과 player위치로 결정
@@ -76,6 +77,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] Transform HpBarPos;
     [SerializeField] protected StatusBar hpBar;
     protected int maxHealth;
+
+    [Header("Shock Wave")]
+    [SerializeField] GameObject shockwave;
 
     EnemyFinder enemyFinder;
     #endregion
@@ -321,7 +325,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (collision.gameObject == Target.gameObject)
         {
-            if(enemyType == EnemyType.Ranged || enemyType == EnemyType.Melee)
+            if (enemyType == EnemyType.Ranged || enemyType == EnemyType.Melee)
             {
                 Attack(EnemyType.Melee);
             }
@@ -419,7 +423,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
 
         if (effect != null) effect.transform.position = hitEffectPoint.position;
-        SoundManager.instance.Play(hit);
 
         enemyKnockBackSpeedFactor = knockBackSpeedFactor;
 
@@ -433,10 +436,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (Stats.hp < 1)
         {
             //Player.instance.transform.GetComponent<Kills>().Add(1);
+            SoundManager.instance.Play(die);
+
             Die();
         }
         else
         {
+            SoundManager.instance.Play(hit);
+
             if (hpBar != null)
             {
                 hpBar.SetStatus(Stats.hp, maxHealth);
@@ -448,11 +455,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Die()
     {
-        if (dieEffectPrefeab == null)
-        {
-            Debug.Log("Die Effect Prefab is Null");
-        }
-        else
+        if (dieEffectPrefeab != null)
         {
             GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
             if (dieEffect != null) dieEffect.transform.position = transform.position;
@@ -460,14 +463,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         // 데칼
         GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
-        Debug.Log("Explosion Effect Name = " + explosionEffect.name);
         explosionEffect.transform.position = transform.position;
         SpriteRenderer[] effectSr = explosionEffect.GetComponentsInChildren<SpriteRenderer>();
         for (int i = 0; i < effectSr.Length; i++)
         {
             effectSr[i].color = enemyColor;
         }
-
 
         GetComponent<DropOnDestroy>().CheckDrop();
 
@@ -487,9 +488,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
         finishedSpawn = false;
         DestroyHPbar();
 
-        if(IsBoss)
+        if (IsBoss)
         {
             FindObjectOfType<BossDieManager>().DieEvent(.1f, 2f);
+        }
+
+        if (shockwave != null)
+        {
+            GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
+            wave.GetComponent<Shockwave>().Init(0, 10f, LayerMask.GetMask("Enemy"), transform.position);
         }
 
         gameObject.SetActive(false);

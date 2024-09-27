@@ -58,7 +58,8 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
     // 유니티 이벤트에 붙임
-    public void GoToMainMenuAfter(float timeToWait)
+    // 씬이 로드되면서 버튼 이펙트가 재생이 잘 안될 경우, 이펙트 재생이 끝난 후 씬을 로드하도록
+    public void GoToMainMenuAfter(float timeToWait) 
     {
         StartCoroutine(GoToMainMenu(timeToWait));
     }

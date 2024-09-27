@@ -23,6 +23,7 @@ public class EnemyStats
 
 public class Enemy : EnemyBase
 {
+    #region Variables
     public int ExperienceReward { get; private set; }
     bool isLive;
     Vector2 currentPosition; // 현재 위치를 기록해서 박으로 튀어나갔을 때, 위치를 되돌리기 위해서
@@ -32,9 +33,10 @@ public class Enemy : EnemyBase
     float nextAttackTime;
     float distanceToPlayer;
 
+    [Header("Flying Enemies")]
+    [SerializeField] float flyingSpeed;
     public bool IsFlying { get; set; }
     public Vector2 LandingTarget { get; set; }
-    [SerializeField] float flyingSpeed;
     float flyingTimeThreshold = 4f;
     float flyingTimeCounter;
 
@@ -42,6 +44,7 @@ public class Enemy : EnemyBase
 
     WallManager wallManager;
     float nextOutOfRangeCheckingTime;
+    #endregion
 
     #region 유니티 콜백 함수
     protected override void OnEnable()

@@ -5,7 +5,6 @@ public class PoolManager : MonoBehaviour
 {
     [Header("Enemies")]
     [SerializeField] GameObject[] enemies;
-    [SerializeField] List<GameObject> bossPrefabs;
     [SerializeField] List<GameObject>[] enemyPools;
 
     StageAssetManager stageAssetManager;
@@ -80,15 +79,6 @@ public class PoolManager : MonoBehaviour
 
         //enemyFinder.AddEnemyToList(select.transform);
         return select;
-    }
-
-    public GameObject GetBoss(EnemyData enemyData)
-    {
-        GameObject boss = null;
-        boss = bossPrefabs.Find(x => x.GetComponent<EnemyBase>().Name == enemyData.Name);
-        //enemyFinder.AddEnemyToList(boss.transform);
-
-        return boss;
     }
     #endregion
 

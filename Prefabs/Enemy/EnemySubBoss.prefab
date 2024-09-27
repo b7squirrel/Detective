@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &970598435026926560
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4514316714589044887}
+  m_Layer: 6
+  m_Name: Hp Bar Position
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4514316714589044887
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970598435026926560}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.55, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8170831695603223113}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1280259842678509913
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +333,7 @@ Transform:
   - {fileID: 7982681945284083134}
   - {fileID: 2178737704433128658}
   - {fileID: 8341499026370567297}
+  - {fileID: 4514316714589044887}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8170831695603223133
@@ -314,7 +346,7 @@ Animator:
   m_GameObject: {fileID: 8170831695603223110}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: b2f1e9d0a8138b744900a2e5ad277722, type: 2}
+  m_Controller: {fileID: 22100000, guid: b78797129470cd249a268972d329035e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -417,11 +449,12 @@ MonoBehaviour:
   knockBackDelay: 0.1
   whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
-  hit: {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
-  die: {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
+  hit: {fileID: 8300000, guid: aa2e0c803358ad34abf8fe2cbafca302, type: 3}
+  die: {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
   HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
-  HpBarPos: {fileID: 8170831695603223113}
+  HpBarPos: {fileID: 4514316714589044887}
   hpBar: {fileID: 0}
+  shockwave: {fileID: 3551865169008432650, guid: e833d82976d43d04298bca6c4809765b, type: 3}
   flyingSpeed: 0
   playerLayer:
     serializedVersion: 2
