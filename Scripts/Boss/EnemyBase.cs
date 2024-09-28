@@ -413,8 +413,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (isOffScreen)
             return;
 
-        AnimatorStateInfo stageInfo = anim.GetCurrentAnimatorStateInfo(0);
-        if (!stageInfo.IsName("SlimeLV1Hurt"))
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        // Do not replay "Hurt" animation if it's already playing
+        if (!stateInfo.IsName("SlimeLV1Hurt"))
         {
             anim.SetTrigger("Hit");
         }
@@ -497,6 +499,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
             wave.GetComponent<Shockwave>().Init(0, 10f, LayerMask.GetMask("Enemy"), transform.position);
+
+            BossDieManager.instance.SlowMo(.5f, .5f);
         }
 
         gameObject.SetActive(false);

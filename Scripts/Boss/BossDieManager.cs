@@ -70,6 +70,17 @@ public class BossDieManager : MonoBehaviour
     //    GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
     //}
     
+    public void SlowMo(float _desiredTimeScale, float _duration)
+    {
+        StartCoroutine(SlowMoCo(_desiredTimeScale, _duration));
+    }
+    IEnumerator SlowMoCo(float _desiredTimeScale, float _duration)
+    {
+        Time.timeScale = _desiredTimeScale;
+        yield return new WaitForSecondsRealtime(_duration);
+        Time.timeScale = 1f;
+    }
+
     void RemoveAllEnemies()
     {
         LayerMask enemyLayer = LayerMask.NameToLayer("Enmey"); // 이상하게 GetMask가 안됨
