@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +10,8 @@ public enum StageEventType
     SpawnEnemyBoss,
     SpawnEggBox,
     SpawnObject,
-    WinStage
+    WinStage,
+    Incoming
 }
 
 [Serializable]

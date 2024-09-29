@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +23,8 @@ public class ReadStageData : MonoBehaviour
             return StageEventType.SpawnEnemyBoss;
         if (stageEventType == "Object")
             return StageEventType.SpawnObject;
+        if (stageEventType == "Incoming")
+            return StageEventType.Incoming;
 
         return StageEventType.WinStage;
     }

@@ -93,6 +93,9 @@ public class StageEvenetManager : MonoBehaviour
                 wallManager.ActivateMovingWalls();
                 break;
 
+            case StageEventType.Incoming:
+                GameManager.instance.GetComponent<IncomingWarningPanel>().Init();
+                break;
             default:
                 break;
         }

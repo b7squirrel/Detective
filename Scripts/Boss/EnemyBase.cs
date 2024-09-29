@@ -409,41 +409,37 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public virtual void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
     {
+        // 화면 밖에 있으면 데미지 입지 않기
         CheckOffScreen();
         if (isOffScreen)
             return;
 
+        // Hurt 애니메이션이 재생중이면 또 재생하지 않기
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-
-        // Do not replay "Hurt" animation if it's already playing
         if (!stateInfo.IsName("SlimeLV1Hurt"))
-        {
             anim.SetTrigger("Hit");
-        }
 
-        Stats.hp -= damage;
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
-
         if (effect != null) effect.transform.position = hitEffectPoint.position;
 
+        // 넉백
         enemyKnockBackSpeedFactor = knockBackSpeedFactor;
 
         float _knockBackDelay = 0f;
         float chance = UnityEngine.Random.Range(0, 100);
         if (chance < knockBackChance && knockBackChance != 0)
-        {
             _knockBackDelay = this.knockBackDelay;
-        }
 
+        // 체력이 0 이하이면 죽음
+        Stats.hp -= damage;
         if (Stats.hp < 1)
         {
-            //Player.instance.transform.GetComponent<Kills>().Add(1);
             SoundManager.instance.Play(die);
-
             Die();
         }
         else
         {
+
             SoundManager.instance.Play(hit);
 
             if (hpBar != null)
@@ -457,20 +453,22 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Die()
     {
-        if (dieEffectPrefeab != null)
-        {
-            GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
-            if (dieEffect != null) dieEffect.transform.position = transform.position;
-        }
+        //if (dieEffectPrefeab != null)
+        //{
+        //    GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
+        //    if (dieEffect != null) dieEffect.transform.position = transform.position;
+        //}
 
         // 데칼
         GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
-        explosionEffect.transform.position = transform.position;
-        SpriteRenderer[] effectSr = explosionEffect.GetComponentsInChildren<SpriteRenderer>();
-        for (int i = 0; i < effectSr.Length; i++)
-        {
-            effectSr[i].color = enemyColor;
-        }
+        if (explosionEffect != null) explosionEffect.transform.position = transform.position;
+
+        //// 터지는 이펙트의 색을 적의 색과 동일하게 맞추기
+        //SpriteRenderer[] effectSr = explosionEffect.GetComponentsInChildren<SpriteRenderer>();
+        //for (int i = 0; i < effectSr.Length; i++)
+        //{
+        //    effectSr[i].color = enemyColor;
+        //}
 
         GetComponent<DropOnDestroy>().CheckDrop();
 
