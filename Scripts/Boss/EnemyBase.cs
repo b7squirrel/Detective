@@ -439,7 +439,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
         else
         {
-
             SoundManager.instance.Play(hit);
 
             if (hpBar != null)
