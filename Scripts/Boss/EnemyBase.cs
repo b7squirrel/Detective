@@ -79,7 +79,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected int maxHealth;
 
     [Header("Shock Wave")]
-    [SerializeField] GameObject shockwave;
+    [SerializeField] protected GameObject shockwave;
 
     EnemyFinder enemyFinder;
     #endregion

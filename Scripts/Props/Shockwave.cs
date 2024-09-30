@@ -40,18 +40,16 @@ public class Shockwave : MonoBehaviour
         {
             for (int i = 0; i < hitsA.Length; i++)
             {
-                hitsA[i].GetComponent<EnemyBase>().TakeDamage(damage, 100f, 4f, transform.position, hitEffect);
-                Debug.Log("PUSH A");
-            }
-        }
-        yield return null;
-        Collider2D[] hitsB = Physics2D.OverlapCircleAll(transform.position, range, target);
-        if (hitsB.Length > 0)
-        {
-            for (int i = 0; i < hitsB.Length; i++)
-            {
-                hitsB[i].GetComponent<EnemyBase>().TakeDamage(damage, 100f, 2f, transform.position, hitEffect);
-                Debug.Log("PUSH B");
+                if (target == LayerMask.GetMask("Enemy"))
+                {
+                    EnemyBase enemy = hitsA[i].GetComponent<EnemyBase>();
+                    if (enemy != null) enemy.TakeDamage(damage, 100f, 4f, transform.position, hitEffect);
+                }
+                if (target == LayerMask.GetMask("Player"))
+                {
+                    Character ch = hitsA[i].GetComponent<Character>();
+                    if (ch != null) ch.TakeDamage(damage, EnemyType.Ranged); // Melee는 3프레임에 한 번 데미지를 입게 되므로
+                }
             }
         }
     }

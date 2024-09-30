@@ -196,53 +196,25 @@ public class EnemyBoss : EnemyBase, Idamageable
     #endregion
 
     #region State Functions
-    //public GameObject GenLandingIndicator()
-    //{
-    //    GameObject landingIndicaotr = Instantiate(SpawnTeleportIndicator, transform.position, Quaternion.identity);
-    //    return landingIndicaotr;
-    //}
-    //void OnDrawGizmos()
-    //{
-    //    // Gizmos.color를 통해 원의 색상을 설정합니다.
-    //    Gizmos.color = Color.red;
-    //    // Gizmos.DrawWireSphere를 사용하여 원의 외곽선을 그립니다.
-    //    Gizmos.DrawWireSphere(transform.position, 15f / 2f);
-    //}
     public void LandingImpact()
     {
-        //GameObject effect = Instantiate(landingEffect, transform.position, Quaternion.identity);
         SoundManager.instance.Play(landingSFX);
-        //effect.transform.position = transform.position;
         Vector2 landingEffectPos = (Vector2)transform.position + new Vector2(0, 3f);
-        //Collider2D[] hits = Physics2D.OverlapCircleAll(landingEffectPos, landingImpactSize, landingHit);
-        Collider2D hit = Physics2D.OverlapCircle(landingEffectPos, 15f/2f, landingHit);
-        //GameObject debugGo = Instantiate(dot, landingEffectPos, Quaternion.identity);
-        //debugGo.transform.localScale = 15f * Vector2.one;
+        //Collider2D hit = Physics2D.OverlapCircle(landingEffectPos, 15f/2f, landingHit);
 
-        if (hit != null)
-        {
-            Character character = GameManager.instance.character;
-            GameManager.instance.character.TakeDamage(1200, EnemyType.Ranged); // 플레이어가 무조건 데미지를 입도록 임시로 ranged
-        }
-        //for (int i = 0; i < hits.Length; i++)
+        //if (hit != null)
         //{
-        //    EnemyBase hit = hits[i].GetComponent<EnemyBase>();
-        //    Character character = hits[i].GetComponent<Character>();
-
-        //    if (hit != null && !hit.IsBoss) // 보스 랜딩 공격에 자신까지 포함시키지 않기
-        //    {
-        //        if (hits[i].CompareTag("Enemy"))
-        //        {
-        //            Debug.Log("Enemy on boss landing " + hits[i].name);
-        //            hit.Stunned(transform.position);
-        //        }
-        //        if (hits[i].CompareTag("Player")) 
-        //        {
-        //            Debug.Log("Hit Player with Landing Attack");
-        //            character.TakeDamage(Stats.damage);
-        //        }
-        //    }
+        //    Character character = GameManager.instance.character;
+        //    GameManager.instance.character.TakeDamage(1200, EnemyType.Ranged); // 플레이어가 무조건 데미지를 입도록 임시로 ranged
         //}
+
+        if (shockwave != null)
+        {
+            GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
+            wave.GetComponent<Shockwave>().Init(1200, 10f, LayerMask.GetMask("Player"), landingEffectPos);
+
+            //BossDieManager.instance.SlowMo(.5f, .5f);
+        }
     }
     public void ActivateLandingIndicator(bool _activate)
     {

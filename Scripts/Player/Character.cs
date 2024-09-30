@@ -127,7 +127,7 @@ public class Character : MonoBehaviour
         if (anim == null) anim = GetComponentInChildren<WeaponContainerAnim>().GetComponent<Animator>();
 
         // 투사체가 아닐 때만 3프레임에 한 번씩 데미지를 받기
-        if (Time.frameCount % 3 != 0 && enemyType != EnemyType.Projectile) return;
+        //if (Time.frameCount % 3 != 0 && enemyType != EnemyType.Projectile) return;
 
         anim.SetTrigger("Hurt");
         PlayHurtSound(hurtSound);
@@ -204,7 +204,10 @@ public class Character : MonoBehaviour
 
         // 스테이지와 동전 저장
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
-        playerData.SaveResourcesBeforeQuitting(); 
+        playerData.SaveResourcesBeforeQuitting();
+
+
+        Debug.Log("In Die, Time Scale = " + Time.timeScale);
 
         GetComponent<CharacterGameOver>().GameOver();
     }

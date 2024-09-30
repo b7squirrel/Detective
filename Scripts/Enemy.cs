@@ -173,6 +173,8 @@ public class Enemy : EnemyBase
         base.ApplyMovement();
     }
 
+    
+
     bool IsOutOfRange()
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();

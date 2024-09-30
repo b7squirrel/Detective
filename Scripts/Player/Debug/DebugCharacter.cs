@@ -7,6 +7,9 @@ public class DebugCharacter : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI hit;
     Character character;
 
+    [Header("TIme Scale")]
+    [SerializeField] TMPro.TextMeshProUGUI timeScale;
+
     private void Start()
     {
         if (character == null) character = FindObjectOfType<Character>();
@@ -15,6 +18,7 @@ public class DebugCharacter : MonoBehaviour
     private void Update()
     {
         playerCurrentHP.text = character.GetCurrentHP().ToString();
+        timeScale.text = Time.timeScale.ToString();
     }
     public void HitMessage(int _damage)
     {
