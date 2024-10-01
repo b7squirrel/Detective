@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DebugCharacter : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class DebugCharacter : MonoBehaviour
 
     [Header("TIme Scale")]
     [SerializeField] TMPro.TextMeshProUGUI timeScale;
+
+    [Header("Damage")]
+    [SerializeField] TMPro.TextMeshProUGUI damage;
 
     private void Start()
     {
@@ -23,6 +27,10 @@ public class DebugCharacter : MonoBehaviour
     public void HitMessage(int _damage)
     {
         StartCoroutine(HitMessageCo(_damage));
+    }
+    public void Damage(int _damage)
+    {
+        damage.text = _damage.ToString();
     }
     IEnumerator HitMessageCo(int _damage)
     {

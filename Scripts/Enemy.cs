@@ -44,7 +44,6 @@ public class Enemy : EnemyBase
 
     WallManager wallManager;
     float nextOutOfRangeCheckingTime;
-    Vector2 pastPos;
     #endregion
 
     #region 유니티 콜백 함수
@@ -53,8 +52,6 @@ public class Enemy : EnemyBase
         base.OnEnable();
         isLive = true;
         SetWalking(); // 날으는 상태로 소환되지 않도록
-
-        pastPos = transform.position;
     }
     void FixedUpdate()
     {
@@ -74,32 +71,6 @@ public class Enemy : EnemyBase
             return;
         if (GameManager.instance.player == null)
             return;
-
-        if (isSubBoss || isBoss) // 보스나 서브보스는 매프레임마다 벽 안쪽에 있는지 체크
-        {
-            //if (IsOutOfRange())
-            //{
-            //    Debug.Log(gameObject.name + " is out of range");
-            //    transform.position = currentPosition;
-            //    return;
-            //}
-            //currentPosition = transform.position;
-            IsInsideWall();
-        }
-        else // 일반 적이라면 10초마다 한번씩 체크해서 벽 바깥이면 비활성화
-        {
-            if (Time.time > nextOutOfRangeCheckingTime)
-            {
-                nextOutOfRangeCheckingTime += 10f;
-                return;
-            }
-
-            if (IsOutOfRange())
-            {
-                Debug.Log("Out of Area");
-                Die();
-            }
-        }
 
         Flip();
 
@@ -181,17 +152,6 @@ public class Enemy : EnemyBase
         float spawnConst = wallManager.GetSpawnAreaConstant();
 
         return new Equation().IsOutOfRange(transform.position, spawnConst);
-    }
-
-    void IsInsideWall()
-    {
-        Vector2 dir = (pastPos - (Vector2)transform.position).normalized;
-        RaycastHit2D hit = Physics2D.Linecast(pastPos, transform.position, LayerMask.GetMask("Wall"));
-        if (hit.collider != null) // 벽 안으로 들어갔다면
-        {
-            transform.position = pastPos;
-        }
-        pastPos = transform.position;
     }
 
     protected override void AttackMelee(int _damage)

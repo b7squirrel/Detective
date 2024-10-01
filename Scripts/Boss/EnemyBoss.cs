@@ -138,6 +138,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public override void Die()
     {
+        Debug.Log("Enemy Boss");
         base.Die();
 
         //GetComponent<DropOnDestroy>().CheckDrop();
@@ -200,20 +201,11 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         SoundManager.instance.Play(landingSFX);
         Vector2 landingEffectPos = (Vector2)transform.position + new Vector2(0, 3f);
-        //Collider2D hit = Physics2D.OverlapCircle(landingEffectPos, 15f/2f, landingHit);
-
-        //if (hit != null)
-        //{
-        //    Character character = GameManager.instance.character;
-        //    GameManager.instance.character.TakeDamage(1200, EnemyType.Ranged); // 플레이어가 무조건 데미지를 입도록 임시로 ranged
-        //}
 
         if (shockwave != null)
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
             wave.GetComponent<Shockwave>().Init(1200, 10f, LayerMask.GetMask("Player"), landingEffectPos);
-
-            //BossDieManager.instance.SlowMo(.5f, .5f);
         }
     }
     public void ActivateLandingIndicator(bool _activate)
@@ -224,7 +216,6 @@ public class EnemyBoss : EnemyBase, Idamageable
             LandingIndicator.transform.localPosition = Vector2.zero;
             LandingIndicator.transform.localScale = .8f * Vector2.one;
         }
-        Debug.Log("Indicator");
         LandingIndicator.SetActive(_activate);
     }
     public void GenTeleportEffect()

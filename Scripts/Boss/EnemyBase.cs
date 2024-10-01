@@ -36,6 +36,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     bool initDone;
     public bool finishedSpawn; // 스폰이 끝나면 적이 이동하도록 하려고
+
+    Vector2 pastPos; // 벽 바깥으로 나가면 다시 되돌리기 위한 변수
+
     #endregion
 
     #region Component Variables
@@ -94,6 +97,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
             anim = GetComponent<Animator>();
             sr = GetComponentInChildren<SpriteRenderer>();
             colEnemy = GetComponent<Collider2D>();
+
+            pastPos = transform.position;
 
             initDone = true;
         }
@@ -154,18 +159,17 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected virtual void Update()
     {
         if (HPbar != null) HPbar.transform.position = HpBarPos.position;
-        //isOffScreen = !(sr.isVisible);
-        //if (isOffScreen)
-        //{
-        //    colEnemy.enabled = false;
-        //    Debug.Log("Col disabled");
-        //}
-        //else
-        //{
-        //    colEnemy.enabled = true;
-        //    Debug.Log("Col enabled");
-        //}
-        //colEnemy.enabled = isOffScreen;
+
+        if (isSubBoss || isBoss) // 보스나 서브보스는 매프레임마다 벽 안쪽에 있는지 체크
+        {
+            IsInsideWall();
+        }
+        else // 일반 적이라면 10초마다 한번씩 체크해서 벽 바깥이면 비활성화
+        {
+            if (Time.frameCount % 600 != 0) return;
+
+            IsInsideWall();
+        }
     }
     #endregion
 
@@ -301,6 +305,17 @@ public class EnemyBase : MonoBehaviour, Idamageable
         rb.velocity = Vector2.zero;
     }
 
+    void IsInsideWall()
+    {
+        Vector2 dir = (pastPos - (Vector2)transform.position).normalized;
+        RaycastHit2D hit = Physics2D.Linecast(pastPos, transform.position, LayerMask.GetMask("Wall"));
+        if (hit.collider != null) // 벽 안으로 들어갔다면
+        {
+            transform.position = pastPos;
+        }
+        pastPos = transform.position;
+    }
+
     // animation events
     // 스폰 애니메이션이 끝나는 지점에 이벤트
     public void TriggerFinishedSpawn()
@@ -325,11 +340,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (collision.gameObject == Target.gameObject)
         {
-            if (enemyType == EnemyType.Ranged || enemyType == EnemyType.Melee)
+            if (enemyType == EnemyType.Melee && Time.frameCount % 3 == 0) // Melee는 3프레임에 한 번 공격
             {
                 Attack(EnemyType.Melee);
             }
-            else
+            else if (enemyType == EnemyType.Ranged)
+            {
+                Attack(EnemyType.Melee);
+            }
+            else if(enemyType == EnemyType.Explode)
             {
                 Attack(EnemyType.Explode);
             }
@@ -359,8 +378,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
             return;
-
-        if (Time.frameCount % 3 != 0) return; // 3프레임에 한 번씩만 공격
 
         anim.SetBool("Attack", true);
 
@@ -429,6 +446,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         float chance = UnityEngine.Random.Range(0, 100);
         if (chance < knockBackChance && knockBackChance != 0)
             _knockBackDelay = this.knockBackDelay;
+
+        FindObjectOfType<DebugCharacter>().Damage(damage);
 
         // 체력이 0 이하이면 죽음
         Stats.hp -= damage;
