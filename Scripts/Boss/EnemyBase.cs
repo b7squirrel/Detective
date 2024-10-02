@@ -446,9 +446,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         float chance = UnityEngine.Random.Range(0, 100);
         if (chance < knockBackChance && knockBackChance != 0)
             _knockBackDelay = this.knockBackDelay;
-
-        FindObjectOfType<DebugCharacter>().Damage(damage);
-
+        
         // 체력이 0 이하이면 죽음
         Stats.hp -= damage;
         if (Stats.hp < 1)
