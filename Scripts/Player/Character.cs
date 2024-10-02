@@ -143,7 +143,6 @@ public class Character : MonoBehaviour
         }
 
         if (debugCharacter == null) debugCharacter = FindObjectOfType<DebugCharacter>();
-        debugCharacter?.HitMessage(damage);
     }
     void PlayHurtSound(AudioClip _hurtSound)
     {

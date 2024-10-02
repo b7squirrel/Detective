@@ -62,8 +62,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected float enemyKnockBackSpeedFactor; // TakeDamage 때마다 인자로 넘어오는 knockBackSpeedFactor를 담아 두는 용도
     protected float stunnedDuration = .2f;
 
-    protected Material initialMat;
-    [SerializeField] protected Material whiteMat;
+    //protected Material initialMat;
+    //[SerializeField] protected Material whiteMat;
 
     [HideInInspector] public Vector2 targetDir;
     protected float stunnedSpeed = 14f;
@@ -103,7 +103,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             initDone = true;
         }
 
-        initialMat = sr.material;
+        //initialMat = sr.material;
         IsKnockBack = false;
         IsStunned = false;
         isOffScreen = true;
@@ -490,7 +490,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         StopAllCoroutines();
 
-        sr.material = initialMat;
+        //sr.material = initialMat;
         IsGrouping = false;
         ResetFlip();
 
@@ -521,7 +521,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록
     {
-        sr.material = initialMat;
+        //sr.material = initialMat;
         IsGrouping = false;
         IsSlowed = false;
 
@@ -532,7 +532,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (whiteFlashCoroutine != null)
             StopCoroutine(whiteFlashCoroutine);
 
-        sr.material = initialMat;
+        //sr.material = initialMat;
         IsSlowed = false;
         gameObject.SetActive(false);
     }
@@ -582,9 +582,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected IEnumerator WhiteFlashCo(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
-        sr.material = whiteMat;
+        //sr.material = whiteMat;
         yield return new WaitForSeconds(.1f);
-        sr.material = initialMat;
+        //sr.material = initialMat;
     }
     #endregion
 
