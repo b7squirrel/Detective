@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ResetStageProgress : MonoBehaviour
 {
+    [SerializeField] TMPro.TextMeshProUGUI currentStageNum;
     PlayerDataManager playerDataManager;
     StageInfo stageInfo;
     public void CLearStageProgress()
@@ -41,5 +42,12 @@ public class ResetStageProgress : MonoBehaviour
         int index = playerDataManager.GetCurrentStageNumber() - 1;
         if (index < 1) index = 1;
         playerDataManager.SetCurrentStageNumber(index);
+    }
+
+    public void UpdateCurrentStageNumberUI()
+    {
+        if (playerDataManager == null)
+            playerDataManager = FindObjectOfType<PlayerDataManager>();
+        currentStageNum.text = playerDataManager.GetCurrentStageNumber().ToString();
     }
 }

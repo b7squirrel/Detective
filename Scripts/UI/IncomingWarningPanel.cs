@@ -13,7 +13,7 @@ public class IncomingWarningPanel : MonoBehaviour
 
     public void Init()
     {
-        incomingText.text = "Enemies Incoming!!!";
+        incomingText.text = "적들이 몰려옵니다!!!";
         incomingWarningPanel.SetActive(true);
         StartCoroutine(ActivateIncomingWarning());
     }

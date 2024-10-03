@@ -4,6 +4,7 @@ public class StageInfoUI : MonoBehaviour
 {
     [SerializeField] PlayerDataManager stageManager;
     [SerializeField] TMPro.TextMeshProUGUI Title;
+    [SerializeField] TMPro.TextMeshProUGUI StageNumber;
 
     [Header("Boss Image")]
     [SerializeField] Animator anim;
