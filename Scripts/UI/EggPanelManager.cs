@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EggPanelManager : MonoBehaviour
@@ -17,6 +16,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject flashEffect;
     [SerializeField] ParticleSystem twinkleStarsParticle;
     [SerializeField] GameObject blackBGPanel;
+    [SerializeField] GameObject whiteBGPanel;
     Costume costume;
 
     Coroutine Close;
@@ -94,6 +94,7 @@ public class EggPanelManager : MonoBehaviour
         EggImageUp(false);
         eggPanel.SetActive(false);
         blackBGPanel.SetActive(false);
+        whiteBGPanel.SetActive(false);
         newKidText.SetActive(false);
         oriNameGroup.SetActive(false);
         oriName.SetActive(false);
@@ -149,12 +150,15 @@ public class EggPanelManager : MonoBehaviour
 
     IEnumerator CloseCo()
     {
-        yield return new WaitForSecondsRealtime(1.66f); // 이름 반짝 사운드 재생 지점
-        SoundManager.instance.Play(oriNameSound);
         blackBGPanel.SetActive(false);
+        whiteBGPanel.SetActive(true);
+        yield return new WaitForSecondsRealtime(1.66f); // 이름 반짝 사운드 재생 지점
+        
+
+        SoundManager.instance.Play(oriNameSound);
+        whiteBGPanel.SetActive(false);
         yield return new WaitForSecondsRealtime(.4f); //폴짝 뛰어서 게임 안으로 들어가는 지점
         SoundManager.instance.Play(jumpUp);
-        
 
         yield return new WaitForSecondsRealtime(0.32f); // 애니메이션 종료
         CloseButtonPressed();

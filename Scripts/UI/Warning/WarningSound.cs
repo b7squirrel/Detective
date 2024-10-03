@@ -17,7 +17,7 @@ public class WarningSound : MonoBehaviour
     }
     public void PlayIdleSound()
     {
-        SoundManager.instance.PlayLoop(idleSound);
+        SoundManager.instance.Play(idleSound);
     }
     public void StopIdleSound()
     {

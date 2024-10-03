@@ -8,7 +8,7 @@ public class Spawner : MonoBehaviour
     public static Spawner instance;
 
     [SerializeField] GameObject enemyGroupShape;
-    //[SerializeField] int maxEnemyInScene; // 적의 수 최대치 설정
+    [SerializeField] int maxEnemyInScene; // 적의 수 최대치 설정
     [SerializeField] int currentEnemyNumbers; // 현재 스폰되어 있는 적의 수
 
     int level;
@@ -66,6 +66,9 @@ public class Spawner : MonoBehaviour
     #region 스폰
     public void Spawn(EnemyData enemyToSpawn, int index)
     {
+        if (currentEnemyNumbers >= maxEnemyInScene)
+            return;
+
         // 스폰 가능한 지점 탐색하고 벽 안쪽에서 2 unit 더 안쪽에 스폰
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         Vector2 spawnPoint = GetAvailablePoints();
@@ -79,8 +82,8 @@ public class Spawner : MonoBehaviour
     }
     public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
     {
-        //if (currentEnemyNumbers >= maxEnemyInScene)
-        //    return;
+        if (currentEnemyNumbers >= maxEnemyInScene)
+            return;
         Vector2 spawnPoint = GetAvailablePoints();
         GameObject groupShape = Instantiate(enemyGroupShape, spawnPoint, Quaternion.identity);
         groupShape.transform.eulerAngles = new Vector3(0, 0, Random.Range(0, 360f));

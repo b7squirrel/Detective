@@ -63,6 +63,7 @@ public class Player : MonoBehaviour, IBouncable
 
     public void OnMovement(InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0f) return;
         InputVec = context.ReadValue<Vector2>();
     }
 
