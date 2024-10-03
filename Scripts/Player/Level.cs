@@ -61,7 +61,6 @@ public class Level : MonoBehaviour
 
     public void AddExperience(int expAmount)
     {
-        Debug.Log("얻은 경험치 = " + expAmount);
         experience += expAmount;
         CheckLevelUp();
     }

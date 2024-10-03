@@ -68,7 +68,6 @@ public class EggPanelManager : MonoBehaviour
         if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
 
-        Debug.Log("Ori = " + wd.Name);
         if (costume != null) { costumeSR.sprite = costume.sprites[10]; }
 
         if (wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
@@ -174,7 +173,6 @@ public class EggPanelManager : MonoBehaviour
         costumeSR.color = new Color(1, 1, 1, 0);
         costume = null;
         costumeSR.sprite = null;
-        Debug.Log("Close");
         CloseNewKidImage();
 
         // 돌아가고 있는 코루틴을 멈추지 않으면 

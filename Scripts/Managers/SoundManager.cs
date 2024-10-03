@@ -49,6 +49,19 @@ public class SoundManager : MonoBehaviour
         audioSource.clip = audioClip;
         audioSource.pitch = UnityEngine.Random.Range(1f, 1.1f);
         audioSource.mute = isMuted; // 현재 Mute 상태에 따라 설정
+        audioSource.loop = false;
+
+        audioSource.Play();
+    }
+
+    public void PlayLoop(AudioClip audioClip)
+    {
+        AudioSource audioSource = GetAudio();
+        if (audioSource == null) return;
+        audioSource.clip = audioClip;
+        audioSource.pitch = UnityEngine.Random.Range(1f, 1.1f);
+        audioSource.mute = isMuted; // 현재 Mute 상태에 따라 설정
+        audioSource.loop = true;
 
         audioSource.Play();
     }
@@ -67,6 +80,20 @@ public class SoundManager : MonoBehaviour
 
         Play(audioClip); // 클립이 재생 중이지 않으면 Play 함수 호출
         singleSound = audioClip; // 현재 재생 중인 클립을 singleSound에 저장
+    }
+
+    public void StopPlaying(AudioClip audioClip)
+    {
+        for (int i = 0; i < audioSources.Count; i++)
+        {
+            if (audioSources[i].clip == null)
+                continue;
+            if (audioSources[i].clip.name == audioClip.name)
+            {
+                audioSources[i].Stop(); // 클립이 이미 재생 중이면 재생 종료
+                return; 
+            }
+        }
     }
 
     public void PlayHurtSound(AudioClip _hurtSound)

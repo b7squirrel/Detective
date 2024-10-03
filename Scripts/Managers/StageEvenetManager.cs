@@ -46,7 +46,6 @@ public class StageEvenetManager : MonoBehaviour
     void Update()
     {
         //if (onStopWatchEffect) return; // 스톱위치가 작동 중이면 이벤트 홀드
-
         if (IsWinningStage)
         {
             if (winStageCoroutine == null)
@@ -55,8 +54,11 @@ public class StageEvenetManager : MonoBehaviour
             }
             return;
         }
-
-        if (spawner.GetCurrentEnemyNums() > enemyNumForNextEvent) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
+        int enemyNums = spawner.GetCurrentEnemyNums();
+        if (enemyNums > enemyNumForNextEvent)
+        {
+            return; // 적이 너무 많이 남아 있다면 이벤트 없음.
+        }
         if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.
 
         if (isWaiting) return;

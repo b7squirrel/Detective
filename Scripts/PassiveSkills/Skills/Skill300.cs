@@ -27,7 +27,6 @@ public class Skill300 : SkillBase
         if (skillCounter > realCoolDownTime)
         {
             skillCounter = 0;
-            Debug.Log($"Skill Damage {realDamage}");
             Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
             if(allEnemies.Length != 0)
             {

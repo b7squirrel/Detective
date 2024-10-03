@@ -393,7 +393,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 break;
             case EnemyType.Explode:
                 AttackExplode(Stats.damage);
-                Debug.Log("Explode Attack");
                 break;
             default:
                 throw new System.ArgumentOutOfRangeException(nameof(enemyType), enemyType, "정의되지 않은 enemyType입니다");

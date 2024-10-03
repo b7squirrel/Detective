@@ -12,7 +12,6 @@ public class Shockwave : MonoBehaviour
     {
         // 디버깅
         transform.localScale = 2f * _range * Vector2.one;
-        Debug.Log("쇼크웨이브 스케일 = " + transform.localScale.x);
 
         damage = _damage;
         range = _range;

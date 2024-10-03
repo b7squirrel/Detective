@@ -157,7 +157,6 @@ public class Enemy : EnemyBase
     protected override void AttackMelee(int _damage)
     {
         Target.gameObject.GetComponent<Character>().TakeDamage(Stats.damage, EnemyType.Melee);
-        Debug.Log("Melee Damage = " + Stats.damage);
     }
     protected override void AttackRange(int _damage)
     {

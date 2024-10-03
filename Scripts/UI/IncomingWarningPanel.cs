@@ -7,6 +7,10 @@ public class IncomingWarningPanel : MonoBehaviour
     [SerializeField] GameObject incomingWarningPanel;
     [SerializeField] Animator anim;
 
+    [SerializeField] AudioClip startingSound;
+    [SerializeField] AudioClip closingSound;
+    [SerializeField] AudioClip idleSound;
+
     public void Init()
     {
         incomingText.text = "Enemies Incoming!!!";
@@ -30,5 +34,23 @@ public class IncomingWarningPanel : MonoBehaviour
         pm.PauseGame();
         yield return new WaitForSecondsRealtime(2f);
         Close();
+    }
+
+    // 애니메이션 이벤트
+    public void PlayStartingSound()
+    {
+        SoundManager.instance.Play(startingSound);
+    }
+    public void PlayClosingSound()
+    {
+        SoundManager.instance.Play(closingSound);
+    }
+    public void PlayIdleSound()
+    {
+        SoundManager.instance.Play(idleSound);
+    }
+    public void StopIdleSound()
+    {
+        SoundManager.instance.StopPlaying(idleSound);
     }
 }

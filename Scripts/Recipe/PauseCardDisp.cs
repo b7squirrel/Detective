@@ -184,7 +184,6 @@ public class PauseCardDisp : MonoBehaviour
     }
     public void UpdatePauseCardLevel(int _level, bool _isWeapon, bool _isSynergy)
     {
-        Debug.Log("Upgraded Level = " + _level);
         if(_isSynergy)
         {
             SetNumStar(0, _isWeapon);

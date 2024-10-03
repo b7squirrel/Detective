@@ -11,7 +11,7 @@ public class EnemyNumsDebug : MonoBehaviour
     }
     private void Update()
     {
-        enemyNums.text = spawner.GetCurrentEnemyNums().ToString();
+        //enemyNums.text = spawner.GetCurrentEnemyNums().ToString();
     }
 
     bool Init()

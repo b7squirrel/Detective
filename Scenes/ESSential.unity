@@ -266,6 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8442943}
   - component: {fileID: 8442944}
+  - component: {fileID: 8442945}
   m_Layer: 5
   m_Name: Incoming Warning Message
   m_TagString: Untagged
@@ -314,6 +315,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8442945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8442942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790481740416670488ad9aafbff9a79a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingSound: {fileID: 8300000, guid: feeb831cfb81ac047bfb37b057e86b3f, type: 3}
+  closingSound: {fileID: 8300000, guid: feeb831cfb81ac047bfb37b057e86b3f, type: 3}
+  idleSound: {fileID: 8300000, guid: c4c4a25e23c603248bb03b03f5ea116c, type: 3}
 --- !u!1 &22583869
 GameObject:
   m_ObjectHideFlags: 0
@@ -3428,6 +3444,7 @@ GameObject:
   m_Component:
   - component: {fileID: 393270797}
   - component: {fileID: 393270799}
+  - component: {fileID: 393270800}
   m_Layer: 5
   m_Name: Boss Warning Message
   m_TagString: Untagged
@@ -3476,6 +3493,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &393270800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393270796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790481740416670488ad9aafbff9a79a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingSound: {fileID: 8300000, guid: feeb831cfb81ac047bfb37b057e86b3f, type: 3}
+  closingSound: {fileID: 8300000, guid: feeb831cfb81ac047bfb37b057e86b3f, type: 3}
+  idleSound: {fileID: 8300000, guid: c4c4a25e23c603248bb03b03f5ea116c, type: 3}
 --- !u!1 &401892271
 GameObject:
   m_ObjectHideFlags: 0
@@ -7238,7 +7270,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyGroupShape: {fileID: 4525072272467478360, guid: 8a5aab02958ecb44d87d618a6e5d9437, type: 3}
-  maxEnemyInScene: 50
   currentEnemyNumbers: 0
 --- !u!1 &688335760
 GameObject:
@@ -26368,6 +26399,9 @@ MonoBehaviour:
   bossName: {fileID: 1577698218}
   bossWarningPanel: {fileID: 393270796}
   anim: {fileID: 393270799}
+  startingSound: {fileID: 8300000, guid: a4bfbbc348f315347bf328135ae1b4e3, type: 3}
+  closingSound: {fileID: 8300000, guid: feeb831cfb81ac047bfb37b057e86b3f, type: 3}
+  idleSound: {fileID: 8300000, guid: c4c4a25e23c603248bb03b03f5ea116c, type: 3}
 --- !u!114 &1834188302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26509,6 +26543,9 @@ MonoBehaviour:
   incomingText: {fileID: 286772427}
   incomingWarningPanel: {fileID: 8442942}
   anim: {fileID: 8442944}
+  startingSound: {fileID: 8300000, guid: a4bfbbc348f315347bf328135ae1b4e3, type: 3}
+  closingSound: {fileID: 8300000, guid: feeb831cfb81ac047bfb37b057e86b3f, type: 3}
+  idleSound: {fileID: 8300000, guid: c4c4a25e23c603248bb03b03f5ea116c, type: 3}
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0
