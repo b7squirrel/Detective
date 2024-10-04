@@ -13,7 +13,7 @@ public class BossWarningPanel : MonoBehaviour
 
     public void Init(string _name)
     {
-        bossName.text = _name + " !!!";
+        bossName.text = _name + " !";
         bossWarningPanel.SetActive(true);
         StartCoroutine(ActivateBossWarning());
     }

@@ -33,6 +33,7 @@ public class IncomingWarningPanel : MonoBehaviour
         PauseManager pm = GameManager.instance.pauseManager;
         pm.PauseGame();
         yield return new WaitForSecondsRealtime(2f);
+        Debug.Log("CLOSE");
         Close();
     }
 
