@@ -18,7 +18,6 @@ public class NewKidEggUi : MonoBehaviour
     public void PlayEggDanceSound()
     {
         SoundManager.instance.Play(eggDanceSound);
-
     }
     // New Friend 텍스트가 삥 하는 소리
     public void PlayNewFriendSound()
