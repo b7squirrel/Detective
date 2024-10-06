@@ -19,8 +19,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected bool isBoss;
     [SerializeField] int numberOfSubBossDrops;
     [SerializeField]
-    int numberOfBossDrops
-        ;
+    int numberOfBossDrops;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir { get; set; } // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
@@ -38,7 +37,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public bool finishedSpawn; // 스폰이 끝나면 적이 이동하도록 하려고
 
     Vector2 pastPos; // 벽 바깥으로 나가면 다시 되돌리기 위한 변수
-
     #endregion
 
     #region Component Variables
