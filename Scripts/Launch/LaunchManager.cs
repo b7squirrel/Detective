@@ -37,6 +37,12 @@ public class LaunchManager : MonoBehaviour
         CloseField();
     }
     
+    // 버튼으로 스테이지 앞 뒤로 갈 수 있도록
+    public void UpdateStageInfo()
+    {
+        InitStageInfo();
+    }
+
     void InitStageInfo()
     {
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();

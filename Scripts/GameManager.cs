@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
     public GameObject darkBG;
     public GameObject lightBG;
 
+    [Header("레어 오리 확률")]
+    float rateToGetRare;
+
     #region Unity CallBack Functions
     void Awake()
     {
@@ -79,6 +82,15 @@ public class GameManager : MonoBehaviour
         startingDataContainer.DestroyStartingDataContainer();
     }
 
+    public float GetRateToGetRare()
+    {
+        return rateToGetRare;
+    }
+    public void SetRateToGetRare(float _rate)
+    {
+        rateToGetRare = _rate;
+    }
+
     #region Option Input
     public void OnQuitGame(InputAction.CallbackContext context)
     {
@@ -96,6 +108,7 @@ public class GameManager : MonoBehaviour
     //}
     #endregion
 
+    #region Camera Shake
     public void ShakeCam(float _duration, float _magnitude)
     {
         StartCoroutine(ShakeCamCo(_duration, _magnitude));
@@ -114,6 +127,7 @@ public class GameManager : MonoBehaviour
         }
         currentCamera.transform.position = originalPos;
     }
+    #endregion
 
     #region 확인 버튼
     public void ActivateConfirmationButton(float _delayToActivate)
