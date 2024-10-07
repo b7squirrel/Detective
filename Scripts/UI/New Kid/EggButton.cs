@@ -19,6 +19,7 @@ public class EggButton : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI textDecimal;
     [SerializeField] float desiredFontSizeFactor;
     [SerializeField] float increment; // 클릭할 때마다 확률 증가분
+    float prevIntegerPart, prevDecimalPart;
     float integerPart, decimalPart;
     float initFontSize;
     bool isInit;
