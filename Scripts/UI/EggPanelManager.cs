@@ -18,6 +18,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject blackBGPanel;
     [SerializeField] GameObject whiteBGPanel;
     Costume costume;
+    EggButton eggButton; // Egg Button에 접근해서 레어오리 확률을 초기화 시키기 위해
 
     Coroutine Close;
 
@@ -125,6 +126,9 @@ public class EggPanelManager : MonoBehaviour
     public void EggImageUp(bool isActive)
     {
         eggImage.SetActive(isActive);
+
+        if (eggButton == null) eggButton = eggImage.GetComponentInChildren<EggButton>();
+        if (isActive) eggButton.InitRate();
     }
     void KidImageUp()
     {

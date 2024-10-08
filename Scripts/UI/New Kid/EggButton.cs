@@ -45,14 +45,9 @@ public class EggButton : MonoBehaviour
             initFontSize = textInteger.fontSize;
             isInit = true;
         }
-        ResetAll();
-    }
-    private void OnDisable()
-    {
-        ResetAll();
     }
 
-    void ResetAll()
+    public void InitRate()
     {
         rateToGetRare = 0f;
         integerPart = 0;
