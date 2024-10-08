@@ -45,6 +45,22 @@ public class EggButton : MonoBehaviour
             initFontSize = textInteger.fontSize;
             isInit = true;
         }
+        ResetAll();
+    }
+    private void OnDisable()
+    {
+        ResetAll();
+    }
+
+    void ResetAll()
+    {
+        rateToGetRare = 0f;
+        integerPart = 0;
+        decimalPart = 0;
+        prevDecimalPart = 0;
+        prevIntegerPart = 0;
+        textInteger.text = integerPart.ToString();
+        textDecimal.text = decimalPart.ToString().Substring(1) + "%";
     }
     public void PlayEggClickSound()
     {
@@ -66,14 +82,16 @@ public class EggButton : MonoBehaviour
         rateToGetRare += increment;
         rateToGetRare = Mathf.Round(rateToGetRare * 100f) / 100f;
         integerPart = Mathf.FloorToInt(rateToGetRare);
-        Debug.Log("Integer Part = " + integerPart);
+
         decimalPart = rateToGetRare - integerPart;
         decimalPart = Mathf.Round(decimalPart * 100) / 100f;
 
         if (anim == null) anim = GetComponentInParent<Animator>();
         anim.SetTrigger("Clicked");
 
-        UpText(rateToGetRare);
+        // 소수점 이하는 클릭 때마다 스케일업. 정수 부분은 변화가 있을 떄만 스케일업
+        if (integerPart > prevIntegerPart) UpText(true);
+        //UpText(textDecimal);
 
         UpdateRateForGameManager();
 
@@ -89,15 +107,15 @@ public class EggButton : MonoBehaviour
         isClicked = false;
         image.material = initMat;
     }
-    public void UpText(float _rate)
+    public void UpText(bool _integerUp)
     {
         if (textInteger.gameObject.activeSelf == false)
             return;
-        StartCoroutine(UpTextCo(_rate));
+        StartCoroutine(UpTextCo(_integerUp));
     }
-    IEnumerator UpTextCo(float _rate)
+    IEnumerator UpTextCo(bool _integerUp)
     {
-        textInteger.fontSize *= desiredFontSizeFactor;
+        if (_integerUp) textInteger.fontSize *= desiredFontSizeFactor;
         textInteger.text = integerPart.ToString();
         textDecimal.text = decimalPart.ToString().Substring(1) + "%";
 
