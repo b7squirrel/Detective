@@ -56,6 +56,7 @@ public class EggButton : MonoBehaviour
         prevIntegerPart = 0;
         textInteger.text = integerPart.ToString();
         textDecimal.text = decimalPart.ToString().Substring(1) + "%";
+        Debug.Log("InitRate");
     }
     public void PlayEggClickSound()
     {
