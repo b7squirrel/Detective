@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour
     [Header("레어 오리 확률")]
     float rateToGetRare;
 
+    [Header("Loading Swipe")]
+    [SerializeField] Animator loadingSwipeAnim;
+
     #region Unity CallBack Functions
     void Awake()
     {
@@ -66,9 +69,17 @@ public class GameManager : MonoBehaviour
         feedbackManager = GetComponent<FeedbackManager>();
 
         confimationButton.SetActive(false);
+
+        OpenLoadingSwipe();
     }
     #endregion
 
+    void OpenLoadingSwipe()
+    {
+        if (loadingSwipeAnim.gameObject.activeSelf == false)
+            loadingSwipeAnim.gameObject.SetActive(true);
+        loadingSwipeAnim.SetTrigger("Open");
+    }
     public void SetPlayerDead()
     {
         IsPlayerDead = true;

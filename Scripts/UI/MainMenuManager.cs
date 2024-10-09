@@ -35,6 +35,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] GameObject blackScreen;
     Animator blackTransitionAnim;
 
+    [Header("Swipe Transition")]
+    [SerializeField] Animator loadingSwipe;
     void Awake()
     {
         InitBlackTransition();
@@ -174,6 +176,8 @@ public class MainMenuManager : MonoBehaviour
 
         blackTransitionAnim.SetTrigger("Start");
         // transition animation 이 끝나면 animation event로 StartGame 호출
+
+        loadingSwipe.SetTrigger("Close");
     }
     public void StartGame()
     {
