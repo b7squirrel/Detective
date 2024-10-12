@@ -168,16 +168,21 @@ public class MainMenuManager : MonoBehaviour
     {
         blackScreen.SetActive(false);
     }
+
+    // 스타트 버튼을 누르면 이벤트로 실행
     public void StartTransition()
     {
-        blackTransitionAnim = GetComponent<Animator>();
-
-        blackScreen.SetActive(true);
-
-        blackTransitionAnim.SetTrigger("Start");
         // transition animation 이 끝나면 animation event로 StartGame 호출
-
         loadingSwipe.SetTrigger("Close");
+
+        StartCoroutine(LoadScenes());
+    }
+
+    IEnumerator LoadScenes()
+    {
+        yield return new WaitForSecondsRealtime(1);
+        LoadingSceneManager loadingSceneManager = FindObjectOfType<LoadingSceneManager>();
+        loadingSceneManager.LoadScenes();
     }
     public void StartGame()
     {

@@ -24,6 +24,7 @@ public class CameraController : MonoBehaviour
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
         spawnConst = wallManager.GetSpawnAreaConstant();
+        spawnConst += .5f * spawnConst;
         boxCol.transform.localScale = Vector3.one * spawnConst;
 
         if (player != null)
@@ -31,7 +32,7 @@ public class CameraController : MonoBehaviour
             //transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
             transform.position = new Vector3(
                 Mathf.Clamp(player.transform.position.x, boxCol.bounds.min.x, boxCol.bounds.max.x),
-                Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y + (offset * 2f), boxCol.bounds.max.y - offset),
+                Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y + (offset), boxCol.bounds.max.y - offset),
                 transform.position.z);
         }
     }

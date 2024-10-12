@@ -72,7 +72,7 @@ public class DropOnDestroy : MonoBehaviour
 
         if (dropItemProperty[itemIndex].isMultipleDropable && isMultiDrop) // 멀티플 드롭이 가능한 아이템이고, 확률로 멀티드롭이 뽑혔다면
         {
-            DropMultipleObjects(toDrop, dropItemProperty[itemIndex].numMultiple);
+            DropMultipleObjects(toDrop, dropItemProperty[itemIndex].numMultiple + UnityEngine.Random.Range(-5, 10));
             return;
         }
 

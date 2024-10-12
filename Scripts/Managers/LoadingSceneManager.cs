@@ -8,9 +8,6 @@ public class LoadingSceneManager : MonoBehaviour
     [SerializeField] Slider progressBar;
     [SerializeField] TMPro.TextMeshProUGUI progressText;
 
-    /// <summary>
-    /// canvas의 애니메이션에서 호출
-    /// </summary>
     public void LoadScenes()
     {
         progressBar.value = 0;
