@@ -77,11 +77,11 @@ public class BeamProjectile : ProjectileBase
         {
             DealDamage(hit);
         }
-        if (disableLaser) // 1프레임 후에 레이져를 그려주자. onEnable 되고 나서 직전의 위치에 레이져를 쏨.
-        {
-            disableLaser = false;
-            return;
-        }
+        //if (disableLaser) // 1프레임 후에 레이져를 그려주자. onEnable 되고 나서 직전의 위치에 레이져를 쏨.
+        //{
+        //    disableLaser = false;
+        //    return;
+        //}
         laserLine.startColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 1);
         laserLine.endColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 1);
         DrawLaser(hit.point);

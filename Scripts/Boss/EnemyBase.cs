@@ -131,14 +131,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         }
     }
-    public void CastSlownessToEnemy(float _slownessFactor)
-    {
-        currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
-    }
-    public void ResetCurrentSpeedToDefault()
-    {
-        currentSpeed = DefaultSpeed;
-    }
     protected void InitHpBar()
     {
         if (HPbarPrefab == null) return;
@@ -469,6 +461,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         //if (dieEffectPrefeab != null)
         //{
         //    GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
+    
         //    if (dieEffect != null) dieEffect.transform.position = transform.position;
         //}
 
@@ -586,6 +579,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #endregion
 
     #region 스킬
+    public void CastSlownessToEnemy(float _slownessFactor)
+    {
+        if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
+        currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
+    }
+    public void ResetCurrentSpeedToDefault()
+    {
+        if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
+        currentSpeed = DefaultSpeed;
+    }
     public void SpeedUpEnemy()
     {
         float speed = 2f;
@@ -595,13 +598,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public void PauseEnemy()
     {
         anim.speed = 0f;
-        CastSlownessToEnemy(1f);
+        currentSpeed = 0f; // sluggish slumber와 겹치지 않기 위해 CastSlowness 함수를 사용하지 않음.
         //rb.bodyType = RigidbodyType2D.Static;
     }
     public void ResumeEnemy()
     {
         anim.speed = 1;
-        ResetCurrentSpeedToDefault();
+        currentSpeed = DefaultSpeed; // sluggish slumber와 겹치지 않기 위해 ResetCurrentSpeed 함수를 사용하지 않음.
         //rb.bodyType = RigidbodyType2D.Dynamic;
     }
     #endregion

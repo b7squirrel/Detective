@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float bosscameraMoveSpeed;
     [SerializeField] GameObject dot;
     [SerializeField] float offset; // 이 값만큼 y축 카메라 바운드 조절
+    [SerializeField] float offsetUpperWall; // 윗벽은 경험치바에 가려지지 않게 따로 바운드 조절
 
     WallManager wallManager;
     float spawnConst;
@@ -32,7 +33,7 @@ public class CameraController : MonoBehaviour
             //transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
             transform.position = new Vector3(
                 Mathf.Clamp(player.transform.position.x, boxCol.bounds.min.x, boxCol.bounds.max.x),
-                Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y + (offset), boxCol.bounds.max.y - offset),
+                Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y + offset, boxCol.bounds.max.y - offsetUpperWall),
                 transform.position.z);
         }
     }
