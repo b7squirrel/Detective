@@ -173,6 +173,7 @@ public class MainMenuManager : MonoBehaviour
     public void StartTransition()
     {
         // transition animation 이 끝나면 loading scene manager 호출
+        loadingSwipe.gameObject.SetActive(true);
         loadingSwipe.SetTrigger("Close");
 
         StartCoroutine(LoadScenes());

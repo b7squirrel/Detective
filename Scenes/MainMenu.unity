@@ -53551,8 +53551,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActiveOnStart:
   - {fileID: 187304703}
+  - {fileID: 797962535}
+  inActiveOnStart:
   - {fileID: 144572495}
-  inActiveOnStart: []
+  - {fileID: 100704225}
+  - {fileID: 1168083570}
+  - {fileID: 917734564}
+  - {fileID: 902960295}
 --- !u!1 &1697450326
 GameObject:
   m_ObjectHideFlags: 0
@@ -65594,7 +65599,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 739286514442511955, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 911024524442310599, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       propertyPath: m_Name
@@ -65602,7 +65607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 911024524442310599, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7775807230432095766, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       propertyPath: m_Pivot.x
