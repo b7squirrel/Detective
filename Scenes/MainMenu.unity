@@ -55655,6 +55655,72 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1849126480}
   m_CullTransparentMesh: 1
+--- !u!1 &1851264771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1851264774}
+  - component: {fileID: 1851264773}
+  - component: {fileID: 1851264772}
+  m_Layer: 0
+  m_Name: Hint Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1851264772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851264771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd328eedc9682984c9c463c1afab42f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1851264773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851264771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dade5be348cb7f546b089d772f428647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hints:
+  - hint: "\uCCB4\uB825\uC774 \uB0AE\uC744 \uB54C\uB294 \n\uC0C1\uC790\uC5D0\uC11C
+      \uB2EC\uCF64\uC6B0\uC720\uAC00 \uB098\uC62C \uD655\uB960\uC774 \n\uB192\uC544\uC9D1\uB2C8\uB2E4."
+  - hint: "\uC6D4\uACC4\uC218\uB294 \uC7A0\uC2DC\uB3D9\uC548 \uC624\uB9AC\uB97C \n\uBB34\uC801\uC73C\uB85C
+      \uB9CC\uB4E4\uC5B4 \uC90D\uB2C8\uB2E4. "
+  - hint: "\uAC01 \uC624\uB9AC\uB4E4\uC740 \uC2DC\uB108\uC9C0 \uC2A4\uD0AC\uC744
+      \uC5BB\uC73C\uBA74\n\uC2DC\uB108\uC9C0 \uC624\uB9AC\uB85C \uBCC0\uC2E0\uD560
+      \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+  hintIndex: 0
+--- !u!4 &1851264774
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851264771}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1852730168
 GameObject:
   m_ObjectHideFlags: 0
@@ -65594,19 +65660,19 @@ PrefabInstance:
     m_TransformParent: {fileID: 1696358904}
     m_Modifications:
     - target: {fileID: 739286514442511955, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 739286514442511955, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 911024524442310599, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       propertyPath: m_Name
       value: Loading Swipe
       objectReference: {fileID: 0}
-    - target: {fileID: 911024524442310599, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 2984640688887118953, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6494556288849804598, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7775807230432095766, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
@@ -65687,6 +65753,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7775807230432095766, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7902215198247622583, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -123353,3 +123423,4 @@ SceneRoots:
   - {fileID: 853363668}
   - {fileID: 679293659328057498}
   - {fileID: 1364429867}
+  - {fileID: 1851264774}

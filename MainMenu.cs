@@ -52,6 +52,9 @@ public class MainMenu : MonoBehaviour
         playerData.SaveResourcesBeforeQuitting(); // 스테이지와 동전 저장
         int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
 
+        // 힌트 리셋
+        FindObjectOfType<HintsOnLoading>().ResetHint();
+
         UnPause();
         GameManager.instance.DestroyStartingData();
 

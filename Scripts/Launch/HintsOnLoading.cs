@@ -1,18 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+
+[Serializable]
+public class Hint
+{
+    [TextArea]
+    public string hint;
+}
 
 public class HintsOnLoading : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Hint[] hints;
+    public int hintIndex;
+    bool initDone; 
+
+    public void Init()
     {
-        
+        if(initDone == false)
+        {
+            hintIndex = UnityEngine.Random.Range(0, hints.Length);
+            initDone = true;
+        }
+    }
+    public string GetHint()
+    {
+        return hints[hintIndex].hint;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ResetHint()
     {
-        
+        initDone = false;
     }
+
+
 }
