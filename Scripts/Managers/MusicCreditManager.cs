@@ -32,7 +32,7 @@ public class MusicCreditManager : MonoBehaviour
         // À½¾Ç Å©·¹µ÷ UI Ç¥½Ã
         if (creditUI == null) creditUI = FindObjectOfType<MusicCreditUI>();
         string title = "\"" + musicType.GetDescription() + "\"";
-        string credit = "Composed by " + creditData.AudioCredits[index].Credit;
+        string credit = "ÀÛ°î " + creditData.AudioCredits[index].Credit;
         StartCoroutine(ShowCreditUI(title, credit, index));
 
         if(musicVisualizer == null) musicVisualizer = GetComponent<MusicVisualizer>();
