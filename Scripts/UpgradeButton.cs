@@ -52,6 +52,9 @@ public class UpgradeButton : MonoBehaviour
             iconWeapon.preserveAspect = true;
             iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 1f);
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
+
+            if (upgradeData.weaponData.DisplayName != "")  
+                upgradeName.text = upgradeData.weaponData.DisplayName;
         }
         else
         {
@@ -64,12 +67,14 @@ public class UpgradeButton : MonoBehaviour
             iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0);
             iconItem.SetNativeSize();
 
+            if (upgradeData.item.DisplayName != "")  
+                upgradeName.text = upgradeData.item.DisplayName;
         }
-        if (upgradeData.Name != "")
-        {
-            upgradeName.text = upgradeData.Name;
-            //upgradeNameShadow.text = upgradeData.Name;
-        }
+        //if (upgradeData.DisplayName != "")
+        //{
+        //    upgradeName.text = upgradeData.weaponData.DisplayName;
+        //    //upgradeNameShadow.text = upgradeData.Name;
+        //}
 
         description.text = upgradeData.description;
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,12 +6,17 @@ public class SoundManager : MonoBehaviour
     public static SoundManager instance;
 
     [SerializeField] GameObject audioSourcePrefab;
-    [SerializeField] int audioSourceCount;
-    [SerializeField] float reductionRate;
-    List<AudioSource> audioSources;
-    AudioClip singleSound; // 한 번만 재생되는 사운드를 리스트에서 빼기 위해
+    [SerializeField] int initialAudioSourceCount = 10;
+    [SerializeField] float soundCooldown = 0.2f; // 사운드 쿨타임 (초 단위)
+    [SerializeField] int maxPlayCountPerClip = 10; // 사운드가 최대 재생될 수 있는 횟수
+    [SerializeField] float resetTime = .3f; // 재생 횟수 리셋 시간
 
-    private bool isMuted; // 현재 Mute 상태를 추적하기 위한 변수
+    List<AudioSource> audioSourcePool;
+    Dictionary<string, int> soundPlayCount; // 사운드 재생 횟수 추적
+    Dictionary<string, float> lastPlayedTime; // 마지막으로 재생된 시간 추적
+
+    AudioClip singleSound; // 한 번만 재생되는 사운드를 리스트에서 빼기 위해
+    bool isMuted; // 현재 Mute 상태를 추적하기 위한 변수
     bool isPlayingHurtSound; // hurt Sound가 재생 중이면 재생하지 않기 위한 플래그
 
     void Awake()
@@ -20,162 +24,134 @@ public class SoundManager : MonoBehaviour
         instance = this;
     }
 
-    void Update()
-    {
-        if (singleSound == null)
-            return;
-        RemoveSingleAudio(singleSound);
-    }
-
     /// <summary>
     /// AudioSource들을 만들어서 리스트로 저장
     /// </summary>
     public void Init()
     {
-        audioSources = new List<AudioSource>();
+        audioSourcePool = new List<AudioSource>();
+        soundPlayCount = new Dictionary<string, int>();
+        lastPlayedTime = new Dictionary<string, float>();
 
-        for (int i = 0; i < audioSourceCount; i++)
+        for (int i = 0; i < initialAudioSourceCount; i++)
         {
-            GameObject go = Instantiate(audioSourcePrefab, transform);
-            go.transform.localPosition = Vector2.zero;
-            audioSources.Add(go.GetComponent<AudioSource>());
+            CreateNewAudioSource();
         }
     }
 
+    /// <summary>
+    /// 오디오소스를 풀에서 가져오기 (재생 중이 아닌 오디오소스)
+    /// </summary>
+    AudioSource GetAudioSourceFromPool()
+    {
+        foreach (var audioSource in audioSourcePool)
+        {
+            if (!audioSource.isPlaying)
+            {
+                return audioSource;
+            }
+        }
+
+        // 풀에 사용 가능한 오디오 소스가 없으면 새로 생성
+        return CreateNewAudioSource();
+    }
+
+    /// <summary>
+    /// 새로운 오디오소스를 풀에 추가
+    /// </summary>
+    AudioSource CreateNewAudioSource()
+    {
+        GameObject go = Instantiate(audioSourcePrefab, transform);
+        go.transform.localPosition = Vector2.zero;
+        AudioSource audioSource = go.GetComponent<AudioSource>();
+        audioSourcePool.Add(audioSource);
+        return audioSource;
+    }
+
+    /// <summary>
+    /// 특정 사운드 클립 재생
+    /// </summary>
     public void Play(AudioClip audioClip)
     {
-        AudioSource audioSource = GetAudio();
-        if (audioSource == null) return;
-        audioSource.clip = audioClip;
-        audioSource.pitch = UnityEngine.Random.Range(1f, 1.1f);
-        audioSource.mute = isMuted; // 현재 Mute 상태에 따라 설정
-        audioSource.loop = false;
+        if (!CanPlaySound(audioClip)) return; // 쿨타임이나 재생 횟수 체크
 
+        AudioSource audioSource = GetAudioSourceFromPool();
+        if (audioSource == null) return;
+
+        audioSource.clip = audioClip;
+        audioSource.volume = 1f;
+        //audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
+        audioSource.mute = isMuted;
         audioSource.Play();
+
+        UpdateSoundPlayInfo(audioClip); // 재생 횟수와 시간 업데이트
     }
 
-    public void PlayLoop(AudioClip audioClip)
+    /// <summary>
+    /// 사운드를 재생할 수 있는지 여부를 판단 (쿨타임, 재생 횟수 제한 적용)
+    /// </summary>
+    bool CanPlaySound(AudioClip audioClip)
     {
-        AudioSource audioSource = GetAudio();
-        if (audioSource == null) return;
-        audioSource.clip = audioClip;
-        audioSource.pitch = UnityEngine.Random.Range(1f, 1.1f);
-        audioSource.mute = isMuted; // 현재 Mute 상태에 따라 설정
-        audioSource.loop = true;
+        string clipName = audioClip.name;
 
-        audioSource.Play();
-    }
-
-    public void PlaySingle(AudioClip audioClip)
-    {
-        for (int i = 0; i < audioSources.Count; i++)
+        // 재생 횟수 리셋 처리
+        if (lastPlayedTime.ContainsKey(clipName) && Time.time - lastPlayedTime[clipName] > resetTime)
         {
-            if (audioSources[i].clip == null)
-                continue;
-            if (audioSources[i].clip.name == audioClip.name)
-            {
-                return; // 클립이 이미 재생 중이면 함수 종료
-            }
+            soundPlayCount[clipName] = 0;
         }
 
-        Play(audioClip); // 클립이 재생 중이지 않으면 Play 함수 호출
-        singleSound = audioClip; // 현재 재생 중인 클립을 singleSound에 저장
-    }
-
-    public void StopPlaying(AudioClip audioClip)
-    {
-        for (int i = 0; i < audioSources.Count; i++)
+        // 최대 재생 횟수 체크
+        if (soundPlayCount.ContainsKey(clipName) && soundPlayCount[clipName] >= maxPlayCountPerClip)
         {
-            if (audioSources[i].clip == null)
-                continue;
-            if (audioSources[i].clip.name == audioClip.name)
-            {
-                audioSources[i].Stop(); // 클립이 이미 재생 중이면 재생 종료
-                return; 
-            }
+            return false;
         }
+
+        //// 쿨타임 체크
+        //if (lastPlayedTime.ContainsKey(clipName) && Time.time - lastPlayedTime[clipName] < soundCooldown)
+        //{
+        //    return false;
+        //}
+
+        return true;
     }
 
-    public void PlayHurtSound(AudioClip _hurtSound)
+    /// <summary>
+    /// 사운드 재생 후 정보 업데이트 (재생 횟수, 마지막 재생 시간)
+    /// </summary>
+    void UpdateSoundPlayInfo(AudioClip audioClip)
     {
-        AudioSource audioSource = GetAudio();
+        string clipName = audioClip.name;
+
+        // 재생 횟수 증가
+        if (!soundPlayCount.ContainsKey(clipName))
+        {
+            soundPlayCount[clipName] = 0;
+        }
+        soundPlayCount[clipName]++;
+
+        // 마지막 재생 시간 업데이트
+        lastPlayedTime[clipName] = Time.time;
+    }
+
+    public void PlaySoundWith(AudioClip _hurtSound, float _volume, bool _pitch)
+    {
+        AudioSource audioSource = GetAudioSourceFromPool();
         if (audioSource == null) return;
+
         audioSource.clip = _hurtSound;
-        audioSource.pitch = UnityEngine.Random.Range(1f, 1.1f);
         audioSource.volume = .4f;
-        audioSource.mute = isMuted; // 현재 Mute 상태에 따라 설정
-
+        audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
+        audioSource.mute = isMuted;
         audioSource.Play();
-    }
 
-    AudioSource GetAudio()
-    {
-        for (int i = 0; i < audioSources.Count; i++)
-        {
-            if (audioSources[i] == null) return null;
-            if (audioSources[i].isPlaying == false)
-            {
-                audioSources[i].volume = 1f;
-                audioSources[i].volume = Mathf.Pow(reductionRate, i);
-                return audioSources[i];
-            }
-        }
-
-        return audioSources[0];
-    }
-
-    void RemoveSingleAudio(AudioClip audioClip)
-    {
-        int index = GetIndex(audioClip);
-        if (index == -1) return;
-
-        if (audioSources[index].isPlaying) return;
-
-        audioSources[index].clip = null;
-        singleSound = null;
-    }
-
-    int GetIndex(AudioClip audioClip)
-    {
-        if (audioClip == null) return -1;
-        for (int i = 0; i < audioSources.Count; i++)
-        {
-            if (audioSources[i].clip == null) continue;
-            if (audioSources[i].clip.name == audioClip.name)
-                return i;
-        }
-        return -1;
-    }
-    // 추가: 독립적인 AudioSource 객체 생성 및 관리
-    public void PlayAtPosition(AudioClip audioClip, Vector3 position)
-    {
-        GameObject tempAudioSource = new GameObject("TempAudio");
-        tempAudioSource.transform.position = position;
-        AudioSource audioSource = tempAudioSource.AddComponent<AudioSource>();
-        audioSource.clip = audioClip;
-        audioSource.mute = isMuted; // 현재 Mute 상태에 따라 설정
-        audioSource.Play();
-        Destroy(tempAudioSource, audioClip.length);
+        UpdateSoundPlayInfo(_hurtSound); // 재생 횟수와 시간 업데이트
     }
 
     // 사운드를 Mute/Unmute 하는 메서드 추가
-    public void ToggleMute()
-    {
-        isMuted = !isMuted;
-
-        foreach (var audioSource in audioSources)
-        {
-            if (audioSource != null)
-            {
-                audioSource.mute = isMuted;
-            }
-        }
-    }
-
     public void SetState(bool _state)
     {
         isMuted = !_state;
-        foreach (var audioSource in audioSources)
+        foreach (var audioSource in audioSourcePool)
         {
             if (audioSource != null)
             {

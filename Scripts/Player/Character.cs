@@ -147,12 +147,12 @@ public class Character : MonoBehaviour
     void PlayHurtSound(AudioClip _hurtSound)
     {
         if (isHurtSoundPlaying) return;
-        SoundManager.instance.PlayHurtSound(_hurtSound);
+        SoundManager.instance.PlaySoundWith(_hurtSound, .4f, true);
         StartCoroutine(WaitHurtSoundFinished());
     }
     IEnumerator WaitHurtSoundFinished()
     {
-        float counter = .4f; // hurt sound를 1초 동안 재생
+        float counter = .4f; // hurt sound를 .4초 동안 재생
         isHurtSoundPlaying = true;
         yield return new WaitForSeconds(counter);
         isHurtSoundPlaying = false;

@@ -17,10 +17,7 @@ public class WarningSound : MonoBehaviour
     }
     public void PlayIdleSound()
     {
+        // 피치 변화 없이 재생, 반드시 재생
         SoundManager.instance.Play(idleSound);
-    }
-    public void StopIdleSound()
-    {
-        SoundManager.instance.StopPlaying(idleSound);
     }
 }

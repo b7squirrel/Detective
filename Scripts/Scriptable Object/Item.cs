@@ -51,6 +51,7 @@ public class ItemStats
 public class Item : ScriptableObject
 {
     public string Name;
+    public string DisplayName;
     public int grade;
     public Sprite charImage;
     public AnimatorData CardItemAnimator;

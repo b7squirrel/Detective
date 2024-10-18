@@ -72,7 +72,7 @@ public class PunchWeapon : WeaponBase
         if(isSynergyWeaponActivated)
         {
             anim.SetTrigger("AttackSynergy");
-            SoundManager.instance.Play(punchSynergy);
+            SoundManager.instance.PlaySoundWith(punchSynergy, .4f, true);
         }
         else
         {

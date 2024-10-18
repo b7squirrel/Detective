@@ -50,8 +50,4 @@ public class IncomingWarningPanel : MonoBehaviour
     {
         SoundManager.instance.Play(idleSound);
     }
-    public void StopIdleSound()
-    {
-        SoundManager.instance.StopPlaying(idleSound);
-    }
 }
