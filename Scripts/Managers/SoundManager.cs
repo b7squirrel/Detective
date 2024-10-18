@@ -80,7 +80,7 @@ public class SoundManager : MonoBehaviour
 
         audioSource.clip = audioClip;
         audioSource.volume = 1f;
-        //audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
+        audioSource.pitch = 1f;
         audioSource.mute = isMuted;
         audioSource.Play();
 
@@ -140,7 +140,7 @@ public class SoundManager : MonoBehaviour
 
         audioSource.clip = _hurtSound;
         audioSource.volume = .4f;
-        audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
+        if (_pitch) audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
         audioSource.mute = isMuted;
         audioSource.Play();
 

@@ -12170,6 +12170,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 319809380}
     m_Modifications:
+    - target: {fileID: 9040317693896460593, guid: 1d0003f07857cf7419da114046017cc2, type: 3}
+      propertyPath: buttonSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
+    - target: {fileID: 9040317693896460593, guid: 1d0003f07857cf7419da114046017cc2, type: 3}
+      propertyPath: buttonSoundAlt
+      value: 
+      objectReference: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
     - target: {fileID: 9040317693896460595, guid: 1d0003f07857cf7419da114046017cc2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -15216,6 +15224,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1101676686708560201, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
+      propertyPath: buttonSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 0d4daf248c55dde409224bb3fc18175d, type: 3}
+    - target: {fileID: 1101676686708560201, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
+      propertyPath: buttonSoundAlt
+      value: 
+      objectReference: {fileID: 8300000, guid: 0d4daf248c55dde409224bb3fc18175d, type: 3}
     - target: {fileID: 1101676686708560203, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_Name
       value: Button_Generic_Quit
@@ -16313,7 +16329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonSound: {fileID: 8300000, guid: 0d4daf248c55dde409224bb3fc18175d, type: 3}
-  buttonSoundAlt: {fileID: 0}
+  buttonSoundAlt: {fileID: 8300000, guid: 0d4daf248c55dde409224bb3fc18175d, type: 3}
   buttonEffect: {fileID: 2670436166161737735}
   shouldBeLocked: 1
   ignoreButtonEffectAnim: 0
@@ -18560,6 +18576,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1101676686708560201, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
+      propertyPath: buttonSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
+    - target: {fileID: 1101676686708560201, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
+      propertyPath: buttonSoundAlt
+      value: 
+      objectReference: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
     - target: {fileID: 1101676686708560203, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_Name
       value: Button_Generic_Resume
@@ -18798,7 +18822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1601090655
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -19487,6 +19511,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetSouindState
       objectReference: {fileID: 0}
+    - target: {fileID: 5523386864339402650, guid: c9bae28baff424d4288068959837f68e, type: 3}
+      propertyPath: buttonSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
+    - target: {fileID: 5523386864339402650, guid: c9bae28baff424d4288068959837f68e, type: 3}
+      propertyPath: buttonSoundAlt
+      value: 
+      objectReference: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
     - target: {fileID: 5523386864339402651, guid: c9bae28baff424d4288068959837f68e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
