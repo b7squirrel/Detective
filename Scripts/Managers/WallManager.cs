@@ -29,6 +29,9 @@ public class WallManager : MonoBehaviour
             ends[i].position = endPositions[i];
 
             walls[i].position = starts[i].position;
+
+            // 벽을 따라 선을 그림
+            GetComponentInChildren<BorderLines>().Init();
         }
 
         duration = _duration;

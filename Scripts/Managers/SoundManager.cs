@@ -106,7 +106,7 @@ public class SoundManager : MonoBehaviour
             return false;
         }
 
-        
+
 
         return true;
     }
@@ -142,7 +142,10 @@ public class SoundManager : MonoBehaviour
 
         audioSource.clip = _audioClip;
         audioSource.volume = .4f;
+
+        audioSource.pitch = 1f;
         if (_pitch) audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
+        
         audioSource.mute = isMuted;
         audioSource.Play();
 
