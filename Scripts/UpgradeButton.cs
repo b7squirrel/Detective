@@ -53,8 +53,15 @@ public class UpgradeButton : MonoBehaviour
             iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 1f);
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
 
-            if (upgradeData.weaponData.DisplayName != "")  
+            // 시너지 업그레이드일 때는 시너지 이름 표시
+            if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade)
+            {
                 upgradeName.text = upgradeData.weaponData.DisplayName;
+            }
+            else
+            {
+                upgradeName.text = upgradeData.DisplayName;
+            }
         }
         else
         {

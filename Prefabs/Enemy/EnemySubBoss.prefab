@@ -448,8 +448,11 @@ MonoBehaviour:
   knockBackSpeed: 15
   knockBackDelay: 0.1
   targetDir: {x: 0, y: 0}
-  hit: {fileID: 8300000, guid: aa2e0c803358ad34abf8fe2cbafca302, type: 3}
-  die: {fileID: 8300000, guid: 9b888d72de7170043be1843a672e88c5, type: 3}
+  hits:
+  - {fileID: 8300000, guid: aa2e0c803358ad34abf8fe2cbafca302, type: 3}
+  dies:
+  - {fileID: 8300000, guid: 3249dbc439fc4f74ca993397cba59de9, type: 3}
+  - {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
   HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
   HpBarPos: {fileID: 4514316714589044887}
   hpBar: {fileID: 0}

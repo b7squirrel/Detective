@@ -79,7 +79,7 @@ public class TennisBallProjectile : ProjectileBase
     private void TriggerHitEffects()
     {
         anim.SetTrigger("Hit");
-        SoundManager.instance.Play(hitSound);
+        SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .034f);
     }
 
     protected override void CastDamage()

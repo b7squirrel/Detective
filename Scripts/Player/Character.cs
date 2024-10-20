@@ -147,16 +147,16 @@ public class Character : MonoBehaviour
     void PlayHurtSound(AudioClip _hurtSound)
     {
         if (isHurtSoundPlaying) return;
-        SoundManager.instance.PlaySoundWith(_hurtSound, .4f, true);
-        StartCoroutine(WaitHurtSoundFinished());
+        SoundManager.instance.PlaySoundWith(_hurtSound, .4f, true, .2f);
+        //StartCoroutine(WaitHurtSoundFinished());
     }
-    IEnumerator WaitHurtSoundFinished()
-    {
-        float counter = .4f; // hurt sound를 .4초 동안 재생
-        isHurtSoundPlaying = true;
-        yield return new WaitForSeconds(counter);
-        isHurtSoundPlaying = false;
-    }
+    //IEnumerator WaitHurtSoundFinished()
+    //{
+    //    float counter = .4f; // hurt sound를 .4초 동안 재생
+    //    isHurtSoundPlaying = true;
+    //    yield return new WaitForSeconds(counter);
+    //    isHurtSoundPlaying = false;
+    //}
 
     void ApplyArmor(ref int damage)
     {

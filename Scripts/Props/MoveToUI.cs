@@ -52,7 +52,7 @@ public class MoveToUI : MonoBehaviour
             return;
 
         coinManager.updateCurrentCoinNumbers(1);
-        SoundManager.instance.Play(hitSound);
+        SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .1f);
         gameObject.SetActive(false);
     }
 }

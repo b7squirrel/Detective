@@ -15,11 +15,11 @@ public class PropSound : MonoBehaviour
 
     public void PlayInitSound()
     {
-        SoundManager.instance.Play(initSound);
+        SoundManager.instance.PlaySoundWith(initSound, 1f, true, 0f);
     }
     public void PlayLandingSound() 
     {
-        SoundManager.instance.Play(landingSound);
+        SoundManager.instance.PlaySoundWith(landingSound, 1f, true, 0f);
     }
 
 }

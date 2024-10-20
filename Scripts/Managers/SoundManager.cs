@@ -8,7 +8,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] GameObject audioSourcePrefab;
     [SerializeField] int initialAudioSourceCount = 10;
     [SerializeField] float soundCooldown = 0.2f; // 사운드 쿨타임 (초 단위)
-    [SerializeField] int maxPlayCountPerClip = 10; // 사운드가 최대 재생될 수 있는 횟수
+    [SerializeField] int maxPlayCountPerClip = 5; // 사운드가 최대 재생될 수 있는 횟수
     [SerializeField] float resetTime = .3f; // 재생 횟수 리셋 시간
 
     List<AudioSource> audioSourcePool;
@@ -106,11 +106,7 @@ public class SoundManager : MonoBehaviour
             return false;
         }
 
-        //// 쿨타임 체크
-        //if (lastPlayedTime.ContainsKey(clipName) && Time.time - lastPlayedTime[clipName] < soundCooldown)
-        //{
-        //    return false;
-        //}
+        
 
         return true;
     }
@@ -133,18 +129,24 @@ public class SoundManager : MonoBehaviour
         lastPlayedTime[clipName] = Time.time;
     }
 
-    public void PlaySoundWith(AudioClip _hurtSound, float _volume, bool _pitch)
+    public void PlaySoundWith(AudioClip _audioClip, float _volume, bool _pitch, float _coolDown)
     {
+        if (!CanPlaySound(_audioClip)) return; // 쿨타임이나 재생 횟수 체크
+        // 쿨타임 체크
+        string clipName = _audioClip.name;
+        if (lastPlayedTime.ContainsKey(clipName) && Time.time - lastPlayedTime[clipName] < _coolDown)
+            return;
+
         AudioSource audioSource = GetAudioSourceFromPool();
         if (audioSource == null) return;
 
-        audioSource.clip = _hurtSound;
+        audioSource.clip = _audioClip;
         audioSource.volume = .4f;
         if (_pitch) audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
         audioSource.mute = isMuted;
         audioSource.Play();
 
-        UpdateSoundPlayInfo(_hurtSound); // 재생 횟수와 시간 업데이트
+        UpdateSoundPlayInfo(_audioClip); // 재생 횟수와 시간 업데이트
     }
 
     // 사운드를 Mute/Unmute 하는 메서드 추가

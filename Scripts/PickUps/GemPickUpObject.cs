@@ -6,17 +6,9 @@ public class GemPickUpObject : Collectable, IPickUpObject
     [field: SerializeField] public int ExpAmount { get; set; }
     public void OnPickUp(Character character)
     {
-        // 보석의 경험치를 플레이어에게 넘겨줄 때, 임시 경험치가 저장되어 있다면 같이 넘겨줌
+        
         if (ExpAmount == 0) ExpAmount = 2000;
-        //int potentialEXP = 0;
-
-        //if (GemManager.instance.HasPotentialExp())
-        //{
-        //    potentialEXP += GemManager.instance.GetPotentialExp();
-        //    GemManager.instance.ResetPotentialExp(); // 임시 경험치 비우기
-        //}
-        //character.level.AddExperience(potentialEXP + ExpAmount);
-        //GemManager.instance.DecreaseGemCount();
+        
         character.level.AddExperience(ExpAmount);
     }
 
@@ -27,7 +19,7 @@ public class GemPickUpObject : Collectable, IPickUpObject
         {
             OnPickUp(character);
 
-            SoundManager.instance.Play(pickup);
+            SoundManager.instance.PlaySoundWith(pickup, 1f, false, .034f);
             gameObject.SetActive(false);
         }
     }

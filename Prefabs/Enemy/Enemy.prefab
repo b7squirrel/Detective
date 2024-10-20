@@ -353,8 +353,10 @@ MonoBehaviour:
   knockBackSpeed: 30
   knockBackDelay: 0.1
   targetDir: {x: 0, y: 0}
-  hit: {fileID: 8300000, guid: e899ef94d61bed2449d5d7c6b81521ca, type: 3}
-  die: {fileID: 8300000, guid: 6f5232cf634787a47840c2067ae17578, type: 3}
+  hits:
+  - {fileID: 8300000, guid: e899ef94d61bed2449d5d7c6b81521ca, type: 3}
+  dies:
+  - {fileID: 8300000, guid: 6f5232cf634787a47840c2067ae17578, type: 3}
   HPbarPrefab: {fileID: 0}
   HpBarPos: {fileID: 0}
   hpBar: {fileID: 0}

@@ -69,8 +69,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     Color enemyColor; // die effect의 색깔을 정하기 위해서.
 
     [Header("Sounds")]
-    [SerializeField] protected AudioClip hit;
-    [SerializeField] protected AudioClip die;
+    [SerializeField] protected AudioClip[] hits;
+    [SerializeField] protected AudioClip[] dies;
 
     [Header("HP Bar")]
     [SerializeField] GameObject HPbarPrefab;
@@ -440,12 +440,19 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Stats.hp -= damage;
         if (Stats.hp < 1)
         {
-            SoundManager.instance.Play(die);
+            for (int i = 0; i < dies.Length; i++)
+            {
+                SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
+            }
+            
             Die();
         }
         else
         {
-            SoundManager.instance.Play(hit);
+            for (int i = 0; i < hits.Length; i++)
+            {
+                SoundManager.instance.PlaySoundWith(hits[i], 1f,  true, .2f); 
+            }
 
             if (hpBar != null)
             {
@@ -458,23 +465,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Die()
     {
-        //if (dieEffectPrefeab != null)
-        //{
-        //    GameObject dieEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
-    
-        //    if (dieEffect != null) dieEffect.transform.position = transform.position;
-        //}
-
-        // 데칼
         GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
         if (explosionEffect != null) explosionEffect.transform.position = transform.position;
-
-        //// 터지는 이펙트의 색을 적의 색과 동일하게 맞추기
-        //SpriteRenderer[] effectSr = explosionEffect.GetComponentsInChildren<SpriteRenderer>();
-        //for (int i = 0; i < effectSr.Length; i++)
-        //{
-        //    effectSr[i].color = enemyColor;
-        //}
 
         GetComponent<DropOnDestroy>().CheckDrop();
 
@@ -497,6 +489,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (IsBoss)
         {
             FindObjectOfType<BossDieManager>().DieEvent(.1f, 2f);
+        }
+
+        if(isSubBoss)
+        {
+            CameraShake.instance.Shake();
         }
 
         if (shockwave != null)
