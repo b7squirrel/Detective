@@ -6,4 +6,5 @@ public interface ISkill
     float CoolDownTime { get; set; }
     void UseSkill();
     void Init(SkillManager _skillManager, CardData _cardData);
+    bool IsActivated();
 }

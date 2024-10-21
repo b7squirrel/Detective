@@ -92,7 +92,6 @@ public class StageEvenetManager : MonoBehaviour
 
             case StageEventType.SpawnEnemyBoss:
                 spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
-                wallManager.ActivateMovingWalls();
                 break;
 
             case StageEventType.Incoming:

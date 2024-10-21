@@ -13,16 +13,16 @@ public class Wall : MonoBehaviour
         wallDamage = _damage;
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision == null) return;
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if(playerEffects == null) playerEffects = collision.gameObject.GetComponent<PlayerEffects>();
-            playerEffects.PlayWallDust();
+    //private void OnCollisionStay2D(Collision2D collision)
+    //{
+    //    if (collision == null) return;
+    //    if (collision.gameObject.CompareTag("Player"))
+    //    {
+    //        if(playerEffects == null) playerEffects = collision.gameObject.GetComponent<PlayerEffects>();
+    //        playerEffects.PlayWallDust();
 
-            if(character == null) character = collision.gameObject.GetComponent<Character>();
-            character.TakeDamage(wallDamage, EnemyType.Melee);
-        }
-    }
+    //        if(character == null) character = collision.gameObject.GetComponent<Character>();
+    //        character.TakeDamage(wallDamage, EnemyType.Melee);
+    //    }
+    //}
 }

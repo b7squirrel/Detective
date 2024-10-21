@@ -55,8 +55,10 @@ public class FieldItemEffect : MonoBehaviour
     IEnumerator PlayerInvincibleCo()
     {
         GameManager.instance.IsPlayerInvincible = true;
+        GameManager.instance.IsPlayerItemInvincible = true;
         yield return new WaitForSeconds(invincibaleDuration);
         GameManager.instance.IsPlayerInvincible = false;
+        GameManager.instance.IsPlayerItemInvincible = false;
     }
     #endregion
     #region ÆøÅº

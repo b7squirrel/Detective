@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public FieldItemSpawner fieldItemSpawner;
     public PlayerRegion playerRegion;
     public FeedbackManager feedbackManager;
+    public FieldItemEffect fieldItemEffect;
 
     public GameObject joystick;
 
@@ -21,7 +22,9 @@ public class GameManager : MonoBehaviour
 
     public bool IsPlayerDead { get; set; }
     public bool IsPlayerInvincible { get; set; }
+    public bool IsPlayerItemInvincible { get; set; }
     public bool IsPaused { get; private set; }
+
 
     [SerializeField] Camera currentCamera;
     public Collider2D cameraBoundary;

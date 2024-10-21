@@ -78,6 +78,30 @@ public class EnemyBoss : EnemyBase, Idamageable
         anim.SetTrigger("Shoot");
     }
 
+    #region 닿으면 Player HP 감소
+    protected override void AttackMelee(int _damage)
+    {
+        Target.gameObject.GetComponent<Character>().TakeDamage(Stats.damage, EnemyType.Melee);
+    }
+    protected override void AttackRange(int _damage)
+    {
+        if (enemyProjectile == null) return;
+        GameObject projectile = GameManager.instance.poolManager.GetMisc(enemyProjectile);
+        if (projectile == null) return; // pooling key에서 개수 제한에 걸려서 더 이상 생성되지 않았다면
+        projectile.transform.position = transform.position;
+
+        // enemyProjectile의 damage값을 _damage 값으로 초기화 시키기
+        EnemyProjectile proj = projectile.GetComponent<EnemyProjectile>();
+        if (proj == null) return;
+        proj.Init(_damage, Vector3.zero);
+    }
+    protected override void AttackExplode(int _damage)
+    {
+        AttackMelee(_damage);
+        Die();
+    }
+    #endregion
+
     #region Shooting Functions
     public void PlayShootAnticSound()
     {

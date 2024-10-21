@@ -12,6 +12,8 @@ public class SkillBase : MonoBehaviour, ISkill
     protected float skillCounter;
     protected SkillUI skillUi;
 
+    protected bool isActivated; // 외부에서 어떤 스킬이 발동되었는지 알기 위해
+
     public virtual void Init(SkillManager _skillManager, CardData _cardData)
     {
         _skillManager.onSkill += UseSkill;
@@ -33,5 +35,10 @@ public class SkillBase : MonoBehaviour, ISkill
         skillCounter += Time.deltaTime;
         skillUi.SetSlider(skillCounter / realCoolDownTime);
         // 각 스킬에서 구현
+    }
+
+    public bool IsActivated()
+    {
+        return isActivated;
     }
 }

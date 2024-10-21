@@ -42,6 +42,10 @@ public class WallManager : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// 원래는 보스가 등장할 때 StageEventManager에서 실행할 예정이었으나 
+    /// 너무 좁아지면 카메라 바운드가 제대로 작동하지 않아서 보류
+    /// </summary>
     public void ActivateMovingWalls()
     {
         StartCoroutine(MoveWalls());

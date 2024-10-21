@@ -59,6 +59,7 @@ public class DropOnDestroy : MonoBehaviour
                     if (dropItemProperty[i].Item.GetComponent<HealPickUpObject>() != null)
                     {
                         toDrop = dropItemProperty[i].Item;
+                        itemIndex = i; // 아래에서는 itemIndex로 아이템을 처리하므로
                         break;
                     }
                 }

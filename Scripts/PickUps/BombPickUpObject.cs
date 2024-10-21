@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class BombPickUpObject : Collectable, IPickUpObject
 {
-    FieldItemEffect fieldItemEffect;
     public void OnPickUp(Character character)
     {
-        if (fieldItemEffect == null) fieldItemEffect = FindObjectOfType<FieldItemEffect>();
-        fieldItemEffect.Explode(transform.position);
+        GameManager.instance.fieldItemEffect.Explode(transform.position);
     }
     void OnTriggerEnter2D(Collider2D collision)
     {

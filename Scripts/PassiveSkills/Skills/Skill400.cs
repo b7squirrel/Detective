@@ -21,6 +21,9 @@ public class Skill400 : SkillBase
     }
     public override void UseSkill()
     {
+        // 월계수로 무적 상태라면 모든 타이머를 정지시킴.
+        if (GameManager.instance.IsPlayerItemInvincible) return; 
+
         base.UseSkill();
 
         if (skillCounter > realCoolDownTime)
