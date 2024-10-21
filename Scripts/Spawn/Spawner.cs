@@ -64,10 +64,14 @@ public class Spawner : MonoBehaviour
     #endregion
 
     #region 스폰
-    public void Spawn(EnemyData enemyToSpawn, int index)
+    public void Spawn(EnemyData enemyToSpawn, int index, bool forceSpawn)
     {
-        if (currentEnemyNumbers >= maxEnemyInScene)
-            return;
+        // 적들이 몰려옵니다의 경우 강제로 스폰
+        if (forceSpawn == false)
+        {
+            if (currentEnemyNumbers >= maxEnemyInScene)
+                return;
+        }
 
         // 스폰 가능한 지점 탐색하고 벽 안쪽에서 2 unit 더 안쪽에 스폰
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);

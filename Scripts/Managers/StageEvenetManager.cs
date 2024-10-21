@@ -18,6 +18,8 @@ public class StageEvenetManager : MonoBehaviour
     bool onStopWatchEffect;
 
     int eventIndexer;
+    bool forceSpawn;
+    int forceSpawnIndex;
 
     MusicManager musicManager;
     public bool IsWinningStage { get; set; }
@@ -55,21 +57,37 @@ public class StageEvenetManager : MonoBehaviour
             return;
         }
         int enemyNums = spawner.GetCurrentEnemyNums();
-        if (enemyNums > enemyNumForNextEvent)
-        {
-            return; // 적이 너무 많이 남아 있다면 이벤트 없음.
-        }
+
         if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.
 
-        if (isWaiting) return;
+        if (stageEvents[eventIndexer].eventType == StageEventType.Incoming)
+        {
+            forceSpawn = true;
+            forceSpawnIndex = 5; // 적들이 몰려옵니다 경고 이후 5개의 이벤트는 강제로 진행
+        }
+
+        // 적들이 몰려옵니다 이벤트가 아닐 때만 적의 수에 따라 이벤트 실행
+        if(forceSpawnIndex <= 0)
+        {
+            if (enemyNums > enemyNumForNextEvent) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
+        }
+
+
+        if (isWaiting) return; // 이벤트가 진행 중일 동안은 다음 이벤트를 진행하지 않고 기다림.
+
         duration = stageEvents[eventIndexer].time;
-        StartCoroutine(TriggerEvent(duration));
+
+        Debug.Log(stageEvents[eventIndexer].eventType.ToString() + forceSpawn);
+
+        StartCoroutine(TriggerEvent(duration, forceSpawn));
     }
-    IEnumerator TriggerEvent(float _duration)
+    IEnumerator TriggerEvent(float _duration, bool _forceSpawn)
     {
         isWaiting = true;
         yield return new WaitForSeconds(_duration);
-        isWaiting = false;
+
+        if (GameManager.instance.IsPlayerDead == false)
+            isWaiting = false;
 
         if (onStopWatchEffect) yield break; // 스톱위치가 작동 중이면 이벤트 홀드
 
@@ -78,7 +96,7 @@ public class StageEvenetManager : MonoBehaviour
             case StageEventType.SpawnEnemy:
                 for (int i = 0; i < stageEvents[eventIndexer].count; i++)
                 {
-                    spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy);
+                    spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy, _forceSpawn);
                 }
                 break;
 
@@ -87,7 +105,7 @@ public class StageEvenetManager : MonoBehaviour
                 break;
 
             case StageEventType.SpawnSubBoss:
-                SpawnSubBoss();
+                SpawnSubBoss(_forceSpawn);
                 break;
 
             case StageEventType.SpawnEnemyBoss:
@@ -102,6 +120,8 @@ public class StageEvenetManager : MonoBehaviour
         }
 
         eventIndexer++;
+        forceSpawnIndex--;
+        if (forceSpawnIndex <= 0) forceSpawn = false;
 
         // 디버깅
         SendStageEventIndex(eventIndexer);
@@ -112,9 +132,9 @@ public class StageEvenetManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         GameManager.instance.GetComponent<WinStage>().OpenPanel();
     }
-    void SpawnSubBoss()
+    void SpawnSubBoss(bool _forceSpawn)
     {
-        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss);
+        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss, _forceSpawn);
     }
     
     void SpawnEnemyGroup(int number)

@@ -50,7 +50,7 @@ public class Indicator : MonoBehaviour
             {
                 indicator.SetActive(true);
                 anim.SetTrigger("onSpot");
-                SoundManager.instance.Play(onSpotSFX);
+                SoundManager.instance.PlaySoundWith(onSpotSFX, 1f, false, .2f);
             }
 
             indicator.transform.position = hit.point;
@@ -67,7 +67,7 @@ public class Indicator : MonoBehaviour
             if (isVisible == false)
             {
                 indicator.SetActive(false);
-                SoundManager.instance.Play(onSpotSFX);
+                SoundManager.instance.PlaySoundWith(onSpotSFX, 1f, false, .2f);
                 isVisible = true;
             }
         }
