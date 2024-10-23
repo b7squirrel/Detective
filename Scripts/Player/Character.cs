@@ -6,6 +6,9 @@ public class Character : MonoBehaviour
 {
     [SerializeField] int currentHealth;
     [SerializeField] GameObject healEffect;
+    [SerializeField] Transform[] tearTransforms;
+    [SerializeField] GameObject tearEffect;
+    bool isTearEffectActivated;
 
     [field: SerializeField] public int MaxHealth { get; set; } = 3000;
     [field: SerializeField] public int Armor { get; set; } = 0;
@@ -50,6 +53,7 @@ public class Character : MonoBehaviour
         currentHealth = MaxHealth;
         hpBar.SetStatus(currentHealth, MaxHealth);
         healEffect.SetActive(false);
+        tearEffect.SetActive(false);
 
         wallCollisionParticle = GetComponentInChildren<ParticleSystem>();
         wallCollisionParticle.Stop();
@@ -131,6 +135,7 @@ public class Character : MonoBehaviour
 
         anim.SetTrigger("Hurt");
         PlayHurtSound(hurtSound);
+        if (isTearEffectActivated == false) StartCoroutine(DoTearParticle());
 
         currentHealth -= damage;
         if (currentHealth < 0)
@@ -148,16 +153,15 @@ public class Character : MonoBehaviour
     {
         if (isHurtSoundPlaying) return;
         SoundManager.instance.PlaySoundWith(_hurtSound, .4f, true, .2f);
-        //StartCoroutine(WaitHurtSoundFinished());
     }
-    //IEnumerator WaitHurtSoundFinished()
-    //{
-    //    float counter = .4f; // hurt sound를 .4초 동안 재생
-    //    isHurtSoundPlaying = true;
-    //    yield return new WaitForSeconds(counter);
-    //    isHurtSoundPlaying = false;
-    //}
-
+    IEnumerator DoTearParticle()
+    {
+        tearEffect.SetActive(true);
+        isTearEffectActivated = true;
+        yield return new WaitForSeconds(.4f);
+        tearEffect.SetActive(false);
+        isTearEffectActivated = false;
+    }
     void ApplyArmor(ref int damage)
     {
         damage -= Armor;
