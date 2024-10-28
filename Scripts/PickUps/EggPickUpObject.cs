@@ -50,7 +50,8 @@ public class EggPickUpObject : Collectable, IPickUpObject
         Character character = collision.GetComponent<Character>();
         if (character != null)
         {
-            OnPickUp(character);
+            UIEvent eggEvent = new UIEvent(() => OnPickUp(character), 3.92f); // Egg + New Kid UI 애니메이션 길이
+            GameManager.instance.popupManager.EnqueueUIEvent(eggEvent);
 
             SoundManager.instance.Play(pickup);
             gameObject.SetActive(false);

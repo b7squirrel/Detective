@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public PlayerRegion playerRegion;
     public FeedbackManager feedbackManager;
     public FieldItemEffect fieldItemEffect;
+    public PopupManager popupManager;
 
     public GameObject joystick;
 
@@ -70,6 +71,8 @@ public class GameManager : MonoBehaviour
         musicCreditManager = GetComponent<MusicCreditManager>();
 
         feedbackManager = GetComponent<FeedbackManager>();
+
+        popupManager = GetComponent<PopupManager>();
 
         confimationButton.SetActive(false);
 
