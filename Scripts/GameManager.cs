@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public FeedbackManager feedbackManager;
     public FieldItemEffect fieldItemEffect;
     public PopupManager popupManager;
+    
 
     public GameObject joystick;
 

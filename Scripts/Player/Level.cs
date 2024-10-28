@@ -71,7 +71,10 @@ public class Level : MonoBehaviour
         // Upgrade Panel Manager에서 패널을 닫으면서 CheckLevelUp 호출
         if (experience >= To_Level_Up) 
         {
-            LevelUp();
+            //LevelUp();
+            UIEvent upgradeEvent = new UIEvent(() => LevelUp());
+            GameManager.instance.popupManager.upgradeAnimHandler.Initialize(upgradeEvent);
+            GameManager.instance.popupManager.EnqueueUIEvent(upgradeEvent);
         }
         else
         {

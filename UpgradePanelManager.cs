@@ -128,5 +128,7 @@ public class UpgradePanelManager : MonoBehaviour
         greyBase.SetActive(false);
         panel.SetActive(false);
         Player.instance.GetComponent<Level>().CheckLevelUp();
+
+        GameManager.instance.popupManager.upgradeAnimHandler.OnAnimationComplete();
     }
 }

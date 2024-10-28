@@ -19990,6 +19990,7 @@ GameObject:
   - component: {fileID: 1686715708}
   - component: {fileID: 1686715710}
   - component: {fileID: 1686715711}
+  - component: {fileID: 1686715712}
   m_Layer: 5
   m_Name: Upgrad Panel
   m_TagString: Untagged
@@ -20050,6 +20051,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1686715712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686715707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0843bdb3d3ca084cb2a7cb4394d09f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1693337968
 GameObject:
   m_ObjectHideFlags: 0
@@ -25922,6 +25935,7 @@ GameObject:
   - component: {fileID: 1739743564}
   - component: {fileID: 1739743565}
   - component: {fileID: 1739743566}
+  - component: {fileID: 1739743567}
   m_Layer: 5
   m_Name: Egg Panel
   m_TagString: Untagged
@@ -26004,6 +26018,18 @@ MonoBehaviour:
   eggDanceSound: {fileID: 8300000, guid: 81c5f169cd9776f469c07c5900a193e9, type: 3}
   newFriendTextSound: {fileID: 8300000, guid: 38429ea0f97dd7748b27386795c66af5, type: 3}
   breakingEggSound: {fileID: 8300000, guid: 492aafab15fa5dd43be81b12f5170836, type: 3}
+--- !u!114 &1739743567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739743561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0843bdb3d3ca084cb2a7cb4394d09f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1743399201
 GameObject:
   m_ObjectHideFlags: 0
@@ -27727,6 +27753,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46831c5f5f0c0604495b6c11e2d8a9bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isProcessing: 0
+  eggAnimHandler: {fileID: 1739743567}
+  upgradeAnimHandler: {fileID: 1686715712}
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0

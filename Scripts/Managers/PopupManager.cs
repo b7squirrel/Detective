@@ -5,7 +5,8 @@ using UnityEngine;
 public class PopupManager : MonoBehaviour
 {
     private Queue<UIEvent> uiEventQueue = new Queue<UIEvent>();
-    private bool isProcessing = false;
+    [SerializeField] bool isProcessing = false;
+    public UIAnimationHandler eggAnimHandler, upgradeAnimHandler;
 
     void Update()
     {
@@ -34,7 +35,7 @@ public class PopupManager : MonoBehaviour
         currentEvent.ShowUI?.Invoke();
 
         // UI가 끝날 때까지 대기
-        yield return new WaitForSeconds(currentEvent.duration);
+        yield return new WaitUntil(() => currentEvent.IsDone);
 
         isProcessing = false;
     }

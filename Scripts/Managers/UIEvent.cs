@@ -1,14 +1,21 @@
 using System;
 using UnityEngine;
 
+[System.Serializable]
 public class UIEvent
 {
     public Action ShowUI { get; }
-    public float duration; // UI가 지속되는 시간
+    public bool IsDone { get; private set; }// UI가 끝났는지 여부
 
-    public UIEvent(Action showUI, float duration)
+    public UIEvent(Action showUI)
     {
         ShowUI = showUI;
-        this.duration = duration;
+        this.IsDone = false;
+    }
+
+    public void TriggerClose()
+    {
+        IsDone = true;
+        Debug.Log("Event Is Done");
     }
 }
