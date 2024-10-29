@@ -39,7 +39,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] AudioClip cheerGroup;
     [SerializeField] AudioClip jumpUp;
     [SerializeField] AudioClip breakingEgg;
-    
+
     void Init(WeaponData wd)
     {
         CloseNewKidImage();
@@ -157,7 +157,7 @@ public class EggPanelManager : MonoBehaviour
         blackBGPanel.SetActive(false);
         whiteBGPanel.SetActive(true);
         yield return new WaitForSecondsRealtime(1.66f); // 이름 반짝 사운드 재생 지점
-        
+
 
         SoundManager.instance.Play(oriNameSound);
         whiteBGPanel.SetActive(false);
@@ -183,7 +183,7 @@ public class EggPanelManager : MonoBehaviour
         costumeSR.sprite = null;
         CloseNewKidImage();
 
-        GameManager.instance.popupManager.eggAnimHandler.OnAnimationComplete();
+        GameManager.instance.popupManager.IsUIDone = true;
         // 돌아가고 있는 코루틴을 멈추지 않으면 
         // 버튼을 누르지 않고 자동으로 창이 종료되었을 때 코루틴이 실행되어 정지된 시간을 풀어버림
         StopCoroutine(Close);

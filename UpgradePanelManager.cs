@@ -123,12 +123,12 @@ public class UpgradePanelManager : MonoBehaviour
     {
         anim.SetTrigger("Close");
         yield return new WaitForSecondsRealtime(.2f); // close animation 길이만큼
+        GameManager.instance.popupManager.IsUIDone = true; // Level.CheckLevelUp 전에 있어야 함. 큐에 쌓이므로
         pauseManager.UnPauseGame();
         HideButtons();
         greyBase.SetActive(false);
         panel.SetActive(false);
         Player.instance.GetComponent<Level>().CheckLevelUp();
 
-        GameManager.instance.popupManager.upgradeAnimHandler.OnAnimationComplete();
     }
 }

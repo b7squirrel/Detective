@@ -38,7 +38,7 @@ public class EggPickUpObject : Collectable, IPickUpObject
         }
         index = Random.Range(0, upgradeToPick.Count);
         character.GetComponent<Level>().GetWeapon(upgradeToPick[index]);
-
+        Debug.Log(upgradeToPick[index].Name.ToString());
         GameManager.instance.eggPanelManager.EggPanelUP(upgradeToPick[index].newKidAnim, upgradeToPick[index].Name);
         GameManager.instance.eggPanelManager.SetEquipmentSprites(upgradeToPick[index].weaponData);
     }
@@ -50,7 +50,10 @@ public class EggPickUpObject : Collectable, IPickUpObject
         Character character = collision.GetComponent<Character>();
         if (character != null)
         {
-            UIEvent eggEvent = new UIEvent(() => OnPickUp(character)); 
+            UIEvent eggEvent = new UIEvent(() => OnPickUp(character), "Egg"); 
+
+            Debug.Log("Egg Name = " + eggEvent.EventName.ToString());
+
             GameManager.instance.popupManager.eggAnimHandler.Initialize(eggEvent);
             GameManager.instance.popupManager.EnqueueUIEvent(eggEvent);
 

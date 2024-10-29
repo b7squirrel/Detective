@@ -16,6 +16,6 @@ public class UIAnimationHandler : MonoBehaviour
     // 알, 업그레이드 패널이 닫힐 때 호출
     public void OnAnimationComplete()
     {
-        uiEvent.TriggerClose();
+        uiEvent?.TriggerClose();
     }
 }
