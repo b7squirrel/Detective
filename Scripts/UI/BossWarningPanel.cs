@@ -15,18 +15,26 @@ public class BossWarningPanel : MonoBehaviour
     {
         bossName.text = _name + " !";
         bossWarningPanel.SetActive(true);
-        StartCoroutine(ActivateBossWarning());
+
+        UIEvent bossEvent = new UIEvent(() => ActivateWarning(), "Boss");
+        GameManager.instance.popupManager.EnqueueUIEvent(bossEvent);
     }
     public void Close()
     {
         anim.SetTrigger("Close");
         StartCoroutine(Deactivate());
     }
+
+    public void ActivateWarning()
+    {
+        StartCoroutine(ActivateBossWarning());
+    }
     IEnumerator Deactivate()
     {
         yield return new WaitForSecondsRealtime(.5f);
         bossWarningPanel.SetActive(false);
         GameManager.instance.pauseManager.UnPauseGame();
+        GameManager.instance.popupManager.IsUIDone = true;
     }
     IEnumerator ActivateBossWarning()
     {
