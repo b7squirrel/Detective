@@ -6,10 +6,10 @@ public class PopupManager : MonoBehaviour
 {
     private Queue<UIEvent> uiEventQueue = new Queue<UIEvent>();
     [SerializeField] bool isProcessing = false;
-    public UIAnimationHandler eggAnimHandler, upgradeAnimHandler;
     public bool IsUIDone { get; set; } = false; // UI 가 끝났는지
 
     [Header("디버그")]
+    [SerializeField] bool debugMode;
     [SerializeField] List<string> queueContents = new List<string>();
     [SerializeField] DebugQueueContents contents;
 
@@ -34,7 +34,7 @@ public class PopupManager : MonoBehaviour
     private IEnumerator ProcessQueueCo()
     {
         isProcessing = true;
-        DebugQueueInProcess.Instance.SetInProcess();
+        if (debugMode) DebugQueueInProcess.Instance.SetInProcess();
 
         UIEvent currentEvent = uiEventQueue.Dequeue();
 
@@ -47,13 +47,16 @@ public class PopupManager : MonoBehaviour
 
         isProcessing = false;
         IsUIDone = false;
-        DebugQueueInProcess.Instance.SetDone();
+        if (debugMode) DebugQueueInProcess.Instance.SetDone();
         DIsplayQueueContents();
     }
 
     // 디버그
     void DIsplayQueueContents()
     {
+        if (debugMode == false) 
+            return;
+
         queueContents.Clear();
         foreach (var item in uiEventQueue)
         {

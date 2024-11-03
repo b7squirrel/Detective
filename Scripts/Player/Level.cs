@@ -73,7 +73,6 @@ public class Level : MonoBehaviour
         {
             //LevelUp();
             UIEvent upgradeEvent = new UIEvent(() => LevelUp(), "Upgrade");
-            GameManager.instance.popupManager.upgradeAnimHandler.Initialize(upgradeEvent);
             GameManager.instance.popupManager.EnqueueUIEvent(upgradeEvent);
         }
         else

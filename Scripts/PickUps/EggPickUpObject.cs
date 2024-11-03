@@ -52,9 +52,6 @@ public class EggPickUpObject : Collectable, IPickUpObject
         {
             UIEvent eggEvent = new UIEvent(() => OnPickUp(character), "Egg"); 
 
-            Debug.Log("Egg Name = " + eggEvent.EventName.ToString());
-
-            GameManager.instance.popupManager.eggAnimHandler.Initialize(eggEvent);
             GameManager.instance.popupManager.EnqueueUIEvent(eggEvent);
 
             SoundManager.instance.Play(pickup);
