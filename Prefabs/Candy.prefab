@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1406523275245128429}
   - component: {fileID: 3822949884837445922}
   - component: {fileID: 7417351492102949385}
+  - component: {fileID: -1497720218639011264}
   m_Layer: 7
   m_Name: Candy
   m_TagString: Untagged
@@ -183,6 +184,25 @@ MonoBehaviour:
   moveSpeed: 20
   hitSound: {fileID: 8300000, guid: 5228925b370ae5b4eb96708df3b884c5, type: 3}
   waitingTimeBeforeMoving: 0
+  targetCanvas: {fileID: 0}
+  uiPrefab: {fileID: 0}
+--- !u!114 &-1497720218639011264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5780315627234978803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16b34be4eaca2f943a6206980a8da732, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+  useScreenBounds: 1
+  zDistance: 10
+  moveSpeed: 1900
+  targetScreenPosition: {x: 0, y: 0}
 --- !u!1 &8663615696361274103
 GameObject:
   m_ObjectHideFlags: 0
