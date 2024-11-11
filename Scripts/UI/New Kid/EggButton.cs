@@ -19,20 +19,15 @@ public class EggButton : MonoBehaviour
     [SerializeField] private float decreaseRate; // 초당 감소량
     [SerializeField] private float maxProbability; // 최대 확률
     [SerializeField] Slider probSlider;
+    [SerializeField] TMPro.TextMeshProUGUI probText;
     float currentProbability = 0f;
 
 
     [Header("레어 오리 확률")]
-    [SerializeField] TMPro.TextMeshProUGUI textInteger;
-    [SerializeField] TMPro.TextMeshProUGUI textDecimal;
     [SerializeField] float desiredFontSizeFactor;
-    [SerializeField] float increment; // 클릭할 때마다 확률 증가분
-    float prevIntegerPart, prevDecimalPart;
-    float integerPart, decimalPart;
     float initFontSize;
     bool isInit;
     float rateToGetRare;
-    float previousRate, currentRate;
 
     bool isClicked; // 너무 연속으로 클릭되는 것을 막기 위해
 
@@ -51,7 +46,6 @@ public class EggButton : MonoBehaviour
 
         if (isInit == false)
         {
-            initFontSize = textInteger.fontSize;
             isInit = true;
         }
     }
@@ -71,21 +65,18 @@ public class EggButton : MonoBehaviour
         if (currentProbability > 0)
         {
             currentProbability = Mathf.Max(0f, currentProbability - (decreaseRate * Time.unscaledDeltaTime));
-            UpdateText();
             UpdateSlider();
+            UpdateProbText();
         }
     }
 
     public void InitRate()
     {
         ResetCurrentProbability();
+        probSlider.value = 0f;
+        initFontSize = probText.fontSize;
+
         rateToGetRare = 0f;
-        integerPart = 0;
-        decimalPart = 0;
-        prevDecimalPart = 0;
-        prevIntegerPart = 0;
-        textInteger.text = integerPart.ToString();
-        textDecimal.text = decimalPart.ToString().Substring(1) + "%";
 
         if (probSlider != null)
         {
@@ -120,6 +111,7 @@ public class EggButton : MonoBehaviour
 
         UpText(true);
         UpdateSlider();
+        UpdateProbText();
         UpdateRateForGameManager();
 
         StartCoroutine(WhiteFlashCo());
@@ -135,24 +127,18 @@ public class EggButton : MonoBehaviour
     }
     public void UpText(bool _integerUp)
     {
-        if (textInteger.gameObject.activeSelf == false)
-            return;
         StartCoroutine(UpTextCo(_integerUp));
     }
     IEnumerator UpTextCo(bool _integerUp)
     {
-        if (_integerUp) textInteger.fontSize *= desiredFontSizeFactor;
-        UpdateText();
+        if (_integerUp) probText.fontSize *= desiredFontSizeFactor;
+        UpdateProbText();
 
         yield return new WaitForSecondsRealtime(.06f);
 
-        textInteger.fontSize = initFontSize;
+        probText.fontSize = initFontSize;
     }
 
-    void UpdateText()
-    {
-        textInteger.text = Mathf.FloorToInt(currentProbability).ToString();
-    }
     void  UpdateSlider()
     {
         // Slider 값 업데이트
@@ -160,6 +146,10 @@ public class EggButton : MonoBehaviour
         {
             probSlider.value = Mathf.FloorToInt(currentProbability);
         }
+    }
+    void UpdateProbText()
+    {
+        probText.text = Mathf.FloorToInt(currentProbability).ToString() + "%";
     }
 
     void UpdateRateForGameManager()
