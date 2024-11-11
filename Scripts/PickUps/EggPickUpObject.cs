@@ -38,8 +38,8 @@ public class EggPickUpObject : Collectable, IPickUpObject
         }
         index = Random.Range(0, upgradeToPick.Count);
         character.GetComponent<Level>().GetWeapon(upgradeToPick[index]);
-        Debug.Log(upgradeToPick[index].Name.ToString());
-        GameManager.instance.eggPanelManager.EggPanelUP(upgradeToPick[index].newKidAnim, upgradeToPick[index].Name);
+        Debug.Log(upgradeToPick[index].weaponData.DisplayName.ToString());
+        GameManager.instance.eggPanelManager.EggPanelUP(upgradeToPick[index].newKidAnim, upgradeToPick[index].weaponData.DisplayName);
         GameManager.instance.eggPanelManager.SetEquipmentSprites(upgradeToPick[index].weaponData);
     }
 

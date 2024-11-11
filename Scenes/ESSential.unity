@@ -9140,6 +9140,9 @@ MonoBehaviour:
   breakEggSound: {fileID: 8300000, guid: 6473b812a2c47174b9abb5f40b267d7a, type: 3}
   eggClickSound: {fileID: 8300000, guid: 716df13cc9a456044820e6f5a1cf134c, type: 3}
   whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
+  increaseProbability: 5
+  decreaseRate: 16
+  maxProbability: 100
   textInteger: {fileID: 286195392}
   textDecimal: {fileID: 626038002}
   desiredFontSizeFactor: 1.6
@@ -30504,7 +30507,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2129931910
 RectTransform:
   m_ObjectHideFlags: 0

@@ -14,6 +14,12 @@ public class EggButton : MonoBehaviour
     Material initMat;
     Image image;
 
+    [Header("Probability Settings")]
+    [SerializeField] private float increaseProbability; // 버튼 클릭시 증가량
+    [SerializeField] private float decreaseRate; // 초당 감소량
+    [SerializeField] private float maxProbability; // 최대 확률
+    private float currentProbability = 0f;
+
     [Header("레어 오리 확률")]
     [SerializeField] TMPro.TextMeshProUGUI textInteger;
     [SerializeField] TMPro.TextMeshProUGUI textDecimal;
@@ -24,6 +30,7 @@ public class EggButton : MonoBehaviour
     float initFontSize;
     bool isInit;
     float rateToGetRare;
+    float previousRate, currentRate;
 
     bool isClicked; // 너무 연속으로 클릭되는 것을 막기 위해
 
@@ -46,9 +53,31 @@ public class EggButton : MonoBehaviour
             isInit = true;
         }
     }
+    void OnButtonClick()
+    {
+        // 확률 증가
+        currentProbability = Mathf.Min(currentProbability + increaseProbability, maxProbability);
+    }
+    void ResetCurrentProbability()
+    {
+        currentProbability = 0f;
+    }
+
+    void Update()
+    {
+        // 확률이 0보다 크면 서서히 감소
+        if (currentProbability > 0)
+        {
+            currentProbability = Mathf.Max(0f, currentProbability - (decreaseRate * Time.unscaledDeltaTime));
+            Debug.Log("Current Probability = " + currentProbability);
+            Debug.Log("Time.deltaTime = " + Time.deltaTime);
+            UpdateText();
+        }
+    }
 
     public void InitRate()
     {
+        ResetCurrentProbability();
         rateToGetRare = 0f;
         integerPart = 0;
         decimalPart = 0;
@@ -73,22 +102,23 @@ public class EggButton : MonoBehaviour
     public void EggClickedFeedback()
     {
         if (isClicked) return;
-        float offset = UnityEngine.Random.Range(-increment / 3f, increment / 3f);
-        increment += offset;
-        rateToGetRare += increment;
-        rateToGetRare = Mathf.Round(rateToGetRare * 100f) / 100f;
-        integerPart = Mathf.FloorToInt(rateToGetRare);
+        //float offset = UnityEngine.Random.Range(-increment / 3f, increment / 3f);
+        //increment += offset;
+        //rateToGetRare += increment;
+        //rateToGetRare = Mathf.Round(rateToGetRare * 100f) / 100f;
+        //integerPart = Mathf.FloorToInt(rateToGetRare);
 
-        decimalPart = rateToGetRare - integerPart;
-        decimalPart = Mathf.Round(decimalPart * 100) / 100f;
+        //decimalPart = rateToGetRare - integerPart;
+        //decimalPart = Mathf.Round(decimalPart * 100) / 100f;
+
+        OnButtonClick();
 
         if (anim == null) anim = GetComponentInParent<Animator>();
         anim.SetTrigger("Clicked");
 
-        // 소수점 이하는 클릭 때마다 스케일업. 정수 부분은 변화가 있을 떄만 스케일업
-        if (integerPart > prevIntegerPart) UpText(true);
-        //UpText(textDecimal);
-
+        // 정수 부분은 변화가 있을 떄만 스케일업
+        //if (integerPart > prevIntegerPart) UpText(true);
+        UpText(true);
         UpdateRateForGameManager();
 
         StartCoroutine(WhiteFlashCo());
@@ -98,7 +128,6 @@ public class EggButton : MonoBehaviour
     {
         isClicked = true;
         image.material = whiteMat;
-        Debug.Log("Meterial = " + image.material.name);
         yield return new WaitForSecondsRealtime(.05f);
         isClicked = false;
         image.material = initMat;
@@ -112,12 +141,18 @@ public class EggButton : MonoBehaviour
     IEnumerator UpTextCo(bool _integerUp)
     {
         if (_integerUp) textInteger.fontSize *= desiredFontSizeFactor;
-        textInteger.text = integerPart.ToString();
-        textDecimal.text = decimalPart.ToString().Substring(1) + "%";
+        UpdateText();
+        //textInteger.text = integerPart.ToString();
+        //textDecimal.text = decimalPart.ToString().Substring(1) + "%";
 
         yield return new WaitForSecondsRealtime(.06f);
 
         textInteger.fontSize = initFontSize;
+    }
+
+    void UpdateText()
+    {
+        textInteger.text = Mathf.FloorToInt(currentProbability).ToString();
     }
 
     void UpdateRateForGameManager()
