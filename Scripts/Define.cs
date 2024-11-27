@@ -140,19 +140,29 @@ public class Skills
 {
     public static string[] SkillNames = new string[]
     {
-        "Steel Body",
-        "Sluggish Slumber",
-        "Flash Damage",
-        "Invincible Body",
-        "Spicy Booster"
+        "강철 피부",
+        "느림보 최면술",
+        "넓은 공격",
+        "천하 무적",
+        "파티 타임"
+        //"Steel Body",
+        //"Sluggish Slumber",
+        //"Flash Damage",
+        //"Invincible Body",
+        //"Spicy Booster"
     };
     public static string[] SkillDescriptions = new string[]
     {
-        "Your friends' body shield you from enemies.",
-        "Temporarily slow down all enemies on the screen for a duration.",
-        "Inflict periodic damage to all enemies on the screen.",
-        "Grant periodic invincibility to the player.",
-        "Periodically boost the attack power of both the player and allies."
+        "동료들이 몸으로 적들의 공격을 막아줍니다.",
+        "잠시 최면을 걸어 적들을 느려지게 합니다.",
+        "화면 안의 모든 적들에게 데미지를 줍니다.",
+        "잠시동안 무적이 됩니다.",
+        "잠시동안 자신과 동료들의 공격력을 올려줍니다."
+        //"Your friends' body shield you from enemies.",
+        //"Temporarily slow down all enemies on the screen for a duration.",
+        //"Inflict periodic damage to all enemies on the screen.",
+        //"Grant periodic invincibility to the player.",
+        //"Periodically boost the attack power of both the player and allies."
     };
 }
 

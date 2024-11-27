@@ -29,7 +29,7 @@ public class EquipDisplayUI : MonoBehaviour
 
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
 
-    public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr)
+    public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
     {
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
@@ -57,7 +57,7 @@ public class EquipDisplayUI : MonoBehaviour
 
         // 카드 이름 텍스트
         titleRibbon.SetActive(true);
-        Title.text = charCardData.Name;
+        Title.text = dispName;
         // 카드 레벨 텍스트
         Level.text = "LV " + charCardData.Level;
 

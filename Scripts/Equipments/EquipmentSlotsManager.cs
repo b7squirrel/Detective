@@ -75,7 +75,7 @@ public class EquipmentSlotsManager : MonoBehaviour
             currentAttribute = new OriAttribute(currentAttribute.Atk, addingFactor * Hp + currentAttribute.Hp);
         }
 
-        equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute); // attr ui 업데이트
+        equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute, cardDictionary.GetDisplayName(instantCharCard)); // attr ui 업데이트
     }
 
     public OriAttribute GetCurrentAttribute() => currentAttribute;

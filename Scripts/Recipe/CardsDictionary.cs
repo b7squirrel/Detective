@@ -55,4 +55,19 @@ public class CardsDictionary : MonoBehaviour
             return weaponItemData;
         }
     }
+
+    public string GetDisplayName(CardData cardData)
+    {
+        string dispName;
+        WeaponItemData weaponItemData = GetWeaponItemData(cardData);
+        if (weaponItemData.weaponData == null)
+        {
+            dispName = weaponItemData.itemData.DisplayName;
+        }
+        else
+        {
+            dispName = weaponItemData.weaponData.DisplayName;
+        }
+        return dispName;
+    }
 }

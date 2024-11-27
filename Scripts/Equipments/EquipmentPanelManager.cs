@@ -86,7 +86,9 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.OnDisplay(oriCardDataToDisplay); // 디스플레이 활성
         CardOnDisplay = oriCardDataToDisplay; // 디스플레이 되는 카드의 card data
         equipmentSlotsManager.InitEquipSlots(oriCardDataToDisplay); // 오리 카드의 Data대로 장비 슬롯 설정 
-        equipDisplayUI.SetWeaponDisplay(oriCardDataToDisplay, equipmentSlotsManager.GetCurrentAttribute()); // 오리 카드 및 Attr
+        equipDisplayUI.SetWeaponDisplay(oriCardDataToDisplay, 
+            equipmentSlotsManager.GetCurrentAttribute(), 
+            cardDictionary.GetDisplayName(oriCardDataToDisplay)); // 오리 카드 및 Attr
 
         // 나중에는 이 항목들을 EquipDispUI에 옮겨야 한다. SetWeaponDisplay에 포함되도록
         int level = CardOnDisplay.Level;
