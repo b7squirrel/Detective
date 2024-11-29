@@ -29,6 +29,9 @@ public class EquipDisplayUI : MonoBehaviour
 
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
 
+    float initAtkFontSize, initHpFontSize;
+    Coroutine atkPopCo, hpPopCo;
+
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
     {
         // 별과 카드 색깔
@@ -62,7 +65,7 @@ public class EquipDisplayUI : MonoBehaviour
         Level.text = "LV " + charCardData.Level;
 
         // Halo
-        halo.SetActive(true);
+        //halo.SetActive(true);
 
         // 캐릭터 이미지
         charImage.gameObject.SetActive(true);
@@ -70,8 +73,17 @@ public class EquipDisplayUI : MonoBehaviour
         // charImage.sprite = wd.charImage;
         charImage.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
+        if (atkPopCo != null)
+            StopCoroutine(atkPopCo);
+
+        if (hpPopCo != null)
+            StopCoroutine(hpPopCo);
+
         atk.text = currentAttr.Atk.ToString();
         hp.text = currentAttr.Hp.ToString();
+
+        initAtkFontSize = atk.fontSize;
+        initHpFontSize = hp.fontSize;
 
         charButton.SetActive(true);
         backButton.SetActive(true);
@@ -82,15 +94,32 @@ public class EquipDisplayUI : MonoBehaviour
         atk.text = _currentAtk.ToString();
         hp.text = _currnetHp.ToString();
 
-        StartCoroutine(PopFontSize(atk));
-        StartCoroutine(PopFontSize(hp));
+        if (atkPopCo != null)
+            StopCoroutine(atkPopCo);
+
+        if (hpPopCo != null)
+            StopCoroutine(hpPopCo);
+
+        atkPopCo = StartCoroutine(PopFontSize(true));
+        hpPopCo = StartCoroutine(PopFontSize(false));
     }
-    IEnumerator PopFontSize(TMPro.TMP_Text _text)
+    IEnumerator PopFontSize(bool _atk)
     {
-        float initFontSize = _text.fontSize;
-        _text.fontSize = _text.fontSize + 7f;
-        yield return new WaitForSeconds(.1f);
-        _text.fontSize = initFontSize;
+        if (_atk)
+        {
+            atk.fontSize = initAtkFontSize;
+            atk.fontSize += 10f;
+            yield return new WaitForSeconds(.1f);
+            atk.fontSize = initAtkFontSize;
+        }
+        else
+        {
+            hp.fontSize = initHpFontSize;
+            hp.fontSize += 10f;
+            yield return new WaitForSeconds(.1f);
+            hp.fontSize = initHpFontSize;
+        }
+
     }
     // 오리 위에 장착된 장비 표시/ 숨기기
     public void SetEquipmentDisplay(CardData itemCardData, bool isAdding)
