@@ -16,6 +16,7 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] Transform stars; // 합성된 카드의 별을 반짝이게 하기 위해서
     [SerializeField] Animator upgradeEffect;
     [SerializeField] Animator starBlingEffect;
+    [SerializeField] AudioClip starBlingSound;
     UpPanelManager upPanelManager;
     Coroutine starCoroutine;
 
@@ -194,6 +195,7 @@ public class UpPanelUI : MonoBehaviour
         for(int i = 0; i < starAnims.Length; i++)
         {
             starAnims[i].SetTrigger("Blink");
+            SoundManager.instance.Play(starBlingSound);
             yield return new WaitForSeconds(.1f);
         }
     }

@@ -57,8 +57,8 @@ public class UpPanelManager : MonoBehaviour
     void OnEnable()
     {
         activated = true;
-        GetIntoAllField("Weapon");
         currentTabType = "Weapon";
+        GetIntoAllField("Weapon");
     }
     #endregion
 
@@ -368,6 +368,7 @@ public class UpPanelManager : MonoBehaviour
 
         if (newCardEvoStage > StaticValues.MaxEvoStage - 1) // Evo 레벨이 최고 레벨을 초과하면
         {
+            Debug.Log("합성 전 등급 = " + newCardGrade);
             newCardGrade++; // 다음 등급으로
 
             if (newCardGrade > StaticValues.MaxGrade - 1) // Grade가 최고 등급을 초과하면
@@ -379,11 +380,13 @@ public class UpPanelManager : MonoBehaviour
             else
             {
                 newCardEvoStage = 0; // 다음 등급이 되면 evo 레벨은 초기화
+                Debug.Log("합성 후 등급 = " + newCardGrade);
             }
         }
 
         // 생성된 카드를 내 카드 리스트에 저장
         //CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newCardGrade);
+        CardToUpgrade.Grade = newCardGrade;
         CardToUpgrade.EvoStage = newCardEvoStage;
         CardToUpgrade.Level = 1;
 
@@ -393,6 +396,7 @@ public class UpPanelManager : MonoBehaviour
 
         // 합성 연출 후 강화 성공 패널로
         matField.gameObject.SetActive(false);
+
         StartCoroutine(UpgradeUICo(CardToUpgrade));
     }
 
