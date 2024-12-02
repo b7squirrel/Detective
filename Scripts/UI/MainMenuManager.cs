@@ -37,6 +37,12 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Swipe Transition")]
     [SerializeField] Animator loadingSwipe;
+
+    [Header("합성 성공 플래그")]
+    // 합성 성공한 상태인 것을 저장. 성공한 상태에서 탭해서 나가지 않고, 아래쪽 탭으로 다른 화면으로 넘어갈 경우를 대비
+    bool mergeFinished;
+    UpgradePanelManager upPanelManager;
+
     void Awake()
     {
         InitBlackTransition();
@@ -122,6 +128,15 @@ public class MainMenuManager : MonoBehaviour
         else
         { 
             tabSliderAnim.SetTrigger("Center"); 
+        }
+
+        // 합성 성공 후 탭을 해서 합성 패널을 초기화 시키지 않고 나올 경우를 대비해서 
+        if(pressBtnID != 3)
+        {
+            if(mergeFinished)
+            {
+                
+            }
         }
     }
 

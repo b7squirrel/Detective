@@ -4,29 +4,37 @@ using DG.Tweening;
 
 public class UpPanelUI : MonoBehaviour
 {
-    [SerializeField] GameObject haloUpCard;
     [SerializeField] GameObject confirmationButtonContainer;
     [SerializeField] Transform upgradeConfirmationButton;
     [SerializeField] GameObject fieldSlotPanel;
-    [SerializeField] GameObject panelUpgradeDark;
     [SerializeField] GameObject upgradeSuccessPanel;
     [SerializeField] RectTransform scrollContent;
     [SerializeField] RectTransform UpPanelBG;
 
     [SerializeField] RectTransform upSlot, matSlot, plus, upSuccess;
 
+    [SerializeField] Transform stars; // 합성된 카드의 별을 반짝이게 하기 위해서
+    [SerializeField] Animator upgradeEffect;
+    [SerializeField] Animator starBlingEffect;
+    UpPanelManager upPanelManager;
+    Coroutine starCoroutine;
+
+
     public void Init()
     {
         upSlot.gameObject.SetActive(true);
         matSlot.gameObject.SetActive(false);
+        fieldSlotPanel.gameObject.SetActive(true);
         plus.gameObject.SetActive(false);
-        haloUpCard.SetActive(false);
         confirmationButtonContainer.SetActive(false);
         upgradeSuccessPanel.SetActive(false);
+        upgradeEffect.gameObject.SetActive(true);
 
-        fieldSlotPanel.transform.localScale = new Vector2(.95f, 1f);
-        fieldSlotPanel.transform.DOScale(1, .3f).SetEase(Ease.OutBack);
-        UpSlotInitAnimtion();
+        fieldSlotPanel.transform.localScale = Vector2.one;
+        //fieldSlotPanel.transform.localScale = new Vector2(.95f, 1f);
+        //fieldSlotPanel.transform.DOScale(1, .3f).SetEase(Ease.OutBack);
+
+        //UpSlotInitAnimtion();
         BGInitAnimation();
     }
 
@@ -46,21 +54,22 @@ public class UpPanelUI : MonoBehaviour
     }
     IEnumerator UpSlotInitAnimationCo() // 업그레이드 슬롯이 조금 늦게 나타나도록
     {
-        upSlot.transform.localScale = Vector2.zero;
+        upSlot.transform.localScale = Vector2.one;
+        //upSlot.transform.localScale = Vector2.zero;
         yield return new WaitForSeconds(.1f);
-        upSlot.DOScale(1f, .15f).SetEase(Ease.OutBack);
+        //upSlot.DOScale(1f, .15f).SetEase(Ease.OutBack);
     }
     void UpCardAcquiredAnimation() // 업그레이드 슬롯에 카드를 올렸을 때 애님
     {
         upSlot.transform.localScale = .8f * Vector2.one;
         upSlot.DOScale(1f, .6f).SetEase(Ease.OutElastic);
-        upSlot.DOAnchorPos(new Vector2(-110, 26), .15f).SetEase(Ease.OutBack);
-        matSlot.DOAnchorPos(new Vector2(160, 26), .15f).SetEase(Ease.OutBack);
+        upSlot.DOAnchorPos(new Vector2(-205, 26), .15f);
+        matSlot.DOAnchorPos(new Vector2(205, 26), .15f);
     }
     void MatCardAcquiredAnimation() // 재료 슬롯에 카드를 올렸을 때 애님
     {
-        matSlot.transform.localScale = .5f * Vector2.one;
-        matSlot.DOScale(.6f, .6f).SetEase(Ease.OutElastic);
+        matSlot.transform.localScale = .8f * Vector2.one;
+        matSlot.DOScale(1f, .6f).SetEase(Ease.OutElastic);
     }
 
     void UpSlotCanceledAnimation() // 업그레이드 슬롯 취소 탭
@@ -73,7 +82,8 @@ public class UpPanelUI : MonoBehaviour
     void UpgradeConfirmationAnimation() // 강화 확인 애님
     {
         upgradeConfirmationButton.localScale = Vector2.zero;
-        fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(0, 0), .15f).SetEase(Ease.InBack);
+        fieldSlotPanel.transform.localScale = Vector2.zero;
+        //fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(0, 0), .15f).SetEase(Ease.InBack);
         upgradeConfirmationButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -560f);
         StartCoroutine(UpgradeConfirmationAnimationCo());
     }
@@ -96,9 +106,10 @@ public class UpPanelUI : MonoBehaviour
         yield return new WaitForSeconds(.15f);
 
         fieldSlotPanel.gameObject.SetActive(true);
-        fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(1, 1), .15f).SetEase(Ease.InBack);
-        fieldSlotPanel.transform.localScale = new Vector2(.8f, .8f);
-        fieldSlotPanel.transform.DOScale(1, .15f).SetEase(Ease.OutBack);
+        //fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(1, 1), .15f).SetEase(Ease.InBack);
+        //fieldSlotPanel.transform.localScale = new Vector2(.8f, .8f);
+        //fieldSlotPanel.transform.DOScale(1, .15f).SetEase(Ease.OutBack);
+        fieldSlotPanel.transform.localScale = Vector2.one;
     }
     #endregion
 
@@ -106,7 +117,6 @@ public class UpPanelUI : MonoBehaviour
     {
         UpCardAcquiredAnimation();
 
-        haloUpCard.SetActive(true);
         matSlot.gameObject.SetActive(true);
         plus.gameObject.SetActive(true);
         plus.DOScale(.48f, .05f).SetEase(Ease.OutBack);
@@ -119,7 +129,6 @@ public class UpPanelUI : MonoBehaviour
     {
         UpSlotCanceledAnimation();
 
-        haloUpCard.SetActive(false);
         matSlot.gameObject.SetActive(false);
         plus.gameObject.SetActive(false);
     }
@@ -148,7 +157,6 @@ public class UpPanelUI : MonoBehaviour
     }
     public void DeactivateSpecialSlots() // 업그레이드, 재료 슬롯들을 비활성화
     {
-        haloUpCard.SetActive(false);
         upSlot.gameObject.SetActive(false);
         matSlot.gameObject.SetActive(false);
         plus.gameObject.SetActive(false);
@@ -162,13 +170,39 @@ public class UpPanelUI : MonoBehaviour
         upSuccess.localScale = .8f * Vector2.one;
         upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
 
+        upgradeEffect.SetTrigger("On");
+        GlimmerStar();
+
         fieldSlotPanel.SetActive(false);
+    }
+
+    // 별 반짝임
+    void GlimmerStar()
+    {
+        starBlingEffect.SetTrigger("On");
+        if (starCoroutine != null) StopCoroutine(starCoroutine);
+        starCoroutine = StartCoroutine(GlimmerStarCo());
+    }
+
+    IEnumerator GlimmerStarCo()
+    {
+
+        yield return new WaitForSeconds(.2f);
+
+
+        Animator[] starAnims = stars.GetComponentsInChildren<Animator>();
+        for(int i = 0; i < starAnims.Length; i++)
+        {
+            starAnims[i].SetTrigger("Blink");
+            yield return new WaitForSeconds(.1f);
+        }
     }
 
     // upgrade success 버튼에서 호출
     public void CloseUpgradeSuccessUI()
     {
         upgradeSuccessPanel.gameObject.SetActive(false);
+
         upSlot.gameObject.SetActive(true);
         matSlot.gameObject.SetActive(true);
         fieldSlotPanel.SetActive(true);

@@ -13,6 +13,7 @@ public class AllField : MonoBehaviour
     int numSlots;
     [SerializeField] GameObject slotPrefab;
     [SerializeField] Slots slotType;
+    [SerializeField] Vector2 slotSize;
     #endregion
 
     void OnDisable()
@@ -38,7 +39,7 @@ public class AllField : MonoBehaviour
             slot.transform.position = Vector3.zero;
             // slot.transform.localScale = new Vector2(0, 0);
             // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
-            slot.transform.localScale = new Vector2(.7f, .7f);
+            slot.transform.localScale = slotSize;
             slots.Add(slot);
         }
 
@@ -74,7 +75,7 @@ public class AllField : MonoBehaviour
         {
             var slot = Instantiate(slotPrefab, transform);
             slot.transform.position = Vector3.zero;
-            slot.transform.localScale = new Vector2(.7f, .7f);
+            slot.transform.localScale = slotSize;
             slots.Add(slot);
         }
 
