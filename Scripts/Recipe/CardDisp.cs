@@ -17,11 +17,17 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI TitleShadow;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
+
     [SerializeField] protected GameObject starPrefab;
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
     [SerializeField] GameObject button; // 버튼을 활성, 비활성 하기 위해
     [SerializeField] GameObject haloSelected; // 선택된 카드 주변 Halo
+
+    [Header("MergedCard")]
+    [SerializeField] bool isMergedCard; // 합성된 카드일 때만 타이틀 리본을 보여주기 위해
+    [SerializeField] Transform ribbon;
     GameObject[] stars;
+    MergedCardDescription mergedCardDescription;
 
     public void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
     {
@@ -32,22 +38,40 @@ public class CardDisp : MonoBehaviour
         int evoStage = cardData.EvoStage;
         SetNumStar(evoStage + 1);
 
+        // 등급에 따른 카드 색깔
         for (int i = 0; i < StaticValues.MaxGrade; i++)
         {
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
         }
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
-        // 카드 이름 텍스트
-        Title.text = weaponData.Name;
-        TitleShadow.text = Title.text;
+        if (isMergedCard)
+        {
+            // 타이틀 리본 색깔
+            for (int i = 0; i < 5; i++)
+            {
+                if (i == intGrade)
+                {
+                    cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
+                    ribbon.GetChild(intGrade).gameObject.SetActive(true);
+                    continue;
+                }
+                cardBaseContainer.GetChild(i).gameObject.SetActive(false);
+                ribbon.GetChild(i).gameObject.SetActive(false);
+            }
 
-        // 임시로 타이틀을 없애보자. 작은 카드 안에 정보가 너무 많음.
-        Title.text = "";
-        TitleShadow.text = "";
+            ribbon.gameObject.SetActive(true);
+
+            // 카드 이름 텍스트
+            Title.text = weaponData.DisplayName;
+            TitleShadow.text = Title.text;
+
+            if(mergedCardDescription == null) mergedCardDescription = GetComponent<MergedCardDescription>();
+            mergedCardDescription.UpdateSkillDescription(cardData);
+        }
 
         // 카드 레벨 텍스트
-        Level.text = "LV " + cardData.Level;
+        Level.text = "레벨 " + cardData.Level;
 
         // 캐릭터 이미지
         //charImage.sprite = weaponData.charImage;
@@ -84,7 +108,7 @@ public class CardDisp : MonoBehaviour
         TitleShadow.text = "";
 
         // 카드 레벨 텍스트
-        Level.text = "LV " + cardData.Level;
+        Level.text = "레벨 " + cardData.Level;
 
         // 아이템 이미지
         int index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
@@ -173,6 +197,7 @@ public class CardDisp : MonoBehaviour
         Level.text = "";
         Title.text = "";
         TitleShadow.text = "";
+        if(isMergedCard) ribbon.gameObject.SetActive(false);
 
         // 캐릭터 이미지
         cardBaseContainer.gameObject.SetActive(false);

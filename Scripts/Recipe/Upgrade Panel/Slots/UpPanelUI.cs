@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class UpPanelUI : MonoBehaviour
@@ -13,13 +14,20 @@ public class UpPanelUI : MonoBehaviour
 
     [SerializeField] RectTransform upSlot, matSlot, plus, upSuccess;
 
+    [Header("합성 이펙트")]
     [SerializeField] Transform stars; // 합성된 카드의 별을 반짝이게 하기 위해서
     [SerializeField] Animator upgradeEffect;
     [SerializeField] Animator starBlingEffect;
+    [SerializeField] AudioClip gradeBlingSound;
+    [SerializeField] AudioClip starBlingBeamSound;
     [SerializeField] AudioClip starBlingSound;
+    [SerializeField] RectTransform whiteEffectOnMerge;
     UpPanelManager upPanelManager;
     Coroutine starCoroutine;
 
+    [Header("아래쪽 탭 제어")]
+    [SerializeField] RectTransform tabs;
+    Button[] tabButtons = new Button[5];
 
     public void Init()
     {
@@ -153,7 +161,7 @@ public class UpPanelUI : MonoBehaviour
     {
         plus.transform.localScale = new Vector3(.6f, .6f, .6f); // default .48f
         plus.DOScale(0, .2f).SetEase(Ease.InBack);
-        upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack);
+        upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack); // 0.15초 동안 가운데로 이동
         matSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack);
     }
     public void DeactivateSpecialSlots() // 업그레이드, 재료 슬롯들을 비활성화
@@ -164,23 +172,76 @@ public class UpPanelUI : MonoBehaviour
     }
 
     // 강화 성공 패널
-    public void OpenUpgradeSuccessPanel(CardData cardData)
+    public void OpenUpgradeSuccessPanel(CardData cardData, bool isGradeUp)
+    {
+        StartCoroutine(OpenSuccessPanelCo(cardData, isGradeUp));
+    }
+
+    IEnumerator OpenSuccessPanelCo(CardData cardData, bool isGradeUp)
     {
         upgradeSuccessPanel.SetActive(true);
 
-        upSuccess.localScale = .8f * Vector2.one;
-        upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
+        // 타격감 White 이펙트
+        whiteEffectOnMerge.gameObject.SetActive(true);
+        whiteEffectOnMerge.GetComponent<Image>().color = Color.white;
+        whiteEffectOnMerge.localScale = Vector2.one;
+        whiteEffectOnMerge.DOScale(1.2f, .4f);
+        whiteEffectOnMerge.GetComponent<Image>().DOFade(0, .6f);
 
         upgradeEffect.SetTrigger("On");
+        yield return new WaitForSeconds(.6f);
+
+        //upSuccess.localScale = .8f * Vector2.one;
+        //upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
+
+        whiteEffectOnMerge.gameObject.SetActive(false);
+
+        // 등급이 올랐다면 타이틀 리본 반짝 이펙트
+        if (isGradeUp)
+        {
+
+            yield return new WaitForSeconds(.5f); // 0.5초 후에 별이 반짝 하도록
+        }
+
+        // 별 반짝 이펙트
         GlimmerStar();
 
         fieldSlotPanel.SetActive(false);
+    }
+
+    // UpPanelManager의 UpgradeUICo 와 탭해서 계속하기 버튼에서 참조.
+    public void DisableBottomTabs(bool disable)
+    {
+        tabButtons = tabs.GetComponentsInChildren<Button>();
+        if (disable)
+        {
+            // 탭 버튼이 작동하지 않도록
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                tabButtons[i].interactable = false;
+            }
+            // 탭을 화면 아래로 이동
+            tabs.DOAnchorPosY(-300f, .5f);
+        }
+        else
+        {
+            // 탭을 원래대로 되돌림
+            tabs.DOAnchorPosY(68f, .5f);
+
+            // 탭 버튼이 작동하도록 하기
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                tabButtons[i].interactable = true;
+            }
+        }
     }
 
     // 별 반짝임
     void GlimmerStar()
     {
         starBlingEffect.SetTrigger("On");
+        SoundManager.instance.Play(starBlingBeamSound);
+
         if (starCoroutine != null) StopCoroutine(starCoroutine);
         starCoroutine = StartCoroutine(GlimmerStarCo());
     }

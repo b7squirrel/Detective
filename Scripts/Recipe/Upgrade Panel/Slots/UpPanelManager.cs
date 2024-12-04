@@ -363,12 +363,12 @@ public class UpPanelManager : MonoBehaviour
     #region 업그레이드
     public void UpgradeCard()
     {
+        bool isGradeUp = false; // 등급이 올라갔다면 타이틀 리본에 반짝 이펙트를 주기 위해
         int newCardGrade = CardToUpgrade.Grade;
         int newCardEvoStage = CardToUpgrade.EvoStage + 1;
 
         if (newCardEvoStage > StaticValues.MaxEvoStage - 1) // Evo 레벨이 최고 레벨을 초과하면
         {
-            Debug.Log("합성 전 등급 = " + newCardGrade);
             newCardGrade++; // 다음 등급으로
 
             if (newCardGrade > StaticValues.MaxGrade - 1) // Grade가 최고 등급을 초과하면
@@ -380,7 +380,7 @@ public class UpPanelManager : MonoBehaviour
             else
             {
                 newCardEvoStage = 0; // 다음 등급이 되면 evo 레벨은 초기화
-                Debug.Log("합성 후 등급 = " + newCardGrade);
+                isGradeUp = true;
             }
         }
 
@@ -397,25 +397,30 @@ public class UpPanelManager : MonoBehaviour
         // 합성 연출 후 강화 성공 패널로
         matField.gameObject.SetActive(false);
 
-        StartCoroutine(UpgradeUICo(CardToUpgrade));
+        StartCoroutine(UpgradeUICo(CardToUpgrade, isGradeUp));
     }
 
-    IEnumerator UpgradeUICo(CardData upgradedCardData)
+    IEnumerator UpgradeUICo(CardData upgradedCardData, bool isGradeUp)
     {
+        // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록
+        upPanelUI.DisableBottomTabs(true);
+
         // 강화 연출 UI
         upPanelUI.MergingCardsUI();
         upPanelUI.OffUpgradeConfirmationUI();
 
-        yield return new WaitForSeconds(.15f);
+        yield return new WaitForSeconds(.15f);  // 1.5초 동안 두 카드가 가운데로 모인 후
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
         ClearAllFieldSlots();
         upPanelUI.DeactivateSpecialSlots();
-        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData);
+        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, isGradeUp);
 
         // 합성 성공 패널이 활성화 된 후에 실행되어야 슬롯이 empty된 상태로 끝나지 않게 된다
         setCardDataOnSlot.PutCardDataIntoSlot(upgradedCardData, upSuccessSlot);
     }
+
+    
 
     // 아이디를 발급 받지 않은 card data 생성
     public CardData GenUpgradeCardData(string _cardName, int _grade)
