@@ -24,10 +24,11 @@ public class ButtonEffect : MonoBehaviour
             myButton.onClick.AddListener(PlayAnimation);
             myButton.onClick.AddListener(PlayButtonSound);
         }
+        if (buttonEffect != null) buttonEffect.SetActive(false);
     }
     public void LockButton()
     {
-        if(shouldBeLocked == false) { return; }
+        if (shouldBeLocked == false) { return; }
         GetComponent<Button>().interactable = false;
     }
     public void PlayAnimation()
@@ -41,7 +42,8 @@ public class ButtonEffect : MonoBehaviour
     public void ButtonParticleEffect()
     {
         // ¥≠∑∂¿ª ∂ß ¿Ã∆Â∆Æ
-        if(buttonEffect == null) return;
+        if (buttonEffect == null) return;
+        buttonEffect.SetActive(true);
         buttonEffect.GetComponent<Animator>().SetTrigger("On");
     }
     public void PlayButtonSound()

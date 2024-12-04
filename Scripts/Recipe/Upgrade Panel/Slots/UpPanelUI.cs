@@ -188,9 +188,11 @@ public class UpPanelUI : MonoBehaviour
         whiteEffectOnMerge.DOScale(1.2f, .4f);
         whiteEffectOnMerge.GetComponent<Image>().DOFade(0, .6f);
 
+        upgradeEffect.gameObject.SetActive(true);
         upgradeEffect.SetTrigger("On");
         yield return new WaitForSeconds(.6f);
 
+        upgradeEffect.gameObject.SetActive(false);
         //upSuccess.localScale = .8f * Vector2.one;
         //upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
 
@@ -239,6 +241,7 @@ public class UpPanelUI : MonoBehaviour
     // 별 반짝임
     void GlimmerStar()
     {
+        starBlingEffect.gameObject.SetActive(true);
         starBlingEffect.SetTrigger("On");
         SoundManager.instance.Play(starBlingBeamSound);
 
@@ -250,6 +253,9 @@ public class UpPanelUI : MonoBehaviour
     {
 
         yield return new WaitForSeconds(.2f);
+
+        starBlingEffect.gameObject.SetActive(false);
+
 
 
         Animator[] starAnims = stars.GetComponentsInChildren<Animator>();
