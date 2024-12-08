@@ -36,6 +36,7 @@ public class UpPanelManager : MonoBehaviour
     CardData pendingCardData; // 장착 해제 팝업이 띄워져 있는 동안 카드 데이터를 임시 저장
 
     [SerializeField] UpTabManager upTabManager; // 탭을 업데이트 하기 위한 참조
+    [SerializeField] GameObject blockTouchPanel; // 합성 연출 동안 터치가 안되도록 하기
     #endregion
 
     #region Unity Callback 함수
@@ -51,6 +52,8 @@ public class UpPanelManager : MonoBehaviour
 
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
+
+        blockTouchPanel.SetActive(false);
 
         CloseAskUnequipPopup();
     }
@@ -402,6 +405,9 @@ public class UpPanelManager : MonoBehaviour
 
     IEnumerator UpgradeUICo(CardData upgradedCardData, bool isGradeUp)
     {
+        // 합성 연출 동안 터치가 안되도록 하기
+        blockTouchPanel.SetActive(true);
+
         // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록
         upPanelUI.DisableBottomTabs(true);
 
@@ -416,11 +422,12 @@ public class UpPanelManager : MonoBehaviour
         upPanelUI.DeactivateSpecialSlots();
         upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, isGradeUp);
 
+        // 다시 터치가 가능하도록
+        blockTouchPanel.SetActive(false);
+
         // 합성 성공 패널이 활성화 된 후에 실행되어야 슬롯이 empty된 상태로 끝나지 않게 된다
         setCardDataOnSlot.PutCardDataIntoSlot(upgradedCardData, upSuccessSlot);
     }
-
-    
 
     // 아이디를 발급 받지 않은 card data 생성
     public CardData GenUpgradeCardData(string _cardName, int _grade)

@@ -159,6 +159,9 @@ public class UpPanelUI : MonoBehaviour
 
     public void MergingCardsUI() // 카드 합치기 UI
     {
+        // 합성 연출 동안 클릭이 안되도록 하기
+
+
         plus.transform.localScale = new Vector3(.6f, .6f, .6f); // default .48f
         plus.DOScale(0, .2f).SetEase(Ease.InBack);
         upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack); // 0.15초 동안 가운데로 이동
@@ -179,6 +182,7 @@ public class UpPanelUI : MonoBehaviour
 
     IEnumerator OpenSuccessPanelCo(CardData cardData, bool isGradeUp)
     {
+        fieldSlotPanel.SetActive(false);
         upgradeSuccessPanel.SetActive(true);
 
         // 타격감 White 이펙트
@@ -208,7 +212,6 @@ public class UpPanelUI : MonoBehaviour
         // 별 반짝 이펙트
         GlimmerStar();
 
-        fieldSlotPanel.SetActive(false);
     }
 
     // UpPanelManager의 UpgradeUICo 와 탭해서 계속하기 버튼에서 참조.

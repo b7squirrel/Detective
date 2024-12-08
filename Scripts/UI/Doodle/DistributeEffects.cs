@@ -29,7 +29,7 @@ public class DistributeEffects : MonoBehaviour
             SetEffectOnRandomPoint(effect);
 
             count--;
-            yield return new WaitForSeconds(.03f);
+            yield return new WaitForSeconds(.8f);
         }
     }
     public void SetEffectOnRandomPoint(GameObject _effect)
