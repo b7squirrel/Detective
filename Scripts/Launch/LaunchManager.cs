@@ -30,6 +30,7 @@ public class LaunchManager : MonoBehaviour
     void OnEnable()
     {
         fieldSlotPanel.SetActive(false);
+        stageInfoUi.PlayFromStart();
         InitLead();
     }
     void OnDisable()

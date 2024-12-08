@@ -17,4 +17,9 @@ public class StageInfoUI : MonoBehaviour
         StageInfo stageInfo = FindObjectOfType<StageInfo>();
         anim.runtimeAnimatorController = stageInfo.GetStageInfo(stageManager.GetCurrentStageNumber()).bossImage;
     }
+
+    public void PlayFromStart()
+    {
+        anim.SetTrigger("Init");
+    }
 }

@@ -366,9 +366,12 @@ public class UpPanelManager : MonoBehaviour
     #region 업그레이드
     public void UpgradeCard()
     {
+        // isGradeUp이 필요하지 않은 것 같다. 정리할 것. 등급이 올라갈 일은 없음. 다른 등급은 뽑기로만 획득 가능함.
+
         bool isGradeUp = false; // 등급이 올라갔다면 타이틀 리본에 반짝 이펙트를 주기 위해
         int newCardGrade = CardToUpgrade.Grade;
         int newCardEvoStage = CardToUpgrade.EvoStage + 1;
+        CardToUpgrade.PassiveSkill = UnityEngine.Random.Range(0, Skills.SkillNames.Length); // 스킬을 랜덤하게 다시 부여
 
         if (newCardEvoStage > StaticValues.MaxEvoStage - 1) // Evo 레벨이 최고 레벨을 초과하면
         {
