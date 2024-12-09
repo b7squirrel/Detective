@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,23 +25,18 @@ public class GachaSystem : MonoBehaviour
             gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
         }
 
-        // 임시로 150개씩 카드가 뽑힘
-        for (int i = 0; i < 1; i++)
+        int pickIndex = UnityEngine.Random.Range(0, gachaPools.Count);
+
+        CardData newCardData = gachaPools[pickIndex];
+        cardDataManager.AddNewCardToMyCardsList(newCardData);
+        Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다.");
+
+        if (newCardData.Type == "Weapon")
         {
-            int pickIndex = UnityEngine.Random.Range(0, gachaPools.Count);
-
-            CardData oriData = gachaPools[pickIndex];
-            cardDataManager.AddNewCardToMyCardsList(oriData);
-            Debug.Log(oriData.Name + oriData.ID + " 을 뽑았습니다.");
-
-            if (oriData.Type == "Weapon")
-            {
-                AddEssentialEquip(oriData);
-            }
-
-            gachaPools = null; // 생성된 카드 데이터가 가챠풀에 저장되어 버리므로
-
+            AddEssentialEquip(newCardData);
         }
+
+        gachaPools = null; // 생성된 카드 데이터가 가챠풀에 저장되어 버리므로
     }
 
     public void AddEssentialEquip(CardData _oriCardData)
@@ -62,5 +56,22 @@ public class GachaSystem : MonoBehaviour
         if (cardDataManager == null) Debug.Log("카드 데이터 메니져가 NULL");
         cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
         cardList.Equip(_oriCardData, defaultItem);
+    }
+
+    // 상점 버튼
+    public void DrawWeapons()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Draw();
+        }
+    }
+    public void DrawItems()
+    {
+
+    }
+    public void DrawCombo()
+    {
+
     }
 }
