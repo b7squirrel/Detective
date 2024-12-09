@@ -77,6 +77,8 @@ public class ReadCardData
 public class CardDataManager : MonoBehaviour
 {
     public TextAsset CardDatabase;
+    public TextAsset WeaponCardDatabase;
+    public TextAsset ItemCardDatabase;
     public TextAsset startingCardData;
     public List<CardData> AllCardsList, MyCardsList;
     string filePath;
