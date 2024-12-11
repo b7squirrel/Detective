@@ -371,7 +371,7 @@ public class UpPanelManager : MonoBehaviour
         bool isGradeUp = false; // 등급이 올라갔다면 타이틀 리본에 반짝 이펙트를 주기 위해
         int newCardGrade = CardToUpgrade.Grade;
         int newCardEvoStage = CardToUpgrade.EvoStage + 1;
-        CardToUpgrade.PassiveSkill = UnityEngine.Random.Range(0, Skills.SkillNames.Length); // 스킬을 랜덤하게 다시 부여
+        CardToUpgrade.PassiveSkill = UnityEngine.Random.Range(1, StaticValues.MaxSkillNumbers + 1); // 스킬을 랜덤하게 다시 부여
 
         if (newCardEvoStage > StaticValues.MaxEvoStage - 1) // Evo 레벨이 최고 레벨을 초과하면
         {

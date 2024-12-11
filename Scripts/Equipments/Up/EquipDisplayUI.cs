@@ -42,9 +42,9 @@ public class EquipDisplayUI : MonoBehaviour
         SetNumStar(intEvoStage + 1);
 
         SkillDescriptionPanel.SetActive(true);
-        SkillName.text = Skills.SkillNames[charCardData.PassiveSkill];
+        SkillName.text = Skills.SkillNames[charCardData.PassiveSkill - 1];
         SkillName.color = MyGrade.GradeColors[charCardData.Grade];
-        SkillDescription.text = Skills.SkillDescriptions[charCardData.PassiveSkill];
+        SkillDescription.text = Skills.SkillDescriptions[charCardData.PassiveSkill - 1];
 
         for (int i = 0; i < 5; i++)
         {
