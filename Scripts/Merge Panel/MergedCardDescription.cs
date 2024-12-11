@@ -9,8 +9,8 @@ public class MergedCardDescription : MonoBehaviour
     public void UpdateSkillDescription(CardData cardData)
     {
         // ½ºÅ³
-        SkillTitle.text = Skills.SkillNames[cardData.PassiveSkill - 1];
-        SkillDescription.text = Skills.SkillDescriptions[cardData.PassiveSkill - 1];
+        SkillTitle.text = Skills.SkillNames[cardData.PassiveSkill];
+        SkillDescription.text = Skills.SkillDescriptions[cardData.PassiveSkill];
 
         SkillTitle.color = MyGrade.GradeColors[cardData.Grade];
     }
