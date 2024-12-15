@@ -7,9 +7,12 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI stageNumber;
     [SerializeField] GameObject rayBGEffect;
     [SerializeField] bool isDarkBG;
+    [SerializeField] AudioClip resultSound;
 
     public void InitAwards(int _killNum, int _coinNum, int _stageNum)
     {
+
+        SoundManager.instance.Play(resultSound);
         killText.text = _killNum.ToString();
         coinText.text = _coinNum.ToString();
         stageNumber.text = _stageNum.ToString();

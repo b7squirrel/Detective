@@ -17,6 +17,7 @@ public class UpgradePanelManager : MonoBehaviour
 
     // 사운드
     [SerializeField] AudioClip clickSound;
+    [SerializeField] AudioClip[] LevelUpSounds;
 
     void Awake()
     {
@@ -33,6 +34,12 @@ public class UpgradePanelManager : MonoBehaviour
     public void OpenPanel(List<UpgradeData> upgradeData)
     {
         // GameManager.instance.joystick.SetActive(false);
+
+        for (int i = 0; i < LevelUpSounds.Length; i++)
+        {
+            SoundManager.instance.Play(LevelUpSounds[i]);
+        }
+
         Clean();
         pauseManager.PauseGame();
 
