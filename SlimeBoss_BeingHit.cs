@@ -23,7 +23,7 @@ public class SlimeBoss_BeingHit : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemyBoss.RePosition();
+        //enemyBoss.RePosition();
         enemyBase.Flip();
         enemyBase.ApplyMovement();
         enemyBoss.ShootTimer();
