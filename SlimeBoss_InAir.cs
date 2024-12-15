@@ -29,7 +29,7 @@ public class SlimeBoss_InAir : StateMachineBehaviour
         enemyBoss.RePosition();
         bossTransform.position = Vector2.MoveTowards(bossTransform.position, target, moveSpeed * Time.deltaTime);
 
-        if (Vector2.Distance(bossTransform.position, target) < 1f)
+        if (Vector2.Distance(bossTransform.position, target) < 2f)
         {
             animator.SetTrigger("IsClose");
         }

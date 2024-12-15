@@ -51,6 +51,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] GameObject dot;
     float debugAlpha;
 
+    #region Init/Shoot Cooldown
     public override void InitEnemy(EnemyData _enemyToSpawn)
     {
         this.Stats = new EnemyStats(_enemyToSpawn.stats);
@@ -77,6 +78,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         anim.SetBool("ShootFinished", false);
         anim.SetTrigger("Shoot");
     }
+    #endregion
 
     #region 닿으면 Player HP 감소
     protected override void AttackMelee(int _damage)

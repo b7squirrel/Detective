@@ -28,7 +28,6 @@ public class EggPanelManager : MonoBehaviour
 
     [SerializeField] GameObject newOriContainer;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
-    [SerializeField] SpriteRenderer charEffect;
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
@@ -57,7 +56,6 @@ public class EggPanelManager : MonoBehaviour
         {
             EquipmentSprites[i].sprite = null;
         }
-        charEffect.sprite = null;
     }
     // 장비 sprite는 모두 default로
     public void SetEquipmentSprites(WeaponData wd)
@@ -71,7 +69,6 @@ public class EggPanelManager : MonoBehaviour
 
         if (costume != null) { costumeSR.sprite = costume.sprites[10]; }
 
-        if (wd.charEffectImage != null) charEffect.sprite = wd.charEffectImage;
     }
 
     void OpenNewKidImage()
@@ -118,7 +115,7 @@ public class EggPanelManager : MonoBehaviour
         eggPanel.SetActive(true);
         EggImageUp(true);
         newKidText.SetActive(true);
-        oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name + "!";
+        oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name;
 
         blackBGPanel.SetActive(true);
     }
@@ -154,8 +151,7 @@ public class EggPanelManager : MonoBehaviour
 
     IEnumerator CloseCo()
     {
-        blackBGPanel.SetActive(false);
-        whiteBGPanel.SetActive(true);
+        //whiteBGPanel.SetActive(true);
         yield return new WaitForSecondsRealtime(1.66f); // 이름 반짝 사운드 재생 지점
 
 
@@ -165,6 +161,7 @@ public class EggPanelManager : MonoBehaviour
         SoundManager.instance.Play(jumpUp);
 
         yield return new WaitForSecondsRealtime(0.32f); // 애니메이션 종료
+        blackBGPanel.SetActive(false);
         CloseButtonPressed();
     }
     void CloseButtonPressed()
