@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class EggButton : MonoBehaviour
 {
@@ -8,19 +9,28 @@ public class EggButton : MonoBehaviour
     [SerializeField] AudioClip pickEggSound;
     [SerializeField] AudioClip breakEggSound;
     [SerializeField] AudioClip eggClickSound;
+    [SerializeField] AudioClip[] upgradeSounds;
+    [SerializeField] AudioClip[] downGradeSounds;
+    [SerializeField] AudioClip gradeFixedSound;
 
     [Header("White Flash")]
     [SerializeField] Material whiteMat;
     Material initMat;
     Image image;
+    [SerializeField] Image[] gradeTags;
+    Coroutine popFeedbackCo;
+    bool isPopFeedbackDone;
 
     [Header("Probability Settings")]
     [SerializeField] private float increaseProbability; // 버튼 클릭시 증가량
     [SerializeField] private float decreaseRate; // 초당 감소량
     [SerializeField] private float maxProbability; // 최대 확률
-    [SerializeField] Slider probSlider;
-    [SerializeField] TMPro.TextMeshProUGUI probText;
     float currentProbability = 0f;
+    string pastGrade;
+    int pastGradeIndex;
+    [SerializeField] RectTransform gradeRoll; // 클릭에 따라 grade가 점점 올라가도록
+    [SerializeField] RectTransform gradePanel; // 등급이 올라갈 때 스케일을 잠깐 올리도록
+    [SerializeField] TMPro.TextMeshProUGUI gradeTitle; // 등급이 올라갈 때 등급 텍스트도 변경
 
 
     [Header("레어 오리 확률")]
@@ -65,28 +75,19 @@ public class EggButton : MonoBehaviour
         if (currentProbability > 0)
         {
             currentProbability = Mathf.Max(0f, currentProbability - (decreaseRate * Time.unscaledDeltaTime));
-            UpdateSlider();
-            UpdateProbText();
+            UpdateGradeTitle();
         }
     }
 
     public void InitRate()
     {
-        ResetCurrentProbability();
-        probSlider.value = 0f;
-        initFontSize = probText.fontSize;
-
+        ResetCurrentProbability(); // 확률 초기화
+        UpdateGradeTitle(); // 확률에 대한 등급 패널 초기화
+        InitGradeColors();
+        popFeedbackCo = null;
+        isPopFeedbackDone = true;
         rateToGetRare = 0f;
 
-        if (probSlider != null)
-        {
-            probSlider.minValue = 0f;
-            probSlider.maxValue = maxProbability;
-            probSlider.value = 0f;
-
-            // 값이 제대로 설정되었는지 로그로 확인
-            Debug.Log($"Slider initialized - Min: {probSlider.minValue}, Max: {probSlider.maxValue}, Current: {probSlider.value}");
-        }
     }
     public void PlayEggClickSound()
     {
@@ -109,15 +110,13 @@ public class EggButton : MonoBehaviour
         if (anim == null) anim = GetComponentInParent<Animator>();
         anim.SetTrigger("Clicked");
 
-        UpText(true);
-        UpdateSlider();
-        UpdateProbText();
+        UpdateGradeTitle();
         UpdateRateForGameManager();
 
-        StartCoroutine(WhiteFlashCo());
+        StartCoroutine(EggWhiteFlashCo());
     }
 
-    IEnumerator WhiteFlashCo()
+    IEnumerator EggWhiteFlashCo()
     {
         isClicked = true;
         image.material = whiteMat;
@@ -125,33 +124,69 @@ public class EggButton : MonoBehaviour
         isClicked = false;
         image.material = initMat;
     }
-    public void UpText(bool _integerUp)
-    {
-        StartCoroutine(UpTextCo(_integerUp));
-    }
-    IEnumerator UpTextCo(bool _integerUp)
-    {
-        if (_integerUp) probText.fontSize *= desiredFontSizeFactor;
-        UpdateProbText();
 
-        yield return new WaitForSecondsRealtime(.06f);
-
-        probText.fontSize = initFontSize;
-    }
-
-    void  UpdateSlider()
+    void InitGradeColors()
     {
-        // Slider 값 업데이트
-        if (probSlider != null)
+        for (int i = 0; i < gradeTags.Length; i++)
         {
-            probSlider.value = Mathf.FloorToInt(currentProbability);
+            gradeTags[i].color = MyGrade.GradeColors[i];
         }
     }
-    void UpdateProbText()
+
+    void  UpdateGradeTitle()
     {
-        probText.text = Mathf.FloorToInt(currentProbability).ToString() + "%";
+        // Slider 값 업데이트
+        // 등급 롤의 위치를 확률에 따라 업데이트
+        // 등급 간 거리 = 128, 등급 총 거리 = 512
+        // 백분위와의 비율 100:512 = 1 : x
+        // 5.12를 곱해줘서 확률을 거리로 변환
+        gradeRoll.anchoredPosition = new Vector2(gradeRoll.anchoredPosition.x, currentProbability * 5.12f);
+        int currentGradeIndex = pastGradeIndex;
+
+        for (int i = 0; i < MyGrade.mGrades.Length; i++)
+        {
+            if (currentProbability >= i * 25f && currentProbability < (i + 1) * 25f)
+            {
+                currentGradeIndex = i;
+                gradeTitle.text = MyGrade.mGrades[i];
+                
+                break;
+            }
+        }
+
+        if (currentGradeIndex != pastGradeIndex)
+        {
+            if (currentGradeIndex > pastGradeIndex)
+            {
+                for (int i = 0; i < upgradeSounds.Length; i++)
+                {
+                    SoundManager.instance.Play(upgradeSounds[i]);
+                }
+                if (isPopFeedbackDone)
+                {
+                    popFeedbackCo = StartCoroutine(PopFeedbackCo(currentGradeIndex));
+                }
+            }
+        }
+
+        pastGradeIndex = currentGradeIndex;
     }
 
+    IEnumerator PopFeedbackCo(int _gradeIndex)
+    {
+        isPopFeedbackDone = false;
+        gradeTags[_gradeIndex].color = new Color(1, 1, 1, 1);
+
+        float defaultFontSize = gradeTitle.fontSize;
+        gradeTitle.fontSize = defaultFontSize * 1.2f;
+
+        yield return new WaitForSecondsRealtime(.04f);
+        gradeTags[_gradeIndex].color = MyGrade.GradeColors[_gradeIndex];
+        gradeTitle.fontSize = defaultFontSize;
+
+
+        isPopFeedbackDone = true;
+    }
     void UpdateRateForGameManager()
     {
         GameManager.instance.SetRateToGetRare(rateToGetRare);

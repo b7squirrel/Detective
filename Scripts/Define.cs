@@ -113,7 +113,8 @@ public class MyGrade
     public static int Unique = 3;
     public static int Legendary = 4;
 
-    public static string[] mGrades = { "Common", "Rare", "Epic", "Unique", "Legendary" };
+    //public static string[] mGrades = { "Common", "Rare", "Epic", "Legendary", "Mythic" };
+    public static string[] mGrades = { "일반", "희귀", "고급", "전설", "신화" };
 
     public static Color[] GradeColors = new Color[]
     {

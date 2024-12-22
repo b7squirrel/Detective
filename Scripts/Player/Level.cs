@@ -26,6 +26,10 @@ public class Level : MonoBehaviour
 
     CoinManager coinManager;
 
+    [Header("Debug")]
+    [SerializeField] float Exp;
+    [SerializeField] float ExpToLevelUp;
+
     int To_Level_Up
     {
         get
@@ -48,6 +52,9 @@ public class Level : MonoBehaviour
         synergyManager = GetComponent<SynergyManager>();
 
         NoMoreUpgrade = false;
+
+        // 디버그
+        ExpToLevelUp = To_Level_Up;
     }
 
     void Start()
@@ -62,6 +69,8 @@ public class Level : MonoBehaviour
     public void AddExperience(int expAmount)
     {
         experience += expAmount;
+        Exp = experience;
+        ExpToLevelUp = To_Level_Up;
         CheckLevelUp();
     }
 
@@ -102,7 +111,7 @@ public class Level : MonoBehaviour
     }
     public void ApplyUpdatedLevel()
     {
-        experience -= To_Level_Up;
+        if (experience > To_Level_Up) experience -= To_Level_Up; // 경험치가 0보다 작아지는 경우가 생긴다. 이유는 잘 모르겠다.
         level++;
         experienceBar.SetLevelText(level);
         experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
