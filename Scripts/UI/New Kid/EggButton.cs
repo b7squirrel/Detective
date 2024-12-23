@@ -27,7 +27,7 @@ public class EggButton : MonoBehaviour
     [SerializeField] private float maxProbability; // 최대 확률
     float currentProbability = 0f;
     string pastGrade;
-    int pastGradeIndex;
+    int currentGradeIndex, pastGradeIndex;
     [SerializeField] RectTransform gradeRoll; // 클릭에 따라 grade가 점점 올라가도록
     [SerializeField] RectTransform gradePanel; // 등급이 올라갈 때 스케일을 잠깐 올리도록
     [SerializeField] TMPro.TextMeshProUGUI gradeTitle; // 등급이 올라갈 때 등급 텍스트도 변경
@@ -67,6 +67,7 @@ public class EggButton : MonoBehaviour
     void ResetCurrentProbability()
     {
         currentProbability = 0f;
+        currentGradeIndex = 0;
     }
 
     void Update()
@@ -141,7 +142,7 @@ public class EggButton : MonoBehaviour
         // 백분위와의 비율 100:512 = 1 : x
         // 5.12를 곱해줘서 확률을 거리로 변환
         gradeRoll.anchoredPosition = new Vector2(gradeRoll.anchoredPosition.x, currentProbability * 5.12f);
-        int currentGradeIndex = pastGradeIndex;
+        currentGradeIndex = pastGradeIndex;
 
         for (int i = 0; i < MyGrade.mGrades.Length; i++)
         {
@@ -199,5 +200,10 @@ public class EggButton : MonoBehaviour
     public void GetEggStats()
     {
 
+    }
+
+    public int GetWeaponGradeIndex()
+    {
+        return currentGradeIndex;
     }
 }
