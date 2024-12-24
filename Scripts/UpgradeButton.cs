@@ -60,7 +60,7 @@ public class UpgradeButton : MonoBehaviour
             }
             else
             {
-                upgradeName.text = upgradeData.DisplayName;
+                upgradeName.text = upgradeData.weaponData.SynergyDispName;
             }
         }
         else

@@ -51,6 +51,7 @@ public class WeaponData : ScriptableObject
     public int grade;
     public string Name;
     public string DisplayName;
+    public string SynergyDispName;
     public Sprite charImage;
     public Costume costume;
     public string SynergyWeapon;

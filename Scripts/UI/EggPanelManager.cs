@@ -1,8 +1,13 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class EggPanelManager : MonoBehaviour
 {
+    string currentWeaponName;
+    int currentGrade;
+
     [SerializeField] GameObject eggPanel;
     [SerializeField] GameObject eggImage;
     [SerializeField] SpriteRenderer costumeSR;
@@ -31,6 +36,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
+    EggButton eggbutton;
 
     [Header("Sound")]
     [SerializeField] AudioClip oriSound;
@@ -38,6 +44,8 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] AudioClip cheerGroup;
     [SerializeField] AudioClip jumpUp;
     [SerializeField] AudioClip breakingEgg;
+
+    WeaponDataDictionary wdDictionary;
 
     void Init(WeaponData wd)
     {
@@ -58,9 +66,10 @@ public class EggPanelManager : MonoBehaviour
         }
     }
     // 장비 sprite는 모두 default로
-    public void SetEquipmentSprites(WeaponData wd)
+    void SetEquipmentSprites(WeaponData wd)
     {
         Init(wd);
+
 
         if (wd.DefaultHead != null) EquipmentSprites[0].sprite = wd.DefaultHead;
         if (wd.DefaultChest != null) EquipmentSprites[1].sprite = wd.DefaultChest;
@@ -109,13 +118,12 @@ public class EggPanelManager : MonoBehaviour
             testEquipmentImages[i].SetActive(false);
         }
     }
-    public void EggPanelUP(RuntimeAnimatorController anim, string name)
+    public void EggPanelUP()
     {
         pauseManager.PauseGame();
         eggPanel.SetActive(true);
         EggImageUp(true);
         newKidText.SetActive(true);
-        oriName.GetComponent<TMPro.TextMeshProUGUI>().text = name;
 
         blackBGPanel.SetActive(true);
     }
@@ -143,10 +151,42 @@ public class EggPanelManager : MonoBehaviour
         birdFlock.SetActive(true);
         twinkleStarsParticle.Play();
     }
+
+    public void SetWeaponName(string _name)
+    {
+        currentWeaponName = _name;
+    }
+    public void SetWeaponGrade(int _grade)
+    {
+        currentGrade = _grade;
+    }
     public void EggAnimFinished()
     {
+        // 뽑은 오리의 등급을 넘겨 받음
+        if(eggbutton == null) eggbutton = FindObjectOfType<EggButton>();
+        currentGrade = eggbutton.GetWeaponGradeIndex();
+
+        // 뽑은 오리의 이름과 등급이 일치하는 Upgrade Data(Acquire) 가져오기
+        UpgradeData newWd = GetAcquireData(currentWeaponName, currentGrade);
+
+        // 이름 반영
+        oriName.GetComponent<TMPro.TextMeshProUGUI>().text = newWd.weaponData.DisplayName;
+
+        // 장비 스프라이트 설정
+        SetEquipmentSprites(newWd.weaponData);
+
+        // 플레이어에 새로운 오리 추가하기
+        GameManager.instance.character.GetComponent<Level>().GetWeapon(newWd);
+
+        // 새로운 아이 패널 띄우기
         KidImageUp();
         Close = StartCoroutine(CloseCo());
+    }
+    UpgradeData GetAcquireData(string _name, int _grade)
+    {
+        if (wdDictionary == null) wdDictionary = FindObjectOfType<WeaponDataDictionary>();
+        UpgradeData acquireData = wdDictionary.GetAcquireDataFrom(currentWeaponName, currentGrade);
+        return acquireData;
     }
 
     IEnumerator CloseCo()

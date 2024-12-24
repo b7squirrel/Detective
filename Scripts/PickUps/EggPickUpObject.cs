@@ -37,10 +37,12 @@ public class EggPickUpObject : Collectable, IPickUpObject
             return;
         }
         index = Random.Range(0, upgradeToPick.Count);
-        character.GetComponent<Level>().GetWeapon(upgradeToPick[index]);
-        Debug.Log(upgradeToPick[index].weaponData.DisplayName.ToString());
-        GameManager.instance.eggPanelManager.EggPanelUP(upgradeToPick[index].newKidAnim, upgradeToPick[index].weaponData.DisplayName);
-        GameManager.instance.eggPanelManager.SetEquipmentSprites(upgradeToPick[index].weaponData);
+
+        string weaponName = upgradeToPick[index].weaponData.Name;
+
+        GameManager.instance.eggPanelManager.EggPanelUP();
+        GameManager.instance.eggPanelManager.SetWeaponName(weaponName);
+        //GameManager.instance.eggPanelManager.SetEquipmentSprites(upgradeToPick[index].weaponData);
     }
 
     // 알이나 우유 등은 일단 물리를 이용해서 충돌체크

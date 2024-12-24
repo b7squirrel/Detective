@@ -15,8 +15,6 @@ public enum UpgradeType
 public class UpgradeData : ScriptableObject
 {
     public UpgradeType upgradeType;
-    public string Name;
-    public string DisplayName;
     [TextArea] public string description;
     public string description2;
 
