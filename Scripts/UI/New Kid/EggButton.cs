@@ -30,8 +30,8 @@ public class EggButton : MonoBehaviour
     [SerializeField] RectTransform gradeRoll; // 클릭에 따라 grade가 점점 올라가도록
     [SerializeField] RectTransform gradePanel; // 등급이 올라갈 때 스케일을 잠깐 올리도록
     [SerializeField] TMPro.TextMeshProUGUI gradeTitle; // 등급이 올라갈 때 등급 텍스트도 변경
-
-
+    [SerializeField] Animator gradePanelAnim;
+    
     [Header("레어 오리 확률")]
     [SerializeField] float desiredFontSizeFactor;
     float initFontSize;
@@ -89,6 +89,8 @@ public class EggButton : MonoBehaviour
         rateToGetRare = 0f;
 
     }
+
+    // 버튼이 눌러지면 이벤트로 실행
     public void PlayEggClickSound()
     {
         if (pickedEgg)
@@ -101,6 +103,7 @@ public class EggButton : MonoBehaviour
             SoundManager.instance.Play(pickEggSound);
         }
     }
+    // 버튼이 눌러지면 이벤트로 실행
     public void EggClickedFeedback()
     {
         if (isClicked) return;
@@ -133,7 +136,7 @@ public class EggButton : MonoBehaviour
         }
     }
 
-    void  UpdateGradeTitle()
+    void UpdateGradeTitle()
     {
         // Slider 값 업데이트
         // 등급 롤의 위치를 확률에 따라 업데이트
@@ -149,7 +152,7 @@ public class EggButton : MonoBehaviour
             {
                 currentGradeIndex = i;
                 gradeTitle.text = MyGrade.mGrades[i];
-                
+
                 break;
             }
         }
@@ -161,6 +164,7 @@ public class EggButton : MonoBehaviour
                 for (int i = 0; i < upgradeSounds.Length; i++)
                 {
                     SoundManager.instance.Play(upgradeSounds[i]);
+                    PlayGradePanelAnim("Upgrade");
                 }
                 if (isPopFeedbackDone)
                 {
@@ -187,6 +191,16 @@ public class EggButton : MonoBehaviour
 
         isPopFeedbackDone = true;
     }
+
+    void PlayGradePanelAnim(string _triggerParameter)
+    {
+        gradePanelAnim.SetTrigger(_triggerParameter);
+    }
+    public void PlayGradePanelFixedAnim(string _triggerParameter)
+    {
+        PlayGradePanelAnim(_triggerParameter);
+    }
+
     void UpdateRateForGameManager()
     {
         GameManager.instance.SetRateToGetRare(rateToGetRare);

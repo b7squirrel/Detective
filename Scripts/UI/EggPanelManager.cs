@@ -178,8 +178,9 @@ public class EggPanelManager : MonoBehaviour
         // 플레이어에 새로운 오리 추가하기
         GameManager.instance.character.GetComponent<Level>().GetWeapon(newWd);
 
-        // 새로운 아이 패널 띄우기
+        // 새로운 아이 패널 띄우기, 확정된 등급 패널 애님 플레이
         KidImageUp();
+        eggbutton.PlayGradePanelFixedAnim("Fixed");
         Close = StartCoroutine(CloseCo());
     }
     UpgradeData GetAcquireData(string _name, int _grade)
