@@ -31,6 +31,8 @@ public class EggButton : MonoBehaviour
     [SerializeField] RectTransform gradePanel; // 등급이 올라갈 때 스케일을 잠깐 올리도록
     [SerializeField] TMPro.TextMeshProUGUI gradeTitle; // 등급이 올라갈 때 등급 텍스트도 변경
     [SerializeField] Animator gradePanelAnim;
+    bool isGradeFixed; // 등급이 결정된 이후에는 다이얼이 더 이상 움직이지 않도록 하려고
+    float fixedProbability; // 확정된 등급의 y높이를 프레임에 딱 맞추기 위해서
     
     [Header("레어 오리 확률")]
     [SerializeField] float desiredFontSizeFactor;
@@ -52,6 +54,8 @@ public class EggButton : MonoBehaviour
         if (image == null) image = GetComponent<Image>();
         if (initMat == null) initMat = image.material;
         image.material = initMat; // whiteMat이 적용된 상태로 시작하지 않기 위해
+        isGradeFixed = false;
+        PlayGradePanelAnim("Init");
 
         if (isInit == false)
         {
@@ -71,8 +75,8 @@ public class EggButton : MonoBehaviour
 
     void Update()
     {
-        // 확률이 0보다 크면 서서히 감소
-        if (currentProbability > 0)
+        // 확률이 0보다 크고 아직 등급이 결정되지 않았다면 서서히 감소
+        if (currentProbability > 0 && isGradeFixed == false)
         {
             currentProbability = Mathf.Max(0f, currentProbability - (decreaseRate * Time.unscaledDeltaTime));
             UpdateGradeTitle();
@@ -82,7 +86,7 @@ public class EggButton : MonoBehaviour
     public void InitRate()
     {
         ResetCurrentProbability(); // 확률 초기화
-        UpdateGradeTitle(); // 확률에 대한 등급 패널 초기화
+        UpdateGradeTitle(); // 초기화된 확률에 대한 등급 패널 초기화
         InitGradeColors();
         popFeedbackCo = null;
         isPopFeedbackDone = true;
@@ -196,9 +200,25 @@ public class EggButton : MonoBehaviour
     {
         gradePanelAnim.SetTrigger(_triggerParameter);
     }
-    public void PlayGradePanelFixedAnim(string _triggerParameter)
+    public void PlayGradePanelFixedAnim()
     {
-        PlayGradePanelAnim(_triggerParameter);
+        PlayGradePanelAnim("Fixed");
+
+        if (popFeedbackCo != null) StopCoroutine(popFeedbackCo);
+
+        isGradeFixed = true;
+
+        for (int i = 0; i < MyGrade.mGrades.Length; i++)
+        {
+            if (currentProbability >= i * 25f && currentProbability < (i + 1) * 25f)
+            {
+                currentProbability = i * 25f;
+                fixedProbability = currentProbability;
+                break;
+            }
+        }
+        gradeRoll.anchoredPosition = new Vector2(gradeRoll.anchoredPosition.x, currentProbability * 5.12f);
+        Debug.Log($"currentProb = {currentProbability}, fixedProb = {fixedProbability}");
     }
 
     void UpdateRateForGameManager()
