@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Tennis 3
+  m_EditorClassIdentifier: 
+  grade: 3
+  Name: Tennis
+  DisplayName: "\uD14C\uB2C8\uC2A4"
+  SynergyDispName: "\uC218\uD37C \uC11C\uBE0C"
+  charImage: {fileID: 21300000, guid: 3bafff59f3f379c41b65e97e6ae1f871, type: 3}
+  costume: {fileID: 11400000, guid: 41bbcb570c9e2824fac60ac823a9c1c7, type: 2}
+  SynergyWeapon: Tennis King
+  SynergyItem: {fileID: 11400000, guid: 7a64f5031e72cd64581e534d57086656, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: d3fc247569af14d4b96f5a3e972af7bb, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: f29159a2137803c4c8a44c194b3b8790, type: 2}
+  DefaultHead: {fileID: -726992558, guid: 302dcf9506e1f77418b2cb742135d63f, type: 3}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: -460708083, guid: 302dcf9506e1f77418b2cb742135d63f, type: 3}
+  charEffectImage: {fileID: 0}
+  costumeAnim: {fileID: 22100000, guid: 934fe9c232971c24e8c8e2a58eb266a3, type: 2}
+  weaponPrefab: {fileID: 1322226256919037930, guid: a41f421e8582c424d94aaa1115e0914d, type: 3}
+  stats:
+    damage: 100
+    timeToAttack: 2
+    numberOfAttacks: 1
+    sizeOfArea: 0
+    projectileSpeed: 25
+    knockBackChance: 20
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 5958538054296379712, guid: 7abd89f57795ae747851e4ad7d13ea7a, type: 3}
+  animatorController: {fileID: 9100000, guid: 9606d5b819b09574da2086658199a54a, type: 2}
+  upgrades:
+  - {fileID: 11400000, guid: 47cf8f6bf2b345443bc6caa508e064dd, type: 2}
+  - {fileID: 11400000, guid: e29944c0debb7104487bf1fe9aded2fd, type: 2}
+  - {fileID: 11400000, guid: 5180e199a995ebd4c8457340ded29a41, type: 2}
+  - {fileID: 11400000, guid: f7e65eb1bd136d14784cad9b621c5e24, type: 2}
+  - {fileID: 11400000, guid: 24c8a79fbb709794eb55c2738eea05a7, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 1471f421cf3262a40a088b49086c5815, type: 2}
+  dropChance: 0
+  hideEssentialEquipmentOnPlay: 1
+  equipmentType: 3

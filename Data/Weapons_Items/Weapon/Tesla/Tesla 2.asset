@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Tesla 2
+  m_EditorClassIdentifier: 
+  grade: 2
+  Name: Tesla
+  DisplayName: "\uD14C\uC2AC\uB77C"
+  SynergyDispName: "\uD14C\uC2AC\uB77C \uB2C8\uCF5C\uB77C"
+  charImage: {fileID: 21300000, guid: bd0ed7115a9bdf74ca52d19b407fc9b5, type: 3}
+  costume: {fileID: 0}
+  SynergyWeapon: Teslection
+  SynergyItem: {fileID: 11400000, guid: 26e4f3c792fe04c4388d4557fef22918, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: 2da88945fadf8dd478be1068836143f3, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: de31e01fbcb22b448831b3a0eac16eb2, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: f29159a2137803c4c8a44c194b3b8790, type: 2}
+  DefaultHead: {fileID: -1850109828, guid: 05525a3e6a7b5f948a2c3a48acc4f518, type: 3}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 664530602, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
+  DefaultHands: {fileID: 0}
+  charEffectImage: {fileID: 21300000, guid: de298601b074ada4a86e794e0dac96ab, type: 3}
+  costumeAnim: {fileID: 0}
+  weaponPrefab: {fileID: 6822868710250514242, guid: cced79b0b48cc454d829e8729681e188, type: 3}
+  stats:
+    damage: 50
+    timeToAttack: 5
+    numberOfAttacks: 1
+    sizeOfArea: 2
+    projectileSpeed: 0
+    knockBackChance: 35
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 7295769312407643447, guid: 9bf37590165248942857e426c05c8c91, type: 3}
+  animatorController: {fileID: 9100000, guid: 1ecb6fa94f9ad5942ab83e6eb5cf08ec, type: 2}
+  upgrades:
+  - {fileID: 11400000, guid: 162b2392838a94e4987855c60ef6c78c, type: 2}
+  - {fileID: 11400000, guid: d2e10447a0d2fac4a8d81b64cb1b89df, type: 2}
+  - {fileID: 11400000, guid: 35138b2a70cc8ed4680f87fd8ca72eb8, type: 2}
+  - {fileID: 11400000, guid: c8b64eb9aa21e324e982f2e19296220f, type: 2}
+  - {fileID: 11400000, guid: 688b251ab6e4fcc4fabf1fcd8d918852, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 0c54557d11684d14bb1fc7f2b2888c08, type: 2}
+  dropChance: 0
+  hideEssentialEquipmentOnPlay: 1
+  equipmentType: 0

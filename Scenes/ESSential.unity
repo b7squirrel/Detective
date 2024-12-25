@@ -28227,12 +28227,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponDatas: []
-  acquireDatas:
-  - {fileID: 11400000, guid: 5d6217358e5570e46a3d56823a332495, type: 2}
-  - {fileID: 11400000, guid: 5fd7bdded016cb04b81137ac6a5cb410, type: 2}
-  - {fileID: 11400000, guid: c86d2842c5113004c87f34f88743619e, type: 2}
-  - {fileID: 11400000, guid: 10b6942a21f36ee4993c1ff809e16ef9, type: 2}
-  - {fileID: 11400000, guid: a1f24287ca27aaf408cd3302214aec96, type: 2}
+  acquireDatas: []
+  AcquireDatas:
+  - Name: Fire
+    acquireDatas:
+    - {fileID: 11400000, guid: 5d6217358e5570e46a3d56823a332495, type: 2}
+    - {fileID: 11400000, guid: 5fd7bdded016cb04b81137ac6a5cb410, type: 2}
+    - {fileID: 11400000, guid: c86d2842c5113004c87f34f88743619e, type: 2}
+    - {fileID: 11400000, guid: 10b6942a21f36ee4993c1ff809e16ef9, type: 2}
+    - {fileID: 11400000, guid: a1f24287ca27aaf408cd3302214aec96, type: 2}
+  - Name: Hoop
+    acquireDatas:
+    - {fileID: 11400000, guid: 5836482e39c69b44b95694d14838502f, type: 2}
+    - {fileID: 11400000, guid: db3710682a432824d8d5904d60a8eadf, type: 2}
+    - {fileID: 11400000, guid: 20e744933ec06a146a52819896f6d333, type: 2}
+    - {fileID: 11400000, guid: ecb28c7453b3736408ef787e1f6c8ea8, type: 2}
+    - {fileID: 11400000, guid: 109705e7ce5d01d48af6e7c4aaaa5da9, type: 2}
+  - Name: Garlic
+    acquireDatas:
+    - {fileID: 11400000, guid: 8307db7aea388e2449fe997c04c6a129, type: 2}
+    - {fileID: 11400000, guid: 96b8596ee8db6014a82464c85d22fba4, type: 2}
+    - {fileID: 11400000, guid: 97b38ea7ab9b1054b83149fbdf6db36e, type: 2}
+    - {fileID: 11400000, guid: 802bd74a40ce9714db2a6ff59cb456f8, type: 2}
+    - {fileID: 11400000, guid: d250722fa4628964abe93aa389c4df82, type: 2}
+  - Name: Bomb
+    acquireDatas:
+    - {fileID: 11400000, guid: 115dbec4a4befe245929dc3c36f4ba7b, type: 2}
+    - {fileID: 11400000, guid: 229d82b0f54e11249be2a5279729115d, type: 2}
+    - {fileID: 11400000, guid: 19224e079c69aaf4d9faf259f78cdd7a, type: 2}
+    - {fileID: 11400000, guid: 845a5bdac1f7819459875013209b19af, type: 2}
+    - {fileID: 11400000, guid: 76b3a5603086ce9449566015a9f67fe0, type: 2}
+  - Name: Laser
+    acquireDatas:
+    - {fileID: 11400000, guid: 33abd3426917f4f48962789222ea5754, type: 2}
+    - {fileID: 11400000, guid: b8b9801dcc64a4a46b4d37665b850502, type: 2}
+    - {fileID: 11400000, guid: 33b8a68863e451b4e9ccb4b997955c2d, type: 2}
+    - {fileID: 11400000, guid: a5fa4bf29dfb33d4682e59d5c4eaaf0f, type: 2}
+    - {fileID: 11400000, guid: 1b6b1a98a52be624e8bd1b0d2990a0dd, type: 2}
+  - Name: Plane
+    acquireDatas:
+    - {fileID: 11400000, guid: e4a09f1ed67a12e4395b9ec291ea9f45, type: 2}
+    - {fileID: 11400000, guid: 3816bf64abec68448bbc0abf09fcc499, type: 2}
+    - {fileID: 11400000, guid: c6254d44a785cb74393ec8b6826647f1, type: 2}
+    - {fileID: 11400000, guid: 49086d0c58c9f9b4ab62268af66e45d3, type: 2}
+    - {fileID: 11400000, guid: 1149a26260bb7d348b19e8157446b456, type: 2}
+  - Name: Punch
+    acquireDatas:
+    - {fileID: 11400000, guid: 956c18bee75820e4886566885eb690fa, type: 2}
+    - {fileID: 11400000, guid: 64674a4d6f7cfae4fb27a1dadaf78b30, type: 2}
+    - {fileID: 11400000, guid: bcbf014b7bd217c4e88ad04812ea7d41, type: 2}
+    - {fileID: 11400000, guid: 85d6f744ae195154c87e49208fd483a9, type: 2}
+    - {fileID: 11400000, guid: d3ede41ea10cc0c418c2cd6098a6930d, type: 2}
+  - Name: Tennis
+    acquireDatas:
+    - {fileID: 11400000, guid: 66ed483b4bfd29243bd38c55ae767291, type: 2}
+    - {fileID: 11400000, guid: 9bf2b4638cb291442a147d42f76d39ac, type: 2}
+    - {fileID: 11400000, guid: ccb6603534b8ae548baa7636311d15c8, type: 2}
+    - {fileID: 11400000, guid: 8c1a8acc1e482b3479f1261cb45a011f, type: 2}
+    - {fileID: 11400000, guid: c665440b16541604593942dbe4b68d4a, type: 2}
+  - Name: Tesla
+    acquireDatas:
+    - {fileID: 11400000, guid: ce1e985d91dd0fa49b5630851d047610, type: 2}
+    - {fileID: 11400000, guid: e71eec48577c4c24db420eb8aa796831, type: 2}
+    - {fileID: 11400000, guid: 0e88a0e2eff3a174ca399b6e48fb31eb, type: 2}
+    - {fileID: 11400000, guid: 777119301e7cd374b9e4d3aff87096ba, type: 2}
+    - {fileID: 11400000, guid: 09df98c59b299e648b308c51baf82af4, type: 2}
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0

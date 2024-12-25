@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grade: 3
   Name: Whistle
-  DisplayName: "\uBFCC\uBFCC \uC624\uB9AC"
+  DisplayName: "\uBFCC\uBFCC"
+  SynergyDispName: "\uAC70\uB300 \uBFCC\uBFCC"
   charImage: {fileID: 21300000, guid: 837dcbdabc2b2e64fae3ee0ecce59c5a, type: 3}
   costume: {fileID: 0}
   SynergyWeapon: Super Whistle
-  SynergyItem: {fileID: 0}
+  SynergyItem: {fileID: 11400000, guid: 0a8e636c5e214834084a4fc0390cc2a3, type: 2}
   Animators:
     CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
     InGamePlayerAnim: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
@@ -41,12 +42,12 @@ MonoBehaviour:
   weaponBasePrefab: {fileID: 3878785206359950514, guid: ba9a7a5fac4d7954296840cc8ce2abe4, type: 3}
   animatorController: {fileID: 0}
   upgrades:
-  - {fileID: 11400000, guid: cb152b734694c034b922d0cca60e757f, type: 2}
-  - {fileID: 11400000, guid: 3571fea31d0e1e24d92b88e4d04cf03e, type: 2}
-  - {fileID: 11400000, guid: 4bfb73d45ee2e084382d6b2f9b97f848, type: 2}
-  - {fileID: 11400000, guid: 99513b5cd5d59244e87cad6f81a90bfe, type: 2}
-  - {fileID: 11400000, guid: 82b30f3c5e350ed48b0a3565ac4782af, type: 2}
-  synergyUpgrade: {fileID: 0}
+  - {fileID: 11400000, guid: 3ac599c62e3a469418bb01373e172825, type: 2}
+  - {fileID: 11400000, guid: e81834a9443014540891988cb9f163cb, type: 2}
+  - {fileID: 11400000, guid: 2b823a7ad4c29404ba56b9bdfc002bd6, type: 2}
+  - {fileID: 11400000, guid: aa65aa4cd6d512a4abde630ba3b0d137, type: 2}
+  - {fileID: 11400000, guid: e2ab1962080860347bf07694808f9464, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 599c95f520818354f82917c48ab0bd3a, type: 2}
   dropChance: 0
   hideEssentialEquipmentOnPlay: 1
   equipmentType: 2

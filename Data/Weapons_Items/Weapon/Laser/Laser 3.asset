@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Laser 3
+  m_EditorClassIdentifier: 
+  grade: 3
+  Name: Laser
+  DisplayName: "\uAD34\uC218"
+  SynergyDispName: "\uD68C\uC804 \uAD34\uC218"
+  charImage: {fileID: 21300000, guid: 3bf5d72b2f56f1241af34605f3904a6d, type: 3}
+  costume: {fileID: 11400000, guid: dc423a9a37aa49b438980b2a5f0cb85d, type: 2}
+  SynergyWeapon: Rainbow Laser
+  SynergyItem: {fileID: 11400000, guid: 20155fcb50cd1dc4fb5339ff2364c93a, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: b79dea8c5f6373845bf5b99cb77bc0c3, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: f29159a2137803c4c8a44c194b3b8790, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  charEffectImage: {fileID: 21300000, guid: 2850b7227823c624aaee94daad94b9e1, type: 3}
+  costumeAnim: {fileID: 0}
+  weaponPrefab: {fileID: 6822868710250514242, guid: f71c0c1781d42624eae696cc65fa84fd, type: 3}
+  stats:
+    damage: 4
+    timeToAttack: 2
+    numberOfAttacks: 1
+    sizeOfArea: 1
+    projectileSpeed: 16
+    knockBackChance: 25
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 2207135196431651454, guid: 5787b55677a691f4db7cb8127a62c66b, type: 3}
+  animatorController: {fileID: 9100000, guid: 9a46ade920df1cd419180f7b8c47e526, type: 2}
+  upgrades:
+  - {fileID: 11400000, guid: 388e7943dd897da4d89be89f7a594465, type: 2}
+  - {fileID: 11400000, guid: cf1eb6d9c4a22cc45ab42fde1a5c4d0a, type: 2}
+  - {fileID: 11400000, guid: 63c3154110e2462479597d8d6ff0d121, type: 2}
+  - {fileID: 11400000, guid: 3d7786910bb146a45bdf05afd4beabfd, type: 2}
+  - {fileID: 11400000, guid: 3658534edfe78944ea8b374586f30932, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 813192bca07fd61439151c11bcc16eba, type: 2}
+  dropChance: 0
+  hideEssentialEquipmentOnPlay: 1
+  equipmentType: 2

@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Garlic 4
+  m_EditorClassIdentifier: 
+  grade: 4
+  Name: Guitar
+  DisplayName: "\uAE30\uD0C0"
+  SynergyDispName: "\uD5E4\uBE44\uBA54\uD0C8"
+  charImage: {fileID: 21300000, guid: 2c77965621ecd3b479d5c67b4339f17b, type: 3}
+  costume: {fileID: 0}
+  SynergyWeapon: Rocker
+  SynergyItem: {fileID: 11400000, guid: 345063fe01eca2345bfaa975c540b87d, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: 06e7adb02ced5514dbe3e5c355d56503, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: f29159a2137803c4c8a44c194b3b8790, type: 2}
+  DefaultHead: {fileID: -1050372065, guid: 120c0acfc10a86940ad836c78ca0fc98, type: 3}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 958767226, guid: 120c0acfc10a86940ad836c78ca0fc98, type: 3}
+  charEffectImage: {fileID: 0}
+  costumeAnim: {fileID: 0}
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 20
+    timeToAttack: 0.7
+    numberOfAttacks: 0
+    sizeOfArea: 0
+    projectileSpeed: 0
+    knockBackChance: 10
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 6391488162450220913, guid: a3055110ed60e4741b9af2ec7dec8b64, type: 3}
+  animatorController: {fileID: 9100000, guid: fa97aaf65b04a1f4795ba06797686d0c, type: 2}
+  upgrades:
+  - {fileID: 11400000, guid: e85fb2bfe65c22e4a93a3c19108589ea, type: 2}
+  - {fileID: 11400000, guid: b5379638e16a26e49b8517a7b25cfb14, type: 2}
+  - {fileID: 11400000, guid: 2c031acf65b085f4db471a7ef6aa1c42, type: 2}
+  - {fileID: 11400000, guid: 4a42e5046e29329468f503c159de95e1, type: 2}
+  - {fileID: 11400000, guid: f9ede65941d0e274480a72d3bd8f2469, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: ccdd4ad62d9baed4c9b006e9d08537eb, type: 2}
+  dropChance: 0
+  hideEssentialEquipmentOnPlay: 1
+  equipmentType: 4
