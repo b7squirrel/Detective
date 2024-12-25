@@ -33,6 +33,8 @@ public class EggButton : MonoBehaviour
     [SerializeField] Animator gradePanelAnim;
     bool isGradeFixed; // 등급이 결정된 이후에는 다이얼이 더 이상 움직이지 않도록 하려고
     float fixedProbability; // 확정된 등급의 y높이를 프레임에 딱 맞추기 위해서
+
+    [SerializeField] Image nameTag; // 이름표의 색깔을 등급과 맞추기 위해
     
     [Header("레어 오리 확률")]
     [SerializeField] float desiredFontSizeFactor;
@@ -175,6 +177,15 @@ public class EggButton : MonoBehaviour
                     popFeedbackCo = StartCoroutine(PopFeedbackCo(currentGradeIndex));
                 }
             }
+            else
+            {
+                //for (int i = 0; i < upgradeSounds.Length; i++)
+                //{
+                //    Debug.Log("Down");
+                //    SoundManager.instance.Play(downGradeSounds[i]);
+                //    PlayGradePanelAnim("Downgrade");
+                //}
+            }
         }
 
         pastGradeIndex = currentGradeIndex;
@@ -214,10 +225,12 @@ public class EggButton : MonoBehaviour
             {
                 currentProbability = i * 25f;
                 fixedProbability = currentProbability;
+                nameTag.color = MyGrade.GradeColors[i];
                 break;
             }
         }
         gradeRoll.anchoredPosition = new Vector2(gradeRoll.anchoredPosition.x, currentProbability * 5.12f);
+        
         Debug.Log($"currentProb = {currentProbability}, fixedProb = {fixedProbability}");
     }
 
