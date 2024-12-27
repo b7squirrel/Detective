@@ -4,6 +4,9 @@ using UnityEngine;
 [Serializable]
 public class StageContents
 {
+    [Header("Stage Number")]
+    public string Name;
+
     [Header("Stage Time")]
     public float WallDuration;
 
@@ -25,6 +28,17 @@ public class StageContents
     public GameObject bossPrefab;
     public GameObject[] effects;
     public GameObject[] bossEffects;
+
+    [Header("Spawn Gem On Start")]
+    public int numbersOfGemToSpawn;
+    public GameObject gemToSpawn;
+    public float innerRadius;
+    public float outerRadius;
+
+    [Header("Chest")]
+    public GameObject chestPrefab;
+    public float innerRadiusForChest;
+    public float outerRadiusForChest;
 
     [Header("Wall")]
     public Vector2[] startPositions = new Vector2[4];

@@ -11,7 +11,7 @@ public class StageTime : MonoBehaviour
 
     private void Awake()
     {
-        timerUI = FindObjectOfType<TimerUI>();
+        //timerUI = FindObjectOfType<TimerUI>();
     }
     private void Start()
     {
@@ -20,6 +20,7 @@ public class StageTime : MonoBehaviour
     void Init()
     {
         FindObjectOfType<WallManager>().SetStageDuration(wallDuration);
+        timerUI = FindObjectOfType<TimerUI>();
     }
 
     void Update()
