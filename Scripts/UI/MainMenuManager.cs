@@ -200,11 +200,11 @@ public class MainMenuManager : MonoBehaviour
         LoadingSceneManager loadingSceneManager = FindObjectOfType<LoadingSceneManager>();
         loadingSceneManager.LoadScenes();
     }
-    public void StartGame()
-    {
-        int currentStage = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
-        string stageToPlay = "GamePlayStage" + currentStage.ToString();
-        SceneManager.LoadScene("Essential", LoadSceneMode.Single);
-        SceneManager.LoadScene(stageToPlay, LoadSceneMode.Additive);
-    }
+    //public void StartGame()
+    //{
+    //    int currentStage = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
+    //    string stageToPlay = "GamePlayStage" + currentStage.ToString();
+    //    SceneManager.LoadScene("Essential", LoadSceneMode.Single);
+    //    SceneManager.LoadScene("Stage", LoadSceneMode.Additive);
+    //}
 }

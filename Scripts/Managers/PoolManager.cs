@@ -22,10 +22,8 @@ public class PoolManager : MonoBehaviour
     [Header("Egg Box")]
     [SerializeField] GameObject eggBox;
 
-    void Start()
+    public void InitPools()
     {
-        InitEnemyPools();
-
         enemyFolder = new GameObject();
         enemyFolder.name = "Enemies";
         enemyFolder.transform.position = Vector3.zero;
@@ -39,7 +37,7 @@ public class PoolManager : MonoBehaviour
     /// <summary>
     /// 레벨의 Stage Asset Manager에서 적들의 종류를 가져옴
     /// </summary>
-    void InitEnemyPools()
+    public void InitEnemyPools()
     {
         stageAssetManager = FindAnyObjectByType<StageAssetManager>();
         this.enemies = new GameObject[stageAssetManager.enemies.Length];

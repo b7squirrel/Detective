@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class ReadStageData : MonoBehaviour
 {
-    public TextAsset text;
+    public TextAsset stageTextData;
     ReadData readData;
     string[,] data;
     List <StageEvent> stageEvents;
-    StageEnemyData stageEnemyData;
+    EnemyData[] enemyDatas;
 
     StageEventType GetStageEventType(string stageEventType)
     {
@@ -32,47 +32,52 @@ public class ReadStageData : MonoBehaviour
     EnemyData GetEnemyType(string enemyType)
     {
         if (enemyType == "LV1")
-            return stageEnemyData.enemyData[0];
+            return enemyDatas[0];
         if (enemyType == "LV1_SubBoss")
-            return stageEnemyData.enemyData[1];
+            return enemyDatas[1];
         if (enemyType == "LV2")
-            return stageEnemyData.enemyData[2];
+            return enemyDatas[2];
         if (enemyType == "LV2_SubBoss")
-            return stageEnemyData.enemyData[3];
+            return enemyDatas[3];
         if (enemyType == "LV3")
-            return stageEnemyData.enemyData[4];
+            return enemyDatas[4];
         if (enemyType == "LV3_SubBoss")
-            return stageEnemyData.enemyData[5];
+            return enemyDatas[5];
         if (enemyType == "LV4")
-            return stageEnemyData.enemyData[6];
+            return enemyDatas[6];
         if (enemyType == "LV4_SubBoss")
-            return stageEnemyData.enemyData[7];
+            return enemyDatas[7];
         if (enemyType == "LV5")
-            return stageEnemyData.enemyData[8];
+            return enemyDatas[8];
         if (enemyType == "LV5_SubBoss")
-            return stageEnemyData.enemyData[9];
+            return enemyDatas[9];
         if (enemyType == "Boss")
-            return stageEnemyData.enemyData[10];
+            return enemyDatas[10];
         if (enemyType == "Group") 
-            return stageEnemyData.enemyData[11];
+            return enemyDatas[11];
         if (enemyType == "Egggulp_LV1") 
-            return stageEnemyData.enemyData[12];
+            return enemyDatas[12];
         if (enemyType == "Egggulp_LV2") 
-            return stageEnemyData.enemyData[13];
+            return enemyDatas[13];
         if (enemyType == "Egggulp_LV3") 
-            return stageEnemyData.enemyData[14];
+            return enemyDatas[14];
         if (enemyType == "Egggulp_LV4") 
-            return stageEnemyData.enemyData[15];
+            return enemyDatas[15];
         if (enemyType == "Egggulp_LV5") 
-            return stageEnemyData.enemyData[16];
-        return stageEnemyData.enemyData[0]; // 일단 채워넣었음
+            return enemyDatas[16];
+        return enemyDatas[0]; // 일단 채워넣었음
+    }
+    
+    public void Init(TextAsset _stageTextData, EnemyData[] _enemyDatas)
+    {
+        stageTextData = _stageTextData;
+        enemyDatas = _enemyDatas;
     }
 
     public List<StageEvent> GetStageEventsList()
     {
         readData = new ReadData();
-        data = readData.GetText(text);
-        stageEnemyData = GetComponent<StageEnemyData>();
+        data = readData.GetText(stageTextData);
         stageEvents = new List<StageEvent>();
         int length = data.GetLength(0);
 

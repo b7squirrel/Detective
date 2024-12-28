@@ -21,7 +21,8 @@ public class LoadingSceneManager : MonoBehaviour
         //yield return null;
 
         int currentStage = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
-        string stageToPlay = "GamePlayStage" + currentStage.ToString();
+        //string stageToPlay = "GamePlayStage" + currentStage.ToString();
+        string stageToPlay = "Stage";
 
         AsyncOperation op1 = SceneManager.LoadSceneAsync("Essential", LoadSceneMode.Single);
         op1.allowSceneActivation = false;
@@ -47,6 +48,8 @@ public class LoadingSceneManager : MonoBehaviour
                 {
                     op1.allowSceneActivation = true;
                     SceneManager.LoadScene(stageToPlay, LoadSceneMode.Additive);
+
+                    StageManager stagemanager = FindObjectOfType<StageManager>();
                     yield break;
                 }
             }

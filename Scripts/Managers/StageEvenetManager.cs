@@ -25,12 +25,13 @@ public class StageEvenetManager : MonoBehaviour
     public bool IsWinningStage { get; set; }
     Coroutine winStageCoroutine;
 
-    [Header("Egg Spawn Time")]
-    [SerializeField] float[] eggSpawnTimes;
-
-    void Start()
+    public void Init(TextAsset _stageTextData, EnemyData[] _enemyDatas, int _enemyNumForNextEvent, StageMusicType _stageMusicType)
     {
+        enemyNumForNextEvent = _enemyNumForNextEvent;
+        stageMusicType = _stageMusicType;
+
         readStageData = GetComponent<ReadStageData>();
+        readStageData.Init(_stageTextData, _enemyDatas);
         foreach (var item in readStageData.GetStageEventsList())
         {
             this.stageEvents.Add(item);
@@ -149,11 +150,6 @@ public class StageEvenetManager : MonoBehaviour
     public StageMusicType GetStageMusicType()
     {
         return stageMusicType;
-    }
-
-    public float[] GetEggSpawnTimes()
-    {
-        return eggSpawnTimes;
     }
 
     #region 디버깅

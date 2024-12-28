@@ -31,12 +31,15 @@ public class FieldItemSpawner : MonoBehaviour
     float eggSpawnCoolDown;
     int eggSpawnIndex;
 
+    public void Init(float[] _eggSpawnTime)
+    {
+        eggSpawnTime = _eggSpawnTime;
+    }
+
     void Start()
     {
         itemBoxSpawnCounter = 0;
         MSBspawnCounter = 0;
-
-        eggSpawnTime = FindObjectOfType<StageEvenetManager>().GetEggSpawnTimes();
     }
     void Update()
     {
