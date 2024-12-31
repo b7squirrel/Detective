@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
 
@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public FeedbackManager feedbackManager;
     public FieldItemEffect fieldItemEffect;
     public PopupManager popupManager;
+    public ProgressionBar progressionBar;
     
 
     public GameObject joystick;
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
     public GameObject darkBG;
     public GameObject lightBG;
 
-    [Header("·¹¾î ¿À¸® È®·ü")]
+    [Header("ë ˆì–´ ì˜¤ë¦¬ í™•ë¥ ")]
     float rateToGetRare;
 
     [Header("Loading Swipe")]
@@ -74,6 +75,8 @@ public class GameManager : MonoBehaviour
         feedbackManager = GetComponent<FeedbackManager>();
 
         popupManager = GetComponent<PopupManager>();
+
+        progressionBar = FindObjectOfType<ProgressionBar>();
 
         confimationButton.SetActive(false);
 
@@ -147,14 +150,14 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region È®ÀÎ ¹öÆ°
+    #region í™•ì¸ ë²„íŠ¼
     public void ActivateConfirmationButton(float _delayToActivate)
     {
         StartCoroutine(ActivateButton(_delayToActivate));
     }
     IEnumerator ActivateButton(float _delayToActivate)
     {
-        // ÀÏ´ÜÀº 0.8ÃÊ ÈÄ¿¡ ³ª¿Àµµ·Ï ÇÔ.
+        // ì¼ë‹¨ì€ 0.8ì´ˆ í›„ì— ë‚˜ì˜¤ë„ë¡ í•¨.
         yield return new WaitForSecondsRealtime(_delayToActivate);
         confimationButton.SetActive(true);
     }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +21,8 @@ public class StageEvenetManager : MonoBehaviour
     bool forceSpawn;
     int forceSpawnIndex;
 
+    int subBossNums;
+
     MusicManager musicManager;
     public bool IsWinningStage { get; set; }
     Coroutine winStageCoroutine;
@@ -32,9 +34,20 @@ public class StageEvenetManager : MonoBehaviour
 
         readStageData = GetComponent<ReadStageData>();
         readStageData.Init(_stageTextData, _enemyDatas);
+
+        List<int> segmentsLengths = new();
+        int length = 0;
         foreach (var item in readStageData.GetStageEventsList())
         {
             this.stageEvents.Add(item);
+            length++;
+
+            if (item.eventType == StageEventType.SpawnSubBoss)
+            {
+                subBossNums++;
+                segmentsLengths.Add(length);
+                length = 0;
+            }
         }
         spawner = FindObjectOfType<Spawner>();
 
@@ -42,6 +55,8 @@ public class StageEvenetManager : MonoBehaviour
         winStageCoroutine = null;
 
         GameManager.instance.musicCreditManager.Init();
+        GameManager.instance.progressionBar.Init(subBossNums, stageEvents.Count, segmentsLengths);
+        GameManager.instance.progressionBar.UpdateProgressBar(0, false);
 
         wallManager = FindObjectOfType<WallManager>();
     }
@@ -68,7 +83,7 @@ public class StageEvenetManager : MonoBehaviour
         }
 
         // 적들이 몰려옵니다 이벤트가 아닐 때만 적의 수에 따라 이벤트 실행
-        if(forceSpawnIndex <= 0)
+        if (forceSpawnIndex <= 0)
         {
             if (enemyNums > enemyNumForNextEvent) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
         }
@@ -91,6 +106,9 @@ public class StageEvenetManager : MonoBehaviour
             isWaiting = false;
 
         if (onStopWatchEffect) yield break; // 스톱위치가 작동 중이면 이벤트 홀드
+
+        bool isSubBoss = stageEvents[eventIndexer].eventType == StageEventType.SpawnSubBoss ? true : false;
+        GameManager.instance.progressionBar.UpdateProgressBar(eventIndexer + 1, isSubBoss);
 
         switch (stageEvents[eventIndexer].eventType)
         {
@@ -124,7 +142,7 @@ public class StageEvenetManager : MonoBehaviour
         forceSpawnIndex--;
         if (forceSpawnIndex <= 0) forceSpawn = false;
 
-        // 디버깅
+        // ???源?
         SendStageEventIndex(eventIndexer);
     }
 
@@ -152,7 +170,7 @@ public class StageEvenetManager : MonoBehaviour
         return stageMusicType;
     }
 
-    #region 디버깅
+    #region ???源?
     void SendStageEventIndex(int _index)
     {
         DebugManager debugManager = FindObjectOfType<DebugManager>();
