@@ -1,8 +1,8 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// À½¾Ç Å©·¹µ÷ °ü¸®, ÇØ´ç ½ºÅ×ÀÌÁöÀÇ À½¾Ç Àç»ı
+/// ìŒì•… í¬ë ˆë”§ ê´€ë¦¬, í•´ë‹¹ ìŠ¤í…Œì´ì§€ì˜ ìŒì•… ì¬ìƒ
 /// </summary>
 public class MusicCreditManager : MonoBehaviour
 {
@@ -14,12 +14,12 @@ public class MusicCreditManager : MonoBehaviour
 
     public void Init()
     {
-        // ½ºÅ×ÀÌÁö ³Ñ¹ö °¡Á®¿À±â
+        // ìŠ¤í…Œì´ì§€ ë„˜ë²„ ê°€ì ¸ì˜¤ê¸°
         PlayerDataManager playerDataManager = FindObjectOfType<PlayerDataManager>();
         StageEvenetManager eventManager = FindObjectOfType<StageEvenetManager>();
-        StageMusicType musicType = eventManager.GetStageMusicType(); // °¢ ½ºÅ×ÀÌÁö¿¡¼­ À½¾Ç Å©·¹µ÷ µ¥ÀÌÅÍ °¡Á®¿È
+        StageMusicType musicType = eventManager.GetStageMusicType(); // ê° ìŠ¤í…Œì´ì§€ì—ì„œ ìŒì•… í¬ë ˆë”§ ë°ì´í„° ê°€ì ¸ì˜´
         
-        // Å©·¹µ÷ Á¦¸ñÀ¸·Î À½¾Ç ÆÄÀÏ Ã£±â
+        // í¬ë ˆë”§ ì œëª©ìœ¼ë¡œ ìŒì•… íŒŒì¼ ì°¾ê¸°
         int index = 0;
         for (int i = 0; i < creditData.AudioCredits.Length; i++)
         {
@@ -29,10 +29,10 @@ public class MusicCreditManager : MonoBehaviour
 
         //int index = playerDataManager.GetCurrentStageNumber();
 
-        // À½¾Ç Å©·¹µ÷ UI Ç¥½Ã
+        // ìŒì•… í¬ë ˆë”§ UI í‘œì‹œ
         if (creditUI == null) creditUI = FindObjectOfType<MusicCreditUI>();
         string title = "\"" + musicType.GetDescription() + "\"";
-        string credit = "ÀÛ°î " + creditData.AudioCredits[index].Credit;
+        string credit = "ì‘ê³¡ " + creditData.AudioCredits[index].Credit;
         StartCoroutine(ShowCreditUI(title, credit, index));
 
         if(musicVisualizer == null) musicVisualizer = GetComponent<MusicVisualizer>();
@@ -50,30 +50,31 @@ public class MusicCreditManager : MonoBehaviour
         //yield return new WaitForSeconds(2f);
         //PlayBGM(_index);
 
-        yield return new WaitForSeconds(.5f); // ÆĞ³ÎÀÌ ¿Ã¶ó¿À°í ³ª¼­ »ç¿îµå Àç»ı
+        yield return new WaitForSeconds(.5f); // íŒ¨ë„ì´ ì˜¬ë¼ì˜¤ê³  ë‚˜ì„œ ì‚¬ìš´ë“œ ì¬ìƒ
         //PlayPanelUpSound();
 
-        yield return new WaitForSeconds(1f); // ÆĞ³Î »ç¿îµå¿Í À½¾ÇÀÌ µ¿½Ã¿¡ °ãÄ¡¸é¼­ ³ª¿ÀÁö ¾Ê°Ô
+        yield return new WaitForSeconds(1f); // íŒ¨ë„ ì‚¬ìš´ë“œì™€ ìŒì•…ì´ ë™ì‹œì— ê²¹ì¹˜ë©´ì„œ ë‚˜ì˜¤ì§€ ì•Šê²Œ
         creditUI.CreditFadeIn(_title, _credit);
         musicVisualizer.Init(MusicManager.instance.GetAudioSource());
 
-        yield return new WaitForSeconds(3.5f); // 5ÃÊ ÈÄ¿¡ ÆĞ³Î ³»¸²
+        yield return new WaitForSeconds(3.5f); // 5ì´ˆ í›„ì— íŒ¨ë„ ë‚´ë¦¼
         HideCreditUI();
 
-        yield return new WaitForSeconds(2f); // Àû´çÈ÷ 2ÃÊ Á¤µµ ÈÄºÎÅÍ´Â À½¾ÇÀÌ ½ÌÅ©µÇÁö ¾Êµµ·Ñ
+        yield return new WaitForSeconds(2f); // ì ë‹¹íˆ 2ì´ˆ ì •ë„ í›„ë¶€í„°ëŠ” ìŒì•…ì´ ì‹±í¬ë˜ì§€ ì•Šë„ë¡¤
         musicVisualizer.FinishSync();
     }
     void HideCreditUI()
     {
         //PlayPanelDownSound();
         creditUI.CreditFadeOut();
+        //GetComponent<ProgressionBar>().StartProgressionBar();
     }
     void PlayPanelUpSound()
     {
         SoundManager.instance.Play(panelUpSound);
 
     }
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®
+    // ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸
     public void PlayPanelDownSound()
     {
         SoundManager.instance.Play(panelDownSound);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class ProgressionBar : MonoBehaviour
     [SerializeField] GameObject milestonePrefab;
     [SerializeField] RectTransform progressBarRect;
     [SerializeField] Slider progressBar;
+    [SerializeField] GameObject slider;
 
     float widthUnit;
     float normalizedLengthUnit;
@@ -47,6 +49,19 @@ public class ProgressionBar : MonoBehaviour
 
         progressBar.maxValue = 1;
         progressBar.value = 0;
+
+        slider.SetActive(true);
+    }
+
+    void StartProgressionBar()
+    {
+        StartCoroutine(InitBarAnim());
+    }
+
+    IEnumerator InitBarAnim()
+    {
+        yield return new WaitForSeconds(2f);
+        slider.SetActive(true);
     }
 
     public void UpdateProgressBar(bool _isSubBoss)
