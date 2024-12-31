@@ -56,7 +56,7 @@ public class StageEvenetManager : MonoBehaviour
 
         GameManager.instance.musicCreditManager.Init();
         GameManager.instance.progressionBar.Init(subBossNums, stageEvents.Count, segmentsLengths);
-        GameManager.instance.progressionBar.UpdateProgressBar(0, false);
+        GameManager.instance.progressionBar.UpdateProgressBar(false);
 
         wallManager = FindObjectOfType<WallManager>();
     }
@@ -108,7 +108,7 @@ public class StageEvenetManager : MonoBehaviour
         if (onStopWatchEffect) yield break; // 스톱위치가 작동 중이면 이벤트 홀드
 
         bool isSubBoss = stageEvents[eventIndexer].eventType == StageEventType.SpawnSubBoss ? true : false;
-        GameManager.instance.progressionBar.UpdateProgressBar(eventIndexer + 1, isSubBoss);
+        GameManager.instance.progressionBar.UpdateProgressBar(isSubBoss);
 
         switch (stageEvents[eventIndexer].eventType)
         {

@@ -49,12 +49,12 @@ public class ProgressionBar : MonoBehaviour
         }
 
         progressBar.maxValue = 1;
+        progressBar.value = 0;
     }
 
-    public void UpdateProgressBar(int _currentValue, bool _isSubBoss)
+    public void UpdateProgressBar(bool _isSubBoss)
     {
-        progressBar.value = normalizedLengthUnit * eventUnits[eventUnitsIndex] * _currentValue;
-        Debug.Log($"Event Unit = {eventUnits[eventUnitsIndex]}, Current Value= {normalizedLengthUnit * eventUnits[eventUnitsIndex] * _currentValue}");
+        progressBar.value += normalizedLengthUnit * eventUnits[eventUnitsIndex];
         if (_isSubBoss)
         {
             eventUnitsIndex++;
