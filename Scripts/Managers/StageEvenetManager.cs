@@ -48,6 +48,10 @@ public class StageEvenetManager : MonoBehaviour
                 segmentsLengths.Add(length);
                 length = 0;
             }
+            else if (item.eventType == StageEventType.SpawnEnemyBoss)
+            {
+                segmentsLengths.Add(length);
+            }
         }
         spawner = FindObjectOfType<Spawner>();
 

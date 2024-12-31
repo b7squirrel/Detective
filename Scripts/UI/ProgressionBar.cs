@@ -9,7 +9,6 @@ public class ProgressionBar : MonoBehaviour
     [SerializeField] Slider progressBar;
 
     float widthUnit;
-    float eventUnit;
     float normalizedLengthUnit;
     float[] eventUnits;
     int eventUnitsIndex;
@@ -20,13 +19,11 @@ public class ProgressionBar : MonoBehaviour
         milestoneAnims = new List<Animator>();
         widthUnit = 720f / (subBossNums + 1);
         normalizedLengthUnit = 1f / (subBossNums + 1);
-        eventUnit = 1f / (float)_eventNums;
         eventUnits = new float[_actualLength.Count];
         eventUnitsIndex = 0;
         for (int i = 0; i < _actualLength.Count; i++)
         {
             eventUnits[i] = 1f/(float)_actualLength[i];
-            Debug.Log($"event Units[{i}] = {eventUnits[i]}");
         }
 
         for (int i = 0; i < subBossNums + 1; i++)
@@ -54,9 +51,11 @@ public class ProgressionBar : MonoBehaviour
 
     public void UpdateProgressBar(bool _isSubBoss)
     {
+        Debug.Log($"eventUnits Length = {eventUnits.Length}, event Unit Index = {eventUnitsIndex}");
         progressBar.value += normalizedLengthUnit * eventUnits[eventUnitsIndex];
         if (_isSubBoss)
         {
+            milestoneAnims[eventUnitsIndex].SetTrigger("Cleared");
             eventUnitsIndex++;
         }
     }
