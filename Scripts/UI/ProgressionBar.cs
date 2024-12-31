@@ -55,7 +55,7 @@ public class ProgressionBar : MonoBehaviour
         progressBar.value += normalizedLengthUnit * eventUnits[eventUnitsIndex];
         if (_isSubBoss)
         {
-            milestoneAnims[eventUnitsIndex].SetTrigger("Cleared");
+            //milestoneAnims[eventUnitsIndex].SetTrigger("Cleared");
             eventUnitsIndex++;
         }
     }
