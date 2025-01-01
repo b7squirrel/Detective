@@ -1,13 +1,13 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DistributeEffects : MonoBehaviour
 {
-    [SerializeField] float radius = 100.0f; // ¹İÁö¸§ (UI ÁÂÇ¥°è¿¡¼­ÀÇ °Å¸® ´ÜÀ§)
-    [SerializeField] int numberOfEffects; // »ı¼ºÇÒ ·£´ı À§Ä¡ÀÇ ¼ö
-    [SerializeField] List<Vector2> randomEffects; // ·£´ı À§Ä¡¸¦ ´ãÀ» ¸®½ºÆ®
-    [SerializeField] GameObject EffectPrefab; // UI ¿ä¼ÒÀÇ ÇÁ¸®ÆÕ
+    [SerializeField] float radius = 100.0f; // ë°˜ì§€ë¦„ (UI ì¢Œí‘œê³„ì—ì„œì˜ ê±°ë¦¬ ë‹¨ìœ„)
+    [SerializeField] int numberOfEffects; // ìƒì„±í•  ëœë¤ ìœ„ì¹˜ì˜ ìˆ˜
+    [SerializeField] List<Vector2> randomEffects; // ëœë¤ ìœ„ì¹˜ë¥¼ ë‹´ì„ ë¦¬ìŠ¤íŠ¸
+    [SerializeField] GameObject EffectPrefab; // UI ìš”ì†Œì˜ í”„ë¦¬íŒ¹
 
     void Start()
     {
@@ -29,7 +29,7 @@ public class DistributeEffects : MonoBehaviour
             SetEffectOnRandomPoint(effect);
 
             count--;
-            yield return new WaitForSeconds(.8f);
+            yield return new WaitForSeconds(3f);
         }
     }
     public void SetEffectOnRandomPoint(GameObject _effect)

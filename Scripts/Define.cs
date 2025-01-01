@@ -118,11 +118,11 @@ public class MyGrade
 
     public static Color[] GradeColors = new Color[]
     {
-        new Color(.6f,.6f,.6f), // white
-        new Color(1,0.8f,0), // yellow
-        new Color(0,0.8f,1), // blue
-        new Color(0.5f,1,0), // green
-        new Color(.7f,0.3f,1) // purple
+        new Color(.6f,.6f,.6f), // white #999999
+        new Color(1,0.8f,0), // yellow  #FFCC00
+        new Color(0,0.8f,1), // blue #00CCFF
+        new Color(0.5f,1,0), // green #80FF00
+        new Color(.7f,0.3f,1) // purple #B34DFF
     };
 
     public static Color[] GradeGlowColors = new Color[]
