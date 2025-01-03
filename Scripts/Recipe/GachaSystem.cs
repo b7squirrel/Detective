@@ -85,32 +85,32 @@ public class GachaSystem : MonoBehaviour
     // ??? 踰??
     public void DrawWeapons()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             Draw("Weapon");
         }
     }
     public void DrawWeaponsAboveGrade(int _grade)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             Draw("Weapon");
         }
     }
     public void DrawItems()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             Draw("Item");
         }
     }
     public void DrawCombo()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             Draw("Weapon");
         }
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             Draw("Item");
         }

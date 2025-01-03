@@ -1,44 +1,46 @@
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SkillUI : MonoBehaviour
 {
     [SerializeField] TMPro.TextMeshProUGUI skillName;
+    [SerializeField] TMPro.TextMeshProUGUI skillNameShadow;
     [SerializeField] GameObject starPrefab;
     [SerializeField] GameObject[] stars;
     [SerializeField] Transform starContainer;
     [SerializeField] GameObject badge;
+    [SerializeField] Image swipeMask;
     Animator Anim;
     Image badgeImage;
     Material badgeMat;
+    Coroutine hitCo;
     [SerializeField] Material white;
-    Slider skillSlider;
 
     public void Init(string _skillName, int _evoStage, float _maxSliderValue)
     {
         skillName.text = _skillName;
+        if (skillNameShadow != null) skillNameShadow.text = _skillName;
         Debug.Log("Evo Stage = " + _evoStage);
-        SetNumStar(_evoStage);
-        skillSlider = GetComponent<Slider>();
-
-        skillSlider.maxValue = 1;
-        skillSlider.value = 0;
+        SetNumStar(_evoStage + 1);
+        swipeMask.fillAmount = 1f;
 
         Anim = GetComponent<Animator>();
         badgeImage = badge.GetComponent<Image>();
         badgeMat = badgeImage.material;
     }
-    
+
     public void SetSlider(float _coolTime)
     {
-        skillSlider.value = _coolTime;
+        //skillSlider.value = _coolTime;
+        swipeMask.fillAmount = 1 - _coolTime;
     }
     void SetNumStar(int numStars)
     {
         stars = null;
         if (stars == null)
         {
-            // 5°³ ¸¸µé¾î¼­ ºñÈ°¼ºÈ­
+            // 3ê°œ ë§Œë“¤ì–´ì„œ ë¹„í™œì„±í™”
             stars = new GameObject[3];
             for (int i = 0; i < stars.Length; i++)
             {
@@ -47,7 +49,7 @@ public class SkillUI : MonoBehaviour
             }
         }
 
-        // µî±Þ¸¸Å­ º° È°¼ºÈ­ÇÏ°í º°¸®½ºÆ®¿¡ ³Ö±â
+        // ë“±ê¸‰ë§Œí¼ ë³„ í™œì„±í™”í•˜ê³  ë³„ë¦¬ìŠ¤íŠ¸ì— ë„£ê¸°
         for (int i = 0; i < numStars; i++)
         {
             stars[i].SetActive(true);
@@ -55,7 +57,10 @@ public class SkillUI : MonoBehaviour
     }
     public void BadgeUpAnim()
     {
-        Anim.SetTrigger("Up");
+        //Anim.SetTrigger("Up");
+        Anim.SetTrigger("Hit");
+        //if (hitCo != null) StopCoroutine(HitCo());
+        //hitCo = StartCoroutine(HitCo());
     }
     // animation event
     public void SetBadgeMatToWhite()
@@ -66,5 +71,17 @@ public class SkillUI : MonoBehaviour
     {
         badgeImage.material = badgeMat;
     }
-
+    IEnumerator HitCo()
+    {
+        Debug.Log("Hit Co");
+        badgeImage.material = white;
+        badge.transform.localScale = Vector3.one * 1.4f;
+        yield return new WaitForSeconds(.3f);
+        badgeImage.material = badgeMat;
+        badge.transform.localScale = Vector3.one;
+    }
+    public void PlayBadgeAnim(string _trigger)
+    {
+        Anim.SetTrigger(_trigger);
+    }
 }

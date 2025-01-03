@@ -228,8 +228,10 @@ public class Equation
 
     public float GetSlowSpeedFactor(int _grade, int _evoStage)
     {
-        int slownessFactor = 5;
-        return .01f * (slownessFactor * ((_grade * 5) + (_evoStage * 2)) + 90f);
+        // grade 0 부터 evo stage0 => 0,1,2,3,4,5.... 가 되도록 식을 만들었음.
+        float slownessFactor = _evoStage * (3f + _grade);
+
+        return (float)(.3f + (0.01 * slownessFactor));
     }
 
     public Vector2 GetSpawnablePos(float _spawnConst, float _offset)

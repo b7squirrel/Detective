@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, Idamageable
@@ -338,7 +338,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             {
                 Attack(EnemyType.Melee);
             }
-            else if(enemyType == EnemyType.Explode)
+            else if (enemyType == EnemyType.Explode)
             {
                 Attack(EnemyType.Explode);
             }
@@ -435,7 +435,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         float chance = UnityEngine.Random.Range(0, 100);
         if (chance < knockBackChance && knockBackChance != 0)
             _knockBackDelay = this.knockBackDelay;
-        
+
         // 체력이 0 이하이면 죽음
         Stats.hp -= damage;
         if (Stats.hp < 1)
@@ -444,14 +444,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
             {
                 SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
             }
-            
+
             Die();
         }
         else
         {
             for (int i = 0; i < hits.Length; i++)
             {
-                SoundManager.instance.PlaySoundWith(hits[i], 1f,  true, .2f); 
+                SoundManager.instance.PlaySoundWith(hits[i], 1f, true, .2f);
             }
 
             if (hpBar != null)
@@ -491,7 +491,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             FindObjectOfType<BossDieManager>().DieEvent(.1f, 2f);
         }
 
-        if(isSubBoss)
+        if (isSubBoss)
         {
             CameraShake.instance.Shake();
         }
@@ -580,6 +580,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
         currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
+        //currentSpeed = DefaultSpeed - DefaultSpeed * .2f;
+        Debug.Log($"Default Speed = {DefaultSpeed}, Current Speed = {currentSpeed}");
     }
     public void ResetCurrentSpeedToDefault()
     {

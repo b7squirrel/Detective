@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class SkillBase : MonoBehaviour, ISkill
 {
@@ -7,12 +7,15 @@ public class SkillBase : MonoBehaviour, ISkill
     public int EvoStage { get; set; }
     public float CoolDownTime { get; set; }
 
-    protected float rate = .3f; // µî±Ş, ½ºÅ³ ·¹º§¿¡ µû¶ó ¾ó¸¶¸¸Å­ ÄğÅ¸ÀÓ¿¡ ¿µÇâÀ» ¹ÌÄ¡°Ô ÇÒ Áö Á¤ÇÏ´Â ºñÀ²
+    protected float rate = .3f; // ë“±ê¸‰, ìŠ¤í‚¬ ë ˆë²¨ì— ë”°ë¼ ì–¼ë§ˆë§Œí¼ ì¿¨íƒ€ì„ì— ì˜í–¥ì„ ë¯¸ì¹˜ê²Œ í•  ì§€ ì •í•˜ëŠ” ë¹„ìœ¨
     protected float realCoolDownTime;
     protected float skillCounter;
     protected SkillUI skillUi;
 
-    protected bool isActivated; // ¿ÜºÎ¿¡¼­ ¾î¶² ½ºÅ³ÀÌ ¹ßµ¿µÇ¾ú´ÂÁö ¾Ë±â À§ÇØ
+    protected bool isActivated; // ì™¸ë¶€ì—ì„œ ì–´ë–¤ ìŠ¤í‚¬ì´ ë°œë™ë˜ì—ˆëŠ”ì§€ ì•Œê¸° ìœ„í•´
+
+    protected bool isHitAnimPlayed;
+    protected bool isDurationAnimPlaying;
 
     public virtual void Init(SkillManager _skillManager, CardData _cardData)
     {
@@ -28,17 +31,50 @@ public class SkillBase : MonoBehaviour, ISkill
         skillUi.Init(skillName, EvoStage, realCoolDownTime);
     }
     /// <summary>
-    /// Skill Counter¸¦ Áõ°¡½ÃÅ°°í, UI¿¡ ¹İ¿µ
+    /// Skill Counterë¥¼ ì¦ê°€ì‹œí‚¤ê³ , UIì— ë°˜ì˜
     /// </summary>
     public virtual void UseSkill()
     {
         skillCounter += Time.deltaTime;
         skillUi.SetSlider(skillCounter / realCoolDownTime);
-        // °¢ ½ºÅ³¿¡¼­ ±¸Çö
+        // ê° ìŠ¤í‚¬ì—ì„œ êµ¬í˜„
     }
 
     public bool IsActivated()
     {
         return isActivated;
+    }
+
+    protected void UpdateUI(float _durationTimer, float _realDuration)
+    {
+        if (skillCounter > realCoolDownTime)
+        {
+            if (isHitAnimPlayed == false)
+            {
+                skillUi.BadgeUpAnim();
+                isHitAnimPlayed = true;
+            }
+
+            // ìŠ¤í‚¬ ë°œë™ ì‹œê°„ ëª¨ë‘ ì¢…ë£Œ
+            if (_durationTimer > _realDuration)
+            {
+                skillUi.PlayBadgeAnim("Done");
+                isHitAnimPlayed = false;
+
+                return;
+            }
+            else
+            {
+                // ìŠ¤í‚¬ ê³„ì† ìœ ì§€
+                if (isDurationAnimPlaying == false)
+                {
+                    skillUi.PlayBadgeAnim("Duration");
+                    isDurationAnimPlaying = true;
+                }
+
+                return;
+            }
+
+        }
     }
 }

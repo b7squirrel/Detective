@@ -12,6 +12,9 @@ public class Skill500 : SkillBase
     float realDuration;
     float durationTImer;
 
+    bool isDurationAnimPlaying; // 스킬이 진행 중인지. duration 애니메이션을 재생하기 위해
+    bool isHitAnimPlaying; // hit anim이 실행되었다면 다음 쿨다운까지는 실행하지 않음
+
     [Header("Debug")]
     [SerializeField] int _defaultDamageBonus;
     [SerializeField] int _realDamageBonus; 
@@ -42,12 +45,24 @@ public class Skill500 : SkillBase
         //DebugValues();
         if (skillCounter > realCoolDownTime)
         {
+            if (isHitAnimPlaying == false)
+            {
+                skillUi.BadgeUpAnim();
+                isHitAnimPlaying = true;
+            }
+            
+            
             // 스킬 발동 시간 끝나면 초기화
             if (durationTImer > realDuration)
             {
                 skillCounter = 0;
                 durationTImer = 0;
                 GameManager.instance.character.DamageBonus = defaultDamageBonus;
+
+                skillUi.PlayBadgeAnim("Done");
+                isDurationAnimPlaying= false;
+                isHitAnimPlaying = false;
+
                 return;
             }
             else
@@ -55,9 +70,15 @@ public class Skill500 : SkillBase
                 // 스킬 계속 유지
                 durationTImer += Time.deltaTime;
                 GameManager.instance.character.DamageBonus = realDamageBonus;
+
+                if (isDurationAnimPlaying == false)
+                {
+                    skillUi.PlayBadgeAnim("Duration");
+                    isDurationAnimPlaying = true;
+                }
+
                 return;
             }
-            
         }
     }
     void DebugValues()
