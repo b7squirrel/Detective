@@ -45,36 +45,36 @@ public class SkillBase : MonoBehaviour, ISkill
         return isActivated;
     }
 
-    protected void UpdateUI(float _durationTimer, float _realDuration)
-    {
-        if (skillCounter > realCoolDownTime)
-        {
-            if (isHitAnimPlayed == false)
-            {
-                skillUi.BadgeUpAnim();
-                isHitAnimPlayed = true;
-            }
+    //protected void UpdateUI(float _durationTimer, float _realDuration)
+    //{
+    //    if (skillCounter > realCoolDownTime)
+    //    {
+    //        if (isHitAnimPlayed == false)
+    //        {
+    //            skillUi.BadgeUpAnim();
+    //            isHitAnimPlayed = true;
+    //        }
 
-            // 스킬 발동 시간 모두 종료
-            if (_durationTimer > _realDuration)
-            {
-                skillUi.PlayBadgeAnim("Done");
-                isHitAnimPlayed = false;
+    //        // 스킬 발동 시간 모두 종료
+    //        if (_durationTimer > _realDuration)
+    //        {
+    //            skillUi.PlayBadgeAnim("Done");
+    //            isHitAnimPlayed = false;
 
-                return;
-            }
-            else
-            {
-                // 스킬 계속 유지
-                if (isDurationAnimPlaying == false)
-                {
-                    skillUi.PlayBadgeAnim("Duration");
-                    isDurationAnimPlaying = true;
-                }
+    //            return;
+    //        }
+    //        else
+    //        {
+    //            // 스킬 계속 유지
+    //            if (isDurationAnimPlaying == false)
+    //            {
+    //                skillUi.PlayBadgeAnim("Duration");
+    //                isDurationAnimPlaying = true;
+    //            }
 
-                return;
-            }
+    //            return;
+    //        }
 
-        }
-    }
+    //    }
+    //}
 }
