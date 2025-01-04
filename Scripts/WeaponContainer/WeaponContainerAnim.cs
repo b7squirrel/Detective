@@ -135,7 +135,7 @@ public class WeaponContainerAnim : MonoBehaviour
                 continue;
             }
 
-            sr[i + 1].sprite = iDatas[i].charImage;
+            sr[i + 1].sprite = iDatas[i].equippedImage;
         }
 
         face.sortingOrder = indexSortingOrder;

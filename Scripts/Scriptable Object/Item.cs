@@ -54,6 +54,7 @@ public class Item : ScriptableObject
     public string DisplayName;
     public int grade;
     public Sprite charImage;
+    public Sprite equippedImage;
     public AnimatorData CardItemAnimator;
     //public string SynergyWeapon;
     public List<string> SynergyWeapons; // 여러 시너지 무기를 저장하는 리스트

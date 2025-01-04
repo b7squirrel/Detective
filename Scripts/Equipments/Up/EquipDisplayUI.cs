@@ -135,12 +135,12 @@ public class EquipDisplayUI : MonoBehaviour
                 //Debug.Log("Essential = " + data.Name);
                 //EquipmentImages[index].runtimeAnimatorController
                 //                      = data.CardItemAnimator.InGamePlayerAnim;
-                EquipmentSprites[index].sprite = data.charImage;
+                EquipmentSprites[index].sprite = data.equippedImage;
 
             }
             else
             {
-                EquipmentSprites[index].sprite = data.charImage;
+                EquipmentSprites[index].sprite = data.equippedImage;
             }
             RestartAnim();
         }

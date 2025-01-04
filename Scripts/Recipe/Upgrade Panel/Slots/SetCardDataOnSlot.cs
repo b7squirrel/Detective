@@ -49,7 +49,7 @@ public class SetCardDataOnSlot : MonoBehaviour
 
             //cardDisp.SetRunTimeAnimController(i, weaponItemData.itemData.CardItemAnimator.CardImageAnim);
 
-            cardDisp.SetEquipCardImage(i, weaponItemData.itemData.charImage);
+            cardDisp.SetEquipCardImage(i, weaponItemData.itemData.equippedImage);
         }
     }
 }

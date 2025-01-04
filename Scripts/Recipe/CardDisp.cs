@@ -10,6 +10,8 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected Transform cardBaseContainer; // 등급 5개
     [SerializeField] protected Transform starContainer;
     [SerializeField] protected UnityEngine.UI.Image charImage;
+    [SerializeField] protected UnityEngine.UI.Image charFaceImage;
+    [SerializeField] protected GameObject charFaceExpression;
     [SerializeField] Animator charAnim;
     [SerializeField] Animator[] equipmentAnimators;
     [SerializeField] Image[] equipmentImages;
@@ -75,8 +77,12 @@ public class CardDisp : MonoBehaviour
 
         // 캐릭터 이미지
         //charImage.sprite = weaponData.charImage;
+        charAnim.enabled = true;
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
+        charFaceExpression.gameObject.SetActive(true);
+        if(charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
+        charFaceImage.sprite = weaponData.faceImage;
 
         // 오리카드는 착용 중 표시 안 함
         // 장비카드만 착용 중 표시
@@ -111,10 +117,16 @@ public class CardDisp : MonoBehaviour
         Level.text = "레벨 " + cardData.Level;
 
         // 아이템 이미지
-        int index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
-        equipmentAnimators[index].gameObject.SetActive(true);
-        equipmentAnimators[index].runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
-        equipmentAnimators[index].SetTrigger("Card");
+        // int index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
+        // equipmentAnimators[index].gameObject.SetActive(true);
+        // equipmentAnimators[index].runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
+        // equipmentAnimators[index].SetTrigger("Card");
+        charImage.gameObject.SetActive(true);
+        charImage.sprite = itemData.charImage;
+        charAnim.enabled = false;
+        charFaceExpression.gameObject.SetActive(false);
+
+
 
         if (displayEquippedText)
         {

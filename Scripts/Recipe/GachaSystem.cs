@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GachaSystem : MonoBehaviour
@@ -65,18 +65,36 @@ public class GachaSystem : MonoBehaviour
 
     public void AddEssentialEquip(CardData _oriCardData)
     {
-        if (gachaPools == null)
+        if (itemPools == null)
         {
-            gachaPools = new();
+            itemPools = new();
 
-            gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
+            itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
         }
-        List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == _oriCardData.Name);
+        // List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == _oriCardData.Name);
 
-        CardData defaultItem = sameItems.Find(x => x.DefaultItem == DefaultItem.Default.ToString());
+        // CardData defaultItem = sameItems.Find(x => x.DefaultItem == DefaultItem.Default.ToString());
 
-        Debug.Log("Default Item = " + defaultItem.Name + " Grade = " + defaultItem.Grade);
+        List<CardData> sameItems = new();
+        CardData defaultItem = null;
+        for (int i = 0; i < itemPools.Count; i++)
+        {
+            if(itemPools[i].BindingTo == _oriCardData.Name)
+            {
+                sameItems.Add(itemPools[i]);
+            }
+        }
+        Debug.Log($"찾는 아이템 = {_oriCardData.Name}");
+        for (int i = 0; i < sameItems.Count; i++)
+        {
+            if(sameItems[i].DefaultItem == DefaultItem.Default.ToString())
+            {
+                defaultItem = sameItems[i];
+            }
+        }
         if (defaultItem == null) Debug.Log(_oriCardData.Name + "의 필수 무기가 NULL입니다");
+        Debug.Log($"찾은 아이템 = {defaultItem.Name}");
+        Debug.Log("Default Item = " + defaultItem.Name + " Grade = " + defaultItem.Grade);
         if (cardDataManager == null) Debug.Log("카드 데이터 메니져가 NULL");
         cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
         cardList.Equip(_oriCardData, defaultItem);
