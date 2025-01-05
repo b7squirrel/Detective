@@ -78,7 +78,7 @@ public class WeaponManager : MonoBehaviour
             Sprite sprite = null;
             if(isInitialWeapon)
             {
-                sprite = GameManager.instance.startingDataContainer.GetItemDatas()[(int)wd.equipmentType].charImage;
+                sprite = GameManager.instance.startingDataContainer.GetItemDatas()[(int)wd.equipmentType].equippedImage;
             }
             else
             {

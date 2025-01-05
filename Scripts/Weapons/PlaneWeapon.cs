@@ -5,9 +5,9 @@ public class PlaneWeapon : WeaponBase
 {
     [SerializeField] GameObject planePrefab;
     [SerializeField] GameObject debugDot;
-    [SerializeField] Transform target;  // Å¸°ÙÀÇ À§Ä¡
-    [SerializeField] float speed = 10f; // ¹Ì»çÀÏÀÇ ÀÌµ¿ ¼Óµµ
-    [SerializeField] float rotateSpeed = 200f; // È¸Àü ¼Óµµ
+    [SerializeField] Transform target;  // íƒ€ê²Ÿì˜ ìœ„ì¹˜
+    [SerializeField] float speed = 10f; // ë¯¸ì‚¬ì¼ì˜ ì´ë™ ì†ë„
+    [SerializeField] float rotateSpeed = 200f; // íšŒì „ ì†ë„
 
     [SerializeField] float radius = 10f;
     [SerializeField] float targetAngle;
@@ -39,14 +39,14 @@ public class PlaneWeapon : WeaponBase
 
     Vector2 GetTargetPos()
     {
-        // °¢µµ¸¦ ½Ã°£¿¡ µû¶ó ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+        // ê°ë„ë¥¼ ì‹œê°„ì— ë”°ë¼ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
         targetAngle += targetSpeed * Time.deltaTime;
 
-        // °¢µµ¿¡ µû¸¥ x, y ÁÂÇ¥¸¦ °è»êÇÕ´Ï´Ù.
+        // ê°ë„ì— ë”°ë¥¸ x, y ì¢Œí‘œë¥¼ ê³„ì‚°í•©ë‹ˆë‹¤.
         float x = transform.position.x + Mathf.Cos(targetAngle) * radius;
         float y = transform.position.y + Mathf.Sin(targetAngle) * radius;
 
-        // Á¡ÀÇ À§Ä¡¸¦ ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+        // ì ì˜ ìœ„ì¹˜ë¥¼ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
         return new Vector2(x, y);
     }
 }
