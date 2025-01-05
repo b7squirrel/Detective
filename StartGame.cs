@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class StartGame : MonoBehaviour
 {
-    // °ÔÀÓÀ» ½ÃÀÛÇÏ±â Àü »ç¿îµå, Æ®·£Áö¼Ç µîÀ» ¸¶¹«¸® ÇÏ±â À§ÇØ µô·¹ÀÌ ½ÃÅ°´Â ½Ã°£
+    // ê²Œì„ì„ ì‹œì‘í•˜ê¸° ì „ ì‚¬ìš´ë“œ, íŠ¸ëœì§€ì…˜ ë“±ì„ ë§ˆë¬´ë¦¬ í•˜ê¸° ìœ„í•´ ë”œë ˆì´ ì‹œí‚¤ëŠ” ì‹œê°„
     [SerializeField] float startDelay; 
     public void StartGamePlay()
     {
@@ -13,7 +13,7 @@ public class StartGame : MonoBehaviour
 
     IEnumerator LoadScenes()
     {
-        yield return new WaitForSeconds(startDelay); // ½ºÅ¸Æ® ¹öÆ°ÀÇ Pressed ¾Ö´Ï¸ŞÀÌ¼ÇÀÇ Àç»ı½Ã°£ 0.15ÃÊ
+        yield return new WaitForSeconds(startDelay); // ìŠ¤íƒ€íŠ¸ ë²„íŠ¼ì˜ Pressed ì• ë‹ˆë©”ì´ì…˜ì˜ ì¬ìƒì‹œê°„ 0.15ì´ˆ
         int currentStage = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
         string stageToPlay = "GamePlayStage" + currentStage.ToString();
         SceneManager.LoadScene("Essential", LoadSceneMode.Single);

@@ -10,7 +10,7 @@ public class CameraShake : MonoBehaviour
     [SerializeField][Range(.1f, 1f)] float duration = .5f;
 
     Vector3 originalCameraPos;
-    bool isShaking; // ½¦ÀÌÅ·ÇÏ´Â µµÁß¿¡ ¶Ç ½¦ÀÌÅ· ÇÏÁö ¾Êµµ·Ï
+    bool isShaking; // ì‰ì´í‚¹í•˜ëŠ” ë„ì¤‘ì— ë˜ ì‰ì´í‚¹ í•˜ì§€ ì•Šë„ë¡
 
     void Awake()
     {

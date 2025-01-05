@@ -6,7 +6,7 @@ public class WarningSound : MonoBehaviour
     [SerializeField] AudioClip closingSound;
     [SerializeField] AudioClip idleSound;
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®
+    // ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸
     public void PlayStartingSound()
     {
         SoundManager.instance.Play(startingSound);
@@ -17,7 +17,7 @@ public class WarningSound : MonoBehaviour
     }
     public void PlayIdleSound()
     {
-        // ÇÇÄ¡ º¯È­ ¾øÀÌ Àç»ı, ¹İµå½Ã Àç»ı
+        // í”¼ì¹˜ ë³€í™” ì—†ì´ ì¬ìƒ, ë°˜ë“œì‹œ ì¬ìƒ
         SoundManager.instance.Play(idleSound);
     }
 }

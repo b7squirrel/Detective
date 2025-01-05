@@ -1,21 +1,21 @@
 using UnityEngine;
 
 /// <summary>
-/// weapon container anim ½ºÅ©¸³Æ®¿Í °ÅÀÇ µ¿ÀÏ
+/// weapon container anim ìŠ¤í¬ë¦½íŠ¸ì™€ ê±°ì˜ ë™ì¼
 /// </summary>
 public class NewKidDisp : MonoBehaviour
 {
     [SerializeField] SpriteRenderer[] EquipmentSprites;
     [SerializeField] SpriteRenderer[] sr;
     [SerializeField] GameObject rawImage;
-    Animator anim; // ¿À¸®ÀÇ animator
+    Animator anim; // ì˜¤ë¦¬ì˜ animator
 
     void Init(RuntimeAnimatorController animCon)
     {
         rawImage.SetActive(true);
         anim.runtimeAnimatorController = animCon;
     }
-    // Àåºñ sprite´Â ¸ğµÎ default·Î
+    // ì¥ë¹„ spriteëŠ” ëª¨ë‘ defaultë¡œ
     public void SetEquipmentSprites(WeaponData wd)
     {
         Init(wd.Animators.InGamePlayerAnim);

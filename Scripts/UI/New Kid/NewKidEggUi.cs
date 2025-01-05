@@ -7,7 +7,7 @@ public class NewKidEggUi : MonoBehaviour
     [SerializeField] AudioClip breakingEggSound;
 
     // animation event
-    // Egg Panel Manager¿¡ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³µÀ½À» ¾Ë¸®°í ÀÚ½ÅÀ» ºñÈ°¼ºÈ­
+    // Egg Panel Managerì— ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚¬ìŒì„ ì•Œë¦¬ê³  ìì‹ ì„ ë¹„í™œì„±í™”
     public void AnimFinished()
     {
         GameManager.instance.eggPanelManager.EggAnimFinished();
@@ -19,7 +19,7 @@ public class NewKidEggUi : MonoBehaviour
     {
         SoundManager.instance.Play(eggDanceSound);
     }
-    // New Friend ÅØ½ºÆ®°¡ »æ ÇÏ´Â ¼Ò¸®
+    // New Friend í…ìŠ¤íŠ¸ê°€ ì‚¥ í•˜ëŠ” ì†Œë¦¬
     public void PlayNewFriendSound()
     {
         SoundManager.instance.Play(newFriendTextSound);

@@ -2,14 +2,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ½ÇÁ¦ ¹öÆ°ÀÇ Çàµ¿°ú´Â »ó°ü ¾ø´Â ±â´Éµé. ½ÇÁ¦ Çàµ¿µéÀº ¸ğµÎ À¯´ÏÆ¼ ÀÌº¥Æ®·Î µî·Ï
-/// ÄÚÀÎÀÌ ºÎÁ·ÇÏ´ÙµçÁö ÇÒ ¶§´Â shouldBeInitialSound¸¦ false·Î ¸¸µé¾î¼­ µÎ ¹øÂ° »ç¿îµå Àç»ı
+/// ì‹¤ì œ ë²„íŠ¼ì˜ í–‰ë™ê³¼ëŠ” ìƒê´€ ì—†ëŠ” ê¸°ëŠ¥ë“¤. ì‹¤ì œ í–‰ë™ë“¤ì€ ëª¨ë‘ ìœ ë‹ˆí‹° ì´ë²¤íŠ¸ë¡œ ë“±ë¡
+/// ì½”ì¸ì´ ë¶€ì¡±í•˜ë‹¤ë“ ì§€ í•  ë•ŒëŠ” shouldBeInitialSoundë¥¼ falseë¡œ ë§Œë“¤ì–´ì„œ ë‘ ë²ˆì§¸ ì‚¬ìš´ë“œ ì¬ìƒ
 /// </summary>
 public class ButtonEffect : MonoBehaviour
 {
     [SerializeField] AudioClip buttonSound;
     [SerializeField] AudioClip buttonSoundAlt;
-    [SerializeField] GameObject buttonEffect; // ¹öÆ°ÀÌ ´­·¯Áö¸é ÀÌÆåÆ® ¹ß»ı
+    [SerializeField] GameObject buttonEffect; // ë²„íŠ¼ì´ ëˆŒëŸ¬ì§€ë©´ ì´í™íŠ¸ ë°œìƒ
     [SerializeField] bool shouldBeLocked;
     [SerializeField] bool ignoreButtonEffectAnim;
     public bool ShoutldBeInitialSound { get; set; } = true;
@@ -41,7 +41,7 @@ public class ButtonEffect : MonoBehaviour
 
     public void ButtonParticleEffect()
     {
-        // ´­·¶À» ¶§ ÀÌÆåÆ®
+        // ëˆŒë €ì„ ë•Œ ì´í™íŠ¸
         if (buttonEffect == null) return;
         buttonEffect.SetActive(true);
         buttonEffect.GetComponent<Animator>().SetTrigger("On");

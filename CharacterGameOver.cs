@@ -30,11 +30,11 @@ public class CharacterGameOver : MonoBehaviour
         gameOverPanel.SetActive(true);
         weaponsGroup.SetActive(false);
 
-        // ½ºÅ×ÀÌÁö¿¡¼­ È¹µæÇÑ ÄÚÀÎ¸¸ Ç¥½Ã.
+        // ìŠ¤í…Œì´ì§€ì—ì„œ íšë“í•œ ì½”ì¸ë§Œ í‘œì‹œ.
         int killNum = GameManager.instance.GetComponent<KillManager>().GetCurrentKills();
         int coinNum = GameManager.instance.GetComponent<CoinManager>().GetCoinNumPickedup();
 
-        // ÇöÀç ½ºÅ×ÀÌÁö
+        // í˜„ì¬ ìŠ¤í…Œì´ì§€
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
 
         gameOverPanel.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum);

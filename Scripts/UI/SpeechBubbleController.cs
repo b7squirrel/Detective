@@ -22,20 +22,20 @@ public class SpeechBubbleController : MonoBehaviour
     {
         textComponent.text = text;
 
-        // ÅØ½ºÆ® Å©±â °è»êÀ» À§ÇØ ·¹ÀÌ¾Æ¿ô ¾÷µ¥ÀÌÆ®
+        // í…ìŠ¤íŠ¸ í¬ê¸° ê³„ì‚°ì„ ìœ„í•´ ë ˆì´ì•„ì›ƒ ì—…ë°ì´íŠ¸
         Canvas.ForceUpdateCanvases();
 
-        // ÅØ½ºÆ®ÀÇ ¼±È£ Å©±â °è»ê
+        // í…ìŠ¤íŠ¸ì˜ ì„ í˜¸ í¬ê¸° ê³„ì‚°
         Vector2 textSize = textComponent.GetPreferredValues();
 
-        // ÆĞµù Àû¿ë
+        // íŒ¨ë”© ì ìš©
         float width = Mathf.Clamp(textSize.x + padding.x * 2, minWidth, maxWidth);
         float height = textSize.y + padding.y * 2;
 
-        // ¹è°æ Å©±â Á¶Á¤
+        // ë°°ê²½ í¬ê¸° ì¡°ì •
         backgroundRect.sizeDelta = new Vector2(width, height);
 
-        // ÅØ½ºÆ® ¿µ¿ª Å©±â Á¶Á¤
+        // í…ìŠ¤íŠ¸ ì˜ì—­ í¬ê¸° ì¡°ì •
         textComponent.rectTransform.sizeDelta = new Vector2(width - padding.x * 2, height - padding.y * 2);
     }
 }

@@ -21,28 +21,28 @@ public class EggButton : MonoBehaviour
     bool isPopFeedbackDone;
 
     [Header("Probability Settings")]
-    [SerializeField] private float increaseProbability; // ¹öÆ° Å¬¸¯½Ã Áõ°¡·®
-    [SerializeField] private float decreaseRate; // ÃÊ´ç °¨¼Ò·®
-    [SerializeField] private float maxProbability; // ÃÖ´ë È®·ü
+    [SerializeField] private float increaseProbability; // ë²„íŠ¼ í´ë¦­ì‹œ ì¦ê°€ëŸ‰
+    [SerializeField] private float decreaseRate; // ì´ˆë‹¹ ê°ì†ŒëŸ‰
+    [SerializeField] private float maxProbability; // ìµœëŒ€ í™•ë¥ 
     float currentProbability = 0f;
     string pastGrade;
     int currentGradeIndex, pastGradeIndex;
-    [SerializeField] RectTransform gradeRoll; // Å¬¸¯¿¡ µû¶ó grade°¡ Á¡Á¡ ¿Ã¶ó°¡µµ·Ï
-    [SerializeField] RectTransform gradePanel; // µî±ŞÀÌ ¿Ã¶ó°¥ ¶§ ½ºÄÉÀÏÀ» Àá±ñ ¿Ã¸®µµ·Ï
-    [SerializeField] TMPro.TextMeshProUGUI gradeTitle; // µî±ŞÀÌ ¿Ã¶ó°¥ ¶§ µî±Ş ÅØ½ºÆ®µµ º¯°æ
+    [SerializeField] RectTransform gradeRoll; // í´ë¦­ì— ë”°ë¼ gradeê°€ ì ì  ì˜¬ë¼ê°€ë„ë¡
+    [SerializeField] RectTransform gradePanel; // ë“±ê¸‰ì´ ì˜¬ë¼ê°ˆ ë•Œ ìŠ¤ì¼€ì¼ì„ ì ê¹ ì˜¬ë¦¬ë„ë¡
+    [SerializeField] TMPro.TextMeshProUGUI gradeTitle; // ë“±ê¸‰ì´ ì˜¬ë¼ê°ˆ ë•Œ ë“±ê¸‰ í…ìŠ¤íŠ¸ë„ ë³€ê²½
     [SerializeField] Animator gradePanelAnim;
-    bool isGradeFixed; // µî±ŞÀÌ °áÁ¤µÈ ÀÌÈÄ¿¡´Â ´ÙÀÌ¾óÀÌ ´õ ÀÌ»ó ¿òÁ÷ÀÌÁö ¾Êµµ·Ï ÇÏ·Á°í
-    float fixedProbability; // È®Á¤µÈ µî±ŞÀÇ y³ôÀÌ¸¦ ÇÁ·¹ÀÓ¿¡ µü ¸ÂÃß±â À§ÇØ¼­
+    bool isGradeFixed; // ë“±ê¸‰ì´ ê²°ì •ëœ ì´í›„ì—ëŠ” ë‹¤ì´ì–¼ì´ ë” ì´ìƒ ì›€ì§ì´ì§€ ì•Šë„ë¡ í•˜ë ¤ê³ 
+    float fixedProbability; // í™•ì •ëœ ë“±ê¸‰ì˜ yë†’ì´ë¥¼ í”„ë ˆì„ì— ë”± ë§ì¶”ê¸° ìœ„í•´ì„œ
 
-    [SerializeField] Image nameTag; // ÀÌ¸§Ç¥ÀÇ »ö±òÀ» µî±Ş°ú ¸ÂÃß±â À§ÇØ
+    [SerializeField] Image nameTag; // ì´ë¦„í‘œì˜ ìƒ‰ê¹”ì„ ë“±ê¸‰ê³¼ ë§ì¶”ê¸° ìœ„í•´
     
-    [Header("·¹¾î ¿À¸® È®·ü")]
+    [Header("ë ˆì–´ ì˜¤ë¦¬ í™•ë¥ ")]
     [SerializeField] float desiredFontSizeFactor;
     float initFontSize;
     bool isInit;
     float rateToGetRare;
 
-    bool isClicked; // ³Ê¹« ¿¬¼ÓÀ¸·Î Å¬¸¯µÇ´Â °ÍÀ» ¸·±â À§ÇØ
+    bool isClicked; // ë„ˆë¬´ ì—°ì†ìœ¼ë¡œ í´ë¦­ë˜ëŠ” ê²ƒì„ ë§‰ê¸° ìœ„í•´
 
     Animator anim;
 
@@ -55,7 +55,7 @@ public class EggButton : MonoBehaviour
 
         if (image == null) image = GetComponent<Image>();
         if (initMat == null) initMat = image.material;
-        image.material = initMat; // whiteMatÀÌ Àû¿ëµÈ »óÅÂ·Î ½ÃÀÛÇÏÁö ¾Ê±â À§ÇØ
+        image.material = initMat; // whiteMatì´ ì ìš©ëœ ìƒíƒœë¡œ ì‹œì‘í•˜ì§€ ì•Šê¸° ìœ„í•´
         isGradeFixed = false;
         PlayGradePanelAnim("Init");
 
@@ -66,7 +66,7 @@ public class EggButton : MonoBehaviour
     }
     void OnButtonClick()
     {
-        // È®·ü Áõ°¡
+        // í™•ë¥  ì¦ê°€
         currentProbability = Mathf.Min(currentProbability + increaseProbability, maxProbability);
     }
     void ResetCurrentProbability()
@@ -77,7 +77,7 @@ public class EggButton : MonoBehaviour
 
     void Update()
     {
-        // È®·üÀÌ 0º¸´Ù Å©°í ¾ÆÁ÷ µî±ŞÀÌ °áÁ¤µÇÁö ¾Ê¾Ò´Ù¸é ¼­¼­È÷ °¨¼Ò
+        // í™•ë¥ ì´ 0ë³´ë‹¤ í¬ê³  ì•„ì§ ë“±ê¸‰ì´ ê²°ì •ë˜ì§€ ì•Šì•˜ë‹¤ë©´ ì„œì„œíˆ ê°ì†Œ
         if (currentProbability > 0 && isGradeFixed == false)
         {
             currentProbability = Mathf.Max(0f, currentProbability - (decreaseRate * Time.unscaledDeltaTime));
@@ -87,8 +87,8 @@ public class EggButton : MonoBehaviour
 
     public void InitRate()
     {
-        ResetCurrentProbability(); // È®·ü ÃÊ±âÈ­
-        UpdateGradeTitle(); // ÃÊ±âÈ­µÈ È®·ü¿¡ ´ëÇÑ µî±Ş ÆĞ³Î ÃÊ±âÈ­
+        ResetCurrentProbability(); // í™•ë¥  ì´ˆê¸°í™”
+        UpdateGradeTitle(); // ì´ˆê¸°í™”ëœ í™•ë¥ ì— ëŒ€í•œ ë“±ê¸‰ íŒ¨ë„ ì´ˆê¸°í™”
         InitGradeColors();
         popFeedbackCo = null;
         isPopFeedbackDone = true;
@@ -96,7 +96,7 @@ public class EggButton : MonoBehaviour
 
     }
 
-    // ¹öÆ°ÀÌ ´­·¯Áö¸é ÀÌº¥Æ®·Î ½ÇÇà
+    // ë²„íŠ¼ì´ ëˆŒëŸ¬ì§€ë©´ ì´ë²¤íŠ¸ë¡œ ì‹¤í–‰
     public void PlayEggClickSound()
     {
         if (pickedEgg)
@@ -109,7 +109,7 @@ public class EggButton : MonoBehaviour
             SoundManager.instance.Play(pickEggSound);
         }
     }
-    // ¹öÆ°ÀÌ ´­·¯Áö¸é ÀÌº¥Æ®·Î ½ÇÇà
+    // ë²„íŠ¼ì´ ëˆŒëŸ¬ì§€ë©´ ì´ë²¤íŠ¸ë¡œ ì‹¤í–‰
     public void EggClickedFeedback()
     {
         if (isClicked) return;
@@ -144,11 +144,11 @@ public class EggButton : MonoBehaviour
 
     void UpdateGradeTitle()
     {
-        // Slider °ª ¾÷µ¥ÀÌÆ®
-        // µî±Ş ·ÑÀÇ À§Ä¡¸¦ È®·ü¿¡ µû¶ó ¾÷µ¥ÀÌÆ®
-        // µî±Ş °£ °Å¸® = 128, µî±Ş ÃÑ °Å¸® = 512
-        // ¹éºĞÀ§¿ÍÀÇ ºñÀ² 100:512 = 1 : x
-        // 5.12¸¦ °öÇØÁà¼­ È®·üÀ» °Å¸®·Î º¯È¯
+        // Slider ê°’ ì—…ë°ì´íŠ¸
+        // ë“±ê¸‰ ë¡¤ì˜ ìœ„ì¹˜ë¥¼ í™•ë¥ ì— ë”°ë¼ ì—…ë°ì´íŠ¸
+        // ë“±ê¸‰ ê°„ ê±°ë¦¬ = 128, ë“±ê¸‰ ì´ ê±°ë¦¬ = 512
+        // ë°±ë¶„ìœ„ì™€ì˜ ë¹„ìœ¨ 100:512 = 1 : x
+        // 5.12ë¥¼ ê³±í•´ì¤˜ì„œ í™•ë¥ ì„ ê±°ë¦¬ë¡œ ë³€í™˜
         gradeRoll.anchoredPosition = new Vector2(gradeRoll.anchoredPosition.x, currentProbability * 5.12f);
         currentGradeIndex = pastGradeIndex;
 
@@ -214,6 +214,7 @@ public class EggButton : MonoBehaviour
     public void PlayGradePanelFixedAnim()
     {
         PlayGradePanelAnim("Fixed");
+        image.material = initMat;
 
         if (popFeedbackCo != null) StopCoroutine(popFeedbackCo);
 

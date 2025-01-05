@@ -7,8 +7,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] BoxCollider2D boxCol;
     [SerializeField] float bosscameraMoveSpeed;
     [SerializeField] GameObject dot;
-    [SerializeField] float offset; // ÀÌ °ª¸¸Å­ yÃà Ä«¸Ş¶ó ¹Ù¿îµå Á¶Àı
-    [SerializeField] float offsetUpperWall; // À­º®Àº °æÇèÄ¡¹Ù¿¡ °¡·ÁÁöÁö ¾Ê°Ô µû·Î ¹Ù¿îµå Á¶Àı
+    [SerializeField] float offset; // ì´ ê°’ë§Œí¼ yì¶• ì¹´ë©”ë¼ ë°”ìš´ë“œ ì¡°ì ˆ
+    [SerializeField] float offsetUpperWall; // ìœ—ë²½ì€ ê²½í—˜ì¹˜ë°”ì— ê°€ë ¤ì§€ì§€ ì•Šê²Œ ë”°ë¡œ ë°”ìš´ë“œ ì¡°ì ˆ
 
     WallManager wallManager;
     float spawnConst;

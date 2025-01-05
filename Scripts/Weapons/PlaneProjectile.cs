@@ -3,16 +3,16 @@ using UnityEngine;
 public class PlaneProjectile : ProjectileBase
 {
     Vector3 target;
-    [SerializeField] LayerMask targetLayer; // Á¶ÁØÇØ¼­ ´øÁö´Â °ÍÀº enemyÁö¸¸ ÅÍÁö¸é enemy, prop µÑ ´Ù °ø°İ
-    [SerializeField] float speed = 10f; // ¹Ì»çÀÏÀÇ ÀÌµ¿ ¼Óµµ
-    [SerializeField] float rotateSpeed = 600f; // È¸Àü ¼Óµµ
-    Vector3 offsetDirection; // ÃÊ±â ¿É¼Â ¹æÇâ
-    float sizeOfArea = 1f; // Å¸°İ ¹üÀ§
+    [SerializeField] LayerMask targetLayer; // ì¡°ì¤€í•´ì„œ ë˜ì§€ëŠ” ê²ƒì€ enemyì§€ë§Œ í„°ì§€ë©´ enemy, prop ë‘˜ ë‹¤ ê³µê²©
+    [SerializeField] float speed = 10f; // ë¯¸ì‚¬ì¼ì˜ ì´ë™ ì†ë„
+    [SerializeField] float rotateSpeed = 600f; // íšŒì „ ì†ë„
+    Vector3 offsetDirection; // ì´ˆê¸° ì˜µì…‹ ë°©í–¥
+    float sizeOfArea = 1f; // íƒ€ê²© ë²”ìœ„
 
     TrailRenderer trailRenderer;
     int frameCount = 0;
 
-    // ´Ù½Ã È°¼ºÈ­ µÉ ¶§ Æ®·¹ÀÏÀÌ ÀÌ»óÇÏ°Ô ½ÃÀÛµÇ´Â ¹®Á¦¸¦ ÇØ°áÇÏ±â À§ÇØ¼­
+    // ë‹¤ì‹œ í™œì„±í™” ë  ë•Œ íŠ¸ë ˆì¼ì´ ì´ìƒí•˜ê²Œ ì‹œì‘ë˜ëŠ” ë¬¸ì œë¥¼ í•´ê²°í•˜ê¸° ìœ„í•´ì„œ
     private void OnDisable()
     {
         if(trailRenderer == null) trailRenderer = GetComponent<TrailRenderer>();
@@ -34,17 +34,17 @@ public class PlaneProjectile : ProjectileBase
     }
     protected override void ApplyMovement()
     {
-        // Å¸°ÙÀ» ÇâÇÑ ÇöÀç ¹æÇâÀ» °è»êÇÕ´Ï´Ù.
+        // íƒ€ê²Ÿì„ í–¥í•œ í˜„ì¬ ë°©í–¥ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
         Vector3 directionToTarget = (target - transform.position).normalized;
 
-        // ÇöÀç ¹æÇâ¿¡¼­ Å¸°ÙÀ» ÇâÇÑ ¹æÇâÀ¸·Î È¸Àü½ÃÅµ´Ï´Ù.
+        // í˜„ì¬ ë°©í–¥ì—ì„œ íƒ€ê²Ÿì„ í–¥í•œ ë°©í–¥ìœ¼ë¡œ íšŒì „ì‹œí‚µë‹ˆë‹¤.
         float rotateAmount = Vector3.Cross(transform.up, directionToTarget).z;
         transform.Rotate(0, 0, rotateAmount * rotateSpeed * Time.deltaTime);
 
-        // ¹Ì»çÀÏÀ» ÀüÁø½ÃÅµ´Ï´Ù.
+        // ë¯¸ì‚¬ì¼ì„ ì „ì§„ì‹œí‚µë‹ˆë‹¤.
         transform.position += transform.up * speed * Time.deltaTime;
 
-        // ¸ñÇ¥¹°¿¡ µµÂøÇÏ¸é µ¥¹ÌÁö ¶ç¿ì°í ºñÈ°¼ºÈ­
+        // ëª©í‘œë¬¼ì— ë„ì°©í•˜ë©´ ë°ë¯¸ì§€ ë„ìš°ê³  ë¹„í™œì„±í™”
         if (Vector3.Distance(transform.position, target) < 1f)
         {
             CastDamage();
@@ -53,7 +53,7 @@ public class PlaneProjectile : ProjectileBase
     }
     public void Init(Vector3 _taget)
     {
-        // Å¸°Ù°úÀÇ ÃÊ±â °¢µµ ¿ÀÇÁ¼ÂÀ» ¼³Á¤ÇÕ´Ï´Ù.
+        // íƒ€ê²Ÿê³¼ì˜ ì´ˆê¸° ê°ë„ ì˜¤í”„ì…‹ì„ ì„¤ì •í•©ë‹ˆë‹¤.
         target = _taget;
 
         float randomAngle = UnityEngine.Random.Range(-70f, 70f);

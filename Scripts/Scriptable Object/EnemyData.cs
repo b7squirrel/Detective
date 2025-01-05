@@ -17,6 +17,6 @@ public class EnemyData : ScriptableObject
     public Color enemyColorHighlight;
 
     [Header("Ranged")]
-    public float distanceToPlayer; // ÇÃ·¹ÀÌ¾î¿¡°Ô °ø°İÀ» ½ÃÀÛÇÒ °Å¸®
-    public float attackInterval; // ¹üÀ§ °ø°İ ½Ã°£ °£°İ
+    public float distanceToPlayer; // í”Œë ˆì´ì–´ì—ê²Œ ê³µê²©ì„ ì‹œì‘í•  ê±°ë¦¬
+    public float attackInterval; // ë²”ìœ„ ê³µê²© ì‹œê°„ ê°„ê²©
 }

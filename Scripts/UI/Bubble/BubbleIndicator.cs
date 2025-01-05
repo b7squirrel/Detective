@@ -10,7 +10,7 @@ public class BubbleIndicator : MonoBehaviour
     {
         bubble.position = indicatorCenter.position;
 
-        // ºÎ¸ğ ¿ÀºêÁ§Æ®¿Í´Â ¹İ´ë·Î È¸ÀüÇØ¼­ È¸Àü¿¡ ¿µÇâÀ» ¹ŞÁö ¾Ê´Â´Ù
+        // ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸ì™€ëŠ” ë°˜ëŒ€ë¡œ íšŒì „í•´ì„œ íšŒì „ì— ì˜í–¥ì„ ë°›ì§€ ì•ŠëŠ”ë‹¤
         //Quaternion inverseRotation = Quaternion.Inverse(indicatorCenter.localRotation);
         //bubble.localRotation = inverseRotation;
 

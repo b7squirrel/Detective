@@ -9,7 +9,7 @@ public class ExperienceBar : MonoBehaviour
     [SerializeField] Image sliderFillImage;
     [SerializeField] Animator fillSliderAnim;
     [SerializeField] Animator levelTextAnim;
-    int nextExp; // ºí¸µÅ© ¾Ö´Ô¿¡¼­´Â exp¹Ù°¡ 100%°¡ µÇ¾î¾ß ÇÏ¹Ç·Î. ÀÓ½Ã·Î ÀúÀåÇØ µÎ°í ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ³¡³ª¸é Àû¿ë
+    int nextExp; // ë¸”ë§í¬ ì• ë‹˜ì—ì„œëŠ” expë°”ê°€ 100%ê°€ ë˜ì–´ì•¼ í•˜ë¯€ë¡œ. ì„ì‹œë¡œ ì €ì¥í•´ ë‘ê³  ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚˜ë©´ ì ìš©
 
     public void UpdateExperienceSlider(int current, int target)
     {

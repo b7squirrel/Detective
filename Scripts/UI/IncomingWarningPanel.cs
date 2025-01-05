@@ -13,7 +13,7 @@ public class IncomingWarningPanel : MonoBehaviour
 
     public void Init()
     {
-        incomingText.text = "ÀûµéÀÌ ¸ô·Á¿É´Ï´Ù!!!";
+        incomingText.text = "ì ë“¤ì´ ëª°ë ¤ì˜µë‹ˆë‹¤!!!";
         incomingWarningPanel.SetActive(true);
 
         UIEvent incomingEvent = new UIEvent(() => ActivateWarning(), "Incoming");
@@ -45,7 +45,7 @@ public class IncomingWarningPanel : MonoBehaviour
         Close();
     }
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®
+    // ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸
     public void PlayStartingSound()
     {
         SoundManager.instance.Play(startingSound);

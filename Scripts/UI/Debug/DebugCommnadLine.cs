@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class DebugCommnadLine : MonoBehaviour
 {
-    public TMPro.TMP_InputField commandInputField; // UI¿¡¼­ Input Field¸¦ µå·¡±×ÇÏ¿© ¿¬°á
-    public TMPro.TextMeshProUGUI outputText; // ¸í·É¾î ½ÇÇà °á°ú¸¦ º¸¿©ÁÙ ÅØ½ºÆ® ÇÊµå(¼±ÅÃ »çÇ×)
+    public TMPro.TMP_InputField commandInputField; // UIì—ì„œ Input Fieldë¥¼ ë“œë˜ê·¸í•˜ì—¬ ì—°ê²°
+    public TMPro.TextMeshProUGUI outputText; // ëª…ë ¹ì–´ ì‹¤í–‰ ê²°ê³¼ë¥¼ ë³´ì—¬ì¤„ í…ìŠ¤íŠ¸ í•„ë“œ(ì„ íƒ ì‚¬í•­)
 
     void Start()
     {
-        // ÀÔ·Â ÇÊµå ÃÊ±âÈ­
+        // ì…ë ¥ í•„ë“œ ì´ˆê¸°í™”
         commandInputField.onEndEdit.AddListener(HandleCommand);
-        commandInputField.ActivateInputField(); // °ÔÀÓ ½ÃÀÛ ½Ã ÀÔ·Â ÇÊµå¿¡ Æ÷Ä¿½º
+        commandInputField.ActivateInputField(); // ê²Œì„ ì‹œì‘ ì‹œ ì…ë ¥ í•„ë“œì— í¬ì»¤ìŠ¤
     }
 
-    // ¸í·É¾î Ã³¸® ÇÔ¼ö
+    // ëª…ë ¹ì–´ ì²˜ë¦¬ í•¨ìˆ˜
     private void HandleCommand(string input)
     {
-        input = input.Trim(); // ÀÔ·Â °ª ¾ÕµÚ °ø¹é Á¦°Å
+        input = input.Trim(); // ì…ë ¥ ê°’ ì•ë’¤ ê³µë°± ì œê±°
 
-        // Æ¯Á¤ ¸í·É¾î¿¡ µû¸¥ ±â´É ½ÇÇà
+        // íŠ¹ì • ëª…ë ¹ì–´ì— ë”°ë¥¸ ê¸°ëŠ¥ ì‹¤í–‰
         switch (input.ToLower())
         {
             case "unlockallweapon":
@@ -30,11 +30,11 @@ public class DebugCommnadLine : MonoBehaviour
                 LevelUp();
                 break;
             case "win":
-                Debug.Log("µğ¹ö±× Ä¿¸àµå ¶óÀÎ¿¡¼­ È£Ãâ");
+                Debug.Log("ë””ë²„ê·¸ ì»¤ë©˜ë“œ ë¼ì¸ì—ì„œ í˜¸ì¶œ");
 
                 FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
                 PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
-                // ½ºÅ×ÀÌÁö°¡ Å¬¸®¾î µÈ °ÍÀ» ±â·Ï
+                // ìŠ¤í…Œì´ì§€ê°€ í´ë¦¬ì–´ ëœ ê²ƒì„ ê¸°ë¡
                 playerData.SetCurrentStageCleared();
                 playerData.SaveResourcesBeforeQuitting();
                 break;
@@ -44,7 +44,7 @@ public class DebugCommnadLine : MonoBehaviour
                 break;
         }
 
-        // ÀÔ·Â ÇÊµå ÃÊ±âÈ­ ¹× Æ÷Ä¿½º ¼³Á¤
+        // ì…ë ¥ í•„ë“œ ì´ˆê¸°í™” ë° í¬ì»¤ìŠ¤ ì„¤ì •
         commandInputField.text = "";
         commandInputField.ActivateInputField();
     }
@@ -54,24 +54,24 @@ public class DebugCommnadLine : MonoBehaviour
         outputText.text = string.Empty;
     }
 
-    // ¸í·É¾î ½ÇÇà ÇÔ¼öµé
+    // ëª…ë ¹ì–´ ì‹¤í–‰ í•¨ìˆ˜ë“¤
     private void UnlockAllWeapons()
     {
-        // ¸ğµç ¹«±â ÇØ±İ ±â´É
+        // ëª¨ë“  ë¬´ê¸° í•´ê¸ˆ ê¸°ëŠ¥
         if (outputText != null)
             outputText.text += "\n" + "All weapons have been unlocked.";
     }
 
     private void GiveGold()
     {
-        // °ñµå Ãß°¡ ±â´É
+        // ê³¨ë“œ ì¶”ê°€ ê¸°ëŠ¥
         if (outputText != null)
             outputText.text += "\n" + "Gold added.";
     }
 
     private void LevelUp()
     {
-        // ·¹º§ ¾÷ ±â´É
+        // ë ˆë²¨ ì—… ê¸°ëŠ¥
         if (outputText != null)
             outputText.text += "\n" + "Level up.";
     }

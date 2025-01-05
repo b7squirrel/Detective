@@ -41,18 +41,18 @@ public class MainMenu : MonoBehaviour
         panelAreYouSure.gameObject.SetActive(true);
     }
 
-    // º¸ÅëÀº ¹öÆ°ÀÇ ÀÌº¥Æ®·Î È£Ãâ
+    // ë³´í†µì€ ë²„íŠ¼ì˜ ì´ë²¤íŠ¸ë¡œ í˜¸ì¶œ
     public void GoToMainMenu()
     {
         panelPause.SetActive(false);
         BG.SetActive(false);
 
-        // ÀçÈ­ ÀúÀå
+        // ì¬í™” ì €ì¥
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
-        playerData.SaveResourcesBeforeQuitting(); // ½ºÅ×ÀÌÁö¿Í µ¿Àü ÀúÀå
+        playerData.SaveResourcesBeforeQuitting(); // ìŠ¤í…Œì´ì§€ì™€ ë™ì „ ì €ì¥
         int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
 
-        // ÈùÆ® ¸®¼Â
+        // íŒíŠ¸ ë¦¬ì…‹
         FindObjectOfType<HintsOnLoading>().ResetHint();
 
         UnPause();
@@ -60,8 +60,8 @@ public class MainMenu : MonoBehaviour
 
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
-    // À¯´ÏÆ¼ ÀÌº¥Æ®¿¡ ºÙÀÓ
-    // ¾ÀÀÌ ·ÎµåµÇ¸é¼­ ¹öÆ° ÀÌÆåÆ®°¡ Àç»ıÀÌ Àß ¾ÈµÉ °æ¿ì, ÀÌÆåÆ® Àç»ıÀÌ ³¡³­ ÈÄ ¾ÀÀ» ·ÎµåÇÏµµ·Ï
+    // ìœ ë‹ˆí‹° ì´ë²¤íŠ¸ì— ë¶™ì„
+    // ì”¬ì´ ë¡œë“œë˜ë©´ì„œ ë²„íŠ¼ ì´í™íŠ¸ê°€ ì¬ìƒì´ ì˜ ì•ˆë  ê²½ìš°, ì´í™íŠ¸ ì¬ìƒì´ ëë‚œ í›„ ì”¬ì„ ë¡œë“œí•˜ë„ë¡
     public void GoToMainMenuAfter(float timeToWait) 
     {
         StartCoroutine(GoToMainMenu(timeToWait));

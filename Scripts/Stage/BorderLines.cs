@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class BorderLines : MonoBehaviour
 {
-    [SerializeField] Transform [] rectangleTr; // Á÷»ç°¢ÇüÀÇ 4°³ÀÇ Á¡
-    [SerializeField] Transform[] walls; // º®
+    [SerializeField] Transform [] rectangleTr; // ì§ì‚¬ê°í˜•ì˜ 4ê°œì˜ ì 
+    [SerializeField] Transform[] walls; // ë²½
     LineRenderer lineRenderer;
     LineRenderer[] lineRenderers;
     Vector2[] rectanglePos = new Vector2[4];
 
     public void Init()
     {
-        // LineRenderer ¼³Á¤
+        // LineRenderer ì„¤ì •
         if(lineRenderers == null ) lineRenderers = GetComponentsInChildren<LineRenderer>();
 
         rectanglePos[0] = new Vector2(walls[0].position.x, walls[3].position.y);
@@ -23,7 +23,7 @@ public class BorderLines : MonoBehaviour
 
     void DrawRectangle()
     {
-        // 4°³ÀÇ Á¡À» ÁöÁ¤ÇÏ°í LineRenderer¿¡ Àü´Ş
+        // 4ê°œì˜ ì ì„ ì§€ì •í•˜ê³  LineRendererì— ì „ë‹¬
         lineRenderers[0].SetPosition(0, rectanglePos[0]);
         lineRenderers[0].SetPosition(1, rectanglePos[1]);
         lineRenderers[1].SetPosition(0, rectanglePos[1]);

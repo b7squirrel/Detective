@@ -4,18 +4,18 @@ public class WinStage : MonoBehaviour
 {
     [SerializeField] GameObject winStage;
 
-    // Victory Init ¾Ö´Ï¸ŞÀÌ¼Ç ¸¶Áö¸· ÇÁ·¹ÀÓ¿¡¼­ ¾Ö´ÔÀÌº¥Æ®·Î ½Ã°£ Á¤Áö 
-    // Confirm ¹öÆ°À» Å¬¸¯ÇÏ¸é ½Ã°£À» ´Ù½Ã Èå¸£°Ô ÇÑ´Ù
+    // Victory Init ì• ë‹ˆë©”ì´ì…˜ ë§ˆì§€ë§‰ í”„ë ˆì„ì—ì„œ ì• ë‹˜ì´ë²¤íŠ¸ë¡œ ì‹œê°„ ì •ì§€ 
+    // Confirm ë²„íŠ¼ì„ í´ë¦­í•˜ë©´ ì‹œê°„ì„ ë‹¤ì‹œ íë¥´ê²Œ í•œë‹¤
     public void OpenPanel()
     {
         winStage.SetActive(true);
         GameManager.instance.darkBG.SetActive(true);
 
-        // ½ºÅ×ÀÌÁö¿¡¼­ È¹µæÇÑ ÄÚÀÎ¸¸ Ç¥½Ã.
+        // ìŠ¤í…Œì´ì§€ì—ì„œ íšë“í•œ ì½”ì¸ë§Œ í‘œì‹œ.
         int killNum = GetComponent<KillManager>().GetCurrentKills();
         int coinNum = GetComponent<CoinManager>().GetCoinNumPickedup();
 
-        // º¸½º°¡ Á×´Â ¼ø°£ ÀÌ¹Ì ½ºÅ×ÀÌÁö°¡ ¿Ã¶ó°¬À¸´Ï±î 1À» »©ÁØ ¼ö¸¦ ³Ñ°ÜÁØ´Ù.
+        // ë³´ìŠ¤ê°€ ì£½ëŠ” ìˆœê°„ ì´ë¯¸ ìŠ¤í…Œì´ì§€ê°€ ì˜¬ë¼ê°”ìœ¼ë‹ˆê¹Œ 1ì„ ë¹¼ì¤€ ìˆ˜ë¥¼ ë„˜ê²¨ì¤€ë‹¤.
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber() - 1;
 
         winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum);

@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®·Î ·¹ÀÌÀú ÀÌ¹ÌÁö ±³Ã¼
+/// ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸ë¡œ ë ˆì´ì € ì´ë¯¸ì§€ êµì²´
 /// </summary>
 public class LaserSpritePicker : MonoBehaviour
 {
     List<Sprite> laserSprites;
     SpriteRenderer sr;
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®·Î ½ºÇÁ¶óÀÌÆ® ±³Ã¼
+    // ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸ë¡œ ìŠ¤í”„ë¼ì´íŠ¸ êµì²´
     public void SetSprite(int _index)
     {
         if(sr == null) sr = GetComponent<SpriteRenderer>();
