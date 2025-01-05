@@ -70,22 +70,34 @@ public class WeaponContainerAnim : MonoBehaviour
 
         if (wd.DefaultHead != null)
         {
+            Debug.Log("머리 장비가 널이 아닙니다.");
             sr[1].sprite = wd.DefaultHead;
+            sr[1].gameObject.SetActive(true);
             
         }
         if (wd.DefaultChest != null)
         {
+            Debug.Log("가슴 장비가 널이 아닙니다.");
+
             sr[2].sprite = wd.DefaultChest;
+            sr[2].gameObject.SetActive(true);
             
         }
         if (wd.DefaultFace != null)
         {
+            Debug.Log("얼굴 장비가 널이 아닙니다.");
+
             sr[3].sprite = wd.DefaultFace;
+            sr[3].gameObject.SetActive(true);
             
         }
         if (wd.DefaultHands != null)
         {
+            Debug.Log("손 장비가 널이 아닙니다.");
+
             sr[4].sprite = wd.DefaultHands;
+            sr[4].gameObject.SetActive(true);
+
         }
 
         if (wd.costume != null)
@@ -169,6 +181,7 @@ public class WeaponContainerAnim : MonoBehaviour
             if(_index < 4)
             {
                 sr[_index + 1].gameObject.SetActive(false);
+                Debug.Log($"{_index + 1} 부위가 비활성화 되었습니다.");
             }
             return;
         }
@@ -182,6 +195,7 @@ public class WeaponContainerAnim : MonoBehaviour
         if (_index == 0) // 머리 부위이면
         {
             _weaponObject.SetParent(headGroup);
+            
             if(_sr != null) { _sr.sortingOrder = sr[1].sortingOrder; }
         }
         if (_index == 1) // 가슴 부위이면
