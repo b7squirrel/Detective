@@ -93,9 +93,6 @@ public class GachaSystem : MonoBehaviour
             }
         }
         if (defaultItem == null) Debug.Log(_oriCardData.Name + "의 필수 무기가 NULL입니다");
-        Debug.Log($"찾은 아이템 = {defaultItem.Name}");
-        Debug.Log("Default Item = " + defaultItem.Name + " Grade = " + defaultItem.Grade);
-        if (cardDataManager == null) Debug.Log("카드 데이터 메니져가 NULL");
         cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
         cardList.Equip(_oriCardData, defaultItem);
     }
