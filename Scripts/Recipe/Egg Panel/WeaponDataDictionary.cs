@@ -32,11 +32,11 @@ public class WeaponDataDictionary : MonoBehaviour
         {
             if (_weaponName == acquireDatas[i].weaponData.Name && _grade == acquireDatas[i].weaponData.grade)
             {
-                Debug.Log($"{_weaponName} À» ¾ò¾ú½À´Ï´Ù.");
+                Debug.Log($"{_weaponName} ì„ ì–»ì—ˆìŠµë‹ˆë‹¤.");
                 return acquireDatas[i];
             }
         }
-        Debug.Log($"Ã£´Â ¹«±â => {_weaponName}, ¹«±â »çÀü¿¡ ÀÏÄ¡ÇÏ´Â ¿À¸®°¡ ¾ø½À´Ï´Ù.");
+        Debug.Log($"ì°¾ëŠ” ë¬´ê¸° => {_weaponName}, ë¬´ê¸° ì‚¬ì „ì— ì¼ì¹˜í•˜ëŠ” ì˜¤ë¦¬ê°€ ì—†ìŠµë‹ˆë‹¤.");
         return null;
     }
 }

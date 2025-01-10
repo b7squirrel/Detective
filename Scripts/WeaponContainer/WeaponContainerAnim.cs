@@ -173,15 +173,16 @@ public class WeaponContainerAnim : MonoBehaviour
         if (costume == null) return;
         costumeSR.sprite = costume.sprites[_index];
     }
-    public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent)
+    public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent, int _debugIndex)
     {
+        Debug.Log($"Index Num = {_index}");
         if (_needParent == false) // 페어런트 시킬 필요가 없는 무기라면 아무것도 하지 않는다
         {
             // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
             if(_index < 4)
             {
                 sr[_index + 1].gameObject.SetActive(false);
-                Debug.Log($"{_index + 1} 부위가 비활성화 되었습니다.");
+                Debug.Log($"{_index + 1} 부위가 비활성화 되었습니다.{_debugIndex}");
             }
             return;
         }
@@ -190,8 +191,8 @@ public class WeaponContainerAnim : MonoBehaviour
         if (_weaponObject.GetComponentInChildren<Weapon>() != null)
         {
             _sr = _weaponObject.GetComponentInChildren<Weapon>().GetWeaponSprite();
+            
         }
-
         if (_index == 0) // 머리 부위이면
         {
             _weaponObject.SetParent(headGroup);
@@ -207,6 +208,7 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             _weaponObject.SetParent(headGroup);
             if (_sr != null) { _sr.sortingOrder = sr[3].sortingOrder; }
+            Debug.Log($"얼굴 부위에 스프라이트의 소팅오더를 조정했습니다.");
         }
         if (_index == 3) // 손 부위이면
         {

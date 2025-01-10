@@ -115,6 +115,9 @@ public class BeamWeapon : WeaponBase
             projectile.IsCriticalDamageProj = isCriticalDamage;
         }
 
+        // 눈 반짝
+        AnimShoot();
+
         // muzzle flash
         if(muzzle == null)
         {
