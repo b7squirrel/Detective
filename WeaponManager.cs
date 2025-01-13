@@ -20,7 +20,7 @@ public class WeaponManager : MonoBehaviour
         character = GetComponent<Character>();
     }
 
-    private void Start()
+    void Start()
     {
         startingWeapon = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         AddWeapon(startingWeapon, true);
@@ -29,13 +29,16 @@ public class WeaponManager : MonoBehaviour
     public void AddWeapon(WeaponData weaponData, bool isInitialWeapon)
     {
         WeaponData wd = null;
+        List<Item> item = new();
         if(isInitialWeapon)
         {
             wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
             container = weaponContainer.CreateContainer(wd, isInitialWeapon);
 
-            // Pause Panel for Player
+            // Pause Panel에서 플레이어의 장비 상태를 보여줌
             GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, true);
+
+            item = GameManager.instance.startingDataContainer.GetItemDatas();
 
         }
         else
@@ -43,7 +46,7 @@ public class WeaponManager : MonoBehaviour
             wd = weaponData;
             container = weaponContainer.CreateContainer(weaponData, isInitialWeapon);
 
-            // Pause Panel
+            // Pause Panel에서 동료 오리들의 장비 상태를 보여줌
             GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, false);
         }
 
@@ -56,10 +59,12 @@ public class WeaponManager : MonoBehaviour
 
         WeaponBase weaponBase = weaponGameObject.GetComponent<WeaponBase>();
 
-        
-        // wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponGameObject.transform, weaponBase.NeedParent, 1); 
+        if (weaponData.weaponPrefab == null)
+        {
+            wa.ParentWeaponObjectTo((int)wd.equipmentType, weaponGameObject.transform, weaponBase.NeedParent, 1);
+        }
 
-        //weaponBase.InitialWeapon = isInitialWeapon; // Player 리드 오리에게 붙는 무기인지 
+        weaponBase.InitialWeapon = isInitialWeapon; // Player 리드 오리에게 붙는 무기인지 
         weaponBase.Init(weaponData.stats);
 
         // 개별 무기들 부착
