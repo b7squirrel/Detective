@@ -50,9 +50,11 @@ public class EquipInfoPanel : MonoBehaviour
         }
 
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
+        Debug.Log($"클릭한 장비는 {weaponItemData.itemData.Name} 입니다");
         itemImage.sprite = weaponItemData.itemData.charImage;
-        anim.runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
-        anim.SetTrigger("Card");
+        // anim.runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
+        anim.enabled = false;
+        // anim.SetTrigger("Card");
 
         equipButton.SetActive(isEquipButton);
 

@@ -205,6 +205,13 @@ public class UpPanelManager : MonoBehaviour
             return;
 
         // 재료 카드의 경우
+        // 리드 오리는 무조건 재료가 될 수 없음
+        if(_cardData.StartingMember == StartingMember.Zero.ToString())
+        {
+            Debug.Log("리드 오리는 재료 카드로 사용할 수 없습니다.");
+            return;
+        }
+
         if (CardToUpgrade.Grade != _cardData.Grade)
         {
             Debug.Log("같은 등급을 합쳐줘야 합니다");
