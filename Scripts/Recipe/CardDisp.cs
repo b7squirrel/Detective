@@ -24,6 +24,7 @@ public class CardDisp : MonoBehaviour
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
     [SerializeField] GameObject button; // 버튼을 활성, 비활성 하기 위해
     [SerializeField] GameObject haloSelected; // 선택된 카드 주변 Halo
+    [SerializeField] GameObject leadTag; // 리드 오리 태그
 
     [Header("MergedCard")]
     [SerializeField] bool isMergedCard; // 합성된 카드일 때만 타이틀 리본을 보여주기 위해
@@ -33,6 +34,13 @@ public class CardDisp : MonoBehaviour
 
     public void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
     {
+        // 리드오리 태그
+        leadTag.gameObject.SetActive(false);
+        if(cardData.StartingMember == StartingMember.Zero.ToString())
+        {
+            leadTag.gameObject.SetActive(true);
+        }
+
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
 
