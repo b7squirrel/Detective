@@ -48,6 +48,7 @@ public class CardClassifier
         {
             if (card.Grade == upCard.Grade && card.Name == upCard.Name && card.EvoStage == upCard.EvoStage)
             {
+                if(card.StartingMember == StartingMember.Zero.ToString()) continue; // 리드 오리는 재료 슬롯에 올리지 않음.
                 cardsPicked.Add(card);
             }
         }
