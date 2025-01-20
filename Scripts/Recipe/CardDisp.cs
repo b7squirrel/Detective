@@ -171,6 +171,7 @@ public class CardDisp : MonoBehaviour
         }
         equipmentImages[index].gameObject.SetActive(true);
         equipmentImages[index].sprite = equipmentImage;
+        ImagePivotAdjuster.instance.AdjustImagePosition(equipmentImages[index]);
     }
     protected virtual void SetNumStar(int numStars)
     {
