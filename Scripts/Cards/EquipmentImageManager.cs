@@ -9,18 +9,6 @@ public class EquipmentImageManager : MonoBehaviour
     [Header("디버깅")]
     [SerializeField] Sprite[] equipmentSprites;
 
-    // private void OnValidate()
-    // {
-    //     if (equipmentImages == null) return;
-
-    //     foreach (Image image in equipmentImages)
-    //     {
-    //         if (image != null && image.sprite != null)
-    //             AdjustImagePosition(image);
-    //         Debug.Log($"{image.name}가 교체되었습니다.");
-    //     }
-    // }
-
     [ContextMenu("Update Images")]
     public void UpdateImages()
     {
@@ -28,7 +16,12 @@ public class EquipmentImageManager : MonoBehaviour
 
         for (int i = 0; i < equipmentImages.Length; i++)
         {
-            if (equipmentSprites[i] == null) continue;
+            equipmentImages[i].color = new Color(1, 1, 1, 1);
+            if (equipmentSprites[i] == null)
+            {
+                equipmentImages[i].color = new Color(1, 1, 1, 0);
+                continue;
+            }
             equipmentImages[i].sprite = equipmentSprites[i];
             Debug.Log($"{equipmentImages[i].name}의 스프라이트는 {equipmentImages[i].sprite.name}입니다.");
         }
@@ -36,16 +29,16 @@ public class EquipmentImageManager : MonoBehaviour
         foreach (Image image in equipmentImages)
         {
             if (image != null && image.sprite != null)
+            {
                 AdjustImagePosition(image);
-            Debug.Log($"{image.name}가 교체되었습니다.");
+                Debug.Log($"{image.name}가 교체되었습니다.");
+            }
         }
     }
 
     /// <summary>
     /// 인덱스에 해당하는 장비 이미지의 스프라이트를 교체하고 위치를 조정합니다.
     /// </summary>
-    /// <param name="index">교체할 이미지의 인덱스</param>
-    /// <param name="newSprite">새 스프라이트</param>
     public void ReplaceEquipment(int index, Sprite newSprite)
     {
         if (index >= 0 && index < equipmentImages.Length && newSprite != null)
@@ -59,8 +52,7 @@ public class EquipmentImageManager : MonoBehaviour
     /// <summary>
     /// 이미지의 RectTransform과 스프라이트의 피벗 차이를 계산하여 위치를 조정합니다.
     /// </summary>
-    /// <param name="image">조정할 Image 컴포넌트</param>
-    private void AdjustImagePosition(Image image)
+    void AdjustImagePosition(Image image)
     {
         if (image == null || image.sprite == null)
             return;
@@ -89,7 +81,7 @@ public class EquipmentImageManager : MonoBehaviour
                 pivotDifference.x * sprite.rect.width,
                 pivotDifference.y * sprite.rect.height
         );
-                
+
 
         rectTransform.anchoredPosition -= positionOffset;
         image.SetNativeSize();
