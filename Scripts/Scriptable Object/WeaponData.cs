@@ -45,6 +45,12 @@ public class AnimatorData
     public RuntimeAnimatorController PauseCardAnim;
 }
 
+[Serializable]
+public class SpriteRow
+{
+    public Sprite[] sprites;
+}
+
 [CreateAssetMenu]
 public class WeaponData : ScriptableObject
 {
@@ -58,9 +64,18 @@ public class WeaponData : ScriptableObject
     public string SynergyWeapon;
     public Item SynergyItem;
     public AnimatorData Animators;
+    
     public Sprite DefaultHead, DefaultChest, DefaultFace, DefaultHands;
+
+    [Header("동료 오리 특성")]
+    public SpriteRow[] equipSprites;
+    public Sprite[] headEquipmentSprites;
+    public Sprite[] chestEquipmentSprites;
+    public Sprite[] faceEquipmentSprites;
+    public Sprite[] handEquipmentSprites;
     public Sprite charEffectImage;
     public RuntimeAnimatorController costumeAnim;
+
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
     public GameObject weaponBasePrefab;
