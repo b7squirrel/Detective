@@ -6,7 +6,6 @@ public class WeaponContainerAnim : MonoBehaviour
 {
     Animator anim; // 오리의 animator
     Costume costume;
-    Item itemData;
     [SerializeField] SpriteRenderer[] sr;
     [SerializeField] SpriteRenderer face;
     [SerializeField] Transform spriteGroup;
@@ -19,10 +18,6 @@ public class WeaponContainerAnim : MonoBehaviour
 
     // 장비 스프라이트
     SpriteRow[] equipSprites;
-    Sprite[] headEquipSprites;
-    Sprite[] chestEquipSprites;
-    Sprite[] faceEquipSprites;
-    Sprite[] handEquipSprites;
 
     public static int indexSortingOrder = 100; // 소팅오더를 정하기 위한 인덱스
 
@@ -50,21 +45,14 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         anim.runtimeAnimatorController = animCon;
     }
-    // void SetEquipSprites(WeaponData _wd)
-    // {
-    //     if(equipSpriteDatas == null) equipSpriteDatas = new SpriteData[4];
-    //     equipSpriteDatas[0] = _wd.defaultHead;
-    //     equipSpriteDatas[1] = _wd.defaultChest;
-    //     equipSpriteDatas[2] = _wd.defaultFace;
-    //     equipSpriteDatas[3] = _wd.defaultHands;
-    // }
 
     void SetFollwersEquipSprites(WeaponData _wd)
     {
         if(equipSprites == null) equipSprites = new SpriteRow[4];
         for (int i = 0; i < 4; i++)
         {
-            if (_wd.equipSprites[i] != null)
+            if(_wd.equipSprites == null) return;
+            if (_wd.equipSprites[i] != null && _wd.equipSprites[i].sprites.Length > 0)
             {
                 sr[i + 1].gameObject.SetActive(true);
                 equipSprites[i] = _wd.equipSprites[i];
@@ -73,7 +61,6 @@ public class WeaponContainerAnim : MonoBehaviour
             {
                 sr[i + 1].gameObject.SetActive(false);
                 equipSprites[i] = null;
-
             }
         }
     }
@@ -104,50 +91,6 @@ public class WeaponContainerAnim : MonoBehaviour
 
         sr[0].sortingOrder = indexSortingOrder;
         indexSortingOrder--;
-
-
-        // if (wd.DefaultHead != null)
-        // {
-        //     Debug.Log("머리 장비가 널이 아닙니다.");
-        //     sr[1].sprite = wd.DefaultHead;
-        //     sr[1].gameObject.SetActive(true);
-            
-        // }
-        // if (wd.DefaultChest != null)
-        // {
-        //     Debug.Log("가슴 장비가 널이 아닙니다.");
-
-        //     sr[2].sprite = wd.DefaultChest;
-        //     sr[2].gameObject.SetActive(true);
-            
-        // }
-        // if (wd.DefaultFace != null)
-        // {
-        //     Debug.Log("얼굴 장비가 널이 아닙니다.");
-
-        //     sr[3].sprite = wd.DefaultFace;
-        //     sr[3].gameObject.SetActive(true);
-            
-        // }
-        // if (wd.DefaultHands != null)
-        // {
-        //     Debug.Log("손 장비가 널이 아닙니다.");
-
-        //     sr[4].sprite = wd.DefaultHands;
-        //     sr[4].gameObject.SetActive(true);
-
-        // }
-
-        // if (wd.costume != null)
-        // {
-        //     costume = wd.costume;
-        //     costumeSR.color = new Color(1, 1, 1, 1);
-        //     Debug.Log("costume name = " + costume.name);
-        // }
-        // else
-        // {
-        //     costumeSR.color = new Color(1, 1, 1, 0);
-        // }
     }
     /// <summary>
     /// 리드 오리의 장비 초기화
