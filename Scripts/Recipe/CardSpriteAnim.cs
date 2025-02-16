@@ -28,6 +28,7 @@ public class CardSpriteAnim : MonoBehaviour
         }
 
     }
+    // 애니메이션 이벤트로 사용
     public void SetEquippedItemSprite(int _index)
     {
         if (equipSprites == null) return;

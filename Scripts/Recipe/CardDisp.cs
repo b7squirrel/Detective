@@ -26,6 +26,9 @@ public class CardDisp : MonoBehaviour
     [SerializeField] GameObject haloSelected; // 선택된 카드 주변 Halo
     [SerializeField] GameObject leadTag; // 리드 오리 태그
 
+    CardSpriteAnim cardSpriteAnim;
+    SpriteRow[] spriteRows;
+
     [Header("MergedCard")]
     [SerializeField] bool isMergedCard; // 합성된 카드일 때만 타이틀 리본을 보여주기 위해
     [SerializeField] Transform ribbon;
@@ -98,6 +101,8 @@ public class CardDisp : MonoBehaviour
 
         // 버튼 활성화
         button.SetActive(true);
+
+        // cardSpriteAnim.Init(weaponData, equipmentImages);
     }
 
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
