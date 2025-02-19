@@ -68,6 +68,7 @@ public class WeaponData : ScriptableObject
     public Sprite DefaultHead, DefaultChest, DefaultFace, DefaultHands;
     
     [Header("동료 오리 특성")]
+    public Item[] defaultItems;
     public SpriteRow[] equipSprites;
     public Sprite[] headEquipmentSprites;
     public Sprite[] chestEquipmentSprites;

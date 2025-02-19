@@ -5,12 +5,12 @@ using UnityEngine.UI;
 // 장착되거나 해제되면 Equipment Panel Manager에서 업데이트
 // 지금은 Instantiate로 카드를 생성하고 destroy 하니까 상관없지만
 // 오브젝트 풀을 사용하면 비활성화 할 때 모든 animator=null, setactive=false 로 해야 함
-public class CardDisp : MonoBehaviour
+public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 {
     [SerializeField] protected Transform cardBaseContainer; // 등급 5개
     [SerializeField] protected Transform starContainer;
-    [SerializeField] protected UnityEngine.UI.Image charImage;
-    [SerializeField] protected UnityEngine.UI.Image charFaceImage;
+    [SerializeField] protected Image charImage;
+    [SerializeField] protected Image charFaceImage;
     [SerializeField] protected GameObject charFaceExpression;
     [SerializeField] Animator charAnim;
     [SerializeField] Animator[] equipmentAnimators;
@@ -102,7 +102,7 @@ public class CardDisp : MonoBehaviour
         // 버튼 활성화
         button.SetActive(true);
 
-        // cardSpriteAnim.Init(weaponData, equipmentImages);
+        // cardSpriteAnim.Init(weaponData, equipmentImages); // weaponData와 장비를 표시할 이미지 배열
     }
 
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
@@ -167,18 +167,29 @@ public class CardDisp : MonoBehaviour
             }
         }
     }
-    public void SetEquipCardImage(int index, Sprite equipmentImage)
+    
+    #region Card Sprite Anim 참조
+    public void InitSpriteRow()
     {
-        if (equipmentImage == null)
+        if (cardSpriteAnim == null) cardSpriteAnim = GetComponentInChildren<CardSpriteAnim>();
+        cardSpriteAnim.Init(equipmentImages);
+    }
+    public void SetEquipCardDisplay(int index, SpriteRow spriteRow)
+    {
+        // cardSpriteAnim.Init을 호출해서 해당 index 부위의 애니메이션 이미지들을 저장해 두기
+        if (spriteRow == null)
         {
             equipmentImages[index].gameObject.SetActive(false);
-            return;
         }
-        equipmentImages[index].gameObject.SetActive(true);
-        equipmentImages[index].sprite = equipmentImage;
-        equipmentImages[index].SetNativeSize();
-        // ImagePivotAdjuster.instance.AdjustImagePosition(equipmentImages[index]);
+        else
+        {
+            equipmentImages[index].gameObject.SetActive(true);
+            cardSpriteAnim.StoreItemSpriteRow(index, spriteRow); // 이미지들을 저장해 두고 애니메이션 이벤트로 사용
+            Debug.Log($"{equipmentImages[index].name}에 이미지를 저장했습니다. Card Disp");
+        }
     }
+    #endregion
+
     protected virtual void SetNumStar(int numStars)
     {
         if (stars == null)

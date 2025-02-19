@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class EquipDisplayUI : MonoBehaviour
+public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
 {
     [SerializeField] Transform cardBaseContainer; // 5레벨
     [SerializeField] Transform starContainer;
@@ -16,9 +17,13 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] protected GameObject starPrefab;
     GameObject[] stars;
     [SerializeField] Animator charImage;
+    [SerializeField] protected Image charFaceImage;
+
     [SerializeField] WeaponContainerAnim weaponContainerAnim;
     [SerializeField] Animator[] EquipmentImages;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
+    [SerializeField] Image[] equipmentImages;
+
     [SerializeField] TMPro.TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] GameObject atkLabel, hpLabel;
@@ -27,6 +32,8 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject charUpgradeButton; // 디스플레이되는 오리카드 업그레이드 버튼
 
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
+
+    CardSpriteAnim cardSpriteAnim;
 
     float initAtkFontSize, initHpFontSize;
     Coroutine atkPopCo, hpPopCo;
@@ -72,6 +79,7 @@ public class EquipDisplayUI : MonoBehaviour
         WeaponData wd = cardDictionary.GetWeaponItemData(charCardData).weaponData;
         // charImage.sprite = wd.charImage;
         charImage.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
+        charFaceImage.sprite = wd.faceImage;
 
         if (atkPopCo != null)
             StopCoroutine(atkPopCo);
@@ -167,6 +175,28 @@ public class EquipDisplayUI : MonoBehaviour
         }
         charImage.Rebind();
     }
+
+    #region Card Sprite Anim 참조
+    public void InitSpriteRow()
+    {
+        if (cardSpriteAnim == null) cardSpriteAnim = GetComponentInChildren<CardSpriteAnim>();
+        cardSpriteAnim.Init(equipmentImages);
+    }
+    public void SetEquipCardDisplay(int index, SpriteRow spriteRow)
+    {
+        // cardSpriteAnim.Init을 호출해서 해당 index 부위의 애니메이션 이미지들을 저장해 두기
+        if (spriteRow == null)
+        {
+            equipmentImages[index].gameObject.SetActive(false);
+        }
+        else
+        {
+            equipmentImages[index].gameObject.SetActive(true);
+            cardSpriteAnim.StoreItemSpriteRow(index, spriteRow); // 이미지들을 저장해 두고 애니메이션 이벤트로 사용
+            Debug.Log($"{equipmentImages[index].name}에 이미지를 저장했습니다. EquipDispUI");
+        }
+    }
+    #endregion
 
     protected virtual void SetNumStar(int numStars)
     {

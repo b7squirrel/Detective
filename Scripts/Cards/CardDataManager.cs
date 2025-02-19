@@ -124,7 +124,7 @@ public class CardDataManager : MonoBehaviour
         AddNewCardToMyCardsList(startingCards[0]);
         startingCards[0].StartingMember = StartingMember.Zero.ToString();
 
-        FindObjectOfType<GachaSystem>().AddEssentialEquip(startingCards[0]);
+        FindObjectOfType<GachaSystem>().AddDefaultEquip(startingCards[0]);
 
         Save();
         Load();
