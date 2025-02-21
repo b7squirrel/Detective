@@ -175,13 +175,6 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             item.SetSlotType(currentSlotType);
         }
-
-List<CardData> MyCardsList = cardDataManager.GetMyCardList();
-        foreach (var item in MyCardsList)
-        {
-            Debug.Log($"{item.Name}의 Starting Member값은 {item.StartingMember}입니다.");
-        }
-
     }
     void ClearAllEquipmentSlots()
     {
@@ -211,6 +204,7 @@ List<CardData> MyCardsList = cardDataManager.GetMyCardList();
         equipmentSlotsManager.SetEquipSlot(index, itemData, cardToEquip);
 
         SetAllFieldTypeOf("Item");
+        setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
         DeActivateEquipInfoPanel();
     }
 
@@ -232,6 +226,7 @@ List<CardData> MyCardsList = cardDataManager.GetMyCardList();
 
         cardDisp.SetEquppiedTextActive(false);
         SetAllFieldTypeOf("Item");
+        setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
         DeActivateEquipInfoPanel();
     }
     // equip slot action 에서 호출
