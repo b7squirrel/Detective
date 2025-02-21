@@ -38,10 +38,14 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     public void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
     {
         // 리드오리 태그
-        leadTag.gameObject.SetActive(false);
-        if(cardData.StartingMember == StartingMember.Zero.ToString())
+        if (leadTag != null) 
         {
-            leadTag.gameObject.SetActive(true);
+            leadTag.gameObject.SetActive(false);
+            if (cardData.StartingMember == StartingMember.Zero.ToString())
+            {
+                // Debug.Log($"{cardData.Name}의 Starting Member 값은 {cardData.StartingMember}입니다.");
+                leadTag.gameObject.SetActive(true);
+            }
         }
 
         // 별과 카드 색깔
@@ -107,6 +111,12 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
     {
+        // 리드오리 태그
+        if (leadTag != null) 
+        {
+            leadTag.gameObject.SetActive(false);
+        }
+
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
         int intGrade = (int)itemData.grade;
@@ -185,7 +195,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         {
             equipmentImages[index].gameObject.SetActive(true);
             cardSpriteAnim.StoreItemSpriteRow(index, spriteRow); // 이미지들을 저장해 두고 애니메이션 이벤트로 사용
-            Debug.Log($"{equipmentImages[index].name}에 이미지를 저장했습니다. Card Disp");
+            // Debug.Log($"{equipmentImages[index].name}에 이미지를 저장했습니다. Card Disp");
         }
     }
     #endregion

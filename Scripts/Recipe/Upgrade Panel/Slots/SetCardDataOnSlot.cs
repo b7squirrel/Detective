@@ -52,7 +52,7 @@ public class SetCardDataOnSlot : MonoBehaviour
 
             if (weaponItemData.itemData == null) continue;
 
-            Debug.Log($"{weaponItemData.itemData.Name}을 디스플레이 할 것입니다.");
+            // Debug.Log($"{weaponItemData.itemData.Name}을 디스플레이 할 것입니다.");
             equipSpriteAnim.SetEquipCardDisplay(i, weaponItemData.itemData.spriteRow);
         }
     }

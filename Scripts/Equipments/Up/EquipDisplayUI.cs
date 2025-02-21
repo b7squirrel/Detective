@@ -71,7 +71,7 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
         titleRibbon.SetActive(true);
         Title.text = dispName;
         // 카드 레벨 텍스트
-        Level.text = "LV " + charCardData.Level;
+        Level.text = "레벨 " + charCardData.Level;
 
         // Halo
         //halo.SetActive(true);
@@ -203,7 +203,7 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
         {
             equipmentImages[index].gameObject.SetActive(true);
             cardSpriteAnim.StoreItemSpriteRow(index, spriteRow); // 이미지들을 저장해 두고 애니메이션 이벤트로 사용
-            Debug.Log($"{equipmentImages[index].name}에 이미지를 저장했습니다. EquipDispUI");
+            // Debug.Log($"{equipmentImages[index].name}에 이미지를 저장했습니다. EquipDispUI");
         }
     }
     #endregion

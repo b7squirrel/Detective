@@ -81,6 +81,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
+
+        
     }
 
     // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출
@@ -103,6 +105,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         isEquipped = false;
         Debug.Log("Card on Display = " + CardOnDisplay.Name);
+
+        
     }
 
     public void ClearAllFieldSlots()
@@ -171,12 +175,20 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             item.SetSlotType(currentSlotType);
         }
+
+List<CardData> MyCardsList = cardDataManager.GetMyCardList();
+        foreach (var item in MyCardsList)
+        {
+            Debug.Log($"{item.Name}의 Starting Member값은 {item.StartingMember}입니다.");
+        }
+
     }
     void ClearAllEquipmentSlots()
     {
         // Display의 장비 슬롯들을 모두 비우기
         equipmentSlotsManager.ClearEquipSlots(); // logic
         equipDisplayUI.OffDisplay(); // UI
+        oriSlot.EmptySlot(); // 슬롯 비활성화
     }
 
     // info panel 의 equip 버튼
