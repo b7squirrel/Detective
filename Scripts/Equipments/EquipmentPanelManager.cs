@@ -3,6 +3,7 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
+using System.Runtime.CompilerServices;
 
 public class EquipmentPanelManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class EquipmentPanelManager : MonoBehaviour
     CardList cardList;
     StatManager statManager;
     CardDisp cardDisp; // Equip info panel이 활성화 되면 클릭한 카드의 disp클래스를 저장(equipped Text 표시를 위해)
+    SetCardDataOnSlot setCardDataOnSlot;
 
     EquipDisplayUI equipDisplayUI;
     [SerializeField] EquipInfoPanel equipInfoPanel;
@@ -34,6 +36,7 @@ public class EquipmentPanelManager : MonoBehaviour
     Tween warningMax;
 
     [Header("Char Card Slot")]
+    [SerializeField] CardSlot oriSlot;
     [SerializeField] TMPro.TextMeshProUGUI charUpgradeCost;
     [SerializeField] GameObject charMaxLevel;
     [SerializeField] CanvasGroup charWarningLackCanvasGroup; // 오리 업그레이드 코인 부족 경고 메시지
@@ -50,6 +53,7 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         cardDataManager = FindObjectOfType<CardDataManager>();
         equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
+        setCardDataOnSlot = GetComponent<SetCardDataOnSlot>();
         cardList = FindAnyObjectByType<CardList>();
         cardDictionary = FindAnyObjectByType<CardsDictionary>();
         equipmentSlotsManager = GetComponent<EquipmentSlotsManager>();
@@ -94,6 +98,8 @@ public class EquipmentPanelManager : MonoBehaviour
         int level = CardOnDisplay.Level;
         UpdateUpgradeCost(level, charUpgradeCost);
         UpdateButtonState(charUpgradeButton, true);
+
+        setCardDataOnSlot.PutCardDataIntoSlot(oriCardDataToDisplay, oriSlot);
 
         isEquipped = false;
         Debug.Log("Card on Display = " + CardOnDisplay.Name);

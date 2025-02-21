@@ -18,6 +18,8 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
     GameObject[] stars;
     [SerializeField] Animator charImage;
     [SerializeField] protected Image charFaceImage;
+    SetCardDataOnSlot setCardDataOnSlot; // 카드 데이터와 슬롯을 넘겨 받아서 슬롯에 카드를 표시
+
 
     [SerializeField] WeaponContainerAnim weaponContainerAnim;
     [SerializeField] Animator[] EquipmentImages;
@@ -74,12 +76,20 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
         // Halo
         //halo.SetActive(true);
 
-        // 캐릭터 이미지
-        charImage.gameObject.SetActive(true);
-        WeaponData wd = cardDictionary.GetWeaponItemData(charCardData).weaponData;
-        // charImage.sprite = wd.charImage;
-        charImage.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
-        charFaceImage.sprite = wd.faceImage;
+        // 캐릭터 이미지 - 필드. 나중에 없애기. ui image로 대체하기
+        // charImage.gameObject.SetActive(true);
+        // WeaponData wd = cardDictionary.GetWeaponItemData(charCardData).weaponData;
+        // // charImage.sprite = wd.charImage;
+        // charImage.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
+        // charFaceImage.sprite = wd.faceImage;
+
+        // charAnim.enabled = true;
+        // charAnim.gameObject.SetActive(true);
+        // charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
+        // charFaceExpression.gameObject.SetActive(true);
+        // if(charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
+        // charFaceImage.sprite = weaponData.faceImage;
+
 
         if (atkPopCo != null)
             StopCoroutine(atkPopCo);
