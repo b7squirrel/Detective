@@ -52,8 +52,11 @@ public class SetCardDataOnSlot : MonoBehaviour
 
             if (weaponItemData.itemData == null) continue;
 
-            // Debug.Log($"{weaponItemData.itemData.Name}을 디스플레이 할 것입니다.");
-            equipSpriteAnim.SetEquipCardDisplay(i, weaponItemData.itemData.spriteRow);
+            // weapon data의 디폴트 아이템의 이미지를 넘겨주는 것이 아니라 장비 카드 데이터로 검색한 아이템의 이미지를 넘겨주어야 함.
+            SpriteRow equipmentSpriteRow = cardDictionary.GetWeaponItemData(equipCardData).itemData.spriteRow;
+
+            // Debug.Log($"{cardDictionary.GetWeaponItemData(equipCardData).itemData.DisplayName}을 디스플레이 할 것입니다.");
+            equipSpriteAnim.SetEquipCardDisplay(i, equipmentSpriteRow);
         }
     }
 }

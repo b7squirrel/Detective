@@ -55,7 +55,6 @@ public class Item : ScriptableObject
     public int grade;
     public Sprite charImage;
     public Sprite equippedImage;
-    public Sprite[] equippedAnimSprites; // 애니메이션 되는 아이템
     public SpriteRow spriteRow;
     public AnimatorData CardItemAnimator;
     //public string SynergyWeapon;

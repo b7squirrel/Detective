@@ -17,7 +17,7 @@ MonoBehaviour:
   DisplayName: "\uCE74\uC6B0 \uC624\uB9AC"
   SynergyDispName: "\uBE75\uC57C \uBE75\uC57C"
   charImage: {fileID: 21300000, guid: a6589f57e09bb324ebca7250d7412b28, type: 3}
-  faceImage: {fileID: -747973565, guid: 47dccab570a808145bb139c6481a4069, type: 3}
+  faceImage: {fileID: 524898965, guid: ed006521c5d1ada44b8cf1d7e919be49, type: 3}
   costume: {fileID: 0}
   SynergyWeapon: Akimbo
   SynergyItem: {fileID: 11400000, guid: 6fed794634024654c8c2ee88559e9bae, type: 2}
@@ -29,6 +29,11 @@ MonoBehaviour:
   DefaultChest: {fileID: 735485920, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
   DefaultFace: {fileID: 664530602, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
   DefaultHands: {fileID: -441495344, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
+  defaultItems:
+  - {fileID: 11400000, guid: f72f835b5568c2a40808f5de6f88c660, type: 2}
+  - {fileID: 11400000, guid: e90cc6c7d77f5b5478ab6073e9aec013, type: 2}
+  - {fileID: 11400000, guid: bef4d2142a743de45bb907ebb91db080, type: 2}
+  - {fileID: 11400000, guid: 56e095c1c2108ea43820db97f6a52336, type: 2}
   equipSprites:
   - sprites:
     - {fileID: 1591285406, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
@@ -44,17 +49,6 @@ MonoBehaviour:
     - {fileID: 664530602, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
   - sprites:
     - {fileID: -441495344, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
-  headEquipmentSprites: []
-  chestEquipmentSprites:
-  - {fileID: 21300000, guid: a23a92efd5e9d5a4a8941482d8a3b13c, type: 3}
-  - {fileID: 21300000, guid: 8f0e6ad16f30b4c4da3f354f340cc72a, type: 3}
-  - {fileID: 21300000, guid: 933972accbfb5364c81766b3f25e30a4, type: 3}
-  - {fileID: 21300000, guid: 822c1eaf8e5c0db4386d90ce5f7ddd3d, type: 3}
-  - {fileID: 21300000, guid: bf7a082d9e9cdee459d80beb9601042c, type: 3}
-  - {fileID: 21300000, guid: 1e258ff4f304a9449b2fd15df6db0e90, type: 3}
-  - {fileID: 21300000, guid: e87c0b86aeb63d0488b5c9aa6d8739f7, type: 3}
-  faceEquipmentSprites: []
-  handEquipmentSprites: []
   charEffectImage: {fileID: 21300000, guid: 123775e884b54414dbd53889ec2b8ae9, type: 3}
   costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 5831665795245939412, guid: 291aed483e7745e40b52be27fc10bc5a, type: 3}

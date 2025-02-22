@@ -17,7 +17,7 @@ MonoBehaviour:
   DisplayName: "\uCE74\uC6B0 \uC624\uB9AC"
   SynergyDispName: "\uBE75\uC57C \uBE75\uC57C"
   charImage: {fileID: 21300000, guid: a6589f57e09bb324ebca7250d7412b28, type: 3}
-  faceImage: {fileID: -747973565, guid: 47dccab570a808145bb139c6481a4069, type: 3}
+  faceImage: {fileID: 524898965, guid: ed006521c5d1ada44b8cf1d7e919be49, type: 3}
   costume: {fileID: 0}
   SynergyWeapon: Akimbo
   SynergyItem: {fileID: 11400000, guid: 6fed794634024654c8c2ee88559e9bae, type: 2}
@@ -29,6 +29,11 @@ MonoBehaviour:
   DefaultChest: {fileID: -1573689963, guid: 3979e30cb6a0d5c4eae3fe8beaa3cd01, type: 3}
   DefaultFace: {fileID: -1365858808, guid: 3979e30cb6a0d5c4eae3fe8beaa3cd01, type: 3}
   DefaultHands: {fileID: -1688251998, guid: 3979e30cb6a0d5c4eae3fe8beaa3cd01, type: 3}
+  defaultItems:
+  - {fileID: 11400000, guid: 6ef8446c53d2de847abc3da678bab148, type: 2}
+  - {fileID: 11400000, guid: f2b324984c1c3a5458c442f3149cb56b, type: 2}
+  - {fileID: 11400000, guid: d161663d5cd473743b57872418a56548, type: 2}
+  - {fileID: 11400000, guid: 4f70acf951212064fbe3d865b65389b5, type: 2}
   equipSprites:
   - sprites:
     - {fileID: -1846063108, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
@@ -44,20 +49,6 @@ MonoBehaviour:
     - {fileID: -1585628255, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
   - sprites:
     - {fileID: -544603694, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
-  headEquipmentSprites:
-  - {fileID: -1846063108, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
-  chestEquipmentSprites:
-  - {fileID: 21300000, guid: a23a92efd5e9d5a4a8941482d8a3b13c, type: 3}
-  - {fileID: 21300000, guid: 8f0e6ad16f30b4c4da3f354f340cc72a, type: 3}
-  - {fileID: 21300000, guid: 933972accbfb5364c81766b3f25e30a4, type: 3}
-  - {fileID: 21300000, guid: 822c1eaf8e5c0db4386d90ce5f7ddd3d, type: 3}
-  - {fileID: 21300000, guid: bf7a082d9e9cdee459d80beb9601042c, type: 3}
-  - {fileID: 21300000, guid: 1e258ff4f304a9449b2fd15df6db0e90, type: 3}
-  - {fileID: 21300000, guid: e87c0b86aeb63d0488b5c9aa6d8739f7, type: 3}
-  faceEquipmentSprites:
-  - {fileID: -1585628255, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
-  handEquipmentSprites:
-  - {fileID: -544603694, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
   charEffectImage: {fileID: 0}
   costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 5831665795245939412, guid: 291aed483e7745e40b52be27fc10bc5a, type: 3}

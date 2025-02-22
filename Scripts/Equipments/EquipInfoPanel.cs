@@ -34,7 +34,7 @@ public class EquipInfoPanel : MonoBehaviour
         NameLabel.color = MyGrade.GradeColors[cardData.Grade];
         GradeLabel.color = MyGrade.GradeColors[cardData.Grade];
         NameLabelGlow.color = MyGrade.GradeGlowColors[cardData.Grade];
-        Name.text = cardData.Name;
+        Name.text = itemData.DisplayName;
         SetItemCardBase(cardData.Grade);
         Level.text = "LV " + cardData.Level.ToString() + " / " + StaticValues.MaxLevel.ToString();
 
@@ -50,7 +50,7 @@ public class EquipInfoPanel : MonoBehaviour
         }
 
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
-        Debug.Log($"클릭한 장비는 {weaponItemData.itemData.Name} 입니다");
+        // Debug.Log($"클릭한 장비는 {weaponItemData.itemData.Name} 입니다");
         itemImage.sprite = weaponItemData.itemData.charImage;
         // anim.runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
         anim.enabled = false;
