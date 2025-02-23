@@ -33,7 +33,6 @@ public class CardSpriteAnim : MonoBehaviour
             if (equipSprites[i].sprites.Length == 1)
             {
                 images[i].sprite = equipSprites[i].sprites[0]; // 이미지가 1개라면 계속 그 첫 번째 이미지만 주입
-                Debug.Log($"{equipSprites[i].sprites[0].name}의 스프라이트가 1개입니다.");
                 images[i].SetNativeSize();
             }
             else if (_index >= 0 && _index < equipSprites[i].sprites.Length)
