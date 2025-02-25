@@ -5,21 +5,20 @@ using UnityEngine;
 public class WeaponContainerAnim : MonoBehaviour
 {
     Animator anim; // 오리의 animator
-    Costume costume;
     [SerializeField] SpriteRenderer[] sr;
     [SerializeField] SpriteRenderer face;
     [SerializeField] Transform spriteGroup;
     [SerializeField] Transform headGroup; // 머리와 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform handsGroup; // 손과 함께 움직이는 중비들은 모두 여기에 페어런트 시킨다
-    [SerializeField] SpriteRenderer costumeSR;
     [SerializeField] GameObject[] testParts; // 테스트 파츠. 생성되면 바로 숨기도록
     StartingDataContainer startingDataContainer;
 
     Sprite sprite; // 개별 무기들의 sprite
 
     // 장비 스프라이트
-    SpriteRow[] equipSprites = new SpriteRow[4];
+    [SerializeField] SpriteRow[] equipSprites = new SpriteRow[4];
+    bool initWeapon = false;
 
     public static int indexSortingOrder = 100; // 소팅오더를 정하기 위한 인덱스
 
@@ -28,6 +27,7 @@ public class WeaponContainerAnim : MonoBehaviour
 
     [Header("Invincible Effects")]
     Coroutine invincibleSpriteChange;
+
     public bool FacingRight
     {
         get => _facingRight;
@@ -51,23 +51,7 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         anim.runtimeAnimatorController = animCon;
     }
-    void SetSpriteRows(WeaponData _wd)
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            if(_wd.defaultItems[i] == null) return;
-            if (_wd.equipSprites[i] != null && _wd.equipSprites[i].sprites.Length > 0)
-            {
-                sr[i + 1].gameObject.SetActive(true);
-                equipSprites[i] = _wd.equipSprites[i];
-            }
-            else
-            {
-                sr[i + 1].gameObject.SetActive(false);
-                equipSprites[i] = null;
-            }
-        }
-    }
+  
     void StoreSpriteRows(WeaponData _wd, bool _isInitialWeapon)
     {
         if (_isInitialWeapon) // 플레이어
@@ -98,37 +82,18 @@ public class WeaponContainerAnim : MonoBehaviour
                 {
                     sr[i + 1].gameObject.SetActive(true);
                     equipSprites[i] = _wd.defaultItems[i].spriteRow;
+                    Debug.Log($"{_wd.Name}의 {i}스프라이트가 있습니다.");
+                    Debug.Log($"{_wd.Name}의 {equipSprites[i].sprites[0].name}스프라이트가 있습니다.");
                 }
                 else
                 {
                     sr[i + 1].gameObject.SetActive(false);
                     equipSprites[i] = null;
+                    Debug.Log($"{_wd.Name}의 {i}스프라이트가 없습니다.");
                 }
             }
         }
         face.sprite = _wd.faceImage;
-        Debug.Log($"얼굴 스프라이트는 {face.sprite.name}입니다.");
-    }
-
-
-    // 애니메이션 이벤트로 사용
-    void SetFollwersEquipSprites(WeaponData _wd)
-    {
-        if(equipSprites == null) equipSprites = new SpriteRow[4];
-        for (int i = 0; i < 4; i++)
-        {
-            if(_wd.equipSprites == null) return;
-            if (_wd.equipSprites[i] != null && _wd.equipSprites[i].sprites.Length > 0)
-            {
-                sr[i + 1].gameObject.SetActive(true);
-                equipSprites[i] = _wd.equipSprites[i];
-            }
-            else
-            {
-                sr[i + 1].gameObject.SetActive(false);
-                equipSprites[i] = null;
-            }
-        }
     }
 
     // 따라다니는 아이들의 sprite는 모두 default로
@@ -137,8 +102,9 @@ public class WeaponContainerAnim : MonoBehaviour
         InitAnimController(wd.Animators.InGamePlayerAnim);
         // SetFollwersEquipSprites(wd);
         StoreSpriteRows(wd, false);
+        initWeapon = false;
 
-        costumeSR.sortingOrder = indexSortingOrder;
+
         indexSortingOrder--;
 
         sr[4].sortingOrder = indexSortingOrder;
@@ -172,33 +138,8 @@ public class WeaponContainerAnim : MonoBehaviour
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
 
         StoreSpriteRows(wd, true);
-
-        // if (wd.costume != null)
-        // {
-        //     costume = wd.costume;
-        //     costumeSR.color = new Color(1, 1, 1, 1);
-
-        //     costumeSR.sortingOrder = indexSortingOrder;
-        //     indexSortingOrder--;
-        // }
-        // else
-        // {
-        //     costumeSR.color = new Color(1, 1, 1, 0);
-        // }
-
-        // for (int i = 0; i < 4; i++)
-        // {
-        //     sr[i + 1].sortingOrder = indexSortingOrder;
-        //     indexSortingOrder--;
-
-        //     if (iDatas[i] == null)
-        //     {
-        //         sr[i + 1].gameObject.SetActive(false);
-        //         continue;
-        //     }
-
-        //     sr[i + 1].sprite = iDatas[i].equippedImage;
-        // }
+        initWeapon = true;
+       
 
         sr[4].sortingOrder = indexSortingOrder; // 손에 든 무기가 가장 위에
         indexSortingOrder--;
@@ -230,38 +171,36 @@ public class WeaponContainerAnim : MonoBehaviour
         anim.SetFloat("Speed", speed);
     }
     // 애니메이션 이벤트
-    public void SetCostumeSprite(int _index)
-    {
-        if (costume == null) return;
-        costumeSR.sprite = costume.sprites[_index];
-    }
+    
     public void SetEquippedItemSprite(int _index)
     {
         if (equipSprites == null) return;
+        if(initWeapon == false) Debug.Log($"equipSprites 배열의 길이는 {equipSprites.Length}입니다.");
 
         for (int i = 0; i < 4; i++)
         {
-            if (equipSprites[i] == null) return;
+            if (equipSprites[i] == null) continue;
             if (equipSprites[i].sprites.Length == 1)
             {
                 sr[i + 1].sprite = equipSprites[i].sprites[0];
+                if(initWeapon == false) Debug.Log($"{equipSprites[i].sprites[0].name}을 sr[{i + 1}]에 넘겨줍니다.");
             }
             else
             {
                 sr[i + 1].sprite = equipSprites[i].sprites[_index];
+                if(initWeapon == false) Debug.Log($"{equipSprites[i].sprites[_index].name}을 sr[{i + 1}]에 넘겨줍니다.");
             }
         }
     }
     public void ParentWeaponObjectTo(int _index, Transform _weaponObject, bool _needParent, int _debugIndex)
     {
-        Debug.Log($"Index Num = {_index}");
         if (_needParent == false) // 페어런트 시킬 필요가 없는 무기라면 아무것도 하지 않는다
         {
             // 해당 부위의 스프라이트는 비활성화 시켜서 겹치지 않게 한다
             if (_index < 4)
             {
                 sr[_index + 1].gameObject.SetActive(false);
-                Debug.Log($"{_index + 1} 부위가 비활성화 되었습니다.{_debugIndex}");
+                Debug.Log($"sr[{_index}]를 비활성화 합니다.");
             }
             return;
         }
@@ -287,7 +226,6 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             _weaponObject.SetParent(headGroup);
             if (_sr != null) { _sr.sortingOrder = sr[3].sortingOrder; }
-            Debug.Log($"얼굴 부위의 스프라이트의 소팅오더를 조정했습니다.");
         }
         if (_index == 3) // 손 부위이면
         {
@@ -339,7 +277,6 @@ public class WeaponContainerAnim : MonoBehaviour
             {
                 sr[i].color = randomColor;
             }
-            if (costumeSR != null) costumeSR.color = randomColor;
             if (face != null) face.color = randomColor;
             yield return null;
         }
@@ -351,7 +288,6 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             sr[i].color = defaultColor;
         }
-        if (costumeSR != null) costumeSR.color = defaultColor;
         if (face != null) face.color = defaultColor;
     }
     #endregion

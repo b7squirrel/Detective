@@ -60,7 +60,6 @@ public class WeaponData : ScriptableObject
     public string SynergyDispName;
     public Sprite charImage;
     public Sprite faceImage;
-    public Costume costume;
     public string SynergyWeapon;
     public Item SynergyItem;
     public AnimatorData Animators;

@@ -10,7 +10,6 @@ public class EggPanelManager : MonoBehaviour
 
     [SerializeField] GameObject eggPanel;
     [SerializeField] GameObject eggImage;
-    [SerializeField] SpriteRenderer costumeSR;
     [SerializeField] PauseManager pauseManager;
     [SerializeField] GameObject oriNameGroup;
     [SerializeField] GameObject oriName;
@@ -22,7 +21,6 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] ParticleSystem twinkleStarsParticle;
     [SerializeField] GameObject blackBGPanel;
     [SerializeField] GameObject whiteBGPanel;
-    Costume costume;
     EggButton eggButton; // Egg Button에 접근해서 레어오리 확률을 초기화 시키기 위해
 
     Coroutine Close;
@@ -51,14 +49,6 @@ public class EggPanelManager : MonoBehaviour
     {
         CloseNewKidImage();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
-        if (wd.costume != null)
-        {
-            costume = wd.costume;
-        }
-        else
-        {
-            costume = null;
-        }
 
         for (int i = 0; i < EquipmentSprites.Length; i++)
         {
@@ -70,14 +60,10 @@ public class EggPanelManager : MonoBehaviour
     {
         Init(wd);
 
-
         if (wd.DefaultHead != null) EquipmentSprites[0].sprite = wd.DefaultHead;
         if (wd.DefaultChest != null) EquipmentSprites[1].sprite = wd.DefaultChest;
         if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
         if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
-
-        if (costume != null) { costumeSR.sprite = costume.sprites[10]; }
-
     }
 
     void OpenNewKidImage()
@@ -143,7 +129,6 @@ public class EggPanelManager : MonoBehaviour
         oriName.SetActive(true);
         nameBar.SetActive(true);
         yayText.SetActive(true);
-        costumeSR.color = new Color(1, 1, 1, 1);
 
         eggPanelAnim.SetTrigger("KidUp");
         SoundManager.instance.Play(oriSound);
@@ -216,9 +201,6 @@ public class EggPanelManager : MonoBehaviour
         yayText.SetActive(false);
         birdFlock.SetActive(false);
         twinkleStarsParticle.Stop();
-        costumeSR.color = new Color(1, 1, 1, 0);
-        costume = null;
-        costumeSR.sprite = null;
         CloseNewKidImage();
 
         GameManager.instance.popupManager.IsUIDone = true;

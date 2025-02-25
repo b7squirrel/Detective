@@ -55,12 +55,6 @@ public class PauseCardDisp : MonoBehaviour
             }
             equipSR[i].sprite = null;
             equipSR[i].gameObject.SetActive(false);
-
-            if (_wd.costume != null)
-            {
-                costume = _wd.costume;
-                setCostumeImage.SetCostumeData(costume);
-            }
         }
     }
     public void InitWeaponCardDisplay(WeaponData _wd)
@@ -95,13 +89,6 @@ public class PauseCardDisp : MonoBehaviour
         {
             equipSR[3].sprite = _wd.DefaultHands;
             equipSR[3].gameObject.SetActive(true);
-        }
-
-        if (_wd.costume != null)
-        {
-            costume = _wd.costume;
-            setCostumeImage.SetCostumeData(costume);
-            Debug.Log("costume name = " + costume.name);
         }
     }
 

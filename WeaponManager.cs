@@ -81,17 +81,16 @@ public class WeaponManager : MonoBehaviour
 
             // 시너지 등으로 무기가 추가된다면 weaponManager.AddExtraWeaponTool에서 추가
             Sprite sprite = null;
-            if(isInitialWeapon)
+            int _index = (int)wd.equipmentType;
+
+            if (wd.defaultItems != null &&
+                                    _index < wd.defaultItems.Length &&
+                                    wd.defaultItems[_index] != null &&
+                                    wd.defaultItems[_index].spriteRow != null &&
+                                    wd.defaultItems[_index].spriteRow.sprites != null &&
+                                    wd.defaultItems[_index].spriteRow.sprites.Length > 0)
             {
-                sprite = GameManager.instance.startingDataContainer.GetItemDatas()[(int)wd.equipmentType].equippedImage;
-            }
-            else
-            {
-                int _index = (int)wd.equipmentType;
-                if (_index == 0) sprite = wd.DefaultHead;
-                if (_index == 1) sprite = wd.DefaultChest;
-                if (_index == 2) sprite = wd.DefaultFace;
-                if (_index == 3) sprite = wd.DefaultHands;
+                sprite = wd.defaultItems[_index].spriteRow.sprites[0];
             }
 
             // 무기에 스프라이트 주입
