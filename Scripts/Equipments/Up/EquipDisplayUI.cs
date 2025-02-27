@@ -36,6 +36,8 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
 
     CardSpriteAnim cardSpriteAnim;
+    [Header("Debug")]
+    [SerializeField] GameObject[] testParts;
 
     float initAtkFontSize, initHpFontSize;
     Coroutine atkPopCo, hpPopCo;
@@ -72,6 +74,16 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
         Title.text = dispName;
         // 카드 레벨 텍스트
         Level.text = "레벨 " + charCardData.Level;
+
+        // 디버그
+        if (testParts != null)
+        {
+            for (int i = 0; i < testParts.Length; i++)
+            {
+                testParts[i].SetActive(false);
+            }
+        }
+
 
         // Halo
         //halo.SetActive(true);
