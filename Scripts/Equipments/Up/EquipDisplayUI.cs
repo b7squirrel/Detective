@@ -25,6 +25,8 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
     [SerializeField] Animator[] EquipmentImages;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
     [SerializeField] Image[] equipmentImages;
+    [SerializeField] RectTransform headMain;
+    bool needToOffset;
 
     [SerializeField] TMPro.TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
@@ -44,6 +46,8 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
     {
+        needToOffset = false;
+
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
         transform.gameObject.SetActive(true);
@@ -83,7 +87,6 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
                 testParts[i].SetActive(false);
             }
         }
-
 
         // Halo
         //halo.SetActive(true);
@@ -204,8 +207,14 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
         if (cardSpriteAnim == null) cardSpriteAnim = GetComponentInChildren<CardSpriteAnim>();
         cardSpriteAnim.Init(equipmentImages);
     }
-    public void SetEquipCardDisplay(int index, SpriteRow spriteRow)
+    public void SetEquipCardDisplay(int index, SpriteRow spriteRow, bool needToOffset, Vector2 offset)
     {
+        // need to offset이 참이 되면 더 이상 변화가 없도록 남겨둠
+        this.needToOffset = this.needToOffset ? true : needToOffset; 
+
+        // offset을 하게 하는 아이템이 탈착 되었을 때를 위한 초기화
+        headMain.anchoredPosition = this.needToOffset == false ? Vector2.zero : headMain.anchoredPosition;
+
         // cardSpriteAnim.Init을 호출해서 해당 index 부위의 애니메이션 이미지들을 저장해 두기
         if (spriteRow == null)
         {
@@ -214,6 +223,8 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
         else
         {
             equipmentImages[index].gameObject.SetActive(true);
+            // 탈착, 장착이 반복될 수록 계속 offset이 더해지는 것을 막기 위해 원점이 아닐 때는 offset을 해주지 않기
+            headMain.anchoredPosition = headMain.anchoredPosition == Vector2.zero ? headMain.anchoredPosition + offset : headMain.anchoredPosition;
             cardSpriteAnim.StoreItemSpriteRow(index, spriteRow); // 이미지들을 저장해 두고 애니메이션 이벤트로 사용
             // Debug.Log($"{equipmentImages[index].name}에 이미지를 저장했습니다. EquipDispUI");
         }

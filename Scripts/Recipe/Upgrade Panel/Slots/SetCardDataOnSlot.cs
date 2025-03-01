@@ -42,7 +42,7 @@ public class SetCardDataOnSlot : MonoBehaviour
             {
                 // cardDisp.SetRunTimeAnimController(i, null);
                 Debug.Log($"{charCard.Name}의 {i}번째 장비칸을 비활성화 합니다.");
-                equipSpriteAnim.SetEquipCardDisplay(i, null); // 이미지 오브젝트를 비활성화
+                equipSpriteAnim.SetEquipCardDisplay(i, null, false, Vector2.zero); // 이미지 오브젝트를 비활성화
                 continue;
             }
 
@@ -59,10 +59,12 @@ public class SetCardDataOnSlot : MonoBehaviour
             Debug.Log($"{weaponItemData.itemData.DisplayName}의 스프라이트를 넘겨줍니다.");
 
             // weapon data의 디폴트 아이템의 이미지를 넘겨주는 것이 아니라 장비 카드 데이터로 검색한 아이템의 이미지를 넘겨주어야 함.
-            SpriteRow equipmentSpriteRow = cardDictionary.GetWeaponItemData(equipCardData).itemData.spriteRow;
+            Item item = cardDictionary.GetWeaponItemData(equipCardData).itemData;
+            SpriteRow equipmentSpriteRow = item.spriteRow;
+            Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
 
             // Debug.Log($"{cardDictionary.GetWeaponItemData(equipCardData).itemData.DisplayName}을 디스플레이 할 것입니다.");
-            equipSpriteAnim.SetEquipCardDisplay(i, equipmentSpriteRow);
+            equipSpriteAnim.SetEquipCardDisplay(i, equipmentSpriteRow, item.needToOffset, offset);
         }
     }
 }
