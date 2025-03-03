@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
+public class EquipDisplayUI : MonoBehaviour
 {
     [SerializeField] Transform cardBaseContainer; // 5레벨
     [SerializeField] Transform starContainer;
@@ -16,17 +16,7 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
     [SerializeField] protected TMPro.TextMeshProUGUI SkillDescription;
     [SerializeField] protected GameObject starPrefab;
     GameObject[] stars;
-    [SerializeField] Animator charImage;
-    [SerializeField] protected Image charFaceImage;
     SetCardDataOnSlot setCardDataOnSlot; // 카드 데이터와 슬롯을 넘겨 받아서 슬롯에 카드를 표시
-
-
-    [SerializeField] WeaponContainerAnim weaponContainerAnim;
-    [SerializeField] Animator[] EquipmentImages;
-    [SerializeField] SpriteRenderer[] EquipmentSprites;
-    [SerializeField] Image[] equipmentImages;
-    [SerializeField] RectTransform headMain;
-    bool needToOffset;
 
     [SerializeField] TMPro.TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
@@ -37,7 +27,6 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
 
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
 
-    CardSpriteAnim cardSpriteAnim;
     [Header("Debug")]
     [SerializeField] GameObject[] testParts;
 
@@ -46,8 +35,6 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
     {
-        needToOffset = false;
-
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
         transform.gameObject.SetActive(true);
@@ -87,24 +74,6 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
                 testParts[i].SetActive(false);
             }
         }
-
-        // Halo
-        //halo.SetActive(true);
-
-        // 캐릭터 이미지 - 필드. 나중에 없애기. ui image로 대체하기
-        // charImage.gameObject.SetActive(true);
-        // WeaponData wd = cardDictionary.GetWeaponItemData(charCardData).weaponData;
-        // // charImage.sprite = wd.charImage;
-        // charImage.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
-        // charFaceImage.sprite = wd.faceImage;
-
-        // charAnim.enabled = true;
-        // charAnim.gameObject.SetActive(true);
-        // charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
-        // charFaceExpression.gameObject.SetActive(true);
-        // if(charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
-        // charFaceImage.sprite = weaponData.faceImage;
-
 
         if (atkPopCo != null)
             StopCoroutine(atkPopCo);
@@ -152,84 +121,12 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
             yield return new WaitForSeconds(.1f);
             hp.fontSize = initHpFontSize;
         }
-
     }
-    // 오리 위에 장착된 장비 표시/ 숨기기
-    public void SetEquipmentDisplay(CardData itemCardData, bool isAdding)
-    {
-        Item data = cardDictionary.GetWeaponItemData(itemCardData).itemData;
-        int index = new Convert().EquipmentTypeToInt(itemCardData.EquipmentType);
-
-        if (isAdding)
-        {
-            EquipmentImages[index].gameObject.SetActive(true);
-            if (itemCardData.EssentialEquip == "Essential")
-            {
-                //Debug.Log("Essential = " + data.Name);
-                //EquipmentImages[index].runtimeAnimatorController
-                //                      = data.CardItemAnimator.InGamePlayerAnim;
-                EquipmentSprites[index].sprite = data.equippedImage;
-
-            }
-            else
-            {
-                EquipmentSprites[index].sprite = data.equippedImage;
-            }
-            RestartAnim();
-        }
-        else
-        {
-            EquipmentImages[index].gameObject.SetActive(false);
-
-        }
-
-        charButton.SetActive(true);
-    }
+    
     public void SetLevelUI(CardData cardOnDisplay)
     {
         Level.text = "LV " + cardOnDisplay.Level;
-
     }
-    // 오리의 idle과 타이밍을 맞추기 위해서 장비가 장착될 때마다 애니메이션 리셋
-    void RestartAnim()
-    {
-        for (int i = 0; i < EquipmentImages.Length; i++)
-        {
-            if (EquipmentImages[i].gameObject.activeSelf)
-                EquipmentImages[i].Rebind();
-        }
-        charImage.Rebind();
-    }
-
-    #region Card Sprite Anim 참조
-    public void InitSpriteRow()
-    {
-        if (cardSpriteAnim == null) cardSpriteAnim = GetComponentInChildren<CardSpriteAnim>();
-        cardSpriteAnim.Init(equipmentImages);
-    }
-    public void SetEquipCardDisplay(int index, SpriteRow spriteRow, bool needToOffset, Vector2 offset)
-    {
-        // need to offset이 참이 되면 더 이상 변화가 없도록 남겨둠
-        this.needToOffset = this.needToOffset ? true : needToOffset; 
-
-        // offset을 하게 하는 아이템이 탈착 되었을 때를 위한 초기화
-        headMain.anchoredPosition = this.needToOffset == false ? Vector2.zero : headMain.anchoredPosition;
-
-        // cardSpriteAnim.Init을 호출해서 해당 index 부위의 애니메이션 이미지들을 저장해 두기
-        if (spriteRow == null)
-        {
-            equipmentImages[index].gameObject.SetActive(false);
-        }
-        else
-        {
-            equipmentImages[index].gameObject.SetActive(true);
-            // 탈착, 장착이 반복될 수록 계속 offset이 더해지는 것을 막기 위해 원점이 아닐 때는 offset을 해주지 않기
-            headMain.anchoredPosition = headMain.anchoredPosition == Vector2.zero ? headMain.anchoredPosition + offset : headMain.anchoredPosition;
-            cardSpriteAnim.StoreItemSpriteRow(index, spriteRow); // 이미지들을 저장해 두고 애니메이션 이벤트로 사용
-            // Debug.Log($"{equipmentImages[index].name}에 이미지를 저장했습니다. EquipDispUI");
-        }
-    }
-    #endregion
 
     protected virtual void SetNumStar(int numStars)
     {
@@ -283,12 +180,6 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
 
         atkLabel.SetActive(false);
         hpLabel.SetActive(false);
-        // charImage.color = new Color(1, 1, 1, 0);
-        for (int i = 0; i < EquipmentImages.Length; i++)
-        {
-            EquipmentImages[i].gameObject.SetActive(false);
-        }
-        charImage.gameObject.SetActive(false);
 
         charButton.SetActive(false);
         charUpgradeButton.SetActive(false);
@@ -305,6 +196,5 @@ public class EquipDisplayUI : MonoBehaviour, IEquipSpriteAnim
         charUpgradeButton.SetActive(true);
 
         charWarningLackCanvasGroup.gameObject.SetActive(true);
-        // charImage.color = new Color(1, 1, 1, 1);
     }
 }

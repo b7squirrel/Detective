@@ -37,7 +37,6 @@ public class EquipmentSlotsManager : MonoBehaviour
             WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
             if (weaponItemData.itemData == null) continue;
             SetEquipSlot(i, weaponItemData.itemData, cardData);
-            equipDisplayUI.SetEquipmentDisplay(cardData, true);
         }
     }
 
@@ -51,7 +50,6 @@ public class EquipmentSlotsManager : MonoBehaviour
 
         // 장비가 더해지면 오리 스탯 업데이트
         UpdateAttribute(cardToEquip, true); // attr data 업데이트
-        equipDisplayUI.SetEquipmentDisplay(cardToEquip, true);
     }
 
     /// <summary>
@@ -98,7 +96,7 @@ public class EquipmentSlotsManager : MonoBehaviour
         UpdateAttribute(cardDataToRemove, false);
 
         // 장비가 빠지면 오리 스탯 업데이트
-        equipDisplayUI.SetEquipmentDisplay(cardDataToRemove, false);
+        // equipDisplayUI.SetEquipmentDisplay(cardDataToRemove, false);
     }
     public bool IsEmpty(int index)
     {
