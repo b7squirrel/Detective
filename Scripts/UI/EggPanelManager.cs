@@ -30,7 +30,10 @@ public class EggPanelManager : MonoBehaviour
     GameObject[] testEquipmentImages;
 
     [SerializeField] GameObject newOriContainer;
+    [SerializeField] WeaponContainerAnim weaponContainerAnim;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
+    [SerializeField] SpriteRenderer faceExpression;
+    
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
@@ -54,16 +57,19 @@ public class EggPanelManager : MonoBehaviour
         {
             EquipmentSprites[i].sprite = null;
         }
-    }
-    // 장비 sprite는 모두 default로
-    void SetEquipmentSprites(WeaponData wd)
-    {
-        Init(wd);
 
-        if (wd.DefaultHead != null) EquipmentSprites[0].sprite = wd.DefaultHead;
-        if (wd.DefaultChest != null) EquipmentSprites[1].sprite = wd.DefaultChest;
-        if (wd.DefaultFace != null) EquipmentSprites[2].sprite = wd.DefaultFace;
-        if (wd.DefaultHands != null) EquipmentSprites[3].sprite = wd.DefaultHands;
+        // CloseNewKidImage();
+
+        // 오리의 애니메이터, 얼굴 주입
+        anim.Rebind();
+        anim.Update(0);
+
+        anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
+        faceExpression.sprite = wd.faceImage;
+        faceExpression.gameObject.SetActive(true);
+
+        // 장비칸 초기화
+        weaponContainerAnim.SetEquipmentSprites(wd);
     }
 
     void OpenNewKidImage()
@@ -71,7 +77,7 @@ public class EggPanelManager : MonoBehaviour
         newOriContainer.SetActive(true);
         rawImage.SetActive(true);
         flashEffect.SetActive(true);
-        anim.SetTrigger("Victory");
+        anim.SetTrigger("Idle");
     }
     void CloseNewKidImage()
     {
@@ -158,7 +164,7 @@ public class EggPanelManager : MonoBehaviour
         oriName.GetComponent<TMPro.TextMeshProUGUI>().text = newWd.weaponData.DisplayName;
 
         // 장비 스프라이트 설정
-        SetEquipmentSprites(newWd.weaponData);
+        Init(newWd.weaponData);
 
         // 플레이어에 새로운 오리 추가하기
         GameManager.instance.character.GetComponent<Level>().GetWeapon(newWd);

@@ -41,7 +41,7 @@ public class WeaponContainerAnim : MonoBehaviour
 
     void OnEnable()
     {
-        anim = GetComponent<Animator>();
+        
         for (int i = 0; i < testParts.Length; i++)
         {
             testParts[i].SetActive(false);
@@ -49,6 +49,7 @@ public class WeaponContainerAnim : MonoBehaviour
     }
     void InitAnimController(RuntimeAnimatorController animCon)
     {
+        if(anim == null) anim = GetComponent<Animator>();
         anim.runtimeAnimatorController = animCon;
     }
   
@@ -94,6 +95,7 @@ public class WeaponContainerAnim : MonoBehaviour
             }
         }
         face.sprite = _wd.faceImage;
+        face.gameObject.SetActive(true);
     }
 
     // 따라다니는 아이들의 sprite는 모두 default로
@@ -104,16 +106,16 @@ public class WeaponContainerAnim : MonoBehaviour
         StoreSpriteRows(wd, false);
         initWeapon = false;
 
-
+        // 1-head, 2-chest, 3-face, 4-hand (expression, 2chest, 1head, 3face, 4hand 순서로 배열하기)
         indexSortingOrder--;
 
         sr[4].sortingOrder = indexSortingOrder;
         indexSortingOrder--;
 
-        sr[1].sortingOrder = indexSortingOrder;
+        sr[3].sortingOrder = indexSortingOrder;
         indexSortingOrder--;
 
-        sr[3].sortingOrder = indexSortingOrder;
+        sr[1].sortingOrder = indexSortingOrder;
         indexSortingOrder--;
 
         sr[2].sortingOrder = indexSortingOrder; // 얼굴 부위가 가슴보다 위에 오도록
@@ -139,15 +141,14 @@ public class WeaponContainerAnim : MonoBehaviour
 
         StoreSpriteRows(wd, true);
         initWeapon = true;
-       
 
         sr[4].sortingOrder = indexSortingOrder; // 손에 든 무기가 가장 위에
         indexSortingOrder--;
 
-        sr[1].sortingOrder = indexSortingOrder;
+        sr[3].sortingOrder = indexSortingOrder;
         indexSortingOrder--;
 
-        sr[3].sortingOrder = indexSortingOrder;
+        sr[1].sortingOrder = indexSortingOrder;
         indexSortingOrder--;
 
         sr[2].sortingOrder = indexSortingOrder; // 얼굴 부위가 가슴보다 위에 오도록
@@ -187,6 +188,7 @@ public class WeaponContainerAnim : MonoBehaviour
             }
             else
             {
+                Debug.Log($"i - {i}, index - {_index}");
                 sr[i + 1].sprite = equipSprites[i].sprites[_index];
                 if(initWeapon == false) Debug.Log($"{equipSprites[i].sprites[_index].name}을 sr[{i + 1}]에 넘겨줍니다.");
             }
