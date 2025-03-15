@@ -11,10 +11,10 @@ public class CardSlot : MonoBehaviour
     [SerializeField] int ID;
     [SerializeField] int grade;
     [SerializeField] string Name;
-    void OnEnable()
-    {
-        EmptySlot();
-    }
+    // void OnEnable()
+    // {
+    //     EmptySlot();
+    // }
     
     public CardData GetCardData()
     {
@@ -29,6 +29,7 @@ public class CardSlot : MonoBehaviour
         CardDisp cardDisp = GetComponent<CardDisp>();
         cardDisp.InitWeaponCardDisplay(_weaponData, _cardData);
 
+        if(cardData == null) return;
         ID = cardData.ID;
         grade = cardData.Grade;
         Name = cardData.Name;
@@ -42,6 +43,7 @@ public class CardSlot : MonoBehaviour
         CardDisp cardDisp = GetComponent<CardDisp>();
         cardDisp.InitItemCardDisplay(_itemData, _cardData, _onEquipment);
 
+        if(cardData == null) return;
         ID = cardData.ID;
         grade = cardData.Grade;
         Name = cardData.Name;

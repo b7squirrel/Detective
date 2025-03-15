@@ -41,7 +41,7 @@ public class SetCardDataOnSlot : MonoBehaviour
             if (equipCards[i] == null)
             {
                 // cardDisp.SetRunTimeAnimController(i, null);
-                Debug.Log($"{charCard.Name}의 {i}번째 장비칸을 비활성화 합니다.");
+                // Debug.Log($"{charCard.Name}의 {i}번째 장비칸을 비활성화 합니다.");
                 equipSpriteAnim.SetEquipCardDisplay(i, null, false, Vector2.zero); // 이미지 오브젝트를 비활성화
                 continue;
             }
@@ -52,11 +52,11 @@ public class SetCardDataOnSlot : MonoBehaviour
 
             if (weaponItemData.itemData == null)
             {
-                Debug.Log($"{charCard.Name}의 {i}번째 장비가 NULL입니다.");
+                // Debug.Log($"{charCard.Name}의 {i}번째 장비가 NULL입니다.");
                 continue;
             }
 
-            Debug.Log($"{weaponItemData.itemData.DisplayName}의 스프라이트를 넘겨줍니다.");
+            // Debug.Log($"{weaponItemData.itemData.DisplayName}의 스프라이트를 넘겨줍니다.");
 
             // weapon data의 디폴트 아이템의 이미지를 넘겨주는 것이 아니라 장비 카드 데이터로 검색한 아이템의 이미지를 넘겨주어야 함.
             Item item = cardDictionary.GetWeaponItemData(equipCardData).itemData;

@@ -176,7 +176,6 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetEquippedItemSprite(int _index)
     {
         if (equipSprites == null) return;
-        if(initWeapon == false) Debug.Log($"equipSprites 배열의 길이는 {equipSprites.Length}입니다.");
 
         for (int i = 0; i < 4; i++)
         {
@@ -184,13 +183,12 @@ public class WeaponContainerAnim : MonoBehaviour
             if (equipSprites[i].sprites.Length == 1)
             {
                 sr[i + 1].sprite = equipSprites[i].sprites[0];
-                if(initWeapon == false) Debug.Log($"{equipSprites[i].sprites[0].name}을 sr[{i + 1}]에 넘겨줍니다.");
+                // if(initWeapon == false) Debug.Log($"{equipSprites[i].sprites[0].name}을 sr[{i + 1}]에 넘겨줍니다.");
             }
             else
             {
-                Debug.Log($"i - {i}, index - {_index}");
                 sr[i + 1].sprite = equipSprites[i].sprites[_index];
-                if(initWeapon == false) Debug.Log($"{equipSprites[i].sprites[_index].name}을 sr[{i + 1}]에 넘겨줍니다.");
+                // if(initWeapon == false) Debug.Log($"{equipSprites[i].sprites[_index].name}을 sr[{i + 1}]에 넘겨줍니다.");
             }
         }
     }
@@ -202,7 +200,7 @@ public class WeaponContainerAnim : MonoBehaviour
             if (_index < 4)
             {
                 sr[_index + 1].gameObject.SetActive(false);
-                Debug.Log($"sr[{_index}]를 비활성화 합니다.");
+                // Debug.Log($"sr[{_index}]를 비활성화 합니다.");
             }
             return;
         }
