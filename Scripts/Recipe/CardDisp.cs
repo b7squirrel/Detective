@@ -60,6 +60,10 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         Level.text = "";
         if (leadTag != null) leadTag.gameObject.SetActive(false);
 
+        // 카드 이름 텍스트
+            Title.text = weaponData.DisplayName;
+            TitleShadow.text = Title.text;
+
         // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
         if (cardData == null)
             return;
@@ -105,10 +109,6 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
             }
 
             ribbon.gameObject.SetActive(true);
-
-            // 카드 이름 텍스트
-            Title.text = weaponData.DisplayName;
-            TitleShadow.text = Title.text;
 
             if (mergedCardDescription == null) mergedCardDescription = GetComponent<MergedCardDescription>();
             mergedCardDescription.UpdateSkillDescription(cardData);

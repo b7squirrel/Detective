@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -29,7 +30,8 @@ public class PausePanel : MonoBehaviour
         PauseCardDisp pauseDisp = slot.GetComponent<PauseCardDisp>();
         pauseCardDisps.Add(wd.Name, pauseDisp);
         
-        if(isLead) 
+        Debug.Log($"Is Lead = {isLead}");
+        pauseDisp.EnableLeadTag(isLead);
         
         pauseDisp.InitWeaponCardDisplay(wd);
 

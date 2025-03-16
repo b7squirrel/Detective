@@ -3,10 +3,11 @@ using UnityEngine;
 public class PauseCardDisp : MonoBehaviour
 {
     [SerializeField] Transform starContainer;
+    [SerializeField] Transform cardBaseContainer;
 
     [SerializeField] GameObject starPrefab;
-    [SerializeField] TMPro.TextMeshProUGUI synergyText;
     [SerializeField] GameObject leadTag;
+    [SerializeField] GameObject synergyGroup;
 
     GameObject[] stars;
     public string Name { get; private set; }
@@ -17,12 +18,25 @@ public class PauseCardDisp : MonoBehaviour
         // 별
         SetNumStar(_wd.stats.currentLevel, true);
 
+        // 등급에 따른 카드 색깔
+        for (int i = 0; i < StaticValues.MaxGrade; i++)
+        {
+            cardBaseContainer.GetChild(i).gameObject.SetActive(false);
+        }
+        cardBaseContainer.GetChild(_wd.grade).gameObject.SetActive(true);
+
         // 이름
         Name = _wd.Name;
 
-        synergyText.gameObject.SetActive(false);
+        synergyGroup.SetActive(false);
+
     }
     #endregion
+
+    public void EnableLeadTag(bool EnableLeadTag)
+    {
+        leadTag.SetActive(EnableLeadTag);
+    }
 
     #region 공통
     void SetNumStar(int numStars, bool _isWeapon)
@@ -89,7 +103,7 @@ public class PauseCardDisp : MonoBehaviour
         if(_isSynergy)
         {
             SetNumStar(0, _isWeapon);
-            synergyText.gameObject.SetActive(true);
+            synergyGroup.SetActive(true);
             return;
         }
         SetNumStar(_level, _isWeapon);
@@ -105,6 +119,5 @@ public class PauseCardDisp : MonoBehaviour
         // 이름
         Name = _item.Name;
     }
-    
     #endregion
 }
