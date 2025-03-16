@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,6 +56,9 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         charFaceExpression.gameObject.SetActive(true);
         if (charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
         charFaceImage.sprite = weaponData.faceImage;
+
+        Level.text = "";
+        if (leadTag != null) leadTag.gameObject.SetActive(false);
 
         // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
         if (cardData == null)

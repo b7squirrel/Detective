@@ -22359,6 +22359,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1834188300}
+        m_TargetAssemblyTypeName: PausePanel, Assembly-CSharp
+        m_MethodName: EnableBG
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1686029979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28343,7 +28355,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.039245177, y: 1}
   m_AnchorMax: {x: 0.9626602, y: 1}
-  m_AnchoredPosition: {x: 14.268188, y: -522}
+  m_AnchoredPosition: {x: 14.268188, y: -1365}
   m_SizeDelta: {x: 71.6134, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1739057554
@@ -28378,12 +28390,12 @@ MonoBehaviour:
     m_Top: 40
     m_Bottom: 40
   m_ChildAlignment: 1
-  m_StartCorner: 0
+  m_StartCorner: 1
   m_StartAxis: 0
   m_CellSize: {x: 170, y: 180}
-  m_Spacing: {x: 30, y: 28}
-  m_Constraint: 0
-  m_ConstraintCount: 2
+  m_Spacing: {x: 122.81, y: 28}
+  m_Constraint: 1
+  m_ConstraintCount: 6
 --- !u!1 &1739743561
 GameObject:
   m_ObjectHideFlags: 0
@@ -30397,6 +30409,7 @@ MonoBehaviour:
   itemSlot: {fileID: 3984365519836007885, guid: e5d3d3410fe088741b26d00232cbb2ab, type: 3}
   weaponContents: {fileID: 3772674121248032269}
   itemContents: {fileID: 1739057553}
+  BG: {fileID: 1321481380}
 --- !u!114 &1834188301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31151,7 +31164,7 @@ GameObject:
   - component: {fileID: 1922625628}
   - component: {fileID: 1922625627}
   m_Layer: 5
-  m_Name: Panel for EggPanel
+  m_Name: Panel for Less Dard BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41762,6 +41775,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1834188300}
+        m_TargetAssemblyTypeName: PausePanel, Assembly-CSharp
+        m_MethodName: EnableBG
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &2566898546987012421
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -42812,7 +42837,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.039245177, y: 1}
   m_AnchorMax: {x: 0.9626602, y: 1}
-  m_AnchoredPosition: {x: 14.268188, y: -205}
+  m_AnchoredPosition: {x: 14.268188, y: -605}
   m_SizeDelta: {x: 71.6134, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &3772674121248032270
@@ -42850,7 +42875,7 @@ MonoBehaviour:
   m_StartCorner: 1
   m_StartAxis: 0
   m_CellSize: {x: 170, y: 180}
-  m_Spacing: {x: 29, y: 28}
+  m_Spacing: {x: 122.81, y: 28}
   m_Constraint: 1
   m_ConstraintCount: 6
 --- !u!114 &3772674121255419401
@@ -42904,7 +42929,7 @@ GameObject:
   - component: {fileID: 3772674121255419401}
   - component: {fileID: 3772674121255419408}
   m_Layer: 5
-  m_Name: RuneFuse
+  m_Name: Card Slots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42961,7 +42986,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3772674121280548897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -43053,10 +43078,10 @@ RectTransform:
   - {fileID: 1739057553}
   m_Father: {fileID: 3772674121255419407}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -398, y: -74}
-  m_SizeDelta: {x: 1312.4443, y: -147.2649}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1312.4443, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3772674121386849762
 MonoBehaviour:

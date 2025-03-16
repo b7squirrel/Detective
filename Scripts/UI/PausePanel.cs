@@ -11,8 +11,12 @@ public class PausePanel : MonoBehaviour
     [SerializeField] GameObject itemSlot; // 아이템 카드 슬롯 프리펩
     [SerializeField] Transform weaponContents; // 무기 슬롯들을 집어넣을 레이아웃
     [SerializeField] Transform itemContents; // 아이템 슬롯들을 집어넣을 레이아웃
-    List<PauseCardDisp> weaponCards;
+    [SerializeField] GameObject BG;
+    List<CardDisp> weaponCards;
     List<PauseCardDisp> itemCards;
+
+    // 이름으로 검색해서 업그레이드 상태를 업데이트하기 위한 딕셔너리
+    Dictionary<string, PauseCardDisp> pauseCardDisps = new Dictionary<string, PauseCardDisp>();
 
     public void InitWeaponSlot(WeaponData wd, bool isLead)
     {
@@ -20,11 +24,19 @@ public class PausePanel : MonoBehaviour
 
         GameObject wSlot = Instantiate(cardSlot, weaponContents.transform);
         CardSlot slot = wSlot.GetComponent<CardSlot>();
-        weaponCards.Add(slot.GetComponent<PauseCardDisp>());
+        weaponCards.Add(slot.GetComponent<CardDisp>());
+
+        PauseCardDisp pauseDisp = slot.GetComponent<PauseCardDisp>();
+        pauseCardDisps.Add(wd.Name, pauseDisp);
+        
+        if(isLead) 
+        
+        pauseDisp.InitWeaponCardDisplay(wd);
 
         SetEquipSpriteRow(slot, wd, isLead);
     }
 
+    // 여기에서 card disp 만 이용할 때 쓰는 3개의 함수를 순서대로 호출 init weapon card dsplay, init sprite row, set equipcard display
     void SetEquipSpriteRow(CardSlot targetSlot, WeaponData wd, bool isLead)
     {
         // card disp와 Equip Disp UI에서 IEquipSpriteAnim을 인터페이스로 사용
@@ -58,18 +70,19 @@ public class PausePanel : MonoBehaviour
 
         iSlot.GetComponent<PauseCardDisp>().InitItemCardDisplay(_item);
     }
+
+    // 업그레이드가 일어나면 pause panel의 weapon 혹은 item 레벨 업데이트 함수들을 호출함.
     public void UpdateWeaponLevel(string _weaponName, int _levelToUpdate, bool _isSynergy)
     {
         for (int i = 0; i < weaponCards.Count; i++)
         {
-            if (weaponCards[i].Name == _weaponName)
+            if (pauseCardDisps.ContainsKey(_weaponName))
             {
-                weaponCards[i].UpdatePauseCardLevel(_levelToUpdate, true, _isSynergy);
-                return;
+                pauseCardDisps[_weaponName].UpdatePauseCardLevel(_levelToUpdate, true, _isSynergy);
             }
         }
-
     }
+
     public void UpdateItemLevel(Item _item)
     {
         for (int i = 0; i < itemCards.Count; i++)
@@ -80,5 +93,10 @@ public class PausePanel : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public void EnableBG(bool EnableBG)
+    {
+        BG.SetActive(EnableBG);
     }
 }
