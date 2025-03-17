@@ -65,8 +65,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
             TitleShadow.text = Title.text;
 
         // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
-        if (cardData == null)
-            return;
+        if (cardData == null) return;
 
         // 리드오리 태그
         if (leadTag != null)
@@ -128,10 +127,21 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
     {
         // 리드오리 태그
-        if (leadTag != null)
-        {
-            leadTag.gameObject.SetActive(false);
-        }
+        if (leadTag != null) leadTag.gameObject.SetActive(false);
+
+        // 카드 이름 텍스트
+        Title.text = itemData.DisplayName;
+        TitleShadow.text = Title.text;
+
+        charImage.gameObject.SetActive(true);
+        charImage.sprite = itemData.charImage;
+        charImage.SetNativeSize();
+        charImage.rectTransform.localScale = 1f * Vector3.one;
+        charAnim.enabled = false;
+        charFaceExpression.gameObject.SetActive(false);
+
+        // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
+        if (cardData == null) return;
 
         // 별과 카드 색깔
         cardBaseContainer.gameObject.SetActive(true);
@@ -144,32 +154,14 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         }
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
-        // 카드 이름 텍스트
-        Title.text = itemData.Name;
-        TitleShadow.text = Title.text;
+        // 카드 레벨 텍스트
+        Level.text = "레벨 " + cardData.Level;
 
         // 임시로 타이틀을 없애보자. 작은 카드 안에 정보가 너무 많음.
         Title.text = "";
         TitleShadow.text = "";
 
-        // 카드 레벨 텍스트
-        Level.text = "레벨 " + cardData.Level;
-
-        // 아이템 이미지
-        // int index = new Convert().EquipmentTypeToInt(cardData.EquipmentType);
-        // equipmentAnimators[index].gameObject.SetActive(true);
-        // equipmentAnimators[index].runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
-        // equipmentAnimators[index].SetTrigger("Card");
-        charImage.gameObject.SetActive(true);
-        charImage.sprite = itemData.charImage;
-        charAnim.enabled = false;
-        charFaceExpression.gameObject.SetActive(false);
-
-
-        if (displayEquippedText)
-        {
-            SetEquppiedTextActive(onEquipment);
-        }
+        if (displayEquippedText) SetEquppiedTextActive(onEquipment);
 
         // 버튼 활성화
         button.SetActive(true);
@@ -255,8 +247,8 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         // 캐릭터 이미지
         cardBaseContainer.gameObject.SetActive(false);
+        charImage.rectTransform.localScale = .7f * Vector3.one;
         charImage.gameObject.SetActive(false);
-        Debug.Log("char Image를 비활성화 했습니다.");
 
         // 장비 이미지
         for (int i = 0; i < 4; i++)

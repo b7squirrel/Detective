@@ -71,6 +71,7 @@ public class PausePanel : MonoBehaviour
         itemCards.Add(iSlot.GetComponent<PauseCardDisp>());
 
         iSlot.GetComponent<PauseCardDisp>().InitItemCardDisplay(_item);
+        iSlot.GetComponent<CardDisp>().InitItemCardDisplay(_item, null, false);
     }
 
     // 업그레이드가 일어나면 pause panel의 weapon 혹은 item 레벨 업데이트 함수들을 호출함.

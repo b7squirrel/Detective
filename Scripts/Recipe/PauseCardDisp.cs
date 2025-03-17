@@ -26,7 +26,7 @@ public class PauseCardDisp : MonoBehaviour
         cardBaseContainer.GetChild(_wd.grade).gameObject.SetActive(true);
 
         // 이름
-        Name = _wd.Name;
+        Name = _wd.Name; // 검색을 위한 이름
 
         synergyGroup.SetActive(false);
 
@@ -57,7 +57,6 @@ public class PauseCardDisp : MonoBehaviour
         // 일단 모든 별을 비활성화. 많은 별에서 적은 별로 업데이트 하면 많은 별로 남아있기 떄문
         for (int i = 0; i < maxStarNum; i++)
         {
-            Debug.Log($"card disp의 인덱스 {i} of {maxStarNum}");
             stars[i].SetActive(false);
         }
 
@@ -66,24 +65,6 @@ public class PauseCardDisp : MonoBehaviour
         {
             stars[i].SetActive(true);
         }
-    }
-
-    public void EmptyCardDisplay()
-    {
-        // // 별 비활성화
-        // DeactivateStars();
-
-        // // 오리 이미지 비활성화
-        // charImage.gameObject.SetActive(false);
-        // if(synergyText != null) synergyText.gameObject.SetActive(false);
-
-        // // 장비 이미지 비활성화
-        // for (int i = 0; i < 4; i++)
-        // {
-        //     if (equipmentAnimators[i] == null)
-        //         continue;
-        //     equipmentAnimators[i].gameObject.SetActive(false);
-        // }
     }
 
     void DeactivateStars()
@@ -116,8 +97,18 @@ public class PauseCardDisp : MonoBehaviour
         // 별
         SetNumStar(_item.stats.currentLevel, false);
 
+        // 카드 색깔은 회색
+        // 등급에 따른 카드 색깔
+        for (int i = 0; i < StaticValues.MaxGrade; i++)
+        {
+            cardBaseContainer.GetChild(i).gameObject.SetActive(false);
+        }
+        cardBaseContainer.GetChild(0).gameObject.SetActive(true);
+
         // 이름
         Name = _item.Name;
+
+        synergyGroup.SetActive(false);
     }
     #endregion
 }
