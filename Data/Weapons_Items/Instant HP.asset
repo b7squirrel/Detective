@@ -13,13 +13,19 @@ MonoBehaviour:
   m_Name: Instant HP
   m_EditorClassIdentifier: 
   Name: Instant HP
+  DisplayName: "\uB2EC\uCF64 \uC6B0\uC720"
   grade: 0
   charImage: {fileID: 535364885, guid: d47678e53a10e8c45a5483d7a5105f73, type: 3}
+  equippedImage: {fileID: 0}
+  spriteRow:
+    sprites: []
+  needToOffset: 0
+  posHead: {x: 0, y: 0}
   CardItemAnimator:
     CardImageAnim: {fileID: 0}
     InGamePlayerAnim: {fileID: 0}
     PauseCardAnim: {fileID: 0}
-  SynergyWeapon: 
+  SynergyWeapons: []
   stats:
     armor: 0
     magnetSize: 0

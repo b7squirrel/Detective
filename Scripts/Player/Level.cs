@@ -18,6 +18,7 @@ public class Level : MonoBehaviour
     WeaponManager weaponManager;
     PassiveItems passiveItems;
     SynergyManager synergyManager;
+    StageItemManager stageItemManager;
     bool NoMoreUpgrade;
 
     [SerializeField] List<UpgradeData> upgradesAvailableOnStart;
@@ -50,6 +51,7 @@ public class Level : MonoBehaviour
         weaponManager = GetComponent<WeaponManager>();
         passiveItems = GetComponent<PassiveItems>();
         synergyManager = GetComponent<SynergyManager>();
+        stageItemManager = GetComponent<StageItemManager>();
 
         NoMoreUpgrade = false;
 
@@ -64,6 +66,14 @@ public class Level : MonoBehaviour
         experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
         experienceBar.SetLevelText(level);
         AddUpgradesIntoTheListOfAvailableUpgrades(upgradesAvailableOnStart);
+
+        // 1스테이지 업그레이드 2개, 2스테이지 3개, 5 이상이 되면 5로 고정
+        int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
+
+        int itemNums = stageNum + 1;
+        if (itemNums > 5) itemNums = 5;
+        List<UpgradeData> startingUpgrades = stageItemManager.GetUpgradePool(itemNums);
+        AddUpgradesIntoTheListOfAvailableUpgrades(startingUpgrades);
     }
 
     public void AddExperience(int expAmount)
