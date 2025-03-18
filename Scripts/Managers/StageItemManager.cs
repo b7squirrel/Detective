@@ -24,7 +24,7 @@ public class StageItemManager : MonoBehaviour
         while (itemNumbers < maxUpgradeNum && itemsPool.Count > 0)
         {
             int index = UnityEngine.Random.Range(0, itemsPool.Count);
-            if (itemsPool[index].stage <= stageNum) // 현재 스테이지보다 낮거나 같은 스테이지의 아이템만 선택
+            if (itemsPool[index].stage >= stageNum) // 현재 스테이지보다 크거나 같은 스테이지의 아이템만 선택
             {
                 pickedItems.Add(itemsPool[index].upgrade); // 나중에 Level에 넘겨줄 아이템 리스트
                 itemNumbers++;
