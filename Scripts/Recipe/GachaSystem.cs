@@ -151,9 +151,9 @@ public class GachaSystem : MonoBehaviour
     }
 
     // 상점 버튼
-    public void DrawWeapons()
+    public void DrawWeapons(int num)
     {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < num; i++)
         {
             Draw("Weapon");
         }
@@ -165,22 +165,20 @@ public class GachaSystem : MonoBehaviour
             Draw("Weapon");
         }
     }
-    public void DrawItems()
+    public void DrawItems(int num)
     {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < num; i++)
         {
             Draw("Item");
         }
     }
-    public void DrawCombo()
+    public void DrawCombo(int num)
     {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < num; i++)
         {
-            Draw("Weapon");
+            DrawWeapons(3);
+            DrawItems(7);
         }
-        for (int i = 0; i < 1; i++)
-        {
-            Draw("Item");
-        }
+
     }
 }

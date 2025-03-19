@@ -85,7 +85,7 @@ public class PauseCardDisp : MonoBehaviour
         {
             SetNumStar(0, _isWeapon);
             synergyGroup.SetActive(true);
-            GetComponent<RectTransform>().localScale = 1.4f * Vector2.one;
+            GetComponent<RectTransform>().localScale = 1.2f * Vector2.one;
             return;
         }
         SetNumStar(_level, _isWeapon);

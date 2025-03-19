@@ -51,7 +51,6 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         //charImage.sprite = weaponData.charImage;
         charAnim.enabled = true;
         charAnim.gameObject.SetActive(true);
-        Debug.Log($"{weaponData.DisplayName}의 char Image가 활성화 되었습니다.");
         charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
         charFaceExpression.gameObject.SetActive(true);
         if (charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();

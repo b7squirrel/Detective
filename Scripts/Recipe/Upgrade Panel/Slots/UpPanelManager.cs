@@ -117,7 +117,6 @@ public class UpPanelManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("_thisCardType = " + _thisCardType);
             List<CardData> cards = GetMyCardsListOnCardType(_thisCardType);
             allField.GenerateAllCardsOfType(cards);
             upTabManager.SetTab(_thisCardType);
