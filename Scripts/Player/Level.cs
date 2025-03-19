@@ -14,11 +14,12 @@ public class Level : MonoBehaviour
     List<UpgradeData> selectedUpgrads;
 
     [SerializeField] List<UpgradeData> acquiredUpgrades;
+    [SerializeField] int itemsAquired;
+    [SerializeField] int maxItemLimit = 5;
 
     WeaponManager weaponManager;
     PassiveItems passiveItems;
     SynergyManager synergyManager;
-    StageItemManager stageItemManager;
     bool NoMoreUpgrade;
 
     [SerializeField] List<UpgradeData> upgradesAvailableOnStart;
@@ -51,7 +52,6 @@ public class Level : MonoBehaviour
         weaponManager = GetComponent<WeaponManager>();
         passiveItems = GetComponent<PassiveItems>();
         synergyManager = GetComponent<SynergyManager>();
-        stageItemManager = GetComponent<StageItemManager>();
 
         NoMoreUpgrade = false;
 
@@ -66,14 +66,6 @@ public class Level : MonoBehaviour
         experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
         experienceBar.SetLevelText(level);
         AddUpgradesIntoTheListOfAvailableUpgrades(upgradesAvailableOnStart);
-
-        // 1스테이지 업그레이드 2개, 2스테이지 3개, 5 이상이 되면 5로 고정
-        int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
-
-        int itemNums = stageNum + 1;
-        if (itemNums > 5) itemNums = 5;
-        List<UpgradeData> startingUpgrades = stageItemManager.GetUpgradePool(itemNums);
-        AddUpgradesIntoTheListOfAvailableUpgrades(startingUpgrades);
     }
 
     public void AddExperience(int expAmount)
@@ -160,6 +152,7 @@ public class Level : MonoBehaviour
                 weaponManager.AddWeapon(upgradeData.weaponData, false);
                 break;
             case UpgradeType.ItemGet:
+                itemsAquired++;
                 passiveItems.Equip(upgradeData.item);
                 AddUpgradesIntoTheListOfAvailableUpgrades(upgradeData.item.upgrades);
                 break;
@@ -198,8 +191,13 @@ public class Level : MonoBehaviour
         randomPool.Clear();
         List<UpgradeData> upgradeList = new List<UpgradeData>();
 
+        // 먼저 아이템 제한을 적용하여 randomPool에 업그레이드 추가
         for (int i = 0; i < upgrades.Count; i++)
         {
+            // 아이템 획득 제한 검사 - ItemGet 타입이고 이미 최대 아이템 개수에 도달했으면 추가하지 않음
+            if (upgrades[i].upgradeType == UpgradeType.ItemGet && itemsAquired >= maxItemLimit)
+                continue;
+
             randomPool.Add(upgrades[i]);
         }
 
@@ -209,10 +207,11 @@ public class Level : MonoBehaviour
         {
             upgradeList.Add(randomPool[index]);
 
+            // 동일한 무기/아이템 중복 제거
             for (int i = randomPool.Count - 1; i > index; i--)
             {
                 // 무기 업그레이드라면 무기 업그레이드끼리만 비교
-                if(randomPool[i].weaponData != null && randomPool[index].weaponData != null)
+                if (randomPool[i].weaponData != null && randomPool[index].weaponData != null)
                 {
                     if (randomPool[i].weaponData.Name == randomPool[index].weaponData.Name)
                     {
@@ -220,6 +219,7 @@ public class Level : MonoBehaviour
                         continue;
                     }
                 }
+
                 // 아이템 업그레이드라면 아이템 업그레이드끼리만 비교
                 if (randomPool[i].item != null && randomPool[index].item != null)
                 {

@@ -16043,8 +16043,6 @@ GameObject:
   - component: {fileID: 1277960127}
   - component: {fileID: 1277960126}
   - component: {fileID: 1277960128}
-  - component: {fileID: 1277960129}
-  - component: {fileID: 1277960130}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -16339,7 +16337,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   experienceBar: {fileID: 5169138812776823889}
   upgradeManager: {fileID: 1834188285}
-  upgrades: []
+  upgrades:
+  - {fileID: 11400000, guid: ebbde51332bd8a04db476b3331910da5, type: 2}
+  - {fileID: 11400000, guid: fcb59f812d3ada14aab9ae1e31bfb1d7, type: 2}
+  - {fileID: 11400000, guid: 0bcccb35b73c09e49a818be979fd9a79, type: 2}
+  - {fileID: 11400000, guid: 8b7288312903e074b8cfc528b6bbda39, type: 2}
+  - {fileID: 11400000, guid: 043c9b08c5cf5fa4da1649f19d88226f, type: 2}
+  - {fileID: 11400000, guid: 1a3a5b2cdd436784e9910a7ea1b65164, type: 2}
+  - {fileID: 11400000, guid: 232dcbeb3101ee94496e0ab7e7f20d44, type: 2}
+  - {fileID: 11400000, guid: 50df83312e4cc604fac6de5a37ffcaae, type: 2}
   synergyUpgrades: []
   acquiredUpgrades: []
   upgradesAvailableOnStart: []
@@ -16503,66 +16509,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallDust: {fileID: 525612540}
   wallDustDuration: 0.5
---- !u!114 &1277960129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1277960107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 796be46e63a3a02489ec46f0aefe1713, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageItemDatas:
-  - stage: 1
-    upgrade: {fileID: 11400000, guid: ebbde51332bd8a04db476b3331910da5, type: 2}
-  - stage: 1
-    upgrade: {fileID: 11400000, guid: fcb59f812d3ada14aab9ae1e31bfb1d7, type: 2}
-  - stage: 2
-    upgrade: {fileID: 11400000, guid: 0bcccb35b73c09e49a818be979fd9a79, type: 2}
-  - stage: 1
-    upgrade: {fileID: 11400000, guid: 8b7288312903e074b8cfc528b6bbda39, type: 2}
-  - stage: 2
-    upgrade: {fileID: 11400000, guid: 043c9b08c5cf5fa4da1649f19d88226f, type: 2}
-  - stage: 3
-    upgrade: {fileID: 11400000, guid: 1a3a5b2cdd436784e9910a7ea1b65164, type: 2}
-  - stage: 1
-    upgrade: {fileID: 11400000, guid: 232dcbeb3101ee94496e0ab7e7f20d44, type: 2}
-  - stage: 3
-    upgrade: {fileID: 11400000, guid: 50df83312e4cc604fac6de5a37ffcaae, type: 2}
---- !u!114 &1277960130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1277960107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1316e1cd61432e5498fad4d4aed5c2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageWeaopnDatas:
-  - stage: 0
-    upgrade: {fileID: 0}
-  - stage: 0
-    upgrade: {fileID: 0}
-  - stage: 0
-    upgrade: {fileID: 0}
-  - stage: 0
-    upgrade: {fileID: 0}
-  - stage: 0
-    upgrade: {fileID: 0}
-  - stage: 0
-    upgrade: {fileID: 0}
-  - stage: 0
-    upgrade: {fileID: 0}
-  - stage: 0
-    upgrade: {fileID: 0}
-  - stage: 0
-    upgrade: {fileID: 0}
 --- !u!1 &1278492623
 GameObject:
   m_ObjectHideFlags: 0

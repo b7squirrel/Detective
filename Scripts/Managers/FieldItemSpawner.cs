@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Game Manager¿¡¼­ Ä³½Ì
+/// Game Managerï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½
 /// </summary>
 public class FieldItemSpawner : MonoBehaviour
 {

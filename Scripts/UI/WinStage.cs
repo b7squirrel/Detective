@@ -15,7 +15,7 @@ public class WinStage : MonoBehaviour
         int killNum = GetComponent<KillManager>().GetCurrentKills();
         int coinNum = GetComponent<CoinManager>().GetCoinNumPickedup();
 
-        // 보스가 죽는 순간 이미 스테이지가 올라갔으니까 1을 빼준 수를 넘겨준다. 현재 스테이지 넘버를 표시하기 위함
+        // 보스가 죽는 순간 이미 스테이지가 올라갔으니까 1을 빼준 수를 넘겨준다.
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber() - 1;
 
         winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum);
