@@ -14,10 +14,15 @@ public class GachaSystem : MonoBehaviour
     List<CardData> weaponPools;
     List<CardData> itemPools;
 
+    List<CardData> cardsPicked; // 뽑은 카드를 저장하는 리스트
+    bool donePicking;
+
     void Awake()
     {
         cardDataManager = GetComponent<CardDataManager>();
         cardList = GetComponent<CardList>();
+
+        cardsPicked = new List<CardData>();
     }
 
     void Draw(string _cardType)
@@ -49,14 +54,18 @@ public class GachaSystem : MonoBehaviour
             newCardData = weaponPools[pickIndex];
             cardDataManager.AddNewCardToMyCardsList(newCardData);
             AddDefaultEquip(newCardData);
-            Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
+
+            // Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
+            cardsPicked.Add(newCardData);
         }
         else if (_cardType == "Item")
         {
             int pickIndex = UnityEngine.Random.Range(0, itemPools.Count);
             newCardData = itemPools[pickIndex];
             cardDataManager.AddNewCardToMyCardsList(newCardData);
-            Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
+
+            // Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
+            cardsPicked.Add(newCardData);
         }
 
         gachaPools = null; // 생성된 카드 데이터가 가챠풀에 저장되어 버리므로
@@ -85,7 +94,6 @@ public class GachaSystem : MonoBehaviour
                 sameItems.Add(itemPools[i]);
             }
         }
-        Debug.Log($"찾는 아이템 = {_oriCardData.Name}");
         for (int i = 0; i < sameItems.Count; i++)
         {
             if(sameItems[i].DefaultItem == DefaultItem.Default.ToString())
@@ -153,32 +161,54 @@ public class GachaSystem : MonoBehaviour
     // 상점 버튼
     public void DrawWeapons(int num)
     {
+        cardsPicked.Clear();
         for (int i = 0; i < num; i++)
         {
             Draw("Weapon");
         }
+        DebugGacha(cardsPicked);
     }
     public void DrawWeaponsAboveGrade(int _grade)
     {
+        cardsPicked.Clear();
         for (int i = 0; i < 1; i++)
         {
             Draw("Weapon");
         }
+        DebugGacha(cardsPicked);
     }
     public void DrawItems(int num)
     {
+        cardsPicked.Clear();
         for (int i = 0; i < num; i++)
         {
             Draw("Item");
         }
+        DebugGacha(cardsPicked);
     }
     public void DrawCombo(int num)
     {
+        cardsPicked.Clear();
         for (int i = 0; i < num; i++)
         {
-            DrawWeapons(3);
-            DrawItems(7);
-        }
+            for (int j = 0; j < 3; j++)
+            {
+                Draw("Weapon");
+            }
 
+            for (int k = 0; k < 7; k++)
+            {
+                Draw("Item");
+            }
+        }
+        DebugGacha(cardsPicked);
+    }
+    void DebugGacha(List<CardData> cards)
+    {
+        foreach (var item in cards)
+        {
+            string grade = MyGrade.mGrades[item.Grade].ToString();
+            Debug.Log($"{grade} {item.Name}을 뽑았습니다.");
+        }
     }
 }
