@@ -17,6 +17,9 @@ public class GachaSystem : MonoBehaviour
     List<CardData> cardsPicked; // 뽑은 카드를 저장하는 리스트
     bool donePicking;
 
+    [Header("가챠 패널")]
+    [SerializeField] GachaPanelManager gachaPanelManager;
+
     void Awake()
     {
         cardDataManager = GetComponent<CardDataManager>();
@@ -101,7 +104,7 @@ public class GachaSystem : MonoBehaviour
                 defaultItem = sameItems[i];
             }
         }
-        if (defaultItem == null) Debug.Log(_oriCardData.Name + "의 필수 무기가 NULL입니다");
+        // if (defaultItem == null) Debug.Log(_oriCardData.Name + "의 필수 무기가 NULL입니다");
         cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
         cardList.Equip(_oriCardData, defaultItem);
     }
@@ -145,7 +148,7 @@ public class GachaSystem : MonoBehaviour
             if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
             {
                 defaultEquips[equipIndex] = matchingItem;
-                Debug.Log($"{defaultEquips[equipIndex].Name}을 장착합니다");
+                // Debug.Log($"{defaultEquips[equipIndex].Name}을 장착합니다");
                 cardDataManager.AddNewCardToMyCardsList(defaultEquips[equipIndex]); // 기본 아이템을 생성
                 cardList.Equip(_oriCardData, defaultEquips[equipIndex]);
             }
@@ -153,7 +156,7 @@ public class GachaSystem : MonoBehaviour
             {
                 // 일치하는 아이템을 찾지 못한 경우 명시적으로 null 처리
                 defaultEquips[equipIndex] = null;
-                Debug.LogWarning($"Default item not found: {searchKey.Name} (Grade: {searchKey.grade})");
+                // Debug.LogWarning($"Default item not found: {searchKey.Name} (Grade: {searchKey.grade})");
             }
         }
     }
@@ -166,7 +169,10 @@ public class GachaSystem : MonoBehaviour
         {
             Draw("Weapon");
         }
-        DebugGacha(cardsPicked);
+        // DebugGacha(cardsPicked);
+        
+        gachaPanelManager.gameObject.SetActive(true);
+        gachaPanelManager.InitGachaPanel(cardsPicked);
     }
     public void DrawWeaponsAboveGrade(int _grade)
     {

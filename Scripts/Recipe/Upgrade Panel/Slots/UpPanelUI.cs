@@ -211,34 +211,6 @@ public class UpPanelUI : MonoBehaviour
 
         // 별 반짝 이펙트
         GlimmerStar();
-
-    }
-
-    // UpPanelManager의 UpgradeUICo 와 탭해서 계속하기 버튼에서 참조.
-    public void DisableBottomTabs(bool disable)
-    {
-        tabButtons = tabs.GetComponentsInChildren<Button>();
-        if (disable)
-        {
-            // 탭 버튼이 작동하지 않도록
-            for (int i = 0; i < tabButtons.Length; i++)
-            {
-                tabButtons[i].interactable = false;
-            }
-            // 탭을 화면 아래로 이동
-            tabs.DOAnchorPosY(-300f, .5f);
-        }
-        else
-        {
-            // 탭을 원래대로 되돌림
-            tabs.DOAnchorPosY(68f, .5f);
-
-            // 탭 버튼이 작동하도록 하기
-            for (int i = 0; i < tabButtons.Length; i++)
-            {
-                tabButtons[i].interactable = true;
-            }
-        }
     }
 
     // 별 반짝임
@@ -254,7 +226,6 @@ public class UpPanelUI : MonoBehaviour
 
     IEnumerator GlimmerStarCo()
     {
-
         yield return new WaitForSeconds(.2f);
 
         starBlingEffect.gameObject.SetActive(false);

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -17,6 +17,13 @@ public class MainMenuManager : MonoBehaviour
     int targetIndex;
 
     Animator[] tabAnims = new Animator[5];
+
+    [Header("아래쪽 탭 제어")]
+    [SerializeField] RectTransform tabs;
+    Button[] tabButtons = new Button[5];
+
+    [Header("윗쪽 탭 제어")]
+    [SerializeField] RectTransform upperTabs;
 
     [Header("Sound")]
     [SerializeField] AudioClip tabTouched;
@@ -42,6 +49,8 @@ public class MainMenuManager : MonoBehaviour
     // 합성 성공한 상태인 것을 저장. 성공한 상태에서 탭해서 나가지 않고, 아래쪽 탭으로 다른 화면으로 넘어갈 경우를 대비
     bool mergeFinished;
     UpgradePanelManager upPanelManager;
+
+    
 
     void Awake()
     {
@@ -207,4 +216,42 @@ public class MainMenuManager : MonoBehaviour
     //    SceneManager.LoadScene("Essential", LoadSceneMode.Single);
     //    SceneManager.LoadScene("Stage", LoadSceneMode.Additive);
     //}
+
+    // UpPanelManager의 UpgradeUICo 와 탭해서 계속하기 버튼에서 참조.
+    public void DisableBottomTabs(bool disable)
+    {
+        tabButtons = tabs.GetComponentsInChildren<Button>();
+        if (disable)
+        {
+            // 탭 버튼이 작동하지 않도록
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                tabButtons[i].interactable = false;
+            }
+            // 탭을 화면 아래로 이동
+            tabs.DOAnchorPosY(-300f, .5f);
+        }
+        else
+        {
+            // 탭을 원래대로 되돌림
+            tabs.DOAnchorPosY(68f, .5f);
+
+            // 탭 버튼이 작동하도록 하기
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                tabButtons[i].interactable = true;
+            }
+        }
+    }
+    public void DisableTopTabs(bool disable)
+    {
+        if (disable)
+        {
+            upperTabs.DOAnchorPosY(300f, 0.5f);
+        }
+        else
+        {
+            upperTabs.DOAnchorPosY(0f, 0.5f);
+        }
+    }
 }

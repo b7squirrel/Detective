@@ -21,6 +21,7 @@ public class UpPanelManager : MonoBehaviour
     CardList cardList;
     SetCardDataOnSlot setCardDataOnSlot; // CardData를 Slot에 넣음
     UpPanelUI upPanelUI; // UI 관련 클래스
+    MainMenuManager mainMenuManager; // 탭을 아래로 내리기 위해
 
     // 카드들이 보여지는 Field
     [SerializeField] AllField allField;
@@ -47,6 +48,7 @@ public class UpPanelManager : MonoBehaviour
         cardsDictionary = FindObjectOfType<CardsDictionary>();
         cardList = FindObjectOfType<CardList>();
         upPanelUI = GetComponent<UpPanelUI>();
+        mainMenuManager = FindObjectOfType<MainMenuManager>();
 
         upTabManager = GetComponentInChildren<UpTabManager>();
 
@@ -418,7 +420,7 @@ public class UpPanelManager : MonoBehaviour
         blockTouchPanel.SetActive(true);
 
         // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록
-        upPanelUI.DisableBottomTabs(true);
+        mainMenuManager.DisableBottomTabs(true);
 
         // 강화 연출 UI
         upPanelUI.MergingCardsUI();
