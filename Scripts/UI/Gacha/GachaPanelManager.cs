@@ -3,36 +3,45 @@ using UnityEngine;
 
 public class GachaPanelManager : MonoBehaviour
 {
-    [SerializeField] GameObject CardPicked;
+    [SerializeField] GameObject CardPicked; // 생성을 위한 프리펩
+    [SerializeField] RectTransform resultPanel;
+
 
     CardDisp cardDisp;
     PauseCardDisp pauseCardDisp;
     CardsDictionary cardDictionary;
     public void InitGachaPanel(List<CardData> cards)
     {
-        CardData cardData = cards[0];
-
-        if (cardDisp == null) cardDisp = CardPicked.GetComponent<CardDisp>();
-        if (pauseCardDisp == null) pauseCardDisp = CardPicked.GetComponent<PauseCardDisp>();
         if (cardDictionary == null) cardDictionary =FindObjectOfType<CardsDictionary>();
 
-        WeaponData wd = cardDictionary.GetWeaponItemData(cardData).weaponData;
-        Debug.Log($"weapon name is {wd.DisplayName}");
-        cardDisp.InitWeaponCardDisplay(wd, cardData);
-        cardDisp.InitSpriteRow();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < cards.Count; i++)
         {
-            Item item = wd.defaultItems[i];
+            var slot = Instantiate(CardPicked, resultPanel);
+            slot.transform.position = Vector3.zero;
+            slot.transform.localScale = .5f * Vector2.one;
 
-            if (item == null)
+            WeaponData wData = cardDictionary.GetWeaponItemData(cards[i]).weaponData;
+            CardDisp cardDisp = slot.GetComponent<CardDisp>();
+            PauseCardDisp pCardDisp = slot.GetComponent<PauseCardDisp>();
+
+            cardDisp.InitWeaponCardDisplay(wData, cards[i]);
+            cardDisp.InitSpriteRow();
+
+            for (int j = 0; i < 4; i++)
             {
-                cardDisp.SetEquipCardDisplay(i, null, false, Vector2.zero); // 이미지 오브젝트를 비활성화
-                continue;
-            }
-            SpriteRow equipmentSpriteRow = item.spriteRow;
-            Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
+                Item item = wData.defaultItems[j];
 
-            cardDisp.SetEquipCardDisplay(i, equipmentSpriteRow, false, offset);
+                if (item == null)
+                {
+                    Debug.Log($"{wData.DisplayName}의 {j}번째 아이템이 NULL입니다.");
+                    cardDisp.SetEquipCardDisplay(j, null, false, Vector2.zero); // 이미지 오브젝트를 비활성화
+                    continue;
+                }
+                SpriteRow equipmentSpriteRow = item.spriteRow;
+                Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
+
+                cardDisp.SetEquipCardDisplay(j, equipmentSpriteRow, false, offset);
+            }
         }
     }
 

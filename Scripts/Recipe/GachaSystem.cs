@@ -169,8 +169,7 @@ public class GachaSystem : MonoBehaviour
         {
             Draw("Weapon");
         }
-        // DebugGacha(cardsPicked);
-        
+                
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
     }
