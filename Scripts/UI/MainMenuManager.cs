@@ -218,20 +218,10 @@ public class MainMenuManager : MonoBehaviour
     //}
 
     // UpPanelManager의 UpgradeUICo 와 탭해서 계속하기 버튼에서 참조.
-    public void DisableBottomTabs(bool disable)
+    public void SetActiveBottomTabs(bool active)
     {
         tabButtons = tabs.GetComponentsInChildren<Button>();
-        if (disable)
-        {
-            // 탭 버튼이 작동하지 않도록
-            for (int i = 0; i < tabButtons.Length; i++)
-            {
-                tabButtons[i].interactable = false;
-            }
-            // 탭을 화면 아래로 이동
-            tabs.DOAnchorPosY(-300f, .5f);
-        }
-        else
+        if (active)
         {
             // 탭을 원래대로 되돌림
             tabs.DOAnchorPosY(68f, .5f);
@@ -242,16 +232,26 @@ public class MainMenuManager : MonoBehaviour
                 tabButtons[i].interactable = true;
             }
         }
-    }
-    public void DisableTopTabs(bool disable)
-    {
-        if (disable)
+        else
         {
-            upperTabs.DOAnchorPosY(300f, 0.5f);
+            // 탭 버튼이 작동하지 않도록
+            for (int i = 0; i < tabButtons.Length; i++)
+            {
+                tabButtons[i].interactable = false;
+            }
+            // 탭을 화면 아래로 이동
+            tabs.anchoredPosition = new Vector2(tabs.anchoredPosition.x, -300f);
+        }
+    }
+    public void SetActiveTopTabs(bool active)
+    {
+        if (active)
+        {
+            upperTabs.DOAnchorPosY(0f, 0.5f);
         }
         else
         {
-            upperTabs.DOAnchorPosY(0f, 0.5f);
+            upperTabs.anchoredPosition = new Vector2(upperTabs.anchoredPosition.x, 300f);
         }
     }
 }

@@ -14,6 +14,8 @@ public class GachaSystem : MonoBehaviour
     List<CardData> weaponPools;
     List<CardData> itemPools;
 
+    MainMenuManager mainMenuManager;
+
     
 
     List<CardData> cardsPicked; // 뽑은 카드를 저장하는 리스트
@@ -28,6 +30,8 @@ public class GachaSystem : MonoBehaviour
         cardList = GetComponent<CardList>();
 
         cardsPicked = new List<CardData>();
+        
+        mainMenuManager = FindObjectOfType<MainMenuManager>();
     }
 
     void Draw(string _cardType)
@@ -166,6 +170,8 @@ public class GachaSystem : MonoBehaviour
     // 상점 버튼
     public void DrawWeapons(int num)
     {
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
         cardsPicked.Clear();
         for (int i = 0; i < num; i++)
         {
@@ -177,6 +183,8 @@ public class GachaSystem : MonoBehaviour
     }
     public void DrawWeaponsAboveGrade(int _grade)
     {
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
         cardsPicked.Clear();
         for (int i = 0; i < 1; i++)
         {
@@ -186,6 +194,8 @@ public class GachaSystem : MonoBehaviour
     }
     public void DrawItems(int num)
     {
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
         cardsPicked.Clear();
         for (int i = 0; i < num; i++)
         {
@@ -195,6 +205,8 @@ public class GachaSystem : MonoBehaviour
     }
     public void DrawCombo(int num)
     {
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
         cardsPicked.Clear();
         for (int i = 0; i < num; i++)
         {

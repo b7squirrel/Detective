@@ -420,7 +420,7 @@ public class UpPanelManager : MonoBehaviour
         blockTouchPanel.SetActive(true);
 
         // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록
-        mainMenuManager.DisableBottomTabs(true);
+        mainMenuManager.SetActiveBottomTabs(false);
 
         // 강화 연출 UI
         upPanelUI.MergingCardsUI();
