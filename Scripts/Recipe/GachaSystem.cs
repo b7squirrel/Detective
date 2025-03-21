@@ -14,6 +14,8 @@ public class GachaSystem : MonoBehaviour
     List<CardData> weaponPools;
     List<CardData> itemPools;
 
+    
+
     List<CardData> cardsPicked; // 뽑은 카드를 저장하는 리스트
     bool donePicking;
 
