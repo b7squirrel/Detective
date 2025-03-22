@@ -155,7 +155,17 @@ public class CardList : MonoBehaviour
             if (equipData.IDs[i] > 0) // 해당 부위에 장비카드가 있다면 (아이디가 없으면 -1, 아이디는 1부터 부여되므로)
             {
                 EquipmentCard equipCard = FindCardDataByID(equipData.IDs[i]);
-                Equip(_charCard.CardData, equipCard.CardData);
+                if (equipCard != null)
+                {
+                    Equip(_charCard.CardData, equipCard.CardData);
+                }
+                else
+                {
+                    Debug.LogWarning($"Equipment with ID {equipData.IDs[i]} not found");
+                    // 옵션: 손상된 장비 데이터 정리
+                    // equipData.IDs[i] = -1; 
+                    // equipmentDataManager.SaveEquipmentData();
+                }
             }
         }
         // 저장되어 있는 데이터를 가져와서 반영하는 것이므로 또 저장할 필요가 없다.

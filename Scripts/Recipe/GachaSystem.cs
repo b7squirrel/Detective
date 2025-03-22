@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +11,6 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] TextAsset gachaPoolDataBase;
     [SerializeField] TextAsset weaponPoolDatabase;
     [SerializeField] TextAsset itemPoolDatabase;
-    List<CardData> gachaPools;
     List<CardData> weaponPools;
     List<CardData> itemPools;
 
@@ -33,53 +33,60 @@ public class GachaSystem : MonoBehaviour
         
         mainMenuManager = FindObjectOfType<MainMenuManager>();
     }
+    void Start()
+    {
+        weaponPools = new ReadCardData().GetCardsList(weaponPoolDatabase);
+        itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
+    }
 
     void Draw(string _cardType)
     {
-        if (gachaPools == null)
-        {
-            gachaPools = new();
-
-            gachaPools = new ReadCardData().GetCardsList(gachaPoolDataBase);
-        }
-        if (weaponPools == null)
-        {
-            weaponPools = new();
-
-            weaponPools = new ReadCardData().GetCardsList(weaponPoolDatabase);
-        }
-        if (itemPools == null)
-        {
-            itemPools = new();
-
-            itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
-        }
-
         CardData newCardData;
 
         if (_cardType == "Weapon")
         {
             int pickIndex = UnityEngine.Random.Range(0, weaponPools.Count);
-            newCardData = weaponPools[pickIndex];
-            cardDataManager.AddNewCardToMyCardsList(newCardData);
+            newCardData = CloneCardData(weaponPools[pickIndex]);
+            cardDataManager.AddNewCardToMyCardsList(newCardData); // 내 카드 데이터에 등록하고 아이디 부여
             AddDefaultEquip(newCardData);
 
-            // Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
+            Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
             cardsPicked.Add(newCardData);
         }
         else if (_cardType == "Item")
         {
             int pickIndex = UnityEngine.Random.Range(0, itemPools.Count);
-            newCardData = itemPools[pickIndex];
+            newCardData = CloneCardData(itemPools[pickIndex]);
             cardDataManager.AddNewCardToMyCardsList(newCardData);
 
-            // Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
+            Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
             cardsPicked.Add(newCardData);
         }
+    }
 
-        gachaPools = null; // 생성된 카드 데이터가 가챠풀에 저장되어 버리므로
-        weaponPools = null; // 생성된 카드 데이터가 가챠풀에 저장되어 버리므로
-        itemPools = null; // 생성된 카드 데이터가 가챠풀에 저장되어 버리므로
+    CardData CloneCardData(CardData original)
+    {
+        if (original == null)
+            return null;
+
+        CardData clone = new CardData(
+        "",
+        original.Type,
+        original.Grade.ToString(),
+        original.EvoStage.ToString(),
+        original.Name,
+        original.Level.ToString(),
+        original.Hp.ToString(),
+        original.Atk.ToString(),
+        original.EquipmentType,
+        original.EssentialEquip,
+        original.BindingTo,
+        original.StartingMember,
+        original.DefaultItem,
+        original.PassiveSkill.ToString()
+        );
+
+        return clone;
     }
 
     public void AddEssentialEquip(CardData _oriCardData)
@@ -153,16 +160,19 @@ public class GachaSystem : MonoBehaviour
             var searchKey = (wd.defaultItems[equipIndex].Name, wd.defaultItems[equipIndex].grade);
             if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
             {
-                defaultEquips[equipIndex] = matchingItem;
-                // Debug.Log($"{defaultEquips[equipIndex].Name}을 장착합니다");
-                cardDataManager.AddNewCardToMyCardsList(defaultEquips[equipIndex]); // 기본 아이템을 생성
-                cardList.Equip(_oriCardData, defaultEquips[equipIndex]);
-            }
-            else
-            {
-                // 일치하는 아이템을 찾지 못한 경우 명시적으로 null 처리
-                defaultEquips[equipIndex] = null;
-                // Debug.LogWarning($"Default item not found: {searchKey.Name} (Grade: {searchKey.grade})");
+                defaultEquips[equipIndex] = CloneCardData(matchingItem); // 복제 사용
+                if (defaultEquips[equipIndex] != null)
+                {
+                    try
+                    {
+                        cardDataManager.AddNewCardToMyCardsList(defaultEquips[equipIndex]);
+                        cardList.Equip(_oriCardData, defaultEquips[equipIndex]);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Error adding default equipment: {e.Message}");
+                    }
+                }
             }
         }
     }
@@ -172,6 +182,7 @@ public class GachaSystem : MonoBehaviour
     {
         mainMenuManager.SetActiveTopTabs(false);
         mainMenuManager.SetActiveBottomTabs(false);
+
         cardsPicked.Clear();
         for (int i = 0; i < num; i++)
         {

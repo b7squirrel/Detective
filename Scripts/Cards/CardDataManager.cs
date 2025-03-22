@@ -84,6 +84,8 @@ public class CardDataManager : MonoBehaviour
     string filePath;
     string myCards = "MyCards.txt";
 
+    bool isInitializing = false;
+
     void Start()
     {
         // 전체 카드 리스트 불러오기
@@ -98,10 +100,14 @@ public class CardDataManager : MonoBehaviour
 
     void Save()
     {
+        if (isInitializing) return; // 중복 초기화 방지
+
+        isInitializing = true;
         string jsonData = JsonUtility.ToJson(new Serialization<CardData>(MyCardsList), true);
         File.WriteAllText(filePath, jsonData);
 
         GetComponent<CardList>().InitCardList();
+        isInitializing = false;
     }
 
     void Load()
