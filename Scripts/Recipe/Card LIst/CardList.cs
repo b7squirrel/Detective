@@ -46,22 +46,40 @@ public class CardList : MonoBehaviour
 {
     [SerializeField] List<CharCard> charCards;
     [SerializeField] List<EquipmentCard> equipmentCards;
+    Dictionary<int, CharCard> charCardDict;
+    Dictionary<int, EquipmentCard> equipCardDict;
 
     CardDataManager cardDataManager;
     EquipmentDataManager equipmentDataManager;
+
+    Convert converter;
+
 
     void Awake()
     {
         cardDataManager = GetComponent<CardDataManager>();
         equipmentDataManager = GetComponent<EquipmentDataManager>();
+        converter = new Convert();
     }
 
     public void Equip(CardData charData, CardData equipData)
     {
+        if (charData == null || equipData == null)
+        {
+            Debug.LogError("Cannot equip: charData or equipData is null");
+            return;
+        }
+
         CharCard charCard = FindCharCard(charData);
         EquipmentCard equipmentCard = FindEquipmentCard(equipData);
 
-        int index = new Convert().EquipmentTypeToInt(equipData.EquipmentType);
+        if (charCard == null || equipmentCard == null)
+        {
+            Debug.LogError($"Cannot equip: charCard or equipmentCard not found in lists");
+            return;
+        }
+
+        int index = converter.EquipmentTypeToInt(equipData.EquipmentType);
         charCard.equipmentCards[index] = equipmentCard;
         equipmentCard.IsEquipped = true;
         equipmentCard.EquippedWho = charCard.CardData;
@@ -78,7 +96,7 @@ public class CardList : MonoBehaviour
         CharCard charCard = FindCharCard(charData);
 
         int index =
-                new Convert().EquipmentTypeToInt(_equipmentCard.CardData.EquipmentType);
+                converter.EquipmentTypeToInt(_equipmentCard.CardData.EquipmentType);
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
         charCard.numberOfEquipments--;
@@ -91,16 +109,20 @@ public class CardList : MonoBehaviour
 
     public CharCard FindCharCard(CardData charCardData)
     {
-        CharCard oriCard = charCards.Find(x => x.CardData.ID == charCardData.ID);
-        if (oriCard == null) Debug.Log("Can't find ID " + charCardData.ID);
-        return oriCard;
+        if (charCardDict.TryGetValue(charCardData.ID, out CharCard card))
+            return card;
+
+        Debug.Log("Can't find ID " + charCardData.ID);
+        return null;
     }
     // 카드 데이터로 EquipmentCard 얻기
     public EquipmentCard FindEquipmentCard(CardData equipCardData)
     {
-        EquipmentCard card = equipmentCards.Find(x => x.CardData.ID == equipCardData.ID);
-        if (card == null) Debug.Log("Can't find ID " + equipCardData.ID);
-        return card;
+        if (equipCardDict.TryGetValue(equipCardData.ID, out EquipmentCard card))
+            return card;
+
+        Debug.Log("Can't find ID " + equipCardData.ID);
+        return null;
     }
     // 특정 오리 카드의 장비 카드 얻기
     public EquipmentCard[] GetEquipmentsCardData(CardData charCardData)
@@ -113,6 +135,8 @@ public class CardList : MonoBehaviour
     {
         charCards = new();
         equipmentCards = new();
+        charCardDict = new();
+        equipCardDict = new();
 
         List<CardData> myCardList = cardDataManager.GetMyCardList();
 
@@ -122,11 +146,13 @@ public class CardList : MonoBehaviour
             {
                 CharCard _charCard = new(myCardList[i]);
                 charCards.Add(_charCard);
+                charCardDict[_charCard.CardData.ID] = _charCard;
             }
             else if (myCardList[i].Type == CardType.Item.ToString())
             {
                 EquipmentCard equipCard = new(myCardList[i]);
                 equipmentCards.Add(equipCard);
+                equipCardDict[equipCard.CardData.ID] = equipCard;
             }
         }
 
@@ -140,15 +166,23 @@ public class CardList : MonoBehaviour
     // 장착시킨 장비는 isEqupped로 설정하기
     void LoadEquipmentData(CharCard _charCard)
     {
+        if (_charCard == null)
+        {
+            Debug.LogError("Cannot load equipment data: charCard is null");
+            return;
+        }
+
         // 매개 변수로 받은 오리카드의 장비 데이터를 찾아서 equipData에 저장
         List<CardEquipmentData> myEquipmentData = equipmentDataManager.GetMyEquipmentsList();
 
-        if (myEquipmentData.Count == 0) return;
+        if (myEquipmentData == null || myEquipmentData.Count == 0)
+            return;
 
         CardEquipmentData equipData = myEquipmentData.Find(x => x.charID == _charCard.CardData.ID);
 
         if (equipData == null)
             return;
+
         // ID로 각각의 EquipmentCard를 찾아서 장비 카드만 모아둔 equipmentCards 리스트에서 찾아 준다
         for (int i = 0; i < 4; i++)
         {
@@ -162,18 +196,16 @@ public class CardList : MonoBehaviour
                 else
                 {
                     Debug.LogWarning($"Equipment with ID {equipData.IDs[i]} not found");
-                    // 옵션: 손상된 장비 데이터 정리
-                    // equipData.IDs[i] = -1; 
-                    // equipmentDataManager.SaveEquipmentData();
                 }
             }
         }
-        // 저장되어 있는 데이터를 가져와서 반영하는 것이므로 또 저장할 필요가 없다.
     }
     EquipmentCard FindCardDataByID(int cardID)
     {
-        EquipmentCard equipmentCard = equipmentCards.Find(x => x.CardData.ID == cardID);
-        return equipmentCard;
+        if (equipCardDict.TryGetValue(cardID, out EquipmentCard card))
+            return card;
+
+        return null;
     }
 
     void EquipStats(CharCard _charCard, CardData _equipCard)
