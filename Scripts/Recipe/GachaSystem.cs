@@ -16,7 +16,12 @@ public class GachaSystem : MonoBehaviour
 
     MainMenuManager mainMenuManager;
 
-    
+    Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
+            { "Head", 0 },
+            { "Chest", 1 },
+            { "Face", 2 },
+            { "Hand", 3 }
+    };
 
     List<CardData> cardsPicked; // 뽑은 카드를 저장하는 리스트
     bool donePicking;
@@ -48,9 +53,8 @@ public class GachaSystem : MonoBehaviour
             int pickIndex = UnityEngine.Random.Range(0, weaponPools.Count);
             newCardData = CloneCardData(weaponPools[pickIndex]);
             cardDataManager.AddNewCardToMyCardsList(newCardData); // 내 카드 데이터에 등록하고 아이디 부여
-            AddDefaultEquip(newCardData);
+            AddEssentialEquip(newCardData);
 
-            Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
             cardsPicked.Add(newCardData);
         }
         else if (_cardType == "Item")
@@ -59,7 +63,6 @@ public class GachaSystem : MonoBehaviour
             newCardData = CloneCardData(itemPools[pickIndex]);
             cardDataManager.AddNewCardToMyCardsList(newCardData);
 
-            Debug.Log(newCardData.Name + newCardData.ID + " 을 뽑았습니다");
             cardsPicked.Add(newCardData);
         }
     }
@@ -91,35 +94,57 @@ public class GachaSystem : MonoBehaviour
 
     public void AddEssentialEquip(CardData _oriCardData)
     {
+        // 아이템풀을 item pool database에서 불러와서 채워 넣기
         if (itemPools == null)
         {
             itemPools = new();
 
             itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
         }
-        // List<CardData> sameItems = gachaPools.FindAll(x => x.BindingTo == _oriCardData.Name);
 
-        // CardData defaultItem = sameItems.Find(x => x.DefaultItem == DefaultItem.Default.ToString());
+        // 카드데이터로 weapon data 얻어내기
+        if (cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
+        WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
+        WeaponData wd = weaponItemData.weaponData;
 
-        List<CardData> sameItems = new();
-        CardData defaultItem = null;
-        for (int i = 0; i < itemPools.Count; i++)
+        // 검색 속도 향상을 위해 Dictionary 생성
+        // Key: (아이템 이름, 등급), Value: CardData
+        Dictionary<(string Name, int Grade), CardData> itemLookup = new Dictionary<(string, int), CardData>();
+        foreach (var item in itemPools)
         {
-            if(itemPools[i].BindingTo == _oriCardData.Name)
-            {
-                sameItems.Add(itemPools[i]);
-            }
+            itemLookup[(item.Name, item.Grade)] = item;
         }
-        for (int i = 0; i < sameItems.Count; i++)
-        {
-            if(sameItems[i].DefaultItem == DefaultItem.Default.ToString())
+
+        // weaponData의 필수 장비 검색
+        string part = _oriCardData.EssentialEquip;
+        int index = defaultEquipIndex[part];
+        
+        CardData defaultEquip;
+        // 필수 장비가 없는 경우 명경고
+            if (wd.defaultItems[index] == null)
             {
-                defaultItem = sameItems[i];
+                Debug.LogError("필수 장비가 인스펙터에 없습니다");
+                return;
             }
-        }
-        // if (defaultItem == null) Debug.Log(_oriCardData.Name + "의 필수 무기가 NULL입니다");
-        cardDataManager.AddNewCardToMyCardsList(defaultItem); // 기본 아이템을 생성
-        cardList.Equip(_oriCardData, defaultItem);
+
+            // Dictionary에서 직접 검색
+            var searchKey = (wd.defaultItems[index].Name, wd.defaultItems[index].grade);
+            if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
+            {
+                defaultEquip = CloneCardData(matchingItem); // 복제 사용
+                if (defaultEquip != null)
+                {
+                    try
+                    {
+                        cardDataManager.AddNewCardToMyCardsList(defaultEquip);
+                        cardList.Equip(_oriCardData, defaultEquip);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Error adding default equipment: {e.Message}");
+                    }
+                }
+            }
     }
 
     public void AddDefaultEquip(CardData _oriCardData)
@@ -212,7 +237,8 @@ public class GachaSystem : MonoBehaviour
         {
             Draw("Item");
         }
-        DebugGacha(cardsPicked);
+        gachaPanelManager.gameObject.SetActive(true);
+        gachaPanelManager.InitGachaPanel(cardsPicked);
     }
     public void DrawCombo(int num)
     {
