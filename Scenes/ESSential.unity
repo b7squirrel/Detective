@@ -6213,7 +6213,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 30
+  orthographic size: 25
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -6259,7 +6259,7 @@ MonoBehaviour:
   boxCol: {fileID: 558571245}
   bosscameraMoveSpeed: 25
   dot: {fileID: 3346168019641469629, guid: a18d6881fa492ac44b1f7c71440de18e, type: 3}
-  offset: 15
+  offset: 10
   offsetUpperWall: 10
 --- !u!114 &519420035
 MonoBehaviour:
@@ -16348,6 +16348,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 50df83312e4cc604fac6de5a37ffcaae, type: 2}
   synergyUpgrades: []
   acquiredUpgrades: []
+  itemsAquired: 0
+  maxItemLimit: 5
   upgradesAvailableOnStart: []
   instantUpgrade:
   - {fileID: 11400000, guid: 66ad9c3942c01bc468f94555c24d6b4e, type: 2}

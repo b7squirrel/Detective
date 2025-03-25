@@ -23,15 +23,11 @@ public class Convert
     }
     public int EquipmentTypeToInt(string _equipmentType)
     {
-        EquipmentType[] allEquipType = (EquipmentType[])Enum.GetValues(typeof(EquipmentType));
-
-        for (int i = 0; i < allEquipType.Length; i++)
-        {
-            if(allEquipType[i].ToString() == _equipmentType)
-            {
-                return i;
-            }
-        }
+        if (_equipmentType == "Head") return 0;
+        if (_equipmentType == "Chest") return 1;
+        if (_equipmentType == "Face") return 2;
+        if (_equipmentType == "Hand") return 3;
+        if (_equipmentType == "Ori") return 4;
         return -1;
     }
 }

@@ -120,7 +120,7 @@ public class GachaSystem : MonoBehaviour
         int index = defaultEquipIndex[part];
         
         CardData defaultEquip;
-        // 필수 장비가 없는 경우 명경고
+        // 필수 장비가 없는 경우 경고
             if (wd.defaultItems[index] == null)
             {
                 Debug.LogError("필수 장비가 인스펙터에 없습니다");
@@ -205,6 +205,16 @@ public class GachaSystem : MonoBehaviour
     // 상점 버튼
     public void DrawWeapons(int num)
     {
+        // 무기 카드 수 제한 확인
+        int weaponCount = CountWeaponCards();
+        int maxWeaponLimit = 30; // 최대 무기 카드 제한
+
+        if (weaponCount + num > maxWeaponLimit)
+        {
+            Debug.Log($"오리 카드의 갯수가 {maxWeaponLimit}개를 넘습니다. 현재 {weaponCount}개의 오리 카드가 있습니다.");
+            return; // 메서드 실행 중단
+        }
+
         mainMenuManager.SetActiveTopTabs(false);
         mainMenuManager.SetActiveBottomTabs(false);
 
@@ -266,5 +276,21 @@ public class GachaSystem : MonoBehaviour
             string grade = MyGrade.mGrades[item.Grade].ToString();
             Debug.Log($"{grade} {item.Name}을 뽑았습니다.");
         }
+    }
+    // 무기 카드 수를 계산하는 메서드
+    int CountWeaponCards()
+    {
+        List<CardData> myCards = cardDataManager.GetMyCardList();
+        int count = 0;
+
+        foreach (var card in myCards)
+        {
+            if (card.Type == CardType.Weapon.ToString())
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 }
