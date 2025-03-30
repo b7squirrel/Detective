@@ -64,6 +64,7 @@ public class Item : ScriptableObject
     public ItemStats stats;
     public List<UpgradeData> upgrades;
     public float dropChance; // 아이템 드랍 확률
+    public int itemIndex;
 
     public void Init(string Name)
     {

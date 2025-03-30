@@ -8,7 +8,6 @@ public class GachaSystem : MonoBehaviour
     CardList cardList;
     CardsDictionary cardDictionary;
 
-    [SerializeField] TextAsset gachaPoolDataBase;
     [SerializeField] TextAsset weaponPoolDatabase;
     [SerializeField] TextAsset itemPoolDatabase;
     List<CardData> weaponPools;
@@ -17,6 +16,7 @@ public class GachaSystem : MonoBehaviour
     // 검색 속도 향상을 위해 Dictionary 생성
     // Key: (아이템 이름, 등급), Value: CardData
     Dictionary<(string Name, int Grade), CardData> itemLookup;
+    List<Item> itemCardData;
 
     MainMenuManager mainMenuManager;
 
@@ -132,11 +132,31 @@ public class GachaSystem : MonoBehaviour
             return;
         }
 
-        // Dictionary에서 직접 검색
-        var searchKey = (wd.defaultItems[index].Name, wd.defaultItems[index].grade);
-        if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
+        // // Dictionary에서 직접 검색
+        // var searchKey = (wd.defaultItems[index].Name, wd.defaultItems[index].grade);
+        // if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
+        // {
+        //     defaultEquip = CloneCardData(matchingItem); // 복제 사용
+        //     if (defaultEquip != null)
+        //     {
+        //         try
+        //         {
+        //             cardDataManager.AddNewCardToMyCardsList(defaultEquip);
+        //             cardList.Equip(_oriCardData, defaultEquip);
+        //         }
+        //         catch (Exception e)
+        //         {
+        //             Debug.LogError($"Error adding default equipment: {e.Message}");
+        //         }
+        //     }
+        // }
+
+        // 스크립터블 오브젝트의 index로 검색
+        int i = wd.defaultItems[index].itemIndex;
+        CardData itemCardData = cardDictionary.GetItemCardData(i);
+        if(itemCardData != null)
         {
-            defaultEquip = CloneCardData(matchingItem); // 복제 사용
+            defaultEquip = CloneCardData(itemCardData); // 복제 사용
             if (defaultEquip != null)
             {
                 try

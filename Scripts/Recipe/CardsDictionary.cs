@@ -18,18 +18,22 @@ public class WeaponItemData
 // GatchaSystem 과 upgradeSlot 두 클래스가 접근해서 값을 얻어간다. 
 public class CardsDictionary : MonoBehaviour
 {
-    [SerializeField] TextAsset cardPoolDataBase;
+    [SerializeField] TextAsset itemPoolDataBase;
     List<CardData> CardPool;
+    List<CardData> ItemPool;
     [SerializeField] List<WeaponData> weaponData;
     [SerializeField] List<Item> itemData;
+    List<CardData> itemCardData;
 
     void Awake()
     {
-        if (CardPool == null)
+        if(ItemPool == null)
         {
-            CardPool = new();
-            CardPool = new ReadCardData().GetCardsList(cardPoolDataBase);
+            ItemPool = new();
+            ItemPool = new ReadCardData().GetCardsList(itemPoolDataBase);
         }
+
+        SetIndex();
     }
     public List<CardData> GetCardPool()
     {
@@ -69,5 +73,50 @@ public class CardsDictionary : MonoBehaviour
             dispName = weaponItemData.weaponData.DisplayName;
         }
         return dispName;
+    }
+
+    void SetIndex()
+    {
+        for (int i = 0; i < itemData.Count; i++)
+        {
+            itemData[i].itemIndex = i;
+            CardData data = FindCardData(itemData[i]);
+            if(data == null) 
+            {
+                Debug.Log($"{itemData[i]}에 해당하는 카드 데이터가 없습니다");
+                return;
+            }
+            itemCardData.Add(data);
+        }
+
+        if(itemData.Count == itemCardData.Count)
+        {
+            Debug.Log("아이템 데이터와 아이템 카드 데이터가 동일하게 작성되었습니다.");
+        }
+        else
+        {
+            Debug.Log($"아이템 데이터 갯수 = {itemData.Count}, 아이템 카드 데이터 갯수 = {itemCardData.Count}");
+        }
+    }
+
+    CardData FindCardData(Item item)
+    {
+        if (itemCardData == null) itemCardData = new List<CardData>();
+
+        for (int i = 0; i < ItemPool.Count; i++)
+        {
+            if (ItemPool[i].Name == item.Name && ItemPool[i].Grade == item.grade)
+                return ItemPool[i];
+        }
+        Debug.Log("해당 item의 Card data를 찾을 수 없습니다.");
+        return null;
+    }
+    public Item GetItem(int index)
+    {
+        return itemData[index];
+    }
+    public CardData GetItemCardData(int index)
+    {
+        return itemCardData[index];
     }
 }
