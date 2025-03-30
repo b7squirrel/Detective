@@ -14,6 +14,10 @@ public class GachaSystem : MonoBehaviour
     List<CardData> weaponPools;
     List<CardData> itemPools;
 
+    // 검색 속도 향상을 위해 Dictionary 생성
+    // Key: (아이템 이름, 등급), Value: CardData
+    Dictionary<(string Name, int Grade), CardData> itemLookup;
+
     MainMenuManager mainMenuManager;
 
     Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
@@ -107,12 +111,13 @@ public class GachaSystem : MonoBehaviour
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
         WeaponData wd = weaponItemData.weaponData;
 
-        // 검색 속도 향상을 위해 Dictionary 생성
-        // Key: (아이템 이름, 등급), Value: CardData
-        Dictionary<(string Name, int Grade), CardData> itemLookup = new Dictionary<(string, int), CardData>();
-        foreach (var item in itemPools)
+        if (itemLookup == null)
         {
-            itemLookup[(item.Name, item.Grade)] = item;
+            itemLookup = new Dictionary<(string, int), CardData>();
+            foreach (var item in itemPools)
+            {
+                itemLookup[(item.Name, item.Grade)] = item;
+            }
         }
 
         // weaponData의 필수 장비 검색
@@ -207,7 +212,7 @@ public class GachaSystem : MonoBehaviour
     {
         // 무기 카드 수 제한 확인
         int weaponCount = CountWeaponCards();
-        int maxWeaponLimit = 30; // 최대 무기 카드 제한
+        int maxWeaponLimit = 100; // 최대 무기 카드 제한
 
         if (weaponCount + num > maxWeaponLimit)
         {
