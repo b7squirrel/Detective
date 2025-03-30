@@ -157,6 +157,8 @@ public class CardList : MonoBehaviour
         }
 
         // 모든 카드가 분류되고 나면 장비 데이터대로 장비 장착하기
+        // 여기에서 모든 charCard를 순회하게 됨. 카드가 늘어날수록 시간이 더 걸림
+        // 추가된 charCard만 검색하는 것으로 바꿔보자
         for (int i = 0; i < charCards.Count; i++)
         {
             LoadEquipmentData(charCards[i]);
