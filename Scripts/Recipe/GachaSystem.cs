@@ -132,25 +132,6 @@ public class GachaSystem : MonoBehaviour
             return;
         }
 
-        // // Dictionary에서 직접 검색
-        // var searchKey = (wd.defaultItems[index].Name, wd.defaultItems[index].grade);
-        // if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
-        // {
-        //     defaultEquip = CloneCardData(matchingItem); // 복제 사용
-        //     if (defaultEquip != null)
-        //     {
-        //         try
-        //         {
-        //             cardDataManager.AddNewCardToMyCardsList(defaultEquip);
-        //             cardList.Equip(_oriCardData, defaultEquip);
-        //         }
-        //         catch (Exception e)
-        //         {
-        //             Debug.LogError($"Error adding default equipment: {e.Message}");
-        //         }
-        //     }
-        // }
-
         // 스크립터블 오브젝트의 index로 검색
         int i = wd.defaultItems[index].itemIndex;
         CardData itemCardData = cardDictionary.GetItemCardData(i);
