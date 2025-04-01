@@ -27,6 +27,7 @@ public class CardSpriteAnim : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
+            if (equipSprites.Length == 0) continue;
             if (equipSprites[i] == null) continue; // 개별 equipSprites[i]가 null이면 건너뛰기
             if (equipSprites[i].sprites == null) continue;
 

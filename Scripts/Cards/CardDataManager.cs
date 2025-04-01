@@ -132,7 +132,9 @@ public class CardDataManager : MonoBehaviour
         AddNewCardToMyCardsList(startingCards[0]);
         startingCards[0].StartingMember = StartingMember.Zero.ToString();
 
-        FindObjectOfType<GachaSystem>().AddEssentialEquip(startingCards[0]);
+        GachaSystem gachaSys = FindObjectOfType<GachaSystem>();
+        gachaSys.AddEssentialEquip(startingCards[0]);
+        gachaSys.DelayedSaveEquipmentData();
 
         Save();
         Load();

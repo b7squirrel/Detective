@@ -100,10 +100,10 @@ public class EquipmentDataManager : MonoBehaviour
         if (charEquipData == null)
         {
             CardEquipmentData newEquipData =
-                new CardEquipmentData(charCardData.ID.ToString(), 
-                                        equipmentCardID[0].ToString(), 
-                                        equipmentCardID[1].ToString(), 
-                                        equipmentCardID[2].ToString(), 
+                new CardEquipmentData(charCardData.ID.ToString(),
+                                        equipmentCardID[0].ToString(),
+                                        equipmentCardID[1].ToString(),
+                                        equipmentCardID[2].ToString(),
                                         equipmentCardID[3].ToString());
 
             MyEquipmentsList.Add(newEquipData);
@@ -113,21 +113,17 @@ public class EquipmentDataManager : MonoBehaviour
         {
             charEquipData.IDs[Equipmentindex] = equipmentCardID[Equipmentindex];
         }
-
-        if(filePath != null)
-        {
-            Save();
-            
-        }
-        else
-        {
-            StartCoroutine(WaitToStartMethodRunning());
-        }
     }
 
+    public void DelayedSave()
+    {
+        StartCoroutine(WaitToStartMethodRunning());
+        Debug.Log("SAVE On Equipment Data Manager");
+    }
     IEnumerator WaitToStartMethodRunning()
     {
         yield return new WaitForSeconds(.04f);
+        Debug.Log("SAVE On Equipment Data Manager Coroutine");
         Save();
     }
 }

@@ -230,6 +230,9 @@ public class GachaSystem : MonoBehaviour
             Draw("Weapon");
         }
 
+        DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브
+        Debug.Log("after save");
+
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
     }
@@ -298,5 +301,11 @@ public class GachaSystem : MonoBehaviour
         }
 
         return count;
+    }
+
+    public void DelayedSaveEquipmentData()
+    {
+        cardList.DelayedSaveEquipments();
+        Debug.Log("Save on Gacha System");
     }
 }

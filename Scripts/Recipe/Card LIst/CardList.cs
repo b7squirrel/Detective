@@ -163,6 +163,8 @@ public class CardList : MonoBehaviour
         {
             LoadEquipmentData(charCards[i]);
         }
+        DelayedSaveEquipments(); // 장비 장착 현황 저장
+
     }
     // charCards에 장비 데이터 로드해서 장착하기
     // 장착시킨 장비는 isEqupped로 설정하기
@@ -201,6 +203,7 @@ public class CardList : MonoBehaviour
                 }
             }
         }
+
     }
     EquipmentCard FindCardDataByID(int cardID)
     {
@@ -224,5 +227,11 @@ public class CardList : MonoBehaviour
     public List<EquipmentCard> GetEquipmentCardsList()
     {
         return equipmentCards;
+    }
+
+    public void DelayedSaveEquipments()
+    {
+        equipmentDataManager.DelayedSave();
+        Debug.Log("Save On Card List");
     }
 }

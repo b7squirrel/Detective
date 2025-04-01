@@ -362,6 +362,9 @@ public class UpPanelManager : MonoBehaviour
 
         AcquireCard(pendingCardData);
         pendingCardData = null;
+
+        cardList.DelayedSaveEquipments(); // 장비 장착 현황 저장
+
         CloseAskUnequipPopup();
     }
     public void CloseAskUnequipPopup()
