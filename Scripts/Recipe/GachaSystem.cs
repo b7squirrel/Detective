@@ -230,7 +230,7 @@ public class GachaSystem : MonoBehaviour
             Draw("Weapon");
         }
 
-        DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브
+        DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브re
         Debug.Log("after save");
 
         gachaPanelManager.gameObject.SetActive(true);
