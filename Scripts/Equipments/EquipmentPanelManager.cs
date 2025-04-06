@@ -215,23 +215,23 @@ public class EquipmentPanelManager : MonoBehaviour
     //     cardList.DelayedSaveEquipments();
     // }
 
-    // // info panel의 UnEquip 버튼
-    // public void OnUnEquipButton()
-    // {
-    //     // 장비 해제
-    //     EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
-    //     cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
-    //     cardList.DelayedSaveEquipments();
+    // info panel의 UnEquip 버튼
+    public void OnUnEquipButton()
+    {
+        // 장비 해제
+        EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
+        cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
+        cardList.DelayedSaveEquipments();
 
-    //     equipmentSlotsManager.EmptyEquipSlot(index);
+        equipmentSlotsManager.EmptyEquipSlot(index);
 
-    //     cardToEquip = null;
+        cardToEquip = null;
 
-    //     cardDisp.SetEquppiedTextActive(false);
-    //     SetAllFieldTypeOf("Item");
-    //     setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
-    //     DeActivateEquipInfoPanel();
-    // }
+        cardDisp.SetEquppiedTextActive(false);
+        SetAllFieldTypeOf("Item");
+        setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
+        DeActivateEquipInfoPanel();
+    }
     // equip slot action 에서 호출
     public void ActivateEquipInfoPanel(CardData itemCardData, CardDisp cardDisp, bool isEquipButton, EquipmentType equipType)
     {

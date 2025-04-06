@@ -14,6 +14,7 @@ public class SoundManager : MonoBehaviour
     List<AudioSource> audioSourcePool;
     Dictionary<string, int> soundPlayCount; // 사운드 재생 횟수 추적
     Dictionary<string, float> lastPlayedTime; // 마지막으로 재생된 시간 추적
+    Dictionary<string, AudioSource> loopingSounds; // 루프 재생 중인 사운드 추적
 
     AudioClip singleSound; // 한 번만 재생되는 사운드를 리스트에서 빼기 위해
     bool isMuted; // 현재 Mute 상태를 추적하기 위한 변수
@@ -32,6 +33,7 @@ public class SoundManager : MonoBehaviour
         audioSourcePool = new List<AudioSource>();
         soundPlayCount = new Dictionary<string, int>();
         lastPlayedTime = new Dictionary<string, float>();
+        loopingSounds = new Dictionary<string, AudioSource>();
 
         for (int i = 0; i < initialAudioSourceCount; i++)
         {
@@ -81,6 +83,7 @@ public class SoundManager : MonoBehaviour
         audioSource.clip = audioClip;
         audioSource.volume = 1f;
         audioSource.pitch = 1f;
+        audioSource.loop = false;
         audioSource.mute = isMuted;
         audioSource.Play();
 
@@ -105,8 +108,6 @@ public class SoundManager : MonoBehaviour
         {
             return false;
         }
-
-
 
         return true;
     }
@@ -150,6 +151,75 @@ public class SoundManager : MonoBehaviour
         audioSource.Play();
 
         UpdateSoundPlayInfo(_audioClip); // 재생 횟수와 시간 업데이트
+    }
+
+    /// <summary>
+    /// 오디오 클립을 루프로 재생
+    /// </summary>
+    public AudioSource PlayLoop(AudioClip audioClip, float volume = 1f)
+    {
+        string clipName = audioClip.name;
+        
+        // 이미 같은 사운드가 루프 재생 중인지 확인
+        if (loopingSounds.ContainsKey(clipName))
+        {
+            // 이미 재생 중이면 기존 오디오 소스 반환
+            return loopingSounds[clipName];
+        }
+        
+        AudioSource audioSource = GetAudioSourceFromPool();
+        if (audioSource == null) return null;
+        
+        audioSource.clip = audioClip;
+        audioSource.volume = volume;
+        audioSource.pitch = 1f;
+        audioSource.loop = true; // 루프 설정
+        audioSource.mute = isMuted;
+        audioSource.Play();
+        
+        // 루프 재생 중인 사운드 목록에 추가
+        loopingSounds[clipName] = audioSource;
+        
+        return audioSource;
+    }
+    
+    /// <summary>
+    /// 특정 오디오 클립의 루프 재생 중단
+    /// </summary>
+    public void StopLoop(AudioClip audioClip)
+    {
+        if (audioClip == null) return;
+        
+        string clipName = audioClip.name;
+        
+        if (loopingSounds.ContainsKey(clipName))
+        {
+            // 재생 중인 오디오 소스 찾아서 중단
+            AudioSource audioSource = loopingSounds[clipName];
+            if (audioSource != null)
+            {
+                audioSource.Stop();
+            }
+            
+            // 루프 재생 목록에서 제거
+            loopingSounds.Remove(clipName);
+        }
+    }
+    
+    /// <summary>
+    /// 모든 루프 재생 중인 사운드 중단
+    /// </summary>
+    public void StopAllLoops()
+    {
+        foreach (var audioSource in loopingSounds.Values)
+        {
+            if (audioSource != null)
+            {
+                audioSource.Stop();
+            }
+        }
+        
+        loopingSounds.Clear();
     }
 
     // 사운드를 Mute/Unmute 하는 메서드 추가
