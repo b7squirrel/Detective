@@ -1,18 +1,111 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements.Experimental;
 
 public class CardSlotManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] List<CardSlot> weaponCardSlots;
+    [SerializeField] List<CardSlot> itemCardSlots;
+    [SerializeField] List<CardData> weaponCardData;
+    [SerializeField] List<CardData> itemCardData;
+    CardDataManager cardDataManager;
+
+    #region 참조 변수
+    [SerializeField] SetCardDataOnSlot displayCardOnSlot;
+    [SerializeField] SlotPool slotPool;
+    #endregion
+
+    #region 슬롯 생성 관련 변수
+    int numSlots;
+    [SerializeField] GameObject slotPrefab;
+    [SerializeField] Transform weaponSlotField;
+    [SerializeField] Transform itemSlotField;
+    [SerializeField] Vector2 slotSize;
+    #endregion
+
     void Start()
     {
-        
+        StartCoroutine(DelayInitCo());
+    }
+    IEnumerator DelayInitCo()
+    {
+        yield return new WaitForSeconds(1f);
+        InitCardSlots();
+    }
+    // 내가 가진 모든 카드를 무기, 아이템으로 따로 저장
+    public void InitCardSlots()
+    {
+        if (cardDataManager == null) cardDataManager = FindObjectOfType<CardDataManager>();
+        List<CardData> myAllCardDatas = new();
+        myAllCardDatas.AddRange(cardDataManager.GetMyCardList());
+
+        if (weaponCardData == null) weaponCardData = new List<CardData>();
+        if (itemCardData == null) itemCardData = new List<CardData>();
+
+        foreach (var item in myAllCardDatas)
+        {
+            if (item.Type == "Weapon")
+            {
+                weaponCardData.Add(item);
+            }
+            else
+            {
+                itemCardData.Add(item);
+            }
+        }
+
+        int totalCards = weaponCardData.Count + itemCardData.Count;
+        Debug.Log($"실제 카드 수 = {myAllCardDatas.Count}와 초기화 시킨 카드의 수 = {totalCards}");
+
+
+        // 무기 카드 슬롯 생성
+        GenerateAllCardsOfType(weaponCardData, weaponSlotField);
+
+        // 아이템 슬롯 생성
+        GenerateAllCardsOfType(itemCardData, itemSlotField);
     }
 
-    // Update is called once per frame
-    void Update()
+    // 카드 슬롯 생성
+    public void GenerateAllCardsOfType(List<CardData> cardList, Transform slotField)
     {
-        
+        List<CardData> cardDatas = new();
+        List<GameObject> slots = new();
+
+        cardDatas.AddRange(cardList); // 재료가 될 수 있는 카드들의 리스트
+
+        numSlots = cardDatas.Count;
+
+        // 슬롯 생성
+        for (int i = 0; i < numSlots; i++)
+        {
+            var slot = Instantiate(slotPrefab, slotField);
+            // var slot = slotPool.GetSlot(slotType, transform);
+            slot.transform.position = Vector3.zero;
+            // slot.transform.localScale = new Vector2(0, 0);
+            // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
+            slot.transform.localScale = slotSize;
+            slots.Add(slot);
+        }
+
+        // 카드 데이터 정렬
+        List<CardData> cardDataSorted = new();
+        cardDataSorted.AddRange(cardDatas);
+
+        // 내림차순으로 카드 정렬 
+        cardDataSorted.Sort((a, b) =>
+        {
+            return new Sort().ByGrade(a, b);
+        });
+
+        cardDataSorted.Reverse();
+
+        // 카드 Display
+        for (int i = 0; i < numSlots; i++)
+        {
+            if (displayCardOnSlot == null) displayCardOnSlot = GetComponent<SetCardDataOnSlot>();
+            displayCardOnSlot.PutCardDataIntoSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
+        }
     }
 }
