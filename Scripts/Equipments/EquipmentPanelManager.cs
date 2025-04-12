@@ -47,6 +47,8 @@ public class EquipmentPanelManager : MonoBehaviour
     float textOffset = 23.5f;
     Coroutine hideCoroutine;
 
+    CardSlotManager cardSlotManager; // 카드 슬롯 풀
+
     [SerializeField] AudioClip maxLevelSound;
 
     void Awake()
@@ -205,6 +207,9 @@ public class EquipmentPanelManager : MonoBehaviour
 
         SetAllFieldTypeOf("Item");
         setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
+
+        UpdateCardSlotOfPool(CardOnDisplay); // 카드 슬롯 풀의 슬로 그림도 업데이트
+
         cardList.DelayedSaveEquipments();
         DeActivateEquipInfoPanel();
     }
@@ -230,8 +235,19 @@ public class EquipmentPanelManager : MonoBehaviour
         cardDisp.SetEquppiedTextActive(false);
         SetAllFieldTypeOf("Item");
         setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
+
+        UpdateCardSlotOfPool(CardOnDisplay); // 카드 슬롯 풀의 슬로 그림도 업데이트
+        
         DeActivateEquipInfoPanel();
     }
+
+    // 카드 슬롯 풀의 그림도 업데이트
+    void UpdateCardSlotOfPool(CardData cardData)
+    {
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        cardSlotManager.UpdateCardDisplay(CardOnDisplay);
+    }
+
     // equip slot action 에서 호출
     public void ActivateEquipInfoPanel(CardData itemCardData, CardDisp cardDisp, bool isEquipButton, EquipmentType equipType)
     {
