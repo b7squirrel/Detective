@@ -18,6 +18,7 @@ public class GachaSystem : MonoBehaviour
     // Key: (아이템 이름, 등급), Value: CardData
     Dictionary<(string Name, int Grade), CardData> itemLookup;
     List<Item> itemCardData;
+    List<Item> equipmentItemsToAdd;
 
     MainMenuManager mainMenuManager;
 
@@ -118,14 +119,14 @@ public class GachaSystem : MonoBehaviour
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
         WeaponData wd = weaponItemData.weaponData;
 
-        if (itemLookup == null)
-        {
-            itemLookup = new Dictionary<(string, int), CardData>();
-            foreach (var item in itemPools)
-            {
-                itemLookup[(item.Name, item.Grade)] = item;
-            }
-        }
+        // if (itemLookup == null)
+        // {
+        //     itemLookup = new Dictionary<(string, int), CardData>();
+        //     foreach (var item in itemPools)
+        //     {
+        //         itemLookup[(item.Name, item.Grade)] = item;
+        //     }
+        // }
 
         // weaponData의 필수 장비 검색
         string part = _oriCardData.EssentialEquip;
@@ -151,6 +152,7 @@ public class GachaSystem : MonoBehaviour
                 {
                     cardDataManager.AddNewCardToMyCardsList(defaultEquip);
                     cardList.Equip(_oriCardData, defaultEquip);
+
                 }
                 catch (Exception e)
                 {
@@ -244,12 +246,19 @@ public class GachaSystem : MonoBehaviour
 
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
+
+        for (int i = 0; i < cardsPicked.Count; i++)
+        {
+            cardSlotManager.AddItemSlotOf(cardsPicked[i]);
+        }
     }
     void AddCardSlot(CardData card)
     {
         // 카드 슬롯 풀에 추가된 카드 슬롯 배치
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.AddCardSlot(card);
+
+        Debug.Log($"{card.ID} : {card.Name} 이 슬롯에 추가되었습니다.");
     }
     public void DrawWeaponsAboveGrade(int _grade)
     {

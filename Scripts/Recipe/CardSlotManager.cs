@@ -25,6 +25,12 @@ public class CardSlotManager : MonoBehaviour
     [SerializeField] Transform weaponSlotField;
     [SerializeField] Transform itemSlotField;
     [SerializeField] Vector2 slotSize;
+    Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
+            { "Head", 0 },
+            { "Chest", 1 },
+            { "Face", 2 },
+            { "Hand", 3 }
+    };
     #endregion
 
     void Start()
@@ -154,10 +160,11 @@ public class CardSlotManager : MonoBehaviour
             }
             else
             {
+                AddCardSlot(card);
                 Debug.Log("Weapon 슬롯 플에 해당 Card Data {card}에 해당하는 슬롯이 없습니다. 에러입니다.");
             }
         }
-        else
+        else if(card.Type == "Item")
         {
             if (itemSlots.ContainsKey(card.ID))
             {
@@ -165,8 +172,17 @@ public class CardSlotManager : MonoBehaviour
             }
             else
             {
+                AddCardSlot(card);
                 Debug.Log("Item 슬롯 플에 해당 Card Data {card}에 해당하는 슬롯이 없습니다. 에러입니다.");
             }
+        }
+    }
+    public void UpdateAllCardSlotDisplay()
+    {
+        List<CardData> mCards = cardDataManager.GetMyCardList();
+        foreach (var item in mCards)
+        {
+            UpdateCardDisplay(item);
         }
     }
 
@@ -221,5 +237,60 @@ public class CardSlotManager : MonoBehaviour
         {
             Debug.LogWarning("리드 카드를 찾을 수 없습니다.");
         }
+    }
+    public void AddItemSlotOf(CardData oriCard)
+    {
+        Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
+            { "Head", 0 },
+            { "Chest", 1 },
+            { "Face", 2 },
+            { "Hand", 3 }
+    };
+
+        // 카드데이터로 weapon data 얻어내기
+        CardsDictionary cardDictionary = FindObjectOfType<CardsDictionary>();
+        WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(oriCard);
+        WeaponData wd = weaponItemData.weaponData;
+
+        string part = oriCard.EssentialEquip;
+        int index = defaultEquipIndex[part];
+        CardData defaultEquip;
+        // 필수 장비가 없는 경우 경고
+        if (wd.defaultItems[index] == null)
+        {
+            Debug.LogError("필수 장비가 인스펙터에 없습니다");
+            return;
+        }
+        // 스크립터블 오브젝트의 index로 검색
+        int i = wd.defaultItems[index].itemIndex;
+        CardData itemCardData = cardDictionary.GetItemCardData(i);
+        defaultEquip = CloneCardData(itemCardData); // 복제 사용
+
+        // AddCardSlot(defaultEquip);
+        Debug.Log($"{defaultEquip.Name} 이 추가되어야 합니다.");
+    }
+    CardData CloneCardData(CardData original)
+    {
+        if (original == null)
+            return null;
+
+        CardData clone = new CardData(
+        "",
+        original.Type,
+        original.Grade.ToString(),
+        original.EvoStage.ToString(),
+        original.Name,
+        original.Level.ToString(),
+        original.Hp.ToString(),
+        original.Atk.ToString(),
+        original.EquipmentType,
+        original.EssentialEquip,
+        original.BindingTo,
+        original.StartingMember,
+        original.DefaultItem,
+        original.PassiveSkill.ToString()
+        );
+
+        return clone;
     }
 }
