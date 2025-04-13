@@ -233,6 +233,7 @@ public class CardSlotManager : MonoBehaviour
         if (leadCard != null)
         {
             AddCardSlot(leadCard);
+            AddItemSlotOf(leadCard);
         }
         else
         {
@@ -249,30 +250,5 @@ public class CardSlotManager : MonoBehaviour
         {
             AddCardSlot(item);
         }
-        
-    }
-    CardData CloneCardData(CardData original)
-    {
-        if (original == null)
-            return null;
-
-        CardData clone = new CardData(
-        "",
-        original.Type,
-        original.Grade.ToString(),
-        original.EvoStage.ToString(),
-        original.Name,
-        original.Level.ToString(),
-        original.Hp.ToString(),
-        original.Atk.ToString(),
-        original.EquipmentType,
-        original.EssentialEquip,
-        original.BindingTo,
-        original.StartingMember,
-        original.DefaultItem,
-        original.PassiveSkill.ToString()
-        );
-
-        return clone;
     }
 }
