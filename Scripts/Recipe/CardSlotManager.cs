@@ -170,6 +170,19 @@ public class CardSlotManager : MonoBehaviour
         }
     }
 
+    public void RemoveSlot(CardData cardData)
+    {
+        if (cardData.Type == "Weapon")
+        {
+            if (weaponSlots.ContainsKey(cardData.ID))
+            {
+                CardSlot cardSlot = weaponSlots[cardData.ID];
+                weaponSlots.Remove(cardData.ID); // 딕셔너리에서 슬롯 제거
+                Destroy(cardSlot.gameObject); // 실제 슬롯 오브젝트 삭제
+            }
+        }
+    }
+
     public void ClearAllSlots()
     {
         // 무기 슬롯 복사 및 파괴

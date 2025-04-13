@@ -22,6 +22,7 @@ public class UpPanelManager : MonoBehaviour
     SetCardDataOnSlot setCardDataOnSlot; // CardData를 Slot에 넣음
     UpPanelUI upPanelUI; // UI 관련 클래스
     MainMenuManager mainMenuManager; // 탭을 아래로 내리기 위해
+    CardSlotManager cardSlotManager; // 슬롯 풀에서 슬롯을 업데이트 하기 위해
 
     // 카드들이 보여지는 Field
     [SerializeField] AllField allField;
@@ -407,7 +408,8 @@ public class UpPanelManager : MonoBehaviour
         CardToUpgrade.EvoStage = newCardEvoStage;
         CardToUpgrade.Level = 1;
 
-        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
+        RemoveCard(cardToFeed);
+        UpdateCardDisplay(cardToFeed);
 
         cardList.InitCardList(); // 장비 슬롯들 업데이트
 
@@ -415,6 +417,19 @@ public class UpPanelManager : MonoBehaviour
         matField.gameObject.SetActive(false);
 
         StartCoroutine(UpgradeUICo(CardToUpgrade, isGradeUp));
+    }
+
+    void RemoveCard(CardData cardData)
+    {
+        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
+
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        cardSlotManager.RemoveSlot(cardData);
+    }
+    void UpdateCardDisplay(CardData cardData)
+    {
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        cardSlotManager.UpdateCardDisplay(cardData);
     }
 
     IEnumerator UpgradeUICo(CardData upgradedCardData, bool isGradeUp)
