@@ -11,6 +11,7 @@ public class CardSlotManager : MonoBehaviour
     [SerializeField] List<CardData> weaponCardData;
     [SerializeField] List<CardData> itemCardData;
     CardDataManager cardDataManager;
+    CardList cardList;
 
     #region 참조 변수
     [SerializeField] SetCardDataOnSlot displayCardOnSlot;
@@ -240,34 +241,15 @@ public class CardSlotManager : MonoBehaviour
     }
     public void AddItemSlotOf(CardData oriCard)
     {
-        Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
-            { "Head", 0 },
-            { "Chest", 1 },
-            { "Face", 2 },
-            { "Hand", 3 }
-    };
-
-        // 카드데이터로 weapon data 얻어내기
-        CardsDictionary cardDictionary = FindObjectOfType<CardsDictionary>();
-        WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(oriCard);
-        WeaponData wd = weaponItemData.weaponData;
-
-        string part = oriCard.EssentialEquip;
-        int index = defaultEquipIndex[part];
-        CardData defaultEquip;
-        // 필수 장비가 없는 경우 경고
-        if (wd.defaultItems[index] == null)
-        {
-            Debug.LogError("필수 장비가 인스펙터에 없습니다");
-            return;
-        }
-        // 스크립터블 오브젝트의 index로 검색
-        int i = wd.defaultItems[index].itemIndex;
-        CardData itemCardData = cardDictionary.GetItemCardData(i);
-        defaultEquip = CloneCardData(itemCardData); // 복제 사용
-
         // AddCardSlot(defaultEquip);
-        Debug.Log($"{defaultEquip.Name} 이 추가되어야 합니다.");
+        if(cardList == null) cardList = FindObjectOfType<CardList>();
+        List<CardData> equipCardDatas = cardList.GetEquipCardDataOf(oriCard);
+
+        foreach (var item in equipCardDatas)
+        {
+            AddCardSlot(item);
+        }
+        
     }
     CardData CloneCardData(CardData original)
     {

@@ -234,4 +234,17 @@ public class CardList : MonoBehaviour
         equipmentDataManager.DelayedSave();
         Debug.Log("Save On Card List");
     }
+
+    public List<CardData> GetEquipCardDataOf(CardData oriCardData)
+    {
+        CharCard charCard = FindCharCard(oriCardData);
+        List<CardData> equipCardDatas = new();
+        for (int i = 0; i < 4; i++)
+        {
+            if(charCard.equipmentCards[i] == null) continue;
+            equipCardDatas.Add(charCard.equipmentCards[i].CardData);
+        }
+
+        return equipCardDatas;
+    } 
 }
