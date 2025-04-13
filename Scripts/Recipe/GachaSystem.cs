@@ -7,6 +7,7 @@ public class GachaSystem : MonoBehaviour
     CardDataManager cardDataManager;
     CardList cardList;
     CardsDictionary cardDictionary;
+    CardSlotManager cardSlotManager;
 
     [SerializeField] TextAsset weaponPoolDatabase;
     [SerializeField] TextAsset itemPoolDatabase;
@@ -56,10 +57,13 @@ public class GachaSystem : MonoBehaviour
         {
             int pickIndex = UnityEngine.Random.Range(0, weaponPools.Count);
             newCardData = CloneCardData(weaponPools[pickIndex]);
-            cardDataManager.AddNewCardToMyCardsList(newCardData); // 내 카드 데이터에 등록하고 아이디 부여
+            cardDataManager.AddNewCardToMyCardsList(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
             AddEssentialEquip(newCardData);
 
             cardsPicked.Add(newCardData);
+
+            // 카드 슬롯 풀에 카드 슬롯 추가
+            AddCardSlot(newCardData);
         }
         else if (_cardType == "Item")
         {
@@ -68,6 +72,9 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.AddNewCardToMyCardsList(newCardData);
 
             cardsPicked.Add(newCardData);
+
+            // 카드 슬롯 풀에 카드 슬롯 추가
+            AddCardSlot(newCardData);
         }
     }
 
@@ -231,10 +238,18 @@ public class GachaSystem : MonoBehaviour
         }
 
         DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브re
+
+        
         Debug.Log("after save");
 
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
+    }
+    void AddCardSlot(CardData card)
+    {
+        // 카드 슬롯 풀에 추가된 카드 슬롯 배치
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        cardSlotManager.AddCardSlot(card);
     }
     public void DrawWeaponsAboveGrade(int _grade)
     {

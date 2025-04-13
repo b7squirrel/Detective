@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters;
 using UnityEngine;
+using VHierarchy.Libs;
 
 public class CardSlotManager : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class CardSlotManager : MonoBehaviour
 
         if (weaponCardData == null) weaponCardData = new List<CardData>();
         if (itemCardData == null) itemCardData = new List<CardData>();
-        
+
 
         foreach (var item in myAllCardDatas)
         {
@@ -98,13 +99,13 @@ public class CardSlotManager : MonoBehaviour
         List<CardData> cardDataSorted = new();
         cardDataSorted.AddRange(cardDatas);
 
-        // 내림차순으로 카드 정렬 
-        cardDataSorted.Sort((a, b) =>
-        {
-            return new Sort().ByGrade(a, b);
-        });
+        // // 내림차순으로 카드 정렬 
+        // cardDataSorted.Sort((a, b) =>
+        // {
+        //     return new Sort().ByGrade(a, b);
+        // });
 
-        cardDataSorted.Reverse();
+        // cardDataSorted.Reverse();
 
         // 슬롯 풀의 Dispaly 설정
         for (int i = 0; i < numSlots; i++)
@@ -119,7 +120,7 @@ public class CardSlotManager : MonoBehaviour
 
     void SetCardSlotDictionary(CardData cardData, CardSlot cardSlot)
     {
-        if(cardData.Type == "Weapon")
+        if (cardData.Type == "Weapon")
         {
             weaponSlots.Add(cardData.ID, cardSlot);
         }
@@ -129,12 +130,25 @@ public class CardSlotManager : MonoBehaviour
         }
     }
 
+    public void AddCardSlot(CardData card)
+    {
+        // 빈 슬롯을 생성해서 Weapon 혹은 Item 필드에 배치
+        Transform field = card.Type == "Weapon" ? field = weaponSlotField : itemSlotField;
+        var slot = Instantiate(slotPrefab, field);
+        slot.transform.position = Vector3.zero;
+        slot.transform.localScale = slotSize;
+
+        SetCardSlotDictionary(card, slot.GetComponent<CardSlot>());
+
+        UpdateCardDisplay(card);
+    }
+
     public void UpdateCardDisplay(CardData card)
     {
         // 아이디로 슬롯을 찾아내서 display 변경
-        if(card.Type == "Weapon")
+        if (card.Type == "Weapon")
         {
-            if(weaponSlots.ContainsKey(card.ID))
+            if (weaponSlots.ContainsKey(card.ID))
             {
                 displayCardOnSlot.PutCardDataIntoSlot(card, weaponSlots[card.ID]);
             }
@@ -145,7 +159,7 @@ public class CardSlotManager : MonoBehaviour
         }
         else
         {
-            if(itemSlots.ContainsKey(card.ID))
+            if (itemSlots.ContainsKey(card.ID))
             {
                 displayCardOnSlot.PutCardDataIntoSlot(card, itemSlots[card.ID]);
             }
@@ -153,6 +167,46 @@ public class CardSlotManager : MonoBehaviour
             {
                 Debug.Log("Item 슬롯 플에 해당 Card Data {card}에 해당하는 슬롯이 없습니다. 에러입니다.");
             }
+        }
+    }
+
+    public void ClearAllSlots()
+    {
+        // 무기 슬롯 복사 및 파괴
+        List<CardSlot> weaponSlotsCopy = new List<CardSlot>(weaponSlots.Values);
+        foreach (var slot in weaponSlotsCopy)
+        {
+            if (slot != null && slot.gameObject != null)
+            {
+                Destroy(slot.gameObject);
+            }
+        }
+
+        // 아이템 슬롯 복사 및 파괴
+        List<CardSlot> itemSlotsCopy = new List<CardSlot>(itemSlots.Values);
+        foreach (var slot in itemSlotsCopy)
+        {
+            if (slot != null && slot.gameObject != null)
+            {
+                Destroy(slot.gameObject);
+            }
+        }
+
+        // Dictionary 비우기
+        weaponSlots.Clear();
+        itemSlots.Clear();
+
+        // 리드 카드(시작 멤버)를 찾아 슬롯 초기화
+        CardData leadCard = cardDataManager.GetMyCardList()
+            .Find(x => x.StartingMember == StartingMember.Zero.ToString());
+
+        if (leadCard != null)
+        {
+            AddCardSlot(leadCard);
+        }
+        else
+        {
+            Debug.LogWarning("리드 카드를 찾을 수 없습니다.");
         }
     }
 }
