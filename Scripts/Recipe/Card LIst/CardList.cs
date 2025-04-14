@@ -238,6 +238,7 @@ public class CardList : MonoBehaviour
     public List<CardData> GetEquipCardDataOf(CardData oriCardData)
     {
         CharCard charCard = FindCharCard(oriCardData);
+        Debug.Log($"{charCard.cardName}");
         List<CardData> equipCardDatas = new();
         for (int i = 0; i < 4; i++)
         {

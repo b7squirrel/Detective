@@ -193,6 +193,16 @@ public class CardSlotManager : MonoBehaviour
         {
             if (weaponSlots.ContainsKey(cardData.ID))
             {
+                // // 먼저 장착된 아이템(필수 무기) 슬롯을 제거
+                // List<CardData> equipCardDatas = GetItemSlotsOf(cardData);
+                // foreach (var item in equipCardDatas)
+                // {
+                //     CardSlot equipCardSlot = itemSlots[item.ID];
+                //     itemSlots.Remove(item.ID);
+                //     Destroy(equipCardSlot.gameObject);
+                // }
+
+                // 오리 카드 슬롯 제거
                 CardSlot cardSlot = weaponSlots[cardData.ID];
                 weaponSlots.Remove(cardData.ID); // 딕셔너리에서 슬롯 제거
                 Destroy(cardSlot.gameObject); // 실제 슬롯 오브젝트 삭제
@@ -250,5 +260,11 @@ public class CardSlotManager : MonoBehaviour
         {
             AddCardSlot(item);
         }
+    }
+    List<CardData> GetItemSlotsOf(CardData oriCard)
+    {
+        if(cardList == null) cardList = FindObjectOfType<CardList>();
+        List<CardData> equipCardDatas = cardList.GetEquipCardDataOf(oriCard);
+        return equipCardDatas;
     }
 }
