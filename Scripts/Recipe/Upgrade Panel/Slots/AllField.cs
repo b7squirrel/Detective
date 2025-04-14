@@ -7,6 +7,7 @@ public class AllField : MonoBehaviour
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] SetCardDataOnSlot displayCardOnSlot;
     [SerializeField] SlotPool slotPool;
+    CardSlotManager cardSlotManager;
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -14,6 +15,8 @@ public class AllField : MonoBehaviour
     [SerializeField] GameObject slotPrefab;
     [SerializeField] Slots slotType;
     [SerializeField] Vector2 slotSize;
+    // Dictionary<string, Transform> slotsOnField = new Dictionary<string, Transform>();
+    List<CardData> slotsOnField = new();
     #endregion
 
     void OnDisable()
@@ -31,17 +34,17 @@ public class AllField : MonoBehaviour
 
         numSlots = cardDatas.Count;
 
-        // 슬롯 생성
-        for (int i = 0; i < numSlots; i++)
-        {
-            var slot = Instantiate(slotPrefab, transform);
-            // var slot = slotPool.GetSlot(slotType, transform);
-            slot.transform.position = Vector3.zero;
-            // slot.transform.localScale = new Vector2(0, 0);
-            // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
-            slot.transform.localScale = slotSize;
-            slots.Add(slot);
-        }
+        // // 슬롯 생성
+        // for (int i = 0; i < numSlots; i++)
+        // {
+        //     var slot = Instantiate(slotPrefab, transform);
+        //     // var slot = slotPool.GetSlot(slotType, transform);
+        //     slot.transform.position = Vector3.zero;
+        //     // slot.transform.localScale = new Vector2(0, 0);
+        //     // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
+        //     slot.transform.localScale = slotSize;
+        //     slots.Add(slot);
+        // }
 
         // 카드 데이터 정렬
         List<CardData> cardDataSorted = new();
@@ -53,13 +56,25 @@ public class AllField : MonoBehaviour
             return new Sort().ByGrade(a, b);
         });
 
-        cardDataSorted.Reverse();
+        // cardDataSorted.Reverse();
 
-        // 카드 Display
-        for (int i = 0; i < numSlots; i++)
+        // // 카드 Display
+        // for (int i = 0; i < numSlots; i++)
+        // {
+        //     displayCardOnSlot.PutCardDataIntoSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
+        // }
+
+        if(cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        foreach (var item in cardDataSorted)
         {
-            displayCardOnSlot.PutCardDataIntoSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
+            Transform picked = cardSlotManager.pickedSlotTransforms(item);
+            if(picked == null) continue;
+            bool isWeapon = item.Type == "Weapon" ? true : false;
+            slotsOnField.Add(item);
+
+            cardSlotManager.SetSlotsPosition(picked, isWeapon, transform);
         }
+
     }
     public void GenerateAllLaunchCardOfType(List<CardData> _cardList, CardData _lead)
     {
@@ -104,15 +119,26 @@ public class AllField : MonoBehaviour
 
     public void ClearSlots()
     {
-        int childCount = transform.childCount;
-        if(childCount == 0) return;
+        // int childCount = transform.childCount;
+        // if(childCount == 0) return;
 
-        for (int i = childCount - 1; i >= 0; i--)
+        // for (int i = childCount - 1; i >= 0; i--)
+        // {
+        //     Transform child = transform.GetChild(i);
+        //     Destroy(child.gameObject);
+        //     // slotPool.ReturnToPool(child);
+        // }
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        if (slotsOnField.Count > 0)
         {
-            Transform child = transform.GetChild(i);
-            Destroy(child.gameObject);
-            // slotPool.ReturnToPool(child);
+            foreach (var item in slotsOnField)
+            {
+                Transform slotTrans = cardSlotManager.pickedSlotTransforms(item);
+                bool isWeapon = item.Type == "Weapon" ? true : false;
+                cardSlotManager.SetSlotsPosition(slotTrans, isWeapon, null);
+            }
         }
+        slotsOnField.Clear();
     }
     #endregion
 }

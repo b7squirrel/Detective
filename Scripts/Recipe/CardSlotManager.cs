@@ -268,8 +268,57 @@ public class CardSlotManager : MonoBehaviour
     }
     List<CardData> GetItemSlotsOf(CardData oriCard)
     {
-        if(cardList == null) cardList = FindObjectOfType<CardList>();
+        if (cardList == null) cardList = FindObjectOfType<CardList>();
         List<CardData> equipCardDatas = cardList.GetEquipCardDataOf(oriCard);
         return equipCardDatas;
+    }
+
+    public Transform pickedSlotTransforms(CardData cardData)
+    {
+        Transform picked;
+        if (cardData.Type == "Weapon")
+        {
+            picked = weaponSlots[cardData.ID].transform;
+        }
+        else
+        {
+            picked = itemSlots[cardData.ID].transform;
+
+        }
+        return picked;
+    }
+
+    /// <summary>
+    /// parent Transform이 널이라면 원래의 풀 위치로 되돌림
+    /// </summary>
+    public void SetSlotsPosition(Transform slotTransforms, bool isWeapon, Transform parentTransform)
+    {
+        StartCoroutine(SetSlotPositionCo(slotTransforms, isWeapon, parentTransform));
+    }
+    IEnumerator SetSlotPositionCo(Transform slotTransforms, bool isWeapon, Transform parentTransform)
+    {
+        yield return new WaitForSeconds(.1f);
+        if (isWeapon)
+        {
+            if (parentTransform != null)
+            {
+                slotTransforms.SetParent(parentTransform);
+            }
+            else
+            {
+                slotTransforms.SetParent(weaponSlotField);
+            }
+        }
+        else
+        {
+            if (parentTransform != null)
+            {
+                slotTransforms.SetParent(parentTransform);
+            }
+            else
+            {
+                slotTransforms.SetParent(itemSlotField);
+            }
+        }
     }
 }
