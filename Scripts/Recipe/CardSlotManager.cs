@@ -297,7 +297,7 @@ public class CardSlotManager : MonoBehaviour
     }
     IEnumerator SetSlotPositionCo(Transform slotTransforms, bool isWeapon, Transform parentTransform)
     {
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.03f);
         if (isWeapon)
         {
             if (parentTransform != null)
