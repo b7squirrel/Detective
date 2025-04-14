@@ -208,6 +208,13 @@ public class CardSlotManager : MonoBehaviour
                 Destroy(cardSlot.gameObject); // 실제 슬롯 오브젝트 삭제
             }
         }
+        else if(cardData.Type == "Item")
+        {
+            // 아이템 카드 슬롯 제거
+                CardSlot cardSlot = itemSlots[cardData.ID];
+                itemSlots.Remove(cardData.ID); // 딕셔너리에서 슬롯 제거
+                Destroy(cardSlot.gameObject); // 실제 슬롯 오브젝트 삭제
+        }
     }
 
     public void ClearAllSlots()

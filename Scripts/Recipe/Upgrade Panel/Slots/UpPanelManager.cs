@@ -424,17 +424,24 @@ public class UpPanelManager : MonoBehaviour
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.RemoveSlot(cardData);
 
-        // 오리 카드 슬롯이 제거되어서 장착 아이템이 떨어져 나오면 equipped 태그를 업데이트 해야 함
-        // 오리 카드가 제거되기 전에 장착 아이템들을 받아 두고
-        List<CardData> equipCardDatas = cardList.GetEquipCardDataOf(cardData);
-
-        // 실제 카드 데이터가 지워진 후
-        cardDataManager.RemoveCardFromMyCardList(cardToFeed);
-
-        // 떨어져 나온 장비 카드들의 슬롯을 업데이트(슬롯 풀에 있는 슬롯들)
-        foreach (var item in equipCardDatas)
+        if (cardData.Type == "Weapon")
         {
-            cardSlotManager.UpdateCardDisplay(item);
+            // 오리 카드 슬롯이 제거되어서 장착 아이템이 떨어져 나오면 equipped 태그를 업데이트 해야 함
+            // 오리 카드가 제거되기 전에 장착 아이템들을 받아 두고
+            List<CardData> equipCardDatas = cardList.GetEquipCardDataOf(cardData);
+
+            // 실제 카드 데이터가 지워진 후
+            cardDataManager.RemoveCardFromMyCardList(cardToFeed);
+
+            // 떨어져 나온 장비 카드들의 슬롯을 업데이트(슬롯 풀에 있는 슬롯들)
+            foreach (var item in equipCardDatas)
+            {
+                cardSlotManager.UpdateCardDisplay(item);
+            }
+        }
+        else if (cardData.Type == "Item")
+        {
+            cardDataManager.RemoveCardFromMyCardList(cardToFeed);
         }
     }
     void UpdateCardSlotDisplay(CardData cardData)
