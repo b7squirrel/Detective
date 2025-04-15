@@ -287,17 +287,22 @@ public class CardSlotManager : MonoBehaviour
         }
         return picked;
     }
+    public Transform GetWeaponSlotTransform(CardData cardData)
+    {
+        Transform picked = weaponSlots[cardData.ID].transform;
+        return picked;
+    }
+    public Transform GetItemSlotTransform(CardData cardData)
+    {
+        Transform picked = picked = itemSlots[cardData.ID].transform;
+        return picked;
+    }
 
     /// <summary>
     /// parent Transform이 널이라면 원래의 풀 위치로 되돌림
     /// </summary>
     public void SetSlotsPosition(Transform slotTransforms, bool isWeapon, Transform parentTransform)
     {
-        StartCoroutine(SetSlotPositionCo(slotTransforms, isWeapon, parentTransform));
-    }
-    IEnumerator SetSlotPositionCo(Transform slotTransforms, bool isWeapon, Transform parentTransform)
-    {
-        yield return new WaitForSeconds(.03f);
         if (isWeapon)
         {
             if (parentTransform != null)
@@ -319,6 +324,17 @@ public class CardSlotManager : MonoBehaviour
             {
                 slotTransforms.SetParent(itemSlotField);
             }
+        }
+    }
+    public Transform GetParentTransform(bool isWeapon)
+    {
+        if(isWeapon)
+        {
+            return weaponSlotField;
+        }
+        else
+        {
+            return itemSlotField;
         }
     }
 }

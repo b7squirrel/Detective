@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +22,12 @@ public class AllField : MonoBehaviour
 
     void OnDisable()
     {
-        ClearSlots();
+        StartCoroutine(DelayClearSlots());
+    }
+    IEnumerator DelayClearSlots()
+    {
+        yield return null; // 한 프레임 대기
+        ClearSlots(); // 여기서 SetParent 호출됨
     }
 
     #region Refresh
@@ -65,16 +71,16 @@ public class AllField : MonoBehaviour
         // }
 
         if(cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+
         foreach (var item in cardDataSorted)
         {
             Transform picked = cardSlotManager.pickedSlotTransforms(item);
-            if(picked == null) continue;
+            if (picked == null) continue;
             bool isWeapon = item.Type == "Weapon" ? true : false;
             slotsOnField.Add(item);
 
             cardSlotManager.SetSlotsPosition(picked, isWeapon, transform);
         }
-
     }
     public void GenerateAllLaunchCardOfType(List<CardData> _cardList, CardData _lead)
     {
