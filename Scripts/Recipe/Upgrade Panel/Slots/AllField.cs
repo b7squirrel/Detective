@@ -9,6 +9,7 @@ public class AllField : MonoBehaviour
     [SerializeField] SetCardDataOnSlot displayCardOnSlot;
     [SerializeField] SlotPool slotPool;
     CardSlotManager cardSlotManager;
+    MainMenuManager mainMenuManager; // 슬롯이 다 옮겨지면 탭이 바뀌도록 하기 위해
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -18,11 +19,13 @@ public class AllField : MonoBehaviour
     [SerializeField] Vector2 slotSize;
     // Dictionary<string, Transform> slotsOnField = new Dictionary<string, Transform>();
     List<CardData> slotsOnField = new();
+
+    bool slotSwappingFinished;
     #endregion
 
     void OnDisable()
     {
-        StartCoroutine(DelayClearSlots());
+        ClearSlots();
     }
     IEnumerator DelayClearSlots()
     {
@@ -33,6 +36,8 @@ public class AllField : MonoBehaviour
     #region Refresh
     public void GenerateAllCardsOfType(List<CardData> cardList)
     {
+        slotSwappingFinished = false;
+
         List<CardData> cardDatas = new();
         List<GameObject> slots = new();
 
@@ -81,6 +86,8 @@ public class AllField : MonoBehaviour
 
             cardSlotManager.SetSlotsPosition(picked, isWeapon, transform);
         }
+
+        slotSwappingFinished = true;
     }
     public void GenerateAllLaunchCardOfType(List<CardData> _cardList, CardData _lead)
     {
@@ -147,4 +154,10 @@ public class AllField : MonoBehaviour
         slotsOnField.Clear();
     }
     #endregion
+
+    void SetSwapState(bool isFinished)
+    {
+        if(mainMenuManager == null) mainMenuManager = FindObjectOfType<MainMenuManager>();
+        mainMenuManager.SetSlotSwapState(isFinished);
+    }
 }

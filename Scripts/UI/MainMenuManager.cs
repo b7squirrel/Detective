@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -50,6 +51,8 @@ public class MainMenuManager : MonoBehaviour
     bool mergeFinished;
     UpgradePanelManager upPanelManager;
 
+    bool slotSwapFinished;
+
     
 
     void Awake()
@@ -92,6 +95,12 @@ public class MainMenuManager : MonoBehaviour
 
         if (Time.time < 0.1f) return;
 
+        StartCoroutine(ActivatePanel());
+    }
+
+    IEnumerator ActivatePanel()
+    {
+        yield return null;
         for (int i = 0; i < SIZE; i++)
         {
             Vector3 BtnTargetPos = BtnRect[i].anchoredPosition3D;
@@ -253,5 +262,9 @@ public class MainMenuManager : MonoBehaviour
         {
             upperTabs.anchoredPosition = new Vector2(upperTabs.anchoredPosition.x, 300f);
         }
+    }
+    public void SetSlotSwapState(bool isFinished)
+    {
+        slotSwapFinished = isFinished;
     }
 }
