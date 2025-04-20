@@ -31,8 +31,10 @@ public class SlotAction : MonoBehaviour
 
         if (upPanelManager == null)
         {
-            upPanelManager = FindAnyObjectByType<UpPanelManager>();
+            upPanelManager = FindObjectOfType<UpPanelManager>();
         }
+
+        if(upPanelManager == null) Debug.Log("UP Panel Manager가 Null입니다.");
 
         ActionType();
     }

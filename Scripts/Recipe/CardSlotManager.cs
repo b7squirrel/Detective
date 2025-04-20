@@ -27,6 +27,7 @@ public class CardSlotManager : MonoBehaviour
     [SerializeField] GameObject slotPrefab;
     [SerializeField] Transform weaponSlotField;
     [SerializeField] Transform itemSlotField;
+    [SerializeField] Transform presentSlotField;
     [SerializeField] Vector2 slotSize;
     Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
             { "Head", 0 },
@@ -309,31 +310,32 @@ public class CardSlotManager : MonoBehaviour
 
     /// <summary>
     /// parent Transform이 널이라면 원래의 풀 위치로 되돌림
+    /// going home이 참이라면 weapon 혹은 item 풀로 되돌림.
     /// </summary>
-    public void SetSlotsPosition(Transform slotTransforms, bool isWeapon, Transform parentTransform)
+    public void SetSlotsPosition(Transform slotTransforms, bool isWeapon, bool goingHome)
     {
-        // if (isWeapon)
-        // {
-        //     if (parentTransform != null)
-        //     {
-        //         slotTransforms.SetParent(parentTransform);
-        //     }
-        //     else
-        //     {
-        //         slotTransforms.SetParent(weaponSlotField);
-        //     }
-        // }
-        // else
-        // {
-        //     if (parentTransform != null)
-        //     {
-        //         slotTransforms.SetParent(parentTransform);
-        //     }
-        //     else
-        //     {
-        //         slotTransforms.SetParent(itemSlotField);
-        //     }
-        // }
+        if (isWeapon)
+        {
+            if (goingHome == false)
+            {
+                slotTransforms.SetParent(presentSlotField);
+            }
+            else
+            {
+                slotTransforms.SetParent(weaponSlotField);
+            }
+        }
+        else
+        {
+            if (goingHome == false)
+            {
+                slotTransforms.SetParent(presentSlotField);
+            }
+            else
+            {
+                slotTransforms.SetParent(itemSlotField);
+            }
+        }
     }
     public Transform GetParentTransform(bool isWeapon)
     {

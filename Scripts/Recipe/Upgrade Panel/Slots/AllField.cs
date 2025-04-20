@@ -84,7 +84,7 @@ public class AllField : MonoBehaviour
             bool isWeapon = item.Type == "Weapon" ? true : false;
             slotsOnField.Add(item);
 
-            cardSlotManager.SetSlotsPosition(picked, isWeapon, transform);
+            cardSlotManager.SetSlotsPosition(picked, isWeapon, false);
         }
 
         slotSwappingFinished = true;
@@ -148,7 +148,7 @@ public class AllField : MonoBehaviour
             {
                 Transform slotTrans = cardSlotManager.pickedSlotTransforms(item);
                 bool isWeapon = item.Type == "Weapon" ? true : false;
-                cardSlotManager.SetSlotsPosition(slotTrans, isWeapon, null);
+                cardSlotManager.SetSlotsPosition(slotTrans, isWeapon, true);
             }
         }
         slotsOnField.Clear();
