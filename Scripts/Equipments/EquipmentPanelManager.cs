@@ -3,7 +3,6 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
-using System.Runtime.CompilerServices;
 
 public class EquipmentPanelManager : MonoBehaviour
 {
@@ -83,8 +82,6 @@ public class EquipmentPanelManager : MonoBehaviour
 
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
-
-        
     }
 
     // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출
@@ -108,7 +105,6 @@ public class EquipmentPanelManager : MonoBehaviour
         isEquipped = false;
         Debug.Log("Card on Display = " + CardOnDisplay.Name);
 
-        
     }
 
     public void ClearAllFieldSlots()
@@ -119,9 +115,10 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         cardToEquip = null;
 
-
         ClearAllFieldSlots();
         List<CardData> card = new();
+
+        string fieldAnimTrigger = cardType == "Weapon" ? "EquipW" : "EquipI";
 
         // 아이템 카드는 착용되어 있지 않는 것들만 보여주기
         if (cardType == CardType.Weapon.ToString())
@@ -129,9 +126,9 @@ public class EquipmentPanelManager : MonoBehaviour
             ClearAllEquipmentSlots(); // logic, UI 모두 처리
 
             card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field에는 오리만 보여줌
-            //card.Remove(CardOnDisplay);
+                                                                                     //card.Remove(CardOnDisplay);
         }
-        else if (cardType == CardType.Item.ToString())
+        else if(cardType == CardType.Item.ToString())
         {
             foreach (var item in cardList.GetEquipmentCardsList())
             {
@@ -163,7 +160,12 @@ public class EquipmentPanelManager : MonoBehaviour
                 }
             }
         }
+
         field.GenerateAllCardsOfType(card);
+
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        cardSlotManager.SettrigerAnim(fieldAnimTrigger); // 오리 혹은 아이템 필드를 보여주기.
+        Debug.Log($"장비탭에서 {fieldAnimTrigger}가 트리거 되었습니다.");
 
         // 장비 슬롯 타입 
         EquipSlotType currentSlotType = EquipSlotType.FieldOri;

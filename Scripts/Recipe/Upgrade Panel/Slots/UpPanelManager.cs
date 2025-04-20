@@ -53,6 +53,8 @@ public class UpPanelManager : MonoBehaviour
 
         upTabManager = GetComponentInChildren<UpTabManager>();
 
+        cardSlotManager = FindObjectOfType<CardSlotManager>();
+
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
 
@@ -65,6 +67,7 @@ public class UpPanelManager : MonoBehaviour
         activated = true;
         currentTabType = "Weapon";
         GetIntoAllField("Weapon");
+        cardSlotManager.SettrigerAnim("MergeW");
     }
     #endregion
 
@@ -111,18 +114,27 @@ public class UpPanelManager : MonoBehaviour
         upPanelUI.ResetScrollContent();
 
         // 카드타입 인자를 비워 놓는다면 up slot에 올라가 있는 카드 타입들만 필드에 진열하기
-        // 머지에 성공하면 항상 ""를 인자로 가지고 온다.
+        // 머지에 성공하면 항상 ""를 인자로 가지고 온다. 오리를 합성했다면 오리필드로, 아이템을 합성했다면 아이템 필드로
         if (_thisCardType == "")
         {
-            allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(upCardSlot.GetCardData().Type));
-            upTabManager.SetTab(upCardSlot.GetCardData().Type);
+            string typeToPresent = upCardSlot.GetCardData().Type;
+            allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(typeToPresent));
+            upTabManager.SetTab(typeToPresent);
             SetMergeDoneState(false);
+
+            string fieldType = typeToPresent == "Weapon" ? "MergeW" : "MergeI";
+            cardSlotManager.SettrigerAnim(fieldType);
         }
         else
         {
             List<CardData> cards = GetMyCardsListOnCardType(_thisCardType);
             allField.GenerateAllCardsOfType(cards);
             upTabManager.SetTab(_thisCardType);
+
+            string fieldType = _thisCardType == "Weapon" ? "MergeW" : "MergeI";
+            cardSlotManager.SettrigerAnim(fieldType);
+
+            cardSlotManager.SettrigerAnim(fieldType);
         }
 
         upPanelUI.Init();
@@ -159,6 +171,9 @@ public class UpPanelManager : MonoBehaviour
     public void GetIntoConfirmation()
     {
         ClearAllFieldSlots();
+
+        cardSlotManager.SettrigerAnim("Off");
+
         upPanelUI.UpgradeConfirmationUI(); // 합성 확인 창 UI
     }
 

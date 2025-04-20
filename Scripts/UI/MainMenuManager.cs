@@ -53,8 +53,6 @@ public class MainMenuManager : MonoBehaviour
 
     bool slotSwapFinished;
 
-    
-
     void Awake()
     {
         InitBlackTransition();

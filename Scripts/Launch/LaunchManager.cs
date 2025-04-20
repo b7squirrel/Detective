@@ -12,6 +12,7 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] StatManager statManager;
     [SerializeField] CardList cardList;
     [SerializeField] StartingDataContainer startingDataContainer;
+    CardSlotManager cardSlotManager;
 
     [SerializeField] GameObject fieldSlotPanel; // 패널 켜고 끄기 위해
     [SerializeField] AllField field; // 모든 카드
@@ -32,6 +33,11 @@ public class LaunchManager : MonoBehaviour
         fieldSlotPanel.SetActive(false);
         stageInfoUi.PlayFromStart();
         InitLead();
+        CloseField();
+
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        cardSlotManager.SettrigerAnim("Off");
+        Debug.Log("출동탭에서 Off를 트리거 했습니다.");
     }
     void OnDisable()
     {
@@ -80,6 +86,10 @@ public class LaunchManager : MonoBehaviour
         // field 오리만 보여줌
         card = cardDataManager.GetMyCardList().FindAll(x => x.Type == oriType);
 
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        cardSlotManager.SettrigerAnim("Launch");
+        Debug.Log($"출동탭에서 Launch가 트리거 되었습니다.");
+
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
         //card.Remove(currentLeadOri);
 
@@ -125,5 +135,7 @@ public class LaunchManager : MonoBehaviour
         DOTween.KillAll(true);
 
         fieldSlotPanel.SetActive(false);
+
+        
     }
 }

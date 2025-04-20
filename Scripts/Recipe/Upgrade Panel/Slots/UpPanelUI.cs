@@ -92,6 +92,7 @@ public class UpPanelUI : MonoBehaviour
     {
         upgradeConfirmationButton.localScale = Vector2.zero;
         fieldSlotPanel.transform.localScale = Vector2.zero;
+
         //fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(0, 0), .15f).SetEase(Ease.InBack);
         upgradeConfirmationButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -560f);
         StartCoroutine(UpgradeConfirmationAnimationCo());
@@ -119,6 +120,8 @@ public class UpPanelUI : MonoBehaviour
         //fieldSlotPanel.transform.localScale = new Vector2(.8f, .8f);
         //fieldSlotPanel.transform.DOScale(1, .15f).SetEase(Ease.OutBack);
         fieldSlotPanel.transform.localScale = Vector2.one;
+
+
     }
     #endregion
 

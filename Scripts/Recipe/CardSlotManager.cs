@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CardSlotManager : MonoBehaviour
 {
+    public static CardSlotManager instance;
     [SerializeField] List<CardSlot> weaponCardSlots;
     [SerializeField] List<CardSlot> itemCardSlots;
     [SerializeField] List<CardData> weaponCardData;
@@ -15,6 +16,9 @@ public class CardSlotManager : MonoBehaviour
     [SerializeField] SetCardDataOnSlot displayCardOnSlot;
     [SerializeField] SlotPool slotPool;
     #endregion
+
+    [Header("필드 제어")]
+    [SerializeField] Animator fieldAnim; // 탭마다 다른 필드의 형태를 애니메이터로 제어
 
     #region 슬롯 생성 관련 변수
     int numSlots;
@@ -31,6 +35,11 @@ public class CardSlotManager : MonoBehaviour
             { "Hand", 3 }
     };
     #endregion
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -303,28 +312,28 @@ public class CardSlotManager : MonoBehaviour
     /// </summary>
     public void SetSlotsPosition(Transform slotTransforms, bool isWeapon, Transform parentTransform)
     {
-        if (isWeapon)
-        {
-            if (parentTransform != null)
-            {
-                slotTransforms.SetParent(parentTransform);
-            }
-            else
-            {
-                slotTransforms.SetParent(weaponSlotField);
-            }
-        }
-        else
-        {
-            if (parentTransform != null)
-            {
-                slotTransforms.SetParent(parentTransform);
-            }
-            else
-            {
-                slotTransforms.SetParent(itemSlotField);
-            }
-        }
+        // if (isWeapon)
+        // {
+        //     if (parentTransform != null)
+        //     {
+        //         slotTransforms.SetParent(parentTransform);
+        //     }
+        //     else
+        //     {
+        //         slotTransforms.SetParent(weaponSlotField);
+        //     }
+        // }
+        // else
+        // {
+        //     if (parentTransform != null)
+        //     {
+        //         slotTransforms.SetParent(parentTransform);
+        //     }
+        //     else
+        //     {
+        //         slotTransforms.SetParent(itemSlotField);
+        //     }
+        // }
     }
     public Transform GetParentTransform(bool isWeapon)
     {
@@ -336,5 +345,9 @@ public class CardSlotManager : MonoBehaviour
         {
             return itemSlotField;
         }
+    }
+    public void SettrigerAnim(string trigger)
+    {
+        fieldAnim.SetTrigger(trigger);
     }
 }
