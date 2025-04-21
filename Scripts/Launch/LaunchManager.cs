@@ -93,7 +93,7 @@ public class LaunchManager : MonoBehaviour
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
         //card.Remove(currentLeadOri);
 
-        field.GenerateAllLaunchCardOfType(card, currentLeadOri);
+        field.GenerateAllCardsOfType(card);
         SetHalo(true);
     }
     void SetLead(CardData lead)
@@ -137,5 +137,10 @@ public class LaunchManager : MonoBehaviour
         fieldSlotPanel.SetActive(false);
 
         
+    }
+
+    public CardData GetLeadCardData()
+    {
+        return currentLead;
     }
 }

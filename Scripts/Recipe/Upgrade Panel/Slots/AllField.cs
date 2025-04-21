@@ -10,6 +10,7 @@ public class AllField : MonoBehaviour
     [SerializeField] SlotPool slotPool;
     CardSlotManager cardSlotManager;
     MainMenuManager mainMenuManager; // 슬롯이 다 옮겨지면 탭이 바뀌도록 하기 위해
+    LaunchManager launchManager; // 리드오리 카드 데이터를 얻기 위해
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -45,18 +46,6 @@ public class AllField : MonoBehaviour
 
         numSlots = cardDatas.Count;
 
-        // // 슬롯 생성
-        // for (int i = 0; i < numSlots; i++)
-        // {
-        //     var slot = Instantiate(slotPrefab, transform);
-        //     // var slot = slotPool.GetSlot(slotType, transform);
-        //     slot.transform.position = Vector3.zero;
-        //     // slot.transform.localScale = new Vector2(0, 0);
-        //     // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
-        //     slot.transform.localScale = slotSize;
-        //     slots.Add(slot);
-        // }
-
         // 카드 데이터 정렬
         List<CardData> cardDataSorted = new();
         cardDataSorted.AddRange(cardDatas);
@@ -69,11 +58,11 @@ public class AllField : MonoBehaviour
 
         cardDataSorted.Reverse();
 
-        // // 카드 Display
-        // for (int i = 0; i < numSlots; i++)
-        // {
-        //     displayCardOnSlot.PutCardDataIntoSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
-        // }
+        // 리드 오리를 가장 앞에 배치
+        if(launchManager == null) launchManager = FindObjectOfType<LaunchManager>();
+        CardData lead = launchManager.GetLeadCardData();
+        cardDataSorted.Remove(lead);
+        cardDataSorted.Insert(0, lead);
 
         if(cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
 
@@ -91,6 +80,8 @@ public class AllField : MonoBehaviour
     }
     public void GenerateAllLaunchCardOfType(List<CardData> _cardList, CardData _lead)
     {
+        slotSwappingFinished = false;
+
         List<CardData> cardDatas = new();
         List<GameObject> slots = new();
 
