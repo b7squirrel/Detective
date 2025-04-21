@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Unity.VisualScripting;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -53,6 +52,9 @@ public class MainMenuManager : MonoBehaviour
     UpgradePanelManager upPanelManager;
 
     bool slotSwapFinished;
+
+    // 리드오리 카드 데이터
+    CardData lead;
 
     void Awake()
     {
@@ -272,5 +274,19 @@ public class MainMenuManager : MonoBehaviour
     public int GetTabIndex()
     {
         return tabIndex;
+    }
+
+    public void SetLeadCardData(CardData _lead)
+    {
+        this.lead = _lead;
+    }
+    public CardData GetLeadCardData()
+    {
+        if(lead == null) 
+        {
+            Debug.Log("리드 오리가 아직 저장되지 않았습니다. 확인해 주세요.");
+            return null;
+        }
+        return lead;
     }
 }

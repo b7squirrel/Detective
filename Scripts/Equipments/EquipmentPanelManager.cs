@@ -161,35 +161,11 @@ public class EquipmentPanelManager : MonoBehaviour
             }
         }
 
-        field.GenerateAllCardsOfType(card);
+        field.GenerateAllCardsOfType(card, "Equip");
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim(fieldAnimTrigger); // 오리 혹은 아이템 필드를 보여주기.
-        Debug.Log($"장비탭에서 {fieldAnimTrigger}가 트리거 되었습니다.");
-
-        // 장비 슬롯 타입 
-        // EquipSlotType currentSlotType11 = EquipSlotType.FieldOri;
-        // if (cardType == "Item")
-        // {
-        //     currentSlotType11 = EquipSlotType.FieldEquipment;
-        // }
-
-        // EquipSlotAction[] slot = field.GetComponentsInChildren<EquipSlotAction>();
-        // foreach (var item in slot)
-        // {
-        //     item.SetSlotType(currentSlotType11);
-        // }
-
-        // SlotType currentSlotType = SlotType.E_FieldOri;
-        // if(cardType == "Item")
-        // {
-        //     currentSlotType = SlotType.E_FieldEquipment;
-        // }
-        // SlotAction[] slots = field.GetComponentsInChildren<SlotAction>();
-        // foreach (var item in slots)
-        // {
-        //     item.SetEquipSlotType(currentSlotType);
-        // }
+        Debug.Log($"장비탭 선별된 카드는 {card.Count}개 입니다.");
     }
     void ClearAllEquipmentSlots()
     {

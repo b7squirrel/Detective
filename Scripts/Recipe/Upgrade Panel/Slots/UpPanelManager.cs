@@ -17,7 +17,6 @@ public class UpPanelManager : MonoBehaviour
 
     #region 참조 변수
     CardDataManager cardDataManager;
-    CardsDictionary cardsDictionary;
     CardList cardList;
     SetCardDataOnSlot setCardDataOnSlot; // CardData를 Slot에 넣음
     UpPanelUI upPanelUI; // UI 관련 클래스
@@ -46,13 +45,10 @@ public class UpPanelManager : MonoBehaviour
     {
         setCardDataOnSlot = GetComponent<SetCardDataOnSlot>();
         cardDataManager = FindObjectOfType<CardDataManager>();
-        cardsDictionary = FindObjectOfType<CardsDictionary>();
         cardList = FindObjectOfType<CardList>();
         upPanelUI = GetComponent<UpPanelUI>();
         mainMenuManager = FindObjectOfType<MainMenuManager>();
-
         upTabManager = GetComponentInChildren<UpTabManager>();
-
         cardSlotManager = FindObjectOfType<CardSlotManager>();
 
         upCardSlot.EmptySlot();
@@ -118,7 +114,7 @@ public class UpPanelManager : MonoBehaviour
         if (_thisCardType == "")
         {
             string typeToPresent = upCardSlot.GetCardData().Type;
-            allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(typeToPresent));
+            allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(typeToPresent), "Up");
             upTabManager.SetTab(typeToPresent);
             SetMergeDoneState(false);
 
@@ -128,7 +124,7 @@ public class UpPanelManager : MonoBehaviour
         else
         {
             List<CardData> cards = GetMyCardsListOnCardType(_thisCardType);
-            allField.GenerateAllCardsOfType(cards);
+            allField.GenerateAllCardsOfType(cards, "Up");
             upTabManager.SetTab(_thisCardType);
 
             string fieldType = _thisCardType == "Weapon" ? "MergeW" : "MergeI";
@@ -179,7 +175,7 @@ public class UpPanelManager : MonoBehaviour
 
     public void BackToMatField()
     {
-        ClearAllFieldSlots();
+        // ClearAllFieldSlots();
 
         allField.gameObject.SetActive(false);
         matField.gameObject.SetActive(true);
@@ -189,6 +185,9 @@ public class UpPanelManager : MonoBehaviour
 
         upPanelUI.OffUpgradeConfirmationUI();
         upPanelUI.MatSlotCanceled();
+
+        string fieldType = CardToUpgrade.Type == "Weapon" ? "MergeW" : "MergeI";
+        cardSlotManager.SettrigerAnim(fieldType);
     }
     #endregion
 
@@ -223,7 +222,7 @@ public class UpPanelManager : MonoBehaviour
 
         // 재료 카드의 경우
         // 리드 오리는 무조건 재료가 될 수 없음
-        if(_cardData.StartingMember == StartingMember.Zero.ToString())
+        if (_cardData.StartingMember == StartingMember.Zero.ToString())
         {
             Debug.Log("리드 오리는 재료 카드로 사용할 수 없습니다.");
             return;
@@ -244,7 +243,7 @@ public class UpPanelManager : MonoBehaviour
             Debug.Log("최고 레벨의 카드만 합성이 가능합니다");
             return;
         }
-        if(CardToUpgrade.EvoStage != _cardData.EvoStage)
+        if (CardToUpgrade.EvoStage != _cardData.EvoStage)
         {
             Debug.Log("같은 합성 등급의 카드만 합성이 가능합니다.");
             return;
@@ -490,23 +489,6 @@ public class UpPanelManager : MonoBehaviour
         // 합성 성공 패널이 활성화 된 후에 실행되어야 슬롯이 empty된 상태로 끝나지 않게 된다
         setCardDataOnSlot.PutCardDataIntoSlot(upgradedCardData, upSuccessSlot);
     }
-
-    // // 아이디를 발급 받지 않은 card data 생성
-    // public CardData GenUpgradeCardData(string _cardName, int _grade)
-    // {
-    //     List<CardData> newCard = new();
-    //     newCard.AddRange(cardsDictionary.GetCardPool());
-
-    //     List<CardData> sameNameCardData = newCard.FindAll(x => x.Name == _cardName);
-    //     Debug.Log("찾는 카드 = " + _cardName);
-    //     CardData picked = sameNameCardData.Find(x => x.Grade == _grade);
-    //     if (picked == null)
-    //     {
-    //         Debug.Log("검색된 카드가 없습니ㅏㄷ");
-    //     }
-
-    //     return picked;
-    // }
     #endregion
 
     #region Refresh All, Mat Field

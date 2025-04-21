@@ -106,12 +106,18 @@ public class UpPanelUI : MonoBehaviour
     }
     void DeactivateUpgradeConfimation()
     {
-        StartCoroutine(DeactivateUpgradeConfirmationCo());
+        // StartCoroutine(DeactivateUpgradeConfirmationCo());
+
+        upgradeConfirmationButton.transform.localScale = 0f * Vector2.one;
+        fieldSlotPanel.gameObject.SetActive(true);
+        fieldSlotPanel.transform.localScale = Vector2.one;
     }
     IEnumerator DeactivateUpgradeConfirmationCo()
     {
-        upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -560), .15f).SetEase(Ease.OutBack);
-        upgradeConfirmationButton.DOScale(0, .15f).SetEase(Ease.InBack);
+        // upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -560), .15f).SetEase(Ease.OutBack);
+        // upgradeConfirmationButton.DOScale(0, .15f).SetEase(Ease.InBack);
+
+        upgradeConfirmationButton.transform.localScale = 0f * Vector2.one;
 
         yield return new WaitForSeconds(.15f);
 

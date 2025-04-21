@@ -10,7 +10,6 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] SetCardDataOnSlot setCardDataOnSlot;
     [SerializeField] StatManager statManager;
-    [SerializeField] CardList cardList;
     [SerializeField] StartingDataContainer startingDataContainer;
     CardSlotManager cardSlotManager;
 
@@ -33,15 +32,10 @@ public class LaunchManager : MonoBehaviour
         fieldSlotPanel.SetActive(false);
         stageInfoUi.PlayFromStart();
         InitLead();
-        CloseField();
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Off");
         Debug.Log("출동탭에서 Off를 트리거 했습니다.");
-    }
-    void OnDisable()
-    {
-        CloseField();
     }
     
     // 버튼으로 스테이지 앞 뒤로 갈 수 있도록
@@ -73,10 +67,6 @@ public class LaunchManager : MonoBehaviour
         startButton.SetActive(true); // 리드 카드가 셋업되기 전에 시작 버튼을 누르면 리드가 스프라이트가 없는 채로 시작된다.
         InitStageInfo();
     }
-    public void ClearAllFieldSlots()
-    {
-        field.ClearSlots();
-    }
 
     public void SetAllFieldTypeOf(string oriType, CardData currentLeadOri)
     {
@@ -93,7 +83,7 @@ public class LaunchManager : MonoBehaviour
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
         //card.Remove(currentLeadOri);
 
-        field.GenerateAllCardsOfType(card);
+        field.GenerateAllCardsOfType(card, "Launch");
         SetHalo(true);
     }
     void SetLead(CardData lead)
@@ -131,16 +121,8 @@ public class LaunchManager : MonoBehaviour
     }
     public void CloseField()
     {
-        ClearAllFieldSlots();
         DOTween.KillAll(true);
 
         fieldSlotPanel.SetActive(false);
-
-        
-    }
-
-    public CardData GetLeadCardData()
-    {
-        return currentLead;
     }
 }
