@@ -168,17 +168,28 @@ public class EquipmentPanelManager : MonoBehaviour
         Debug.Log($"장비탭에서 {fieldAnimTrigger}가 트리거 되었습니다.");
 
         // 장비 슬롯 타입 
-        EquipSlotType currentSlotType = EquipSlotType.FieldOri;
-        if (cardType == "Item")
-        {
-            currentSlotType = EquipSlotType.FieldEquipment;
-        }
+        // EquipSlotType currentSlotType11 = EquipSlotType.FieldOri;
+        // if (cardType == "Item")
+        // {
+        //     currentSlotType11 = EquipSlotType.FieldEquipment;
+        // }
 
-        EquipSlotAction[] slot = field.GetComponentsInChildren<EquipSlotAction>();
-        foreach (var item in slot)
-        {
-            item.SetSlotType(currentSlotType);
-        }
+        // EquipSlotAction[] slot = field.GetComponentsInChildren<EquipSlotAction>();
+        // foreach (var item in slot)
+        // {
+        //     item.SetSlotType(currentSlotType11);
+        // }
+
+        // SlotType currentSlotType = SlotType.E_FieldOri;
+        // if(cardType == "Item")
+        // {
+        //     currentSlotType = SlotType.E_FieldEquipment;
+        // }
+        // SlotAction[] slots = field.GetComponentsInChildren<SlotAction>();
+        // foreach (var item in slots)
+        // {
+        //     item.SetEquipSlotType(currentSlotType);
+        // }
     }
     void ClearAllEquipmentSlots()
     {
@@ -259,6 +270,8 @@ public class EquipmentPanelManager : MonoBehaviour
         Item iData = cardDictionary.GetWeaponItemData(itemCardData).itemData;
 
         equipInfoPanel.gameObject.SetActive(true);
+        cardSlotManager.SettrigerAnim("Off"); // 필드 끄기
+
 
         bool isEssential = false;
         if (CardOnDisplay.EssentialEquip == equipType.ToString())
@@ -281,6 +294,8 @@ public class EquipmentPanelManager : MonoBehaviour
     public void DeActivateEquipInfoPanel()
     {
         equipInfoPanel.gameObject.SetActive(false);
+        // cardSlotManager.SettrigerAnim("EquipI"); // 필드 끄기, 인포는 무조건 아이템이니까 아이템으로 돌아감
+
         this.cardDisp = null;
     }
     /// <summary>

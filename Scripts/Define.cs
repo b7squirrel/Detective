@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEngine;
 
 #region 메인 메뉴 관련
-public enum SlotType { Field, Up, Mat, None };
+public enum SlotType { M_Field, M_Up, M_Mat, E_FieldOri, E_FieldEquipment, E_UpEquipment, L_Field, L_Up, None};// M - Merge, E - Equip, L - Launch
 public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
 public enum LaunchSlotType { Field, Up, None }
 
