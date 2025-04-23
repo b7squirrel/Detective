@@ -13,7 +13,6 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     [SerializeField] protected Image charFaceImage;
     [SerializeField] protected GameObject charFaceExpression;
     [SerializeField] Animator charAnim;
-    [SerializeField] Animator[] equipmentAnimators;
     [SerializeField] Image[] equipmentImages;
     [SerializeField] RectTransform headMain;
     bool needToOffset;
@@ -252,9 +251,9 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         // 장비 이미지
         for (int i = 0; i < 4; i++)
         {
-            if (equipmentAnimators[i] == null)
+            if (equipmentImages[i] == null)
                 continue;
-            equipmentAnimators[i].gameObject.SetActive(false);
+            equipmentImages[i].gameObject.SetActive(false);
         }
 
         SetEquppiedTextActive(false);

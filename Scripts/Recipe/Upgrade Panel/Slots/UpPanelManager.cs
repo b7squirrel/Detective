@@ -299,7 +299,7 @@ public class UpPanelManager : MonoBehaviour
             {
                 if (_cardData.EquipmentType == equipCard.EquippedWho.EssentialEquip)
                 {
-                    AcquireCard(_cardData); // 그냥 슬롯에 카드를 올리기
+                    // AcquireCard(_cardData); // 그냥 슬롯에 카드를 올리기
                     return;
                 }
             }
