@@ -115,7 +115,7 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         cardToEquip = null;
 
-        ClearAllFieldSlots();
+        // ClearAllFieldSlots(); // 어차피 all field에서 슬롯들을 비워주니 필요없지 않을까?
         List<CardData> card = new();
 
         string fieldAnimTrigger = cardType == "Weapon" ? "EquipW" : "EquipI";
