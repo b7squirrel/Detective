@@ -9,6 +9,7 @@ public class CardSlotManager : MonoBehaviour
     [SerializeField] List<CardSlot> itemCardSlots;
     [SerializeField] List<CardData> weaponCardData;
     [SerializeField] List<CardData> itemCardData;
+    [SerializeField] List<Transform> presentationSlotTransforms = new List<Transform>(); // 프레젠테이션 필드에 있는 슬롯들에 접근하기 위해
     CardDataManager cardDataManager;
     CardList cardList;
 
@@ -319,6 +320,7 @@ public class CardSlotManager : MonoBehaviour
             if (goingHome == false)
             {
                 slotTransforms.SetParent(presentSlotField);
+                presentationSlotTransforms.Add(slotTransforms);
             }
             else
             {
@@ -330,12 +332,18 @@ public class CardSlotManager : MonoBehaviour
             if (goingHome == false)
             {
                 slotTransforms.SetParent(presentSlotField);
+                presentationSlotTransforms.Add(slotTransforms);
             }
             else
             {
                 slotTransforms.SetParent(itemSlotField);
             }
         }
+    }
+    public void ClearPresentationField()
+    {
+        
+        
     }
     public Transform GetParentTransform(bool isWeapon)
     {

@@ -3,6 +3,7 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class EquipmentPanelManager : MonoBehaviour
 {
@@ -165,7 +166,12 @@ public class EquipmentPanelManager : MonoBehaviour
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim(fieldAnimTrigger); // 오리 혹은 아이템 필드를 보여주기.
-        Debug.Log($"장비탭 선별된 카드는 {card.Count}개 입니다.");
+
+        foreach (var item in card)
+        {
+            Debug.Log($"장비 탭에서 {item.Name}을 뽑았습니다.");
+        }
+        // Debug.Log($"장비탭 선별된 카드는 {card.Count}개 입니다.");
     }
     void ClearAllEquipmentSlots()
     {
