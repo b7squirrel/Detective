@@ -36,7 +36,7 @@ public class MatField : MonoBehaviour
         picked.AddRange(new CardClassifier().GetCardsAvailableForMat(myCardData, cardDataOnUpSlot));
 
         // 장비가 필수장비이고, 다른 오리에게 장착되어 있으면 건너뛴다
-        if(cardDataOnUpSlot.Type == CardType.Item.ToString())
+        if (cardDataOnUpSlot.Type == CardType.Item.ToString())
         {
             List<CardData> myCardList = new();
             myCardList.AddRange(cardDataManager.GetMyCardList());
@@ -46,21 +46,18 @@ public class MatField : MonoBehaviour
             for (int i = 0; i < picked2.Count; i++)
             {
                 EquipmentCard equipCard = cardList.FindEquipmentCard(picked2[i]);
-                if(picked2[i].EssentialEquip == EssentialEquip.Essential.ToString() && equipCard.IsEquipped)
+                if (picked2[i].EssentialEquip == EssentialEquip.Essential.ToString() && equipCard.IsEquipped)
                 {
                     picked.Remove(picked2[i]);
                 }
             }
         }
 
+        if (picked == null) return;
         foreach (var item in picked)
         {
-            Transform pickedTransform = cardSlotManager.pickedSlotTransforms(item);
-            if (pickedTransform == null) continue;
-            bool isWeapon = item.Type == "Weapon" ? true : false;
             slotsOnField.Add(item);
-
-            cardSlotManager.SetSlotsPosition(pickedTransform, isWeapon, false);
+            cardSlotManager.SetSlotActive(item.ID, false);
         }
     }
 
@@ -71,9 +68,7 @@ public class MatField : MonoBehaviour
         {
             foreach (var item in slotsOnField)
             {
-                Transform slotTrans = cardSlotManager.pickedSlotTransforms(item);
-                bool isWeapon = item.Type == "Weapon" ? true : false;
-                cardSlotManager.SetSlotsPosition(slotTrans, isWeapon, true);
+                cardSlotManager.SetSlotActive(item.ID, true);
             }
         }
         slotsOnField.Clear();

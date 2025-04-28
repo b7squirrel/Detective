@@ -1,20 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VHierarchy.Libs;
 
 public class CardSlotManager : MonoBehaviour
 {
     public static CardSlotManager instance;
-    [SerializeField] List<CardSlot> weaponCardSlots;
-    [SerializeField] List<CardSlot> itemCardSlots;
-    [SerializeField] List<CardData> weaponCardData;
-    [SerializeField] List<CardData> itemCardData;
-    [SerializeField] List<Transform> presentationSlotTransforms = new List<Transform>(); // 프레젠테이션 필드에 있는 슬롯들에 접근하기 위해
     CardDataManager cardDataManager;
     CardList cardList;
 
     #region 참조 변수
-    [SerializeField] SetCardDataOnSlot displayCardOnSlot;
+    [SerializeField] SetCardDataOnSlot setCardDataOnSLot;
     [SerializeField] SlotPool slotPool;
     #endregion
 
@@ -23,11 +19,8 @@ public class CardSlotManager : MonoBehaviour
 
     #region 슬롯 생성 관련 변수
     int numSlots;
-    Dictionary<int, CardSlot> weaponSlots;
-    Dictionary<int, CardSlot> itemSlots;
+    Dictionary<int, CardSlot> mySlots = new Dictionary<int, CardSlot>(); // 내가 가지고 있는 모든 슬롯을 ID로 검색하기 위해서
     [SerializeField] GameObject slotPrefab;
-    [SerializeField] Transform weaponSlotField;
-    [SerializeField] Transform itemSlotField;
     [SerializeField] Transform presentSlotField;
     [SerializeField] Vector2 slotSize;
     Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
@@ -50,143 +43,73 @@ public class CardSlotManager : MonoBehaviour
     IEnumerator DelayInitCo()
     {
         yield return new WaitForSeconds(1f);
-        InitCardSlots();
+        InitSlots();
     }
-    // 내가 가진 모든 카드를 무기, 아이템으로 따로 저장
-    public void InitCardSlots()
+
+    /// <summary>
+    /// 최초에는 그냥 Card data manager에 접근해서 내가 가진 모든 카드를 얻어와서 슬롯을 생성
+    /// my slots 딕셔너리에 id를 키로 해서 저장
+    /// </summary>
+    void InitSlots()
     {
         if (cardDataManager == null) cardDataManager = FindObjectOfType<CardDataManager>();
         List<CardData> myAllCardDatas = new();
         myAllCardDatas.AddRange(cardDataManager.GetMyCardList());
 
-        if (weaponCardData == null) weaponCardData = new List<CardData>();
-        if (itemCardData == null) itemCardData = new List<CardData>();
-
-
         foreach (var item in myAllCardDatas)
         {
-            if (item.Type == "Weapon")
-            {
-                weaponCardData.Add(item);
-            }
-            else
-            {
-                itemCardData.Add(item);
-            }
-        }
-
-        int totalCards = weaponCardData.Count + itemCardData.Count;
-        Debug.Log($"실제 카드 수 = {myAllCardDatas.Count}와 초기화 시킨 카드의 수 = {totalCards}");
-
-
-        // 무기 카드 슬롯 생성
-        GenerateAllCardsOfType(weaponCardData, weaponSlotField);
-
-        // 아이템 슬롯 생성
-        GenerateAllCardsOfType(itemCardData, itemSlotField);
-    }
-
-    // 카드 슬롯 생성
-    public void GenerateAllCardsOfType(List<CardData> cardList, Transform slotField)
-    {
-        List<CardData> cardDatas = new();
-        List<GameObject> slots = new();
-
-        if (weaponSlots == null) weaponSlots = new Dictionary<int, CardSlot>();
-        if (itemSlots == null) itemSlots = new Dictionary<int, CardSlot>();
-
-        cardDatas.AddRange(cardList); // 재료가 될 수 있는 카드들의 리스트
-
-        numSlots = cardDatas.Count;
-
-        // 카드 데이터 갯수만큼 빈 슬롯 생성
-        for (int i = 0; i < numSlots; i++)
-        {
-            var slot = Instantiate(slotPrefab, slotField);
-            // var slot = slotPool.GetSlot(slotType, transform);
-            slot.transform.position = Vector3.zero;
-            // slot.transform.localScale = new Vector2(0, 0);
-            // slot.transform.DOScale(new Vector2(.5f, .5f), .2f).SetEase(Ease.OutBack);
-            slot.transform.localScale = slotSize;
-            slots.Add(slot);
-        }
-
-        // 카드 데이터 정렬
-        List<CardData> cardDataSorted = new();
-        cardDataSorted.AddRange(cardDatas);
-
-        // // 내림차순으로 카드 정렬 
-        // cardDataSorted.Sort((a, b) =>
-        // {
-        //     return new Sort().ByGrade(a, b);
-        // });
-
-        // cardDataSorted.Reverse();
-
-        // 슬롯 풀의 Dispaly 설정
-        for (int i = 0; i < numSlots; i++)
-        {
-            if (displayCardOnSlot == null) displayCardOnSlot = GetComponent<SetCardDataOnSlot>();
-            displayCardOnSlot.PutCardDataIntoSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
-
-            // Weapon 혹은 item 딕셔너리에 저장
-            SetCardSlotDictionary(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
+            GenSlots(item);
         }
     }
-
-    void SetCardSlotDictionary(CardData cardData, CardSlot cardSlot)
+    void GenSlots(CardData cardData)
     {
-        if (cardData.Type == "Weapon")
-        {
-            weaponSlots.Add(cardData.ID, cardSlot);
-        }
-        else
-        {
-            itemSlots.Add(cardData.ID, cardSlot);
-        }
+        // 생성할 때만 cardSlot에 접근해서 getcomponent를 하니까 그냥 하자
+        var slot = Instantiate(slotPrefab, presentSlotField);
+        slot.transform.localScale = slotSize * Vector2.one;
+        mySlots.Add(cardData.ID, slot.GetComponent<CardSlot>());
+
+        // 카드 디스플레이 업데이트
+        UpdateCardDisplay(cardData);
     }
-
-    public void AddCardSlot(CardData card)
+    public void SetSlotActive(int cardID, bool _active)
     {
-        // 빈 슬롯을 생성해서 Weapon 혹은 Item 필드에 배치
-        Transform field = card.Type == "Weapon" ? field = weaponSlotField : itemSlotField;
-        var slot = Instantiate(slotPrefab, field);
+        mySlots[cardID].gameObject.SetActive(_active);
+    }
+    public void DestroySlot(int cardID)
+    {
+        GameObject slotToDestroy = mySlots[cardID].gameObject;
+        mySlots.Remove(cardID); // 딕셔너리에서 제거
+        Destroy(slotToDestroy); // 실제 슬롯 오브젝트 제거
+    }
+    public void AddSlot(CardData card)
+    {
+        // 빈 슬롯을 생성해서 필드에 배치, 최초에는 카드 데이터가 필요함
+        var slot = Instantiate(slotPrefab, presentSlotField);
         slot.transform.position = Vector3.zero;
         slot.transform.localScale = slotSize;
 
-        SetCardSlotDictionary(card, slot.GetComponent<CardSlot>());
-
+        mySlots.Add(card.ID, slot.GetComponent<CardSlot>());
         UpdateCardDisplay(card);
     }
 
     public void UpdateCardDisplay(CardData card)
     {
-        // 아이디로 슬롯을 찾아내서 display 변경
-        if (card.Type == "Weapon")
+        int cardID = card.ID;
+        if (mySlots.ContainsKey(cardID))
         {
-            if (weaponSlots.ContainsKey(card.ID))
-            {
-                displayCardOnSlot.PutCardDataIntoSlot(card, weaponSlots[card.ID]);
-            }
-            else
-            {
-                AddCardSlot(card);
-                Debug.Log("Weapon 슬롯 플에 해당 Card Data {card}에 해당하는 슬롯이 없습니다. 에러입니다.");
-            }
+            setCardDataOnSLot.PutCardDataIntoSlot(card, mySlots[cardID]);
         }
-        else if(card.Type == "Item")
+        else
         {
-            if (itemSlots.ContainsKey(card.ID))
-            {
-                displayCardOnSlot.PutCardDataIntoSlot(card, itemSlots[card.ID]);
-            }
-            else
-            {
-                AddCardSlot(card);
-                Debug.Log("Item 슬롯 플에 해당 Card Data {card}에 해당하는 슬롯이 없습니다. 에러입니다.");
-            }
+            // 카드가 없으면 안되는데 임시로 카드를 생성하게 했음. 왜 없는 경우가 생기는지 찾아야 함
+            AddSlot(card);
+            Debug.Log("Weapon 슬롯 플에 해당 Card Data {card}에 해당하는 슬롯이 없습니다. 에러입니다.");
         }
     }
+
+    /// <summary>
+    /// 디버깅 용도. 카드의 레벨을 모두 최고 레벨로 올린 후 디스플레이 업데이트를 위해
+    /// </summary>
     public void UpdateAllCardSlotDisplay()
     {
         List<CardData> mCards = cardDataManager.GetMyCardList();
@@ -196,61 +119,23 @@ public class CardSlotManager : MonoBehaviour
         }
     }
 
-    public void RemoveSlot(CardData cardData)
-    {
-        if (cardData.Type == "Weapon")
-        {
-            if (weaponSlots.ContainsKey(cardData.ID))
-            {
-                // // 먼저 장착된 아이템(필수 무기) 슬롯을 제거
-                // List<CardData> equipCardDatas = GetItemSlotsOf(cardData);
-                // foreach (var item in equipCardDatas)
-                // {
-                //     CardSlot equipCardSlot = itemSlots[item.ID];
-                //     itemSlots.Remove(item.ID);
-                //     Destroy(equipCardSlot.gameObject);
-                // }
-
-                // 오리 카드 슬롯 제거
-                CardSlot cardSlot = weaponSlots[cardData.ID];
-                weaponSlots.Remove(cardData.ID); // 딕셔너리에서 슬롯 제거
-                Destroy(cardSlot.gameObject); // 실제 슬롯 오브젝트 삭제
-            }
-        }
-        else if(cardData.Type == "Item")
-        {
-            // 아이템 카드 슬롯 제거
-                CardSlot cardSlot = itemSlots[cardData.ID];
-                itemSlots.Remove(cardData.ID); // 딕셔너리에서 슬롯 제거
-                Destroy(cardSlot.gameObject); // 실제 슬롯 오브젝트 삭제
-        }
-    }
-
+    /// <summary>
+    /// 디버그 용도. 카드 초기화 버튼에 연결되어 있음. 모든 슬롯들을 파괴하고 딕셔너리에서 제거하기
+    /// </summary>
     public void ClearAllSlots()
     {
-        // 무기 슬롯 복사 및 파괴
-        List<CardSlot> weaponSlotsCopy = new List<CardSlot>(weaponSlots.Values);
-        foreach (var slot in weaponSlotsCopy)
+        List<CardSlot> slotsToDestroy = new List<CardSlot>();
+        foreach (var item in mySlots)
         {
-            if (slot != null && slot.gameObject != null)
-            {
-                Destroy(slot.gameObject);
-            }
+            slotsToDestroy.Add(item.Value);
         }
-
-        // 아이템 슬롯 복사 및 파괴
-        List<CardSlot> itemSlotsCopy = new List<CardSlot>(itemSlots.Values);
-        foreach (var slot in itemSlotsCopy)
+        mySlots.Clear();
+        foreach (var item in slotsToDestroy)
         {
-            if (slot != null && slot.gameObject != null)
-            {
-                Destroy(slot.gameObject);
-            }
+            if(item == null) continue;
+            GameObject.Destroy(item);
         }
-
-        // Dictionary 비우기
-        weaponSlots.Clear();
-        itemSlots.Clear();
+        slotsToDestroy.Clear();
 
         // 리드 카드(시작 멤버)를 찾아 슬롯 초기화
         CardData leadCard = cardDataManager.GetMyCardList()
@@ -258,7 +143,7 @@ public class CardSlotManager : MonoBehaviour
 
         if (leadCard != null)
         {
-            AddCardSlot(leadCard);
+            AddSlot(leadCard);
             AddItemSlotOf(leadCard);
         }
         else
@@ -266,6 +151,10 @@ public class CardSlotManager : MonoBehaviour
             Debug.LogWarning("리드 카드를 찾을 수 없습니다.");
         }
     }
+
+    /// <summary>
+    /// 오리 카드를 생성한 후에 오리가 장착하고 있는 필수 아이템을 검색해서 슬롯으로 추가
+    /// </summary>
     public void AddItemSlotOf(CardData oriCard)
     {
         // AddCardSlot(defaultEquip);
@@ -274,88 +163,10 @@ public class CardSlotManager : MonoBehaviour
 
         foreach (var item in equipCardDatas)
         {
-            AddCardSlot(item);
+            AddSlot(item);
         }
     }
-    List<CardData> GetItemSlotsOf(CardData oriCard)
-    {
-        if (cardList == null) cardList = FindObjectOfType<CardList>();
-        List<CardData> equipCardDatas = cardList.GetEquipCardDataOf(oriCard);
-        return equipCardDatas;
-    }
-
-    public Transform pickedSlotTransforms(CardData cardData)
-    {
-        Transform picked;
-        if (cardData.Type == "Weapon")
-        {
-            picked = weaponSlots[cardData.ID].transform;
-        }
-        else
-        {
-            picked = itemSlots[cardData.ID].transform;
-
-        }
-        return picked;
-    }
-    public Transform GetWeaponSlotTransform(CardData cardData)
-    {
-        Transform picked = weaponSlots[cardData.ID].transform;
-        return picked;
-    }
-    public Transform GetItemSlotTransform(CardData cardData)
-    {
-        Transform picked = picked = itemSlots[cardData.ID].transform;
-        return picked;
-    }
-
-    /// <summary>
-    /// parent Transform이 널이라면 원래의 풀 위치로 되돌림
-    /// going home이 참이라면 weapon 혹은 item 풀로 되돌림.
-    /// </summary>
-    public void SetSlotsPosition(Transform slotTransforms, bool isWeapon, bool goingHome)
-    {
-        if (isWeapon)
-        {
-            if (goingHome == false)
-            {
-                slotTransforms.SetParent(presentSlotField);
-                presentationSlotTransforms.Add(slotTransforms);
-            }
-            else
-            {
-                slotTransforms.SetParent(weaponSlotField);
-            }
-        }
-        else
-        {
-            if (goingHome == false)
-            {
-                slotTransforms.SetParent(presentSlotField);
-                presentationSlotTransforms.Add(slotTransforms);
-            }
-            else
-            {
-                slotTransforms.SetParent(itemSlotField);
-            }
-        }
-    }
-    public void ClearPresentationField()
-    {
-        
-        
-    }
-    public Transform GetParentTransform(bool isWeapon)
-    {
-        if(isWeapon)
-        {
-            return weaponSlotField;
-        }
-        else
-        {
-            return itemSlotField;
-        }
-    }
+    
     public void SettrigerAnim(string trigger)
     {
         fieldAnim.SetTrigger(trigger);

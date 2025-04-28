@@ -49,14 +49,11 @@ public class AllField : MonoBehaviour
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
 
+        if(cardDataSorted == null) return;
         foreach (var item in cardDataSorted)
         {
-            Transform picked = cardSlotManager.pickedSlotTransforms(item);
-            if (picked == null) continue;
-            bool isWeapon = item.Type == "Weapon" ? true : false;
             slotsOnField.Add(item);
-
-            cardSlotManager.SetSlotsPosition(picked, isWeapon, false);
+            cardSlotManager.SetSlotActive(item.ID, true);
         }
 
         Debug.Log($"{tab}에서 호출되었고, {cardDataSorted.Count}개의 슬롯이 작업되었습니다.");
@@ -69,9 +66,7 @@ public class AllField : MonoBehaviour
         {
             foreach (var item in slotsOnField)
             {
-                Transform slotTrans = cardSlotManager.pickedSlotTransforms(item);
-                bool isWeapon = item.Type == "Weapon" ? true : false;
-                cardSlotManager.SetSlotsPosition(slotTrans, isWeapon, true);
+                cardSlotManager.SetSlotActive(item.ID, false);
             }
         }
         slotsOnField.Clear();

@@ -436,7 +436,7 @@ public class UpPanelManager : MonoBehaviour
     void RemoveCard(CardData cardData)
     {
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        cardSlotManager.RemoveSlot(cardData);
+        cardSlotManager.DestroySlot(cardData.ID);
 
         if (cardData.Type == "Weapon")
         {

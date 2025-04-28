@@ -256,7 +256,7 @@ public class GachaSystem : MonoBehaviour
     {
         // 카드 슬롯 풀에 추가된 카드 슬롯 배치
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        cardSlotManager.AddCardSlot(card);
+        cardSlotManager.AddSlot(card);
 
         Debug.Log($"{card.ID} : {card.Name} 이 슬롯에 추가되었습니다.");
     }
