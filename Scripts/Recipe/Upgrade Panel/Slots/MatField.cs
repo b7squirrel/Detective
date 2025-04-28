@@ -56,21 +56,14 @@ public class MatField : MonoBehaviour
         foreach (var item in picked)
         {
             slotsOnField.Add(item);
-            cardSlotManager.SetSlotActive(item.ID, false);
+            cardSlotManager.SetSlotActive(item.ID, true);
         }
     }
 
     public void ClearSlots()
     {
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        if (slotsOnField.Count > 0)
-        {
-            foreach (var item in slotsOnField)
-            {
-                cardSlotManager.SetSlotActive(item.ID, true);
-            }
-        }
-        slotsOnField.Clear();
+        cardSlotManager.ClearPresentationField();
     }
     #endregion
 }

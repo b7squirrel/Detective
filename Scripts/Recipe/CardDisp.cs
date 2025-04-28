@@ -35,13 +35,6 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     GameObject[] stars;
     MergedCardDescription mergedCardDescription;
 
-
-    void Update()
-    {
-        if(charAnim.gameObject.activeSelf) return;
-        // Debug.Log($"char anim이 비활성화 되었습니다.");
-    }
-
     public void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
     {
         needToOffset = false;

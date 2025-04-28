@@ -43,7 +43,6 @@ public class SetCardDataOnSlot : MonoBehaviour
                 continue;
             }
 
-            // 장비의 runtimeAnimatorController 구하기
             CardData equipCardData = equipCards[i].CardData;
             WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(equipCardData);
 

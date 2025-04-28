@@ -73,7 +73,6 @@ public class UpPanelManager : MonoBehaviour
         ClearAllFieldSlots();
 
         allField.gameObject.SetActive(false);
-        Debug.Log("All Field Activated");
         matField.gameObject.SetActive(true);
         StartCoroutine(GenMatCardListCo());
     }

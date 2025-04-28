@@ -10,7 +10,6 @@ public class CardSlotManager : MonoBehaviour
 
     #region 참조 변수
     [SerializeField] SetCardDataOnSlot setCardDataOnSLot;
-    [SerializeField] SlotPool slotPool;
     #endregion
 
     [Header("필드 제어")]
@@ -182,5 +181,10 @@ public class CardSlotManager : MonoBehaviour
     public void SettrigerAnim(string trigger)
     {
         fieldAnim.SetTrigger(trigger);
+    }
+
+    public void SortByGrade(List<int> IDs)
+    {
+
     }
 }

@@ -13,11 +13,33 @@ public class AllField : MonoBehaviour
     {
         ClearSlots();
 
-        List<CardData> cardDatas = new();
-        List<GameObject> slots = new();
+        // List<CardData> cardDatas = new();
 
-        cardDatas.AddRange(cardList); // 재료가 될 수 있는 카드들의 리스트
+        // cardDatas.AddRange(cardList); // 재료가 될 수 있는 카드들의 리스트
 
+        // // 카드 데이터 정렬
+        // List<CardData> cardDataSorted = SortByGrade(cardDatas);
+
+        // // 목록에 리드 오리가 있다면 리드 오리를 가장 앞에 배치
+        // if (startingDataContainer == null) startingDataContainer = FindObjectOfType<StartingDataContainer>();
+        // CardData lead = startingDataContainer.GetPlayerCardData();
+        // foreach (var item in cardList)
+        // {
+        //     if (item.ID == lead.ID)
+        //     {
+        //         cardDataSorted.Remove(lead);
+        //         cardDataSorted.Insert(0, lead);
+        //         break;
+        //     }
+        // }
+
+        foreach (var item in cardList)
+        {
+            cardSlotManager.SetSlotActive(item.ID, true);
+        }
+    }
+    public List<CardData> SortByGrade(List<CardData> cardDatas)
+    {
         // 카드 데이터 정렬
         List<CardData> cardDataSorted = new();
         cardDataSorted.AddRange(cardDatas);
@@ -29,25 +51,7 @@ public class AllField : MonoBehaviour
         });
 
         cardDataSorted.Reverse();
-
-        // 목록에 리드 오리가 있다면 리드 오리를 가장 앞에 배치
-        if (startingDataContainer == null) startingDataContainer = FindObjectOfType<StartingDataContainer>();
-        CardData lead = startingDataContainer.GetPlayerCardData();
-        foreach (var item in cardList)
-        {
-            if (item.ID == lead.ID)
-            {
-                cardDataSorted.Remove(lead);
-                cardDataSorted.Insert(0, lead);
-                break;
-            }
-        }
-
-        foreach (var item in cardDataSorted)
-        {
-            cardSlotManager.SetSlotActive(item.ID, true);
-            Debug.Log($"{item.Name}이 필드에 포함됩니다.");
-        }
+        return cardDataSorted;
     }
 
     public void ClearSlots()
