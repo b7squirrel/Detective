@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VHierarchy.Libs;
 
 public class CardSlotManager : MonoBehaviour
 {
@@ -18,7 +17,6 @@ public class CardSlotManager : MonoBehaviour
     [SerializeField] Animator fieldAnim; // 탭마다 다른 필드의 형태를 애니메이터로 제어
 
     #region 슬롯 생성 관련 변수
-    int numSlots;
     Dictionary<int, CardSlot> mySlots = new Dictionary<int, CardSlot>(); // 내가 가지고 있는 모든 슬롯을 ID로 검색하기 위해서
     [SerializeField] GameObject slotPrefab;
     [SerializeField] Transform presentSlotField;
@@ -106,6 +104,18 @@ public class CardSlotManager : MonoBehaviour
             Debug.Log("Weapon 슬롯 플에 해당 Card Data {card}에 해당하는 슬롯이 없습니다. 에러입니다.");
         }
     }
+    /// <summary>
+    /// 프레젠테이션 필드의 슬롯들을 모두 비활성화
+    /// 이전 탭의 슬롯들이 남아있지 않도록 하기 위해
+    /// 데이터 변화 없이 슬롯들만 필드에서 비활성화
+    /// </summary>
+    public void ClearPresentationField()
+    {
+        foreach (var item in mySlots)
+        {
+            item.Value.gameObject.SetActive(false);
+        }
+    }
 
     /// <summary>
     /// 디버깅 용도. 카드의 레벨을 모두 최고 레벨로 올린 후 디스플레이 업데이트를 위해
@@ -124,6 +134,7 @@ public class CardSlotManager : MonoBehaviour
     /// </summary>
     public void ClearAllSlots()
     {
+        ClearPresentationField();
         List<CardSlot> slotsToDestroy = new List<CardSlot>();
         foreach (var item in mySlots)
         {
@@ -136,6 +147,7 @@ public class CardSlotManager : MonoBehaviour
             GameObject.Destroy(item);
         }
         slotsToDestroy.Clear();
+        mySlots.Clear();
 
         // 리드 카드(시작 멤버)를 찾아 슬롯 초기화
         CardData leadCard = cardDataManager.GetMyCardList()

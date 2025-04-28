@@ -8,10 +8,6 @@ public class AllField : MonoBehaviour
     [SerializeField] StartingDataContainer startingDataContainer; // 리드 오리 카드 데이터를 얻어오기 위해
     #endregion
 
-    #region 슬롯 생성 관련 변수
-    List<CardData> slotsOnField = new();
-    #endregion
-
     #region Refresh
     public void GenerateAllCardsOfType(List<CardData> cardList, string tab)
     {
@@ -47,29 +43,17 @@ public class AllField : MonoBehaviour
             }
         }
 
-        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-
-        if(cardDataSorted == null) return;
         foreach (var item in cardDataSorted)
         {
-            slotsOnField.Add(item);
             cardSlotManager.SetSlotActive(item.ID, true);
+            Debug.Log($"{item.Name}이 필드에 포함됩니다.");
         }
-
-        Debug.Log($"{tab}에서 호출되었고, {cardDataSorted.Count}개의 슬롯이 작업되었습니다.");
     }
 
     public void ClearSlots()
     {
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        if (slotsOnField.Count > 0)
-        {
-            foreach (var item in slotsOnField)
-            {
-                cardSlotManager.SetSlotActive(item.ID, false);
-            }
-        }
-        slotsOnField.Clear();
+        cardSlotManager.ClearPresentationField();
     }
     #endregion
 }
