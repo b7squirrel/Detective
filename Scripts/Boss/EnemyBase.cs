@@ -266,6 +266,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (flipCoroutine != null) StopCoroutine(flipCoroutine);
     }
 
+    #region Apply Movement
     public virtual void ApplyMovement()
     {
         if (finishedSpawn == false) return; // 스폰이 완료되지 않았다면 이동 금지. 스폰 애니메이션에서 이벤트로 설정
@@ -294,6 +295,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
+    #endregion
 
     void IsInsideWall()
     {

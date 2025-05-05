@@ -144,8 +144,6 @@ public class Enemy : EnemyBase
         base.ApplyMovement();
     }
 
-    
-
     bool IsOutOfRange()
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
@@ -193,4 +191,20 @@ public class Enemy : EnemyBase
             return true;
         return false;
     }
+
+
+    #region Shadow Height에서 사용하기 위한 함수들
+    public void ActivateCollider(bool activateCol)
+    {
+        colEnemy.enabled= activateCol;
+    }
+
+    // 점프를 위해 매프레임마다 수평 이동 속도가 필요하다
+    public Vector2 GetNextVec()
+    {
+        Vector2 dirVec = Target.position - (Vector2)rb.transform.position;
+        Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
+        return nextVec;
+    }
+    #endregion
 }

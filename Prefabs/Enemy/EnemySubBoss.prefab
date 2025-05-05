@@ -126,6 +126,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8170831695603223113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6177232830121167237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7359049792538786892}
+  m_Layer: 6
+  m_Name: BodyTrans
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7359049792538786892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6177232830121167237}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5841538734844495885}
+  m_Father: {fileID: 8170831695603223113}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7892753920920310918
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,12 +183,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7892753920920310918}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8170831695603223113}
+  m_Father: {fileID: 7359049792538786892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1157535045955070963
 SpriteRenderer:
@@ -280,8 +312,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -992651983
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 6df3af4c975891a499f6b33b8f38ff59, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.2}
@@ -309,6 +341,7 @@ GameObject:
   - component: {fileID: 8170831695603223219}
   - component: {fileID: 8170831695603223211}
   - component: {fileID: 4172382219901582434}
+  - component: {fileID: 7255073503352527799}
   m_Layer: 6
   m_Name: EnemySubBoss
   m_TagString: Enemy
@@ -329,7 +362,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5841538734844495885}
+  - {fileID: 7359049792538786892}
   - {fileID: 7982681945284083134}
   - {fileID: 2178737704433128658}
   - {fileID: 8341499026370567297}
@@ -346,7 +379,7 @@ Animator:
   m_GameObject: {fileID: 8170831695603223110}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 6d6fddb1826376a4791e738572e05834, type: 2}
+  m_Controller: {fileID: 22100000, guid: b78797129470cd249a268972d329035e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -504,6 +537,55 @@ MonoBehaviour:
   indicatorPrefab: {fileID: 7141555531057633907, guid: 3477d7e6cb348f844971662a0b9ba746, type: 3}
   iconSprite: {fileID: 21300000, guid: d795a96a6ff0494439d1de55e3c3a596, type: 3}
   onSpotSFX: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}
+--- !u!114 &7255073503352527799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170831695603223110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7a355becef835e47800c23a5143c1a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bouncingNumbers: 1
+  onLandingMask: Enemy
+  onGroundHitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7255073503352527799}
+        m_TargetAssemblyTypeName: ShadowHeightEnemy, Assembly-CSharp
+        m_MethodName: Bounce
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7255073503352527799}
+        m_TargetAssemblyTypeName: ShadowHeightEnemy, Assembly-CSharp
+        m_MethodName: ActivateCollider
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  trnsBody: {fileID: 7359049792538786892}
+  sprRndBody: {fileID: 1157535045955070963}
+  sprRndshadow: {fileID: 5633993858387267651}
+  enemy: {fileID: 8170831695603223219}
+  canJump: 1
+  verticalVelocity: 50
+  jumpInterval: 3
+  isGrounded: 0
 --- !u!1 &9082757898902183703
 GameObject:
   m_ObjectHideFlags: 0

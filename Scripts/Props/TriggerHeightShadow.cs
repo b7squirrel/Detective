@@ -1,14 +1,13 @@
 using UnityEngine;
 
 /// <summary>
-/// Æ¢¾î¿À¸£´Â ¹°Ã¼ÀÇ ¹æÇâÀ» ·£´ıÇÏ°Ô Á¤ÇØÁÖ´Â Å¬·¡½º
+/// ì˜¤ë¸Œì íŠ¸ê°€ í™œì„±í™” ë˜ëŠ” ìˆœê°„ On Enableë¡œ Shadow Height ì‹¤í–‰
 /// </summary>
 public class TriggerHeightShadow : MonoBehaviour
 {
     ShadowHeight shadowHeight;
     [SerializeField] float verticalVel;
 
-    // ·£´ı ÁÂÇ¥ °ü·Ã º¯¼ö
     [SerializeField] float radius;
    
     void OnEnable()
