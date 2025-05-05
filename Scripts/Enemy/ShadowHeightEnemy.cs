@@ -13,7 +13,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     [SerializeField] SpriteRenderer sprRndshadow; // 그림자 스프라이트. sorting order 변경을 위해
 
     [SerializeField] Enemy enemy; // 수평 속도를 가져오기 위해
-    [SerializeField] bool canJump; // 점프를 하는 캐릭터인지 판별
+    bool isJumper; // 점프를 하는 캐릭터인지 판별
     [SerializeField] float verticalVelocity; // 수직 점프 속도
     [SerializeField] float jumpInterval; // 점프를 하는 주기
     float currentVerticalVel;
@@ -28,7 +28,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     #region Update
     void Update()
     {
-        if(canJump == false) return; // 점프를 할 수 있는 캐릭터가 아니라면 아무것도 하지 않기
+        if(isJumper == false) return; // 점프를 할 수 있는 캐릭터가 아니라면 아무것도 하지 않기
         UpdatePosition();
         UpdateLayers();
         CheckGroundHit();
@@ -55,6 +55,11 @@ public class ShadowHeightEnemy : MonoBehaviour
         lastInitaialVerticalVelocity = verticalVel;
 
         anim = GetComponent<Animator>();
+    }
+
+    public void SetIsJumper(bool isJumper)
+    {
+        this.isJumper = isJumper;
     }
     #endregion
 

@@ -33,6 +33,9 @@ public class Enemy : EnemyBase
     float nextAttackTime;
     float distanceToPlayer;
 
+    // 점프
+    bool canJump;
+
     [Header("Flying Enemies")]
     [SerializeField] float flyingSpeed;
     public bool IsFlying { get; set; }
@@ -111,6 +114,9 @@ public class Enemy : EnemyBase
         dieEffectPrefeab = _data.dieEffectPrefab; // 자폭 죽음과 일반 죽음을 구별하기 위해서 
 
         Name = _data.Name;
+
+        canJump = _data.canJump; // 점프 여부
+        if(canJump) GetComponent<ShadowHeightEnemy>().SetIsJumper(true);
     }
     public void SetFlying(Vector2 target)
     {
