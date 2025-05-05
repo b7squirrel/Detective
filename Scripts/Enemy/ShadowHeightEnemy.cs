@@ -15,7 +15,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     [SerializeField] Enemy enemy; // 수평 속도를 가져오기 위해
     bool isJumper; // 점프를 하는 캐릭터인지 판별
     [SerializeField] float verticalVelocity; // 수직 점프 속도
-    [SerializeField] float jumpInterval; // 점프를 하는 주기
+    float jumpFrequency; // 점프를 하는 주기
     float currentVerticalVel;
     float jumpCounter; // 점프 주기를 재는 카운터
 
@@ -57,9 +57,11 @@ public class ShadowHeightEnemy : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    public void SetIsJumper(bool isJumper)
+    public void SetIsJumper(bool isJumper, float jumpInterval)
     {
         this.isJumper = isJumper;
+        if(isJumper && jumpInterval == 0) this.isJumper = false; // 실수로 점프 가능이면서 인터벌이 0일 때는 그냥 점프불가로
+        this.jumpFrequency = jumpInterval + UnityEngine.Random.Range(-1f, 1f);
     }
     #endregion
 
@@ -67,7 +69,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     void CountJumpCounter()
     {
         if(isGrounded) jumpCounter += Time.deltaTime; // 점프를 하고 있지 않을 때만 카운터가 돌아간다
-        if (jumpCounter >= jumpInterval)
+        if (jumpCounter >= jumpFrequency)
         {
             jumpCounter = 0;
             Initialize(verticalVelocity);

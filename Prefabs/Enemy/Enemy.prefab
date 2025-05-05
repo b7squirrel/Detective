@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 5297514985837409365}
   - component: {fileID: 5297514985837409457}
   - component: {fileID: 5297514985837409449}
+  - component: {fileID: 2566266023260407847}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -390,6 +391,54 @@ MonoBehaviour:
   specialDropRate: 0
   isChestDebuggingOn: 0
   dropItemIndex: 0
+--- !u!114 &2566266023260407847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297514985837409348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7a355becef835e47800c23a5143c1a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bouncingNumbers: 1
+  onLandingMask: Enemy
+  onGroundHitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2566266023260407847}
+        m_TargetAssemblyTypeName: ShadowHeightEnemy, Assembly-CSharp
+        m_MethodName: ActivateCollider
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2566266023260407847}
+        m_TargetAssemblyTypeName: ShadowHeightEnemy, Assembly-CSharp
+        m_MethodName: Bounce
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  trnsBody: {fileID: 4230202729391454313}
+  sprRndBody: {fileID: 7866643054979264505}
+  sprRndshadow: {fileID: 5974572655354779491}
+  enemy: {fileID: 5297514985837409457}
+  verticalVelocity: 20
+  jumpInterval: 5
+  isGrounded: 0
 --- !u!1 &6160804460574017110
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,7 +677,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.28, y: 1.28}
+  m_Size: {x: 7.3142858, y: 7.3142858}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0

@@ -42,6 +42,7 @@ public class Enemy : EnemyBase
     public Vector2 LandingTarget { get; set; }
     float flyingTimeThreshold = 4f;
     float flyingTimeCounter;
+    ShadowHeightEnemy shadowHeightEnemy;
 
     [SerializeField] LayerMask playerLayer;
 
@@ -116,7 +117,8 @@ public class Enemy : EnemyBase
         Name = _data.Name;
 
         canJump = _data.canJump; // 점프 여부
-        if(canJump) GetComponent<ShadowHeightEnemy>().SetIsJumper(true);
+        if(shadowHeightEnemy == null) shadowHeightEnemy = GetComponent<ShadowHeightEnemy>();
+        shadowHeightEnemy.SetIsJumper(canJump, _data.jumpInterval);
     }
     public void SetFlying(Vector2 target)
     {
