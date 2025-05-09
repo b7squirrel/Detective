@@ -215,6 +215,7 @@ public class EggButton : MonoBehaviour
     {
         PlayGradePanelAnim("Fixed");
         image.material = initMat;
+        Debug.Log($"그레이드롤의 매테리얼 = {image.material.name}");
 
         if (popFeedbackCo != null) StopCoroutine(popFeedbackCo);
 

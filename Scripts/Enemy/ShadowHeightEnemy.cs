@@ -42,7 +42,6 @@ public class ShadowHeightEnemy : MonoBehaviour
         if (!isInitialized)
         {
             //초기화
-            sprRndBody = transform.GetComponentInChildren<SpriteRenderer>();
             sprRndshadow.sortingLayerName = "Shadow";
             isInitialized = true;
         }
@@ -93,6 +92,7 @@ public class ShadowHeightEnemy : MonoBehaviour
             sprRndshadow.sortingLayerName = "Shadow";
 
             gameObject.layer = LayerMask.NameToLayer("Enemy");
+            Debug.Log("Is Grounded");
         }
         else
         {
