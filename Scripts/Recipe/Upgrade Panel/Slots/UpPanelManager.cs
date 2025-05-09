@@ -48,7 +48,7 @@ public class UpPanelManager : MonoBehaviour
         cardList = FindObjectOfType<CardList>();
         upPanelUI = GetComponent<UpPanelUI>();
         mainMenuManager = FindObjectOfType<MainMenuManager>();
-        upTabManager = FindObjectOfType<UpTabManager>();
+        // upTabManager = FindObjectOfType<UpTabManager>();
         cardSlotManager = FindObjectOfType<CardSlotManager>();
 
         upCardSlot.EmptySlot();
