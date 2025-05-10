@@ -28,7 +28,8 @@ public class ShadowHeightEnemy : MonoBehaviour
     #region Update
     void Update()
     {
-        if(isJumper == false) return; // 점프를 할 수 있는 캐릭터가 아니라면 아무것도 하지 않기
+        if (isJumper == false) return; // 점프를 할 수 있는 캐릭터가 아니라면 아무것도 하지 않기
+        if (enemy.isTimeStopped()) return; // 시간이 정지되어 있는 상태라면 아무것도 하지 않기
         UpdatePosition();
         UpdateLayers();
         CheckGroundHit();
@@ -59,7 +60,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     public void SetIsJumper(bool isJumper, float jumpInterval)
     {
         this.isJumper = isJumper;
-        if(isJumper && jumpInterval == 0) this.isJumper = false; // 실수로 점프 가능이면서 인터벌이 0일 때는 그냥 점프불가로
+        if (isJumper && jumpInterval == 0) this.isJumper = false; // 실수로 점프 가능이면서 인터벌이 0일 때는 그냥 점프불가로
         this.jumpFrequency = jumpInterval + UnityEngine.Random.Range(-1f, 1f);
     }
     #endregion
@@ -67,7 +68,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     #region 매 프레임마다 할 일
     void CountJumpCounter()
     {
-        if(isGrounded) jumpCounter += Time.deltaTime; // 점프를 하고 있지 않을 때만 카운터가 돌아간다
+        if (isGrounded) jumpCounter += Time.deltaTime; // 점프를 하고 있지 않을 때만 카운터가 돌아간다
         if (jumpCounter >= jumpFrequency)
         {
             jumpCounter = 0;

@@ -608,5 +608,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         currentSpeed = DefaultSpeed; // sluggish slumber와 겹치지 않기 위해 ResetCurrentSpeed 함수를 사용하지 않음.
         //rb.bodyType = RigidbodyType2D.Dynamic;
     }
+    public bool isTimeStopped()
+    {
+        return currentSpeed == 0f ? true : false;
+    }
     #endregion
 }
