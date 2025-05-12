@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     [Header("Common")]
-    public string Name;
+    public string Name; // 보스를 위한 이름
     public RuntimeAnimatorController animController;
     public EnemyStats stats;
     public EnemyType enemyType;
@@ -21,6 +21,6 @@ public class EnemyData : ScriptableObject
     public float attackInterval; // 범위 공격 시간 간격
 
     [Header("점프")]
-    public bool canJump; // 점프하는 캐릭터인지
+    [Range(0, 1f)] public float jumpRate; // 점프를 하는 적이 될 확률
     public float jumpInterval; // 점프 주기
 }

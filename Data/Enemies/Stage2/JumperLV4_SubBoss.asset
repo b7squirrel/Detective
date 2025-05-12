@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608ab2ae7154af4429ee6ffc8873925f, type: 3}
+  m_Name: JumperLV4_SubBoss
+  m_EditorClassIdentifier: 
+  Name: Prince Blueberry
+  animController: {fileID: 22100000, guid: f8d437ffcab2e6e438001413db28b1ba, type: 2}
+  stats:
+    hp: 12200
+    speed: 10
+    damage: 70
+    rangedDamage: 0
+    experience_reward: 8000
+  enemyType: 0
+  projectilePrefab: {fileID: 0}
+  dieEffectPrefab: {fileID: 0}
+  enemyColor: {r: 0, g: 0, b: 0, a: 0}
+  enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
+  distanceToPlayer: 0
+  attackInterval: 0
+  jumpRate: 1
+  jumpInterval: 3

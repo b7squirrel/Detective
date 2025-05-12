@@ -116,7 +116,7 @@ public class Enemy : EnemyBase
 
         Name = _data.Name;
 
-        canJump = _data.canJump; // 점프 여부
+        canJump = UnityEngine.Random.Range(0, 1f) <= _data.jumpRate? true : false; // 점프 여부
         if(shadowHeightEnemy == null) shadowHeightEnemy = GetComponent<ShadowHeightEnemy>();
         shadowHeightEnemy.SetIsJumper(canJump, _data.jumpInterval);
     }
