@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class EggPanelManager : MonoBehaviour
 {
@@ -22,6 +20,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject blackBGPanel;
     [SerializeField] GameObject whiteBGPanel;
     EggButton eggButton; // Egg Button에 접근해서 레어오리 확률을 초기화 시키기 위해
+    RectTransform eggImageRecTransform; // 알 이미지를 비활성화 시키면 코루틴들이 의도하지 않게 작동하므로 위치를 화면 밖으로 이동시키기 위해
 
     Coroutine Close;
 
@@ -122,7 +121,12 @@ public class EggPanelManager : MonoBehaviour
 
     public void EggImageUp(bool isActive)
     {
-        eggImage.SetActive(isActive);
+        float yPos = isActive == true? 0f:-700f;
+        if(eggImageRecTransform == null) eggImageRecTransform = eggImage.GetComponent<RectTransform>();
+        Vector2 currentPos = eggImageRecTransform.anchoredPosition;
+        eggImageRecTransform.anchoredPosition = new Vector2(currentPos.x, yPos); 
+
+        // eggImage.SetActive(isActive);
 
         if (eggButton == null) eggButton = eggImage.GetComponentInChildren<EggButton>();
         if (isActive) eggButton.InitRate();

@@ -96,7 +96,6 @@ public class ShadowHeightEnemy : MonoBehaviour
             sprRndshadow.sortingLayerName = "Shadow";
 
             gameObject.layer = LayerMask.NameToLayer("Enemy");
-            Debug.Log("Is Grounded");
         }
         else
         {

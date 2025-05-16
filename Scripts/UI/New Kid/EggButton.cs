@@ -215,7 +215,6 @@ public class EggButton : MonoBehaviour
     {
         PlayGradePanelAnim("Fixed");
         image.material = initMat;
-        Debug.Log($"그레이드롤의 매테리얼 = {image.material.name}");
 
         if (popFeedbackCo != null) StopCoroutine(popFeedbackCo);
 
@@ -232,8 +231,6 @@ public class EggButton : MonoBehaviour
             }
         }
         gradeRoll.anchoredPosition = new Vector2(gradeRoll.anchoredPosition.x, currentProbability * 5.12f);
-        
-        Debug.Log($"currentProb = {currentProbability}, fixedProb = {fixedProbability}");
     }
 
     void UpdateRateForGameManager()
