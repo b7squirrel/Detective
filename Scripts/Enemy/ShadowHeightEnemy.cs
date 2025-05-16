@@ -48,7 +48,7 @@ public class ShadowHeightEnemy : MonoBehaviour
         }
         IsDone = false;
 
-        ActivateCollider(false);
+        ActivateCollider(true);
 
         isGrounded = false;
         currentVerticalVel = verticalVel;
@@ -74,6 +74,9 @@ public class ShadowHeightEnemy : MonoBehaviour
             jumpCounter = 0;
             Initialize(verticalVelocity);
             Debug.Log("Jump 실행");
+            enemy.CastSlownessToEnemy(-1f);
+            ActivateCollider(false);
+
         }
     }
 
@@ -126,6 +129,9 @@ public class ShadowHeightEnemy : MonoBehaviour
         if (bouncingNumbers < 1)
         {
             IsDone = true;
+            enemy.ResumeEnemy();
+            ActivateCollider(true);
+
             return;
         }
         Initialize(lastInitaialVerticalVelocity / divisionFactor);
@@ -134,7 +140,7 @@ public class ShadowHeightEnemy : MonoBehaviour
 
     public void ActivateCollider(bool ActivateCol)
     {
-        // enemy.ActivateCollider(ActivateCol);
+        enemy.ActivateCollider(ActivateCol);
     }
     public void TriggerAnim(string animation)
     {

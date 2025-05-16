@@ -234,20 +234,20 @@ public class Equation
         return (float)(.3f + (0.01 * slownessFactor));
     }
 
-    public Vector2 GetSpawnablePos(float _spawnConst, float _offset)
+    public Vector2 GetSpawnablePos(float spawnConst, float offset)
     {
         Vector2 position = new Vector2();
         float f = UnityEngine.Random.value > .5f ? 1f : -1f;
 
         if (UnityEngine.Random.value > .5f)
         {
-            position.x = UnityEngine.Random.Range(-_spawnConst + _offset, _spawnConst - _offset);
-            position.y = f > 0 ? (_spawnConst * f) - _offset : (_spawnConst * f) + _offset;
+            position.x = UnityEngine.Random.Range(-spawnConst + offset, spawnConst - offset);
+            position.y = f > 0 ? (spawnConst * f) - offset : (spawnConst * f) + offset;
         }
         else
         {
-            position.y = UnityEngine.Random.Range(-_spawnConst + _offset, _spawnConst - _offset);
-            position.x = f > 0 ? (_spawnConst * f) - _offset : (_spawnConst * f) + _offset;
+            position.y = UnityEngine.Random.Range(-spawnConst + offset, spawnConst - offset);
+            position.x = f > 0 ? (spawnConst * f) - offset : (spawnConst * f) + offset;
         }
 
         return position;

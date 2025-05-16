@@ -10,6 +10,7 @@ public class StageManager : MonoBehaviour
     SpawnGemsOnStart spawnGemsOnStart;
     PoolManager poolManager;
     FieldItemSpawner fieldItemSpawner;
+    WallManager wallManager;
 
     void Awake()
     {
@@ -19,6 +20,7 @@ public class StageManager : MonoBehaviour
         spawnGemsOnStart = GetComponent<SpawnGemsOnStart>();
         poolManager = FindObjectOfType<PoolManager>();
         fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
+        wallManager = FindObjectOfType<WallManager>();
     }
 
     void Start()
@@ -26,6 +28,7 @@ public class StageManager : MonoBehaviour
         int currentStageNum = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
         StageContents contents = stageContents[currentStageNum - 1];
 
+        wallManager.SetWallSize(contents.startPositions);
         stageTime.Init(contents.WallDuration);
 
         poolManager.InitPools();
@@ -45,7 +48,7 @@ public class StageManager : MonoBehaviour
 
         stageAssetManager.Init(contents.enemies, contents.bossPrefab, contents.effects, contents.bossEffects);
 
-        // pool Manager¿¡¼­ stage Asset manager¸¦ ÂüÁ¶ÇÏ´Ï±î °¡Àå ¸¶Áö¸·¿¡ ½ÇÇà
+        // pool Managerï¿½ï¿½ï¿½ï¿½ stage Asset managerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         poolManager.InitEnemyPools();
     }
 }

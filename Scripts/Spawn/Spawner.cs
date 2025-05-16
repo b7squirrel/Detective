@@ -127,7 +127,11 @@ public class Spawner : MonoBehaviour
         yield return new WaitForSecondsRealtime(2f);
 
         // 텔레포트 이펙트
-        Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
+        // Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
+        Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
+        Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
+        worldCenter.z = 0;
+        Vector2 spawnPoint = worldCenter;
         GameManager.instance.GetComponent<TeleportEffect>().GenTeleportEffect(spawnPoint);
 
         // 보스 스폰

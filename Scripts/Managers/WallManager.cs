@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WallManager : MonoBehaviour
 {
-    // left, right, up, down ¼ø¼­
+    // left, right, up, down ï¿½ï¿½ï¿½ï¿½
     [SerializeField] Transform[] walls;
     [SerializeField] Transform[] starts;
     [SerializeField] Transform[] ends;
@@ -17,34 +17,36 @@ public class WallManager : MonoBehaviour
     float elapsedTime;
     bool isGameOver;
     
-    // StageTimeÀÇ Start¿¡¼­ È£Ãâ
+    // StageTimeï¿½ï¿½ Startï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
     public void SetStageDuration(float _duration)
+    {
+        duration = _duration;
+
+        // if (isMovingFromStart)
+        // {
+        //     StartCoroutine(MoveWalls());
+        // }
+    }
+    public void SetWallSize(Vector2[] startPos)
     {
         for (int i = 0; i < starts.Length; i++)
         {
             starts[i].parent = null;
             ends[i].parent = null;
 
-            starts[i].position = startPositions[i];
+            starts[i].position = startPos[i];
             ends[i].position = endPositions[i];
 
             walls[i].position = starts[i].position;
 
-            // º®À» µû¶ó ¼±À» ±×¸²
             GetComponentInChildren<BorderLines>().Init();
-        }
-
-        duration = _duration;
-
-        if (isMovingFromStart)
-        {
-            StartCoroutine(MoveWalls());
         }
     }
     
+    
     /// <summary>
-    /// ¿ø·¡´Â º¸½º°¡ µîÀåÇÒ ¶§ StageEventManager¿¡¼­ ½ÇÇàÇÒ ¿¹Á¤ÀÌ¾úÀ¸³ª 
-    /// ³Ê¹« Á¼¾ÆÁö¸é Ä«¸Þ¶ó ¹Ù¿îµå°¡ Á¦´ë·Î ÀÛµ¿ÇÏÁö ¾Ê¾Æ¼­ º¸·ù
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ StageEventManagerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ï¿½ 
+    /// ï¿½Ê¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½ ï¿½Ù¿ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ûµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void ActivateMovingWalls()
     {

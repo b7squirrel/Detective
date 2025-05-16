@@ -21,6 +21,7 @@ public class StageContents
     public TextAsset stageDataText;
 
     [Header("Enemy Data")]
+    public EnemyVariant stageEnmeyVariant;
     public EnemyData[] enemyData;
 
     [Header("Stage Asset Data")]
