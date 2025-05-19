@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PauseCardDisp : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class PauseCardDisp : MonoBehaviour
 
     GameObject[] stars;
     public string Name { get; private set; }
+
+    [Header("Synergy Icon")]
+    [SerializeField] Image synergyIcon; // pause slot에서 시너지 아이템을 표시하기 위해
 
     #region 오리
     public void InitWeaponCardDisplay(WeaponData _wd)
@@ -29,7 +33,10 @@ public class PauseCardDisp : MonoBehaviour
         Name = _wd.Name; // 검색을 위한 이름
 
         synergyGroup.SetActive(false);
-
+        
+        // 시너지 아이콘 표시
+        synergyIcon.gameObject.SetActive(true);
+        synergyIcon.sprite = _wd.SynergyItem.charImage;
     }
     #endregion
 
@@ -91,7 +98,7 @@ public class PauseCardDisp : MonoBehaviour
         SetNumStar(_level, _isWeapon);
     }
     #endregion
-    
+
     #region 아이템
     public void InitItemCardDisplay(Item _item)
     {
@@ -110,6 +117,8 @@ public class PauseCardDisp : MonoBehaviour
         Name = _item.Name;
 
         synergyGroup.SetActive(false);
+        // 시너지 아이콘 비활성화
+        synergyIcon.gameObject.SetActive(false);
     }
     #endregion
 }

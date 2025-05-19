@@ -1,5 +1,7 @@
 using System.Collections;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EggPanelManager : MonoBehaviour
 {
@@ -32,6 +34,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] WeaponContainerAnim weaponContainerAnim;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
     [SerializeField] SpriteRenderer faceExpression;
+    [SerializeField] Image synergyIcon;
     
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
@@ -69,6 +72,10 @@ public class EggPanelManager : MonoBehaviour
 
         // 장비칸 초기화
         weaponContainerAnim.SetEquipmentSprites(wd);
+
+        // 시너지 아이콘 표시
+        synergyIcon.sprite = wd.SynergyItem.charImage;
+        synergyIcon.rectTransform.localScale = 1.7f * Vector3.one;
     }
 
     void OpenNewKidImage()
@@ -121,7 +128,7 @@ public class EggPanelManager : MonoBehaviour
 
     public void EggImageUp(bool isActive)
     {
-        float yPos = isActive == true? 0f:-700f;
+        float yPos = isActive == true? 0f:-3000f;
         if(eggImageRecTransform == null) eggImageRecTransform = eggImage.GetComponent<RectTransform>();
         Vector2 currentPos = eggImageRecTransform.anchoredPosition;
         eggImageRecTransform.anchoredPosition = new Vector2(currentPos.x, yPos); 
