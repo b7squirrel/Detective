@@ -11,6 +11,7 @@ public enum StageEventType
     SpawnEggBox,
     SpawnObject,
     WinStage,
+    SubBossIncoming,
     Incoming
 }
 

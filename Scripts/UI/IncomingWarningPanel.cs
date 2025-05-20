@@ -14,8 +14,6 @@ public class IncomingWarningPanel : MonoBehaviour
     public void Init()
     {
         incomingText.text = "적들이 몰려옵니다!!!";
-        incomingWarningPanel.SetActive(true);
-
         UIEvent incomingEvent = new UIEvent(() => ActivateWarning(), "Incoming");
         GameManager.instance.popupManager.EnqueueUIEvent(incomingEvent);
     }
@@ -27,6 +25,7 @@ public class IncomingWarningPanel : MonoBehaviour
 
     public void ActivateWarning()
     {
+        incomingWarningPanel.SetActive(true);
         StartCoroutine(ActivateIncomingWarning());
     }
     IEnumerator Deactivate()

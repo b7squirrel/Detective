@@ -6,9 +6,9 @@ public class PopupManager : MonoBehaviour
 {
     private Queue<UIEvent> uiEventQueue = new Queue<UIEvent>();
     [SerializeField] bool isProcessing = false;
-    public bool IsUIDone { get; set; } = false; // UI °¡ ³¡³µ´ÂÁö
+    public bool IsUIDone { get; set; } = false; // UI
 
-    [Header("µð¹ö±×")]
+    [Header("ë””ë²„ê·¸")]
     [SerializeField] bool debugMode;
     [SerializeField] List<string> queueContents = new List<string>();
     [SerializeField] DebugQueueContents contents;
@@ -38,11 +38,10 @@ public class PopupManager : MonoBehaviour
 
         UIEvent currentEvent = uiEventQueue.Dequeue();
 
-        // UI Ç¥½Ã
+        // UI
         currentEvent.ShowUI?.Invoke();
-        Debug.Log("Å¥ ÀÌ¸§ = " + currentEvent.EventName.ToString());
 
-        // UI°¡ ³¡³¯ ¶§±îÁö ´ë±â
+        // UI
         yield return new WaitUntil(() => IsUIDone);
 
         isProcessing = false;
@@ -51,7 +50,6 @@ public class PopupManager : MonoBehaviour
         DIsplayQueueContents();
     }
 
-    // µð¹ö±×
     void DIsplayQueueContents()
     {
         if (debugMode == false) 

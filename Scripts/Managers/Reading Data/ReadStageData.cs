@@ -25,6 +25,8 @@ public class ReadStageData : MonoBehaviour
             return StageEventType.SpawnObject;
         if (stageEventType == "Incoming")
             return StageEventType.Incoming;
+        if (stageEventType == "SubBossIncoming")
+            return StageEventType.SubBossIncoming;
 
         return StageEventType.WinStage;
     }

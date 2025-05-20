@@ -1,11 +1,10 @@
 using System;
-using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class UIEvent
 {
     public Action ShowUI { get; }
-    public bool IsDone { get; private set; }// UI가 끝났는지 여부
+    public bool IsDone { get; private set; }
     public string EventName;
 
     public UIEvent(Action showUI, string eventName)

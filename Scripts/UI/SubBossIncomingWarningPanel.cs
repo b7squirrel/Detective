@@ -1,21 +1,24 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class BossWarningPanel : MonoBehaviour
+public class SubBossIncomingWarningPanel : MonoBehaviour
 {
-    [SerializeField] TMPro.TextMeshProUGUI bossName;
-    [SerializeField] GameObject bossWarningPanel;
+    [SerializeField] TMPro.TextMeshProUGUI incomingText;
+    [SerializeField] GameObject incomingWarningPanel;
     [SerializeField] Animator anim;
 
     [SerializeField] AudioClip startingSound;
     [SerializeField] AudioClip closingSound;
     [SerializeField] AudioClip idleSound;
 
-    public void Init(string _name)
+    public void Init()
     {
-        bossName.text = _name + " !";
-        UIEvent bossEvent = new UIEvent(() => ActivateWarning(), "Boss");
-        GameManager.instance.popupManager.EnqueueUIEvent(bossEvent);
+        incomingText.text = "적들이 몰려옵니다!!!";
+        incomingWarningPanel.SetActive(true);
+
+        UIEvent incomingEvent = new UIEvent(() => ActivateWarning(), "Incoming");
+        GameManager.instance.popupManager.EnqueueUIEvent(incomingEvent);
     }
     public void Close()
     {
@@ -25,21 +28,21 @@ public class BossWarningPanel : MonoBehaviour
 
     public void ActivateWarning()
     {
-        bossWarningPanel.SetActive(true);
-        StartCoroutine(ActivateBossWarning());
+        StartCoroutine(ActivateIncomingWarning());
     }
     IEnumerator Deactivate()
     {
         yield return new WaitForSecondsRealtime(.5f);
-        bossWarningPanel.SetActive(false);
+        incomingWarningPanel.SetActive(false);
         GameManager.instance.pauseManager.UnPauseGame();
         GameManager.instance.popupManager.IsUIDone = true;
     }
-    IEnumerator ActivateBossWarning()
+    IEnumerator ActivateIncomingWarning()
     {
         PauseManager pm = GameManager.instance.pauseManager;
         pm.PauseGame();
         yield return new WaitForSecondsRealtime(2f);
+        Debug.Log("CLOSE");
         Close();
     }
 

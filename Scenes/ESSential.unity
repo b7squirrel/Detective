@@ -31074,6 +31074,7 @@ GameObject:
   - component: {fileID: 1834188299}
   - component: {fileID: 1834188298}
   - component: {fileID: 1834188310}
+  - component: {fileID: 1834188315}
   - component: {fileID: 1834188301}
   - component: {fileID: 1834188302}
   - component: {fileID: 1834188303}
@@ -31674,6 +31675,24 @@ MonoBehaviour:
   progressBarRect: {fileID: 628481588}
   progressBar: {fileID: 1323262616}
   slider: {fileID: 1323262614}
+--- !u!114 &1834188315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc5c6ef36d65c614dbcf690fbdcd87f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  incomingText: {fileID: 4902329426384978778}
+  incomingWarningPanel: {fileID: 0}
+  anim: {fileID: 0}
+  startingSound: {fileID: 0}
+  closingSound: {fileID: 0}
+  idleSound: {fileID: 0}
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0

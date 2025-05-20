@@ -80,10 +80,11 @@ public class StageEvenetManager : MonoBehaviour
 
         if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.
 
-        if (stageEvents[eventIndexer].eventType == StageEventType.Incoming)
+        if (stageEvents[eventIndexer].eventType == StageEventType.Incoming
+            || stageEvents[eventIndexer].eventType == StageEventType.SubBossIncoming)
         {
             forceSpawn = true;
-            forceSpawnIndex = 5; // 적들이 몰려옵니다 경고 이후 5개의 이벤트는 강제로 진행
+            forceSpawnIndex = 5; // 적들이 몰려옵니다 또는 보스가 옵니다 경고 이후 5개의 이벤트는 강제로 진행
         }
 
         // 적들이 몰려옵니다 이벤트가 아닐 때만 적의 수에 따라 이벤트 실행
@@ -138,6 +139,8 @@ public class StageEvenetManager : MonoBehaviour
             case StageEventType.Incoming:
                 GameManager.instance.GetComponent<IncomingWarningPanel>().Init();
                 break;
+            case StageEventType.SubBossIncoming: // 인커밍과는 다르게 서브 보스 인커밍은 단순히 강제로 적들을 스폰하는 역할만 한다.
+                break;
             default:
                 break;
         }
@@ -158,8 +161,10 @@ public class StageEvenetManager : MonoBehaviour
     void SpawnSubBoss(bool _forceSpawn)
     {
         spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss, _forceSpawn);
+        string subBossName = stageEvents[eventIndexer].enemyToSpawn.Name;
+        GameManager.instance.bossWarningPanel.Init(subBossName);
     }
-    
+
     void SpawnEnemyGroup(int number)
     {
         spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup, number);

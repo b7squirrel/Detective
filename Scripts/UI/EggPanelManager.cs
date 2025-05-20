@@ -75,7 +75,8 @@ public class EggPanelManager : MonoBehaviour
 
         // 시너지 아이콘 표시
         synergyIcon.sprite = wd.SynergyItem.charImage;
-        synergyIcon.rectTransform.localScale = 1.7f * Vector3.one;
+        // synergyIcon.rectTransform.localScale = 1.7f * Vector3.one;
+        synergyIcon.SetNativeSize();
     }
 
     void OpenNewKidImage()
