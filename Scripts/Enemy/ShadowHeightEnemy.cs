@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -47,7 +48,7 @@ public class ShadowHeightEnemy : MonoBehaviour
             isInitialized = true;
         }
         IsDone = false;
-
+        
         ActivateCollider(true);
 
         isGrounded = false;
