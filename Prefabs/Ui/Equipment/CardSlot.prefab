@@ -498,7 +498,7 @@ Animator:
   m_GameObject: {fileID: 1000505775764498781}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+  m_Controller: {fileID: 22100000, guid: f4a27db573f90e54c919adbfd94fa76b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1534,7 +1534,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4547271631804510125
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1552,7 +1552,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 182.85715, y: 182.85715}
+  m_SizeDelta: {x: 257.14285, y: 257.14285}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &798150477419339282
 CanvasRenderer:
@@ -1582,7 +1582,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 21bf7de8800f84e4da40177c2fe23530, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 093fd274e8dbf9143888f8decd28a592, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3479,11 +3479,6 @@ MonoBehaviour:
   charFaceImage: {fileID: 0}
   charFaceExpression: {fileID: 3511103101110740273}
   charAnim: {fileID: 8447414011726664376}
-  equipmentAnimators:
-  - {fileID: 5643468381126323483}
-  - {fileID: 6415799841142554752}
-  - {fileID: 2135301584409930276}
-  - {fileID: 6950402492648014087}
   equipmentImages:
   - {fileID: 4547928814262110994}
   - {fileID: 781984966262327122}

@@ -216,7 +216,7 @@ public class EggButton : MonoBehaviour
         PlayGradePanelAnim("Fixed");
         image.material = initMat;
 
-        if (popFeedbackCo != null) StopCoroutine(popFeedbackCo);
+        // if (popFeedbackCo != null) StopCoroutine(popFeedbackCo);
 
         isGradeFixed = true;
 
