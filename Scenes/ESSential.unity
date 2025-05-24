@@ -29870,7 +29870,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.0023707636}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1758337199
@@ -34297,6 +34297,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2071112218}
   m_CullTransparentMesh: 1
+--- !u!1001 &2090558625
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511348166633184609, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7026673886671561706, guid: d1acead6a37471043b1446a65acb8642, type: 3}
+      propertyPath: m_Name
+      value: Egg_jump_bomb
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d1acead6a37471043b1446a65acb8642, type: 3}
 --- !u!1 &2099146930
 GameObject:
   m_ObjectHideFlags: 0
@@ -48231,3 +48288,4 @@ SceneRoots:
   - {fileID: 648173085}
   - {fileID: 679293658354540722}
   - {fileID: 3750699134201411976}
+  - {fileID: 2090558625}

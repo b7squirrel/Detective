@@ -37,6 +37,8 @@ public class BombWeapon : WeaponBase
 
     IEnumerator AttackCo()
     {
+        AnimShoot();
+
         for (int i = 0; i < weaponStats.numberOfAttacks - 1; i++)
         {
             yield return new WaitForSeconds(.2f);
