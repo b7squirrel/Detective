@@ -129,9 +129,9 @@ public class EggPanelManager : MonoBehaviour
 
     public void EggImageUp(bool isActive)
     {
-        float yPos = isActive == true? 0f:-3000f;
         if(eggImageRecTransform == null) eggImageRecTransform = eggImage.GetComponent<RectTransform>();
         Vector2 currentPos = eggImageRecTransform.anchoredPosition;
+        float yPos = isActive ? -194f : -3000f;
         eggImageRecTransform.anchoredPosition = new Vector2(currentPos.x, yPos); 
 
         // eggImage.SetActive(isActive);
