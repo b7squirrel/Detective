@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SoundManager : MonoBehaviour
 {
@@ -22,7 +23,17 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        // 싱글톤 패턴 안전하게 구현
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
     /// <summary>
@@ -30,6 +41,12 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     public void Init()
     {
+        if (audioSourcePool != null)
+        {
+            // 기존 풀 정리
+            CleanupAudioSourcePool();
+        }
+
         audioSourcePool = new List<AudioSource>();
         soundPlayCount = new Dictionary<string, int>();
         lastPlayedTime = new Dictionary<string, float>();
@@ -39,6 +56,34 @@ public class SoundManager : MonoBehaviour
         {
             CreateNewAudioSource();
         }
+
+        Debug.Log($"SoundManager 초기화 완료: {audioSourcePool.Count}개 AudioSource 생성");
+    }
+
+    /// <summary>
+    /// 파괴된 AudioSource들을 풀에서 제거
+    /// </summary>
+    void CleanupAudioSourcePool()
+    {
+        if (audioSourcePool == null) return;
+
+        // 파괴된 AudioSource들을 제거
+        audioSourcePool = audioSourcePool.Where(source => source != null).ToList();
+        
+        // 루프 사운드에서도 파괴된 것들 제거
+        var keysToRemove = new List<string>();
+        foreach (var kvp in loopingSounds)
+        {
+            if (kvp.Value == null)
+            {
+                keysToRemove.Add(kvp.Key);
+            }
+        }
+        
+        foreach (string key in keysToRemove)
+        {
+            loopingSounds.Remove(key);
+        }
     }
 
     /// <summary>
@@ -46,9 +91,13 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     AudioSource GetAudioSourceFromPool()
     {
+        // 먼저 풀을 정리
+        CleanupAudioSourcePool();
+
+        // 사용 가능한 AudioSource 찾기
         foreach (var audioSource in audioSourcePool)
         {
-            if (!audioSource.isPlaying)
+            if (audioSource != null && !audioSource.isPlaying)
             {
                 return audioSource;
             }
@@ -63,11 +112,44 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     AudioSource CreateNewAudioSource()
     {
-        GameObject go = Instantiate(audioSourcePrefab, transform);
-        go.transform.localPosition = Vector2.zero;
-        AudioSource audioSource = go.GetComponent<AudioSource>();
-        audioSourcePool.Add(audioSource);
-        return audioSource;
+        try
+        {
+            if (audioSourcePrefab == null)
+            {
+                Debug.LogError("AudioSource Prefab이 설정되지 않았습니다.");
+                return null;
+            }
+
+            GameObject go = Instantiate(audioSourcePrefab, transform);
+            if (go == null)
+            {
+                Debug.LogError("AudioSource GameObject 생성 실패");
+                return null;
+            }
+
+            go.transform.localPosition = Vector2.zero;
+            AudioSource audioSource = go.GetComponent<AudioSource>();
+            
+            if (audioSource == null)
+            {
+                Debug.LogError("AudioSource 컴포넌트를 찾을 수 없습니다.");
+                Destroy(go);
+                return null;
+            }
+
+            if (audioSourcePool == null)
+            {
+                audioSourcePool = new List<AudioSource>();
+            }
+
+            audioSourcePool.Add(audioSource);
+            return audioSource;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"AudioSource 생성 중 오류: {e.Message}");
+            return null;
+        }
     }
 
     /// <summary>
@@ -75,19 +157,36 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     public void Play(AudioClip audioClip)
     {
+        if (audioClip == null)
+        {
+            Debug.LogWarning("재생할 AudioClip이 null입니다.");
+            return;
+        }
+
         if (!CanPlaySound(audioClip)) return; // 쿨타임이나 재생 횟수 체크
 
         AudioSource audioSource = GetAudioSourceFromPool();
-        if (audioSource == null) return;
+        if (audioSource == null)
+        {
+            Debug.LogWarning("사용 가능한 AudioSource를 찾을 수 없습니다.");
+            return;
+        }
 
-        audioSource.clip = audioClip;
-        audioSource.volume = 1f;
-        audioSource.pitch = 1f;
-        audioSource.loop = false;
-        audioSource.mute = isMuted;
-        audioSource.Play();
+        try
+        {
+            audioSource.clip = audioClip;
+            audioSource.volume = 1f;
+            audioSource.pitch = 1f;
+            audioSource.loop = false;
+            audioSource.mute = isMuted;
+            audioSource.Play();
 
-        UpdateSoundPlayInfo(audioClip); // 재생 횟수와 시간 업데이트
+            UpdateSoundPlayInfo(audioClip); // 재생 횟수와 시간 업데이트
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"사운드 재생 중 오류: {e.Message}");
+        }
     }
 
     /// <summary>
@@ -95,7 +194,13 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     bool CanPlaySound(AudioClip audioClip)
     {
+        if (audioClip == null) return false;
+
         string clipName = audioClip.name;
+
+        // Dictionary 초기화 확인
+        if (lastPlayedTime == null) lastPlayedTime = new Dictionary<string, float>();
+        if (soundPlayCount == null) soundPlayCount = new Dictionary<string, int>();
 
         // 재생 횟수 리셋 처리
         if (lastPlayedTime.ContainsKey(clipName) && Time.time - lastPlayedTime[clipName] > resetTime)
@@ -117,7 +222,13 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     void UpdateSoundPlayInfo(AudioClip audioClip)
     {
+        if (audioClip == null) return;
+
         string clipName = audioClip.name;
+
+        // Dictionary 초기화 확인
+        if (soundPlayCount == null) soundPlayCount = new Dictionary<string, int>();
+        if (lastPlayedTime == null) lastPlayedTime = new Dictionary<string, float>();
 
         // 재생 횟수 증가
         if (!soundPlayCount.ContainsKey(clipName))
@@ -132,25 +243,45 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySoundWith(AudioClip _audioClip, float _volume, bool _pitch, float _coolDown)
     {
+        if (_audioClip == null)
+        {
+            Debug.LogWarning("재생할 AudioClip이 null입니다.");
+            return;
+        }
+
         if (!CanPlaySound(_audioClip)) return; // 쿨타임이나 재생 횟수 체크
+        
         // 쿨타임 체크
         string clipName = _audioClip.name;
+        if (lastPlayedTime == null) lastPlayedTime = new Dictionary<string, float>();
+        
         if (lastPlayedTime.ContainsKey(clipName) && Time.time - lastPlayedTime[clipName] < _coolDown)
             return;
 
         AudioSource audioSource = GetAudioSourceFromPool();
-        if (audioSource == null) return;
+        if (audioSource == null)
+        {
+            Debug.LogWarning("사용 가능한 AudioSource를 찾을 수 없습니다.");
+            return;
+        }
 
-        audioSource.clip = _audioClip;
-        audioSource.volume = .4f;
+        try
+        {
+            audioSource.clip = _audioClip;
+            audioSource.volume = Mathf.Clamp01(_volume); // 볼륨 값 안전하게 제한
 
-        audioSource.pitch = 1f;
-        if (_pitch) audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
-        
-        audioSource.mute = isMuted;
-        audioSource.Play();
+            audioSource.pitch = 1f;
+            if (_pitch) audioSource.pitch = Random.Range(0.95f, 1.05f); // 피치 랜덤화
+            
+            audioSource.mute = isMuted;
+            audioSource.Play();
 
-        UpdateSoundPlayInfo(_audioClip); // 재생 횟수와 시간 업데이트
+            UpdateSoundPlayInfo(_audioClip); // 재생 횟수와 시간 업데이트
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"사운드 재생 중 오류: {e.Message}");
+        }
     }
 
     /// <summary>
@@ -158,29 +289,54 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     public AudioSource PlayLoop(AudioClip audioClip, float volume = 1f)
     {
+        if (audioClip == null)
+        {
+            Debug.LogWarning("재생할 AudioClip이 null입니다.");
+            return null;
+        }
+
         string clipName = audioClip.name;
+        
+        if (loopingSounds == null) loopingSounds = new Dictionary<string, AudioSource>();
         
         // 이미 같은 사운드가 루프 재생 중인지 확인
         if (loopingSounds.ContainsKey(clipName))
         {
-            // 이미 재생 중이면 기존 오디오 소스 반환
-            return loopingSounds[clipName];
+            AudioSource existingSource = loopingSounds[clipName];
+            // null 체크 추가
+            if (existingSource != null && existingSource.isPlaying)
+            {
+                return existingSource;
+            }
+            else
+            {
+                // 파괴된 AudioSource 제거
+                loopingSounds.Remove(clipName);
+            }
         }
         
         AudioSource audioSource = GetAudioSourceFromPool();
         if (audioSource == null) return null;
         
-        audioSource.clip = audioClip;
-        audioSource.volume = volume;
-        audioSource.pitch = 1f;
-        audioSource.loop = true; // 루프 설정
-        audioSource.mute = isMuted;
-        audioSource.Play();
-        
-        // 루프 재생 중인 사운드 목록에 추가
-        loopingSounds[clipName] = audioSource;
-        
-        return audioSource;
+        try
+        {
+            audioSource.clip = audioClip;
+            audioSource.volume = Mathf.Clamp01(volume);
+            audioSource.pitch = 1f;
+            audioSource.loop = true; // 루프 설정
+            audioSource.mute = isMuted;
+            audioSource.Play();
+            
+            // 루프 재생 중인 사운드 목록에 추가
+            loopingSounds[clipName] = audioSource;
+            
+            return audioSource;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"루프 사운드 재생 중 오류: {e.Message}");
+            return null;
+        }
     }
     
     /// <summary>
@@ -192,13 +348,22 @@ public class SoundManager : MonoBehaviour
         
         string clipName = audioClip.name;
         
+        if (loopingSounds == null) return;
+        
         if (loopingSounds.ContainsKey(clipName))
         {
             // 재생 중인 오디오 소스 찾아서 중단
             AudioSource audioSource = loopingSounds[clipName];
             if (audioSource != null)
             {
-                audioSource.Stop();
+                try
+                {
+                    audioSource.Stop();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"루프 사운드 중단 중 오류: {e.Message}");
+                }
             }
             
             // 루프 재생 목록에서 제거
@@ -211,27 +376,83 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     public void StopAllLoops()
     {
+        if (loopingSounds == null) return;
+        
         foreach (var audioSource in loopingSounds.Values)
         {
             if (audioSource != null)
             {
-                audioSource.Stop();
+                try
+                {
+                    audioSource.Stop();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"루프 사운드 중단 중 오류: {e.Message}");
+                }
             }
         }
         
         loopingSounds.Clear();
     }
 
-    // 사운드를 Mute/Unmute 하는 메서드 추가
+    /// <summary>
+    /// 사운드를 Mute/Unmute 하는 메서드
+    /// </summary>
     public void SetState(bool _state)
     {
         isMuted = !_state;
+        
+        if (audioSourcePool == null) return;
+        
         foreach (var audioSource in audioSourcePool)
         {
             if (audioSource != null)
             {
-                audioSource.mute = isMuted;
+                try
+                {
+                    audioSource.mute = isMuted;
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"AudioSource mute 설정 중 오류: {e.Message}");
+                }
             }
+        }
+    }
+
+    /// <summary>
+    /// 모든 사운드 중단
+    /// </summary>
+    public void StopAllSounds()
+    {
+        if (audioSourcePool == null) return;
+        
+        foreach (var audioSource in audioSourcePool)
+        {
+            if (audioSource != null && audioSource.isPlaying)
+            {
+                try
+                {
+                    audioSource.Stop();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"사운드 중단 중 오류: {e.Message}");
+                }
+            }
+        }
+        
+        StopAllLoops();
+    }
+
+    void OnDestroy()
+    {
+        StopAllSounds();
+        
+        if (instance == this)
+        {
+            instance = null;
         }
     }
 }
