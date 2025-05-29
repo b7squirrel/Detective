@@ -23,17 +23,7 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
-        // 싱글톤 패턴 안전하게 구현
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        instance = this;
     }
 
     /// <summary>

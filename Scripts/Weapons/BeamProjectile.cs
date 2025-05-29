@@ -20,7 +20,7 @@ public class BeamProjectile : ProjectileBase
     void OnEnable()
     {
         if (anim == null) anim = GetComponentInChildren<Animator>();
-        
+
         if (isSynergyActivated)
         {
             anim.SetTrigger("Synergy");
@@ -71,27 +71,50 @@ public class BeamProjectile : ProjectileBase
     void CastRayToDestructables()
     {
         if (Time.timeScale == 0) return;
-        Vector2 startPos = new Vector2(transform.position.x, transform.position.y+ .5f);
-        RaycastHit2D hit = Physics2D.Linecast(startPos, endPoint.position, destructables);
-        if(Time.frameCount % frameCount != 0) // 일정 프레임 간격으로 데미지를 입힘. 반면에 레이져 그림은 계속 업데이트 됨.
+
+        Vector2 startPos = new Vector2(transform.position.x, transform.position.y + .5f);
+
+        // 모든 레이어를 검사하여 가장 가까운 충돌점 찾기
+        LayerMask allLayers = destructables | walls | screenEdges;
+        RaycastHit2D[] hits = Physics2D.LinecastAll(startPos, endPoint.position, allLayers);
+
+        RaycastHit2D closestHit = new RaycastHit2D();
+        float closestDistance = float.MaxValue;
+
+        // 가장 가까운 충돌점 찾기
+        foreach (var hit in hits)
         {
-            DealDamage(hit);
+            float distance = Vector2.Distance(startPos, hit.point);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestHit = hit;
+            }
         }
-        //if (disableLaser) // 1프레임 후에 레이져를 그려주자. onEnable 되고 나서 직전의 위치에 레이져를 쏨.
-        //{
-        //    disableLaser = false;
-        //    return;
-        //}
+
+        // 데미지 처리 (destructables만)
+        if (Time.frameCount % frameCount == 0)
+        {
+            foreach (var hit in hits)
+            {
+                if (((1 << hit.collider.gameObject.layer) & destructables) != 0)
+                {
+                    DealDamage(hit);
+                }
+            }
+        }
+
+        // 레이저 그리기
         laserLine.startColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 1);
         laserLine.endColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 1);
-        DrawLaser(hit.point);
-        
 
+        Vector2 laserEndPoint = closestHit.collider != null ? closestHit.point : (Vector2)endPoint.position;
+        DrawLaser(laserEndPoint);
     }
     void DealDamage(RaycastHit2D _object)
     {
         if (_object == false) return;
-        if (_object.transform.GetComponent<Idamageable>() == null) 
+        if (_object.transform.GetComponent<Idamageable>() == null)
             return;
 
         // 카메라 밖에 있으면 데미지 전달 하지 않음. 빌드에서 잘 작동함

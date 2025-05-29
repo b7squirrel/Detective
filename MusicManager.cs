@@ -78,6 +78,7 @@ public class MusicManager : MonoBehaviour
 
     public AudioSource GetAudioSource()
     {
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
         return audioSource;
     }
 
