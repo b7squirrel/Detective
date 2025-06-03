@@ -264,7 +264,7 @@ public class EquipmentPanelManager : MonoBehaviour
     public void DeActivateEquipInfoPanel()
     {
         equipInfoPanel.gameObject.SetActive(false);
-        // cardSlotManager.SettrigerAnim("EquipI"); // 필드 끄기, 인포는 무조건 아이템이니까 아이템으로 돌아감
+        cardSlotManager.SettrigerAnim("EquipI"); // 필드 끄기, 인포는 무조건 아이템이니까 아이템으로 돌아감
 
         this.cardDisp = null;
     }

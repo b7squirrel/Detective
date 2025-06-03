@@ -68,18 +68,13 @@ public class WeaponData : ScriptableObject
     
     [Header("동료 오리 특성")]
     public Item[] defaultItems = new Item[4];
-    public SpriteRow[] equipSprites;
     public Sprite charEffectImage;
-    public RuntimeAnimatorController costumeAnim;
 
     [Header("Gun, Staff, etc")] public Transform weaponPrefab; // gun, staff, etc...
     public WeaponStats stats;
     public GameObject weaponBasePrefab;
-    [Header("children anim")] public RuntimeAnimatorController animatorController;
     public List<UpgradeData> upgrades;
     public UpgradeData synergyUpgrade;
-    public float dropChance; // 아이템 드랍 확률
-    public bool hideEssentialEquipmentOnPlay;
 
     // 어느 부위에 붙을지 알려줌. weapon container anim에서 해당 부위의 sprite는 비활성화
     // 플레이어는 card data의 essential index가 필요하지만 

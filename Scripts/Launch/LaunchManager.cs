@@ -29,7 +29,7 @@ public class LaunchManager : MonoBehaviour
     
     void OnEnable()
     {
-        fieldSlotPanel.SetActive(false);
+        // fieldSlotPanel.SetActive(false);
         stageInfoUi.PlayFromStart();
         InitLead();
 
@@ -70,7 +70,7 @@ public class LaunchManager : MonoBehaviour
 
     public void SetAllFieldTypeOf(string oriType, CardData currentLeadOri)
     {
-        fieldSlotPanel.SetActive(true);
+        // fieldSlotPanel.SetActive(true);
         List<CardData> card = new();
 
         // field 오리만 보여줌
@@ -81,10 +81,10 @@ public class LaunchManager : MonoBehaviour
         Debug.Log($"출동탭에서 Launch가 트리거 되었습니다.");
 
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
-        //card.Remove(currentLeadOri);
+        // card.Remove(currentLeadOri);
 
         field.GenerateAllCardsOfType(card, "Launch");
-        SetHalo(true);
+        // SetHalo(true);
     }
     void SetLead(CardData lead)
     {
@@ -119,10 +119,12 @@ public class LaunchManager : MonoBehaviour
             }
         }
     }
-    public void CloseField()
+    void CloseField()
     {
-        DOTween.KillAll(true);
+        // DOTween.KillAll(true);
 
-        fieldSlotPanel.SetActive(false);
+        // fieldSlotPanel.SetActive(false);
+
+        cardSlotManager.SettrigerAnim("Off");
     }
 }

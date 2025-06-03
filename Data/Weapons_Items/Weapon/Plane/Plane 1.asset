@@ -21,9 +21,9 @@ MonoBehaviour:
   SynergyWeapon: Paper Storm
   SynergyItem: {fileID: 11400000, guid: 19f5b53173fbfe843a87811665586130, type: 2}
   Animators:
-    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
-    InGamePlayerAnim: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
-    PauseCardAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    CardImageAnim: {fileID: 22100000, guid: 84afe442e6532406ba0956ae75f89b4a, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: 156e26a3ec9c940a082cfbfd4f5cfa39, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: 84afe442e6532406ba0956ae75f89b4a, type: 2}
   DefaultHead: {fileID: -1496928472, guid: adac61e0a0532f64d8ed8e125139193f, type: 3}
   DefaultChest: {fileID: 0}
   DefaultFace: {fileID: 0}
@@ -33,17 +33,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  equipSprites:
-  - sprites:
-    - {fileID: -1496928472, guid: adac61e0a0532f64d8ed8e125139193f, type: 3}
-  - sprites:
-    - {fileID: 735485920, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
-  - sprites:
-    - {fileID: 664530602, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
-  - sprites:
-    - {fileID: -441495344, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
   charEffectImage: {fileID: 0}
-  costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 4994908367473084417, guid: f09b71c68f2f7ca4b9f2fbeff3080999, type: 3}
   stats:
     damage: 100
@@ -54,7 +44,6 @@ MonoBehaviour:
     knockBackChance: 40
     currentLevel: 0
   weaponBasePrefab: {fileID: 2830375067195287894, guid: c8416dc1973318342ae185f4858e6084, type: 3}
-  animatorController: {fileID: 9100000, guid: 3fd5a02571cc9bf408b1a92b0035517c, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 56b61083aa7b8024d8f401ccf67375af, type: 2}
   - {fileID: 11400000, guid: fe1ee0963fbbb0142929885840f3ba0e, type: 2}
@@ -62,6 +51,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3ddefa8e91b0bf24bb9afcd8920b3592, type: 2}
   - {fileID: 11400000, guid: 0772f64c81e601143b24dc102941f5f7, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: 551519dd91965b640b747a53a8b42b9a, type: 2}
-  dropChance: 0
-  hideEssentialEquipmentOnPlay: 1
   equipmentType: 0
