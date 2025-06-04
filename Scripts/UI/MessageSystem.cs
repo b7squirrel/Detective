@@ -35,11 +35,11 @@ public class MessageSystem : MonoBehaviour
         messagePool[count].gameObject.SetActive(true);
         messagePool[count].transform.position = worldPosition;
         messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().text = text;
-        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, 1, 1, 1); // 노란색
+        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, .8f, 0, 1); // yellow
         messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().sortingOrder = 50;
         if (isCritical)
         {
-            messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, .3f, .3f, 1); // 빨간색
+            messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, .3f, .3f, 1); // red
             messagePool[count].GetComponent<DamageMessage>().PlayCriticalDamage();
             messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().sortingOrder = 51;
         }
