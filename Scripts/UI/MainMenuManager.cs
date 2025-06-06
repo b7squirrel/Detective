@@ -75,7 +75,7 @@ public class MainMenuManager : MonoBehaviour
         for (int i = 0; i < tabPanels.Length; i++)
         {
             tabPanels[i].SetActive(false);
-            PanelBGs[i].SetActive(false);
+            // PanelBGs[i].SetActive(false);
         }
 
         for (int i = 0; i < BtnImageRect.Length; i++)
@@ -126,7 +126,7 @@ public class MainMenuManager : MonoBehaviour
             BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .5f);
             BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(false); // setActive의 인자로 textActive를 넘기지만 임시로 모두 숨김
             tabPanels[i].SetActive(i == targetIndex);
-            PanelBGs[i].SetActive(i == targetIndex);
+            // PanelBGs[i].SetActive(i == targetIndex);
 
             tabIndex = i == targetIndex ? i : tabIndex; // 어떤 탭에 들어와 있는지 저장
         }
