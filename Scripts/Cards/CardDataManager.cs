@@ -154,6 +154,7 @@ public class CardDataManager : MonoBehaviour
     void Start()
     {
         InitializeDataDirectory();
+        Debug.Log(Application.persistentDataPath);
         Load();
     }
     
