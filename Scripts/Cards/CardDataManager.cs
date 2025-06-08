@@ -256,6 +256,7 @@ public class CardDataManager : MonoBehaviour
             
             if (startingCardData != null)
             {
+                Debug.Log("시작 카드를 로드합니다");
                 List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
                 
                 if (startingCards.Count > 0)

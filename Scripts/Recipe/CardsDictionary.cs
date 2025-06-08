@@ -29,6 +29,7 @@ public class CardsDictionary : MonoBehaviour
     {
         if(ItemPool == null)
         {
+            Debug.Log("모든 아이템 종류를 로드합니다");
             ItemPool = new();
             ItemPool = new ReadCardData().GetCardsList(itemPoolDataBase);
         }

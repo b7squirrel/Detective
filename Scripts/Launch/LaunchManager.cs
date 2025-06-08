@@ -35,7 +35,6 @@ public class LaunchManager : MonoBehaviour
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Off");
-        Debug.Log("출동탭에서 Off를 트리거 했습니다.");
     }
     
     // 버튼으로 스테이지 앞 뒤로 갈 수 있도록
@@ -78,7 +77,6 @@ public class LaunchManager : MonoBehaviour
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Launch");
-        Debug.Log($"출동탭에서 Launch가 트리거 되었습니다.");
 
         // 지금 리드 오리로 선택되어 있는 오리는 제외하기
         // card.Remove(currentLeadOri);
