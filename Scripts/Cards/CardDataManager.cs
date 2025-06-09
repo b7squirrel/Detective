@@ -268,7 +268,8 @@ public class CardDataManager : MonoBehaviour
                     if (gachaSys != null)
                     {
                         gachaSys.AddEssentialEquip(startingCards[0]);
-                        gachaSys.DelayedSaveEquipmentData();
+                        // gachaSys.DelayedSaveEquipmentData();
+                        gachaSys.ImmediateSaveEquipmentData();
                     }
                 }
             }

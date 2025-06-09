@@ -121,7 +121,7 @@ public class EquipmentDataManager : MonoBehaviour
     
     void Start()
     {
-        InitializeDataDirectory();
+        // InitializeDataDirectory(); // Start보다 Save가 먼저 호출되면 filepath가 만들어지지 않아서 오류가 생김. 그냥 save에서 경로 생성했음
         Load();
         InitializeCardList();
     }
@@ -164,19 +164,20 @@ public class EquipmentDataManager : MonoBehaviour
     void Save()
     {
         if (isSaving) return;
+        InitializeDataDirectory();
         
         try
         {
             isSaving = true;
-            
+
             if (MyEquipmentsList == null)
             {
                 MyEquipmentsList = new List<CardEquipmentData>();
             }
-            
+
             string jsonData = JsonUtility.ToJson(new Serialization<CardEquipmentData>(MyEquipmentsList), true);
             File.WriteAllText(filePath, jsonData, System.Text.Encoding.UTF8);
-            
+
             Debug.Log($"장비 데이터 저장 완료: {MyEquipmentsList.Count}개");
         }
         catch (Exception e)
@@ -301,7 +302,12 @@ public class EquipmentDataManager : MonoBehaviour
             Debug.LogError($"UpdateEquipment 오류: {e.Message}");
         }
     }
-    
+
+    public void ImmediateSave()
+    {
+        Save();
+    }
+
     public void DelayedSave()
     {
         if (!isSaving)

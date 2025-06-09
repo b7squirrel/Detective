@@ -152,7 +152,7 @@ public class GachaSystem : MonoBehaviour
                 {
                     cardDataManager.AddNewCardToMyCardsList(defaultEquip);
                     cardList.Equip(_oriCardData, defaultEquip);
-
+                    Debug.Log($"{defaultEquip.Name}을 장착합니다");
                 }
                 catch (Exception e)
                 {
@@ -325,6 +325,11 @@ public class GachaSystem : MonoBehaviour
         }
 
         return count;
+    }
+
+    public void ImmediateSaveEquipmentData()
+    {
+        cardList.ImmediateSaveEquipment();
     }
 
     public void DelayedSaveEquipmentData()

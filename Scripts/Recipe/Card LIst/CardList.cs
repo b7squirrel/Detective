@@ -228,6 +228,10 @@ public class CardList : MonoBehaviour
         return equipmentCards;
     }
 
+    public void ImmediateSaveEquipment()
+    {
+        equipmentDataManager.ImmediateSave();
+    }
     public void DelayedSaveEquipments()
     {
         equipmentDataManager.DelayedSave();
