@@ -118,10 +118,14 @@ public class EquipmentDataManager : MonoBehaviour
     string filePath;
     string myEquips = "MyEquipments.txt";
     bool isSaving = false;
-    
+
+    void Awake()
+    {
+        InitializeDataDirectory(); // Start보다 Save가 먼저 호출되면 filepath가 만들어지지 않아서 오류가 생김.
+    }
     void Start()
     {
-        // InitializeDataDirectory(); // Start보다 Save가 먼저 호출되면 filepath가 만들어지지 않아서 오류가 생김. 그냥 save에서 경로 생성했음
+        // CardList에서 여러가지 초기화가 되고 난 후에 실행되도록 Start에 넣었음
         Load();
         InitializeCardList();
     }
@@ -164,7 +168,6 @@ public class EquipmentDataManager : MonoBehaviour
     void Save()
     {
         if (isSaving) return;
-        InitializeDataDirectory();
         
         try
         {
