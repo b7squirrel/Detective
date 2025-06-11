@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Game Manager���� ĳ��
+/// Game Manager에서 캐싱
 /// </summary>
 public class FieldItemSpawner : MonoBehaviour
 {
