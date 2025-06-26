@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class ImageBouncerManager : MonoBehaviour
@@ -13,8 +14,19 @@ public class ImageBouncerManager : MonoBehaviour
     [Header("Sound")]
     [SerializeField] AudioClip oriSound;
 
-    public void Jump(int nums)
+    public void Jump(int nums, float timeOffset)
     {
+        StartCoroutine(JumpCo(nums, timeOffset));
+    }
+    public void JumpWithDelay(int nums)
+    {
+        StartCoroutine(JumpCo(nums, .4f));
+    }
+
+    IEnumerator JumpCo(int nums, float timeOffset)
+    {
+        yield return new WaitForSeconds(timeOffset);
+
         RectTransform root = rootObj.GetComponent<RectTransform>();
 
         for (int i = 0; i < nums; i++)
@@ -35,7 +47,7 @@ public class ImageBouncerManager : MonoBehaviour
             goRec.position = new Vector2(root.position.x + xOffset, root.position.y + yOffset);
 
             // 크기
-            float scaleOffset = UnityEngine.Random.Range(.5f, 2f);
+            float scaleOffset = UnityEngine.Random.Range(.5f, 4.5f);
             goRec.localScale = scaleOffset * Vector2.one;
 
             // 회전

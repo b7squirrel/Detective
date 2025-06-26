@@ -12,6 +12,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int numberOfProjectile;
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
+    [SerializeField] float timeToDropSlime;
 
     [SerializeField] Transform ShootPoint;
     [SerializeField] Transform dustPoint;
@@ -21,6 +22,9 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int halfWallBouncerNumber;
     GenerateWalls generateWalls;
     float timer; // shoot coolTime counter
+    float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터
+
+    [SerializeField] GameObject slimeDropPrefab; // 슬라임 점액 프리펩
 
     SpriteRenderer spriteRen;
     [SerializeField] Collider2D col;
@@ -78,7 +82,23 @@ public class EnemyBoss : EnemyBase, Idamageable
         anim.SetBool("ShootFinished", false);
         anim.SetTrigger("Shoot");
     }
+
+    public void SlimeDropTimer()
+    {
+        if (slimeDropTimer < timeToDropSlime)
+        {
+            slimeDropTimer += Time.deltaTime;
+            return;
+        }
+        DropSlime();
+        slimeDropTimer = 0f;
+
+    }
     #endregion
+    void DropSlime()
+    {
+        GameManager.instance.slimeDropManager.DropSlimeDrop(ShootPoint.position);
+    }
 
     #region 닿으면 Player HP 감소
     protected override void AttackMelee(int _damage)

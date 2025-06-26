@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public FieldItemEffect fieldItemEffect;
     public PopupManager popupManager;
     public ProgressionBar progressionBar;
+    public SlimeDropManager slimeDropManager;
     
 
     public GameObject joystick;
@@ -77,6 +78,8 @@ public class GameManager : MonoBehaviour
         popupManager = GetComponent<PopupManager>();
 
         progressionBar = FindObjectOfType<ProgressionBar>();
+
+        slimeDropManager = FindObjectOfType<SlimeDropManager>();
 
         confimationButton.SetActive(false);
 

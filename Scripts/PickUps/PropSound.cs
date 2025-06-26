@@ -1,8 +1,4 @@
 using UnityEngine;
-
-/// <summary>
-/// ¾ÆÀÌÅÛÀÌ µå·ÓµÇ´Â ¼ø°£ »ç¿îµå, ÂøÁö »ç¿îµå ÇÃ·¹ÀÌ
-/// </summary>
 public class PropSound : MonoBehaviour
 {
     [SerializeField] AudioClip initSound;
@@ -17,7 +13,9 @@ public class PropSound : MonoBehaviour
     {
         SoundManager.instance.PlaySoundWith(initSound, 1f, true, 0f);
     }
-    public void PlayLandingSound() 
+    
+    // ëœë”© ì‚¬ìš´ë“œëŠ” shadowHeight í•¨ìˆ˜ì—ì„œ ìœ ë‹ˆí‹° ì´ë²¤íŠ¸ë¡œ ì‹¤í–‰í•˜ê³  ìˆìŒ
+    public void PlayLandingSound()
     {
         SoundManager.instance.PlaySoundWith(landingSound, 1f, true, 0f);
     }

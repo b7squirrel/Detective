@@ -26,6 +26,7 @@ public class SlimeBoss_Walk : StateMachineBehaviour
         enemyBase.Flip();
         enemyBase.ApplyMovement();
         enemyBoss.ShootTimer();
+        enemyBoss.SlimeDropTimer();
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

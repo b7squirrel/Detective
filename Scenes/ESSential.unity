@@ -29219,7 +29219,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1739743562
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31047,6 +31047,7 @@ GameObject:
   - component: {fileID: 1834188314}
   - component: {fileID: 1834188308}
   - component: {fileID: 1834188313}
+  - component: {fileID: 1834188315}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -31078,6 +31079,7 @@ MonoBehaviour:
   fieldItemEffect: {fileID: 259608702}
   popupManager: {fileID: 0}
   progressionBar: {fileID: 0}
+  slimeDropManager: {fileID: 0}
   joystick: {fileID: 277539638}
   musicCreditManager: {fileID: 0}
   currentCamera: {fileID: 0}
@@ -31638,6 +31640,19 @@ MonoBehaviour:
   progressBarRect: {fileID: 628481588}
   progressBar: {fileID: 1323262616}
   slider: {fileID: 1323262614}
+--- !u!114 &1834188315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29db5ba63dd945659a6f10c89a66440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slimeDropPrefab: {fileID: 316917546869292117, guid: 1cfe962c76946449e9d4f1a9393e7895, type: 3}
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0
@@ -32262,6 +32277,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1933615683}
   - component: {fileID: 1933615684}
+  - component: {fileID: 1933615685}
   m_Layer: 5
   m_Name: Safe Area
   m_TagString: Untagged
@@ -32325,6 +32341,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 533bc9445a65b8d45a5ab10e31317033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1933615685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933615682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653f5a4b2b85140fcac1b33760757ee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToJump: {fileID: 5623451490839814581, guid: c9f5a8f8e9fe74837ac5b70cd0a62d83, type: 3}
+  rootObj: {fileID: 0}
+  verticalVelocity: 6000
+  horizontalVelocity: 500
+  gravity: -12000
+  xOffsetRange: 15
+  yOffsetRange: 25
+  oriSound: {fileID: 8300000, guid: 250924cd9f64e6240bf152bce6a6e136, type: 3}
 --- !u!1 &1942456455
 GameObject:
   m_ObjectHideFlags: 0
