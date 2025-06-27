@@ -5,6 +5,7 @@ public class FieldItemEffect : MonoBehaviour
 {
     [SerializeField] float stopDuration;
     [SerializeField] float invincibaleDuration;
+    [SerializeField] GameObject invincibleCounterUIPrefab;
     [SerializeField] int bombDamage;
     [SerializeField] GameObject bombHitEffect;
     [SerializeField] GameObject bombExplosionEffect;
@@ -67,9 +68,26 @@ public class FieldItemEffect : MonoBehaviour
     {
         GameManager.instance.IsPlayerInvincible = true;
         GameManager.instance.IsPlayerItemInvincible = true;
-        yield return new WaitForSeconds(invincibaleDuration);
+
+        GameObject invincibleCounter = Instantiate(invincibleCounterUIPrefab, Player.instance.transform);
+        invincibleCounter.transform.position = Player.instance.transform.position;
+
+        InvincibleCounterUI counterUI = invincibleCounter.GetComponent<InvincibleCounterUI>();
+
+        int remainingTime = Mathf.CeilToInt(invincibaleDuration);
+        counterUI.SetCountNumber(remainingTime);
+
+        while (remainingTime > 0)
+        {
+            yield return new WaitForSeconds(1f);  // 1초 기다림
+            remainingTime--;
+            counterUI.SetCountNumber(remainingTime);
+        }
+
         GameManager.instance.IsPlayerInvincible = false;
         GameManager.instance.IsPlayerItemInvincible = false;
+        Destroy(invincibleCounter);
+
     }
     #endregion
     #region 폭탄
@@ -110,7 +128,6 @@ public class FieldItemEffect : MonoBehaviour
         MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, false);
     }
     #endregion
-
     #region 모든 적 제거
     public void RemoveAllEnemy()
     {

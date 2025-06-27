@@ -17,7 +17,7 @@ public class SlimeDrop : MonoBehaviour
         if (anim.speed == 0) return;// 스톱워치로 멈춘 상태라면 
 
         if (collision.CompareTag("Player"))
-            slimeDropManager.EnterSlime();
+            slimeDropManager?.EnterSlime();
     }
     void OnTriggerExit2D(Collider2D collision)
     {
@@ -25,7 +25,9 @@ public class SlimeDrop : MonoBehaviour
         if (anim.speed == 0) return;// 스톱워치로 멈춘 상태라면 
 
         if (collision.CompareTag("Player"))
-            slimeDropManager.ExitSlime();
+        {
+            slimeDropManager?.ExitSlime();
+        }
     }
     void CachingReferences()
     {
