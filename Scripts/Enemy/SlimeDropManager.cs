@@ -7,6 +7,7 @@ using UnityEngine;
 public class SlimeDropManager : MonoBehaviour
 {
     [SerializeField] GameObject slimeDropPrefab; // 슬라임 점액 프리펩
+    [SerializeField] GameObject slimeDropOnLandingPrefab; // 착지할 때 나오는 슬라임 점액 프리펩
     [SerializeField] int slimeDropDamage; // 슬라임 점액 데미지
     [SerializeField] float slowDownFactor; // 플레이어가 점액 위에 있을 때 속도 저하를 위한 인자
 
@@ -19,6 +20,11 @@ public class SlimeDropManager : MonoBehaviour
     {
         // 보스의 현재 위치에 바로 점액을 떨어트림
         Instantiate(slimeDropPrefab, dropPos, Quaternion.identity);
+    }
+    public void DropSlimeDropOnLanding(Vector2 dropPos)
+    {
+        // 보스의 현재 위치에 바로 점액을 떨어트림
+        Instantiate(slimeDropOnLandingPrefab, dropPos, Quaternion.identity);
     }
     #endregion
 
@@ -51,16 +57,14 @@ public class SlimeDropManager : MonoBehaviour
                 isSlowDownActivated = false;
             }
         }
-
-
-
     }
     public void Attack()
     {
         if (isTriggered == false) return;
+        if (GameManager.instance.fieldItemEffect.IsStopedWithStopwatch()) return; // 스톱워치로 멈춘 상태라면 공격하지 않도록
 
         // 3프레임에 한 번 공격
-        if (Time.frameCount % 3 == 0)
+        if (Time.frameCount % 10f == 0)
             GameManager.instance.character.TakeDamage(slimeDropDamage, EnemyType.Melee);
     }
     #endregion

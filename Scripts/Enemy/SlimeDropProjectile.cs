@@ -5,7 +5,6 @@ public class SlimeDropProjectile : MonoBehaviour
 {
     [SerializeField] Transform jumpSprite;
     [SerializeField] GameObject slimeDropPrefab; // 투사체가 목표물에 도착하면 드롭될 점액프리펩
-    float verticalVel;
     
     public void InitProjectile(Vector2 startPoint, Vector2 endPoint, float duration)
     {
@@ -20,6 +19,10 @@ public class SlimeDropProjectile : MonoBehaviour
 
         while (elapsedTime < duration)
         {
+            // 스톱워치로 시간이 멈춰 있다면 이동하지 않음
+            if (GameManager.instance.fieldItemEffect.IsStopedWithStopwatch()) yield return null;
+
+            // 수평 이동
             float t = elapsedTime / duration;
             transform.position = Vector3.Lerp(startPoint, endPoint, t);
             elapsedTime += Time.deltaTime;

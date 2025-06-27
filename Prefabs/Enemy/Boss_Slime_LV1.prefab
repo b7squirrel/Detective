@@ -449,7 +449,6 @@ MonoBehaviour:
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
   teleportEffectPrefab: {fileID: 0}
   halfWallBouncerNumber: 13
-  slimeDropPrefab: {fileID: 316917546869292117, guid: 1cfe962c76946449e9d4f1a9393e7895, type: 3}
   col: {fileID: 0}
   deadBody: {fileID: 1432597800540744455, guid: 5c1f04be75c8cde4ab66104ee2865cbb, type: 3}
   landingImpactSize: 15
@@ -498,7 +497,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slimeDropPrefab: {fileID: 316917546869292117, guid: 1cfe962c76946449e9d4f1a9393e7895, type: 3}
-  slimeDropDamage: 10
+  slimeDropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
+  slimeDropDamage: 8
   slowDownFactor: 0.7
 --- !u!1 &7694664301936465618
 GameObject:

@@ -25,8 +25,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     GenerateWalls generateWalls;
     float timer; // shoot coolTime counter
     float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터
-
-    [SerializeField] GameObject slimeDropPrefab; // 슬라임 점액 프리펩
+    SlimeDropManager slimeDropManager;
 
     SpriteRenderer spriteRen;
     [SerializeField] Collider2D col;
@@ -99,7 +98,15 @@ public class EnemyBoss : EnemyBase, Idamageable
     #endregion
     void DropSlime()
     {
-        GameManager.instance.slimeDropManager.DropSlimeDrop(ShootPoint.position);
+        // 이동 할 때 슬라임 점액
+        if (slimeDropManager == null) slimeDropManager = GetComponent<SlimeDropManager>();
+        slimeDropManager.DropSlimeDrop(ShootPoint.position);
+    }
+    void DropSlimeOnLanding()
+    {
+        // 착지 시 슬라임 점액
+        if (slimeDropManager == null) slimeDropManager = GetComponent<SlimeDropManager>();
+        slimeDropManager.DropSlimeDropOnLanding(ShootPoint.position);
     }
 
     #region 닿으면 Player HP 감소
@@ -276,6 +283,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
             wave.GetComponent<Shockwave>().Init(1200, 10f, LayerMask.GetMask("Player"), landingEffectPos);
+
+            DropSlimeOnLanding();
         }
     }
     public void ActivateLandingIndicator(bool _activate)

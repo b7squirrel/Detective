@@ -508,6 +508,19 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         gameObject.SetActive(false);
     }
+    // 보스가 등장할 때 적들은 모두 없어지도록 할 때 쓰는 Die
+    // 아무것도 드롭하지 않도록 Drop on Destroy를 포함하지 않음
+    // 플레이어의 kill수에도 포함시키지 않음
+    public void DieOnBossEvent()
+    {
+        if (isBoss || isSubBoss) return; // 보스이거나 서브보스라면 없애지 않음
+        GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
+        if (explosionEffect != null) explosionEffect.transform.position = transform.position;
+
+        IsSlowed = false;
+        finishedSpawn = false;
+        gameObject.SetActive(false);
+    }
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록
     {
         //sr.material = initialMat;

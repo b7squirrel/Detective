@@ -146,6 +146,9 @@ public class Spawner : MonoBehaviour
         enemyBase.InitEnemy(enemyToSpawn);
         enemyBase.IsBoss = true;
 
+        // 다른 모든 적들 제거
+        GameManager.instance.fieldItemEffect.RemoveAllEnemy();
+
         // 줄어드는 벽 활성화
 
     }

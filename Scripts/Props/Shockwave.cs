@@ -10,7 +10,6 @@ public class Shockwave : MonoBehaviour
 
     public void Init(int _damage, float _range, LayerMask _layer, Vector2 _pos)
     {
-        // µð¹ö±ë
         transform.localScale = 2f * _range * Vector2.one;
 
         damage = _damage;
@@ -47,7 +46,7 @@ public class Shockwave : MonoBehaviour
                 if (target == LayerMask.GetMask("Player"))
                 {
                     Character ch = hitsA[i].GetComponent<Character>();
-                    if (ch != null) ch.TakeDamage(damage, EnemyType.Ranged); // Melee´Â 3ÇÁ·¹ÀÓ¿¡ ÇÑ ¹ø µ¥¹ÌÁö¸¦ ÀÔ°Ô µÇ¹Ç·Î
+                    if (ch != null) ch.TakeDamage(damage, EnemyType.Ranged); // Meleeï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½Ç¹Ç·ï¿½
                 }
             }
         }
