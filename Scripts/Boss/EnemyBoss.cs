@@ -7,7 +7,9 @@ public class EnemyBoss : EnemyBase, Idamageable
     [field: SerializeField] public float moveSpeedInAir { get; private set; }
     [field: SerializeField] public bool IsInAir { get; set; }
 
-    [SerializeField] EnemyData[] projectiles;
+    [SerializeField] EnemyData[] projectiles; // 날으는 슬라임 적
+    [SerializeField] GameObject slimeProjectilePrefab; // 슬라임 점액
+    [SerializeField] float slimeProjectileSpeed; // 슬라임 점액 속도
     [SerializeField] AudioClip[] projectileSFX;
     [SerializeField] int numberOfProjectile;
     [SerializeField] int maxProjectile;
@@ -139,7 +141,8 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public void ShootProjectile()
     {
-        StartCoroutine(ShootProjectileCo());
+        // StartCoroutine(ShootProjectileCo());
+        StartCoroutine(ShootSlimeCo());
     }
     IEnumerator ShootProjectileCo()
     {
@@ -148,6 +151,27 @@ public class EnemyBoss : EnemyBase, Idamageable
             int randomNum = UnityEngine.Random.Range(0, projectiles.Length);
             Vector2 offsetPos = Target.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
             spawner.SpawnEnemiesToShoot(projectiles[randomNum], (int)SpawnItem.enemy, ShootPoint.position, offsetPos);
+            SoundManager.instance.Play(projectileSFX[randomNum]);
+            yield return new WaitForSeconds(.1f);
+        }
+
+        numberOfProjectile += 5;
+        if (numberOfProjectile > maxProjectile)
+        {
+            numberOfProjectile = maxProjectile;
+        }
+
+        StartCoroutine(ShootFinishedCo());
+    }
+
+    IEnumerator ShootSlimeCo()
+    {
+        for (int i = 0; i < numberOfProjectile; i++)
+        {
+            int randomNum = UnityEngine.Random.Range(0, projectiles.Length);
+            Vector2 offsetPos = Target.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
+            GameObject slimeDrop = Instantiate(slimeProjectilePrefab);
+            slimeDrop.GetComponent<SlimeDropProjectile>().InitProjectile(transform.position, offsetPos, slimeProjectileSpeed);
             SoundManager.instance.Play(projectileSFX[randomNum]);
             yield return new WaitForSeconds(.1f);
         }

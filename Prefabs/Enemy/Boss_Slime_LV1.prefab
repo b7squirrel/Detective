@@ -434,14 +434,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 90f06bf610826bf448080ea909f77b4d, type: 2}
   - {fileID: 11400000, guid: 41e40d421b77bbc4282b92af34e4c6c0, type: 2}
   - {fileID: 11400000, guid: a10b6d55aed95a949aa2fef0440a0d12, type: 2}
+  slimeProjectilePrefab: {fileID: 4338945772903457947, guid: 4e46f9ffa3f314f64be191a9c1b53c96, type: 3}
+  slimeProjectileSpeed: 24
   projectileSFX:
   - {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
   - {fileID: 8300000, guid: b2847e7a689436843802ca6ca60536fb, type: 3}
   - {fileID: 8300000, guid: 220425e348b6f454f94046ff3c09f704, type: 3}
   numberOfProjectile: 2
-  maxProjectile: 50
+  maxProjectile: 100
   timeToAttack: 5
-  timeToDropSlime: 0.3
+  timeToDropSlime: 0.5
   ShootPoint: {fileID: 487513323129266538}
   dustPoint: {fileID: 1199690674249790336}
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
@@ -497,6 +499,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slimeDropPrefab: {fileID: 316917546869292117, guid: 1cfe962c76946449e9d4f1a9393e7895, type: 3}
   slimeDropDamage: 10
+  slowDownFactor: 0.7
 --- !u!1 &7694664301936465618
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,21 +8,17 @@ public class SlimeDropManager : MonoBehaviour
 {
     [SerializeField] GameObject slimeDropPrefab; // 슬라임 점액 프리펩
     [SerializeField] int slimeDropDamage; // 슬라임 점액 데미지
+    [SerializeField] float slowDownFactor; // 플레이어가 점액 위에 있을 때 속도 저하를 위한 인자
+
     bool isTriggered; // 중첩되어 슬라임과 충돌했을 때 데미지가 너무 많이 들어가는 것을 방지
     int overrapingSlimeCount; // 슬라임 위에 있는지 체크하기 위한 플레이어와 중첩되는 슬라임 갯수
+    bool isSlowDownActivated; // slow down factor가 활성화 되어 있는지 여부
 
     #region 슬라임 드롭/슛
     public void DropSlimeDrop(Vector2 dropPos)
     {
         // 보스의 현재 위치에 바로 점액을 떨어트림
-        GameObject slime = Instantiate(slimeDropPrefab, dropPos, Quaternion.identity);
-        slime.GetComponent<ShadowHeight>().Initialize(Vector2.zero, 0f);
-    }
-    public void ShootSlimeDrop(Vector2 ShootPos)
-    {
-        // 보스의 현재 위치에서 점액을 발사
-        GameObject slime = Instantiate(slimeDropPrefab, ShootPos, Quaternion.identity);
-        slime.GetComponent<ShadowHeight>().Initialize(Vector2.zero, 0f);
+        Instantiate(slimeDropPrefab, dropPos, Quaternion.identity);
     }
     #endregion
 
@@ -35,12 +31,29 @@ public class SlimeDropManager : MonoBehaviour
     {
         overrapingSlimeCount++;
         isTriggered = true;
+
+        if (isSlowDownActivated == false)
+        {
+            SetPlayerMoveSpeed(slowDownFactor);
+            isSlowDownActivated = true;
+        }
     }
     public void ExitSlime()
     {
         overrapingSlimeCount--;
         if (overrapingSlimeCount <= 0) overrapingSlimeCount = 0;
-        isTriggered = false;
+        {
+            isTriggered = false;
+
+            if (isSlowDownActivated == true)
+            {
+                SetPlayerMoveSpeed(1f);
+                isSlowDownActivated = false;
+            }
+        }
+
+
+
     }
     public void Attack()
     {
@@ -52,4 +65,10 @@ public class SlimeDropManager : MonoBehaviour
     }
     #endregion
 
+    #region 플레이어 속도 제어
+    void SetPlayerMoveSpeed(float _slowDownFactor)
+    {
+        Player.instance.SetSlowDownFator(_slowDownFactor);
+    }
+    #endregion
 }

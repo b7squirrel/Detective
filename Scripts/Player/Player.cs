@@ -29,6 +29,10 @@ public class Player : MonoBehaviour, IBouncable
     Vector2 bouncingForce;
     Coroutine bouncingCoroutine;
 
+    // 점액 위에 있을 때 속도가 느려지게 하기 위한 인자. 
+    // 속도 업그레이드가 되어도 여전히 일정 비율로 느려지도록 직접 speed를 건드리지 않고 slowDownFactor로 속도 제어
+    float slowDownFactor; 
+
     public bool ShouldBeStill { get; set; } // 메뉴, 이벤트 등 플레이어가 움직이면 안되는 상황
 
     void Awake()
@@ -36,6 +40,8 @@ public class Player : MonoBehaviour, IBouncable
         instance = this;
         rb = GetComponent<Rigidbody2D>();
         character = GetComponent<Character>();
+
+        slowDownFactor = 1f;
     }
 
     void LateUpdate()
@@ -82,7 +88,7 @@ public class Player : MonoBehaviour, IBouncable
 #elif UNITY_ANDROID
         InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
 #endif
-        Vector2 nextVec = InputVec * character.MoveSpeed * Time.fixedDeltaTime;
+        Vector2 nextVec = InputVec * character.MoveSpeed * slowDownFactor * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + nextVec);
     }
     void Flip()
@@ -123,6 +129,15 @@ public class Player : MonoBehaviour, IBouncable
         if (InputVec == Vector2.zero)
             return false;
         return true;
+    }
+
+    public void SetSlowDownFator(float factor)
+    {
+        slowDownFactor = factor;
+    }
+    public void ResetSlowDownFactor()
+    {
+        slowDownFactor = 1f;
     }
 
     #region OnDead Event
