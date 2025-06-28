@@ -122,6 +122,9 @@ public class Character : MonoBehaviour
         if (GameManager.instance.IsPlayerInvincible)
             return;
 
+        if (GameManager.instance.fieldItemEffect.IsStopedWithStopwatch()) return; // 스톱워치로 시간이 정지되어 있다면
+        if (Time.timeScale == 0) return;
+
         // 슬로우 모션 상태에서 TakeDamage가 일어나지 않게 하기
         if (BossDieManager.instance.IsBossDead)
             return;

@@ -21,6 +21,7 @@ public class SlimeDropProjectile : MonoBehaviour
         {
             // 스톱워치로 시간이 멈춰 있다면 이동하지 않음
             if (GameManager.instance.fieldItemEffect.IsStopedWithStopwatch()) yield return null;
+            if (Time.timeScale == 0) yield return null;
 
             // 수평 이동
             float t = elapsedTime / duration;

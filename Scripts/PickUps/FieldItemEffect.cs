@@ -5,7 +5,7 @@ public class FieldItemEffect : MonoBehaviour
 {
     [SerializeField] float stopDuration;
     [SerializeField] float invincibaleDuration;
-    [SerializeField] GameObject invincibleCounterUIPrefab;
+    [SerializeField] InvincibleCounterUI invincibleCounterUI;
     [SerializeField] int bombDamage;
     [SerializeField] GameObject bombHitEffect;
     [SerializeField] GameObject bombExplosionEffect;
@@ -69,25 +69,24 @@ public class FieldItemEffect : MonoBehaviour
         GameManager.instance.IsPlayerInvincible = true;
         GameManager.instance.IsPlayerItemInvincible = true;
 
-        GameObject invincibleCounter = Instantiate(invincibleCounterUIPrefab, Player.instance.transform);
-        invincibleCounter.transform.position = Player.instance.transform.position;
+        invincibleCounterUI.gameObject.SetActive(true);
 
-        InvincibleCounterUI counterUI = invincibleCounter.GetComponent<InvincibleCounterUI>();
+        Animator counterAnim = invincibleCounterUI.GetComponent<Animator>();
 
         int remainingTime = Mathf.CeilToInt(invincibaleDuration);
-        counterUI.SetCountNumber(remainingTime);
+        invincibleCounterUI.SetCountNumber(remainingTime);
 
         while (remainingTime > 0)
         {
             yield return new WaitForSeconds(1f);  // 1초 기다림
             remainingTime--;
-            counterUI.SetCountNumber(remainingTime);
+            invincibleCounterUI.SetCountNumber(remainingTime);
+            counterAnim.SetTrigger("Pop");
         }
 
         GameManager.instance.IsPlayerInvincible = false;
         GameManager.instance.IsPlayerItemInvincible = false;
-        Destroy(invincibleCounter);
-
+        invincibleCounterUI.gameObject.SetActive(false);
     }
     #endregion
     #region 폭탄

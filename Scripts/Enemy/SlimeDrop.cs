@@ -1,20 +1,26 @@
 using System.Collections;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class SlimeDrop : MonoBehaviour
 {
+    [Header("Drop")]
     [SerializeField] float life;
     [SerializeField] GameObject mainBody; // 사라질 때 파괴할 오브젝트
     [SerializeField] SpriteRenderer srBody, srBodyCore;
     [SerializeField] float fadeDuration;
-    float lifeCounter;
     SlimeDropManager slimeDropManager;
     Animator anim;
+    [Header("Bubble")]
+    [SerializeField] GameObject bubblePrefab;
+    GameObject bubbleObject; // 버블을 담아두고 슬라임 점액이 파괴될 때 버블도 파괴
+    [SerializeField] float range;
+    [SerializeField] float interval; // 버블이 생성되는 주기
+
     #region OnTrigger
     void OnTriggerEnter2D(Collider2D collision)
     {
         CachingReferences();
-        if (anim.speed == 0) return;// 스톱워치로 멈춘 상태라면 
 
         if (collision.CompareTag("Player"))
             slimeDropManager?.EnterSlime();
@@ -22,7 +28,6 @@ public class SlimeDrop : MonoBehaviour
     void OnTriggerExit2D(Collider2D collision)
     {
         CachingReferences();
-        if (anim.speed == 0) return;// 스톱워치로 멈춘 상태라면 
 
         if (collision.CompareTag("Player"))
         {
@@ -35,7 +40,7 @@ public class SlimeDrop : MonoBehaviour
         if (anim == null) anim = GetComponentInParent<Animator>();
     }
     #endregion
-    
+
     #region 수명
     void Update()
     {
@@ -55,6 +60,8 @@ public class SlimeDrop : MonoBehaviour
         Color originalColorBody = srBody.color;
         Color originalColorBodyCore = srBodyCore.color;
 
+        if (bubbleObject != null) Destroy(bubbleObject);
+
         while (elapsed < fadeDuration)
         {
             elapsed += Time.deltaTime;
@@ -66,8 +73,31 @@ public class SlimeDrop : MonoBehaviour
 
         // 최종적으로 완전히 사라졌다면 비활성화하거나 제거할 수 있음
         srBody.color = new Color(originalColorBody.r, originalColorBody.g, originalColorBody.b, 0f);
-            srBodyCore.color = new Color(originalColorBodyCore.r, originalColorBodyCore.g, originalColorBodyCore.b, 0f);
+        srBodyCore.color = new Color(originalColorBodyCore.r, originalColorBodyCore.g, originalColorBodyCore.b, 0f);
+
         Destroy(mainBody);
+    }
+    #endregion
+
+    #region 버블
+    private void Start()
+    {
+        StartCoroutine(GenerateRandomPositions());
+    }
+
+    IEnumerator GenerateRandomPositions()
+    {
+        while (true)
+        {
+            Vector2 randomPos = GetRandomPosition2D();
+            bubbleObject = Instantiate(bubblePrefab, randomPos, Quaternion.identity);
+            yield return new WaitForSeconds(interval);
+        }
+    }
+
+    Vector2 GetRandomPosition2D()
+    {
+        return (Vector2)transform.position + Random.insideUnitCircle * range;
     }
     #endregion
 }

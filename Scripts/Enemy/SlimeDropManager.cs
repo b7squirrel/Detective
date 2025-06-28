@@ -61,7 +61,6 @@ public class SlimeDropManager : MonoBehaviour
     public void Attack()
     {
         if (isTriggered == false) return;
-        if (GameManager.instance.fieldItemEffect.IsStopedWithStopwatch()) return; // 스톱워치로 멈춘 상태라면 공격하지 않도록
 
         // 3프레임에 한 번 공격
         if (Time.frameCount % 10f == 0)
