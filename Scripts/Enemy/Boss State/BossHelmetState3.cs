@@ -54,5 +54,21 @@ public class BossHelmetState3 : MonoBehaviour
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
+
+    void OnCollisionEnter2D(Collision2D collision)
+{
+    // 벽이나 반사 가능한 오브젝트에만 반응하도록 태그 체크 (선택 사항)
+    if (collision.collider.CompareTag("Wall"))
+    {
+        // 충돌 지점의 법선 벡터 사용 (보통 첫 번째 ContactPoint 사용)
+        Vector2 normal = collision.contacts[0].normal;
+
+        // 현재 방향을 기준으로 반사 벡터 계산
+        dirVec = Vector2.Reflect(dirVec.normalized, normal);
+
+        // 반사 방향으로 계속 대시하도록 설정
+        isDirectionSet = true;
+    }
+}
     #endregion
 }

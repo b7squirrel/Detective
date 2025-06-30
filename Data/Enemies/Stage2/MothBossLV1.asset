@@ -17,11 +17,15 @@ MonoBehaviour:
   stats:
     hp: 100000
     speed: 3
-    damage: 180
+    damage: 500
     rangedDamage: 0
     experience_reward: 1
   enemyType: 0
   projectilePrefab: {fileID: 0}
   dieEffectPrefab: {fileID: 0}
+  enemyColor: {r: 0, g: 0, b: 0, a: 0}
+  enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
   distanceToPlayer: 0
   attackInterval: 0
+  jumpRate: 0
+  jumpInterval: 0
