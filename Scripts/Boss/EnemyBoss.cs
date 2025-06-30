@@ -17,6 +17,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
     [SerializeField] float timeToDropSlime;
+    
     #region 상태 액션 이벤트 변수
     public static event Action OnState1Enter; // 첫 번째 상태 Enter
     public static event Action OnState1Update; // 두 번째 상태 Update
