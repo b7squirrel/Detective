@@ -12,8 +12,7 @@ public class BossMossDash : StateMachineBehaviour
     EnemyBoss enemyBoss;
     BossBase bossBase;
 
-    Vector2 targetPoint; // 대쉬할 지점
-
+    Vector2 targetPoint; 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = GameManager.instance.player.transform;

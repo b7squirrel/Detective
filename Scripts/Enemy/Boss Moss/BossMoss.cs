@@ -28,17 +28,17 @@ public class BossMoss : BossBase
     }
     Vector2 GetProjectileDir()
     {
-        // shooter°¡ player¸¦ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ °è»ê
+        // shooterì—ì„œ playerë¥¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„° ê³„ì‚°
         Vector2 directionToPlayer =
-                 (GameManager.instance.player.transform.position - transform.position).normalized;
+            (GameManager.instance.player.transform.position - transform.position).normalized;
 
-        // ·£´ıÇÑ °¢µµ¸¦ °è»êÇÏ±â À§ÇØ +15µµ¿Í -15µµ »çÀÌ¿¡¼­ ¹«ÀÛÀ§ °¢µµ ¼±ÅÃ
+        // ë°œì‚¬ì²´ ê¶¤ë„ë¥¼ ëœë¤í•˜ê²Œ í•˜ê¸° ìœ„í•´ -30ë„ì—ì„œ +30ë„ ì‚¬ì´ì˜ ëœë¤ ê°ë„ ìƒì„±
         float randomAngle = Random.Range(-30f, 30f);
 
-        // directionToPlayer º¤ÅÍ¸¦ ±âÁØÀ¸·Î randomAngle¸¸Å­ È¸ÀüÇÏ´Â Quaternion »ı¼º
+        // directionToPlayer ë²¡í„°ë¥¼ Zì¶• ê¸°ì¤€ìœ¼ë¡œ randomAngleë§Œí¼ íšŒì „í•˜ëŠ” Quaternion ìƒì„±
         Quaternion randomRotation = Quaternion.Euler(0, 0, randomAngle);
 
-        // shooter°¡ player¸¦ ¹Ù¶óº¸´Â ¹æÇâ¿¡ randomRotation Àû¿ë
+        // shooterì—ì„œ playerë¥¼ ë°”ë¼ë³´ëŠ” ë°©í–¥ì— randomRotation ì ìš©
         Vector2 randomDirection = randomRotation * directionToPlayer;
 
         return randomDirection;

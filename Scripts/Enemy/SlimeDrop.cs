@@ -80,7 +80,7 @@ public class SlimeDrop : MonoBehaviour
     #endregion
 
     #region 버블
-    private void Start()
+    void OnEnable()
     {
         StartCoroutine(GenerateRandomPositions());
     }

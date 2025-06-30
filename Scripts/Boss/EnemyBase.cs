@@ -294,6 +294,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
+        Debug.Log("nextVec = " + nextVec);
     }
     #endregion
 
@@ -596,6 +597,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
         currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
         //currentSpeed = DefaultSpeed - DefaultSpeed * .2f;
+        if (currentSpeed >= 15f) currentSpeed = 15f;
         Debug.Log($"Default Speed = {DefaultSpeed}, Current Speed = {currentSpeed}");
     }
     public void ResetCurrentSpeedToDefault()

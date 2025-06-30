@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [field: SerializeField] public float moveSpeedInAir { get; private set; }
     [field: SerializeField] public bool IsInAir { get; set; }
 
+    [Header("공격")]
     [SerializeField] EnemyData[] projectiles; // 날으는 슬라임 적
     [SerializeField] GameObject slimeProjectilePrefab; // 슬라임 점액
     [SerializeField] float slimeProjectileSpeed; // 슬라임 점액 속도
@@ -15,8 +17,24 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
     [SerializeField] float timeToDropSlime;
+    #region 상태 액션 이벤트 변수
+    public static event Action OnState2Enter; // 두 번째 상태 Enter
+    public static event Action OnState2Update; // 두 번째 상태 Update
+    public static event Action OnState2Exit; // 두 번째 상태 Exit
+    public static event Action OnState3Enter;// 세 번째 상태 Enter
+    public static event Action OnState3Update;// 세 번째 상태 Update
+    public static event Action OnState3Exit;// 세 번째 상태 Exit
+    public static event Action OnState2AnticEnter;// 세 번째 상태 anitic Enter
+    public static event Action OnState2AnticUpdate;// 세 번째 상태 anitic Update
+    public static event Action OnState2AnticExit;// 세 번째 상태 anitic Exit
+    public static event Action OnState3AnticEnter;// 세 번째 상태 antic Enter
+    public static event Action OnState3AnticUpdate;// 세 번째 상태 antic Update
+    public static event Action OnState3AnticExit;// 세 번째 상태 antic Exit
+    #endregion
 
     [SerializeField] Transform ShootPoint;
+
+    [Header("이펙트")]
     [SerializeField] Transform dustPoint;
     [SerializeField] GameObject dustEffect;
     GameObject dust;
@@ -27,6 +45,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터
     SlimeDropManager slimeDropManager;
 
+    [Header("기타")]
     SpriteRenderer spriteRen;
     [SerializeField] Collider2D col;
     [SerializeField] GameObject deadBody;
@@ -38,6 +57,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     WallManager wallManager;
     Vector2 currentPosition;
 
+    [Header("이펙트 및 사운드 이펙트")]
     [SerializeField] float landingImpactSize;
     [SerializeField] float landingImpactForce;
     [SerializeField] LayerMask landingHit;
@@ -54,6 +74,9 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     [Header("Debug")]
     [SerializeField] GameObject dot;
+    [SerializeField] GameObject stateDisplay; // 상태 표시. walk, dash, shoot 등등
+    [SerializeField] bool debugState; // 상태 표시 디스플레이를 표시할지 여부
+    BossStateDisp bossStateDisp; // 상태 디스플레이
     float debugAlpha;
 
     #region Init/Shoot Cooldown
@@ -70,6 +93,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
         InitHpBar();
+
+        stateDisplay.SetActive(debugState);
     }
 
     public void ShootTimer()
@@ -273,7 +298,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     #endregion
 
-    #region State Functions
+    #region 상태 함수, 애니메이션 이벤트
     public void LandingImpact()
     {
         SoundManager.instance.Play(landingSFX);
@@ -320,6 +345,34 @@ public class EnemyBoss : EnemyBase, Idamageable
         }
         Debug.Log("Yes, I am inside the wall");
         currentPosition = transform.position;
+    }
+
+    // 랜덤하게 3개의 공격 가운데 하나를 선택하기 위한 인덱스.
+    public void SetRandomState()
+    {
+        // 보스의 상태는 3개 : Walk, Attack1, Attack2, 이 중 랜덤하게 1개의 상태 선택
+        string[] states = { "State1", "State2", "State3" };
+        int stateIndex = UnityEngine.Random.Range(0, states.Length);
+        anim.SetTrigger(states[stateIndex]);
+    }
+    public void ExecuteState2Enter() => OnState2Enter?.Invoke();
+    public void ExecuteState2Update() => OnState2Update?.Invoke();
+    public void ExecuteState2Exit() => OnState2Exit?.Invoke();
+    public void ExecuteState3Enter() => OnState3Enter?.Invoke();
+    public void ExecuteState3Update() => OnState3Update?.Invoke();
+    public void ExecuteState3Exit() => OnState3Exit?.Invoke();
+    public void ExecuteState2AnticEnter() => OnState2AnticEnter?.Invoke();
+    public void ExecuteState2AnticUpdate() => OnState2AnticUpdate?.Invoke();
+    public void ExecuteState2AnticExit() => OnState2AnticExit?.Invoke();
+    public void ExecuteState3AnticEnter() => OnState3AnticEnter?.Invoke();
+    public void ExecuteState3AnticUpdate() => OnState3AnticUpdate?.Invoke();
+    public void ExecuteState3AnticExit() => OnState3AnticExit?.Invoke();
+
+    // 상태 스크립트로 진입할 때 enter에서 실행하기
+    public void DisplayCurrentState(string currentState)
+    {
+        if (bossStateDisp == null) bossStateDisp = stateDisplay.GetComponent<BossStateDisp>();
+        bossStateDisp.SetStateText(currentState);
     }
     #endregion
 }

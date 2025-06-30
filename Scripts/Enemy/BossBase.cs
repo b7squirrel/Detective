@@ -1,12 +1,16 @@
 using UnityEngine;
 
+/// <summary>
+/// Boss Moss ìºë¦­í„°ë§Œì„ ìœ„í•œ í´ë˜ìŠ¤. ì ì§„ì ìœ¼ë¡œ ì‚¬ìš©í•˜ì§€ ì•Šê³  EnemyBossë¥¼ ì´ìš©í•´ì„œ ë³´ìŠ¤ë¥¼ ê³„ì† êµ¬í˜„í•˜ë„ë¡ í•˜ì
+/// </summary>
 public class BossBase : EnemyBase, Idamageable
 {
     [Header("Boss Properties")]
     [SerializeField] float timeToChangeState;
     [SerializeField] Collider2D col;
     [SerializeField] GameObject deadBody;
-    [SerializeField] int numberOfStates; // º¸½ºÀÇ ÃÑ »óÅÂ ¼ö. 
+    [SerializeField] int numberOfStates; // ë³´ìŠ¤ê°€ ê°€ì§„ ìƒíƒœ ìˆ˜
+
     Spawner spawner;
     float timer; // shoot coolTime counter
 
@@ -23,9 +27,9 @@ public class BossBase : EnemyBase, Idamageable
     [SerializeField] protected Transform dustPoint;
     [SerializeField] protected GameObject dustEffect;
     [SerializeField] protected GameObject teleportEffectPrefab;
+
     public Coroutine shootCoroutine;
     protected GameObject dust;
-
     Vector2 currentPosition;
 
     [SerializeField] float landingImpactSize;
@@ -35,6 +39,7 @@ public class BossBase : EnemyBase, Idamageable
     [SerializeField] GameObject LandingIndicator;
     [SerializeField] GameObject landingEffect;
     [SerializeField] GameObject teleEffectPrefab;
+
     [SerializeField] AudioClip spawnSFX;
     [SerializeField] AudioClip landingSFX;
     [SerializeField] AudioClip shootAnticSFX;
@@ -51,24 +56,21 @@ public class BossBase : EnemyBase, Idamageable
     public override void InitEnemy(EnemyData _enemyToSpawn)
     {
         this.Stats = new EnemyStats(_enemyToSpawn.stats);
-        spawner = FindObjectOfType<Spawner>(); // ÀÔ¿¡¼­ enemy¸¦ ¹ß»çÇÏ±â À§ÇØ¼­
+        spawner = FindObjectOfType<Spawner>(); // ì£½ì—ˆì„ ë•Œ enemyë¥¼ ì‚­ì œí•˜ê¸° ìœ„í•´ì„œ
         col = GetComponent<CapsuleCollider2D>();
-
         Name = _enemyToSpawn.name;
-
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
         InitHpBar();
     }
 
-    #region º¸½º ½ºÅ³
+    #region ë°œì‚¬ ìŠ¤í‚¬
     public virtual void ShootMultiProjectiles()
     {
-
     }
     #endregion
 
-    #region »óÅÂ º¯°æ
+    #region ìƒíƒœ ë³€ê²½
     public void ChangeStateTImer()
     {
         if (timer < timeToChangeState)
@@ -77,14 +79,12 @@ public class BossBase : EnemyBase, Idamageable
             return;
         }
         timer = 0f;
-
         int stateIndex = UnityEngine.Random.Range(0, numberOfStates);
-
         anim.SetTrigger(stateIndex.ToString());
     }
     #endregion
 
-    #region TakeDamage Funcitons
+    #region TakeDamage Functions
     public override void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
     {
         if (IsInAir)
@@ -92,22 +92,20 @@ public class BossBase : EnemyBase, Idamageable
         base.TakeDamage(damage, knockBackChance, knockBackSpeedFactor, target, hitEffect);
         hpBar.SetStatus(Stats.hp, maxHealth);
     }
+
     public override void Die()
     {
         base.Die();
-
         //GetComponent<DropOnDestroy>().CheckDrop();
-
         SoundManager.instance.Play(dieSFX);
         anim.SetTrigger("Die");
-
         BossDieManager.instance.InitDeadBody(deadBody, transform, 25);
         BossDieManager.instance.DieEvent(.1f, 2f);
         gameObject.SetActive(false);
     }
     #endregion
 
-    #region ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌº¥Æ®
+    #region ì• ë‹ˆë©”ì´ì…˜ ì´ë²¤íŠ¸
     public float GetDefaultSpeed()
     {
         return DefaultSpeed;
