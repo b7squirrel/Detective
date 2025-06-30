@@ -43,13 +43,14 @@ public class FieldItemSpawner : MonoBehaviour
     }
     void Update()
     {
-        if (itemBoxSpawnCounter >= frequency)
+        if (itemBoxSpawnCounter >= frequency && GameManager.instance.IsBossStage == false)
         {
+            // 보스가 등장한 후에는 스폰이 되지 않도록
             SpawnObject(objectsToSpawn, numPoints);
             itemBoxSpawnCounter = 0f;
         }
         
-        if (MSBspawnCounter >= frequencyMSB)
+        if (MSBspawnCounter >= frequencyMSB && GameManager.instance.IsBossStage == false)
         {
             int index = Mathf.Clamp((int)(MSBspawnCounter / 60f), 0, timeIntervals.Length - 1);
             MSBToSpawn = gemPrefabs[index];
@@ -63,7 +64,7 @@ public class FieldItemSpawner : MonoBehaviour
 
         if (eggSpawnIndex > eggSpawnTime.Length - 1) return;
         eggSpawnCoolDown += Time.deltaTime;
-        if (eggSpawnCoolDown > eggSpawnTime[eggSpawnIndex])
+        if (eggSpawnCoolDown > eggSpawnTime[eggSpawnIndex] && GameManager.instance.IsBossStage == false)
         {
             SpawnEggBox();
             eggSpawnIndex++;

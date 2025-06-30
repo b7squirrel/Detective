@@ -9,6 +9,7 @@ public class FieldItemEffect : MonoBehaviour
     [SerializeField] int bombDamage;
     [SerializeField] GameObject bombHitEffect;
     [SerializeField] GameObject bombExplosionEffect;
+    [SerializeField] GameObject itemDieEffect; // 상자, 보석 등이 사라질 때의 이펙트
     StageEvenetManager stageEventManager;
     Coroutine coStopWatch, coInvincible;
     bool isStoppedWithStopwatch = false; // 스톱워치로 시간을 멈추었을 때
@@ -135,6 +136,40 @@ public class FieldItemEffect : MonoBehaviour
         foreach (var item in allEnemies)
         {
             item.DieOnBossEvent();
+        }
+    }
+    #endregion
+
+    #region 모든 보석 제거
+    public void RemoveAllGems()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 200f);
+        foreach (var item in hits)
+        {
+            Collectable collectable = item.GetComponent<Collectable>();
+            if (collectable != null)
+            {
+                GameObject effect = GameManager.instance.poolManager.GetMisc(itemDieEffect);
+                if (effect != null) effect.transform.position = collectable.transform.position;
+                collectable.gameObject.SetActive(false);
+            }
+        }
+    }
+    #endregion
+
+    #region 모든 상자 제거
+    public void RemoveAllChests()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 200f);
+        foreach (var item in hits)
+        {
+            DestructableObject DestructableObject = item.GetComponent<DestructableObject>();
+            if (DestructableObject != null)
+            {
+                GameObject effect = GameManager.instance.poolManager.GetMisc(itemDieEffect);
+                if (effect != null) effect.transform.position = DestructableObject.transform.position;
+                DestructableObject.gameObject.SetActive(false);
+            }
         }
     }
     #endregion

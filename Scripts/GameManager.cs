@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
     public bool IsPlayerInvincible { get; set; }
     public bool IsPlayerItemInvincible { get; set; }
     public bool IsPaused { get; private set; }
+    public bool IsBossStage { get; private set; } // 보스가 등장했는지 여부. 아이템 상자나 알상자가 더 이상 스폰되지 않도록 
 
 
     [SerializeField] Camera currentCamera;
@@ -84,6 +86,8 @@ public class GameManager : MonoBehaviour
         confimationButton.SetActive(false);
 
         OpenLoadingSwipe();
+
+        IsBossStage = false;
     }
     #endregion
 
@@ -113,6 +117,11 @@ public class GameManager : MonoBehaviour
     public void SetRateToGetRare(float _rate)
     {
         rateToGetRare = _rate;
+    }
+
+    public void SetBossStage(bool bossStage)
+    {
+        IsBossStage = bossStage;
     }
 
     #region Option Input

@@ -11,6 +11,9 @@ public class Spawner : MonoBehaviour
     [SerializeField] int maxEnemyInScene; // 적의 수 최대치 설정
     [SerializeField] int currentEnemyNumbers; // 현재 스폰되어 있는 적의 수
 
+    [Header("보스 랜딩 두들 이펙트")]
+    [SerializeField] GameObject BossLandingDoodleIndicator;
+
     int level;
     float timer;
 
@@ -126,31 +129,41 @@ public class Spawner : MonoBehaviour
         GameManager.instance.bossWarningPanel.Init(enemyName);
         yield return new WaitForSecondsRealtime(2f);
 
-        // 텔레포트 이펙트
-        // Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
+        // 랜딩 이펙트
         Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
         worldCenter.z = 0;
         Vector2 spawnPoint = worldCenter;
+
+        GameObject landingDoodle = Instantiate(BossLandingDoodleIndicator, spawnPoint, Quaternion.identity);
+        yield return new WaitForSeconds(2f);
+
+        // 텔레포트 이펙트
+        // Vector2 spawnPoint = new GeneralFuctions().GetRandomPositionFrom(Player.instance.transform.position, 3f, 10f);
         GameManager.instance.GetComponent<TeleportEffect>().GenTeleportEffect(spawnPoint);
 
         // 보스 스폰
+        Destroy(landingDoodle);
         yield return new WaitForSeconds(.26f);
 
         // 스폰 위치 정하기, 보스 프리펩 얻어오기
         GameObject enemy = Instantiate(FindObjectOfType<StageAssetManager>().GetBoss(), GameManager.instance.poolManager.transform);
         enemy.transform.position = spawnPoint;
 
-        // 스폰 한 후 일단 비활성화
+        // 보스 초기화
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemyBase.InitEnemy(enemyToSpawn);
         enemyBase.IsBoss = true;
 
         // 다른 모든 적들 제거
         GameManager.instance.fieldItemEffect.RemoveAllEnemy();
+        GameManager.instance.fieldItemEffect.RemoveAllGems();
+        GameManager.instance.fieldItemEffect.RemoveAllChests();
+
+        // 보스 스테이지 변수를 트리거 해서 더 이상 아이템 상자, 알 상자가 스폰되지 않도록
+        GameManager.instance.SetBossStage(true);
 
         // 줄어드는 벽 활성화
-
     }
 
     public void SpawnBoss(EnemyData enemyToSpawn)
