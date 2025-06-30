@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BossHelmetState3 : MonoBehaviour
 {
+    EnemyBoss enemyBoss;
     void OnEnable()
     {
         EnemyBoss.OnState3Enter += InitState3Enter;
@@ -17,7 +18,8 @@ public class BossHelmetState3 : MonoBehaviour
     void InitState3Enter()
     {
         Debug.Log("State3 Enter");
-        GetComponent<EnemyBoss>().DisplayCurrentState("헬멧 대시 상태");
+        if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
+        enemyBoss.DisplayCurrentState("헬멧 대시 상태");
     }
     void InitState3Update()
     {

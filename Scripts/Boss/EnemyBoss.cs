@@ -18,15 +18,18 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] float timeToAttack;
     [SerializeField] float timeToDropSlime;
     #region 상태 액션 이벤트 변수
+    public static event Action OnState1Enter; // 첫 번째 상태 Enter
+    public static event Action OnState1Update; // 두 번째 상태 Update
+    public static event Action OnState1Exit; // 세 번째 상태 Exit
     public static event Action OnState2Enter; // 두 번째 상태 Enter
     public static event Action OnState2Update; // 두 번째 상태 Update
     public static event Action OnState2Exit; // 두 번째 상태 Exit
     public static event Action OnState3Enter;// 세 번째 상태 Enter
     public static event Action OnState3Update;// 세 번째 상태 Update
     public static event Action OnState3Exit;// 세 번째 상태 Exit
-    public static event Action OnState2AnticEnter;// 세 번째 상태 anitic Enter
-    public static event Action OnState2AnticUpdate;// 세 번째 상태 anitic Update
-    public static event Action OnState2AnticExit;// 세 번째 상태 anitic Exit
+    public static event Action OnState2AnticEnter;// 두 번째 상태 anitic Enter
+    public static event Action OnState2AnticUpdate;// 두 번째 상태 anitic Update
+    public static event Action OnState2AnticExit;// 두 번째 상태 anitic Exit
     public static event Action OnState3AnticEnter;// 세 번째 상태 antic Enter
     public static event Action OnState3AnticUpdate;// 세 번째 상태 antic Update
     public static event Action OnState3AnticExit;// 세 번째 상태 antic Exit
@@ -355,6 +358,9 @@ public class EnemyBoss : EnemyBase, Idamageable
         int stateIndex = UnityEngine.Random.Range(0, states.Length);
         anim.SetTrigger(states[stateIndex]);
     }
+    public void ExecuteState1Enter() => OnState1Enter?.Invoke();
+    public void ExecuteState1Update() => OnState1Update?.Invoke();
+    public void ExecuteState1Exit() => OnState1Exit?.Invoke();
     public void ExecuteState2Enter() => OnState2Enter?.Invoke();
     public void ExecuteState2Update() => OnState2Update?.Invoke();
     public void ExecuteState2Exit() => OnState2Exit?.Invoke();
