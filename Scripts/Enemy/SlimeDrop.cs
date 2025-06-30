@@ -87,8 +87,15 @@ public class SlimeDrop : MonoBehaviour
 
     IEnumerator GenerateRandomPositions()
     {
+        yield return new WaitForSeconds(.5f);
         while (true)
         {
+            if (bubblePrefab == null)
+            {
+                // bubblePrefab을 인스펙터에서 할당했는데도 자꾸 assign을 해야한다고 나올 때가 있음
+                // 그래서 null인 경우 건너뜀. 왜 그런지는 모르겠음
+                yield break;
+            }
             Vector2 randomPos = GetRandomPosition2D();
             bubbleObject = Instantiate(bubblePrefab, randomPos, Quaternion.identity);
             yield return new WaitForSeconds(interval);
