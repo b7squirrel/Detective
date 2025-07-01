@@ -77,9 +77,11 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     [Header("Debug")]
     [SerializeField] GameObject dot;
-    [SerializeField] GameObject stateDisplay; // 상태 표시. walk, dash, shoot 등등
+    [SerializeField] GameObject stateDisplayPrefab; // 상태 표시 프리펩
+    GameObject stateDisp; // 상태 표시. walk, dash, shoot 등등
     [SerializeField] bool debugState; // 상태 표시 디스플레이를 표시할지 여부
     BossStateDisp bossStateDisp; // 상태 디스플레이
+    [SerializeField] Transform stateDiplayPoint; // 상태 디스플레이를 위치시킬 로케이터
     float debugAlpha;
 
     #region Init/Shoot Cooldown
@@ -97,7 +99,11 @@ public class EnemyBoss : EnemyBase, Idamageable
         currentSpeed = DefaultSpeed;
         InitHpBar();
 
-        stateDisplay.SetActive(debugState);
+        if (debugState)
+        {
+            stateDisp = Instantiate(stateDisplayPrefab);
+            StartCoroutine(SetStateDispPosToPlayer());
+        }
     }
 
     public void ShootTimer()
@@ -379,10 +385,19 @@ public class EnemyBoss : EnemyBase, Idamageable
     public void ExecuteState3AnticUpdate() => OnState3AnticUpdate?.Invoke();
     public void ExecuteState3AnticExit() => OnState3AnticExit?.Invoke();
 
+    IEnumerator SetStateDispPosToPlayer()
+    {
+        // 디버그 함수를 update에 넣으면 보기에 복잡하니까 코루틴으로 매 프레임마다 따라다니도록 하기
+        while (true)
+        {
+            stateDisp.transform.position = stateDiplayPoint.position;
+            yield return null;
+        }
+    }
     // 상태 스크립트로 진입할 때 enter에서 실행하기
     public void DisplayCurrentState(string currentState)
     {
-        if (bossStateDisp == null) bossStateDisp = stateDisplay.GetComponent<BossStateDisp>();
+        if (bossStateDisp == null) bossStateDisp = stateDisp.GetComponent<BossStateDisp>();
         bossStateDisp.SetStateText(currentState);
     }
     #endregion
