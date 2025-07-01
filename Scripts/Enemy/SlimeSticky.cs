@@ -29,7 +29,6 @@ public class SlimeSticky : MonoBehaviour
     {
         transform.position = GameManager.instance.player.transform.position;
     }
-
     
     void LifeCounter()
     {
