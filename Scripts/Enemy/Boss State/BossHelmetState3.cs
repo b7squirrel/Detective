@@ -8,6 +8,7 @@ public class BossHelmetState3 : MonoBehaviour
     bool isDirectionSet; // 한 번 정해진 방향으로 대시하도록
     Vector2 dirVec; // 대시 방향
     [SerializeField] float dashSpeed;
+    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
 
     void OnEnable()
     {
@@ -33,6 +34,7 @@ public class BossHelmetState3 : MonoBehaviour
     }
     void InitState3Update()
     {
+        enemyBoss.SlimeDropTimer(timeToDropSlime);
         Dash();
         Debug.Log("State3 Update");
     }
@@ -40,6 +42,8 @@ public class BossHelmetState3 : MonoBehaviour
     {
         Debug.Log("State3 Exit");
     }
+
+    
 
     #region 공격 관련 함수
     void Dash()
@@ -56,19 +60,24 @@ public class BossHelmetState3 : MonoBehaviour
     }
 
     void OnCollisionEnter2D(Collision2D collision)
-{
-    // 벽이나 반사 가능한 오브젝트에만 반응하도록 태그 체크 (선택 사항)
-    if (collision.collider.CompareTag("Wall"))
     {
-        // 충돌 지점의 법선 벡터 사용 (보통 첫 번째 ContactPoint 사용)
-        Vector2 normal = collision.contacts[0].normal;
+        // 벽이나 반사 가능한 오브젝트에만 반응하도록 태그 체크 (선택 사항)
+        if (collision.collider.CompareTag("Wall"))
+        {
+            // 충돌 지점의 법선 벡터 사용 (보통 첫 번째 ContactPoint 사용)
+            Vector2 normal = collision.contacts[0].normal;
 
-        // 현재 방향을 기준으로 반사 벡터 계산
-        dirVec = Vector2.Reflect(dirVec.normalized, normal);
+            // 현재 방향을 기준으로 반사 벡터 계산
+            dirVec = Vector2.Reflect(dirVec.normalized, normal);
 
-        // 반사 방향으로 계속 대시하도록 설정
-        isDirectionSet = true;
+            // 반사 방향으로 계속 대시하도록 설정
+            isDirectionSet = true;
+        }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Player Hit");
+            if (Time.frameCount % 3 == 0) GameManager.instance.character.TakeDamage(enemyBoss.Stats.damage, EnemyType.Melee);
+        }
     }
-}
     #endregion
 }

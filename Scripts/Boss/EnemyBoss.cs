@@ -16,7 +16,8 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int numberOfProjectile;
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
-    [SerializeField] float timeToDropSlime;
+    float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터. 주기는 각 상태에서 정함
+    SlimeDropManager slimeDropManager;
     
     #region 상태 액션 이벤트 변수
     public static event Action OnState1Enter; // 첫 번째 상태 Enter
@@ -46,8 +47,6 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int halfWallBouncerNumber;
     GenerateWalls generateWalls;
     float timer; // shoot coolTime counter
-    float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터
-    SlimeDropManager slimeDropManager;
 
     [Header("기타")]
     SpriteRenderer spriteRen;
@@ -113,16 +112,15 @@ public class EnemyBoss : EnemyBase, Idamageable
         anim.SetTrigger("Shoot");
     }
 
-    public void SlimeDropTimer()
+    public void SlimeDropTimer(float dropTime)
     {
-        if (slimeDropTimer < timeToDropSlime)
+        if (slimeDropTimer < dropTime)
         {
             slimeDropTimer += Time.deltaTime;
             return;
         }
         DropSlime();
         slimeDropTimer = 0f;
-
     }
     #endregion
     void DropSlime()
@@ -362,6 +360,8 @@ public class EnemyBoss : EnemyBase, Idamageable
         string[] states = { "State1", "State2", "State3" };
         int stateIndex = UnityEngine.Random.Range(0, states.Length);
         anim.SetTrigger(states[stateIndex]);
+        // anim.SetTrigger(states[2]); // 대시만 실행
+        // anim.SetTrigger(states[1]); // 발사만 실행
     }
     public void ExecuteState1Enter() => OnState1Enter?.Invoke();
     public void ExecuteState1Update() => OnState1Update?.Invoke();

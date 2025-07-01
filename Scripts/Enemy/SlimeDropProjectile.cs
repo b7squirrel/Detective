@@ -1,11 +1,16 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
+/// <summary>
+/// 플레이어의 주변으로 날아가는 적 투사체
+/// </summary>
 public class SlimeDropProjectile : MonoBehaviour
 {
     [SerializeField] Transform jumpSprite;
     [SerializeField] GameObject slimeDropPrefab; // 투사체가 목표물에 도착하면 드롭될 점액프리펩
-    
+    public UnityEvent onDoneEvent; // 투사체 죽음 이벤트
+
     public void InitProjectile(Vector2 startPoint, Vector2 endPoint, float duration)
     {
         StartCoroutine(MoveObjectCo(startPoint, endPoint, duration));
@@ -34,7 +39,17 @@ public class SlimeDropProjectile : MonoBehaviour
         transform.position = endPoint;
 
         // 점액을 드롭하고 자신은 파괴
+        ProjectileDone();
+    }
+    void ProjectileDone()
+    {
+        onDoneEvent?.Invoke();
+        gameObject.SetActive(false); // 공통적으로 들어가야 하니 함수를 따로 빼지 않고 여기에 넣어 버리자
+    }
+
+    // 유니티 이벤트에 붙일 함수들
+    public void Event_DropNormalSlimeDrop()
+    {
         Instantiate(slimeDropPrefab, transform.position, Quaternion.identity);
-        Destroy(gameObject);
     }
 }

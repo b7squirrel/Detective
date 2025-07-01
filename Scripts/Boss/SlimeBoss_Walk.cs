@@ -8,6 +8,8 @@ public class SlimeBoss_Walk : StateMachineBehaviour
     bool isKnockBack;
     EnemyBase enemyBase;
     EnemyBoss enemyBoss;
+    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
+    
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -26,7 +28,7 @@ public class SlimeBoss_Walk : StateMachineBehaviour
         enemyBase.Flip();
         enemyBase.ApplyMovement();
         enemyBoss.ShootTimer();
-        enemyBoss.SlimeDropTimer();
+        enemyBoss.SlimeDropTimer(timeToDropSlime);
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

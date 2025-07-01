@@ -4,6 +4,8 @@ public class BossHelmetState1 : MonoBehaviour
 {
     EnemyBoss enemyBoss;
     EnemyBase enemyBase;
+    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
+
     void OnEnable()
     {
         EnemyBoss.OnState1Enter += InitState1Enter;
@@ -28,7 +30,7 @@ public class BossHelmetState1 : MonoBehaviour
         enemyBase.Flip();
         enemyBase.ApplyMovement();
         enemyBoss.ShootTimer();
-        enemyBoss.SlimeDropTimer();
+        enemyBoss.SlimeDropTimer(timeToDropSlime);
         Debug.Log("State1 Update");
     }
     void InitState1Exit()

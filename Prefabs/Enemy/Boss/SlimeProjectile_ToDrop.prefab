@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5823435439280303243}
   - component: {fileID: 8741347603340805117}
   m_Layer: 0
-  m_Name: SlimeProjectile
+  m_Name: SlimeProjectile_ToDrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,7 +132,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpSprite: {fileID: 7145217766795402281}
   slimeDropPrefab: {fileID: 316917546869292117, guid: 1cfe962c76946449e9d4f1a9393e7895, type: 3}
-  verticalVel: 10
+  onDoneEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8741347603340805117}
+        m_TargetAssemblyTypeName: SlimeDropProjectile, Assembly-CSharp
+        m_MethodName: Event_DropNormalSlimeDrop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8285458067995132244
 GameObject:
   m_ObjectHideFlags: 0

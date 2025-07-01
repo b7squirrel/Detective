@@ -602,7 +602,6 @@ MonoBehaviour:
   numberOfProjectile: 2
   maxProjectile: 100
   timeToAttack: 5
-  timeToDropSlime: 0.5
   ShootPoint: {fileID: 7814706633938963400}
   dustPoint: {fileID: 4364289045917254098}
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
@@ -673,6 +672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c07a43d1c49214bae884819832a3fc22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToDropSlime: 0.5
 --- !u!114 &9139378338178264030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -685,9 +685,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 828813a77ec624c47b98aa9962bf6c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jellyPrefab: {fileID: 7908969164944023627, guid: 04e9c1a23d02c7d4f8f13b98d4d3b47d, type: 3}
+  jellyPrefab: {fileID: 9133637884860939391, guid: a8001084231a6b84d9be7c344aac8946, type: 3}
   projectileNums: 20
-  jellyDamage: 1000
+  jellyDamage: 0
+  timeToDropSlime: 3
 --- !u!114 &7460476524800510790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -701,6 +702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dashSpeed: 30
+  timeToDropSlime: 0.1
 --- !u!1 &7613028300662219542
 GameObject:
   m_ObjectHideFlags: 0

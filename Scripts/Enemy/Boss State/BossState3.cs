@@ -30,7 +30,6 @@ public class BossState3 : StateMachineBehaviour
 
         // 개별 Update
         enemyBoss.ExecuteState3Update();
-        enemyBoss.SlimeDropTimer();
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

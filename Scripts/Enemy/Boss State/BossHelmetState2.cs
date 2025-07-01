@@ -10,6 +10,8 @@ public class BossHelmetState2 : MonoBehaviour
     [SerializeField] GameObject jellyPrefab;
     [SerializeField] int projectileNums;
     [SerializeField] int jellyDamage;
+    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
+
     Transform shootPoint;
     Coroutine co;
     bool isAttackDone;
@@ -35,6 +37,7 @@ public class BossHelmetState2 : MonoBehaviour
     }
     void InitState2Update()
     {
+        enemyBoss.SlimeDropTimer(timeToDropSlime);
         if (isAttackDone) return;
 
         co = StartCoroutine(ShootCo());
