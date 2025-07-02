@@ -32,16 +32,18 @@ public class MessageSystem : MonoBehaviour
 
     public void PostMessage(string text, Vector3 worldPosition, bool isCritical)
     {
+        TMPro.TextMeshPro damageText = messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>();
+
         messagePool[count].gameObject.SetActive(true);
         messagePool[count].transform.position = worldPosition;
-        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().text = text;
-        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, .8f, 0, 1); // yellow
-        messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().sortingOrder = 50;
+        damageText.text = text;
+        damageText.color = new Color(1, .8f, 0, 1); // yellow
+        damageText.sortingOrder = 50;
         if (isCritical)
         {
-            messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().color = new Color(1, .3f, .3f, 1); // red
+            damageText.color = new Color(1, .3f, .3f, 1); // red
             messagePool[count].GetComponent<DamageMessage>().PlayCriticalDamage();
-            messagePool[count].GetComponentInChildren<TMPro.TextMeshPro>().sortingOrder = 51;
+            damageText.sortingOrder = 51;
         }
         count++;
 

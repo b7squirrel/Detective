@@ -64,6 +64,7 @@ Transform:
   - {fileID: 4364289045917254098}
   - {fileID: 3753949127701031895}
   - {fileID: 312834047570834129}
+  - {fileID: 1094609424290101815}
   m_Father: {fileID: 2497243515629161829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1731860861157803047
@@ -181,6 +182,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3997274307978027707}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5141595236042310508
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1094609424290101815}
+  m_Layer: 6
+  m_Name: Dialog Bubble Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1094609424290101815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5141595236042310508}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.58, y: 6.62, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3997274307978027707}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6325816808547760431
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,6 +263,7 @@ GameObject:
   - component: {fileID: 9139378338178264030}
   - component: {fileID: 7460476524800510790}
   - component: {fileID: 1107227592599761436}
+  - component: {fileID: 856374984649581830}
   m_Layer: 6
   m_Name: LV2_Boss_Slime_Helmet
   m_TagString: Enemy
@@ -378,6 +411,7 @@ MonoBehaviour:
   maxProjectile: 100
   timeToAttack: 5
   ShootPoint: {fileID: 7814706633938963400}
+  dialogBubblePoint: {fileID: 1094609424290101815}
   dustPoint: {fileID: 4364289045917254098}
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
   teleportEffectPrefab: {fileID: 0}
@@ -401,7 +435,7 @@ MonoBehaviour:
   dieSFX: {fileID: 8300000, guid: 8c325d52ceb15424eb350b25efcd946a, type: 3}
   dot: {fileID: 534593963739121254, guid: 5d384957a642c924b8656c26eb946e34, type: 3}
   stateDisplayPrefab: {fileID: 8779905352047327024, guid: a247a652c55de4aee8ec01be81bc9144, type: 3}
-  debugState: 1
+  debugState: 0
   stateDiplayPoint: {fileID: 312834047570834129}
 --- !u!114 &3148108158803683198
 MonoBehaviour:
@@ -514,6 +548,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 2.52}
   serializedVersion: 2
   m_Radius: 2.56
+--- !u!114 &856374984649581830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779923083274053433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cecc8a7bbf03243d592170ebf7e5a5df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogBubblePrefab: {fileID: 1817514581722573707, guid: 4b0fb1a40623948f086f6d38b7a61579, type: 3}
 --- !u!1 &7613028300662219542
 GameObject:
   m_ObjectHideFlags: 0

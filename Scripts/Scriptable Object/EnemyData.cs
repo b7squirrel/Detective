@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -23,4 +24,7 @@ public class EnemyData : ScriptableObject
     [Header("점프")]
     [Range(0, 1f)] public float jumpRate; // 점프를 하는 적이 될 확률
     public float jumpInterval; // 점프 주기
+
+    [Header("보스 대사")]
+    public List<string> dialogs;
 }

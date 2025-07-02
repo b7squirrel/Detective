@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBoss : EnemyBase, Idamageable
@@ -35,9 +36,12 @@ public class EnemyBoss : EnemyBase, Idamageable
     public static event Action OnState3AnticEnter;// 세 번째 상태 antic Enter
     public static event Action OnState3AnticUpdate;// 세 번째 상태 antic Update
     public static event Action OnState3AnticExit;// 세 번째 상태 antic Exit
+
+    List<string> dialogs = new(); // state1, 2, 3 대사
     #endregion
 
     [SerializeField] Transform ShootPoint;
+    [SerializeField] Transform dialogBubblePoint;
 
     [Header("이펙트")]
     [SerializeField] Transform dustPoint;
@@ -98,6 +102,9 @@ public class EnemyBoss : EnemyBase, Idamageable
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
         InitHpBar();
+
+        //대사 초기화
+        this.dialogs.AddRange(_enemyToSpawn.dialogs);
 
         if (debugState)
         {
@@ -338,6 +345,10 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         return ShootPoint;
     }
+    public Transform GetDialogBubblePoint()
+    {
+        return dialogBubblePoint;
+    }
 
     bool IsOutOfRange()
     {
@@ -385,6 +396,11 @@ public class EnemyBoss : EnemyBase, Idamageable
     public void ExecuteState3AnticUpdate() => OnState3AnticUpdate?.Invoke();
     public void ExecuteState3AnticExit() => OnState3AnticExit?.Invoke();
 
+    public string GetDialog(int stateIndex)
+    {
+        return dialogs[stateIndex];
+    }
+
     IEnumerator SetStateDispPosToPlayer()
     {
         // 디버그 함수를 update에 넣으면 보기에 복잡하니까 코루틴으로 매 프레임마다 따라다니도록 하기
@@ -397,6 +413,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     // 상태 스크립트로 진입할 때 enter에서 실행하기
     public void DisplayCurrentState(string currentState)
     {
+        if (debugState == false) return;
         if (bossStateDisp == null) bossStateDisp = stateDisp.GetComponent<BossStateDisp>();
         bossStateDisp.SetStateText(currentState);
     }
