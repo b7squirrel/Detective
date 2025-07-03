@@ -1,82 +1,97 @@
 using UnityEngine;
 
-public class BossHelmetState3 : MonoBehaviour
+public class BossDrillState3 : MonoBehaviour
 {
     EnemyBoss enemyBoss;
     Transform playerTrns;
     Rigidbody2D rb;
     bool isDirectionSet; // 한 번 정해진 방향으로 대시하도록
+    bool isMoving; // 현재 이동 중인지 확인
     Vector2 dirVec; // 대시 방향
     [SerializeField] float dashSpeed;
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
 
+    #region 액션 이벤트
     void OnEnable()
     {
         EnemyBoss.OnState3Enter += InitState3Enter;
         EnemyBoss.OnState3Update += InitState3Update;
         EnemyBoss.OnState3Exit += InitState3Exit;
     }
+
     void OnDisable()
     {
         EnemyBoss.OnState3Enter -= InitState3Enter;
         EnemyBoss.OnState3Update -= InitState3Update;
         EnemyBoss.OnState3Exit -= InitState3Exit;
     }
+    #endregion
+
     void InitState3Enter()
     {
         Debug.Log("State3 Enter");
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
         if (playerTrns == null) playerTrns = GameManager.instance.player.transform;
         if (rb == null) rb = GetComponent<Rigidbody2D>();
-
+        
         isDirectionSet = false;
-        enemyBoss.DisplayCurrentState("헬멧 대시 상태");
+        isMoving = true;
+        enemyBoss.DisplayCurrentState("드릴 터널 이동");
     }
+
     void InitState3Update()
     {
         enemyBoss.SlimeDropTimer(timeToDropSlime);
-        Dash();
+        
+        if (isMoving)
+        {
+            UndergroundDash();
+        }
+        
         Debug.Log("State3 Update");
     }
+
     void InitState3Exit()
     {
         Debug.Log("State3 Exit");
+        isMoving = false;
     }
 
-    
-
     #region 공격 관련 함수
-    void Dash()
+    void UndergroundDash()
     {
         if (isDirectionSet == false) // 방향이 한 번 정해지면 다음 대시 전까지는 바뀌지 않도록
         {
-            dirVec = playerTrns.position - transform.position;
+            dirVec = (playerTrns.position - transform.position).normalized;
             isDirectionSet = true;
         }
 
-        Vector2 nextVec = dashSpeed * Time.fixedDeltaTime * dirVec.normalized;
-        rb.MovePosition((Vector2)rb.transform.position + nextVec);
-        rb.velocity = Vector2.zero;
+        if (isMoving)
+        {
+            Vector2 nextVec = dashSpeed * Time.fixedDeltaTime * dirVec;
+            rb.MovePosition((Vector2)rb.transform.position + nextVec);
+            rb.velocity = Vector2.zero;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // 벽이나 반사 가능한 오브젝트에만 반응하도록 태그 체크 (선택 사항)
+        // 벽에 충돌하면 이동 멈춤
         if (collision.collider.CompareTag("Wall"))
         {
-            // 충돌 지점의 법선 벡터 사용 (보통 첫 번째 ContactPoint 사용)
-            Vector2 normal = collision.contacts[0].normal;
-
-            // 현재 방향을 기준으로 반사 벡터 계산
-            dirVec = Vector2.Reflect(dirVec.normalized, normal);
-
-            // 반사 방향으로 계속 대시하도록 설정
-            isDirectionSet = true;
+            isMoving = false;
+            rb.velocity = Vector2.zero;
+            Debug.Log("벽에 충돌 - 이동 멈춤");
         }
+
+        // 플레이어와 충돌
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player Hit");
-            if (Time.frameCount % 3 == 0) GameManager.instance.character.TakeDamage(enemyBoss.Stats.damage, EnemyType.Melee);
+            Debug.Log("플레이어와 충돌");
+            if (Time.frameCount % 3 == 0) 
+            {
+                GameManager.instance.character.TakeDamage(enemyBoss.Stats.damage, EnemyType.Melee);
+            }
         }
     }
     #endregion

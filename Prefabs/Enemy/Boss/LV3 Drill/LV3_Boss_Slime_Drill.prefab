@@ -325,11 +325,11 @@ GameObject:
   - component: {fileID: 390673747403180902}
   - component: {fileID: 8450805024433572474}
   - component: {fileID: 7016512509256424709}
-  - component: {fileID: 8289786095269894217}
-  - component: {fileID: 5516059189162163834}
-  - component: {fileID: 6363484911408734751}
   - component: {fileID: 7304840127937383004}
   - component: {fileID: 7155824667513064819}
+  - component: {fileID: 6441386176674987020}
+  - component: {fileID: 1435305814662800124}
+  - component: {fileID: 2970345735412955765}
   m_Layer: 6
   m_Name: LV3_Boss_Slime_Drill
   m_TagString: Enemy
@@ -536,49 +536,6 @@ MonoBehaviour:
   slimeDropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
   slimeDropDamage: 8
   slowDownFactor: 0.7
---- !u!114 &8289786095269894217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6583756308009929707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c07a43d1c49214bae884819832a3fc22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToDropSlime: 0.5
---- !u!114 &5516059189162163834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6583756308009929707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 828813a77ec624c47b98aa9962bf6c1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jellyPrefab: {fileID: 9133637884860939391, guid: a8001084231a6b84d9be7c344aac8946, type: 3}
-  projectileNums: 20
-  jellyDamage: 0
-  timeToDropSlime: 3
---- !u!114 &6363484911408734751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6583756308009929707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c8299cc0e1454c15b4ecf9dd80fe073, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dashSpeed: 30
-  timeToDropSlime: 0.1
 --- !u!58 &7304840127937383004
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -627,6 +584,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogBubblePrefab: {fileID: 1817514581722573707, guid: 4b0fb1a40623948f086f6d38b7a61579, type: 3}
+--- !u!114 &6441386176674987020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6583756308009929707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b3fa1ad7026d4678aaa52b9f3b19ee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToDropSlime: 0.5
+--- !u!114 &1435305814662800124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6583756308009929707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d76c8b020754e63bc96961d58e9142, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jellyPrefab: {fileID: 0}
+  projectileNums: 20
+  jellyDamage: 0
+  timeToDropSlime: 3
+--- !u!114 &2970345735412955765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6583756308009929707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1f9196a30df34b3395c950beb411918, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashSpeed: 20
+  timeToDropSlime: 0.1
 --- !u!1 &6592318033015768284
 GameObject:
   m_ObjectHideFlags: 0
