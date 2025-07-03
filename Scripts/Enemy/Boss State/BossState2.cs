@@ -25,7 +25,7 @@ public class BossState2 : StateMachineBehaviour
         else
         {
             stateTimer = 0f;
-            enemyBoss.SetRandomState();
+            animator.SetTrigger("Settle");
         }
 
         // 개별 Update

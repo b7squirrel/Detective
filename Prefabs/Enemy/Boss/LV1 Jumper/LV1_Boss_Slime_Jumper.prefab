@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &667991307297512849
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 454581177511335588}
+  m_Layer: 6
+  m_Name: State Display Debug Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &454581177511335588
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667991307297512849}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 6.74, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5433417143217792927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1627749069346275297
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,9 +287,9 @@ MonoBehaviour:
   fallDownSFX: {fileID: 8300000, guid: 65c88103c5dfa4d4a942bfc6a70e604c, type: 3}
   dieSFX: {fileID: 8300000, guid: 8c325d52ceb15424eb350b25efcd946a, type: 3}
   dot: {fileID: 534593963739121254, guid: 5d384957a642c924b8656c26eb946e34, type: 3}
-  stateDisplayPrefab: {fileID: 0}
+  stateDisplayPrefab: {fileID: 8779905352047327024, guid: a247a652c55de4aee8ec01be81bc9144, type: 3}
   debugState: 0
-  stateDiplayPoint: {fileID: 0}
+  stateDiplayPoint: {fileID: 454581177511335588}
 --- !u!114 &5356226881793711286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,6 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e237e1a0540a4463c9729a3d4f67a7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToDropSlime: 0.5
 --- !u!114 &7471620232612088572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,9 +349,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 4338945772903457947, guid: 4e46f9ffa3f314f64be191a9c1b53c96, type: 3}
-  projectileNums: 5
+  projectileNums: 200
   jellyDamage: 0
-  projectilSpeed: 15
+  projectilSpeed: 24
   timeToDropSlime: 3
   projectileSFX: {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
 --- !u!114 &5287274232121127389
@@ -349,6 +381,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogBubblePrefab: {fileID: 1817514581722573707, guid: 4b0fb1a40623948f086f6d38b7a61579, type: 3}
+--- !u!1 &4104794032901784933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5825962675198153940}
+  m_Layer: 6
+  m_Name: Dialog Bubble Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5825962675198153940
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104794032901784933}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.58, y: 6.62, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5433417143217792927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5340641981018971738
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,6 +444,8 @@ Transform:
   - {fileID: 8488362740134233737}
   - {fileID: 3883101929143233562}
   - {fileID: 3173228057631423548}
+  - {fileID: 454581177511335588}
+  - {fileID: 5825962675198153940}
   m_Father: {fileID: 2744612390525029880}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6180653316091096333

@@ -38,20 +38,22 @@ public class BossJumpState2 : MonoBehaviour
         Debug.Log("State2 Enter");
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
         isAttackDone = false; // 공격을 할 수 있도록 초기화
-        enemyBoss.DisplayCurrentState("헬멧 슬라임 구슬 발사 상태");
+        enemyBoss.DisplayCurrentState("점퍼 슈팅");
 
         playerTrns = GameManager.instance.player.transform;
+
+        co = StartCoroutine(ShootCo());
     }
     void InitState2Update()
     {
         enemyBoss.SlimeDropTimer(timeToDropSlime);
         if (isAttackDone) return;
 
-        co = StartCoroutine(ShootCo());
         Debug.Log("State2 Update");
     }
     void InitState2Exit()
     {
+        StopShooting();
         Debug.Log("State3 Exit");
     }
     #endregion
@@ -59,27 +61,24 @@ public class BossJumpState2 : MonoBehaviour
     #region 공격 관련 함수들
     IEnumerator ShootCo()
     {
-        for (int i = 0; i < projectileNums; i++)
+        int projectileCounter = projectileNums;
+        while (projectileCounter > 0)
         {
             GameObject projectile = Instantiate(projectilePrefab);
-            projectile.GetComponent<SlimeDropProjectile>().InitProjectile(transform.position, playerTrns.position, projectilSpeed);
+            Vector2 offsetPos = (Vector2)playerTrns.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
+            projectile.GetComponent<SlimeDropProjectile>().InitProjectile(transform.position, offsetPos, projectilSpeed);
             SoundManager.instance.Play(projectileSFX);
+            projectileCounter--;
             yield return new WaitForSeconds(.1f);
         }
-        co = StartCoroutine(ShootFinishedCo());
     }
 
-    IEnumerator ShootFinishedCo()
-    {
-        yield return new WaitForSeconds(1f);
-        // State2Settle 로 가야함
-        // anim.SetBool("ShootFinished", true);
-    }
     public void StopShooting()
     {
         if (co == null)
             return;
         StopCoroutine(co);
+        co = null;
     }
     #endregion
 }

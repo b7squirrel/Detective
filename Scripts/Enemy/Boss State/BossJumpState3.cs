@@ -43,7 +43,7 @@ public class BossJumpState3 : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody2D>();
 
         isMoving = true;
-        enemyBoss.DisplayCurrentState("점프 공중 이동");
+        enemyBoss.DisplayCurrentState("점퍼 점프");
 
         elapsedTIme = 0f;
 
@@ -53,6 +53,9 @@ public class BossJumpState3 : MonoBehaviour
         // 시작지점, 도착지점
         startPos = transform.position;
         targetPos = playerTrns.position;
+
+        // 착지 지점 인디케이터
+        enemyBoss.ActivateLandingIndicator(true);
     }
 
     void InitState3Update()
@@ -70,6 +73,8 @@ public class BossJumpState3 : MonoBehaviour
     void InitState3Exit()
     {
         Debug.Log("State3 Exit");
+        enemyBoss.ActivateLandingIndicator(false);
+
         isMoving = false;
     }
 
