@@ -136,6 +136,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         slimeDropTimer = 0f;
     }
     #endregion
+
     void DropSlime()
     {
         // 이동 할 때 슬라임 점액
@@ -285,6 +286,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public void SetLayer(string layer)
     {
+        // Enemy, InAir 등등
         gameObject.layer = LayerMask.NameToLayer(layer);
     }
     public void EnableCollider()
