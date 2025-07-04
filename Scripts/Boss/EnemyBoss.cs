@@ -36,6 +36,11 @@ public class EnemyBoss : EnemyBase, Idamageable
     public static event Action OnState3AnticEnter;// 세 번째 상태 antic Enter
     public static event Action OnState3AnticUpdate;// 세 번째 상태 antic Update
     public static event Action OnState3AnticExit;// 세 번째 상태 antic Exit
+    public static event Action OnStateSettleEnter;
+    public static event Action OnStateSettleUpdate;
+    public static event Action OnStateSettleExit;
+
+    public Vector2 prevDir; // 뒤로 튕겨나갈 때 필요한 방향 벡터
 
     List<string> dialogs = new(); // state1, 2, 3 대사
     #endregion
@@ -385,7 +390,11 @@ public class EnemyBoss : EnemyBase, Idamageable
         string[] states = { "State1", "State2", "State3" };
         int stateIndex = UnityEngine.Random.Range(0, states.Length);
 
-        if (debugSetState) anim.SetTrigger(states[desiredStateIndex]); // debugSetState모드일 때는 해당 상태만 계속 되도록 하기
+        if (debugSetState)
+        {
+            anim.SetTrigger(states[desiredStateIndex]); // debugSetState모드일 때는 해당 상태만 계속 되도록 하기
+            return;
+        }
 
         anim.SetTrigger(states[stateIndex]);
     }
@@ -404,10 +413,22 @@ public class EnemyBoss : EnemyBase, Idamageable
     public void ExecuteState3AnticEnter() => OnState3AnticEnter?.Invoke();
     public void ExecuteState3AnticUpdate() => OnState3AnticUpdate?.Invoke();
     public void ExecuteState3AnticExit() => OnState3AnticExit?.Invoke();
+    public void ExecuteStateSettleEnter() => OnStateSettleEnter?.Invoke();
+    public void ExecuteStateSettleUpdate() => OnStateSettleUpdate?.Invoke();
+    public void ExecuteStateSettleExit() => OnStateSettleExit?.Invoke();
 
     public string GetDialog(int stateIndex)
     {
         return dialogs[stateIndex];
+    }
+
+    public Vector2 GetPrevDir()
+    {
+        return prevDir;
+    }
+    public void SetPrevDir(Vector2 previousDirection)
+    {
+        prevDir = previousDirection;
     }
 
     IEnumerator SetStateDispPosToPlayer()

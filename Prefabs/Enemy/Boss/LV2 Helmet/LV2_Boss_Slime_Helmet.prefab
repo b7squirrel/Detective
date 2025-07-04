@@ -262,6 +262,7 @@ GameObject:
   - component: {fileID: 4067861370001060545}
   - component: {fileID: 9139378338178264030}
   - component: {fileID: 7460476524800510790}
+  - component: {fileID: 3389163351709460277}
   - component: {fileID: 1107227592599761436}
   - component: {fileID: 856374984649581830}
   m_Layer: 6
@@ -335,7 +336,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &7649279383913775786
 MonoBehaviour:
@@ -410,6 +411,7 @@ MonoBehaviour:
   numberOfProjectile: 2
   maxProjectile: 100
   timeToAttack: 5
+  prevDir: {x: 0, y: 0}
   ShootPoint: {fileID: 7814706633938963400}
   dialogBubblePoint: {fileID: 1094609424290101815}
   dustPoint: {fileID: 4364289045917254098}
@@ -437,7 +439,7 @@ MonoBehaviour:
   stateDisplayPrefab: {fileID: 8779905352047327024, guid: a247a652c55de4aee8ec01be81bc9144, type: 3}
   debugState: 0
   stateDiplayPoint: {fileID: 312834047570834129}
-  debugSetState: 1
+  debugSetState: 0
   desiredStateIndex: 2
 --- !u!114 &3148108158803683198
 MonoBehaviour:
@@ -515,6 +517,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dashSpeed: 30
   timeToDropSlime: 0.1
+--- !u!114 &3389163351709460277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779923083274053433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271aa79f4b0ca456db7dc066245915c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bounceDistance: 3
 --- !u!58 &1107227592599761436
 CircleCollider2D:
   m_ObjectHideFlags: 0
