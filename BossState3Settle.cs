@@ -1,9 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// 멈춰 있는 역할만 함
-/// </summary>
-public class BossStateSettle : StateMachineBehaviour
+public class BossState3Settle : StateMachineBehaviour
 {
     Rigidbody2D rb;
     EnemyBoss enemyBoss;

@@ -1,9 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// 멈춰 있는 역할만 함
-/// </summary>
-public class BossStateSettle : StateMachineBehaviour
+public class BossState2Settle : StateMachineBehaviour
 {
     Rigidbody2D rb;
     EnemyBoss enemyBoss;
@@ -12,18 +9,18 @@ public class BossStateSettle : StateMachineBehaviour
         rb = animator.GetComponent<Rigidbody2D>();
         enemyBoss = animator.GetComponent<EnemyBoss>();
 
-        enemyBoss.ExecuteState3SettleEnter();
+        enemyBoss.ExecuteState2SettleEnter();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemyBoss.ExecuteState3SettleUpdate();
+        enemyBoss.ExecuteState2SettleUpdate();
 
         rb.velocity = Vector2.zero;
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemyBoss.ExecuteState3SettleExit();
+        enemyBoss.ExecuteState2SettleExit();
     }
 }

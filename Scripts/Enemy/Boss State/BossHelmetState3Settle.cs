@@ -17,19 +17,19 @@ public class BossHelmetState3Settle : MonoBehaviour
     #region 상태 이벤트
     void OnEnable()
     {
-        EnemyBoss.OnStateSettleEnter += InitSettleEnter;
-        EnemyBoss.OnStateSettleUpdate += InitSettleUpdate;
-        EnemyBoss.OnStateSettleExit += InitsettleExit;
+        EnemyBoss.OnState3SettleEnter += InitState3SettleEnter;
+        EnemyBoss.OnState3SettleUpdate += InitState3SettleUpdate;
+        EnemyBoss.OnState3SettleExit += InitState3settleExit;
     }
     void OnDisable()
     {
-        EnemyBoss.OnStateSettleEnter -= InitSettleEnter;
-        EnemyBoss.OnStateSettleUpdate -= InitSettleUpdate;
-        EnemyBoss.OnStateSettleExit -= InitsettleExit;
+        EnemyBoss.OnState3SettleEnter -= InitState3SettleEnter;
+        EnemyBoss.OnState3SettleUpdate -= InitState3SettleUpdate;
+        EnemyBoss.OnState3SettleExit -= InitState3settleExit;
     }
     #endregion
 
-    void InitSettleEnter()
+    void InitState3SettleEnter()
     {
         Debug.Log("State1 Enter");
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
@@ -43,12 +43,12 @@ public class BossHelmetState3Settle : MonoBehaviour
 
         enemyBoss.DisplayCurrentState("헬멧 슬라임 걷기 상태");
     }
-    void InitSettleUpdate()
+    void InitState3SettleUpdate()
     {
         BounceBack();
         Debug.Log("State1 Update");
     }
-    void InitsettleExit()
+    void InitState3settleExit()
     {
         Debug.Log("State1 Exit");
     }

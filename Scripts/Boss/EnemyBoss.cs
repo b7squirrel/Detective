@@ -36,9 +36,15 @@ public class EnemyBoss : EnemyBase, Idamageable
     public static event Action OnState3AnticEnter;// 세 번째 상태 antic Enter
     public static event Action OnState3AnticUpdate;// 세 번째 상태 antic Update
     public static event Action OnState3AnticExit;// 세 번째 상태 antic Exit
-    public static event Action OnStateSettleEnter;
-    public static event Action OnStateSettleUpdate;
-    public static event Action OnStateSettleExit;
+    public static event Action OnState1SettleEnter;
+    public static event Action OnState1SettleUpdate;
+    public static event Action OnState1SettleExit;
+    public static event Action OnState2SettleEnter;
+    public static event Action OnState2SettleUpdate;
+    public static event Action OnState2SettleExit;
+    public static event Action OnState3SettleEnter;
+    public static event Action OnState3SettleUpdate;
+    public static event Action OnState3SettleExit;
 
     public Vector2 prevDir; // 뒤로 튕겨나갈 때 필요한 방향 벡터
 
@@ -413,9 +419,15 @@ public class EnemyBoss : EnemyBase, Idamageable
     public void ExecuteState3AnticEnter() => OnState3AnticEnter?.Invoke();
     public void ExecuteState3AnticUpdate() => OnState3AnticUpdate?.Invoke();
     public void ExecuteState3AnticExit() => OnState3AnticExit?.Invoke();
-    public void ExecuteStateSettleEnter() => OnStateSettleEnter?.Invoke();
-    public void ExecuteStateSettleUpdate() => OnStateSettleUpdate?.Invoke();
-    public void ExecuteStateSettleExit() => OnStateSettleExit?.Invoke();
+    public void ExecuteState1SettleEnter() => OnState1SettleEnter?.Invoke();
+    public void ExecuteState1SettleUpdate() => OnState1SettleUpdate?.Invoke();
+    public void ExecuteState1SettleExit() => OnState1SettleExit?.Invoke();
+    public void ExecuteState2SettleEnter() => OnState2SettleEnter?.Invoke();
+    public void ExecuteState2SettleUpdate() => OnState2SettleUpdate?.Invoke();
+    public void ExecuteState2SettleExit() => OnState2SettleExit?.Invoke();
+    public void ExecuteState3SettleEnter() => OnState3SettleEnter?.Invoke();
+    public void ExecuteState3SettleUpdate() => OnState3SettleUpdate?.Invoke();
+    public void ExecuteState3SettleExit() => OnState3SettleExit?.Invoke();
 
     public string GetDialog(int stateIndex)
     {
