@@ -87,6 +87,8 @@ public class EnemyBoss : EnemyBase, Idamageable
     BossStateDisp bossStateDisp; // 상태 디스플레이
     [SerializeField] Transform stateDiplayPoint; // 상태 디스플레이를 위치시킬 로케이터
     float debugAlpha;
+    [SerializeField] bool debugSetState; // 특정 상태만 계속 나오게 하고 싶다면 체크
+    [SerializeField] int desiredStateIndex; // 계속 나오게 하고 싶은 상태 인덱스
 
     #region Init/Shoot Cooldown
     public override void InitEnemy(EnemyData _enemyToSpawn)
@@ -313,6 +315,10 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         anim.SetTrigger("Land");
     }
+    public void SetTriggerTo(string trigger)
+    {
+        anim.SetTrigger(trigger);
+    }
     #endregion
 
     #region 상태 함수, 애니메이션 이벤트
@@ -378,9 +384,10 @@ public class EnemyBoss : EnemyBase, Idamageable
         // 보스의 상태는 3개 : Walk, Attack1, Attack2, 이 중 랜덤하게 1개의 상태 선택
         string[] states = { "State1", "State2", "State3" };
         int stateIndex = UnityEngine.Random.Range(0, states.Length);
+
+        if (debugSetState) anim.SetTrigger(states[desiredStateIndex]); // debugSetState모드일 때는 해당 상태만 계속 되도록 하기
+
         anim.SetTrigger(states[stateIndex]);
-        // anim.SetTrigger(states[2]); // 대시만 실행
-        // anim.SetTrigger(states[1]); // 발사만 실행
     }
     public void ExecuteState1Enter() => OnState1Enter?.Invoke();
     public void ExecuteState1Update() => OnState1Update?.Invoke();

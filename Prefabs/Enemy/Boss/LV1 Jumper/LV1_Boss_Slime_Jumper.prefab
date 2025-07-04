@@ -353,6 +353,7 @@ MonoBehaviour:
   jellyDamage: 0
   projectilSpeed: 24
   timeToDropSlime: 3
+  projectileOffset: 10
   projectileSFX: {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
 --- !u!114 &5287274232121127389
 MonoBehaviour:
@@ -367,7 +368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inAirDuration: 1
-  timeToDropSlime: 0.1
+  timeToDropSlime: 1000
 --- !u!114 &4669373223621701690
 MonoBehaviour:
   m_ObjectHideFlags: 0

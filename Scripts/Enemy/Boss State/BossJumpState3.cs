@@ -8,7 +8,7 @@ public class BossJumpState3 : MonoBehaviour
     bool isMoving;
 
     [SerializeField] float inAirDuration; // 이동할 거리와 상관없이 같은 시간으로 이동
-    [SerializeField] float timeToDropSlime;
+    [SerializeField] float timeToDropSlime; // 1000정도로 하면 이 상태에서는 점액을 흘리지 않음
     float elapsedTIme = 0;
 
     Vector2 startPos, targetPos;
@@ -19,9 +19,6 @@ public class BossJumpState3 : MonoBehaviour
         EnemyBoss.OnState3Enter += InitState3Enter;
         EnemyBoss.OnState3Update += InitState3Update;
         EnemyBoss.OnState3Exit += InitState3Exit;
-
-        enemyLayer = LayerMask.NameToLayer("Enemy");
-        inAirLayer = LayerMask.NameToLayer("InAir");
     }
 
     void OnDisable()

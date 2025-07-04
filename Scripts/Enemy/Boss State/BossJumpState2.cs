@@ -9,6 +9,7 @@ public class BossJumpState2 : MonoBehaviour
     [SerializeField] int jellyDamage;
     [SerializeField] float projectilSpeed;
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
+    [SerializeField] float projectileOffset; // 슬라임이 착지할 지점 offset
 
     [Header("SFX")]
     [SerializeField] AudioClip projectileSFX;
@@ -65,7 +66,11 @@ public class BossJumpState2 : MonoBehaviour
         while (projectileCounter > 0)
         {
             GameObject projectile = Instantiate(projectilePrefab);
-            Vector2 offsetPos = (Vector2)playerTrns.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
+
+            float offsetX = UnityEngine.Random.Range(-1 * projectileOffset, projectileOffset);
+            float offsetY = UnityEngine.Random.Range(-1 * projectileOffset, projectileOffset);
+
+            Vector2 offsetPos = (Vector2)playerTrns.position + new Vector2(offsetX, offsetY);
             projectile.GetComponent<SlimeDropProjectile>().InitProjectile(transform.position, offsetPos, projectilSpeed);
             SoundManager.instance.Play(projectileSFX);
             projectileCounter--;

@@ -10,6 +10,13 @@ public class BossHelmetState3 : MonoBehaviour
     [SerializeField] float dashSpeed;
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
 
+    // Bouncing back
+    bool isBouncing = false;
+    Vector2 bounceStartPos;
+    Vector2 bounceTargetPos;
+    float bounceTime = 0f;
+    float bounceDuration = 0.2f; // 튕겨나기 애니메이션 시간
+
     void OnEnable()
     {
         EnemyBoss.OnState3Enter += InitState3Enter;
@@ -30,11 +37,14 @@ public class BossHelmetState3 : MonoBehaviour
         if (rb == null) rb = GetComponent<Rigidbody2D>();
 
         isDirectionSet = false;
+        isBouncing = false;
         enemyBoss.DisplayCurrentState("헬멧 대시 상태");
     }
     void InitState3Update()
     {
+        // 슬라임 떨어뜨리는 타이머는 계속 작동
         enemyBoss.SlimeDropTimer(timeToDropSlime);
+        BounceBack();
         Dash();
         Debug.Log("State3 Update");
     }
@@ -43,11 +53,10 @@ public class BossHelmetState3 : MonoBehaviour
         Debug.Log("State3 Exit");
     }
 
-    
-
     #region 공격 관련 함수
     void Dash()
     {
+        if (isBouncing) return; // 뒤로 튕겨나는 중이면 대시하지 않음
         if (isDirectionSet == false) // 방향이 한 번 정해지면 다음 대시 전까지는 바뀌지 않도록
         {
             dirVec = playerTrns.position - transform.position;
@@ -58,25 +67,52 @@ public class BossHelmetState3 : MonoBehaviour
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
+    void BounceBack()
+    {
+        // 반동 중이면 대시 중단, 대신 Lerp로 이동 처리
+        if (isBouncing)
+        {
+            bounceTime += Time.deltaTime;
+            float t = Mathf.Clamp01(bounceTime / bounceDuration);
+            rb.MovePosition(Vector2.Lerp(bounceStartPos, bounceTargetPos, t));
+
+            if (t >= 1f)
+            {
+                isBouncing = false;
+                enemyBoss.SetTriggerTo("Settle");
+            }
+        }
+    }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // 벽이나 반사 가능한 오브젝트에만 반응하도록 태그 체크 (선택 사항)
         if (collision.collider.CompareTag("Wall"))
         {
-            // 충돌 지점의 법선 벡터 사용 (보통 첫 번째 ContactPoint 사용)
             Vector2 normal = collision.contacts[0].normal;
+            Vector2 reflectDir = Vector2.Reflect(dirVec.normalized, normal);
+            float bounceDistance = 0.5f;
 
-            // 현재 방향을 기준으로 반사 벡터 계산
-            dirVec = Vector2.Reflect(dirVec.normalized, normal);
+            bounceStartPos = rb.position;
+            bounceTargetPos = rb.position + reflectDir * bounceDistance;
+            bounceTime = 0f;
+            isBouncing = true;
 
-            // 반사 방향으로 계속 대시하도록 설정
-            isDirectionSet = true;
+            rb.velocity = Vector2.zero;
         }
+
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player Hit");
-            if (Time.frameCount % 3 == 0) GameManager.instance.character.TakeDamage(enemyBoss.Stats.damage, EnemyType.Melee);
+
+            Vector2 awayFromPlayer = (transform.position - playerTrns.position).normalized;
+            float bounceDistance = 0.3f;
+
+            bounceStartPos = rb.position;
+            bounceTargetPos = rb.position + awayFromPlayer * bounceDistance;
+            bounceTime = 0f;
+            isBouncing = true;
+
+            rb.velocity = Vector2.zero;
         }
     }
     #endregion
