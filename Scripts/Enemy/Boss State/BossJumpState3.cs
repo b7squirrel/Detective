@@ -13,9 +13,6 @@ public class BossJumpState3 : MonoBehaviour
 
     Vector2 startPos, targetPos;
 
-    int enemyLayer;
-    int inAirLayer;
-
     #region 액션 이벤트
     void OnEnable()
     {
@@ -46,9 +43,6 @@ public class BossJumpState3 : MonoBehaviour
         enemyBoss.DisplayCurrentState("점퍼 점프");
 
         elapsedTIme = 0f;
-
-        // 레이어를 "InAir"로 변경. 벽과만 충돌을 하는 레이어
-        gameObject.layer = inAirLayer;
 
         // 시작지점, 도착지점
         startPos = transform.position;
@@ -100,9 +94,6 @@ public class BossJumpState3 : MonoBehaviour
         {
             isMoving = false;
             rb.velocity = Vector2.zero;
-
-            // 레이어를 "Enemy"로 되돌림
-            gameObject.layer = enemyLayer;
 
             Debug.Log("벽에 충돌 - 이동 멈춤");
         }
