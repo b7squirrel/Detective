@@ -188,7 +188,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &5164020350092701242
 MonoBehaviour:
@@ -263,6 +263,7 @@ MonoBehaviour:
   numberOfProjectile: 2
   maxProjectile: 100
   timeToAttack: 5
+  prevDir: {x: 0, y: 0}
   ShootPoint: {fileID: 8488362740134233737}
   dialogBubblePoint: {fileID: 0}
   dustPoint: {fileID: 3883101929143233562}
@@ -290,6 +291,8 @@ MonoBehaviour:
   stateDisplayPrefab: {fileID: 8779905352047327024, guid: a247a652c55de4aee8ec01be81bc9144, type: 3}
   debugState: 0
   stateDiplayPoint: {fileID: 454581177511335588}
+  debugSetState: 0
+  desiredStateIndex: 0
 --- !u!114 &5356226881793711286
 MonoBehaviour:
   m_ObjectHideFlags: 0

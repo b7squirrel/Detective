@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608ab2ae7154af4429ee6ffc8873925f, type: 3}
+  m_Name: Slime LV4_Boss
+  m_EditorClassIdentifier: 
+  Name: "\uAC70\uB300\uBBF8 \uC655\uC790"
+  animController: {fileID: 22100000, guid: 6d6fddb1826376a4791e738572e05834, type: 2}
+  stats:
+    hp: 15000
+    speed: 10
+    damage: 210
+    rangedDamage: 0
+    experience_reward: 8000
+  enemyType: 0
+  projectilePrefab: {fileID: 0}
+  dieEffectPrefab: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
+  enemyColor: {r: 0.3647059, g: 0.67058825, b: 0.6, a: 1}
+  enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
+  distanceToPlayer: 0
+  attackInterval: 0
+  jumpRate: 0
+  jumpInterval: 0

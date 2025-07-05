@@ -391,19 +391,35 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     // 랜덤하게 3개의 공격 가운데 하나를 선택하기 위한 인덱스.
     public void SetRandomState()
+{
+    string[] states = { "State1", "State2", "State3" };
+
+    if (debugSetState)
     {
-        // 보스의 상태는 3개 : Walk, Attack1, Attack2, 이 중 랜덤하게 1개의 상태 선택
-        string[] states = { "State1", "State2", "State3" };
-        int stateIndex = UnityEngine.Random.Range(0, states.Length);
-
-        if (debugSetState)
-        {
-            anim.SetTrigger(states[desiredStateIndex]); // debugSetState모드일 때는 해당 상태만 계속 되도록 하기
-            return;
-        }
-
-        anim.SetTrigger(states[stateIndex]);
+        anim.SetTrigger(states[desiredStateIndex]);
+        return;
     }
+
+    // 0~99 사이의 난수를 생성
+    int rand = UnityEngine.Random.Range(0, 100);
+
+    int stateIndex;
+    if (rand < 10)
+    {
+        stateIndex = 0; // State1: 10%
+    }
+    else if (rand < 55)
+    {
+        stateIndex = 1; // State2: 45%
+    }
+    else
+    {
+        stateIndex = 2; // State3: 45%
+    }
+
+    anim.SetTrigger(states[stateIndex]);
+}
+
     public void ExecuteState1Enter() => OnState1Enter?.Invoke();
     public void ExecuteState1Update() => OnState1Update?.Invoke();
     public void ExecuteState1Exit() => OnState1Exit?.Invoke();
