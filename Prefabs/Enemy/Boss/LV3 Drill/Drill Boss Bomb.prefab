@@ -213,8 +213,10 @@ GameObject:
   - component: {fileID: 2363684164618232530}
   - component: {fileID: 6049118448828226657}
   - component: {fileID: 796035753408465331}
+  - component: {fileID: 4030257125410257184}
+  - component: {fileID: 3338693995322511011}
   m_Layer: 11
-  m_Name: SlimeEggProjectile
+  m_Name: Drill Boss Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -277,6 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bouncingNumbers: 3
+  bounceCounter: 0
   onLandingMask: Enemy
   onGroundHitEvent:
     m_PersistentCalls:
@@ -352,3 +355,44 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &4030257125410257184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4996769589237571694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3e0a4f4eb0d4a98936b7d8c443227e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitingTime: 3
+  damage: 1000
+  radius: 10
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  isDubugMode: 1
+  debugCircleForCheckingRadius: {fileID: 2101900553215353305, guid: e14baa2d3babb4038a7965027a8d1154, type: 3}
+--- !u!95 &3338693995322511011
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4996769589237571694}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f9716b635f67247c498e59b28ec00c37, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

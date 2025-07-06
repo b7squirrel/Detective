@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public class ShadowHeightProjectile : MonoBehaviour
 {
     [SerializeField] int bouncingNumbers;
+    [SerializeField] int bounceCounter;
     [SerializeField] string onLandingMask;
     public bool IsDone { get; private set; }
     public UnityEvent onGroundHitEvent;
@@ -52,13 +53,15 @@ public class ShadowHeightProjectile : MonoBehaviour
         // 현재 속도 초기화 (선택 사항)
         rb.velocity = Vector2.zero;
 
+        gameObject.layer = LayerMask.NameToLayer("InAir");
+        rb.mass = 1f;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+
         // 힘을 적용
         rb.AddForce(groundVelocity * forceMultiplier, ForceMode2D.Impulse);
         StartCoroutine(SlowDownCoroutine());
 
-        gameObject.layer = LayerMask.NameToLayer("InAir");
-        rb.mass = 1f;
-        rb.bodyType = RigidbodyType2D.Dynamic;
+        
     }
 
     void UpdateLayer()
@@ -118,22 +121,23 @@ public class ShadowHeightProjectile : MonoBehaviour
     // 애니메이션 이벤트들
     public void Bounce(float divisionFactor)
     {
-        if (bouncingNumbers < 1)
+        if (bounceCounter > bouncingNumbers)
         {
             IsDone = true;
             gameObject.layer = LayerMask.NameToLayer("Enemy");
             rb.velocity = Vector2.zero;
             rb.mass = 100f;
             rb.bodyType = RigidbodyType2D.Kinematic;
+            bounceCounter = 0;
             return;
         }
 
         // 바운스 시 수직 속도를 양수로 만들어야 함
         verticalVelocity = Mathf.Abs(verticalVelocity) / divisionFactor;
 
-        bouncingNumbers--;
+        bounceCounter++;
         isGrounded = false;
 
-        Debug.Log($"Bouncing! New verticalVelocity: {verticalVelocity}, Remaining bounces: {bouncingNumbers}");
+        Debug.Log($"Bouncing! New verticalVelocity: {verticalVelocity}, Remaining bounces: {bounceCounter}");
     }
 }
