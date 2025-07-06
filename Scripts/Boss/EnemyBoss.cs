@@ -154,13 +154,13 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         // 이동 할 때 슬라임 점액
         if (slimeDropManager == null) slimeDropManager = GetComponent<SlimeDropManager>();
-        slimeDropManager.DropSlimeDrop(ShootPoint.position); // 이동할 때는 보스의 가운데에서 점액이 나오는 것이 나아보인다
+        slimeDropManager.DropObject(ShootPoint.position); // 이동할 때는 보스의 가운데에서 점액이 나오는 것이 나아보인다
     }
     void DropSlimeOnLanding()
     {
         // 착지 시 슬라임 점액
         if (slimeDropManager == null) slimeDropManager = GetComponent<SlimeDropManager>();
-        slimeDropManager.DropSlimeDropOnLanding(dustPoint.position); // 랜딩할 때는 인디케이터와 일치되는 위치에 점액이 떨어지는 것이 좋아 보인다
+        slimeDropManager.DropObjectOnLanding(dustPoint.position); // 랜딩할 때는 인디케이터와 일치되는 위치에 점액이 떨어지는 것이 좋아 보인다
     }
 
     #region 닿으면 Player HP 감소

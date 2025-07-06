@@ -6,25 +6,26 @@ using UnityEngine;
 /// </summary>
 public class SlimeDropManager : MonoBehaviour
 {
-    [SerializeField] GameObject slimeDropPrefab; // 슬라임 점액 프리펩
-    [SerializeField] GameObject slimeDropOnLandingPrefab; // 착지할 때 나오는 슬라임 점액 프리펩
-    [SerializeField] int slimeDropDamage; // 슬라임 점액 데미지
+    [Header("흘리고 다니는 오브젝트")]
+    [SerializeField] GameObject dropPrefab; // 슬라임 점액 프리펩
+    [SerializeField] GameObject DropOnLandingPrefab; // 착지할 때 나오는 슬라임 점액 프리펩
+    [SerializeField] int dropDamage; // 슬라임 점액 데미지
     [SerializeField] float slowDownFactor; // 플레이어가 점액 위에 있을 때 속도 저하를 위한 인자
 
     bool isTriggered; // 중첩되어 슬라임과 충돌했을 때 데미지가 너무 많이 들어가는 것을 방지
-    int overrapingSlimeCount; // 슬라임 위에 있는지 체크하기 위한 플레이어와 중첩되는 슬라임 갯수
+    int overrapingObjectsCount; // 슬라임 위에 있는지 체크하기 위한 플레이어와 중첩되는 슬라임 갯수
     bool isSlowDownActivated; // slow down factor가 활성화 되어 있는지 여부
 
     #region 슬라임 드롭/슛
-    public void DropSlimeDrop(Vector2 dropPos)
+    public void DropObject(Vector2 dropPos)
     {
         // 보스의 현재 위치에 바로 점액을 떨어트림
-        Instantiate(slimeDropPrefab, dropPos, Quaternion.identity);
+        Instantiate(dropPrefab, dropPos, Quaternion.identity);
     }
-    public void DropSlimeDropOnLanding(Vector2 dropPos)
+    public void DropObjectOnLanding(Vector2 dropPos)
     {
         // 보스의 현재 위치에 바로 점액을 떨어트림
-        Instantiate(slimeDropOnLandingPrefab, dropPos, Quaternion.identity);
+        Instantiate(DropOnLandingPrefab, dropPos, Quaternion.identity);
     }
     #endregion
 
@@ -35,7 +36,7 @@ public class SlimeDropManager : MonoBehaviour
     }
     public void EnterSlime()
     {
-        overrapingSlimeCount++;
+        overrapingObjectsCount++;
         isTriggered = true;
 
         if (isSlowDownActivated == false)
@@ -46,8 +47,8 @@ public class SlimeDropManager : MonoBehaviour
     }
     public void ExitSlime()
     {
-        overrapingSlimeCount--;
-        if (overrapingSlimeCount <= 0) overrapingSlimeCount = 0;
+        overrapingObjectsCount--;
+        if (overrapingObjectsCount <= 0) overrapingObjectsCount = 0;
         {
             isTriggered = false;
 
@@ -64,7 +65,7 @@ public class SlimeDropManager : MonoBehaviour
 
         // 3프레임에 한 번 공격
         if (Time.frameCount % 10f == 0)
-            GameManager.instance.character.TakeDamage(slimeDropDamage, EnemyType.Melee);
+            GameManager.instance.character.TakeDamage(dropDamage, EnemyType.Melee);
     }
     #endregion
 
