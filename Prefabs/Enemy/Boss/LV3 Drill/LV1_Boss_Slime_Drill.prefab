@@ -535,7 +535,7 @@ MonoBehaviour:
   debugState: 0
   stateDiplayPoint: {fileID: 2421271094358426884}
   debugSetState: 0
-  desiredStateIndex: 0
+  desiredStateIndex: 2
 --- !u!114 &5603598336060603696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,10 +594,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07d76c8b020754e63bc96961d58e9142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jellyPrefab: {fileID: 4338945772903457947, guid: 4e46f9ffa3f314f64be191a9c1b53c96, type: 3}
-  projectileNums: 20
-  jellyDamage: 0
+  eggPrefab: {fileID: 4996769589237571694, guid: ad823d1c67bf348baa9bdc3eacce1b42, type: 3}
+  projectileNums: 5
   timeToDropSlime: 3
+  projectileSpeed: 15
+  verticalVelocity: 60
 --- !u!114 &-5899414744825767708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -610,8 +611,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1f9196a30df34b3395c950beb411918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashSpeed: 20
+  moveSpeed: 7
   timeToDropSlime: 0.1
+  playerCheckInterval: 0.5
+  maxDirChangeNum: 4
 --- !u!114 &5324615908188051270
 MonoBehaviour:
   m_ObjectHideFlags: 0

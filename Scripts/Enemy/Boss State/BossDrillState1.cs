@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class BossDrillState1 : MonoBehaviour
 {
+    [Header("드릴 걷기")]
+    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
     EnemyBoss enemyBoss;
     EnemyBase enemyBase;
-    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
 
     #region 액션 이벤트
     void OnEnable()

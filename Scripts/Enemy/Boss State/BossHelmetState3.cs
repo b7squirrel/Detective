@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 대시하고 벽이나 플레이어에게 부딪칠 때까지 이동
+/// </summary>
 public class BossHelmetState3 : MonoBehaviour
 {
     EnemyBoss enemyBoss;

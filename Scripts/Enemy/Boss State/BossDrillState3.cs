@@ -1,15 +1,26 @@
 using UnityEngine;
+using System.Collections;
 
 public class BossDrillState3 : MonoBehaviour
 {
+    [Header("드릴 언더그라운드")]
+    [SerializeField] float moveSpeed = 5f; // 이동 속도 (units per second)
+    [SerializeField] float timeToDropSlime; // 1000정도로 하면 이 상태에서는 점액을 흘리지 않음
+    [SerializeField] float playerCheckInterval = 2f; // 플레이어 위치 체크 간격
+    
+    [Header("상태 지속 시간")]
+    [SerializeField] int maxDirChangeNum;
+    int dirChangeCounter;
+    
     EnemyBoss enemyBoss;
     Transform playerTrns;
     Rigidbody2D rb;
-    bool isDirectionSet; // 한 번 정해진 방향으로 대시하도록
-    bool isMoving; // 현재 이동 중인지 확인
-    Vector2 dirVec; // 대시 방향
-    [SerializeField] float dashSpeed;
-    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
+    bool isMoving;
+    Vector2 targetPos;
+    Vector2 moveDirection; // 현재 이동 방향
+    
+    // 플레이어 추적용 변수들
+    Coroutine playerTrackingCoroutine;
 
     #region 액션 이벤트
     void OnEnable()
@@ -33,66 +44,95 @@ public class BossDrillState3 : MonoBehaviour
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
         if (playerTrns == null) playerTrns = GameManager.instance.player.transform;
         if (rb == null) rb = GetComponent<Rigidbody2D>();
-        
-        isDirectionSet = false;
+
         isMoving = true;
-        enemyBoss.DisplayCurrentState("드릴 터널 이동");
+        enemyBoss.DisplayCurrentState("점퍼 점프");
+
+        // 초기 목표지점과 방향 설정
+        targetPos = playerTrns.position;
+        SetMoveDirection();
+
+        // 착지 지점 인디케이터
+        enemyBoss.ActivateLandingIndicator(true);
+
+        // 플레이어 추적 코루틴 시작
+        if (playerTrackingCoroutine != null)
+        {
+            StopCoroutine(playerTrackingCoroutine);
+        }
+        playerTrackingCoroutine = StartCoroutine(TrackPlayerPosition());
     }
 
     void InitState3Update()
     {
+        if (dirChangeCounter > maxDirChangeNum)
+        {
+            dirChangeCounter = 0;
+            GetComponent<Animator>().SetTrigger("Settle");
+        }
+
         enemyBoss.SlimeDropTimer(timeToDropSlime);
-        
         if (isMoving)
         {
-            UndergroundDash();
+            MoveInDirection();
         }
-        
         Debug.Log("State3 Update");
     }
 
     void InitState3Exit()
     {
         Debug.Log("State3 Exit");
+        enemyBoss.ActivateLandingIndicator(false);
         isMoving = false;
+
+        // 플레이어 추적 코루틴 정지
+        if (playerTrackingCoroutine != null)
+        {
+            StopCoroutine(playerTrackingCoroutine);
+            playerTrackingCoroutine = null;
+        }
     }
 
-    #region 공격 관련 함수
-    void UndergroundDash()
+    // 목표지점을 향한 방향 설정
+    void SetMoveDirection()
     {
-        if (isDirectionSet == false) // 방향이 한 번 정해지면 다음 대시 전까지는 바뀌지 않도록
-        {
-            dirVec = (playerTrns.position - transform.position).normalized;
-            isDirectionSet = true;
-        }
+        moveDirection = (targetPos - (Vector2)transform.position).normalized;
+        Debug.Log($"새로운 이동 방향 설정: {moveDirection}, 목표: {targetPos}");
+    }
 
-        if (isMoving)
+    // 2초마다 플레이어 위치를 체크하는 코루틴
+    IEnumerator TrackPlayerPosition()
+    {
+        while (isMoving)
         {
-            Vector2 nextVec = dashSpeed * Time.fixedDeltaTime * dirVec;
-            rb.MovePosition((Vector2)rb.transform.position + nextVec);
-            rb.velocity = Vector2.zero;
+            yield return new WaitForSeconds(playerCheckInterval);
+
+            if (isMoving && playerTrns != null)
+            {
+                // 새로운 목표 지점 설정
+                targetPos = playerTrns.position;
+                // 새로운 방향으로 업데이트
+                SetMoveDirection();
+                dirChangeCounter++;
+            }
         }
     }
 
+    // 설정된 방향으로 계속 이동
+    void MoveInDirection()
+    {
+        Vector2 newPosition = (Vector2)transform.position + moveDirection * moveSpeed * Time.deltaTime;
+        transform.position = newPosition;
+    }
+
+    // 벽에 부딪치면 멈추게 했음. 벽 밖으로 나가는 것을 막기 위해서
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // 벽에 충돌하면 이동 멈춤
         if (collision.collider.CompareTag("Wall"))
         {
             isMoving = false;
             rb.velocity = Vector2.zero;
             Debug.Log("벽에 충돌 - 이동 멈춤");
         }
-
-        // 플레이어와 충돌
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("플레이어와 충돌");
-            if (Time.frameCount % 3 == 0) 
-            {
-                GameManager.instance.character.TakeDamage(enemyBoss.Stats.damage, EnemyType.Melee);
-            }
-        }
     }
-    #endregion
 }
