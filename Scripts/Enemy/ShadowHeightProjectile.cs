@@ -32,6 +32,7 @@ public class ShadowHeightProjectile : MonoBehaviour
     {
         UpdateVerticalMovement();
         CheckGroundHit();
+        UpdateLayer();
     }
 
     public void Initialize(Vector2 groundVelocity, float verticalVelocity)
@@ -54,8 +55,23 @@ public class ShadowHeightProjectile : MonoBehaviour
         // 힘을 적용
         rb.AddForce(groundVelocity * forceMultiplier, ForceMode2D.Impulse);
         StartCoroutine(SlowDownCoroutine());
+
+        gameObject.layer = LayerMask.NameToLayer("InAir");
+        rb.mass = 1f;
+        rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
+    void UpdateLayer()
+    {
+        if (isGrounded)
+        {
+            gameObject.layer = LayerMask.NameToLayer("Enemy");
+        }
+        else
+        {
+            gameObject.layer = LayerMask.NameToLayer("InAir");
+        }
+    }
     IEnumerator SlowDownCoroutine()
     {
         while (rb.velocity.magnitude > minVelocityToStop)
@@ -105,6 +121,10 @@ public class ShadowHeightProjectile : MonoBehaviour
         if (bouncingNumbers < 1)
         {
             IsDone = true;
+            gameObject.layer = LayerMask.NameToLayer("Enemy");
+            rb.velocity = Vector2.zero;
+            rb.mass = 100f;
+            rb.bodyType = RigidbodyType2D.Kinematic;
             return;
         }
 
