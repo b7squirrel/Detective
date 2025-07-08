@@ -519,19 +519,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a64bd59390e40404cb2144823e3e8fe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToDropSlime: 0.5
   laserProjectile: {fileID: 1930924403175459071, guid: d63a3a936b20b4a23bce2dde28769eb1, type: 3}
   shootPoint: {fileID: 3032690082359150762}
   laserDuration: 6
   fireRate: 3
-  rotationSpeed: 60
-  rotationDelay: 2
+  rotationSpeed: 40
+  rotationDelay: 1
+  retargetDelay: 0.3
   damage: 10
   destructables:
     serializedVersion: 2
     m_Bits: 256
   walls:
     serializedVersion: 2
-    m_Bits: 5120
+    m_Bits: 4096
   playerTag: Player
 --- !u!114 &2776323734575455962
 MonoBehaviour:

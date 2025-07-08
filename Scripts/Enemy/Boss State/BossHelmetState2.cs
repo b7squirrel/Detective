@@ -11,6 +11,8 @@ public class BossHelmetState2 : MonoBehaviour
     [SerializeField] int projectileNums;
     [SerializeField] int jellyDamage;
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
+    [SerializeField] float stateDuration; // 상태 지속 시간
+    float stateTimer;
 
     Transform shootPoint;
     Coroutine co;
@@ -37,6 +39,16 @@ public class BossHelmetState2 : MonoBehaviour
     }
     void InitState2Update()
     {
+        if (stateTimer < stateDuration)
+        {
+            stateTimer += Time.deltaTime;
+        }
+        else
+        {
+            stateTimer = 0f;
+            enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
+        }
+
         enemyBoss.SlimeDropTimer(timeToDropSlime);
         if (isAttackDone) return;
 

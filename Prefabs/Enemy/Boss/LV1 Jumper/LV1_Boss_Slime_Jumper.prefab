@@ -291,8 +291,8 @@ MonoBehaviour:
   stateDisplayPrefab: {fileID: 8779905352047327024, guid: a247a652c55de4aee8ec01be81bc9144, type: 3}
   debugState: 0
   stateDiplayPoint: {fileID: 454581177511335588}
-  debugSetState: 0
-  desiredStateIndex: 0
+  debugSetState: 1
+  desiredStateIndex: 2
 --- !u!114 &5356226881793711286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,6 +357,7 @@ MonoBehaviour:
   projectilSpeed: 24
   timeToDropSlime: 3
   projectileOffset: 10
+  stateDuration: 3
   projectileSFX: {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
 --- !u!114 &5287274232121127389
 MonoBehaviour:

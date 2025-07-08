@@ -10,6 +10,8 @@ public class BossJumpState2 : MonoBehaviour
     [SerializeField] float projectilSpeed;
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
     [SerializeField] float projectileOffset; // 슬라임이 착지할 지점 offset
+    [SerializeField] float stateDuration; // 상태 지속 시간
+    float stateTimer;
 
     [Header("SFX")]
     [SerializeField] AudioClip projectileSFX;
@@ -47,6 +49,17 @@ public class BossJumpState2 : MonoBehaviour
     }
     void InitState2Update()
     {
+        // 공통 Update
+        if (stateTimer < stateDuration)
+        {
+            stateTimer += Time.deltaTime;
+        }
+        else
+        {
+            stateTimer = 0f;
+            enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
+        }
+        
         enemyBoss.SlimeDropTimer(timeToDropSlime);
         if (isAttackDone) return;
 

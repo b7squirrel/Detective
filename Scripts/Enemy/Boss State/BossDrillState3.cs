@@ -1,24 +1,27 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// 방향 전환을 주어진 횟수만큼 하면 상태 종료
+/// </summary>
 public class BossDrillState3 : MonoBehaviour
 {
     [Header("드릴 언더그라운드")]
     [SerializeField] float moveSpeed = 5f; // 이동 속도 (units per second)
     [SerializeField] float timeToDropSlime; // 1000정도로 하면 이 상태에서는 점액을 흘리지 않음
     [SerializeField] float playerCheckInterval = 2f; // 플레이어 위치 체크 간격
-    
+
     [Header("상태 지속 시간")]
     [SerializeField] int maxDirChangeNum;
     int dirChangeCounter;
-    
+
     EnemyBoss enemyBoss;
     Transform playerTrns;
     Rigidbody2D rb;
     bool isMoving;
     Vector2 targetPos;
     Vector2 moveDirection; // 현재 이동 방향
-    
+
     // 플레이어 추적용 변수들
     Coroutine playerTrackingCoroutine;
 

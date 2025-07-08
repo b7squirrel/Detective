@@ -9,6 +9,8 @@ public class BossDrillState2 : MonoBehaviour
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
     [SerializeField] float projectileSpeed; // 수평 속도
     [SerializeField] float verticalVelocity; // 수직 속도
+    [SerializeField] float stateDuration; // 상태 지속 시간
+    float stateTimer;
 
     EnemyBoss enemyBoss;
     Transform shootPoint;
@@ -40,6 +42,17 @@ public class BossDrillState2 : MonoBehaviour
     }
     void InitState2Update()
     {
+        // 공통 Update
+        if (stateTimer < stateDuration)
+        {
+            stateTimer += Time.deltaTime;
+        }
+        else
+        {
+            stateTimer = 0f;
+            enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
+        }
+
         enemyBoss.SlimeDropTimer(timeToDropSlime);
         if (isAttackDone) return;
 
