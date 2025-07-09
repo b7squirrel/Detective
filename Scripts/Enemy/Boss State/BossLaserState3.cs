@@ -1,24 +1,31 @@
+using System.Collections;
 using UnityEngine;
 
+// 투사체를 모두 발사하면 상태 종료
 public class BossLaserState3 : MonoBehaviour
 {
-    [Header("반사 레이저 설정")]
-    public GameObject bouncingLaserPrefab;  // 반사 레이저 프리팹
-    public Transform shootPoint;            // 레이저 발사 위치
-    public float laserSpeed = 15f;          // 레이저 속도
-    public float laserLifetime = 10f;       // 레이저 생존 시간
-    public float fireRate = 3f;             // 발사 간격 (초)
-    public int maxBounces = 5;              // 최대 반사 횟수
-    public float damage = 15f;              // 데미지
+    EnemyBoss enemyBoss;
+    [Header("반사 공 설정")]
+    public GameObject bouncingBallPrefab;   // 반사 공 프리팹
+    public Transform shootPoint;            // 공 발사 위치
+    [SerializeField] int maxProjectileNum;  // 공 개수 
+    public float ballSpeed = 12f;           // 공 속도
+    [SerializeField] float randomAngleRange = 20f; // 무작위 각도 범위 (±도 단위)
+    public float ballLifetime = 15f;        // 공 생존 시간
+    public float fireRate = 4f;             // 발사 간격 (초)
+    public int damage = 20;                 // 데미지
     public LayerMask playerLayer;           // 플레이어 레이어
     public LayerMask wallLayer;             // 벽 레이어
-    
+
     [Header("타겟 설정")]
     public string playerTag = "Player";     // 플레이어 태그
-    
+
     private Transform player;
     private float nextFireTime = 0f;
-    
+
+    [SerializeField] float stateDuration; // 상태 지속 시간
+    float stateTimer;
+
     #region 액션 이벤트
     void OnEnable()
     {
@@ -37,6 +44,7 @@ public class BossLaserState3 : MonoBehaviour
 
     void InitState3Enter()
     {
+        enemyBoss = GetComponent<EnemyBoss>();
         // 플레이어 찾기
         GameObject playerObj = GameObject.FindGameObjectWithTag(playerTag);
         if (playerObj != null)
@@ -47,7 +55,7 @@ public class BossLaserState3 : MonoBehaviour
         {
             Debug.LogWarning("플레이어를 찾을 수 없습니다!");
         }
-        
+
         // shootPoint가 설정되지 않은 경우 자신의 위치 사용
         if (shootPoint == null)
         {
@@ -56,9 +64,20 @@ public class BossLaserState3 : MonoBehaviour
     }
     void InitState3Update()
     {
+        // // 공통 Update
+        // if (stateTimer < stateDuration)
+        // {
+        //     stateTimer += Time.deltaTime;
+        // }
+        // else
+        // {
+        //     stateTimer = 0f;
+        //     enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
+        // }
+
         if (Time.time >= nextFireTime && player != null)
         {
-            FireBouncingLaser();
+            StartCoroutine(FireBouncingBallCo());
             nextFireTime = Time.time + fireRate;
         }
     }
@@ -66,24 +85,56 @@ public class BossLaserState3 : MonoBehaviour
     {
 
     }
-    
-    void FireBouncingLaser()
+
+    IEnumerator FireBouncingBallCo()
+    {
+        int currentProjectileNums = maxProjectileNum;
+        while (currentProjectileNums >= 0)
+        {
+            Vector3 baseDirection = (player.position - shootPoint.position).normalized;
+
+            // 무작위 각도 회전
+            float randomAngle = Random.Range(-randomAngleRange, randomAngleRange);
+            Quaternion rotation = Quaternion.Euler(0, 0, randomAngle);
+
+            // 회전된 방향 적용
+            Vector3 direction = rotation * baseDirection;
+
+            // 공 생성
+            GameObject ball = Instantiate(bouncingBallPrefab, shootPoint.position, Quaternion.identity);
+
+            // 공 설정
+            EnemyBouncingLaserProjectile ballScript = ball.GetComponent<EnemyBouncingLaserProjectile>();
+            if (ballScript == null)
+            {
+                ballScript = ball.AddComponent<EnemyBouncingLaserProjectile>();
+            }
+
+            ballScript.Initialize(direction, ballSpeed, damage, ballLifetime);
+
+            currentProjectileNums--;
+
+            yield return new WaitForSeconds(.03f);
+        }
+        enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
+    }
+    void FireBouncingBall()
     {
         // 플레이어 방향으로 발사
         Vector3 direction = (player.position - shootPoint.position).normalized;
-        
-        // 레이저 생성
-        GameObject laser = Instantiate(bouncingLaserPrefab, shootPoint.position, Quaternion.identity);
-        
-        // 레이저 설정
-        EnemyBouncingLaserProjectile laserScript = laser.GetComponent<EnemyBouncingLaserProjectile>();
-        if (laserScript == null)
+
+        // 공 생성
+        GameObject ball = Instantiate(bouncingBallPrefab, shootPoint.position, Quaternion.identity);
+
+        // 공 설정
+        EnemyBouncingLaserProjectile ballScript = ball.GetComponent<EnemyBouncingLaserProjectile>();
+        if (ballScript == null)
         {
-            laserScript = laser.AddComponent<EnemyBouncingLaserProjectile>();
+            ballScript = ball.AddComponent<EnemyBouncingLaserProjectile>();
         }
-        
-        laserScript.Initialize(direction, laserSpeed, damage, maxBounces, laserLifetime, playerLayer, wallLayer);
-        
-        Debug.Log("반사 레이저 발사!");
+
+        ballScript.Initialize(direction, ballSpeed, damage, ballLifetime);
+
+        Debug.Log("반사 공 발사!");
     }
 }

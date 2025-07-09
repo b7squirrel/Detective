@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 3403393055940210562}
   - component: {fileID: 3808557497288469687}
   - component: {fileID: 681864384855126616}
-  - component: {fileID: 2776323734575455962}
+  - component: {fileID: 3950626386936856750}
   m_Layer: 6
   m_Name: LV4_Boss_Slime_Laser
   m_TagString: Enemy
@@ -272,7 +272,7 @@ Animator:
   m_GameObject: {fileID: 2310203829848606500}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: c2c7a496284eb4f189140867b87bd2b4, type: 2}
+  m_Controller: {fileID: 22100000, guid: cbaddcf44b36f444ca65ffc52dcca068, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -446,8 +446,8 @@ MonoBehaviour:
   stateDisplayPrefab: {fileID: 8779905352047327024, guid: a247a652c55de4aee8ec01be81bc9144, type: 3}
   debugState: 0
   stateDiplayPoint: {fileID: 8858378767474878279}
-  debugSetState: 1
-  desiredStateIndex: 1
+  debugSetState: 0
+  desiredStateIndex: 2
 --- !u!114 &5835580508532317093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -524,9 +524,10 @@ MonoBehaviour:
   shootPoint: {fileID: 3032690082359150762}
   laserDuration: 6
   fireRate: 3
-  rotationSpeed: 40
+  rotationSpeed: 35
   rotationDelay: 1
   retargetDelay: 0.3
+  laserWidth: 2
   damage: 10
   destructables:
     serializedVersion: 2
@@ -535,7 +536,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   playerTag: Player
---- !u!114 &2776323734575455962
+--- !u!114 &3950626386936856750
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -544,13 +545,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 2310203829848606500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1f9196a30df34b3395c950beb411918, type: 3}
+  m_Script: {fileID: 11500000, guid: e6cc48cb9306e4c84aae231b63753c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  timeToDropSlime: 0.1
-  playerCheckInterval: 0.5
-  maxDirChangeNum: 4
+  bouncingBallPrefab: {fileID: 455867368629588361, guid: d11fd6edfa338406b92a0ebb9cf9ba93, type: 3}
+  shootPoint: {fileID: 0}
+  maxProjectileNum: 10
+  ballSpeed: 16
+  randomAngleRange: 20
+  ballLifetime: 15
+  fireRate: 3
+  damage: 15
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  playerTag: Player
+  stateDuration: 3
 --- !u!1 &2760832794399453502
 GameObject:
   m_ObjectHideFlags: 0

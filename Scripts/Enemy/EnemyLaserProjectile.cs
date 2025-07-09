@@ -32,6 +32,7 @@ public class EnemyLaserProjectile : MonoBehaviour
         laserLine.startWidth = laserWidth;  // 시작점 두께
         laserLine.endWidth = laserWidth;    // 끝점 두께
         laserLine.positionCount = 2;
+        laserLine.sortingLayerName = "Effect"; // Sorting Layer를 Effect로 설정
         laserLine.sortingOrder = 10;
 
         // 히트 이펙트 설정
