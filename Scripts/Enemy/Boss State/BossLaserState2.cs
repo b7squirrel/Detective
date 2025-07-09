@@ -14,11 +14,11 @@ public class BossLaserState2 : MonoBehaviour
     public Transform shootPoint;        // 레이저 발사 위치
     public float laserDuration = 5f;    // 레이저 지속 시간
     public float fireRate = 3f;         // 발사 간격 (초)
-    public float rotationSpeed = 60f;   // 회전 속도 (도/초)
+    public float rotationSpeed = 40f;   // 회전 속도 (도/초)
     public float rotationDelay = 2f;    // 회전 시작 지연 시간 (초)
-    public float retargetDelay = 1f;    // 재타겟팅 대기 시간 (초)
+    public float retargetDelay = 2f;    // 재타겟팅 대기 시간 (초)
     public float laserWidth = 2f;       // 레이저 두께
-    public float damage = 10f;          // 데미지
+    public int damage = 10;          // 데미지
     public LayerMask destructables;     // 파괴 가능한 레이어
     public LayerMask walls;             // 벽 레이어
     Coroutine co;
@@ -151,10 +151,10 @@ public class BossLaserState2 : MonoBehaviour
         }
 
         enemyBoss.SlimeDropTimer(timeToDropSlime);
-
     }
     void InitState2Exit()
     {
+        rotationSpeed += 10f; // 매번 10도씩 증가. 점점 빨라지도록
         Debug.Log("State3 Exit");
     }
 

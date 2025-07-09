@@ -7,6 +7,7 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
     float lifeTime;
     Vector2 moveDirection;
     bool isInitialized;
+    int damage;
 
     [SerializeField] LayerMask reflectLayerMask; // 반사될 수 있는 레이어 마스크
 
@@ -26,6 +27,7 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
         this.moveDirection = direction.normalized;
         this.speed = speed;
         this.lifeTime = duration;
+        this.damage = damage;
         isInitialized = true;
 
         rb.velocity = moveDirection * speed;
@@ -41,16 +43,26 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // 지정된 레이어에 포함된 오브젝트에만 반사
-        if ((reflectLayerMask.value & (1 << other.gameObject.layer)) != 0)
+        if (other.CompareTag("Player"))
         {
-            Vector2 contactPoint = other.ClosestPoint(transform.position);
-            Vector2 normal = (transform.position - (Vector3)contactPoint).normalized;
+            Character character = other.GetComponent<Character>();
 
-            // 벽의 표면 방향으로 반사
-            moveDirection = Vector2.Reflect(moveDirection, normal).normalized;
-            rb.velocity = moveDirection * speed;
+            if (character != null)
+            {
+                // 데미지 주기
+                character.TakeDamage(damage, EnemyType.Melee);
+            }
         }
+        // 지정된 레이어에 포함된 오브젝트에만 반사
+            if ((reflectLayerMask.value & (1 << other.gameObject.layer)) != 0)
+            {
+                Vector2 contactPoint = other.ClosestPoint(transform.position);
+                Vector2 normal = (transform.position - (Vector3)contactPoint).normalized;
+
+                // 벽의 표면 방향으로 반사
+                moveDirection = Vector2.Reflect(moveDirection, normal).normalized;
+                rb.velocity = moveDirection * speed;
+            }
     }
 
     void Deactivate()

@@ -9,7 +9,7 @@ public class LaserEnemy : MonoBehaviour
     public float laserDuration = 2f;    // 레이저 지속 시간
     public float fireRate = 3f;         // 발사 간격 (초)
     public float rotationSpeed = 60f;   // 회전 속도 (도/초)
-    public float damage = 10f;          // 데미지
+    public int damage = 10;          // 데미지
     public LayerMask destructables;     // 파괴 가능한 레이어
     public LayerMask walls;             // 벽 레이어
     

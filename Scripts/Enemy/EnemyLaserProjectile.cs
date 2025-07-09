@@ -8,7 +8,7 @@ public class EnemyLaserProjectile : MonoBehaviour
     [SerializeField] float maxDistance = 50f;
     [SerializeField] float laserWidth = 1f; // 레이저 두께
 
-    private float damage;
+    private int damage;
     private LayerMask destructables;
     private LayerMask walls;
     private float duration;
@@ -72,7 +72,7 @@ public class EnemyLaserProjectile : MonoBehaviour
         }
     }
 
-    public void Initialize(float _damage, LayerMask _destructables, LayerMask _walls, float _duration, float _laserWidth = 1f)
+    public void Initialize(int _damage, LayerMask _destructables, LayerMask _walls, float _duration, float _laserWidth = 1f)
     {
         damage = _damage;
         destructables = _destructables;
@@ -139,30 +139,15 @@ public class EnemyLaserProjectile : MonoBehaviour
                 RaycastHit2D[] hits = Physics2D.RaycastAll(rayPos, direction, maxDistance, destructables);
                 foreach (var hitTarget in hits)
                 {
-                    DealDamage(hitTarget);
+                    if (hit.collider == null) return;
+
+                    // 그냥 getcomponent와는 다르게 메모리 할당 없음
+                    if (hit.collider.TryGetComponent<Character>(out Character character))
+                    {
+                        character.TakeDamage(damage, EnemyType.Melee);
+                    }
                 }
             }
         }
-    }
-
-    void DealDamage(RaycastHit2D hitTarget)
-    {
-        // if (hitTarget.collider == null) return;
-
-        // // IDamageable 인터페이스 확인
-        // var damageable = hitTarget.transform.GetComponent<IDamageable>();
-        // if (damageable == null) return;
-
-        // // 화면 밖에 있으면 데미지 처리하지 않음
-        // var spriteRenderer = hitTarget.transform.GetComponentInChildren<SpriteRenderer>();
-        // if (spriteRenderer != null && !spriteRenderer.isVisible)
-        // {
-        //     return;
-        // }
-
-        // // 데미지 처리
-        // damageable.TakeDamage(damage, 0, 0, hitTarget.point, null);
-
-        // Debug.Log($"레이저가 {hitTarget.transform.name}에게 {damage} 데미지를 입혔습니다!");
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 // 투사체를 모두 발사하면 상태 종료
 public class BossLaserState3 : MonoBehaviour
 {
+    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
     EnemyBoss enemyBoss;
     [Header("반사 공 설정")]
     public GameObject bouncingBallPrefab;   // 반사 공 프리팹
@@ -22,9 +23,6 @@ public class BossLaserState3 : MonoBehaviour
 
     private Transform player;
     private float nextFireTime = 0f;
-
-    [SerializeField] float stateDuration; // 상태 지속 시간
-    float stateTimer;
 
     #region 액션 이벤트
     void OnEnable()
@@ -64,22 +62,13 @@ public class BossLaserState3 : MonoBehaviour
     }
     void InitState3Update()
     {
-        // // 공통 Update
-        // if (stateTimer < stateDuration)
-        // {
-        //     stateTimer += Time.deltaTime;
-        // }
-        // else
-        // {
-        //     stateTimer = 0f;
-        //     enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
-        // }
-
         if (Time.time >= nextFireTime && player != null)
         {
             StartCoroutine(FireBouncingBallCo());
             nextFireTime = Time.time + fireRate;
         }
+
+        enemyBoss.SlimeDropTimer(timeToDropSlime);
     }
     void InitState3Exit()
     {
