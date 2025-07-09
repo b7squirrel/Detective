@@ -336,7 +336,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     public void LandingImpact()
     {
         SoundManager.instance.Play(landingSFX);
-        Vector2 landingEffectPos = (Vector2)transform.position + new Vector2(0, 3f);
+        Vector2 landingEffectPos = (Vector2)dustPoint.transform.position;
 
         if (shockwave != null)
         {
