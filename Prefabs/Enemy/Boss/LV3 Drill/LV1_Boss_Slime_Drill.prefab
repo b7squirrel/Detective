@@ -321,10 +321,10 @@ GameObject:
   - component: {fileID: 8360687991056641939}
   - component: {fileID: 5603598336060603696}
   - component: {fileID: 1233400896952925331}
-  - component: {fileID: -7897696313385265885}
-  - component: {fileID: -6694010950212134346}
-  - component: {fileID: -5899414744825767708}
   - component: {fileID: 5324615908188051270}
+  - component: {fileID: 7317872549419765963}
+  - component: {fileID: 7123509232804550367}
+  - component: {fileID: 8253698559757532680}
   m_Layer: 6
   m_Name: LV1_Boss_Slime_Drill
   m_TagString: Enemy
@@ -569,52 +569,6 @@ MonoBehaviour:
   DropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
   dropDamage: 8
   slowDownFactor: 0.7
---- !u!114 &-7897696313385265885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6488986989764395079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b3fa1ad7026d4678aaa52b9f3b19ee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToDropSlime: 0.5
---- !u!114 &-6694010950212134346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6488986989764395079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d76c8b020754e63bc96961d58e9142, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eggPrefab: {fileID: 4996769589237571694, guid: ad823d1c67bf348baa9bdc3eacce1b42, type: 3}
-  projectileNums: 8
-  timeToDropSlime: 3
-  projectileSpeed: 20
-  verticalVelocity: 60
---- !u!114 &-5899414744825767708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6488986989764395079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1f9196a30df34b3395c950beb411918, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 7
-  timeToDropSlime: 0.1
-  playerCheckInterval: 0.5
-  maxDirChangeNum: 4
 --- !u!114 &5324615908188051270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -628,6 +582,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogBubblePrefab: {fileID: 1817514581722573707, guid: 4b0fb1a40623948f086f6d38b7a61579, type: 3}
+--- !u!114 &7317872549419765963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488986989764395079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b0aedfc8c5c4c45b74f285bc7f2ba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToDropSlime: 0.5
+--- !u!114 &7123509232804550367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488986989764395079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa65a58af8af34322aad062fada95dbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eggPrefab: {fileID: 4996769589237571694, guid: ad823d1c67bf348baa9bdc3eacce1b42, type: 3}
+  projectileNums: 8
+  timeToDropSlime: 3
+  projectileSpeed: 20
+  verticalVelocity: 60
+  stateDuration: 0
+--- !u!114 &8253698559757532680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488986989764395079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41daebcba606248f2948fe12cb13dca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 7
+  timeToDropSlime: 0.1
+  playerCheckInterval: 0.5
+  maxDirChangeNum: 4
 --- !u!1 &6616656374508502190
 GameObject:
   m_ObjectHideFlags: 0

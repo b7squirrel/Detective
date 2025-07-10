@@ -234,9 +234,9 @@ GameObject:
   - component: {fileID: 5835580508532317093}
   - component: {fileID: 837035334181767672}
   - component: {fileID: 3403393055940210562}
-  - component: {fileID: 3808557497288469687}
-  - component: {fileID: 681864384855126616}
-  - component: {fileID: 3950626386936856750}
+  - component: {fileID: 7508251032728997745}
+  - component: {fileID: 2186079937195565773}
+  - component: {fileID: 2264689055649237039}
   m_Layer: 6
   m_Name: LV4_Boss_Slime_Laser
   m_TagString: Enemy
@@ -494,7 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogBubblePrefab: {fileID: 1817514581722573707, guid: 4b0fb1a40623948f086f6d38b7a61579, type: 3}
---- !u!114 &3808557497288469687
+--- !u!114 &7508251032728997745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -503,11 +503,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2310203829848606500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2791ca6bcd981410a9b9a68a1218fcc1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1db6538acf1ec4573a2474e96514223a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDropSlime: 0.5
---- !u!114 &681864384855126616
+--- !u!114 &2186079937195565773
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -516,7 +516,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2310203829848606500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a64bd59390e40404cb2144823e3e8fe6, type: 3}
+  m_Script: {fileID: 11500000, guid: bb522217a0af84381846389a4e955f1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDropSlime: 100
@@ -536,7 +536,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   playerTag: Player
---- !u!114 &3950626386936856750
+--- !u!114 &2264689055649237039
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -545,7 +545,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2310203829848606500}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6cc48cb9306e4c84aae231b63753c35, type: 3}
+  m_Script: {fileID: 11500000, guid: a332efcfc83aa43e3a78544285267486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDropSlime: 100

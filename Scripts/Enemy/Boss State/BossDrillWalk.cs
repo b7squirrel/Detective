@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class BossJumpState1 : MonoBehaviour
+public class BossDrillWalk : MonoBehaviour
 {
+    [Header("드릴 걷기")]
+    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
     EnemyBoss enemyBoss;
     EnemyBase enemyBase;
-    [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
 
     #region 액션 이벤트
     void OnEnable()
@@ -27,7 +26,7 @@ public class BossJumpState1 : MonoBehaviour
     {
         Debug.Log("State1 Enter");
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
-        enemyBoss.DisplayCurrentState("점퍼 걷기 상태");
+        enemyBoss.DisplayCurrentState("드릴 슬라임 걷기 상태");
     }
     void InitState1Update()
     {

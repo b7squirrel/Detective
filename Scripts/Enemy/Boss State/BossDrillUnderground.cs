@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// 방향 전환을 주어진 횟수만큼 하면 상태 종료
 /// </summary>
-public class BossDrillState3 : MonoBehaviour
+public class BossDrillUnderground : MonoBehaviour
 {
     [Header("드릴 언더그라운드")]
     [SerializeField] float moveSpeed = 5f; // 이동 속도 (units per second)

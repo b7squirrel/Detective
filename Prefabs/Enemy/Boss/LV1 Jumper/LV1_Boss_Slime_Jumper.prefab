@@ -78,10 +78,10 @@ GameObject:
   - component: {fileID: 8208861631688714840}
   - component: {fileID: 5356226881793711286}
   - component: {fileID: 6706049363256519885}
-  - component: {fileID: 8937980815541450473}
-  - component: {fileID: 7471620232612088572}
-  - component: {fileID: 5287274232121127389}
   - component: {fileID: 4669373223621701690}
+  - component: {fileID: 1254668060210418061}
+  - component: {fileID: 8275891941622575484}
+  - component: {fileID: 6840463841601635737}
   m_Layer: 6
   m_Name: LV1_Boss_Slime_Jumper
   m_TagString: Enemy
@@ -326,53 +326,6 @@ MonoBehaviour:
   DropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
   dropDamage: 8
   slowDownFactor: 0.7
---- !u!114 &8937980815541450473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2244808662150857081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e237e1a0540a4463c9729a3d4f67a7e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToDropSlime: 0.5
---- !u!114 &7471620232612088572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2244808662150857081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9a3bb0beaebe4809befe2c8b503561e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 4338945772903457947, guid: 4e46f9ffa3f314f64be191a9c1b53c96, type: 3}
-  projectileNums: 200
-  jellyDamage: 0
-  projectilSpeed: 24
-  timeToDropSlime: 3
-  projectileOffset: 20
-  stateDuration: 3
-  projectileSFX: {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
---- !u!114 &5287274232121127389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2244808662150857081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bebd35616537848caaadb59d159a4b5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inAirDuration: 1
-  timeToDropSlime: 1000
 --- !u!114 &4669373223621701690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +339,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogBubblePrefab: {fileID: 1817514581722573707, guid: 4b0fb1a40623948f086f6d38b7a61579, type: 3}
+--- !u!114 &1254668060210418061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2244808662150857081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a203240612e0c490c9ed26e2fa871656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToDropSlime: 0.5
+--- !u!114 &8275891941622575484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2244808662150857081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49f288aba0b72420fa231c6d568a515c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 4338945772903457947, guid: 4e46f9ffa3f314f64be191a9c1b53c96, type: 3}
+  projectileNums: 200
+  jellyDamage: 0
+  projectilSpeed: 24
+  timeToDropSlime: 3
+  projectileOffset: 20
+  stateDuration: 3
+  projectileSFX: {fileID: 8300000, guid: 9082ed65a6b86da4f8754de4896530d4, type: 3}
+--- !u!114 &6840463841601635737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2244808662150857081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e945deb133347b0b903f14c5e81b64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inAirDuration: 1
+  timeToDropSlime: 1000
 --- !u!1 &4104794032901784933
 GameObject:
   m_ObjectHideFlags: 0

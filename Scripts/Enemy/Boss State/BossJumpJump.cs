@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class BossJumpState3 : MonoBehaviour
+public class BossJumpJump : MonoBehaviour
 {
     EnemyBoss enemyBoss;
     Transform playerTrns;

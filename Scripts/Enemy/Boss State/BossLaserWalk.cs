@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class BossDrillState1 : MonoBehaviour
+public class BossLaserWalk : MonoBehaviour
 {
-    [Header("드릴 걷기")]
+    [Header("레이져걷기")]
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
     EnemyBoss enemyBoss;
     EnemyBase enemyBase;
@@ -26,7 +26,7 @@ public class BossDrillState1 : MonoBehaviour
     {
         Debug.Log("State1 Enter");
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
-        enemyBoss.DisplayCurrentState("드릴 슬라임 걷기 상태");
+        enemyBoss.DisplayCurrentState("레이져 슬라임 걷기 상태");
     }
     void InitState1Update()
     {

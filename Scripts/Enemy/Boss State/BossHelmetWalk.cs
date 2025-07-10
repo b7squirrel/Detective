@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossHelmetState1 : MonoBehaviour
+public class BossHelemtWalk : MonoBehaviour
 {
     EnemyBoss enemyBoss;
     EnemyBase enemyBase;
