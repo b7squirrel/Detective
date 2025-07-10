@@ -602,7 +602,7 @@ MonoBehaviour:
   debugState: 0
   stateDiplayPoint: {fileID: 4535658218261975118}
   debugSetState: 0
-  desiredStateIndex: 2
+  desiredStateIndex: 1
 --- !u!114 &3201050841283660606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -661,6 +661,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e54f160614a42c395546f8eac0a0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToDropSlime: 0.5
 --- !u!114 &8884501505424679619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,6 +674,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 946ef54a656d14105855e75bc1d7b708, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToDropSlime: 100
+  fireProjectile: {fileID: 1552547427917143382, guid: 34a58d9340c824820872260c8aa04541, type: 3}
+  maxProjectileNum: 8
+  ballSpeed: 20
+  fireInterval: 0.05
+  randomAngleRange: 20
+  ballLifetime: 15
+  fireRate: 100
+  damage: 20
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  playerTag: Player
 --- !u!114 &4050492920094674872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -685,3 +702,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cc912ce79da84edf94556e1575a98a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToDropSlime: 100
+  homingBallPrefab: {fileID: 4579585065997787372, guid: 3c994f760849742788bdb57c9677ba51, type: 3}
+  shootPoint: {fileID: 0}
+  maxProjectileNum: 10
+  ballSpeed: 6
+  homingDelay: 2
+  randomAngleRange: 20
+  fireInterval: 0.5
+  ballLifetime: 4
+  fireRate: 4
+  damage: 20
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  playerTag: Player
