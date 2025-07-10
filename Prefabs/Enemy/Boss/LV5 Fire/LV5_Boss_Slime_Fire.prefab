@@ -676,12 +676,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeToDropSlime: 100
   fireProjectile: {fileID: 1552547427917143382, guid: 34a58d9340c824820872260c8aa04541, type: 3}
-  maxProjectileNum: 8
+  maxProjectileNum: 15
   ballSpeed: 20
   fireInterval: 0.05
   randomAngleRange: 20
   ballLifetime: 15
-  fireRate: 100
+  fireRate: 5
   damage: 20
   playerLayer:
     serializedVersion: 2
@@ -689,7 +689,6 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 4096
-  playerTag: Player
 --- !u!114 &4050492920094674872
 MonoBehaviour:
   m_ObjectHideFlags: 0

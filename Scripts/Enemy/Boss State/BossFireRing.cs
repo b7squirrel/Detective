@@ -19,10 +19,6 @@ public class BossFireRing : MonoBehaviour
     public int damage = 20;                 // 데미지
     public LayerMask playerLayer;           // 플레이어 레이어
     public LayerMask wallLayer;             // 벽 레이어
-
-    [Header("타겟 설정")]
-    public string playerTag = "Player";     // 플레이어 태그
-
     private Transform player;
     private float nextFireTime = 0f;
 
@@ -68,7 +64,6 @@ public class BossFireRing : MonoBehaviour
 
     IEnumerator FireCirclePatternCo(int count)
     {
-        
         // 3번 왕복하기
         for (int i = 0; i < 3; i++)
         {
@@ -83,7 +78,7 @@ public class BossFireRing : MonoBehaviour
             while (currentProjectileNums < count)
             {
                 // 플레이어 방향을 기준으로 균등한 원형 패턴
-                float angle = playerAngle + (leftRightdir * (120f * currentProjectileNums / count));
+                float angle = playerAngle + (leftRightdir * (360f * currentProjectileNums / count));
 
                 Vector3 newDir = Quaternion.Euler(0, 0, angle) * Vector3.right;
 
@@ -93,6 +88,7 @@ public class BossFireRing : MonoBehaviour
                 Debug.Log($"투사체 발사 - 각도: {angle:F1}도");
                 yield return new WaitForSeconds(fireInterval);
             }
+            yield return new WaitForSeconds(.2f);
         }
         enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
     }
