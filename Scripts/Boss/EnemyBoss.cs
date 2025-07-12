@@ -459,6 +459,12 @@ public class EnemyBoss : EnemyBase, Idamageable
         prevDir = previousDirection;
     }
 
+    // 투사체를 발사할 때 멈춰있고, 플레이어에게 밀려나지 않도록 할 때 사용
+    public void SetMovable(bool movable)
+    {
+        rb.bodyType = movable ? RigidbodyType2D.Dynamic : RigidbodyType2D.Kinematic;
+    }
+
     IEnumerator SetStateDispPosToPlayer()
     {
         // 디버그 함수를 update에 넣으면 보기에 복잡하니까 코루틴으로 매 프레임마다 따라다니도록 하기

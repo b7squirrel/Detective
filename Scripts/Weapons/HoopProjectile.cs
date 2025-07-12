@@ -26,7 +26,7 @@ public class HoopProjectile : ProjectileBase
 
         if (Time.timeScale == 0)
             return;
-        if (Time.frameCount % 2 != 0) // 2프레임 간격으로 공격을 함
+        if (Time.frameCount % 3 != 0) // 2프레임 간격으로 공격을 함
             return;
 
         SetDamageStats();

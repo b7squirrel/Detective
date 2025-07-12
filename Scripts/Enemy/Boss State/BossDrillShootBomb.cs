@@ -31,7 +31,7 @@ public class BossDrillShootBomb : MonoBehaviour
         EnemyBoss.OnState2Exit -= InitState2Exit;
     }
     #endregion
-    
+
     #region 상태 함수들
     void InitState2Enter()
     {
@@ -39,6 +39,9 @@ public class BossDrillShootBomb : MonoBehaviour
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
         isAttackDone = false; // 공격을 할 수 있도록 초기화
         enemyBoss.DisplayCurrentState("드릴 알 쏘기");
+
+        // 플레이어에게 밀리지 않기
+        enemyBoss.SetMovable(false);
     }
     void InitState2Update()
     {
@@ -61,7 +64,7 @@ public class BossDrillShootBomb : MonoBehaviour
     }
     void InitState2Exit()
     {
-        Debug.Log("State3 Exit");
+        enemyBoss.SetMovable(true);
     }
     #endregion
 

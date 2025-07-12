@@ -1,31 +1,30 @@
 using UnityEngine;
 
-public class BossState2Antic : StateMachineBehaviour
+public class BossState1Antic : StateMachineBehaviour
 {
     EnemyBoss enemyBoss;
-
     DialogBubble dialogBubble;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemyBoss = animator.GetComponent<EnemyBoss>();
-        enemyBoss.ExecuteState2AnticEnter();
+        enemyBoss.ExecuteState3AnticEnter();
 
         // 말풍선 활성화
         if (dialogBubble == null) dialogBubble = animator.GetComponent<DialogBubble>();
         dialogBubble = enemyBoss.GetComponent<DialogBubble>();
-        dialogBubble.InitDialogBubble(animator.transform);
+        dialogBubble.InitDialogBubble(enemyBoss.GetDialogBubblePoint());
         dialogBubble.SetBubbleActive(true);
-
-        dialogBubble.SetDialogText(enemyBoss.GetDialog(1)); // state1 : 0, state2 : 1, state3 : 2
 
         // 플레이어에게 밀리지 않도록
         enemyBoss.SetMovable(false);
+
+        dialogBubble.SetDialogText(enemyBoss.GetDialog(2)); // state1 : 0, state2 : 1, state3 : 2
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemyBoss.ExecuteState2AnticUpdate();
+        enemyBoss.ExecuteState3AnticUpdate();
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -35,6 +34,6 @@ public class BossState2Antic : StateMachineBehaviour
 
         enemyBoss.SetMovable(true);
 
-        enemyBoss.ExecuteState2AnticExit();
+        enemyBoss.ExecuteState3AnticExit();
     }
 }

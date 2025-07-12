@@ -36,6 +36,9 @@ public class BossHelmetStickySlime : MonoBehaviour
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
         isAttackDone = false; // 공격을 할 수 있도록 초기화
         enemyBoss.DisplayCurrentState("헬멧 슬라임 구슬 발사 상태");
+
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
     }
     void InitState2Update()
     {
@@ -57,7 +60,7 @@ public class BossHelmetStickySlime : MonoBehaviour
     }
     void InitState2Exit()
     {
-        Debug.Log("State3 Exit");
+        enemyBoss.SetMovable(true);
     }
     #endregion
 

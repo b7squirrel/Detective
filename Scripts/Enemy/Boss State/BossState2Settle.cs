@@ -9,6 +9,9 @@ public class BossState2Settle : StateMachineBehaviour
         rb = animator.GetComponent<Rigidbody2D>();
         enemyBoss = animator.GetComponent<EnemyBoss>();
 
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
+
         enemyBoss.ExecuteState2SettleEnter();
     }
 
@@ -21,6 +24,8 @@ public class BossState2Settle : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        enemyBoss.SetMovable(true);
+        
         enemyBoss.ExecuteState2SettleExit();
     }
 }

@@ -53,6 +53,9 @@ public class BossFireHoming : MonoBehaviour
         {
             shootPoint = enemyBoss.GetShootPoint();
         }
+
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
     }
     void InitHomingUpdate()
     {
@@ -66,7 +69,7 @@ public class BossFireHoming : MonoBehaviour
     }
     void InitHomingExit()
     {
-
+        enemyBoss.SetMovable(true);
     }
 
     IEnumerator FireCirclePatternCo(int count)

@@ -66,6 +66,9 @@ public class BossLaserThickLaser : MonoBehaviour
             Debug.LogWarning("플레이어를 찾을 수 없습니다!");
         }
 
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
+
         // shootPoint가 설정되지 않은 경우 자신의 위치 사용
         if (shootPoint == null)
         {
@@ -155,7 +158,8 @@ public class BossLaserThickLaser : MonoBehaviour
     void InitState2Exit()
     {
         rotationSpeed += 10f; // 매번 10도씩 증가. 점점 빨라지도록
-        Debug.Log("State3 Exit");
+
+        enemyBoss.SetMovable(true);
     }
 
     #region 기타 함수들

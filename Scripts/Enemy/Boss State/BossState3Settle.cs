@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BossState1Settle : StateMachineBehaviour
+public class BossState3Settle : StateMachineBehaviour
 {
     Rigidbody2D rb;
     EnemyBoss enemyBoss;
@@ -9,18 +9,23 @@ public class BossState1Settle : StateMachineBehaviour
         rb = animator.GetComponent<Rigidbody2D>();
         enemyBoss = animator.GetComponent<EnemyBoss>();
 
-        enemyBoss.ExecuteState1SettleEnter();
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
+
+        enemyBoss.ExecuteState3SettleEnter();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemyBoss.ExecuteState1SettleUpdate();
+        enemyBoss.ExecuteState3SettleUpdate();
 
         rb.velocity = Vector2.zero;
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemyBoss.ExecuteState1SettleExit();
+        enemyBoss.SetMovable(true);
+        
+        enemyBoss.ExecuteState3SettleExit();
     }
 }

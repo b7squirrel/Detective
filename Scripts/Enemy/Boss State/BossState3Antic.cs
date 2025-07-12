@@ -16,6 +16,9 @@ public class BossState3Antic : StateMachineBehaviour
         dialogBubble.InitDialogBubble(enemyBoss.GetDialogBubblePoint());
         dialogBubble.SetBubbleActive(true);
 
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
+
         dialogBubble.SetDialogText(enemyBoss.GetDialog(2)); // state1 : 0, state2 : 1, state3 : 2
     }
 
@@ -28,6 +31,8 @@ public class BossState3Antic : StateMachineBehaviour
     {
         // 말풍선 비활성화
         dialogBubble.SetBubbleActive(false);
+
+        enemyBoss.SetMovable(true);
 
         enemyBoss.ExecuteState3AnticExit();
     }

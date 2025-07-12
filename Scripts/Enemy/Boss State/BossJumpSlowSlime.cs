@@ -45,6 +45,9 @@ public class BossJumpSlowSlime : MonoBehaviour
 
         playerTrns = GameManager.instance.player.transform;
 
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
+
         co = StartCoroutine(ShootCo());
     }
     void InitState2Update()
@@ -68,7 +71,7 @@ public class BossJumpSlowSlime : MonoBehaviour
     void InitState2Exit()
     {
         StopShooting();
-        Debug.Log("State3 Exit");
+        enemyBoss.SetMovable(true);
     }
     #endregion
 

@@ -59,6 +59,9 @@ public class BossLaserReflectionLaser : MonoBehaviour
         {
             shootPoint = transform;
         }
+
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
     }
     void InitState3Update()
     {
@@ -72,7 +75,7 @@ public class BossLaserReflectionLaser : MonoBehaviour
     }
     void InitState3Exit()
     {
-
+        enemyBoss.SetMovable(true);
     }
 
     IEnumerator FireBouncingBallCo()

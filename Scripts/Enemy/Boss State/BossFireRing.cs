@@ -45,6 +45,9 @@ public class BossFireRing : MonoBehaviour
         player = GameManager.instance.player.transform;
         nextFireTime = 0;
         if (shootPoint == null) shootPoint = enemyBoss.GetShootPoint();
+
+        // 플레이어에게 밀리지 않도록
+        enemyBoss.SetMovable(false);
     }
 
     void InitFireRingUpdate()
@@ -60,6 +63,7 @@ public class BossFireRing : MonoBehaviour
 
     void InitFireRingExit()
     {
+        enemyBoss.SetMovable(true);
     }
 
     IEnumerator FireCirclePatternCo(int count)
