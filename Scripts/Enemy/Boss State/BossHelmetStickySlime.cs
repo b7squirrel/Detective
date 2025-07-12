@@ -52,6 +52,8 @@ public class BossHelmetStickySlime : MonoBehaviour
             enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
         }
 
+        enemyBoss.Flip();
+
         enemyBoss.SlimeDropTimer(timeToDropSlime);
         if (isAttackDone) return;
 

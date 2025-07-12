@@ -17,6 +17,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int numberOfProjectile;
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
+    [SerializeField] Transform slimeDropPos; // 슬라임 점액을 떨어트리는 위치
     float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터. 주기는 각 상태에서 정함
     SlimeDropManager slimeDropManager;
     
@@ -154,7 +155,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     {
         // 이동 할 때 슬라임 점액
         if (slimeDropManager == null) slimeDropManager = GetComponent<SlimeDropManager>();
-        slimeDropManager.DropObject(ShootPoint.position); // 이동할 때는 보스의 가운데에서 점액이 나오는 것이 나아보인다
+        slimeDropManager.DropObject(slimeDropPos.position); // 이동할 때는 보스의 가운데에서 점액이 나오는 것이 나아보인다
     }
     void DropSlimeOnLanding()
     {
