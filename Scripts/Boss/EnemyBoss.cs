@@ -20,7 +20,7 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] Transform slimeDropPos; // 슬라임 점액을 떨어트리는 위치
     float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터. 주기는 각 상태에서 정함
     SlimeDropManager slimeDropManager;
-    
+
     #region 상태 액션 이벤트 변수
     public static event Action OnState1Enter; // 첫 번째 상태 Enter
     public static event Action OnState1Update; // 두 번째 상태 Update
@@ -392,6 +392,35 @@ public class EnemyBoss : EnemyBase, Idamageable
 
     // 랜덤하게 3개의 공격 가운데 하나를 선택하기 위한 인덱스.
     public void SetRandomState()
+    {
+        string[] states = { "State1", "State2", "State3" };
+
+        if (debugSetState)
+        {
+            anim.SetTrigger(states[desiredStateIndex]);
+            return;
+        }
+
+        // 0~99 사이의 난수를 생성
+        int rand = UnityEngine.Random.Range(0, 100);
+
+        int stateIndex;
+        if (rand < 20)
+        {
+            stateIndex = 0; // State1: 10%
+        }
+        else if (rand < 60)
+        {
+            stateIndex = 1; // State2: 45%
+        }
+        else
+        {
+            stateIndex = 2; // State3: 45%
+        }
+
+        anim.SetTrigger(states[stateIndex]);
+    }
+    public void SetState(float state1Probability, float state2Probability, float state3Probability)
 {
     string[] states = { "State1", "State2", "State3" };
 
@@ -401,21 +430,32 @@ public class EnemyBoss : EnemyBase, Idamageable
         return;
     }
 
-    // 0~99 사이의 난수를 생성
-    int rand = UnityEngine.Random.Range(0, 100);
+    float total = state1Probability + state2Probability + state3Probability;
+    if (total <= 0f)
+    {
+        Debug.LogWarning("Total probability must be greater than zero.");
+        return;
+    }
+
+    // 정규화
+    float p1 = state1Probability / total;
+    float p2 = state2Probability / total;
+    float p3 = state3Probability / total;
+
+    float rand = UnityEngine.Random.value; // 0.0f ~ 1.0f
 
     int stateIndex;
-    if (rand < 10)
+    if (rand < p1)
     {
-        stateIndex = 0; // State1: 10%
+        stateIndex = 0;
     }
-    else if (rand < 55)
+    else if (rand < p1 + p2)
     {
-        stateIndex = 1; // State2: 45%
+        stateIndex = 1;
     }
     else
     {
-        stateIndex = 2; // State3: 45%
+        stateIndex = 2;
     }
 
     anim.SetTrigger(states[stateIndex]);

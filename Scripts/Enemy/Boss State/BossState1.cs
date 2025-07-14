@@ -13,6 +13,8 @@ public class BossState1 : StateMachineBehaviour
         enemyBoss = animator.GetComponent<EnemyBoss>();
         enemyBoss.ActivateLandingIndicator(false);
 
+        stateTimer = 0f;
+
         // 개별 Enter
         enemyBoss.ExecuteState1Enter();
     }
