@@ -21,6 +21,7 @@ public class BossFireRing : MonoBehaviour
     public LayerMask wallLayer;             // 벽 레이어
     private Transform player;
     private float nextFireTime = 0f;
+    Coroutine co;
 
     #region 액션 이벤트
     void OnEnable()
@@ -46,15 +47,20 @@ public class BossFireRing : MonoBehaviour
         nextFireTime = 0;
         if (shootPoint == null) shootPoint = enemyBoss.GetShootPoint();
 
+        if (co != null)
+        {
+            StopCoroutine(co);
+        }
+
         // 플레이어에게 밀리지 않도록
-        enemyBoss.SetMovable(false);
+            enemyBoss.SetMovable(false);
     }
 
     void InitFireRingUpdate()
     {
         if (Time.time >= nextFireTime)
         {
-            StartCoroutine(FireCirclePatternCo(10));
+            co = StartCoroutine(FireCirclePatternCo(10));
             nextFireTime = Time.time + fireRate;
         }
 

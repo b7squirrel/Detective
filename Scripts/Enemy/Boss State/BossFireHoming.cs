@@ -25,6 +25,7 @@ public class BossFireHoming : MonoBehaviour
 
     private Transform player;
     private float nextFireTime = 0f;
+    Coroutine co;
 
     #region 액션 이벤트
     void OnEnable()
@@ -48,10 +49,15 @@ public class BossFireHoming : MonoBehaviour
         // 플레이어 찾기
         if (player == null) player = GameManager.instance.player.transform;
 
-        // shootPoint가 설정되지 않은 경우 자신의 위치 사용
+        // shootPoint가 설정되지 않은 경우 위치 로케이터의 transform을 얻어오기
         if (shootPoint == null)
         {
             shootPoint = enemyBoss.GetShootPoint();
+        }
+
+        if (co != null)
+        {
+            StopCoroutine(co);
         }
 
         // 플레이어에게 밀리지 않도록
@@ -61,7 +67,7 @@ public class BossFireHoming : MonoBehaviour
     {
         if (Time.time >= nextFireTime && player != null)
         {
-            StartCoroutine(FireCirclePatternCo(10));
+            co = StartCoroutine(FireCirclePatternCo(10));
             nextFireTime = Time.time + fireRate;
         }
 
