@@ -668,7 +668,7 @@ MonoBehaviour:
     - {x: 25, y: 0}
     - {x: 0, y: 25}
     - {x: 0, y: -25}
-  - Name: 6
+  - Name: 6-jump
     WallDuration: 114.4
     enemyNumForNextEvent: 50
     stageMusicType: 6
@@ -968,7 +968,7 @@ MonoBehaviour:
     - {x: 25, y: 0}
     - {x: 0, y: 25}
     - {x: 0, y: -25}
-  - Name: 12
+  - Name: 12 - helmet
     WallDuration: 120
     enemyNumForNextEvent: 50
     stageMusicType: 6
@@ -991,7 +991,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
     - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
     - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
-    - {fileID: 11400000, guid: 89eec160e9ca14083824f46d5f9e014d, type: 2}
+    - {fileID: 11400000, guid: 98b637b5dad19e5458119684ca5962fb, type: 2}
     - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
     - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
     - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
@@ -1002,6 +1002,879 @@ MonoBehaviour:
     - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
     - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
     - {fileID: 2017777881417455486, guid: 377ccdc91bde71a408249f564fc614ae, type: 3}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 6779923083274053433, guid: 4a802d32ddc574b99bb07c22fdce4617, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 13
+    WallDuration: 0
+    enemyNumForNextEvent: 30
+    stageMusicType: 1
+    eggSpawnTimes:
+    - 20
+    - 60
+    stageDataText: {fileID: 4900000, guid: c247027e61d352346932a8fb823fdf3f, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: aa66c97985c85444ab874b421c9504f6, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 14
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 2
+    eggSpawnTimes:
+    - 10
+    - 50
+    stageDataText: {fileID: 4900000, guid: 1a99e8411e401db49b0bb1f8fce9b33e, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: cba1191daa831c34e93675cdf5beb405, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 15
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 3
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 120
+    stageDataText: {fileID: 4900000, guid: fd61bf85cbe714d4cb3db70789cfa201, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: fe174230ab60a2f4da1dde68d68f0506, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 16
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 0
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 120
+    - 190
+    stageDataText: {fileID: 4900000, guid: 0074927116197b64dae42e2857a138a4, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: 14b094f9901549d44a4d51f00351f7e5, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 17
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 4
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 90
+    - 160
+    - 230
+    stageDataText: {fileID: 4900000, guid: fa5842de696948946aa1627739bfb750, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: 7c508b8ed3c6e9e42a207ad4f0e78130, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 18 - drill
+    WallDuration: 114.4
+    enemyNumForNextEvent: 50
+    stageMusicType: 6
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 90
+    - 160
+    - 230
+    stageDataText: {fileID: 4900000, guid: 705673d1adef73a4883f27a26942e749, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: e80f23c47e006451183eb77a64e6439d, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 6488986989764395079, guid: 5fc5db870a1cd42b5869f24780b8d986, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 19
+    WallDuration: 0
+    enemyNumForNextEvent: 30
+    stageMusicType: 1
+    eggSpawnTimes:
+    - 20
+    - 60
+    stageDataText: {fileID: 4900000, guid: c247027e61d352346932a8fb823fdf3f, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: aa66c97985c85444ab874b421c9504f6, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 20
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 2
+    eggSpawnTimes:
+    - 10
+    - 50
+    stageDataText: {fileID: 4900000, guid: 1a99e8411e401db49b0bb1f8fce9b33e, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: cba1191daa831c34e93675cdf5beb405, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 21
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 3
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 120
+    stageDataText: {fileID: 4900000, guid: fd61bf85cbe714d4cb3db70789cfa201, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: fe174230ab60a2f4da1dde68d68f0506, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 22
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 0
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 120
+    - 190
+    stageDataText: {fileID: 4900000, guid: 0074927116197b64dae42e2857a138a4, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: 14b094f9901549d44a4d51f00351f7e5, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 23
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 4
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 90
+    - 160
+    - 230
+    stageDataText: {fileID: 4900000, guid: fa5842de696948946aa1627739bfb750, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: 7c508b8ed3c6e9e42a207ad4f0e78130, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 24 - laser
+    WallDuration: 114.4
+    enemyNumForNextEvent: 50
+    stageMusicType: 6
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 90
+    - 160
+    - 230
+    stageDataText: {fileID: 4900000, guid: 705673d1adef73a4883f27a26942e749, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: 78f4ebf1a570841deb6bf4c571710181, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 2310203829848606500, guid: e39d69088bcad43bfae02a7037cd07a2, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 25
+    WallDuration: 0
+    enemyNumForNextEvent: 30
+    stageMusicType: 1
+    eggSpawnTimes:
+    - 20
+    - 60
+    stageDataText: {fileID: 4900000, guid: c247027e61d352346932a8fb823fdf3f, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: aa66c97985c85444ab874b421c9504f6, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 26
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 2
+    eggSpawnTimes:
+    - 10
+    - 50
+    stageDataText: {fileID: 4900000, guid: 1a99e8411e401db49b0bb1f8fce9b33e, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: cba1191daa831c34e93675cdf5beb405, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 27
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 3
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 120
+    stageDataText: {fileID: 4900000, guid: fd61bf85cbe714d4cb3db70789cfa201, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: fe174230ab60a2f4da1dde68d68f0506, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 28
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 0
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 120
+    - 190
+    stageDataText: {fileID: 4900000, guid: 0074927116197b64dae42e2857a138a4, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: 14b094f9901549d44a4d51f00351f7e5, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 29
+    WallDuration: 120
+    enemyNumForNextEvent: 30
+    stageMusicType: 4
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 90
+    - 160
+    - 230
+    stageDataText: {fileID: 4900000, guid: fa5842de696948946aa1627739bfb750, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: 7c508b8ed3c6e9e42a207ad4f0e78130, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
+    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
+    bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    effects: []
+    bossEffects: []
+    numbersOfGemToSpawn: 10
+    gemToSpawn: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    innerRadius: 11.9
+    outerRadius: 12
+    chestPrefab: {fileID: 76857048987349971, guid: 8b1f20c1989668246a3ac77700b67f31, type: 3}
+    innerRadiusForChest: 11
+    outerRadiusForChest: 18
+    startPositions:
+    - {x: -25, y: 0}
+    - {x: 25, y: 0}
+    - {x: 0, y: 25}
+    - {x: 0, y: -25}
+  - Name: 30 - fire
+    WallDuration: 114.4
+    enemyNumForNextEvent: 50
+    stageMusicType: 6
+    eggSpawnTimes:
+    - 10
+    - 50
+    - 90
+    - 160
+    - 230
+    stageDataText: {fileID: 4900000, guid: 705673d1adef73a4883f27a26942e749, type: 3}
+    stageEnmeyVariant: 0
+    enemyData:
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}
+    - {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
+    - {fileID: 11400000, guid: 22227035b271285469623b44feed7d9d, type: 2}
+    - {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
+    - {fileID: 11400000, guid: 0b53e64fd5444854898a547d7cd29432, type: 2}
+    - {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
+    - {fileID: 11400000, guid: 0a20f7c0afc34f043b85daaa31d80ed0, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 36414a5106679224fb29421061c7486c, type: 2}
+    - {fileID: 11400000, guid: 857691383ea054595b5ddeec142113cb, type: 2}
+    - {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
+    enemies:
+    - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
+    - {fileID: 0}
     - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
     bossPrefab: {fileID: 9102214741909136496, guid: 26030932fd36143ddbf0eed423bfa5db, type: 3}
     effects: []

@@ -72,7 +72,7 @@ public class StageEvenetManager : MonoBehaviour
         {
             if (winStageCoroutine == null)
             {
-                winStageCoroutine = StartCoroutine(WinStage());
+                WinStage();
             }
             return;
         }
@@ -153,9 +153,8 @@ public class StageEvenetManager : MonoBehaviour
         SendStageEventIndex(eventIndexer);
     }
 
-    IEnumerator WinStage()
+    void WinStage()
     {
-        yield return new WaitForSeconds(3f);
         GameManager.instance.GetComponent<WinStage>().OpenPanel();
     }
     void SpawnSubBoss(bool _forceSpawn)

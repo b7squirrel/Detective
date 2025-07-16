@@ -50,7 +50,10 @@ public class BossDieManager : MonoBehaviour
         RemoveAllEnemies();
         RemoveAllWalls();
         //dropCoins.Init(amountOfCoins, deadBody.transform.position);
+        yield return new WaitForSeconds(3f);
+        if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();
 
+        yield return new WaitForSeconds(2f);
         FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
     }
     

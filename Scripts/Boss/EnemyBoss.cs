@@ -59,7 +59,6 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] Transform dustPoint;
     [SerializeField] GameObject dustEffect;
     GameObject dust;
-    [SerializeField] GameObject teleportEffectPrefab;
     [SerializeField] int halfWallBouncerNumber;
     GenerateWalls generateWalls;
     float timer; // shoot coolTime counter
@@ -71,7 +70,6 @@ public class EnemyBoss : EnemyBase, Idamageable
 
 
     public Coroutine shootCoroutine;
-    bool wallCreated;
 
     WallManager wallManager;
     Vector2 currentPosition;
