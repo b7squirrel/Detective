@@ -1,8 +1,7 @@
 using System.Collections;
-using Unity.Mathematics;
 using UnityEngine;
 
-public class BossDeadBody : MonoBehaviour
+public class BossDeadBody : MonoBehaviour, Idamageable
 {
     [Header("이펙트")]
     [SerializeField] GameObject teleportEffectPrefab;
@@ -12,7 +11,8 @@ public class BossDeadBody : MonoBehaviour
     [SerializeField] AudioClip squelchSFX;
     [SerializeField] AudioClip squeackSFX;
     Animator anim;
-    public bool FinishBossCam {get; private set;}
+    bool isDamageable; // 아이들 상태로 들어가면 그제서야 데미지를 받고 반응할 수 있다
+    public bool FinishBossCam { get; private set; }
     void OnEnable()
     {
         anim = GetComponent<Animator>();
@@ -26,6 +26,7 @@ public class BossDeadBody : MonoBehaviour
     {
         GameManager.instance.GetComponent<TeleportEffect>().GenTeleportOutEffect(transform.position);
         yield return new WaitForSeconds(.45f);
+        isDamageable = false;
         gameObject.SetActive(false);
     }
 
@@ -42,5 +43,21 @@ public class BossDeadBody : MonoBehaviour
     public void TriggerPlayerCamera()
     {
         BossDieManager.instance.BossCameraOff();
+    }
+    public void SetDamageable()
+    {
+        isDamageable = true;
+    }
+
+    public void TakeDamage(int damage, float knockBackChance, float knockBackSpeed, Vector2 target, GameObject hitEffect)
+    {
+        // 아이들 상태이고 Hit 애니메이션이 끝난 상태라면 반응하기
+        if (isDamageable)
+        {
+            AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0); // 0은 Base Layer
+            if (stateInfo.IsName("Hit")) return;
+
+            anim.SetTrigger("Hit");
+        }
     }
 }
