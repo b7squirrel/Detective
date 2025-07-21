@@ -20,7 +20,12 @@ public class BossDeadBody : MonoBehaviour
 
     public void TeleportOutEffect()
     {
+        StartCoroutine(TeleportOutEffectCo());
+    }
+    IEnumerator TeleportOutEffectCo()
+    {
         GameManager.instance.GetComponent<TeleportEffect>().GenTeleportOutEffect(transform.position);
+        yield return new WaitForSeconds(.45f);
         gameObject.SetActive(false);
     }
 
