@@ -30,6 +30,7 @@ public class TeleportEffect : MonoBehaviour
         yield return new WaitForSeconds(.3f);
         GameObject teleEffect = Instantiate(teleportOutEffectPrefab, _spawnPos, Quaternion.identity);
         SoundManager.instance.Play(teleportOutSound);
+        CameraShake.instance.Shake();
 
         yield return new WaitForSeconds(.5f);
         particleSys.Stop();
