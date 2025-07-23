@@ -27,10 +27,15 @@ public class TeleportEffect : MonoBehaviour
         particleSys = teleUpEffect.GetComponentInChildren<ParticleSystem>();
         particleSys.Play();
 
+        SoundManager.instance.Play(teleportOutSound);
+        SoundManager.instance.Play(teleportOutSound);
+
         yield return new WaitForSeconds(.3f);
         GameObject teleEffect = Instantiate(teleportOutEffectPrefab, _spawnPos, Quaternion.identity);
-        SoundManager.instance.Play(teleportOutSound);
         CameraShake.instance.Shake();
+
+        yield return new WaitForSeconds(.83f);
+        // teleEffect.GetComponentInChildren<ParticleSystem>().Play();
 
         yield return new WaitForSeconds(.5f);
         particleSys.Stop();

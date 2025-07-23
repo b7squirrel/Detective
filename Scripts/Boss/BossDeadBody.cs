@@ -54,8 +54,8 @@ public class BossDeadBody : MonoBehaviour, Idamageable
         // 아이들 상태이고 Hit 애니메이션이 끝난 상태라면 반응하기
         if (isDamageable)
         {
-            AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0); // 0은 Base Layer
-            if (stateInfo.IsName("Hit")) return;
+            // AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0); // 0은 Base Layer
+            // if (stateInfo.IsName("Hit")) return;
 
             anim.SetTrigger("Hit");
         }

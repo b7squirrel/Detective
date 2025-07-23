@@ -53,7 +53,7 @@ public class BossDieManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
         if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
         FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
     }
     
