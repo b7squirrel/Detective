@@ -17,6 +17,12 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] GameObject[] stars; // 활성, 비활성 시킬 별
     [SerializeField] GameObject unSelectionPanel; // 선택되지 않으면 카드를 어둡게 하는 역할
     [SerializeField] GameObject synergyText; // 시너지 아이콘 표시 텍스트
+    [SerializeField] GameObject titleGroup; // 선택되지 않은 카드의 타이틀을 숨기기 위해. 어두운 레이어를 올릴 때 불편함
+    [SerializeField] Image titleSticker; // 타이틀 포스트잇 색깔을 조절하기 위해
+    [SerializeField] Color weaponStickerColor; // 오리 포스트잇 색깔
+    [SerializeField] Color itemStickerColor; // 아이템 포스트잇 색깔
+    [SerializeField] Color synergyStickerColor; // 시너지 오리 포스트잇 색깔
+    [SerializeField] Color instantStickerColor; // 인스탄트 아이템 포스트잇 색깔
     [SerializeField] List<Image> levelOn;
     [SerializeField] List<Image> levelOff;
     [SerializeField] List<Animator> levelOnAnim;
@@ -46,14 +52,16 @@ public class UpgradeButton : MonoBehaviour
     {
         anim.SetTrigger("Reset");
 
-        if(upgradeData.weaponData != null)
+        titleGroup.SetActive(true);
+
+        if (upgradeData.weaponData != null)
         {
             iconWeapon.sprite = upgradeData.weaponData.charImage;
             iconWeapon.preserveAspect = true;
             iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 1f);
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
 
-            // 시너지 업그레이드일 때는 시너지 이름 표시
+            // 시너지 업그레이드일 때는 시너지 이름 표시 + 타이틀 포스트잇 색깔 적용
             if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade)
             {
                 upgradeName.text = upgradeData.weaponData.DisplayName;
@@ -74,7 +82,7 @@ public class UpgradeButton : MonoBehaviour
             iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0);
             iconItem.SetNativeSize();
 
-            if (upgradeData.item.DisplayName != "")  
+            if (upgradeData.item.DisplayName != "")
                 upgradeName.text = upgradeData.item.DisplayName;
         }
         //if (upgradeData.DisplayName != "")
@@ -102,7 +110,7 @@ public class UpgradeButton : MonoBehaviour
         }
 
         levelBar.SetActive(true);
-        if(upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
+        if (upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
         {
             // 별 5개, 연두 패널
             SetLevelStarAlpha(weaponContainer.GetWeaponLevel(upgradeData.weaponData), StaticValues.MaxGrade);
@@ -110,8 +118,10 @@ public class UpgradeButton : MonoBehaviour
             panel_synergy.SetActive(false);
             panel_weapon.SetActive(true);
             panel_instant_items.SetActive(false);
+
+            titleSticker.color = weaponStickerColor;
         }
-        else if(upgradeData.upgradeType == UpgradeType.ItemUpgrade || upgradeData.upgradeType == UpgradeType.ItemGet)
+        else if (upgradeData.upgradeType == UpgradeType.ItemUpgrade || upgradeData.upgradeType == UpgradeType.ItemGet)
         {
             // 별 3개, 파란 패널
             SetLevelStarAlpha(passiveItems.GetItemLevel(upgradeData.item), StaticValues.MaxItemGrade);
@@ -119,8 +129,10 @@ public class UpgradeButton : MonoBehaviour
             panel_synergy.SetActive(false);
             panel_weapon.SetActive(false);
             panel_instant_items.SetActive(false);
+
+            titleSticker.color = itemStickerColor;
         }
-        else if(upgradeData.upgradeType == UpgradeType.SynergyUpgrade)
+        else if (upgradeData.upgradeType == UpgradeType.SynergyUpgrade)
         {
             Debug.Log("Synergy");
             panel_item.SetActive(false);
@@ -128,14 +140,18 @@ public class UpgradeButton : MonoBehaviour
             panel_synergy.SetActive(true);
             levelBar.SetActive(false);
             panel_instant_items.SetActive(false);
+
+            titleSticker.color = synergyStickerColor;
         }
-        else if(upgradeData.upgradeType == UpgradeType.Coin || upgradeData.upgradeType == UpgradeType.Heal)
+        else if (upgradeData.upgradeType == UpgradeType.Coin || upgradeData.upgradeType == UpgradeType.Heal)
         {
             panel_item.SetActive(false);
             panel_weapon.SetActive(false);
             panel_synergy.SetActive(false);
             levelBar.SetActive(false);
             panel_instant_items.SetActive(true);
+
+            titleSticker.color = instantStickerColor;
         }
     }
 
@@ -195,8 +211,10 @@ public class UpgradeButton : MonoBehaviour
     public void UnSelected() // 선택되지 않은 카드의 행동
     {
         unSelectionPanel.SetActive(true);
-        iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0f);
-        iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0f);
+        // iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0f);
+        // iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0f);
+
+        titleGroup.SetActive(false);
     }
 
     public void ResetUnseletedPanel()
