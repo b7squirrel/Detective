@@ -16,7 +16,6 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] GameObject panel_instant_items; // 동전, 도넛 패널, 노란색
     [SerializeField] GameObject[] stars; // 활성, 비활성 시킬 별
     [SerializeField] GameObject unSelectionPanel; // 선택되지 않으면 카드를 어둡게 하는 역할
-    [SerializeField] GameObject synergyText; // 시너지 아이콘 표시 텍스트
     [SerializeField] GameObject titleGroup; // 선택되지 않은 카드의 타이틀을 숨기기 위해. 어두운 레이어를 올릴 때 불편함
     [SerializeField] Image titleSticker; // 타이틀 포스트잇 색깔을 조절하기 위해
     [SerializeField] Color weaponStickerColor; // 오리 포스트잇 색깔
@@ -27,6 +26,8 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] List<Image> levelOff;
     [SerializeField] List<Animator> levelOnAnim;
     [SerializeField] List<Animator> starSelectedEffectAnim;
+    [SerializeField] GameObject synergyGroup; // 일반 오리카드가 아니면 비활성화 하기 위해
+    [SerializeField] GameObject synergyText; // 시너지 아이콘 표시 텍스트
     [SerializeField] Image synergyCouipleIcon;
     WeaponContainer weaponContainer;
     PassiveItems passiveItems;
@@ -61,7 +62,7 @@ public class UpgradeButton : MonoBehaviour
             iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 1f);
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
 
-            // 시너지 업그레이드일 때는 시너지 이름 표시 + 타이틀 포스트잇 색깔 적용
+            // 시너지 업그레이드일 때는 시너지 이름 표시
             if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade)
             {
                 upgradeName.text = upgradeData.weaponData.DisplayName;
@@ -93,15 +94,17 @@ public class UpgradeButton : MonoBehaviour
 
         description.text = upgradeData.description;
 
+        synergyGroup.SetActive(false);
         synergyCouipleIcon.color = new Color(1, 1, 1, 0);
         synergyText.SetActive(false);
 
-        
+        levelBar.SetActive(true);
 
         if (upgradeData.weaponData != null) // 넘겨 받은 업그레이드 데이터가 Weapon 이라면
         {
             if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade) // 시너지 업그레이드가 아닌 경우에만 시너지 커플 표시
             {
+                synergyGroup.SetActive(true); // 일반 오리일 때만 시너지 포스트잇 표시
                 synergyCouipleIcon.color = new Color(1, 1, 1, 1);
                 synergyCouipleIcon.sprite = upgradeData.weaponData.SynergyItem.charImage;
                 synergyCouipleIcon.preserveAspect = true;
@@ -109,7 +112,6 @@ public class UpgradeButton : MonoBehaviour
             }
         }
 
-        levelBar.SetActive(true);
         if (upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
         {
             // 별 5개, 연두 패널
@@ -215,6 +217,7 @@ public class UpgradeButton : MonoBehaviour
         // iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0f);
 
         titleGroup.SetActive(false);
+        synergyGroup.SetActive(false);
     }
 
     public void ResetUnseletedPanel()
