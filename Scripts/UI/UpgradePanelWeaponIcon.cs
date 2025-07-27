@@ -1,3 +1,5 @@
+using System.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,16 +12,30 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     [SerializeField] Image[] equipmentImages;
     [SerializeField] RectTransform headMain;
     bool needToOffset;
+    WeaponData leadWeaponData; //리드 오리 데이터 저장해서 사용 
 
     CardSpriteAnim cardSpriteAnim;
     public void InitWeaponIcon(WeaponData wd)
     {
-        InitWeaponCardDisplay(wd, null);
+        if (leadWeaponData == null) leadWeaponData = GameManager.instance.startingDataContainer.GetLeadWeaponData();
+
+        bool isLead = false;
+        if (wd.Name == leadWeaponData.Name)
+        {
+            InitWeaponCardDisplay(leadWeaponData, null);
+            isLead = true;
+        }
+        else
+        {
+            InitWeaponCardDisplay(wd, null);
+            isLead = false;
+        }
+
         InitSpriteRow(); // card sprite row의 이미지 참조들이 남지 않게 초기화
 
         for (int i = 0; i < 4; i++)
         {
-            Item item = wd.defaultItems[i];
+            Item item = isLead ? GameManager.instance.startingDataContainer.GetItemDatas()[i] : wd.defaultItems[i];
 
             if (item == null)
             {
