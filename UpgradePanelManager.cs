@@ -12,6 +12,8 @@ public class UpgradePanelManager : MonoBehaviour
 
     [SerializeField] List<UpgradeButton> upgradeButtons;
 
+    [SerializeField] GameObject confetti; // 폭죽 숨기고 보이게 하기
+
     Animator anim;
     Level level;
 
@@ -42,6 +44,8 @@ public class UpgradePanelManager : MonoBehaviour
 
         Clean();
         pauseManager.PauseGame();
+
+        if(confetti != null) confetti.SetActive(true);
 
         greyBase.SetActive(true);
         panel.SetActive(true);
@@ -128,6 +132,8 @@ public class UpgradePanelManager : MonoBehaviour
 
     IEnumerator VanishPanel()
     {
+        if(confetti != null) confetti.SetActive(false);
+
         anim.SetTrigger("Close");
         yield return new WaitForSecondsRealtime(.2f); // close animation 길이만큼
         GameManager.instance.popupManager.IsUIDone = true; // Level.CheckLevelUp 전에 있어야 함. 큐에 쌓이므로
