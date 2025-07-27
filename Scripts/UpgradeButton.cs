@@ -29,6 +29,7 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] GameObject synergyGroup; // 일반 오리카드가 아니면 비활성화 하기 위해
     [SerializeField] GameObject synergyText; // 시너지 아이콘 표시 텍스트
     [SerializeField] Image synergyCouipleIcon;
+    [SerializeField] UpgradePanelWeaponIcon upgradePanelWeaponIcon; // 오리와 장비. 애니메이션
     WeaponContainer weaponContainer;
     PassiveItems passiveItems;
 
@@ -37,20 +38,20 @@ public class UpgradeButton : MonoBehaviour
     Animator anim;
     int cardLevel;
 
-    void Awake()
+    void OnEnable()
     {
-        weaponContainer = Player.instance.GetComponent<WeaponContainer>();
-        passiveItems = Player.instance.GetComponent<PassiveItems>();
+
 
         ClearLevelstars();
         levelBar.SetActive(false);
         unSelectionPanel.SetActive(false);
+        upgradePanelWeaponIcon.gameObject.SetActive(false);
 
-        anim = GetComponent<Animator>();
     }
 
     public void Set(UpgradeData upgradeData)
     {
+        if (anim == null) anim = GetComponent<Animator>();
         anim.SetTrigger("Reset");
 
         titleGroup.SetActive(true);
@@ -59,8 +60,12 @@ public class UpgradeButton : MonoBehaviour
         {
             iconWeapon.sprite = upgradeData.weaponData.charImage;
             iconWeapon.preserveAspect = true;
-            iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 1f);
+            iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0f);
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
+
+
+            upgradePanelWeaponIcon.gameObject.SetActive(true);
+            upgradePanelWeaponIcon.InitWeaponIcon(upgradeData.weaponData); // 오리 아이콘 셋업
 
             // 시너지 업그레이드일 때는 시너지 이름 표시
             if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade)
@@ -72,7 +77,7 @@ public class UpgradeButton : MonoBehaviour
                 upgradeName.text = upgradeData.weaponData.SynergyDispName;
             }
         }
-        else
+        else // 오리가 아닌 카드들이라면
         {
             if (upgradeData == null) Debug.Log("upgrade Data를 넘겨받지 못했습니다.");
             if (upgradeData.item == null) Debug.Log("upgrade Data의 item이 Null입니다..");
@@ -81,6 +86,7 @@ public class UpgradeButton : MonoBehaviour
             iconItem.preserveAspect = true;
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 1f);
             iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0);
+            upgradePanelWeaponIcon.gameObject.SetActive(false);
             iconItem.SetNativeSize();
 
             if (upgradeData.item.DisplayName != "")
@@ -115,6 +121,7 @@ public class UpgradeButton : MonoBehaviour
         if (upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
         {
             // 별 5개, 연두 패널
+            if (weaponContainer == null) weaponContainer = Player.instance.GetComponent<WeaponContainer>();
             SetLevelStarAlpha(weaponContainer.GetWeaponLevel(upgradeData.weaponData), StaticValues.MaxGrade);
             panel_item.SetActive(false);
             panel_synergy.SetActive(false);
@@ -126,6 +133,7 @@ public class UpgradeButton : MonoBehaviour
         else if (upgradeData.upgradeType == UpgradeType.ItemUpgrade || upgradeData.upgradeType == UpgradeType.ItemGet)
         {
             // 별 3개, 파란 패널
+            if (passiveItems == null) passiveItems = Player.instance.GetComponent<PassiveItems>();
             SetLevelStarAlpha(passiveItems.GetItemLevel(upgradeData.item), StaticValues.MaxItemGrade);
             panel_item.SetActive(true);
             panel_synergy.SetActive(false);
@@ -224,7 +232,7 @@ public class UpgradeButton : MonoBehaviour
     {
         unSelectionPanel.SetActive(false);
     }
-    
+
     void StarBlinking(int index)
     {
         levelOnAnim[index].SetTrigger("Blink");
