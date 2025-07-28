@@ -88,17 +88,25 @@ public class DropOnDestroy : MonoBehaviour
             }
         }
 
+        if (toDrop.GetComponent<EggPickUpObject>() != null)
+        {
+            bool spawnable = GameManager.instance.fieldItemSpawner.isEggSpawnable();
+            if (spawnable == false) return; // 알이 스폰될 것이지만 스폰되어서는 안될 조건이라면 여기서 끝 (알의 중복 생성 방지)
+        }
+
         if (toDrop == null)
         {
             Debug.LogWarning("DropOnDestroy, drop Item Prefab이 null입니다.");
             return;
         }
 
+        // 적이라면 보석 드롭
         if (GetComponent<Enemy>() != null)
         {
             exp = GetComponent<Enemy>().ExperienceReward;
         }
         
+        // 보석인지 아닌지 판별
         if (toDrop.GetComponent<Collectable>() != null)
         {
             isGem = toDrop.GetComponent<Collectable>().IsGem;
@@ -120,8 +128,6 @@ public class DropOnDestroy : MonoBehaviour
 
         // 디버깅
         if (isChestDebuggingOn) toDrop = dropItemProperty[dropItemIndex].Item;
-
-        
 
         SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
     }

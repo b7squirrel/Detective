@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,7 +34,7 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] SpriteRenderer[] EquipmentSprites;
     [SerializeField] SpriteRenderer faceExpression;
     [SerializeField] Image synergyIcon;
-    
+
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
@@ -49,6 +48,9 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] AudioClip breakingEgg;
 
     WeaponDataDictionary wdDictionary;
+
+    // 알에 아이디 부여
+    [SerializeField] int eggIndex;
 
     void Init(WeaponData wd)
     {
@@ -129,10 +131,10 @@ public class EggPanelManager : MonoBehaviour
 
     public void EggImageUp(bool isActive)
     {
-        if(eggImageRecTransform == null) eggImageRecTransform = eggImage.GetComponent<RectTransform>();
+        if (eggImageRecTransform == null) eggImageRecTransform = eggImage.GetComponent<RectTransform>();
         Vector2 currentPos = eggImageRecTransform.anchoredPosition;
         float yPos = isActive ? -194f : -3000f;
-        eggImageRecTransform.anchoredPosition = new Vector2(currentPos.x, yPos); 
+        eggImageRecTransform.anchoredPosition = new Vector2(currentPos.x, yPos);
 
         // eggImage.SetActive(isActive);
 
@@ -166,7 +168,7 @@ public class EggPanelManager : MonoBehaviour
     public void EggAnimFinished()
     {
         // 뽑은 오리의 등급을 넘겨 받음
-        if(eggbutton == null) eggbutton = FindObjectOfType<EggButton>();
+        if (eggbutton == null) eggbutton = FindObjectOfType<EggButton>();
         currentGrade = eggbutton.GetWeaponGradeIndex();
 
         // 뽑은 오리의 이름과 등급이 일치하는 Upgrade Data(Acquire) 가져오기
@@ -225,5 +227,11 @@ public class EggPanelManager : MonoBehaviour
         // 돌아가고 있는 코루틴을 멈추지 않으면 
         // 버튼을 누르지 않고 자동으로 창이 종료되었을 때 코루틴이 실행되어 정지된 시간을 풀어버림
         StopCoroutine(Close);
+    }
+
+    // 알에 아이디 부여
+    public void SetEggID()
+    {
+        eggIndex++;
     }
 }

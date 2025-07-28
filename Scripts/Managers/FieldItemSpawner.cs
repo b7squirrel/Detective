@@ -30,6 +30,11 @@ public class FieldItemSpawner : MonoBehaviour
     float[] eggSpawnTime;
     float eggSpawnCoolDown;
     int eggSpawnIndex;
+    int eggBoxNums; // 알 상자에 아이디 부여
+    int eggNums = -1; // 알에 아이디 부여
+
+    // 알 디버그
+    int eggBugNums; // 알의 갯수 오류가 난 횟수
 
     public void Init(float[] _eggSpawnTime)
     {
@@ -49,7 +54,7 @@ public class FieldItemSpawner : MonoBehaviour
             SpawnObject(objectsToSpawn, numPoints);
             itemBoxSpawnCounter = 0f;
         }
-        
+
         if (MSBspawnCounter >= frequencyMSB && GameManager.instance.IsBossStage == false)
         {
             int index = Mathf.Clamp((int)(MSBspawnCounter / 60f), 0, timeIntervals.Length - 1);
@@ -87,6 +92,7 @@ public class FieldItemSpawner : MonoBehaviour
         if (eggBox != null)
         {
             eggBox.position = GetRandomSpawnPoint();
+            eggBoxNums++; // 알 상자가 스폰될 때 알 상자 갯수 증가
         }
     }
     Vector2 GetRandomSpawnPoint()
@@ -128,5 +134,15 @@ public class FieldItemSpawner : MonoBehaviour
             yield return null;
         }
         yield break;
+    }
+
+    public bool isEggSpawnable()
+    {
+        eggNums++;
+        bool spawnable = eggNums > eggBoxNums ? false : true;
+        Debug.Log($"eggNums = {eggNums} , eggBoxNums = {eggBoxNums} - spawnable = {spawnable}");
+        if (spawnable == false) eggNums--; //알 갯수는 다시 되돌림. 그렇지 않으면 앞으로는 계속 eggNum이 eggBox보다 크게 된다
+        Debug.Log($"알 스폰 오류 횟수 = {eggBugNums}");
+        return spawnable;
     }
 }

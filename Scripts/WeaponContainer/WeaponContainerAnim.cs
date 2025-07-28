@@ -83,8 +83,8 @@ public class WeaponContainerAnim : MonoBehaviour
                 {
                     sr[i + 1].gameObject.SetActive(true);
                     equipSprites[i] = _wd.defaultItems[i].spriteRow;
-                    Debug.Log($"{_wd.Name}의 {i}스프라이트가 있습니다.");
-                    Debug.Log($"{_wd.Name}의 {equipSprites[i].sprites[0].name}스프라이트가 있습니다.");
+                    // Debug.Log($"{_wd.Name}의 {i}스프라이트가 있습니다.");
+                    // Debug.Log($"{_wd.Name}의 {equipSprites[i].sprites[0].name}스프라이트가 있습니다.");
                 }
                 else
                 {

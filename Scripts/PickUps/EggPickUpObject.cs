@@ -5,7 +5,6 @@ using UnityEngine;
 public class EggPickUpObject : Collectable, IPickUpObject
 {
     [SerializeField] List<UpgradeData> upgradeToPick;
-    int index;
 
     public override void OnHitMagnetField(Vector2 direction)
     {
@@ -37,7 +36,7 @@ public class EggPickUpObject : Collectable, IPickUpObject
             // 지금은 일단 아무것도 하지 않게 했음
             return;
         }
-        index = Random.Range(0, upgradeToPick.Count);
+        int index = Random.Range(0, upgradeToPick.Count);
 
         string weaponName = upgradeToPick[index].weaponData.Name;
 
@@ -53,8 +52,8 @@ public class EggPickUpObject : Collectable, IPickUpObject
         Character character = collision.GetComponent<Character>();
         if (character != null)
         {
-            // Collider도 즉시 비활성화
-            GetComponent<Collider2D>().enabled = false;
+            // // Collider도 즉시 비활성화
+            // GetComponent<Collider2D>().enabled = false;
 
             UIEvent eggEvent = new UIEvent(() => OnPickUp(character), "Egg");
             GameManager.instance.popupManager.EnqueueUIEvent(eggEvent);
