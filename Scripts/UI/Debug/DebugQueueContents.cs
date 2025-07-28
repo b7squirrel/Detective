@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +14,8 @@ public class DebugQueueContents : MonoBehaviour
 
     void UpdateQueueText()
     {
-        text.text = "Queue Contents:\n";
+        // text.text = "Queue Contents:\n";
+        text.text = "";
 
         foreach (var item in events)
         {

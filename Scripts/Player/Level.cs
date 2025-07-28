@@ -268,6 +268,9 @@ public class Level : MonoBehaviour
     // 알에서 중복되는 무기가 나오지 않도록 하기위한 플래그
     public bool HavingWeapon(UpgradeData item)
     {
+        WeaponData leadWd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
+        if (item.weaponData.Name == leadWd.Name) return true;
+
         List<UpgradeData> weaponUpgrade = new();
         for (int i = 0; i < acquiredUpgrades.Count; i++)
         {

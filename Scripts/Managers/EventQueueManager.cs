@@ -8,7 +8,7 @@ public class EventQueueManager : MonoBehaviour
     Queue<IEnumerator> eventQueue = new Queue<IEnumerator>();
     bool isProcessing = false;
 
-    [Header("µğ¹ö±ë")]
+    [Header("ë””ë²„ê·¸")]
     public bool processing = false;
 
     void Awake()
@@ -23,7 +23,7 @@ public class EventQueueManager : MonoBehaviour
         {
             StartCoroutine(ProcessQueue());
         }
-        Debug.Log("Å¥¿¡ ÀÖ´Â ÀÌº¥Æ® ¼ö = " + eventQueue.Count);
+        Debug.Log("ëŒ€ê¸° ì¤‘ì¸ ì´ë²¤íŠ¸ ìˆ˜ = " + eventQueue.Count);
 
     }
 
