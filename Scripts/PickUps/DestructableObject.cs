@@ -77,6 +77,13 @@ public class DestructableObject : MonoBehaviour, Idamageable
         gameObject.SetActive(false);
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            DestroyObject();
+        }       
+    }
     bool IsOutOfRange()
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();

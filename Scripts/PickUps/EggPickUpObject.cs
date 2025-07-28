@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,12 +53,21 @@ public class EggPickUpObject : Collectable, IPickUpObject
         Character character = collision.GetComponent<Character>();
         if (character != null)
         {
-            UIEvent eggEvent = new UIEvent(() => OnPickUp(character), "Egg"); 
+            // Collider도 즉시 비활성화
+            GetComponent<Collider2D>().enabled = false;
 
+            UIEvent eggEvent = new UIEvent(() => OnPickUp(character), "Egg");
             GameManager.instance.popupManager.EnqueueUIEvent(eggEvent);
-
             SoundManager.instance.Play(pickup);
-            gameObject.SetActive(false);
+
+            // 다음 프레임에서 비활성화 (더 안전)
+            StartCoroutine(DeactivateNextFrame());
         }
+    }
+
+    private IEnumerator DeactivateNextFrame()
+    {
+        yield return null; // 한 프레임 대기
+        gameObject.SetActive(false);
     }
 }

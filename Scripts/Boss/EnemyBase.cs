@@ -294,7 +294,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
-        Debug.Log("nextVec = " + nextVec);
     }
     #endregion
 
