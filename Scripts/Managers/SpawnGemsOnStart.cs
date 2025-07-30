@@ -40,7 +40,7 @@ public class SpawnGemsOnStart : MonoBehaviour
 
         Vector2 posChest =
             new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadiusForChest, innerRadiusForChest);
-        GameObject chest = manager.poolManager.GetMisc(chestPrefab);
-        chest.transform.position = posChest;
+
+        GameManager.instance.fieldItemSpawner.SpawnEggBox(posChest);
     }
 }

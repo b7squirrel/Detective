@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: bea0536fd789a9b41b496e40c24379a5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -443,11 +443,12 @@ MonoBehaviour:
   numberOfProjectile: 2
   maxProjectile: 100
   timeToAttack: 5
-  timeToDropSlime: 0.5
+  slimeDropPos: {fileID: 0}
+  prevDir: {x: 0, y: 0}
   ShootPoint: {fileID: 487513323129266538}
+  dialogBubblePoint: {fileID: 0}
   dustPoint: {fileID: 1199690674249790336}
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
-  teleportEffectPrefab: {fileID: 0}
   halfWallBouncerNumber: 13
   col: {fileID: 0}
   deadBody: {fileID: 1432597800540744455, guid: 5c1f04be75c8cde4ab66104ee2865cbb, type: 3}
@@ -467,6 +468,11 @@ MonoBehaviour:
   fallDownSFX: {fileID: 8300000, guid: 65c88103c5dfa4d4a942bfc6a70e604c, type: 3}
   dieSFX: {fileID: 8300000, guid: 8c325d52ceb15424eb350b25efcd946a, type: 3}
   dot: {fileID: 534593963739121254, guid: 5d384957a642c924b8656c26eb946e34, type: 3}
+  stateDisplayPrefab: {fileID: 0}
+  debugState: 0
+  stateDiplayPoint: {fileID: 0}
+  debugSetState: 0
+  desiredStateIndex: 0
 --- !u!114 &588927070903608866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,9 +502,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29db5ba63dd945659a6f10c89a66440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slimeDropPrefab: {fileID: 316917546869292117, guid: 1cfe962c76946449e9d4f1a9393e7895, type: 3}
-  slimeDropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
-  slimeDropDamage: 8
+  dropPrefab: {fileID: 0}
+  DropOnLandingPrefab: {fileID: 0}
+  dropDamage: 0
   slowDownFactor: 0.7
 --- !u!1 &7694664301936465618
 GameObject:

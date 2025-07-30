@@ -3172,7 +3172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1445503499187216344, guid: 495b38f6391e047d083df293c8508022, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.15
+      value: 1.038
       objectReference: {fileID: 0}
     - target: {fileID: 1445503499187216344, guid: 495b38f6391e047d083df293c8508022, type: 3}
       propertyPath: m_LocalPosition.z
@@ -31566,6 +31566,7 @@ MonoBehaviour:
   cheerGroup: {fileID: 8300000, guid: 87230dfc327e2744c851b594c72f631a, type: 3}
   jumpUp: {fileID: 8300000, guid: 38ef9490c2e63254cbcf0d95d76fd9c1, type: 3}
   breakingEgg: {fileID: 8300000, guid: 492aafab15fa5dd43be81b12f5170836, type: 3}
+  eggIndex: 0
 --- !u!114 &1834188290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31882,7 +31883,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 395c2a714d4c2e940bd0fb20e5c12208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  processing: 0
 --- !u!114 &1834188312
 MonoBehaviour:
   m_ObjectHideFlags: 0
