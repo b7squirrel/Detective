@@ -12,14 +12,15 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] PauseManager pauseManager;
     [SerializeField] GameObject oriNameGroup;
     [SerializeField] GameObject oriName;
-    [SerializeField] GameObject yayText;
     [SerializeField] GameObject nameBar;
     [SerializeField] GameObject newKidText;
     [SerializeField] GameObject birdFlock;
     [SerializeField] GameObject flashEffect;
     [SerializeField] ParticleSystem twinkleStarsParticle;
+    [SerializeField] GameObject comicsLines; // 집중선 이펙트
     [SerializeField] GameObject blackBGPanel;
     [SerializeField] GameObject whiteBGPanel;
+    [SerializeField] GameObject eggButtonFullScreen; // 화면 전체를 클릭하면 높은 등급의 오리 확률이 올라가도록
     EggButton eggButton; // Egg Button에 접근해서 레어오리 확률을 초기화 시키기 위해
     RectTransform eggImageRecTransform; // 알 이미지를 비활성화 시키면 코루틴들이 의도하지 않게 작동하므로 위치를 화면 밖으로 이동시키기 위해
 
@@ -107,7 +108,6 @@ public class EggPanelManager : MonoBehaviour
         oriNameGroup.SetActive(false);
         oriName.SetActive(false);
         nameBar.SetActive(false);
-        yayText.SetActive(false);
         birdFlock.SetActive(false);
         flashEffect.SetActive(false);
         twinkleStarsParticle.Stop();
@@ -125,7 +125,6 @@ public class EggPanelManager : MonoBehaviour
         eggPanel.SetActive(true);
         EggImageUp(true);
         newKidText.SetActive(true);
-
         blackBGPanel.SetActive(true);
     }
 
@@ -135,6 +134,8 @@ public class EggPanelManager : MonoBehaviour
         Vector2 currentPos = eggImageRecTransform.anchoredPosition;
         float yPos = isActive ? -194f : -3000f;
         eggImageRecTransform.anchoredPosition = new Vector2(currentPos.x, yPos);
+
+        eggButtonFullScreen.SetActive(isActive);
 
         // eggImage.SetActive(isActive);
 
@@ -148,7 +149,7 @@ public class EggPanelManager : MonoBehaviour
         oriNameGroup.SetActive(true);
         oriName.SetActive(true);
         nameBar.SetActive(true);
-        yayText.SetActive(true);
+        comicsLines.SetActive(true);
 
         eggPanelAnim.SetTrigger("KidUp");
         SoundManager.instance.Play(oriSound);
@@ -207,6 +208,7 @@ public class EggPanelManager : MonoBehaviour
         SoundManager.instance.Play(jumpUp);
 
         yield return new WaitForSecondsRealtime(0.32f); // 애니메이션 종료
+
         blackBGPanel.SetActive(false);
         CloseButtonPressed();
     }
@@ -218,9 +220,9 @@ public class EggPanelManager : MonoBehaviour
         newKidText.SetActive(false);
         oriName.SetActive(false);
         nameBar.SetActive(false);
-        yayText.SetActive(false);
         birdFlock.SetActive(false);
         twinkleStarsParticle.Stop();
+        comicsLines.SetActive(false);
         CloseNewKidImage();
 
         GameManager.instance.popupManager.IsUIDone = true;

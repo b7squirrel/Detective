@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,9 +11,14 @@ public class PopupManager : MonoBehaviour
 
     [Header("디버그")]
     [SerializeField] bool debugMode;
+    [SerializeField] GameObject debugPanel; // 디버그 모드일때만 활성화
     [SerializeField] List<string> queueContents = new List<string>();
     [SerializeField] DebugQueueContents contents;
 
+    void Start()
+    {
+        debugPanel.SetActive(debugMode);
+    }
     void Update()
     {
         if (isProcessing || uiEventQueue.Count <= 0)

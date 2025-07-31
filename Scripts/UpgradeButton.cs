@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class UpgradeButton : MonoBehaviour
 {
-    [SerializeField] Image iconWeapon;
     [SerializeField] Image iconItem;
     [SerializeField] TMPro.TextMeshProUGUI upgradeName;
     [SerializeField] TMPro.TextMeshProUGUI description; // 설명
@@ -58,9 +57,6 @@ public class UpgradeButton : MonoBehaviour
 
         if (upgradeData.weaponData != null)
         {
-            iconWeapon.sprite = upgradeData.weaponData.charImage;
-            iconWeapon.preserveAspect = true;
-            iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0f);
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
 
 
@@ -85,7 +81,6 @@ public class UpgradeButton : MonoBehaviour
             iconItem.sprite = upgradeData.item.charImage;
             iconItem.preserveAspect = true;
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 1f);
-            iconWeapon.color = new Color(iconWeapon.color.r, iconWeapon.color.g, iconWeapon.color.b, 0);
             upgradePanelWeaponIcon.gameObject.SetActive(false);
             iconItem.SetNativeSize();
 
@@ -167,7 +162,6 @@ public class UpgradeButton : MonoBehaviour
 
     internal void Clean()
     {
-        iconWeapon.sprite = null;
         iconItem.sprite = null;
         ClearLevelstars();
         IsClicked = false;
