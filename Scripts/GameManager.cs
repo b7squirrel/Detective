@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
-using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -164,7 +163,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region 확인 버튼
+    #region Victory, Defeat 패널의 확인 버튼
     public void ActivateConfirmationButton(float _delayToActivate)
     {
         StartCoroutine(ActivateButton(_delayToActivate));

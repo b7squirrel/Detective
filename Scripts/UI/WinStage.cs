@@ -9,7 +9,6 @@ public class WinStage : MonoBehaviour
     public void OpenPanel()
     {
         winStage.SetActive(true);
-        // GameManager.instance.darkBG.SetActive(true);
 
         // 스테이지에서 획득한 코인만 표시.
         int killNum = GetComponent<KillManager>().GetCurrentKills();

@@ -8,9 +8,22 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] GameObject rayBGEffect;
     [SerializeField] bool isDarkBG;
     [SerializeField] AudioClip resultSound;
+    [SerializeField] GameObject[] confetties;
 
     public void InitAwards(int _killNum, int _coinNum, int _stageNum)
     {
+        if (confetties != null)
+        {
+            foreach (var item in confetties)
+            {
+                item.SetActive(true);
+                ParticleSystem ps = item.GetComponent<ParticleSystem>();
+                if (ps != null)
+                {
+                    ps.Play(); // 명시적으로 파티클 재생
+                }
+            }
+        }
 
         SoundManager.instance.Play(resultSound);
         killText.text = _killNum.ToString();
@@ -29,6 +42,6 @@ public class ResultPanel : MonoBehaviour
             GameManager.instance.darkBG.SetActive(false);
             // rayBGEffect.SetActive(true);
         }
-        GameManager.instance.ActivateConfirmationButton(1.31f);
+        GameManager.instance.ActivateConfirmationButton(2.7f);
     }
 }
