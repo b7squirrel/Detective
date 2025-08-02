@@ -21,13 +21,13 @@ public class ResultPanel : MonoBehaviour
         {
             GameManager.instance.darkBG.SetActive(true);
             GameManager.instance.lightBG.SetActive(false);
-            rayBGEffect.SetActive(false);
+            // rayBGEffect.SetActive(false);
         }
         else
         {
             GameManager.instance.lightBG.SetActive(true);
             GameManager.instance.darkBG.SetActive(false);
-            rayBGEffect.SetActive(true);
+            // rayBGEffect.SetActive(true);
         }
         GameManager.instance.ActivateConfirmationButton(1.31f);
     }

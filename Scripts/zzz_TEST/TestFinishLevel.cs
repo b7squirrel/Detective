@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TestFinishLevel : MonoBehaviour
 {
-    int index = 0; // ¿©·¯¹ø Ãæµ¹À» ¹æÁö
+    int index = 0; // í•œ ë²ˆë§Œ ì¶©ëŒ ì²˜ë¦¬í•˜ë„ë¡
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
