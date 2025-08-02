@@ -9,6 +9,10 @@ public class PauseCardDisp : MonoBehaviour
     [SerializeField] GameObject starPrefab;
     [SerializeField] GameObject leadTag;
     [SerializeField] GameObject synergyGroup;
+    [SerializeField] GameObject[] synergytags;
+    [SerializeField] GameObject synergyDoneGroup;
+    [SerializeField] GameObject newWeaponText;
+    [SerializeField] GameObject newItemText;
 
     GameObject[] stars;
     public string Name { get; private set; }
@@ -21,6 +25,11 @@ public class PauseCardDisp : MonoBehaviour
     {
         // 별
         SetNumStar(_wd.stats.currentLevel, true);
+
+        // 새로운 오리 텍트스 표시
+        newWeaponText.SetActive(false);
+        newItemText.SetActive(false);
+        if (_wd.stats.currentLevel == 0) newWeaponText.SetActive(true);
 
         // 등급에 따른 카드 색깔
         for (int i = 0; i < StaticValues.MaxGrade; i++)
@@ -88,7 +97,7 @@ public class PauseCardDisp : MonoBehaviour
     }
     public void UpdatePauseCardLevel(int _level, bool _isWeapon, bool _isSynergy)
     {
-        if(_isSynergy)
+        if (_isSynergy)
         {
             SetNumStar(0, _isWeapon);
             synergyGroup.SetActive(true);
@@ -96,6 +105,10 @@ public class PauseCardDisp : MonoBehaviour
             return;
         }
         SetNumStar(_level, _isWeapon);
+
+        // 새로운 오리, 새로운 아이템 텍스트 숨기기
+        newWeaponText.SetActive(false);
+        newItemText.SetActive(false);
     }
     #endregion
 
@@ -104,6 +117,11 @@ public class PauseCardDisp : MonoBehaviour
     {
         // 별
         SetNumStar(_item.stats.currentLevel, false);
+
+        // 새로운 아이템 텍스트 표시
+        newWeaponText.SetActive(false);
+        newItemText.SetActive(false);
+        if (_item.stats.currentLevel == 0) newItemText.SetActive(true);
 
         // 카드 색깔은 회색
         // 등급에 따른 카드 색깔
@@ -119,6 +137,10 @@ public class PauseCardDisp : MonoBehaviour
         synergyGroup.SetActive(false);
         // 시너지 아이콘 비활성화
         synergyIcon.gameObject.SetActive(false);
+        foreach (var item in synergytags)
+        {
+            item.SetActive(false);
+        }
     }
     #endregion
 }

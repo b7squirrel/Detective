@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,8 @@ public class UpgradeButton : MonoBehaviour
     [SerializeField] GameObject[] stars; // 활성, 비활성 시킬 별
     [SerializeField] GameObject unSelectionPanel; // 선택되지 않으면 카드를 어둡게 하는 역할
     [SerializeField] GameObject titleGroup; // 선택되지 않은 카드의 타이틀을 숨기기 위해. 어두운 레이어를 올릴 때 불편함
+    [SerializeField] GameObject newWeaponText; // 새로운 오리! 텍스트
+    [SerializeField] GameObject newItemText; // 새로운 아이템! 텍스트
     [SerializeField] Image titleSticker; // 타이틀 포스트잇 색깔을 조절하기 위해
     [SerializeField] Color weaponStickerColor; // 오리 포스트잇 색깔
     [SerializeField] Color itemStickerColor; // 아이템 포스트잇 색깔
@@ -54,6 +57,9 @@ public class UpgradeButton : MonoBehaviour
         anim.SetTrigger("Reset");
 
         titleGroup.SetActive(true);
+        // 일단 비활성화 하고 더 아래쪽에서 조건에 따라 표시하거나 비활성화 한채로 두기
+        newWeaponText.SetActive(false);
+        newItemText.SetActive(false);
 
         if (upgradeData.weaponData != null)
         {
@@ -123,6 +129,9 @@ public class UpgradeButton : MonoBehaviour
             panel_weapon.SetActive(true);
             panel_instant_items.SetActive(false);
 
+            // 처음 획득한 카드라면 새로운 오리! 텍스트 표시
+            if (weaponContainer.GetWeaponLevel(upgradeData.weaponData) == 0) newWeaponText.SetActive(true);
+
             titleSticker.color = weaponStickerColor;
         }
         else if (upgradeData.upgradeType == UpgradeType.ItemUpgrade || upgradeData.upgradeType == UpgradeType.ItemGet)
@@ -134,6 +143,9 @@ public class UpgradeButton : MonoBehaviour
             panel_synergy.SetActive(false);
             panel_weapon.SetActive(false);
             panel_instant_items.SetActive(false);
+
+            // 처음 획득한 카드라면 새로운 아이템! 텍스트 표시
+            if (passiveItems.GetItemLevel(upgradeData.item) == 0) newItemText.SetActive(true);
 
             titleSticker.color = itemStickerColor;
         }

@@ -46,12 +46,11 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         charAnim.enabled = true;
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
-        charFaceExpression.gameObject.SetActive(true);
+        charFaceExpression.SetActive(true);
         if (charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
         charFaceImage.sprite = weaponData.faceImage;
 
         Level.text = "";
-        if (leadTag != null) leadTag.gameObject.SetActive(false);
 
         // 카드 이름 텍스트
         Title.text = weaponData.DisplayName;
@@ -61,14 +60,11 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         if (cardData == null) return;
 
         // 리드오리 태그
-        if (leadTag != null)
+        leadTag.SetActive(false);
+        if (cardData.StartingMember == StartingMember.Zero.ToString())
         {
-            leadTag.gameObject.SetActive(false);
-            if (cardData.StartingMember == StartingMember.Zero.ToString())
-            {
-                // Debug.Log($"{cardData.Name}의 Starting Member 값은 {cardData.StartingMember}입니다.");
-                leadTag.gameObject.SetActive(true);
-            }
+            // Debug.Log($"{cardData.Name}의 Starting Member 값은 {cardData.StartingMember}입니다.");
+            leadTag.SetActive(true);
         }
 
         // 별과 카드 색깔
@@ -120,7 +116,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
     {
         // 리드오리 태그
-        if (leadTag != null) leadTag.gameObject.SetActive(false);
+        leadTag.SetActive(false);
 
         // 카드 이름 텍스트
         Title.text = itemData.DisplayName;
