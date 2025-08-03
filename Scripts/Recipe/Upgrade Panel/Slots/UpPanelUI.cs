@@ -16,13 +16,18 @@ public class UpPanelUI : MonoBehaviour
 
     [Header("합성 이펙트")]
     [SerializeField] Transform stars; // 합성된 카드의 별을 반짝이게 하기 위해서
-    [SerializeField] Animator upgradeEffect;
+    [SerializeField] Animator upEffectAnim; // 합성이 성공한 순간 번쩍하는 이펙트의 animator
+    [SerializeField] GameObject upgradeEffect; // 합성이 성공한 순간 번찍하는 이펙트
+    [SerializeField] GameObject blingBlingEffect; // 카드 주변에서 반짝반짝
     [SerializeField] Animator starBlingEffect;
     [SerializeField] AudioClip gradeBlingSound;
     [SerializeField] AudioClip starBlingBeamSound;
     [SerializeField] AudioClip starBlingSound;
     [SerializeField] RectTransform whiteEffectOnMerge;
+    [SerializeField] GameObject newStatPanel;
+    [SerializeField] GameObject tabToContinue;
     UpPanelManager upPanelManager;
+    UICameraShake uiCameraShake;
     Coroutine starCoroutine;
 
     [Header("아래쪽 탭 제어")]
@@ -37,7 +42,9 @@ public class UpPanelUI : MonoBehaviour
         plus.gameObject.SetActive(false);
         confirmationButtonContainer.SetActive(false);
         upgradeSuccessPanel.SetActive(false);
-        upgradeEffect.gameObject.SetActive(true);
+        upgradeEffect.SetActive(true);
+        blingBlingEffect.SetActive(false);
+        starBlingEffect.gameObject.SetActive(false);
 
         fieldSlotPanel.transform.localScale = Vector2.one;
         //fieldSlotPanel.transform.localScale = new Vector2(.95f, 1f);
@@ -192,20 +199,35 @@ public class UpPanelUI : MonoBehaviour
     IEnumerator OpenSuccessPanelCo(CardData cardData, bool isGradeUp)
     {
         fieldSlotPanel.SetActive(false);
+        // 합성 성공 패널 활성화. 그러나 아직 합성된 카드, 새로운 스탯 패널, 탭해서 계속하기는 숨김 
         upgradeSuccessPanel.SetActive(true);
+        upSuccess.gameObject.SetActive(false);
+        newStatPanel.SetActive(false);
+        tabToContinue.SetActive(false);
 
         // 타격감 White 이펙트
         whiteEffectOnMerge.gameObject.SetActive(true);
         whiteEffectOnMerge.GetComponent<Image>().color = Color.white;
         whiteEffectOnMerge.localScale = Vector2.one;
-        whiteEffectOnMerge.DOScale(1.2f, .4f);
-        whiteEffectOnMerge.GetComponent<Image>().DOFade(0, .6f);
+        // whiteEffectOnMerge.DOScale(1.2f, .4f);
+        whiteEffectOnMerge.DOScale(.5f, 1f); // 1초 동안 절반으로 줄어들기 (antic)
+        
+        yield return new WaitForSeconds(1.7f);
+        upgradeEffect.SetActive(true);  // 방사형 이펙트. 버튼 클릭 이펙트 재활용
+        upEffectAnim.SetTrigger("On");
 
-        upgradeEffect.gameObject.SetActive(true);
-        upgradeEffect.SetTrigger("On");
+        upSuccess.gameObject.SetActive(true); // 합성된 카드 절반 크기로 활성화
+        upSuccess.localScale = .5f * Vector2.one;
+        upSuccess.DOScale(1.3f, .07f);
+
+        whiteEffectOnMerge.DOScale(1.8f, .1f); // 0.2초 동안 1.3배 커지기 (overshoot)
+        whiteEffectOnMerge.GetComponent<Image>().DOFade(0, .6f); // 0.6초 동안 사라지기
+
         yield return new WaitForSeconds(.6f);
-
-        upgradeEffect.gameObject.SetActive(false);
+        blingBlingEffect.SetActive(true);
+        newStatPanel.SetActive(true);
+        tabToContinue.SetActive(true);
+        upgradeEffect.SetActive(false);
         //upSuccess.localScale = .8f * Vector2.one;
         //upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
 

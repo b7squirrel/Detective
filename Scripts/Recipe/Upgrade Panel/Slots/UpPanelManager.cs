@@ -475,12 +475,20 @@ public class UpPanelManager : MonoBehaviour
         upPanelUI.MergingCardsUI();
         upPanelUI.OffUpgradeConfirmationUI();
 
+        yield return new WaitForSeconds(.05f); // 카드가 움직이고 나서 잠시 후에 카메라 쉐이크가 일어나도록
+        // 카메라 쉐이크
+        FindObjectOfType<UICameraShake>().Shake(1.85f, 12f); // 1.65초 동안 12의 크기로 흔들기
+
         yield return new WaitForSeconds(.15f);  // 1.5초 동안 두 카드가 가운데로 모인 후
+
+        // 카메라 쉐이크 (1초 가량)
+        // 합성 이펙트
+
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
         ClearAllFieldSlots();
         upPanelUI.DeactivateSpecialSlots();
-        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, isGradeUp);
+        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, isGradeUp); // 강조되어야 할 부분들. 별의 갯수 등을 강조해 주는 연출
 
         // 다시 터치가 가능하도록
         blockTouchPanel.SetActive(false);
