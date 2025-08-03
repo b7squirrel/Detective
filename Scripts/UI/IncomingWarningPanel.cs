@@ -1,11 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IncomingWarningPanel : MonoBehaviour
 {
     [SerializeField] TMPro.TextMeshProUGUI incomingText;
     [SerializeField] GameObject incomingWarningPanel;
     [SerializeField] Animator anim;
+    [SerializeField] Image tagColorImage;
+    [SerializeField] Color tagColor;
 
     [SerializeField] AudioClip startingSound;
     [SerializeField] AudioClip closingSound;
@@ -14,6 +17,7 @@ public class IncomingWarningPanel : MonoBehaviour
     public void Init()
     {
         incomingText.text = "적들이 몰려옵니다!!!";
+        tagColorImage.color = tagColor;
         UIEvent incomingEvent = new UIEvent(() => ActivateWarning(), "Incoming");
         GameManager.instance.popupManager.EnqueueUIEvent(incomingEvent);
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ResultPanel : MonoBehaviour
@@ -5,49 +6,44 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI killText;
     [SerializeField] TMPro.TextMeshProUGUI coinText;
     [SerializeField] TMPro.TextMeshProUGUI stageNumber;
-    [SerializeField] GameObject rayBGEffect;
     [SerializeField] bool isDarkBG;
     [SerializeField] AudioClip resultSound;
-    [SerializeField] GameObject[] confetties;
     [SerializeField] CardDisp cardDisp; // 플레이어를 보여줄 cardDisp
+    [SerializeField] Animator charAnim; // 오리의 애니메이터
+
     [Header("오리폭죽")]
     [SerializeField] ImageBouncerManager bouncerManager; // 오리 폭죽
     [SerializeField] int confettiNums; // 오리 수
 
-    public void InitAwards(int _killNum, int _coinNum, int _stageNum)
+    public void InitAwards(int killNum, int coinNum, int stageNum, bool isWinningStage)
     {
-        if (confetties != null)
-        {
-            foreach (var item in confetties)
-            {
-                item.SetActive(true);
-                // ParticleSystem ps = item.GetComponent<ParticleSystem>();
-                // if (ps != null)
-                // {
-                //     ps.Play(); // 명시적으로 파티클 재생
-                // }
-            }
-        }
-        bouncerManager.Jump(confettiNums); // 150마리 폭죽
+        StartCoroutine(InitAwardsCo(killNum, coinNum, stageNum, isWinningStage));
+    }
+
+    IEnumerator InitAwardsCo(int killNum, int coinNum, int stageNum, bool isWinningStage)
+    {
+        if(isWinningStage) bouncerManager.Jump(confettiNums); // 150마리 폭죽
+        
+
+        yield return new WaitForSecondsRealtime(.5f);
 
         SetEquipSpriteRow();
+        if (isWinningStage == false) charAnim.SetTrigger("Hit"); // 패배 화면이라면 오리도 패배 모션으로
 
         SoundManager.instance.Play(resultSound);
-        killText.text = _killNum.ToString();
-        coinText.text = _coinNum.ToString();
-        stageNumber.text = _stageNum.ToString();
+        killText.text = killNum.ToString();
+        coinText.text = coinNum.ToString();
+        stageNumber.text = stageNum.ToString();
 
         if (isDarkBG)
         {
             GameManager.instance.darkBG.SetActive(true);
             GameManager.instance.lightBG.SetActive(false);
-            // rayBGEffect.SetActive(false);
         }
         else
         {
             GameManager.instance.lightBG.SetActive(true);
             GameManager.instance.darkBG.SetActive(false);
-            // rayBGEffect.SetActive(true);
         }
         GameManager.instance.ActivateConfirmationButton(2.7f);
     }

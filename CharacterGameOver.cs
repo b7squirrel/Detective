@@ -37,6 +37,6 @@ public class CharacterGameOver : MonoBehaviour
         // 현재 스테이지
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
 
-        gameOverPanel.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum);
+        gameOverPanel.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, false);
     }
 }

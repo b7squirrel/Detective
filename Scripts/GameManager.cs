@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public Player player;
     public Character character;
+    public CharacterGameOver characterGameOver;
     public PoolManager poolManager;
     public EggPanelManager eggPanelManager;
     public BossWarningPanel bossWarningPanel;

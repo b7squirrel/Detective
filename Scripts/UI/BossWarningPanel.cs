@@ -1,11 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossWarningPanel : MonoBehaviour
 {
     [SerializeField] TMPro.TextMeshProUGUI bossName;
     [SerializeField] GameObject bossWarningPanel;
     [SerializeField] Animator anim;
+    [SerializeField] Image tagColorImage;
+    [SerializeField] Color tagColor;
 
     [SerializeField] AudioClip startingSound;
     [SerializeField] AudioClip closingSound;
@@ -14,6 +17,7 @@ public class BossWarningPanel : MonoBehaviour
     public void Init(string _name)
     {
         bossName.text = _name + " !";
+        tagColorImage.color = tagColor;
         UIEvent bossEvent = new UIEvent(() => ActivateWarning(), "Boss");
         GameManager.instance.popupManager.EnqueueUIEvent(bossEvent);
     }

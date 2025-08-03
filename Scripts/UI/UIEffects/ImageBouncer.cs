@@ -16,6 +16,7 @@ public class ImageBouncer : MonoBehaviour
     {
         if (trnsObject == null) trnsObject = GetComponent<RectTransform>();
     }
+    
     void Update()
     {
         if (isInitDone == false) return;
@@ -33,15 +34,18 @@ public class ImageBouncer : MonoBehaviour
         trnsImage.anchoredPosition = Vector2.zero;
         this.yLandingPos = yLandingPos;
     }
+    
     void UpdatePosition()
     {
         if (isGrounded == false)
         {
-            verticalVelocity += gravity * Time.deltaTime;
+            // Time.unscaledDeltaTime 사용 (타임스케일 무시)
+            verticalVelocity += gravity * Time.unscaledDeltaTime;
             
-            trnsImage.anchoredPosition += new Vector2(horizontalVelocity, verticalVelocity) * Time.deltaTime;
+            trnsImage.anchoredPosition += new Vector2(horizontalVelocity, verticalVelocity) * Time.unscaledDeltaTime;
         }
     }
+    
     void CheckGroundHit()
     {
         if (trnsImage.position.y < yLandingPos && !isGrounded)

@@ -17,9 +17,9 @@ public class WinStage : MonoBehaviour
         // 보스가 죽는 순간 이미 스테이지가 올라갔으니까 1을 빼준 수를 넘겨준다.
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber() - 1;
 
-        winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum);
+        winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, true);
 
-        // 시간이 멈추면 오리 폭죽이 작동하지 않으므로
-        // GetComponent<PauseManager>().PauseGame(); 
+        GetComponent<PauseManager>().PauseGame();
+        Debug.Log("윈 스테이지");
     }
 }

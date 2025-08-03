@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TestFinishLevel : MonoBehaviour
 {
+    [SerializeField] bool isGameOver;
     int index = 0; // 한 번만 충돌 처리하도록
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -11,7 +12,14 @@ public class TestFinishLevel : MonoBehaviour
         if (collision.gameObject.GetComponent<Player>() != null)
         {
             index++;
-            GameManager.instance.GetComponent<WinStage>().OpenPanel();
+            if (isGameOver)
+            {
+                GameManager.instance.characterGameOver.GameOver();
+            }
+            else
+            {
+                GameManager.instance.GetComponent<WinStage>().OpenPanel();
+            }
         }
     }
 }

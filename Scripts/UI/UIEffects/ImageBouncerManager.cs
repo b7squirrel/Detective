@@ -10,6 +10,7 @@ public class ImageBouncerManager : MonoBehaviour
     [SerializeField] float gravity;
     [SerializeField] float xOffsetRange;
     [SerializeField] float yOffsetRange;
+    
     [Header("Sound")]
     [SerializeField] AudioClip oriSound;
 
@@ -30,7 +31,9 @@ public class ImageBouncerManager : MonoBehaviour
 
     IEnumerator JumpCo(int nums, float timeOffset)
     {
-        yield return new WaitForSeconds(timeOffset);
+        // WaitForSecondsRealtime 사용 (타임스케일 무시)
+        yield return new WaitForSecondsRealtime(timeOffset);
+        
         foreach (var item in rootObjs)
         {
             RectTransform root = item.GetComponent<RectTransform>();

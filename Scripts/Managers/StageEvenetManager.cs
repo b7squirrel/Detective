@@ -26,6 +26,7 @@ public class StageEvenetManager : MonoBehaviour
     MusicManager musicManager;
     public bool IsWinningStage { get; set; }
     Coroutine winStageCoroutine;
+    bool winStageDone; // winStage 초기화가 update에서 일어나는데 반복해서 하지 않도록
 
     public void Init(TextAsset _stageTextData, EnemyData[] _enemyDatas, int _enemyNumForNextEvent, StageMusicType _stageMusicType)
     {
@@ -70,8 +71,9 @@ public class StageEvenetManager : MonoBehaviour
         //if (onStopWatchEffect) return; // 스톱위치가 작동 중이면 이벤트 홀드
         if (IsWinningStage)
         {
-            if (winStageCoroutine == null)
+            if (winStageDone == false)
             {
+                winStageDone = true;
                 WinStage();
             }
             return;
