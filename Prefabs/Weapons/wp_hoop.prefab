@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705506148426016751}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 105}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2950560052302967599
 MonoBehaviour:
@@ -62,10 +62,12 @@ MonoBehaviour:
   weaponToolsExtra: {fileID: 0}
   ShootPointExtra: {fileID: 0}
   EffectPointExtra: {fileID: 0}
+  <NeedParent>k__BackingField: 0
   enemy:
     serializedVersion: 2
     m_Bits: 16576
   hoopProjectile: {fileID: 5722380107684637038, guid: b78812d8cfb87e041a397806d581b79c, type: 3}
+  hoopSynergyProjectile: {fileID: 0}
   projectiles: []
   projectilesSynergy: []
   projSpin: {fileID: 0}

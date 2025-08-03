@@ -19,6 +19,7 @@ public class WinStage : MonoBehaviour
 
         winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum);
 
-        GetComponent<PauseManager>().PauseGame();
+        // 시간이 멈추면 오리 폭죽이 작동하지 않으므로
+        // GetComponent<PauseManager>().PauseGame(); 
     }
 }

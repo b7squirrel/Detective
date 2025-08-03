@@ -10,6 +10,9 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] AudioClip resultSound;
     [SerializeField] GameObject[] confetties;
     [SerializeField] CardDisp cardDisp; // 플레이어를 보여줄 cardDisp
+    [Header("오리폭죽")]
+    [SerializeField] ImageBouncerManager bouncerManager; // 오리 폭죽
+    [SerializeField] int confettiNums; // 오리 수
 
     public void InitAwards(int _killNum, int _coinNum, int _stageNum)
     {
@@ -18,13 +21,14 @@ public class ResultPanel : MonoBehaviour
             foreach (var item in confetties)
             {
                 item.SetActive(true);
-                ParticleSystem ps = item.GetComponent<ParticleSystem>();
-                if (ps != null)
-                {
-                    ps.Play(); // 명시적으로 파티클 재생
-                }
+                // ParticleSystem ps = item.GetComponent<ParticleSystem>();
+                // if (ps != null)
+                // {
+                //     ps.Play(); // 명시적으로 파티클 재생
+                // }
             }
         }
+        bouncerManager.Jump(confettiNums); // 150마리 폭죽
 
         SetEquipSpriteRow();
 

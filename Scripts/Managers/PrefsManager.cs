@@ -10,7 +10,7 @@ public class PrefsManager : MonoBehaviour
 
     private void Start()
     {
-        //DeleteSoundState(); // ÃÖÃÊ °ÔÀÓ ½ÇÇà »óÈ² ÀçÇöÀ» À§ÇØ
+        //DeleteSoundState(); // ê°œë°œ ì¤‘ ì´ˆê¸°í™” ìƒíƒœ í™•ì¸ìš© (ì‚¬ìš©ì ì„¤ì • ì‚­ì œ)
         Load();
 
         soundManager = FindObjectOfType<SoundManager>();
@@ -38,13 +38,13 @@ public class PrefsManager : MonoBehaviour
     }
     void InitSoundState(bool _soundState)
     {
-        // »ç¿îµå, À½¾Ç, ¿É¼Ç »ç¿îµå ¹öÆ° ÀÌ¹ÌÁö ¼Â¾÷
+        // ì‚¬ìš´ë“œ ë§¤ë‹ˆì €, ìŒì•… ë§¤ë‹ˆì €, ì˜µì…˜ í† ê¸€ ë²„íŠ¼ì— ìƒíƒœ ë°˜ì˜
         soundManager.SetState(_soundState);
         musicManager.SetState(_soundState);
 
-        buttonToggle.SetImage(_soundState);
+        buttonToggle.SetImage(_soundState); // ë²„íŠ¼ ì´ë¯¸ì§€ë„ ìƒíƒœì— ë§ê²Œ ì„¤ì •
     }
-    public void SetSouindState()
+    public void SetSouindState() // Toggle ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ í˜¸ì¶œë¨
     {
         soundState = !soundState;
         InitSoundState(soundState);
