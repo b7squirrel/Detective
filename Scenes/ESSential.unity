@@ -65806,6 +65806,7 @@ MonoBehaviour:
   confetties:
   - {fileID: 7538048314302317787}
   - {fileID: 2063275125671058368}
+  cardDisp: {fileID: 3235164102203273248}
 --- !u!4 &1093108058917216419
 Transform:
   m_ObjectHideFlags: 0
@@ -105004,7 +105005,6 @@ GameObject:
   - component: {fileID: 8170106742703563905}
   - component: {fileID: 7217276695410660977}
   - component: {fileID: 3235164102203273248}
-  - component: {fileID: 8092443873962041743}
   m_Layer: 5
   m_Name: PauseSlot
   m_TagString: Untagged
@@ -128939,43 +128939,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8092443873962041743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7415656552451904222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b3301c9a1bc10d4093c7f43aa509bc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  starContainer: {fileID: 4859543067730757253}
-  cardBaseContainer: {fileID: 5519935239894074260}
-  starPrefab: {fileID: 5468452277051132356, guid: b2fe1091ae62cdc4992b7f59db386506, type: 3}
-  leadTag: {fileID: 7133722910329277868}
-  synergyGroup: {fileID: 5979335765445996760}
-  synergytags:
-  - {fileID: 4678273956748437400}
-  - {fileID: 3793613113162624819}
-  - {fileID: 2066362631365102796}
-  - {fileID: 2833106060534492279}
-  - {fileID: 4702206552637044850}
-  - {fileID: 482569648052152735}
-  - {fileID: 573568485061440915}
-  - {fileID: 2024833632592691451}
-  - {fileID: 7743072994949258191}
-  - {fileID: 5868135348477101770}
-  - {fileID: 3936224591762059149}
-  - {fileID: 4768279770836316509}
-  - {fileID: 6951260889194240352}
-  - {fileID: 4974534675880740920}
-  - {fileID: 2891730629140281701}
-  synergyDoneGroup: {fileID: 5979335765445996760}
-  newWeaponText: {fileID: 4536361200151586297}
-  newItemText: {fileID: 5797681718965726476}
-  synergyIcon: {fileID: 6861993452390287393}
 --- !u!95 &8116185921244082676
 Animator:
   serializedVersion: 5

@@ -9,6 +9,7 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] bool isDarkBG;
     [SerializeField] AudioClip resultSound;
     [SerializeField] GameObject[] confetties;
+    [SerializeField] CardDisp cardDisp; // 플레이어를 보여줄 cardDisp
 
     public void InitAwards(int _killNum, int _coinNum, int _stageNum)
     {
@@ -24,6 +25,8 @@ public class ResultPanel : MonoBehaviour
                 }
             }
         }
+
+        SetEquipSpriteRow();
 
         SoundManager.instance.Play(resultSound);
         killText.text = _killNum.ToString();
@@ -43,5 +46,27 @@ public class ResultPanel : MonoBehaviour
             // rayBGEffect.SetActive(true);
         }
         GameManager.instance.ActivateConfirmationButton(2.7f);
+    }
+
+    void SetEquipSpriteRow()
+    {
+        WeaponData wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
+        cardDisp.InitWeaponCardDisplay(wd, null);
+        cardDisp.InitSpriteRow(); // card sprite row의 이미지 참조들이 남지 않게 초기화
+
+        for (int i = 0; i < 4; i++)
+        {
+            Item item = GameManager.instance.startingDataContainer.GetItemDatas()[i];
+
+            if (item == null)
+            {
+                cardDisp.SetEquipCardDisplay(i, null, false, Vector2.zero); // 이미지 오브젝트를 비활성화
+                continue;
+            }
+            SpriteRow equipmentSpriteRow = item.spriteRow;
+            Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
+
+            cardDisp.SetEquipCardDisplay(i, equipmentSpriteRow, item.needToOffset, offset);
+        }
     }
 }
