@@ -14,6 +14,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     [SerializeField] protected GameObject charFaceExpression;
     [SerializeField] Animator charAnim;
     [SerializeField] Image[] equipmentImages;
+    [SerializeField] Sprite emptyEquipment; // 장비가 없어서 비활성화 되는 부위의 이미지를 null로 만들 수는 없으니 그냥 투명한 이미지로 대체하기
     [SerializeField] RectTransform headMain;
     bool needToOffset;
     [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
@@ -173,6 +174,8 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         // cardSpriteAnim.Init을 호출해서 해당 index 부위의 애니메이션 이미지들을 저장해 두기
         if (spriteRow == null)
         {
+            equipmentImages[index].sprite = emptyEquipment;
+            equipmentImages[index].SetNativeSize();
             equipmentImages[index].gameObject.SetActive(false);
         }
         else

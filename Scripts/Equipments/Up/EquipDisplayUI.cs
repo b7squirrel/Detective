@@ -110,14 +110,14 @@ public class EquipDisplayUI : MonoBehaviour
         if (_atk)
         {
             atk.fontSize = initAtkFontSize;
-            atk.fontSize += 10f;
+            atk.fontSize += 12f;
             yield return new WaitForSeconds(.1f);
             atk.fontSize = initAtkFontSize;
         }
         else
         {
             hp.fontSize = initHpFontSize;
-            hp.fontSize += 10f;
+            hp.fontSize += 12f;
             yield return new WaitForSeconds(.1f);
             hp.fontSize = initHpFontSize;
         }

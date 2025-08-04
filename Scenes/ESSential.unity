@@ -8662,7 +8662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8412086724261749293, guid: 38ac0c50df9c843b9b27fade732b077f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15835,7 +15835,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &820591422
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27836,7 +27836,7 @@ RectTransform:
   m_GameObject: {fileID: 1471183874}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5030171, y: 1.5030171, z: 1.5030171}
+  m_LocalScale: {x: 2.7251203, y: 2.7251203, z: 2.7251203}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 535847062}
@@ -27853,7 +27853,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -201.94}
+  m_AnchoredPosition: {x: 0, y: -280}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1471183876
@@ -27879,6 +27879,7 @@ MonoBehaviour:
   - {fileID: 1493116864}
   - {fileID: 982384298}
   - {fileID: 1309950677}
+  emptyEquipment: {fileID: 0}
   headMain: {fileID: 168309136}
   equippedText: {fileID: 0}
   Title: {fileID: 142944388}
@@ -40005,7 +40006,7 @@ MonoBehaviour:
   incomingWarningPanel: {fileID: 1551261960241231777}
   anim: {fileID: 1395614655970295730}
   tagColorImage: {fileID: 6588822314622811543}
-  tagColor: {r: 1, g: 0.3, b: 0, a: 1}
+  tagColor: {r: 0, g: 0.7, b: 1, a: 1}
   startingSound: {fileID: 8300000, guid: a4bfbbc348f315347bf328135ae1b4e3, type: 3}
   closingSound: {fileID: 8300000, guid: feeb831cfb81ac047bfb37b057e86b3f, type: 3}
   idleSound: {fileID: 8300000, guid: c4c4a25e23c603248bb03b03f5ea116c, type: 3}
@@ -55523,6 +55524,7 @@ MonoBehaviour:
   - {fileID: 7423182480085227804}
   - {fileID: 7498556203605231516}
   - {fileID: 9148250470164633186}
+  emptyEquipment: {fileID: 0}
   headMain: {fileID: 1641825169739876467}
   equippedText: {fileID: 0}
   Title: {fileID: 1030778307733878662}
@@ -60921,7 +60923,7 @@ RectTransform:
   m_GameObject: {fileID: 7415656552451904222}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5030171, y: 1.5030171, z: 1.5030171}
+  m_LocalScale: {x: 2.7251203, y: 2.7251203, z: 2.7251203}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5519935239894074260}
@@ -60938,7 +60940,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -201.94}
+  m_AnchoredPosition: {x: 0, y: -280.00006}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6533817665116974947
@@ -63139,7 +63141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8412086724261749293, guid: 38ac0c50df9c843b9b27fade732b077f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

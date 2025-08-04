@@ -30,13 +30,21 @@ public class EquipInfoPanel : MonoBehaviour
         this.cardDisp = _cardDisp;
 
         grade.text = MyGrade.mGrades[cardData.Grade].ToString();
-        grade.color = MyGrade.GradeColors[cardData.Grade];
+        Name.text = itemData.DisplayName;
+        // grade.color = MyGrade.GradeColors[cardData.Grade];
         NameLabel.color = MyGrade.GradeColors[cardData.Grade];
         GradeLabel.color = MyGrade.GradeColors[cardData.Grade];
         NameLabelGlow.color = MyGrade.GradeGlowColors[cardData.Grade];
-        Name.text = itemData.DisplayName;
         SetItemCardBase(cardData.Grade);
         Level.text = "LV " + cardData.Level.ToString() + " / " + StaticValues.MaxLevel.ToString();
+
+        grade.color = Color.black;
+        Name.color = Color.black;
+        if (cardData.Grade == 4)
+        {
+            grade.color = Color.white;
+            Name.color = Color.white;
+        }
 
         if (cardData.Atk != 0)
         {
