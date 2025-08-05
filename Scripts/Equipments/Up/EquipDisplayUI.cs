@@ -12,6 +12,7 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject SkillDescriptionPanel;
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
+    [SerializeField] protected TMPro.TextMeshProUGUI LevelShadow;
     [SerializeField] protected TMPro.TextMeshProUGUI SkillName;
     [SerializeField] protected TMPro.TextMeshProUGUI SkillDescription;
     [SerializeField] protected GameObject starPrefab;
@@ -65,6 +66,7 @@ public class EquipDisplayUI : MonoBehaviour
         Title.text = dispName;
         // 카드 레벨 텍스트
         Level.text = "레벨 " + charCardData.Level;
+        LevelShadow.text = Level.text;
 
         // 디버그
         if (testParts != null)
@@ -126,6 +128,7 @@ public class EquipDisplayUI : MonoBehaviour
     public void SetLevelUI(CardData cardOnDisplay)
     {
         Level.text = "LV " + cardOnDisplay.Level;
+        LevelShadow.text = Level.text;
     }
 
     protected virtual void SetNumStar(int numStars)
@@ -176,6 +179,7 @@ public class EquipDisplayUI : MonoBehaviour
         titleRibbon.SetActive(false);
 
         Level.text = "";
+        LevelShadow.text = "";
         Title.text = "";
 
         atkLabel.SetActive(false);

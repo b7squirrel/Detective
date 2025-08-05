@@ -56,12 +56,11 @@ public class EnemyFinder : MonoBehaviour
         }
 
         // 순회하면서 원하는 갯수만큼 공격 가능한 개체들을 수집
-        float distanceToclosestEnemy = 20f;
+        float distanceToclosestEnemy = float.MaxValue;
         Vector2 closestEnemy = Vector2.zero;
 
         for (int i = 0; i < numberOfTargets; i++)
         {
-            distanceToclosestEnemy = 20f;
             for (int y = 0; y < allEnemies.Count; y++)
             {
                 float distanceToEnmey =

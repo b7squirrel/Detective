@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class TennisWeapon : WeaponBase
@@ -12,12 +11,17 @@ public class TennisWeapon : WeaponBase
 
     protected override void Attack()
     {
+
         List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(1);
         if (closestEnemyPosition == null) return;
+        Debug.Log($"가까운 적 위치 = {closestEnemyPosition[0]}");
+
         if (closestEnemyPosition[0] == Vector2.zero)
         {
             return;
         }
+        Debug.Log($"가까운 적 수 = {closestEnemyPosition.Count}");
+        Debug.Log("Attack Tennis");
 
         AttackCo();
     }
