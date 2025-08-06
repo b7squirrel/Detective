@@ -25,7 +25,9 @@ public class LaunchManager : MonoBehaviour
     OriAttribute currentAttr; // 현재 리드로 선택된 오리의 attr
 
     bool isInitialized; // 한 번 초기화 된 후에는 코루틴으로 리드를 초기화 할 필요가 없으므로 
-    float initDelayTime = .3f; // 코루틴으로 리드를 초기화 할 때 얼마만큼 딜레이 할 것인지.
+
+    // 코루틴으로 리드를 초기화 할 때 얼마만큼 딜레이 할 것인지. (0.3으로 설정되어 있었는데 이렇게 설정한 이유를 모르겠음. 딜레이가 있으면 장비 탭에서 리드 오리의 장비를 교체한 후 론치 패널로 돌아왔을 때 0.3초 후에 장비 그림이 업데이트가 되어서 0으로 바꿔 놓았음)
+    float initDelayTime = 0f; 
     
     void OnEnable()
     {
