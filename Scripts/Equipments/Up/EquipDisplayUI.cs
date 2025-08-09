@@ -9,6 +9,7 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] Transform ribbon;
     [SerializeField] GameObject halo;
     [SerializeField] GameObject titleRibbon;
+    [SerializeField] GameObject titleRibbonShadow;
     [SerializeField] GameObject SkillDescriptionPanel;
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
@@ -63,6 +64,7 @@ public class EquipDisplayUI : MonoBehaviour
 
         // 카드 이름 텍스트
         titleRibbon.SetActive(true);
+        titleRibbonShadow.SetActive(true);
         Title.text = dispName;
         // 카드 레벨 텍스트
         Level.text = "레벨 " + charCardData.Level;
@@ -177,6 +179,7 @@ public class EquipDisplayUI : MonoBehaviour
 
         // 카드 레벨 텍스트
         titleRibbon.SetActive(false);
+        titleRibbonShadow.SetActive(false);
 
         Level.text = "";
         LevelShadow.text = "";

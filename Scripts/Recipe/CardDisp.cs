@@ -244,7 +244,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         // 캐릭터 이미지
         cardBaseContainer.gameObject.SetActive(false);
-        charImage.rectTransform.localScale = .7f * Vector3.one;
+        // charImage.rectTransform.localScale = 1f * Vector3.one; // 오리 char image 크기
         charImage.gameObject.SetActive(false);
 
         // 장비 이미지

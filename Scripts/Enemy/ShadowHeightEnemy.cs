@@ -25,6 +25,8 @@ public class ShadowHeightEnemy : MonoBehaviour
     bool isInitialized;
     Animator anim;
 
+    EnemyBase enemyBase;
+
     #region Update
     void Update()
     {
@@ -68,7 +70,12 @@ public class ShadowHeightEnemy : MonoBehaviour
     #region 매 프레임마다 할 일
     void CountJumpCounter()
     {
-        if (isGrounded) jumpCounter += Time.deltaTime; // 점프를 하고 있지 않을 때만 카운터가 돌아간다
+        if (isGrounded)
+        {
+            jumpCounter += Time.deltaTime; // 점프를 하고 있지 않을 때만 카운터가 돌아간다
+            if (enemyBase == null) enemyBase = GetComponent<EnemyBase>();
+            enemyBase.SetGrounded(isGrounded);
+        }
         if (jumpCounter >= jumpFrequency)
         {
             jumpCounter = 0;

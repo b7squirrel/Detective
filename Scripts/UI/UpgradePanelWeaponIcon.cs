@@ -75,7 +75,7 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         this.needToOffset = this.needToOffset ? true : needToOffset;
 
         // offset을 하게 하는 아이템이 탈착 되었을 때를 위한 초기화
-        headMain.anchoredPosition = Vector2.zero;
+        headMain.anchoredPosition = this.needToOffset == false ? Vector2.zero : headMain.anchoredPosition;
 
         // cardSpriteAnim.Init을 호출해서 해당 index 부위의 애니메이션 이미지들을 저장해 두기
         if (spriteRow == null)

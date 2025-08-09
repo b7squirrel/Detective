@@ -75,6 +75,12 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Weapon");
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
+        // // 패널에 진입하면 기본적으로 리드 오리를 디스플레이 하고 있도록
+        // CardOnDisplay = cardDataManager.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
+        // InitDisplay(CardOnDisplay);
+        // Debug.Log($"Lead Card Data Name = {CardOnDisplay.Name}");
+        // SetAllFieldTypeOf("Item");
+
         charUpgradeButton.gameObject.SetActive(false);
         ClearAllEquipmentSlots(); // logic, UI 모두 처리
 

@@ -37,6 +37,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public bool finishedSpawn; // 스폰이 끝나면 적이 이동하도록 하려고
 
     Vector2 pastPos; // 벽 바깥으로 나가면 다시 되돌리기 위한 변수
+
+    bool isGrouned; // 점프 중이라면 플립을 하지 않도록 하기 위해
     #endregion
 
     #region Component Variables
@@ -109,6 +111,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         transform.eulerAngles = Vector3.zero;
         StopFlipCoroutine();
         isFlipping = false;
+        isGrouned = true;
 
         anim.speed = 1f;
         //rb.bodyType = RigidbodyType2D.Dynamic;
@@ -193,7 +196,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             currentFacingDir = -1f;
         }
 
-        if (currentFacingDir != pastFacingDir && isFlipping == false)
+        if (currentFacingDir != pastFacingDir && isFlipping == false && isGrouned)
             flipCoroutine = StartCoroutine(FlipCo());
 
         if (IsGrouping)
@@ -306,6 +309,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
             transform.position = pastPos;
         }
         pastPos = transform.position;
+    }
+
+    public void SetGrounded(bool _isGrouinded)
+    {
+        isGrouned = _isGrouinded;
     }
 
     // animation events
