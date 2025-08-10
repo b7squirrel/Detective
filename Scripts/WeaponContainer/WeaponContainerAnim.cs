@@ -12,6 +12,8 @@ public class WeaponContainerAnim : MonoBehaviour
     [SerializeField] Transform chestGroup; // 가슴과 함께 움직이는 장비들은 모두 여기에 페어런트 시킨다
     [SerializeField] Transform handsGroup; // 손과 함께 움직이는 중비들은 모두 여기에 페어런트 시킨다
     [SerializeField] GameObject[] testParts; // 테스트 파츠. 생성되면 바로 숨기도록
+    [SerializeField] Transform headMain; // 머리의 offset을 적용
+    Vector2 headOffset; // 여러 오리를 돌려쓰는 것이 아니니까 UI와는 다르게 그냥 offset 저장
     StartingDataContainer startingDataContainer;
 
     Sprite sprite; // 개별 무기들의 sprite
@@ -67,6 +69,13 @@ public class WeaponContainerAnim : MonoBehaviour
                 {
                     sr[i + 1].gameObject.SetActive(true);
                     equipSprites[i] = iData[i].spriteRow;
+
+                    //offset
+                    if (i == 1) //가슴 부위의 아이템이라면
+                    {
+                        headOffset = iData[i].needToOffset ? iData[i].worldPosHead : Vector2.zero;
+                        headMain.position += (Vector3)headOffset;
+                    }
                 }
                 else
                 {
@@ -79,12 +88,20 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             for (int i = 0; i < 4; i++)
             {
-                if(_wd.defaultItems[i] != null && _wd.defaultItems[i].spriteRow.sprites.Length> 0)
+                if (_wd.defaultItems[i] != null && _wd.defaultItems[i].spriteRow.sprites.Length > 0)
                 {
                     sr[i + 1].gameObject.SetActive(true);
                     equipSprites[i] = _wd.defaultItems[i].spriteRow;
                     // Debug.Log($"{_wd.Name}의 {i}스프라이트가 있습니다.");
                     // Debug.Log($"{_wd.Name}의 {equipSprites[i].sprites[0].name}스프라이트가 있습니다.");
+
+                    //offset
+                    //offset
+                    if (i == 1) //가슴 부위의 아이템이라면
+                    {
+                        headOffset = _wd.defaultItems[i].needToOffset ? _wd.defaultItems[i].worldPosHead : Vector2.zero; 
+                        if(headMain != null) headMain.position += (Vector3)headOffset;
+                    }
                 }
                 else
                 {
@@ -171,8 +188,8 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         anim.SetFloat("Speed", speed);
     }
-    // 애니메이션 이벤트
     
+    // 애니메이션 이벤트
     public void SetEquippedItemSprite(int _index)
     {
         if (equipSprites == null) return;

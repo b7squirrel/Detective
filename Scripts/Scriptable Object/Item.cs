@@ -57,7 +57,8 @@ public class Item : ScriptableObject
     public Sprite equippedImage;
     public SpriteRow spriteRow;
     public bool needToOffset;
-    public Vector2 posHead;
+    public Vector2 posHead; // UI에서 offset
+    public Vector2 worldPosHead; // 필드에서의 offset
     public AnimatorData CardItemAnimator;
     //public string SynergyWeapon;
     public List<string> SynergyWeapons; // 여러 시너지 무기를 저장하는 리스트
