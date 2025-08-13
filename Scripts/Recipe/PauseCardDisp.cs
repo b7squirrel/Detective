@@ -13,6 +13,9 @@ public class PauseCardDisp : MonoBehaviour
     [SerializeField] GameObject synergyDoneGroup;
     [SerializeField] GameObject newWeaponText;
     [SerializeField] GameObject newItemText;
+    [SerializeField] Transform synergyOutPoint;
+    [SerializeField] Transform synergyInPoint;
+    SimpleUILineConnector lineConnector; // 시너지가 되는 아이템을 습득하면 선으로 연결하기 위해
 
     GameObject[] stars;
     public string Name { get; private set; }

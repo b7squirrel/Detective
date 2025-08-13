@@ -51,6 +51,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         charFaceExpression.SetActive(true);
         if (charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
         charFaceImage.sprite = weaponData.faceImage;
+        charImage.SetNativeSize();
 
         Level.text = "";
         LevelShadow.text = Level.text;
