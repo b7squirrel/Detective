@@ -17,6 +17,7 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] AllField field; // 모든 카드
 
     [SerializeField] GameObject startButton;
+    [SerializeField] GameObject BgToExitField; // 벼경을 터치하면 리드오리 선택 필드를 나가도록
 
     [SerializeField] StageInfoUI stageInfoUi;
     [SerializeField] StageInfo stageInfo;
@@ -85,6 +86,8 @@ public class LaunchManager : MonoBehaviour
 
         field.GenerateAllCardsOfType(card, "Launch");
         // SetHalo(true);
+
+        BgToExitField.SetActive(true);
     }
     void SetLead(CardData lead)
     {
@@ -119,7 +122,8 @@ public class LaunchManager : MonoBehaviour
             }
         }
     }
-    void CloseField()
+    // Update Lead 외에도 BG to Exit 버튼을 누르면 호출
+    public void CloseField()
     {
         // DOTween.KillAll(true);
 
