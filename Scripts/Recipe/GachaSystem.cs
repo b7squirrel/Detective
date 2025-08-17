@@ -14,6 +14,10 @@ public class GachaSystem : MonoBehaviour
     List<CardData> weaponPools;
     List<CardData> itemPools;
 
+    [Header("버튼 클릭 시 UI 관련 제어")]
+    [SerializeField] GameObject content; // 가챠 화면으로 넘어갈 때 상점을 숨기기 위해
+    [SerializeField] GameObject darkBG; // 가챠 화면으로 넘어갈 때 칠판 배경으로 덮기 위해
+
     // 검색 속도 향상을 위해 Dictionary 생성
     // Key: (아이템 이름, 등급), Value: CardData
     Dictionary<(string Name, int Grade), CardData> itemLookup;
@@ -241,7 +245,7 @@ public class GachaSystem : MonoBehaviour
 
         DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브re
 
-        
+
         Debug.Log("after save");
 
         gachaPanelManager.gameObject.SetActive(true);
@@ -251,6 +255,10 @@ public class GachaSystem : MonoBehaviour
         {
             cardSlotManager.AddItemSlotOf(cardsPicked[i]);
         }
+
+        //가챠 패널로 넘어갈 때 상점 메뉴를 숨기고 배경으로 덮기
+        content.SetActive(false);
+        darkBG.SetActive(true);
     }
     void AddCardSlot(CardData card)
     {
@@ -273,6 +281,16 @@ public class GachaSystem : MonoBehaviour
     }
     public void DrawItems(int num)
     {
+        // 아이템 카드 수 제한 확인
+        int itemCount = CountItemCards();
+        int maxItemLimit = 100; // 최대 아이템 카드 제한
+
+        if (itemCount + num > maxItemLimit)
+        {
+            Debug.Log($"아이템 카드의 갯수가 {maxItemLimit}개를 넘습니다. 현재 {itemCount}개의 아이템 카드가 있습니다.");
+            return; // 메서드 실행 중단
+        }
+
         mainMenuManager.SetActiveTopTabs(false);
         mainMenuManager.SetActiveBottomTabs(false);
         cardsPicked.Clear();
@@ -282,6 +300,10 @@ public class GachaSystem : MonoBehaviour
         }
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
+
+        //가챠 패널로 넘어갈 때 상점 메뉴를 숨기고 배경으로 덮기
+        content.SetActive(false);
+        darkBG.SetActive(true);
     }
     public void DrawCombo(int num)
     {
@@ -319,6 +341,22 @@ public class GachaSystem : MonoBehaviour
         foreach (var card in myCards)
         {
             if (card.Type == CardType.Weapon.ToString())
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+    // 아이템 카드 수를 계산하는 메서드
+    int CountItemCards()
+    {
+        List<CardData> myCards = cardDataManager.GetMyCardList();
+        int count = 0;
+
+        foreach (var card in myCards)
+        {
+            if (card.Type == CardType.Item.ToString())
             {
                 count++;
             }

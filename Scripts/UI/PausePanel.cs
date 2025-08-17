@@ -1,21 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// weapon manager에서 무기를 추가할 떄 호출해서 초기화.
-/// 무기를 업그레이드 할 때도 호출해서 업데이트.
-/// </summary>
 public class PausePanel : MonoBehaviour
 {
-    [SerializeField] GameObject cardSlot; // 오리 카드 슬롯 프리펩
-    [SerializeField] GameObject itemSlot; // 아이템 카드 슬롯 프리펩
-    [SerializeField] Transform weaponContents; // 무기 슬롯들을 집어넣을 레이아웃
-    [SerializeField] Transform itemContents; // 아이템 슬롯들을 집어넣을 레이아웃
+    [SerializeField] GameObject cardSlot;
+    [SerializeField] GameObject itemSlot;
+    [SerializeField] Transform weaponContents;
+    [SerializeField] Transform itemContents;
     [SerializeField] GameObject BG;
+
     List<CardDisp> weaponCards;
     List<PauseCardDisp> itemCards;
-
-    // 이름으로 검색해서 업그레이드 상태를 업데이트하기 위한 딕셔너리
     Dictionary<string, PauseCardDisp> pauseCardDisps = new Dictionary<string, PauseCardDisp>();
 
     public void InitWeaponSlot(WeaponData wd, bool isLead)
@@ -28,40 +23,17 @@ public class PausePanel : MonoBehaviour
 
         PauseCardDisp pauseDisp = slot.GetComponent<PauseCardDisp>();
         pauseCardDisps.Add(wd.Name, pauseDisp);
-        
+
         Debug.Log($"Is Lead = {isLead}");
         pauseDisp.EnableLeadTag(isLead);
-        
+
         pauseDisp.InitWeaponCardDisplay(wd);
 
         SetEquipSpriteRow(slot, wd, isLead);
+
+        // // 시너지 아이템이 있다면 선으로 연결
     }
 
-    // 여기에서 card disp 만 이용할 때 쓰는 3개의 함수를 순서대로 호출 init weapon card dsplay, init sprite row, set equipcard display
-    void SetEquipSpriteRow(CardSlot targetSlot, WeaponData wd, bool isLead)
-    {
-        // card disp와 Equip Disp UI에서 IEquipSpriteAnim을 인터페이스로 사용
-        CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
-
-        cardDisp.InitWeaponCardDisplay(wd, null);
-        // CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
-        cardDisp.InitSpriteRow(); // card sprite row의 이미지 참조들이 남지 않게 초기화
-
-        for (int i = 0; i < 4; i++)
-        {
-            Item item = isLead ? GameManager.instance.startingDataContainer.GetItemDatas()[i] : wd.defaultItems[i];
-
-            if (item == null)
-            {
-                cardDisp.SetEquipCardDisplay(i, null, false, Vector2.zero); // 이미지 오브젝트를 비활성화
-                continue;
-            }
-            SpriteRow equipmentSpriteRow = item.spriteRow;
-            Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
-
-            cardDisp.SetEquipCardDisplay(i, equipmentSpriteRow, item.needToOffset, offset);
-        }
-    }
     public void InitItemSlot(Item _item)
     {
         if (itemCards == null) itemCards = new();
@@ -69,36 +41,70 @@ public class PausePanel : MonoBehaviour
         GameObject iSlot = Instantiate(itemSlot, itemContents.transform);
         itemCards.Add(iSlot.GetComponent<PauseCardDisp>());
 
-        iSlot.GetComponent<PauseCardDisp>().InitItemCardDisplay(_item);
-        iSlot.GetComponent<CardDisp>().InitItemCardDisplay(_item, null, false);
+        PauseCardDisp pauseCardDisp = iSlot.GetComponent<PauseCardDisp>();
+        CardDisp cardDisp = iSlot.GetComponent<CardDisp>();
+        pauseCardDisp.InitItemCardDisplay(_item);
+        cardDisp.InitItemCardDisplay(_item, null, false);
     }
 
-    // 업그레이드가 일어나면 pause panel의 weapon 혹은 item 레벨 업데이트 함수들을 호출함.
-    public void UpdateWeaponLevel(string _weaponName, int _levelToUpdate, bool _isSynergy)
+    public void UpdateWeaponLevel(string _weaponName, int _level, bool _isSynergy)
     {
-        for (int i = 0; i < weaponCards.Count; i++)
-        {
-            if (pauseCardDisps.ContainsKey(_weaponName))
-            {
-                pauseCardDisps[_weaponName].UpdatePauseCardLevel(_levelToUpdate, true, _isSynergy);
-            }
-        }
+        if (pauseCardDisps.TryGetValue(_weaponName, out var disp))
+            disp.UpdatePauseCardLevel(_level, true, _isSynergy);
     }
 
     public void UpdateItemLevel(Item _item)
     {
-        for (int i = 0; i < itemCards.Count; i++)
+        foreach (var item in itemCards)
         {
-            if (itemCards[i].Name == _item.Name)
+            if (item.Name == _item.Name)
             {
-                itemCards[i].UpdatePauseCardLevel(_item.stats.currentLevel,false, false);
+                item.UpdatePauseCardLevel(_item.stats.currentLevel, false, false);
                 return;
             }
         }
     }
 
-    public void EnableBG(bool EnableBG)
+    public void EnableBG(bool enable) => BG.SetActive(enable);
+
+    // weapon data의 시너지를 이루는 아이템이 있는지 검색
+    RectTransform GetSynergyItemPos(WeaponData wd)
     {
-        BG.SetActive(EnableBG);
+        Item coupleItem = GameManager.instance.character
+            .GetComponent<PassiveItems>()
+            .GetSynergyCouple(wd.SynergyWeapon);
+
+        if (coupleItem == null) return null;
+
+        foreach (var item in itemCards)
+        {
+            if (item.Name == coupleItem.Name)
+            {
+                return item.GetSynergyInPoint();
+            }
+        }
+        return null;
+    }
+
+    void SetEquipSpriteRow(CardSlot targetSlot, WeaponData wd, bool isLead)
+    {
+        CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
+        cardDisp.InitWeaponCardDisplay(wd, null);
+        cardDisp.InitSpriteRow();
+
+        for (int i = 0; i < 4; i++)
+        {
+            Item item = isLead ?
+                GameManager.instance.startingDataContainer.GetItemDatas()[i] :
+                wd.defaultItems[i];
+
+            if (item == null)
+            {
+                cardDisp.SetEquipCardDisplay(i, null, false, Vector2.zero);
+                continue;
+            }
+            Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
+            cardDisp.SetEquipCardDisplay(i, item.spriteRow, item.needToOffset, offset);
+        }
     }
 }
