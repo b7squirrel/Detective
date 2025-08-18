@@ -51,7 +51,7 @@ public class PopupManager : MonoBehaviour
         else if (uiEvent.EventName == "Egg")
         {
             // 현재 사이클에서 이미 2개의 Egg 이벤트를 처리했다면 무시
-            if (currentEggCount >= 2)
+            if (currentEggCount >= 1)
             {
                 if (debugMode)
                 {
