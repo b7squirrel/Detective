@@ -280,7 +280,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
         this.cardDisp = null;
     }
-    
+
     #region Display에 보여지는 오리카드의 업그레이드
     public void UpgradeCardOnDisplay()
     {
@@ -318,6 +318,9 @@ public class EquipmentPanelManager : MonoBehaviour
         UpdateUpgradeCost(level, charUpgradeCost);
         if (CheckIfMaxLevel(CardOnDisplay)) SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
         UpdateButtonState(charUpgradeButton, true);
+
+        // 필드의 해당 카드도 업데이트
+        UpdateCardSlotOfPool(CardOnDisplay);
     }
     #endregion
 
