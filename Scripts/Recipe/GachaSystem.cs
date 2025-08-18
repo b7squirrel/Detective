@@ -284,7 +284,7 @@ public class GachaSystem : MonoBehaviour
     {
         // 아이템 카드 수 제한 확인
         int itemCount = CountItemCards();
-        int maxItemLimit = 100; // 최대 아이템 카드 제한
+        int maxItemLimit = 200; // 최대 아이템 카드 제한
 
         if (itemCount > maxItemLimit)
         {

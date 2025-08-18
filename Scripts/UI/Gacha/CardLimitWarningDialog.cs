@@ -13,13 +13,18 @@ public class CardLimitWarningDialog : MonoBehaviour
     [SerializeField] float warningDuration;
     [SerializeField] TMPro.TextMeshProUGUI warningText;
     [SerializeField] GameObject BG;
+    [SerializeField] AudioClip warningSound; // 경고 사운드
+    [SerializeField] int maxOriCard;
+    [SerializeField] int maxItemCard;
+
 
     Coroutine co;
     bool isManuallyClose = false; // 수동으로 닫혔는지 플래그
 
     public void SetWarningText(string cardType, int cardCount)
     {
-        string warning = $"{cardType} 카드가 100장을 넘겼어요! ({cardCount}/100)\n\n" +
+        int maxCardNum = cardType == "오리" ? maxOriCard : maxItemCard;
+        string warning = $"{cardType} 카드가 {maxCardNum}장을 넘겼어요! ({cardCount}/{maxCardNum})\n\n" +
                         "카드를 판매하거나 합성해서\n" +
                         "공간을 정리해 주세요.";
         warningText.text = warning;
@@ -58,7 +63,8 @@ public class CardLimitWarningDialog : MonoBehaviour
         // 패널 열기
         warningPanel.SetActive(true);
         BG.SetActive(true);
-
+        FindObjectOfType<UICameraShake>().Shake(.3f, 5f); // 1.65초 동안 12의 크기로 흔들기
+        SoundManager.instance.Play(warningSound);
         yield return new WaitForSecondsRealtime(warningDuration);
 
         // 수동으로 닫히지 않았을 때만 자동으로 닫기
