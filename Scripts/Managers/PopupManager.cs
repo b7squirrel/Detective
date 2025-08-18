@@ -35,7 +35,7 @@ public class PopupManager : MonoBehaviour
         if (uiEvent.EventName == "Upgrade")
         {
             // 현재 사이클에서 이미 5개의 업그레이드 이벤트를 처리했다면 무시
-            if (currentUpgradeCount >= 5)
+            if (currentUpgradeCount >= maxUpgradeQueue)
             {
                 if (debugMode)
                 {
