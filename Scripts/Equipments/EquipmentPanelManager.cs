@@ -43,6 +43,8 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] CanvasGroup charWarningLackCanvasGroup; // 오리 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button charUpgradeButton;
     [SerializeField] GameObject CharCoinImage;
+    [SerializeField] GameObject GearBGToExitField;
+    [SerializeField] GameObject GearBGToExitInfo;
     Tween charWarningLack;
     Tween charWarningMax;
     float textOffset = 23.5f;
@@ -96,6 +98,7 @@ public class EquipmentPanelManager : MonoBehaviour
     // 오리 카드를 equip display에 보여준다
     public void InitDisplay(CardData oriCardDataToDisplay)
     {
+        GearBGToExitField.SetActive(true); // 백 버튼, bg to exit field 버튼, 디스플레이된 오리카드 버튼을 눌렀을 때 비활성화
         equipDisplayUI.OnDisplay(oriCardDataToDisplay); // 디스플레이 활성
         CardOnDisplay = oriCardDataToDisplay; // 디스플레이 되는 카드의 card data
         equipmentSlotsManager.InitEquipSlots(oriCardDataToDisplay); // 오리 카드의 Data대로 장비 슬롯 설정 
@@ -242,6 +245,7 @@ public class EquipmentPanelManager : MonoBehaviour
     // equip slot action 에서 호출
     public void ActivateEquipInfoPanel(CardData itemCardData, CardDisp cardDisp, bool isEquipButton, EquipmentType equipType)
     {
+        GearBGToExitInfo.SetActive(true); // x 버튼, bg to exit info버튼으로 비활성화
         index = new Convert().EquipmentTypeToInt(itemCardData.EquipmentType);
         isEquipped = !isEquipButton; // equip button을 띄운다는 것은 field에 있는 장비 카드라는 뜻이므로
 
