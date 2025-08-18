@@ -203,6 +203,7 @@ public class EquipmentPanelManager : MonoBehaviour
         setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
 
         UpdateCardSlotOfPool(CardOnDisplay); // 카드 슬롯 풀의 슬로 그림도 업데이트
+        UpdateCardSlotOfPool(equipmentCards[index].CardData); // 장착하는 장비의 그림도 업데이트. isEquipped
 
         cardList.DelayedSaveEquipments();
         DeActivateEquipInfoPanel();
@@ -231,6 +232,7 @@ public class EquipmentPanelManager : MonoBehaviour
         setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
 
         UpdateCardSlotOfPool(CardOnDisplay); // 카드 슬롯 풀의 슬로 그림도 업데이트
+        UpdateCardSlotOfPool(equipmentCards[index].CardData); //해제하는 장비의 그림도 업데이트. isEquipped
         
         DeActivateEquipInfoPanel();
     }
@@ -239,7 +241,7 @@ public class EquipmentPanelManager : MonoBehaviour
     void UpdateCardSlotOfPool(CardData cardData)
     {
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        cardSlotManager.UpdateCardDisplay(CardOnDisplay);
+        cardSlotManager.UpdateCardDisplay(cardData);
     }
 
     // equip slot action 에서 호출
