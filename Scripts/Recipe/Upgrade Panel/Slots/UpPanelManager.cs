@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security;
 using UnityEngine;
 
 public class UpPanelManager : MonoBehaviour
@@ -38,6 +39,7 @@ public class UpPanelManager : MonoBehaviour
 
     [SerializeField] UpTabManager upTabManager; // 탭을 업데이트 하기 위한 참조
     [SerializeField] GameObject blockTouchPanel; // 합성 연출 동안 터치가 안되도록 하기
+    [SerializeField] GameObject currencyTab; // 합성 연출 동안 재화 탭 숨기기
     #endregion
 
     #region Unity Callback 함수
@@ -468,8 +470,11 @@ public class UpPanelManager : MonoBehaviour
         // 합성 연출 동안 터치가 안되도록 하기
         blockTouchPanel.SetActive(true);
 
-        // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록
+        // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록. tab to continue 버튼으로 다시 활성화
         mainMenuManager.SetActiveBottomTabs(false);
+
+        // 위쪽의 재화 탭을 숨기기. tab to continue 버튼으로 다시 활성화
+        currencyTab.SetActive(false);
 
         // 강화 연출 UI
         upPanelUI.MergingCardsUI();

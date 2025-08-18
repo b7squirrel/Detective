@@ -28,6 +28,7 @@ public class EquipmentPanelManager : MonoBehaviour
     PlayerDataManager playerDataManager;
     [SerializeField] TMPro.TextMeshProUGUI upgradeCost;
     [SerializeField] GameObject itemMaxLevel;
+    [SerializeField] GameObject itemUpgradeText; // 최고 레벨일 때 업그레이드 텍스트 숨기기
     [SerializeField] CanvasGroup warningLackCanvasGroup; // 아이템 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button upgradeButton;
     [SerializeField] GameObject EquipCoinImage;
@@ -38,6 +39,7 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] CardSlot oriSlot;
     [SerializeField] TMPro.TextMeshProUGUI charUpgradeCost;
     [SerializeField] GameObject charMaxLevel;
+    [SerializeField] GameObject charUpgradeText; // 최고 레벨일 때 업그레이드 텍스트 숨기기
     [SerializeField] CanvasGroup charWarningLackCanvasGroup; // 오리 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button charUpgradeButton;
     [SerializeField] GameObject CharCoinImage;
@@ -274,9 +276,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         this.cardDisp = null;
     }
-    /// <summary>
-    /// Display에 보여지는 오리카드의 업그레이드
-    /// </summary>
+    
+    #region Display에 보여지는 오리카드의 업그레이드
     public void UpgradeCardOnDisplay()
     {
         charUpgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = true;
@@ -314,9 +315,9 @@ public class EquipmentPanelManager : MonoBehaviour
         if (CheckIfMaxLevel(CardOnDisplay)) SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
         UpdateButtonState(charUpgradeButton, true);
     }
-    /// <summary>
-    /// info panel의 업그레이드 버튼
-    /// </summary>
+    #endregion
+
+    #region info panel의 업그레이드 버튼
     public void UpgradeCard()
     {
         upgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = true;
@@ -352,7 +353,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         UpdateUpgradeCost(level, upgradeCost);
-        if(CheckIfMaxLevel(cardToEquip)) SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
+        if (CheckIfMaxLevel(cardToEquip)) SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
         UpdateButtonState(upgradeButton, false);
     }
 
@@ -364,34 +365,41 @@ public class EquipmentPanelManager : MonoBehaviour
         _upgradeCost.text = "X " + GetAmountToUpgrade(_level).ToString();
     }
 
-    /// <summary>
-    /// 카드의 레벨에 대응하는 업그레이드 비용 계산
-    /// </summary>
+    // 카드의 레벨에 대응하는 업그레이드 비용 계산
     int GetAmountToUpgrade(int level)
     {
         return level * 3;
     }
+    #endregion
 
-    /// <summary>
-    /// 조건에 따라 업그레이드 버튼을 활성/비활성 시킴
-    /// </summary>
+
+    #region 버튼 상태 업데이트
+    // 조건에 따라 업그레이드 버튼을 활성/비활성 시킴
     void UpdateButtonState(Button button, bool isChar)
     {
-        CharCoinImage.SetActive(true);
-        EquipCoinImage.SetActive(true);
+        // CharCoinImage.SetActive(true);
+        // EquipCoinImage.SetActive(true);
+        // charUpgradeText.SetActive(true);
 
-        charMaxLevel.SetActive(false);
-        itemMaxLevel.SetActive(false);
+        // charMaxLevel.SetActive(false);
+        // itemMaxLevel.SetActive(false);
 
         if (isChar)
         {
             if (CardOnDisplay.Level == StaticValues.MaxLevel)
             {
                 charMaxLevel.SetActive(true);
+                charUpgradeText.SetActive(false);
                 charUpgradeCost.text = "";
                 CharCoinImage.SetActive(false);
                 button.interactable = false;
                 return;
+            }
+            else
+            {
+                charMaxLevel.SetActive(false);
+                charUpgradeText.SetActive(true);
+                CharCoinImage.SetActive(true);
             }
         }
         else
@@ -399,10 +407,18 @@ public class EquipmentPanelManager : MonoBehaviour
             if (cardToEquip.Level == StaticValues.MaxLevel)
             {
                 itemMaxLevel.SetActive(true);
+                itemUpgradeText.SetActive(false);
                 upgradeCost.text = "";
                 EquipCoinImage.SetActive(false);
                 button.interactable = false;
                 return;
+            }
+            else
+            {
+                itemMaxLevel.SetActive(false);
+                itemUpgradeText.SetActive(true);
+                // upgradeCost.text = "";
+                EquipCoinImage.SetActive(true);
             }
         }
         button.interactable = true;
@@ -413,6 +429,7 @@ public class EquipmentPanelManager : MonoBehaviour
             return true;
         return false;
     }
+    #endregion
 
     IEnumerator HideWarning(CanvasGroup canvasGroupToHide)
     {
