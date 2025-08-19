@@ -12,17 +12,20 @@ public class LaunchSlotAction : MonoBehaviour
     }
     IEnumerator OnClickCo()
     {
-        // 터치하면 일단 또잉또잉
         RectTransform slotRec = GetComponent<RectTransform>();
         float initialValue = slotRec.transform.localScale.x;
-        //slotRec.transform.localScale = new Vector2(initialValue * 1.1f, initialValue * 1.1f);
-        //slotRec.DOScale(initialValue, .04f).SetEase(Ease.InBack);
 
-        yield return new WaitForSeconds(.066f);
+        // 부드럽게 크기 증가 후 감소
+        Sequence clickSequence = DOTween.Sequence();
+        clickSequence.Append(slotRec.DOScale(initialValue * 1.1f, 0.08f).SetEase(Ease.OutQuad))
+                    .Append(slotRec.DOScale(initialValue, 0.12f).SetEase(Ease.OutBack));
+
+        // 전체 애니메이션 완료까지 대기
+        yield return new WaitForSeconds(0.2f);
 
         ActionType();
     }
-    
+
     void ActionType()
     {
         if (currentSlotType == LaunchSlotType.Up)
