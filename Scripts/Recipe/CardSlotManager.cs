@@ -142,7 +142,7 @@ public class CardSlotManager : MonoBehaviour
         mySlots.Clear();
         foreach (var item in slotsToDestroy)
         {
-            if(item == null) continue;
+            if (item == null) continue;
             GameObject.Destroy(item);
         }
         slotsToDestroy.Clear();
@@ -169,7 +169,7 @@ public class CardSlotManager : MonoBehaviour
     public void AddItemSlotOf(CardData oriCard)
     {
         // AddCardSlot(defaultEquip);
-        if(cardList == null) cardList = FindObjectOfType<CardList>();
+        if (cardList == null) cardList = FindObjectOfType<CardList>();
         List<CardData> equipCardDatas = cardList.GetEquipCardDataOf(oriCard);
 
         foreach (var item in equipCardDatas)
@@ -177,7 +177,7 @@ public class CardSlotManager : MonoBehaviour
             AddSlot(item);
         }
     }
-    
+
     public void SettrigerAnim(string trigger)
     {
         fieldAnim.SetTrigger(trigger);
@@ -186,5 +186,11 @@ public class CardSlotManager : MonoBehaviour
     public void SortByGrade(List<int> IDs)
     {
 
+    }
+    // 아이디를 가지고 mySlots를 검색해서 해당 카드슬롯을 반환
+    public CardSlot GetSlotByID(int cardID)
+    {
+        mySlots.TryGetValue(cardID, out CardSlot slot);
+        return slot; // 없으면 자동으로 null 반환
     }
 }

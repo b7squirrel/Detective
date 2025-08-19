@@ -106,10 +106,24 @@ public class LaunchManager : MonoBehaviour
         Debug.Log("Update Lead");
         cardDataManager.UpdateStartingmemberOfCard(currentLead, "N");
         cardDataManager.UpdateStartingmemberOfCard(newLead, "Zero");
-        
-        CloseField();
+
+        CardSlot currentCardSlot = cardSlotManager.GetSlotByID(currentLead.ID);
+
+        cardSlotManager.UpdateCardDisplay(currentCardSlot.GetCardData());
+        cardSlotManager.UpdateCardDisplay(newLead);
+
         SetLead(newLead);
+        StartCoroutine(UpdateLeadCo());
+
     }
+
+    IEnumerator UpdateLeadCo()
+    {
+        yield return new WaitForSeconds(.2f);
+        CloseField();
+        BgToExitField.SetActive(false);
+    }
+
     public void SetHalo(bool _isActive)
     {
         CardSlot[] _cardSlot = field.GetComponentsInChildren<CardSlot>();
