@@ -104,4 +104,8 @@ public class EquipmentSlotsManager : MonoBehaviour
             return true;
         return false;
     }
+    public CardData GetSlotCardData(int index)
+    {
+        return equipSlots[index].GetCardData();
+    }
 }

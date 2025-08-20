@@ -180,7 +180,7 @@ public class EquipmentPanelManager : MonoBehaviour
         oriSlot.EmptySlot(); // 슬롯 비활성화
     }
 
-    // info panel 의 equip 버튼
+    #region Info패널 장착/해제 버튼
     public void OnEquipButton()
     {
         // 디스플레이 되는 charCard의 equipments
@@ -192,6 +192,8 @@ public class EquipmentPanelManager : MonoBehaviour
             Debug.Log("장비가 이미 있습니다. 교체합니다.");
             cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
             equipmentSlotsManager.EmptyEquipSlot(index);
+
+            UpdateCardSlotOfPool(equipmentSlotsManager.GetSlotCardData(index)); // 해제되는 장비의 그림도 업데이트 isEquipped 태그 관련
         }
 
         // 새로운 장비 장착
@@ -236,6 +238,7 @@ public class EquipmentPanelManager : MonoBehaviour
         
         DeActivateEquipInfoPanel();
     }
+    #endregion
 
     // 카드 슬롯 풀의 그림도 업데이트
     void UpdateCardSlotOfPool(CardData cardData)

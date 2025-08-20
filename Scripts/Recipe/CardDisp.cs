@@ -19,9 +19,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     bool needToOffset;
     [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
-    [SerializeField] protected TMPro.TextMeshProUGUI TitleShadow;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
-    [SerializeField] protected TMPro.TextMeshProUGUI LevelShadow;
 
     [SerializeField] protected GameObject starPrefab;
     [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
@@ -54,21 +52,19 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         charImage.SetNativeSize();
 
         Level.text = "";
-        if(LevelShadow != null) LevelShadow.text = Level.text;
 
         // 카드 이름 텍스트
         Title.text = weaponData.DisplayName;
-        if(TitleShadow != null) TitleShadow.text = Title.text;
 
         // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
         if (cardData == null) return;
 
         // 리드오리 태그
-        leadTag.SetActive(false);
+        SetLeadTagActive(false);
         if (cardData.StartingMember == StartingMember.Zero.ToString())
         {
             // Debug.Log($"{cardData.Name}의 Starting Member 값은 {cardData.StartingMember}입니다.");
-            leadTag.SetActive(true);
+            SetLeadTagActive(true);
         }
 
         // 별과 카드 색깔
@@ -108,7 +104,6 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         // 카드 레벨 텍스트
         Level.text = "레벨 " + cardData.Level;
-        if(LevelShadow != null)  LevelShadow.text = Level.text;
 
         // 오리카드는 착용 중 표시 안 함
         // 장비카드만 착용 중 표시
@@ -121,11 +116,10 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
     {
         // 리드오리 태그
-        leadTag.SetActive(false);
+        SetLeadTagActive(false);
 
         // 카드 이름 텍스트
         Title.text = itemData.DisplayName;
-        if(TitleShadow != null) TitleShadow.text = Title.text;
 
         charImage.gameObject.SetActive(true);
         charImage.sprite = itemData.charImage;
@@ -150,11 +144,9 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         // 카드 레벨 텍스트
         Level.text = "레벨 " + cardData.Level;
-        if(LevelShadow != null) LevelShadow.text = Level.text;
 
         // 임시로 타이틀을 없애보자. 작은 카드 안에 정보가 너무 많음.
         Title.text = "";
-        if(TitleShadow != null) TitleShadow.text = "";
 
         if (displayEquippedText) SetEquppiedTextActive(onEquipment);
 
@@ -220,9 +212,14 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         }
     }
 
+    void SetLeadTagActive(bool active)
+    {
+        if (leadTag != null) leadTag.SetActive(active);
+    }
+
     public void SetEquppiedTextActive(bool _isActive)
     {
-        if(equippedText == null) return;
+        if (equippedText == null) return;
         equippedText.SetActive(_isActive);
     }
 
@@ -238,9 +235,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         // 카드 레벨 텍스트
         Level.text = "";
-        if(LevelShadow != null) LevelShadow.text = Level.text;
         Title.text = "";
-        if(TitleShadow != null) TitleShadow.text = "";
         if (isMergedCard) ribbon.gameObject.SetActive(false);
 
         // 캐릭터 이미지

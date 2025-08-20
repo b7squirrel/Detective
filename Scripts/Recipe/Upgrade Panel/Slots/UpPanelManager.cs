@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security;
 using UnityEngine;
 
 public class UpPanelManager : MonoBehaviour
@@ -40,6 +39,9 @@ public class UpPanelManager : MonoBehaviour
     [SerializeField] UpTabManager upTabManager; // 탭을 업데이트 하기 위한 참조
     [SerializeField] GameObject blockTouchPanel; // 합성 연출 동안 터치가 안되도록 하기
     [SerializeField] GameObject currencyTab; // 합성 연출 동안 재화 탭 숨기기
+
+    [Header("Sound")]
+    [SerializeField] AudioClip mergeBuildUpSound; // 고조시키는 소리
     #endregion
 
     #region Unity Callback 함수
@@ -483,6 +485,8 @@ public class UpPanelManager : MonoBehaviour
         yield return new WaitForSeconds(.05f); // 카드가 움직이고 나서 잠시 후에 카메라 쉐이크가 일어나도록
         // 카메라 쉐이크
         FindObjectOfType<UICameraShake>().Shake(1.85f, 12f); // 1.65초 동안 12의 크기로 흔들기
+
+        SoundManager.instance.Play(mergeBuildUpSound); // 고조시키는 사운드
 
         yield return new WaitForSeconds(.15f);  // 1.5초 동안 두 카드가 가운데로 모인 후
 

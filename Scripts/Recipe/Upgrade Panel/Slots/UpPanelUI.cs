@@ -20,6 +20,7 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] GameObject upgradeEffect; // 합성이 성공한 순간 번찍하는 이펙트
     [SerializeField] GameObject blingBlingEffect; // 카드 주변에서 반짝반짝
     [SerializeField] Animator starBlingEffect;
+    [SerializeField] AudioClip[] mergeSuccessSounds; // 카드 성공 짠 하는 소리들
     [SerializeField] AudioClip gradeBlingSound;
     [SerializeField] AudioClip starBlingBeamSound;
     [SerializeField] AudioClip starBlingSound;
@@ -213,6 +214,10 @@ public class UpPanelUI : MonoBehaviour
         whiteEffectOnMerge.DOScale(.5f, 1f); // 1초 동안 절반으로 줄어들기 (antic)
         
         yield return new WaitForSeconds(1.7f);
+        foreach (var item in mergeSuccessSounds)
+        {
+            SoundManager.instance.Play(item); // 짠 하는 사운드
+        }
         upgradeEffect.SetActive(true);  // 방사형 이펙트. 버튼 클릭 이펙트 재활용
         upEffectAnim.SetTrigger("On");
 
