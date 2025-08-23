@@ -19,6 +19,9 @@ public class SlotAction : MonoBehaviour
     [Header("Merge Slot")]
     [SerializeField] protected SlotType mergeSlotType;
 
+    // 애니메이션 중복 클릭 방지용 플래그
+    private bool isAnimating = false;
+
     SlotType currentSlotType;
     protected UpPanelManager upPanelManager;
     protected MainMenuManager mainMenuManager;
@@ -32,10 +35,21 @@ public class SlotAction : MonoBehaviour
 
     public void Onclick()
     {
+        // 애니메이션 중이면 클릭 무시
+        if (isAnimating) 
+        {
+            Debug.Log("Animation in progress, click ignored");
+            return;
+        }
+        
         StartCoroutine(OnClickCo());
     }
+
     IEnumerator OnClickCo()
     {
+        // 애니메이션 시작
+        isAnimating = true;
+
         RectTransform slotRec = GetComponent<RectTransform>();
         float initialValue = slotRec.transform.localScale.x;
 
@@ -44,8 +58,14 @@ public class SlotAction : MonoBehaviour
         clickSequence.Append(slotRec.DOScale(initialValue * 1.1f, 0.08f).SetEase(Ease.OutQuad))
                     .Append(slotRec.DOScale(initialValue, 0.12f).SetEase(Ease.OutBack));
 
+        RectTransform cardRec = GetComponent<RectTransform>();
+        FindObjectOfType<CardEffect>().SetEffectPosition(cardRec);
+
         // 전체 애니메이션 완료까지 대기
         yield return new WaitForSeconds(0.2f);
+
+        // 애니메이션 완료
+        isAnimating = false;
 
         if (upPanelManager == null)
         {
@@ -149,13 +169,21 @@ public class SlotAction : MonoBehaviour
             Debug.Log("장비, 론치, 머지 탭 외의 상태에서 슬롯이 눌러졌습니다. 오류입니다.");
         }
     }
+
     public void SetEquipSlotType(SlotType equipSlotType)
     {
         currentSlotType = equipSlotType;
     }
 
-    // public void SetSlotType(SlotType slotType)
-    // {
-    //     currentSlotType = slotType;
-    // }
+    // 외부에서 애니메이션 상태 확인용 (필요시)
+    public bool IsAnimating()
+    {
+        return isAnimating;
+    }
+
+    // 외부에서 강제로 애니메이션 상태 리셋용 (필요시)
+    public void ResetAnimationState()
+    {
+        isAnimating = false;
+    }
 }

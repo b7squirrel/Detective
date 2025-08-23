@@ -20,6 +20,9 @@ public class LaunchSlotAction : MonoBehaviour
         clickSequence.Append(slotRec.DOScale(initialValue * 1.1f, 0.08f).SetEase(Ease.OutQuad))
                     .Append(slotRec.DOScale(initialValue, 0.12f).SetEase(Ease.OutBack));
 
+        RectTransform cardRec = GetComponent<RectTransform>();
+        FindObjectOfType<CardEffect>().SetEffectPosition(cardRec);
+
         // 전체 애니메이션 완료까지 대기
         yield return new WaitForSeconds(0.2f);
 
