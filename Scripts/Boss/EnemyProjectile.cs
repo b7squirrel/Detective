@@ -64,7 +64,7 @@ public class EnemyProjectile : MonoBehaviour
         if (Time.frameCount % 2 != 0) // 홀수 프레임 스킵
             return;
 
-        float sqrDist = (GameManager.instance.player.transform.position - transform.position).sqrMagnitude;
+        float sqrDist = ((Vector2)GameManager.instance.player.transform.position - (Vector2)transform.position).sqrMagnitude;
         if (sqrDist < hitRange * hitRange)
         {
             GameManager.instance.character.TakeDamage(damage, EnemyType.Projectile);
