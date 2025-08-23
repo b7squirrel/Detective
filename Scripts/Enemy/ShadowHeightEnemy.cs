@@ -5,6 +5,8 @@ public class ShadowHeightEnemy : MonoBehaviour
 {
     [SerializeField] int bouncingNumbers;
     [SerializeField] string onLandingMask;
+    [SerializeField] AudioClip jumpSound;
+    [SerializeField] AudioClip landingSound;
     public bool IsDone { get; private set; }
     public UnityEvent onGroundHitEvent;
 
@@ -23,6 +25,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     float lastInitaialVerticalVelocity;
     [SerializeField] bool isGrounded;
     bool isInitialized;
+    bool isFirstJump = true; // 첫 번째 점프인지 체크
     Animator anim;
 
     EnemyBase enemyBase;
@@ -64,6 +67,7 @@ public class ShadowHeightEnemy : MonoBehaviour
         this.isJumper = isJumper;
         if (isJumper && jumpInterval == 0) this.isJumper = false; // 실수로 점프 가능이면서 인터벌이 0일 때는 그냥 점프불가로
         this.jumpFrequency = jumpInterval + UnityEngine.Random.Range(-1f, 1f);
+        isFirstJump = true; // 점프 캐릭터로 설정될 때 첫 번째 점프 플래그 초기화
     }
     #endregion
 
@@ -79,11 +83,18 @@ public class ShadowHeightEnemy : MonoBehaviour
         if (jumpCounter >= jumpFrequency)
         {
             jumpCounter = 0;
+
+            // 점프 사운드 재생 (첫 번째 점프이거나 바운스가 아닌 일반 점프일 때)
+            if (isFirstJump)
+            {
+                if (jumpSound != null) SoundManager.instance.Play(jumpSound); //
+                isFirstJump = false;
+            }
+
             Initialize(verticalVelocity);
             Debug.Log("Jump 실행");
             enemy.CastSlownessToEnemy(-1f);
             ActivateCollider(false);
-
         }
     }
 
@@ -125,6 +136,8 @@ public class ShadowHeightEnemy : MonoBehaviour
     void GroundHit()
     {
         if (IsDone) return;
+
+        SoundManager.instance.Play(landingSound);
         onGroundHitEvent?.Invoke();
     }
     #endregion
@@ -137,6 +150,7 @@ public class ShadowHeightEnemy : MonoBehaviour
             IsDone = true;
             enemy.ResumeEnemy();
             ActivateCollider(true);
+            isFirstJump = true; // 점프가 완료되면 다음 점프 사이클을 위해 초기화
 
             return;
         }
@@ -151,6 +165,15 @@ public class ShadowHeightEnemy : MonoBehaviour
     public void TriggerAnim(string animation)
     {
         anim.SetTrigger(animation);
+    }
+    
+    // 점프 사운드 재생 함수
+    void PlayJumpSound()
+    {
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.Play(jumpSound);
+        }
     }
     #endregion
 }
