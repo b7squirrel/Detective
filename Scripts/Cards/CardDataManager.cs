@@ -19,16 +19,25 @@ public class CardData
         string _defaultItem, string _passiveSkill)
     {
         // ID 파싱 (안전하게)
-        if(int.TryParse(_id?.Trim(), out int intID))
+        if (int.TryParse(_id?.Trim(), out int intID))
         {
             ID = intID;
         }
         else
         {
-            Debug.LogWarning($"ID 파싱 실패: '{_id}' - 기본값 -1 사용");
-            ID = -1;
+            // pool의 아이디 셀이 비어있음. 나중에 랜덤한 아이디를 부여받게 되므로 에러는 아님.
+            // 빈 칸을 파싱 실패로 인식하지 않도록 따로 조건문을 추가했음
+            if (string.IsNullOrWhiteSpace(_id))
+            {
+                ID = -1; // 임시 값, 나중에 교체됨
+            }
+            else
+            {
+                Debug.LogWarning($"ID 파싱 실패: '{_id}' - 기본값 -1 사용");
+                ID = -1;
+            }
         }
-        
+
         Type = _Type?.Trim() ?? "";
         Name = _Name?.Trim() ?? "";
         EquipmentType = _equipmentType?.Trim() ?? "";

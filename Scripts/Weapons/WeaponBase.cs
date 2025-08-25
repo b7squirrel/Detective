@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ public class WeaponBase : MonoBehaviour
     protected Vector2 direction;
     protected bool flip;
     public bool IsDirectional {get; set;}
+
     #endregion
 
     public virtual void Init(WeaponStats stats)

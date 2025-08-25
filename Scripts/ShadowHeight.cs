@@ -26,14 +26,74 @@ public class ShadowHeight : MonoBehaviour
     bool isInitialized;
     Animator anim;
 
+    // 목표 위치 기반 포물선을 위한 새로운 변수들
+    Vector2 startPosition;
+    Vector2 targetPosition;
+    float trajectoryTime;
+    float currentTime;
+    bool useTargetBasedTrajectory;
+
     void Update()
     {
-        UpdatePosition();
+        if (useTargetBasedTrajectory)
+        {
+            UpdateTargetBasedPosition();
+        }
+        else
+        {
+            UpdatePosition();
+        }
+        
         UpdateShadow();
         CheckGroundHit();
     }
 
+    // 기존 Initialize 메서드 (하위 호환성 유지)
     public void Initialize(Vector2 groundVelocity, float verticalVelocity)
+    {
+        InitializeCommon();
+        
+        this.groundVelocity = groundVelocity;
+        this.verticalVelocity = verticalVelocity;
+        lastInitaialVerticalVelocity = verticalVelocity;
+        useTargetBasedTrajectory = false;
+    }
+
+    // 새로운 Initialize 메서드 - 목표 위치와 비행 시간을 받음
+    public void InitializeToTarget(Vector2 targetPosition, float trajectoryTime)
+    {
+        InitializeCommon();
+        
+        this.startPosition = trnsObject.position;
+        this.targetPosition = targetPosition;
+        this.trajectoryTime = trajectoryTime;
+        this.currentTime = 0f;
+        useTargetBasedTrajectory = true;
+
+        // 포물선 계산을 위한 초기 속도 계산
+        CalculateTrajectoryVelocities();
+    }
+
+    // 새로운 Initialize 메서드 - 목표 위치와 최대 높이를 받음
+    public void InitializeWithHeight(Vector2 targetPosition, float maxHeight)
+    {
+        InitializeCommon();
+        
+        this.startPosition = trnsObject.position;
+        this.targetPosition = targetPosition;
+        useTargetBasedTrajectory = true;
+
+        // 최대 높이를 기반으로 비행 시간 계산
+        float distance = Vector2.Distance(startPosition, targetPosition);
+        float timeToMaxHeight = Mathf.Sqrt(2f * maxHeight / Mathf.Abs(gravity));
+        this.trajectoryTime = timeToMaxHeight * 2f; // 올라갔다 내려오는 시간
+        this.currentTime = 0f;
+
+        // 포물선 계산을 위한 초기 속도 계산
+        CalculateTrajectoryVelocities();
+    }
+
+    void InitializeCommon()
     {
         if (!isInitialized)
         {
@@ -58,14 +118,57 @@ public class ShadowHeight : MonoBehaviour
             }
             isInitialized = true;
         }
+        
         IsDone = false;
-
         isGrounded = false;
-        this.groundVelocity = groundVelocity;
-        this.verticalVelocity = verticalVelocity;
-        lastInitaialVerticalVelocity = verticalVelocity;
-
         anim = GetComponent<Animator>();
+    }
+
+    void CalculateTrajectoryVelocities()
+    {
+        // 수평 속도 계산
+        Vector2 horizontalDistance = new Vector2(targetPosition.x - startPosition.x, 0);
+        groundVelocity = horizontalDistance / trajectoryTime;
+
+        // 수직 속도 계산 (포물선 공식 사용)
+        float verticalDistance = targetPosition.y - startPosition.y;
+        verticalVelocity = (verticalDistance / trajectoryTime) - (0.5f * gravity * trajectoryTime);
+        lastInitaialVerticalVelocity = verticalVelocity;
+    }
+
+    void UpdateTargetBasedPosition()
+    {
+        if (!isGrounded && currentTime < trajectoryTime)
+        {
+            currentTime += Time.deltaTime;
+            
+            // 포물선 공식을 사용한 위치 계산
+            float t = currentTime;
+            
+            // 수평 이동 (등속 운동)
+            Vector2 horizontalPos = startPosition + (targetPosition - startPosition) * (t / trajectoryTime);
+            
+            // 수직 이동 (포물선 운동)
+            float verticalPos = startPosition.y + (lastInitaialVerticalVelocity * t) + (0.5f * gravity * t * t);
+            
+            // 실제 위치 적용
+            trnsObject.position = new Vector2(horizontalPos.x, startPosition.y);
+            trnsBody.position = new Vector2(horizontalPos.x, verticalPos);
+            
+            // 목표 지점에 도달했거나 시간이 지났으면 착지
+            if (currentTime >= trajectoryTime || verticalPos <= targetPosition.y)
+            {
+                trnsObject.position = targetPosition;
+                trnsBody.position = targetPosition;
+                isGrounded = true;
+                GroundHit();
+            }
+        }
+        else if (!IsDone && isGrounded)
+        {
+            // 착지 후에는 기존 groundVelocity로 이동 (바운스 등을 위해)
+            trnsObject.position += (Vector3)groundVelocity * Time.deltaTime;
+        }
     }
 
     void UpdatePosition()
@@ -80,6 +183,7 @@ public class ShadowHeight : MonoBehaviour
             trnsObject.position += (Vector3)groundVelocity * Time.deltaTime;
         }
     }
+
     void UpdateShadow()
     {
         if (noHeightShadow == false)
@@ -119,13 +223,15 @@ public class ShadowHeight : MonoBehaviour
 
     void CheckGroundHit()
     {
-        if (trnsBody.position.y < trnsObject.position.y && !isGrounded)
+        // 목표 기반 궤적을 사용하지 않을 때만 기존 방식으로 체크
+        if (!useTargetBasedTrajectory && trnsBody.position.y < trnsObject.position.y && !isGrounded)
         {
             trnsBody.position = trnsObject.position;
             isGrounded = true;
             GroundHit();
         }
     }
+
     void GroundHit()
     {
         if (IsDone) return;
@@ -137,6 +243,7 @@ public class ShadowHeight : MonoBehaviour
     {
         groundVelocity = Vector2.zero;
     }
+
     public void Bounce(float divisionFactor)
     {
         if (IsDone)
@@ -149,9 +256,13 @@ public class ShadowHeight : MonoBehaviour
             IsDone = true;
             return;
         }
+        
+        // 바운스 시에는 기존 방식 사용
+        useTargetBasedTrajectory = false;
         Initialize(groundVelocity, lastInitaialVerticalVelocity / divisionFactor);
         bouncingNumbers--;
     }
+
     public void SlowDownGroundVelocity(float divisionFactor)
     {
         if (IsDone) return;

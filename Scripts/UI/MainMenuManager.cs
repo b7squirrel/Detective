@@ -56,7 +56,7 @@ public class MainMenuManager : MonoBehaviour
     // 리드오리 카드 데이터
     CardData lead;
 
-    void Awake()
+    void Start()
     {
         InitBlackTransition();
 
@@ -136,23 +136,24 @@ public class MainMenuManager : MonoBehaviour
     {
         tabSlider.value = pos[pressBtnID];
         targetIndex = pressBtnID;
-        if (pressBtnID == 0) 
-        { 
+        
+        if (pressBtnID == 0)
+        {
             tabSliderAnim.SetTrigger("Left");
             return;
         }
-        if (pressBtnID == 4) 
-        { 
+        if (pressBtnID == 4)
+        {
             tabSliderAnim.SetTrigger("Right");
             return;
         }
         else
-        { 
-            tabSliderAnim.SetTrigger("Center"); 
+        {
+            tabSliderAnim.SetTrigger("Center");
         }
 
         // 합성 성공 후 탭을 해서 합성 패널을 초기화 시키지 않고 나올 경우를 대비해서 
-        if(pressBtnID != 3)
+        if (pressBtnID != 3)
         {
             if(mergeFinished)
             {
