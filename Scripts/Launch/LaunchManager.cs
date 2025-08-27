@@ -41,7 +41,9 @@ public class LaunchManager : MonoBehaviour
     }
     void OnDisable()
     {
-        BgToExitField.SetActive(false); // 론치 패널 계층 바깥에 있으므로 따로 비활성화
+        // 론치 패널 계층 바깥에 있는 요소들은 따로 비활성화
+        BgToExitField.SetActive(false); 
+        startButton.SetActive(false); 
     }
 
     // 버튼으로 스테이지 앞 뒤로 갈 수 있도록
