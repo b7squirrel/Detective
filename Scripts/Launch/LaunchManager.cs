@@ -39,8 +39,13 @@ public class LaunchManager : MonoBehaviour
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Off");
     }
-    
+    void OnDisable()
+    {
+        BgToExitField.SetActive(false); // 론치 패널 계층 바깥에 있으므로 따로 비활성화
+    }
+
     // 버튼으로 스테이지 앞 뒤로 갈 수 있도록
+
     public void UpdateStageInfo()
     {
         InitStageInfo();

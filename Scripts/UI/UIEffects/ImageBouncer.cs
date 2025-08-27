@@ -1,5 +1,4 @@
 using UnityEngine;
-using VHierarchy.Libs;
 
 public class ImageBouncer : MonoBehaviour
 {
@@ -54,7 +53,7 @@ public class ImageBouncer : MonoBehaviour
             isGrounded = true;
             isInitDone = false;
 
-            gameObject.Destroy();
+            Destroy(gameObject);
         }
     }
 }
