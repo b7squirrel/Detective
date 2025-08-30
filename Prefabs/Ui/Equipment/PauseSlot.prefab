@@ -2832,7 +2832,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 810ec37af41f6c545940602d2d659403, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -2956,9 +2956,7 @@ MonoBehaviour:
   headMain: {fileID: 5150040672720473155}
   equippedText: {fileID: 0}
   Title: {fileID: 6917105266828948406}
-  TitleShadow: {fileID: 8616755436066216990}
   Level: {fileID: 9122003728927259730}
-  LevelShadow: {fileID: 3031264461771393360}
   starPrefab: {fileID: 3764076669932085183, guid: 4b8d1816b41606a4a9137ac22fe85660, type: 3}
   displayEquippedText: 1
   button: {fileID: 0}
@@ -3017,12 +3015,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e12d06b4ff954b529f5022e2897843a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startImage: {fileID: 0}
-  endImage: {fileID: 0}
+  startPos: {x: 0, y: 0}
+  endPos: {x: 0, y: 0}
   lineColor: {r: 1, g: 1, b: 1, a: 1}
   lineThickness: 2
-  connectFromCenter: 1
+  useLocalCoordinates: 1
   updateEveryFrame: 1
+  updateInterval: 0.1
 --- !u!1 &4006800317226078791
 GameObject:
   m_ObjectHideFlags: 0
