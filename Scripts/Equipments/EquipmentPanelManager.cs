@@ -220,21 +220,23 @@ public class EquipmentPanelManager : MonoBehaviour
     // info panel의 UnEquip 버튼
     public void OnUnEquipButton()
     {
-        // 장비 해제
+        // 해제될 장비 카드의 카드 데이터를 미리 저장
         EquipmentCard[] equipmentCards = cardList.GetEquipmentsCardData(CardOnDisplay);
+        CardData unequippedCardData = equipmentCards[index]?.CardData;
+
+        // 장비 해제
         cardList.UnEquip(CardOnDisplay, equipmentCards[index]);
         cardList.DelayedSaveEquipments();
-
         equipmentSlotsManager.EmptyEquipSlot(index);
 
         cardToEquip = null;
-
         cardDisp.SetEquppiedTextActive(false);
         SetAllFieldTypeOf("Item");
+
         setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
 
         UpdateCardSlotOfPool(CardOnDisplay); // 카드 슬롯 풀의 슬로 그림도 업데이트
-        UpdateCardSlotOfPool(equipmentCards[index].CardData); //해제하는 장비의 그림도 업데이트. isEquipped
+        UpdateCardSlotOfPool(unequippedCardData); //해제하는 장비의 그림도 업데이트. isEquipped
         
         DeActivateEquipInfoPanel();
     }
