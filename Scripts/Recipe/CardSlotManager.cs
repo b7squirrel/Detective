@@ -30,7 +30,7 @@ public class CardSlotManager : MonoBehaviour
 
     #region 정렬 관련 변수
     SortType currentSortType = SortType.Level; // 정렬 기본값은 레벨
-    bool ascending = true; // 기본값은 오름차순
+    bool ascending = false; // 기본값은 오름차순
     #endregion
 
     void Awake()
@@ -62,6 +62,8 @@ public class CardSlotManager : MonoBehaviour
         {
             GenSlots(item);
         }
+
+        SortByGrade();
     }
     void GenSlots(CardData cardData)
     {
@@ -241,9 +243,9 @@ public class CardSlotManager : MonoBehaviour
         }
         else
         {
-            // 새로운 정렬 타입이면 오름차순으로 시작
+            // 새로운 정렬 타입이면 내림차순으로 시작
             currentSortType = sortType;
-            ascending = true;
+            ascending = false;
         }
 
         SortSlots(sortType, ascending);
