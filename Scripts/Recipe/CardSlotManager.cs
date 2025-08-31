@@ -18,7 +18,7 @@ public class CardSlotManager : MonoBehaviour
     #region 슬롯 생성 관련 변수
     Dictionary<int, CardSlot> mySlots = new Dictionary<int, CardSlot>(); // 내가 가지고 있는 모든 슬롯을 ID로 검색하기 위해서
     [SerializeField] GameObject slotPrefab;
-    [SerializeField] Transform presentSlotField;
+    [SerializeField] Transform presentSlotField; // Grid Layout Group으로 슬롯들을 관리
     [SerializeField] Vector2 slotSize;
     Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
             { "Head", 0 },
