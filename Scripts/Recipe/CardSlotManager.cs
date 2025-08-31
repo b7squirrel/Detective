@@ -28,6 +28,11 @@ public class CardSlotManager : MonoBehaviour
     };
     #endregion
 
+    #region 정렬 관련 변수
+    SortType currentSortType = SortType.Level; // 정렬 기본값은 레벨
+    bool ascending = true; // 기본값은 오름차순
+    #endregion
+
     void Awake()
     {
         instance = this;
@@ -193,4 +198,60 @@ public class CardSlotManager : MonoBehaviour
         mySlots.TryGetValue(cardID, out CardSlot slot);
         return slot; // 없으면 자동으로 null 반환
     }
+
+    #region 정렬
+    void SortSlots(SortType sortType, bool ascending)
+    {
+        List<CardData> cards = cardDataManager.GetMyCardList();
+
+        switch (sortType)
+        {
+            case SortType.Level:
+                cards.Sort((a, b) => ascending ? a.Level.CompareTo(b.Level) : b.Level.CompareTo(a.Level));
+                break;
+            case SortType.Grade:
+                cards.Sort((a, b) => ascending ? a.Grade.CompareTo(b.Grade) : b.Grade.CompareTo(a.Grade));
+                break;
+            case SortType.EvoStage:
+                cards.Sort((a, b) => ascending ? a.EvoStage.CompareTo(b.EvoStage) : b.EvoStage.CompareTo(a.EvoStage));
+                break;
+            case SortType.Name:
+                cards.Sort((a, b) => ascending
+                    ? string.Compare(a.Name, b.Name, System.StringComparison.Ordinal)
+                    : string.Compare(b.Name, a.Name, System.StringComparison.Ordinal));
+                break;
+        }
+
+        // Grid Layout Group에 반영
+        for (int i = 0; i < cards.Count; i++)
+        {
+            if (mySlots.TryGetValue(cards[i].ID, out CardSlot slot))
+            {
+                slot.transform.SetSiblingIndex(i);
+            }
+        }
+    }
+
+    void SortBy(SortType sortType)
+    {
+        // 이미 해당 타입으로 정렬 중이면 오름차순/내림차순 토글
+        if (currentSortType == sortType)
+        {
+            ascending = !ascending;
+        }
+        else
+        {
+            // 새로운 정렬 타입이면 오름차순으로 시작
+            currentSortType = sortType;
+            ascending = true;
+        }
+
+        SortSlots(sortType, ascending);
+    }
+    // 버튼용 : 특정 속성으로 정렬 (버튼을 한 번 더 누르면 오름차순, 내림차순으로 토글)
+    public void SortByName() => SortBy(SortType.Name);
+    public void SortByGrade() => SortBy(SortType.Grade);
+    public void SortByLevel() => SortBy(SortType.Level);
+    public void SortByEvoStage() => SortBy(SortType.EvoStage);
+    #endregion
 }

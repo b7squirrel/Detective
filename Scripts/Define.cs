@@ -134,6 +134,17 @@ public class MyGrade
         new Color(1,0.5f,0.9f, 0.25f) // purple
     };
 }
+
+// 정렬 관련
+public enum SortType
+{
+    Level,
+    Grade,
+    EvoStage,
+    Atk,
+    Name   // 문자열 기준 정렬 추가
+}
+
 #endregion
 
 #region 스킬 관련
