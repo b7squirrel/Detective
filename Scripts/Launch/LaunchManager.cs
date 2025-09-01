@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
+using System.ComponentModel.Design;
 
 // 대장 오리는 playerPref에 저장하자
 public class LaunchManager : MonoBehaviour
@@ -28,8 +30,8 @@ public class LaunchManager : MonoBehaviour
     bool isInitialized; // 한 번 초기화 된 후에는 코루틴으로 리드를 초기화 할 필요가 없으므로 
 
     // 코루틴으로 리드를 초기화 할 때 얼마만큼 딜레이 할 것인지. (0.3으로 설정되어 있었는데 이렇게 설정한 이유를 모르겠음. 딜레이가 있으면 장비 탭에서 리드 오리의 장비를 교체한 후 론치 패널로 돌아왔을 때 0.3초 후에 장비 그림이 업데이트가 되어서 0으로 바꿔 놓았음)
-    float initDelayTime = 0f; 
-    
+    float initDelayTime = 0f;
+
     void OnEnable()
     {
         // fieldSlotPanel.SetActive(false);
@@ -42,8 +44,8 @@ public class LaunchManager : MonoBehaviour
     void OnDisable()
     {
         // 론치 패널 계층 바깥에 있는 요소들은 따로 비활성화
-        BgToExitField.SetActive(false); 
-        startButton.SetActive(false); 
+        BgToExitField.SetActive(false);
+        startButton.SetActive(false);
     }
 
     // 버튼으로 스테이지 앞 뒤로 갈 수 있도록
@@ -95,6 +97,10 @@ public class LaunchManager : MonoBehaviour
         // SetHalo(true);
 
         BgToExitField.SetActive(true);
+        startButton.SetActive(false);
+
+        // 디폴트로 높은 등급 순으로 분류
+        cardSlotManager.InitialSortingByGrade();
     }
     void SetLead(CardData lead)
     {
@@ -102,9 +108,9 @@ public class LaunchManager : MonoBehaviour
 
         // 리드오리 attr update
         currentAttr = statManager.GetLeadAttribute(currentLead);
-        
+
         setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
-        
+
         startingDataContainer.SetLead(lead, currentAttr);
     }
 
@@ -151,5 +157,6 @@ public class LaunchManager : MonoBehaviour
         // fieldSlotPanel.SetActive(false);
 
         cardSlotManager.SettrigerAnim("Off");
+        startButton.SetActive(true);
     }
 }

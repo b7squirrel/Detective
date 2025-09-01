@@ -44,7 +44,7 @@ public class CardSlotManager : MonoBehaviour
     }
     IEnumerator DelayInitCo()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         InitSlots();
     }
 
@@ -63,7 +63,7 @@ public class CardSlotManager : MonoBehaviour
             GenSlots(item);
         }
 
-        SortByGrade();
+        InitialSortingByGrade();
     }
     void GenSlots(CardData cardData)
     {
@@ -128,11 +128,16 @@ public class CardSlotManager : MonoBehaviour
     /// </summary>
     public void UpdateAllCardSlotDisplay()
     {
-        List<CardData> mCards = cardDataManager.GetMyCardList();
-        foreach (var item in mCards)
+        // List<CardData> mCards = cardDataManager.GetMyCardList();
+        // foreach (var item in mCards)
+        // {
+        //     UpdateCardDisplay(item);
+        // }
+        foreach (KeyValuePair<int, CardSlot> item in mySlots)
         {
-            UpdateCardDisplay(item);
+            UpdateCardDisplay(item.Value.GetCardData());
         }
+
     }
 
     /// <summary>
@@ -188,12 +193,9 @@ public class CardSlotManager : MonoBehaviour
     public void SettrigerAnim(string trigger)
     {
         fieldAnim.SetTrigger(trigger);
+        SortByGrade();
     }
 
-    public void SortByGrade(List<int> IDs)
-    {
-
-    }
     // 아이디를 가지고 mySlots를 검색해서 해당 카드슬롯을 반환
     public CardSlot GetSlotByID(int cardID)
     {
@@ -204,7 +206,11 @@ public class CardSlotManager : MonoBehaviour
     #region 정렬
     void SortSlots(SortType sortType, bool ascending)
     {
-        List<CardData> cards = cardDataManager.GetMyCardList();
+        List<CardData> cards = new();
+        foreach (KeyValuePair<int, CardSlot> item in mySlots)
+        {
+            cards.Add(item.Value.GetCardData());
+        }
 
         switch (sortType)
         {
@@ -234,6 +240,12 @@ public class CardSlotManager : MonoBehaviour
         }
     }
 
+    public void InitialSortingByGrade()
+    {
+        SortSlots(SortType.Grade, false);
+        ascending = false;
+    }
+
     void SortBy(SortType sortType)
     {
         // 이미 해당 타입으로 정렬 중이면 오름차순/내림차순 토글
@@ -250,6 +262,7 @@ public class CardSlotManager : MonoBehaviour
 
         SortSlots(sortType, ascending);
     }
+    
     // 버튼용 : 특정 속성으로 정렬 (버튼을 한 번 더 누르면 오름차순, 내림차순으로 토글)
     public void SortByName() => SortBy(SortType.Name);
     public void SortByGrade() => SortBy(SortType.Grade);

@@ -92,6 +92,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
+
+        cardSlotManager.InitialSortingByGrade();
     }
 
     // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출

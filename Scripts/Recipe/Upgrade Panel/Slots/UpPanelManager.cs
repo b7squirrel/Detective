@@ -68,6 +68,7 @@ public class UpPanelManager : MonoBehaviour
         currentTabType = "Weapon";
         GetIntoAllField("Weapon");
         cardSlotManager.SettrigerAnim("MergeW");
+        cardSlotManager.InitialSortingByGrade();
     }
     #endregion
 
