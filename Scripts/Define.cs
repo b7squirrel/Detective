@@ -195,7 +195,7 @@ public class StaticValues
 #region 색깔 관련
 public class Colors
 {
-    public static Color[] randomColors = 
+    public static Color[] randomColors =
         { Color.red, Color.yellow, Color.magenta, Color.white };
 }
 #endregion

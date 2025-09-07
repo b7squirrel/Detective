@@ -44,6 +44,11 @@ public class Player : MonoBehaviour, IBouncable
         slowDownFactor = 1f;
     }
 
+    void Start()
+    {
+        GameEvents.OnGameStart?.Invoke();       
+    }
+
     void LateUpdate()
     {
         if (ShouldBeStill || 

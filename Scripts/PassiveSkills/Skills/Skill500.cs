@@ -12,7 +12,6 @@ public class Skill500 : SkillBase
     float realDuration;
     float durationTImer;
 
-    bool isDurationAnimPlaying; // 스킬이 진행 중인지. duration 애니메이션을 재생하기 위해
     bool isHitAnimPlaying; // hit anim이 실행되었다면 다음 쿨다운까지는 실행하지 않음
 
     [Header("Debug")]

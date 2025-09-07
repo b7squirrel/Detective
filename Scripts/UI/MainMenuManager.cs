@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] CanvasGroup BlackFadeIn;
     [SerializeField] float blackOutTime;
     [SerializeField] float fadeSpeed;
+    [SerializeField] GameObject LoadingOnStart; // 시작 시 로딩 화면
     bool onStart = true;
     bool shouldFadeIn;
     Coroutine fadeInCoroutine;
@@ -62,7 +64,7 @@ public class MainMenuManager : MonoBehaviour
 
         if (onStart)
         {
-            BlackFadeIn.gameObject.SetActive(true);
+            // BlackFadeIn.gameObject.SetActive(true);
             fadeInCoroutine = StartCoroutine(FadeInCo());
         }
 
@@ -182,19 +184,28 @@ public class MainMenuManager : MonoBehaviour
 
     IEnumerator FadeInCo()
     {
+        LoadingOnStart.SetActive(true);
         yield return new WaitForSeconds(blackOutTime);
         onStart = false;
-        shouldFadeIn = true;
-        while (shouldFadeIn)
-        {
-            if (BlackFadeIn.alpha <= .01)
-            {
-                BlackFadeIn.alpha = 0f;
-                shouldFadeIn = false;
-            }
-            BlackFadeIn.alpha = Mathf.Lerp(BlackFadeIn.alpha, 0, fadeSpeed * Time.deltaTime);
-            yield return null;
-        }
+
+        FindObjectOfType<ImageBouncerManager>().Jump(150);
+        yield return new WaitForSeconds(1f);
+        LoadingOnStart.GetComponentInChildren<Image>().DOFade(0, .5f)
+        .OnComplete(() => { LoadingOnStart.SetActive(false); });
+        LoadingOnStart.GetComponentInChildren<TextMeshProUGUI>().DOFade(0, .5f);
+        // LoadingOnStart.SetActive(false);
+        // shouldFadeIn = true;
+        // while (shouldFadeIn)
+        // {
+        //     if (BlackFadeIn.alpha <= .01)
+        //     {
+        //         BlackFadeIn.alpha = 0f;
+        //         shouldFadeIn = false;
+        //     }
+        //     BlackFadeIn.alpha = Mathf.Lerp(BlackFadeIn.alpha, 0, fadeSpeed * Time.deltaTime);
+        //     yield return null;
+        // }
+        // LoadingOnStart.SetActive(false);
     }
     void StopFadeIn(Coroutine co)
     {
