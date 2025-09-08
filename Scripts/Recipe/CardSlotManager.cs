@@ -33,6 +33,11 @@ public class CardSlotManager : MonoBehaviour
     bool ascending = false; // 기본값은 오름차순
     #endregion
 
+    #region 초기화 플래그
+    // 슬롯이 초기화 되기 전에 SetSlot이 호출되면 알려주기 위한 플래그
+    bool isInitialized = false;
+    #endregion
+
     void Awake()
     {
         instance = this;
@@ -42,10 +47,14 @@ public class CardSlotManager : MonoBehaviour
     {
         StartCoroutine(DelayInitCo());
     }
+
+    // 기존에는 2초 후에 InitSlots를 했음. 그러면 슬롯이 초기화 되기 전에 다른 AllField 같은 곳에서 SetSlot을 하면 슬롯을 찾지 못함.
+    // 왜 그 때 2초를 지연시키기로 결정했을까?
     IEnumerator DelayInitCo()
     {
         yield return new WaitForSeconds(2f);
         InitSlots();
+        isInitialized = true; // 초기화 완료 표시
     }
 
     /// <summary>
@@ -77,7 +86,20 @@ public class CardSlotManager : MonoBehaviour
     }
     public void SetSlotActive(int cardID, bool _active)
     {
-        mySlots[cardID].gameObject.SetActive(_active);
+        // mySlots[cardID].gameObject.SetActive(_active);
+        if (!isInitialized)
+        {
+            Debug.LogWarning($"슬롯 초기화 전 호출됨: ID {cardID}");
+            return;
+        }
+        if (mySlots.TryGetValue(cardID, out CardSlot slot))
+        {
+            slot.gameObject.SetActive(_active);
+        }
+        else
+        {
+            Debug.LogWarning($"SetSlotActive 실패: ID {cardID} 슬롯이 존재하지 않습니다.");
+        }
     }
     public void DestroySlot(int cardID)
     {
