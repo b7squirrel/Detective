@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DebugDrawCards : MonoBehaviour
 {
@@ -14,9 +13,8 @@ public class DebugDrawCards : MonoBehaviour
     [SerializeField] CardSlot weaponCardSlot;
     [SerializeField] CardSlot itemCardSlot;
 
-    List<CardDisp> weaponCards;
-    List<PauseCardDisp> itemCards;
     CardsDictionary cardDictionary;
+    GachaSystem gachaSystem;
 
     // 인덱스 및 개수
     int weaponNum, itemNum;
@@ -26,48 +24,38 @@ public class DebugDrawCards : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI weaponNumText;
     [SerializeField] TMPro.TextMeshProUGUI itemNumText;
 
-    // [SerializeField] Image 
     void Start()
     {
         cardDictionary = FindObjectOfType<CardsDictionary>();
+        gachaSystem = FindObjectOfType<GachaSystem>();
 
         weaponPools = new ReadCardData().GetCardsList(weaponPoolDatabase);
         itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
 
         // index 0 항목 카드에 보여주기
-        InitWeaponSlot(cardDictionary.GetWeaponItemData(weaponPools[0]).weaponData);
-        InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[0]).itemData);
+        InitWeaponSlot(cardDictionary.GetWeaponItemData(weaponPools[0]).weaponData, weaponPools[0]);
+        InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[0]).itemData, itemPools[0]);
 
         // UI에 현재 개수 업데이트. 디폴트 0이므로 1로 시작하게 됨
         SetWeaponNum(true);
         SetItemNum(true);
     }
 
-    public void InitWeaponSlot(WeaponData wd)
+    public void InitWeaponSlot(WeaponData wd, CardData cardData)
     {
-        if (weaponCards == null) weaponCards = new();
-
-        weaponCards.Add(weaponCardSlot.GetComponent<CardDisp>());
-
-        SetEquipSpriteRow(weaponCardSlot, wd);
-
-        // // 시너지 아이템이 있다면 선으로 연결
+        SetEquipSpriteRow(weaponCardSlot, wd, cardData);
     }
 
-    public void InitItemSlot(Item _item)
+    public void InitItemSlot(Item _item, CardData cardData)
     {
-        if (itemCards == null) itemCards = new();
-
-        itemCards.Add(itemCardSlot.GetComponent<PauseCardDisp>());
-
         CardDisp cardDisp = itemCardSlot.GetComponent<CardDisp>();
-        cardDisp.InitItemCardDisplay(_item, null, false);
+        cardDisp.InitItemCardDisplay(_item, cardData, false);
     }
 
-    void SetEquipSpriteRow(CardSlot targetSlot, WeaponData wd)
+    void SetEquipSpriteRow(CardSlot targetSlot, WeaponData wd, CardData cardData)
     {
         CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
-        cardDisp.InitWeaponCardDisplay(wd, null);
+        cardDisp.InitWeaponCardDisplay(wd, cardData);
         cardDisp.InitSpriteRow();
 
         for (int i = 0; i < 4; i++)
@@ -103,14 +91,25 @@ public class DebugDrawCards : MonoBehaviour
     {
         weaponIndex = addition ? weaponIndex + 1 : weaponIndex - 1;
         if (weaponIndex < 0) weaponIndex = weaponPools.Count - 1; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록
-        InitWeaponSlot(cardDictionary.GetWeaponItemData(weaponPools[weaponIndex]).weaponData);
+        if (weaponIndex > weaponPools.Count - 1) weaponIndex = 0; // 최대값을 넘어가면 0으로 가서 루프가 되도록
+        InitWeaponSlot(cardDictionary.GetWeaponItemData(weaponPools[weaponIndex]).weaponData, weaponPools[weaponIndex]);
     }
 
     public void SetItemCard(bool addition)
     {
         itemIndex = addition ? itemIndex + 1 : itemIndex - 1;
         if (itemIndex < 0) itemIndex = itemPools.Count - 1;
-        InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[itemIndex]).itemData);
+        if (itemIndex > itemPools.Count - 1) itemIndex = 0;
+        InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[itemIndex]).itemData, itemPools[itemIndex]);
+    }
+
+    public void DrawWeaponCard()
+    {
+        gachaSystem.DrawSpecificCard("Weapon", weaponIndex, weaponNum);
+    }
+    public void DrawItemCard()
+    {
+        gachaSystem.DrawSpecificCard("Item", itemIndex, itemNum);
     }
     #endregion
 }

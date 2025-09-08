@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class GachaSystem : MonoBehaviour
@@ -82,6 +83,39 @@ public class GachaSystem : MonoBehaviour
             AddCardSlot(newCardData);
         }
     }
+    #region Debug 특정 카드 뽑기
+    public void DrawSpecificCard(string _cardType, int index, int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            CardData newCardData;
+
+            if (_cardType == "Weapon")
+            {
+                newCardData = CloneCardData(weaponPools[index]);
+                cardDataManager.AddNewCardToMyCardsList(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
+                AddEssentialEquip(newCardData);
+
+                cardsPicked.Add(newCardData);
+
+                // 카드 슬롯 풀에 카드 슬롯 추가
+                AddCardSlot(newCardData);
+            }
+            else if (_cardType == "Item")
+            {
+                newCardData = CloneCardData(itemPools[index]);
+                cardDataManager.AddNewCardToMyCardsList(newCardData);
+
+                cardsPicked.Add(newCardData);
+
+                // 카드 슬롯 풀에 카드 슬롯 추가
+                AddCardSlot(newCardData);
+            }
+        }
+
+        DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브re
+    }
+    #endregion
 
     CardData CloneCardData(CardData original)
     {

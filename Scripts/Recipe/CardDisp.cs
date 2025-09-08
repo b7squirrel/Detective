@@ -110,7 +110,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         SetEquppiedTextActive(false);
 
         // 버튼 활성화
-        button.SetActive(true);
+        if(button != null) button.SetActive(true);
     }
 
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
