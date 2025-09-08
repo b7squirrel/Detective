@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DebugDrawCards : MonoBehaviour
 {
@@ -17,6 +18,14 @@ public class DebugDrawCards : MonoBehaviour
     List<PauseCardDisp> itemCards;
     CardsDictionary cardDictionary;
 
+    // 인덱스 및 개수
+    int weaponNum, itemNum;
+    int weaponIndex, itemIndex;
+
+    [Header("UI")]
+    [SerializeField] TMPro.TextMeshProUGUI weaponNumText;
+    [SerializeField] TMPro.TextMeshProUGUI itemNumText;
+
     // [SerializeField] Image 
     void Start()
     {
@@ -28,6 +37,10 @@ public class DebugDrawCards : MonoBehaviour
         // index 0 항목 카드에 보여주기
         InitWeaponSlot(cardDictionary.GetWeaponItemData(weaponPools[0]).weaponData);
         InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[0]).itemData);
+
+        // UI에 현재 개수 업데이트. 디폴트 0이므로 1로 시작하게 됨
+        SetWeaponNum(true);
+        SetItemNum(true);
     }
 
     public void InitWeaponSlot(WeaponData wd)
@@ -70,4 +83,34 @@ public class DebugDrawCards : MonoBehaviour
             cardDisp.SetEquipCardDisplay(i, item.spriteRow, item.needToOffset, offset);
         }
     }
+
+    #region UI
+    public void SetWeaponNum(bool addition)
+    {
+        weaponNum = addition ? weaponNum + 1 : weaponNum - 1;
+        if (weaponNum <= 0) weaponNum = 1;
+        weaponNumText.text = weaponNum.ToString();
+    }
+
+    public void SetItemNum(bool addition)
+    {
+        itemNum = addition ? itemNum + 1 : itemNum - 1;
+        if (itemNum <= 0) itemNum = 1;
+        itemNumText.text = itemNum.ToString();
+    }
+
+    public void SetWeaponCard(bool addition)
+    {
+        weaponIndex = addition ? weaponIndex + 1 : weaponIndex - 1;
+        if (weaponIndex < 0) weaponIndex = weaponPools.Count - 1; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록
+        InitWeaponSlot(cardDictionary.GetWeaponItemData(weaponPools[weaponIndex]).weaponData);
+    }
+
+    public void SetItemCard(bool addition)
+    {
+        itemIndex = addition ? itemIndex + 1 : itemIndex - 1;
+        if (itemIndex < 0) itemIndex = itemPools.Count - 1;
+        InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[itemIndex]).itemData);
+    }
+    #endregion
 }
