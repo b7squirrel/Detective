@@ -19,15 +19,7 @@ public class TutorialManager : MonoBehaviour
 
 	private void Awake()
 	{
-		if (instance != null && instance != this)
-		{
-			Destroy(gameObject);
-			return;
-		}
 		instance = this;
-		DontDestroyOnLoad(gameObject);
-
-		
 	}
 	void Start()
 	{
@@ -82,9 +74,16 @@ public class TutorialManager : MonoBehaviour
 	#region 디버깅
 	public void ResetTutorialState()
 	{
-		foreach (var item in tutorials)
+		// 알려진 모든 튜토리얼 키들을 직접 리셋
+		string[] allTutorialKeys = { "Move", "Attack", "Jump", "Inventory", "Shop" };
+
+		foreach (string key in allTutorialKeys)
 		{
-			item.hasShown = false;
+			if (PlayerPrefs.HasKey(key))
+			{
+				PlayerPrefs.SetInt(key, 0);
+				Debug.Log($"PlayerPrefs key '{key}' reset to 0");
+			}
 		}
 	}
 	#endregion

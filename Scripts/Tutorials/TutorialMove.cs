@@ -21,7 +21,7 @@ public class TutorialMove : MonoBehaviour
     }
     IEnumerator ShowInstructionSequence()
     {
-        GameManager.instance.pauseManager.PauseGame();
+        // GameManager.instance.pauseManager.PauseGame();
 
         // 페이드 인
         yield return StartCoroutine(FadeAlpha(0f, 1f, fadeTime));
@@ -34,7 +34,7 @@ public class TutorialMove : MonoBehaviour
 
         // 오브젝트 파괴
         Destroy(gameObject);
-        GameManager.instance.pauseManager.UnPauseGame();
+        // GameManager.instance.pauseManager.UnPauseGame();
     }
     // timeScale이 0이 되어도 진행될 수 있도록 unscaled delta time
     IEnumerator FadeAlpha(float startAlpha, float endAlpha, float fadeTime)
