@@ -110,6 +110,8 @@ public class GachaSystem : MonoBehaviour
 
                 // 카드 슬롯 풀에 카드 슬롯 추가
                 AddCardSlot(newCardData);
+                if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+                cardSlotManager.AddItemSlotOf(newCardData);
             }
         }
 
@@ -191,7 +193,7 @@ public class GachaSystem : MonoBehaviour
                     cardDataManager.AddNewCardToMyCardsList(defaultEquip);
                     cardList.Equip(_oriCardData, defaultEquip);
                     Debug.Log($"{defaultEquip.Name}을 장착합니다");
-                    AddCardSlot(defaultEquip);
+                    // AddCardSlot(defaultEquip);
                 }
                 catch (Exception e)
                 {
@@ -287,6 +289,7 @@ public class GachaSystem : MonoBehaviour
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
 
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         for (int i = 0; i < cardsPicked.Count; i++)
         {
             cardSlotManager.AddItemSlotOf(cardsPicked[i]);

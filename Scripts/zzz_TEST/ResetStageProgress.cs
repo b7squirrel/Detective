@@ -46,8 +46,8 @@ public class ResetStageProgress : MonoBehaviour
 
     public void UpdateCurrentStageNumberUI()
     {
-        if (playerDataManager == null)
-            playerDataManager = FindObjectOfType<PlayerDataManager>();
-        currentStageNum.text = playerDataManager.GetCurrentStageNumber().ToString();
+        // if (playerDataManager == null)
+        //     playerDataManager = FindObjectOfType<PlayerDataManager>();
+        // currentStageNum.text = playerDataManager.GetCurrentStageNumber().ToString();
     }
 }
