@@ -87,7 +87,13 @@ public class MainMenuManager : MonoBehaviour
         }
 
         PlayBGM(); // awake에서 Music Manager가 준비가 안되어 있을 수 있으므로 코루틴으로 약간 기다린 후 재생
-;    }
+
+        // 저장된 정보를 불러와서 탭 설정하기
+        // SetButtonActive(0, false);
+        // SetButtonActive(1, false);
+        // SetButtonActive(3, false);
+        // SetButtonActive(4, false);
+    }
 
     void Update()
     {
@@ -241,6 +247,13 @@ public class MainMenuManager : MonoBehaviour
     //    SceneManager.LoadScene("Stage", LoadSceneMode.Additive);
     //}
 
+    #region 탭 버튼 활성/비활성 제어
+    public void SetButtonActive(int buttonIndex, bool active)
+    {
+        BtnRect[buttonIndex].GetComponent<Button>().interactable = active;
+        BtnImageRect[buttonIndex].GetComponent<Image>().enabled = active;
+    }
+    #endregion
     // UpPanelManager의 UpgradeUICo 와 탭해서 계속하기 버튼에서 참조.
     public void SetActiveBottomTabs(bool active)
     {

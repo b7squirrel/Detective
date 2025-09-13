@@ -26,14 +26,17 @@ public class TutorialManager : MonoBehaviour
 		// PlayerPrefs.DeleteAll(); // 테스트 용
 		LoadTutorialState();
 		StartCoroutine(PauseeWithDelay());
-    }
+	}
 	IEnumerator PauseeWithDelay()
 	{
 		yield return null;
-		ActivateTutorial("Move");
+		foreach (var item in tutorials)
+		{
+			if (item.Name == "Move") ActivateTutorial("Move");
+		}
 	}
 
-    /// <summary>
+	/// <summary>
 	/// tutorial type을 인자로 넘겨줌
 	/// </summary>
 	/// <param name="type"></param>

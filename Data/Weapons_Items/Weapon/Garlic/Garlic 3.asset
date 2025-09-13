@@ -33,20 +33,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bf483df31dbde674fbd065dcdb22a743, type: 2}
   - {fileID: 0}
   - {fileID: 11400000, guid: 74e6bf4b1162eda40969fea1c9ac1d6e, type: 2}
-  equipSprites:
-  - sprites:
-    - {fileID: -1050372065, guid: 120c0acfc10a86940ad836c78ca0fc98, type: 3}
-  - sprites:
-    - {fileID: -795214558, guid: 120c0acfc10a86940ad836c78ca0fc98, type: 3}
-  - sprites:
-    - {fileID: 438539381, guid: 120c0acfc10a86940ad836c78ca0fc98, type: 3}
-  - sprites:
-    - {fileID: 958767226, guid: 120c0acfc10a86940ad836c78ca0fc98, type: 3}
   charEffectImage: {fileID: 0}
-  costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 0}
   stats:
-    damage: 20
+    damage: 50
     timeToAttack: 0.7
     numberOfAttacks: 0
     sizeOfArea: 0
@@ -54,7 +44,6 @@ MonoBehaviour:
     knockBackChance: 10
     currentLevel: 0
   weaponBasePrefab: {fileID: 6391488162450220913, guid: a3055110ed60e4741b9af2ec7dec8b64, type: 3}
-  animatorController: {fileID: 9100000, guid: fa97aaf65b04a1f4795ba06797686d0c, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 008731cb1f0357f419a4219176a576bc, type: 2}
   - {fileID: 11400000, guid: 100ed9b5305c90345867c8a41fc00ccd, type: 2}
@@ -62,6 +51,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 90275b9f30e5efe4fac1e52be1edcb7b, type: 2}
   - {fileID: 11400000, guid: ae2d0f9049ff68a4a8f2b9aef516e498, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: 78997a0451875154384e96e8a04133e9, type: 2}
-  dropChance: 0
-  hideEssentialEquipmentOnPlay: 1
   equipmentType: 4
