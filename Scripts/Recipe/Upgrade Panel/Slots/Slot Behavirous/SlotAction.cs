@@ -4,6 +4,7 @@ using System.Collections;
 
 /// <summary>
 /// 업그레이드 슬롯
+/// 클릭하면 상황에 따라 슬롯 타입을 결정
 /// </summary>
 public class SlotAction : MonoBehaviour
 {

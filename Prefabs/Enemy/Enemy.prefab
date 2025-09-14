@@ -469,7 +469,7 @@ MonoBehaviour:
   hitEffectPoint: {fileID: 2267519023532398335}
   whiteFlashDuration: 0.01
   knockBackSpeed: 30
-  knockBackDelay: 0.1
+  knockBackDelay: 0.2
   targetDir: {x: 0, y: 0}
   hits:
   - {fileID: 8300000, guid: e899ef94d61bed2449d5d7c6b81521ca, type: 3}
@@ -522,6 +522,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bouncingNumbers: 1
   onLandingMask: Enemy
+  jumpSound: {fileID: 0}
+  landingSound: {fileID: 0}
   onGroundHitEvent:
     m_PersistentCalls:
       m_Calls:

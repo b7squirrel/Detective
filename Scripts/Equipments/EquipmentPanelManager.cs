@@ -119,7 +119,6 @@ public class EquipmentPanelManager : MonoBehaviour
         Debug.Log("Card on Display = " + CardOnDisplay.Name);
 
     }
-
     public void SetAllFieldTypeOf(string cardType)
     {
         cardToEquip = null;
@@ -136,7 +135,7 @@ public class EquipmentPanelManager : MonoBehaviour
             card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field에는 오리만 보여줌
                                                                                      //card.Remove(CardOnDisplay);
         }
-        else if(cardType == CardType.Item.ToString())
+        else if (cardType == CardType.Item.ToString())
         {
             foreach (var item in cardList.GetEquipmentCardsList())
             {
