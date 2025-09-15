@@ -8,6 +8,9 @@ public class Character : MonoBehaviour
     [SerializeField] GameObject healEffect;
     [SerializeField] Transform[] tearTransforms;
     [SerializeField] GameObject tearEffect;
+    [SerializeField] GameObject magnetSynEffectPrefab;
+    GameObject magnetSynEffect;
+    bool isSynergyMagnetEffectActivated; // 시너지 자석 이펙트가 트리거 되면 그 때부터 계속 발산
     bool isTearEffectActivated;
 
     [field: SerializeField] public int MaxHealth { get; set; } = 3000;
@@ -68,6 +71,8 @@ public class Character : MonoBehaviour
             Heal(1, false);
             HpRegenerationTimer -= 1f;
         }
+
+        MagnetSynergy();
     }
 
     // 처음 시작할 때 persistant 데이터들을 가져옴.
@@ -201,6 +206,22 @@ public class Character : MonoBehaviour
     public int GetCurrentHP()
     {
         return currentHealth;
+    }
+
+    public void SetTriggerSynergyEffect()
+    {
+        isSynergyMagnetEffectActivated = true;
+    }
+    void MagnetSynergy()
+    {
+        if (isSynergyMagnetEffectActivated == false) return;
+        if (Time.frameCount % 30 == 0) return; // 1초에 한 번씩만 자석 효과 발생
+
+        if (magnetSynEffect == null) magnetSynEffect = GameManager.instance.poolManager.GetMisc(magnetSynEffectPrefab);
+        magnetSynEffect.transform.position = transform.position;
+        magnetSynEffect.transform.SetParent(transform);
+
+        GetComponentInChildren<Magnetic>().MagneticField(MagnetSize + 14f);
     }
 
     void Die()

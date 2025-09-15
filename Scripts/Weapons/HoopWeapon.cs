@@ -33,15 +33,18 @@ public class HoopWeapon : WeaponBase
         projSpin.transform.Rotate(Vector3.forward * weaponStats.projectileSpeed * Time.deltaTime);
         projSpinSynergy.transform.Rotate(Vector3.back * weaponStats.projectileSpeed * Time.deltaTime);
 
-        // 업그레이드 되면 프로젝타일을 중단시키고 다시 시작해서 갯수를 weaponStats.numberOfAttacks에 맞춰줌
-        int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
-        if (numberOfProjectilesToGen == 0)
-            return;
-        if (isProjectileActive == false) // 프로젝타일이 활성화 되어 있을 때만 Destroy 실행
-            return;
+        // 업그레이드 되면 프로젝타일을 중단시키고 다시 시작해서 갯수를 weaponStats.numberOfAttacks에 맞춰줌. 매 프레임 검사하지 말고 1초에 한 번씩 하기
+        if (Time.frameCount % 30 == 0)
+        {
+            int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
+            if (numberOfProjectilesToGen == 0)
+                return;
+            if (isProjectileActive == false) // 프로젝타일이 활성화 되어 있을 때만 Destroy 실행
+                return;
 
-        timer = 0; // 곧바로 업그레이드 된 갯수로 업데이트 하기위해
-        DestroyProjectiles();
+            timer = 0; // 곧바로 업그레이드 된 갯수로 업데이트 하기위해
+            DestroyProjectiles();
+        }
     }
 
     protected override void Attack()
@@ -132,6 +135,9 @@ public class HoopWeapon : WeaponBase
     public override void ActivateSynergyWeapon()
     {
         base.ActivateSynergyWeapon();
+
+        GameManager.instance.character.SetTriggerSynergyEffect(); // 자력 및 이펙트 활성화
+
         DestroyProjectiles(); // 부셔서 isProjectileActive를 false로 해줘야 다시 생성을 하게 됨
     }
 }
