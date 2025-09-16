@@ -30,12 +30,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8503271524242975902}
   m_Father: {fileID: 7915456699106812962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -2.2950006}
+  m_AnchoredPosition: {x: 0, y: -2.295}
   m_SizeDelta: {x: 35.5, y: -10.949999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8604820269004865692
@@ -377,14 +378,14 @@ RectTransform:
   m_GameObject: {fileID: 1507960126502128420}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 480389512807021369}
+  m_Father: {fileID: 2984640688887118953}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1164, y: -1585}
+  m_AnchoredPosition: {x: 18, y: 118}
   m_SizeDelta: {x: 230, y: 230}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6479801834563490973
@@ -408,7 +409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0.8, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1194,7 +1195,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1164.3765, y: -1967.7627}
-  m_SizeDelta: {x: 797.9767, y: 67.7607}
+  m_SizeDelta: {x: 621.36, y: 67.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3020995556821678046
 CanvasRenderer:
@@ -2749,7 +2750,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1164.3765, y: -1967.7627}
-  m_SizeDelta: {x: 781.93, y: 52.68141}
+  m_SizeDelta: {x: 608.86, y: 52.68}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8730838073056742235
 MonoBehaviour:
@@ -2983,7 +2984,6 @@ RectTransform:
   - {fileID: 6916666388310974683}
   - {fileID: 8466661582215163013}
   - {fileID: 8307607766659420102}
-  - {fileID: 8503271524242975902}
   - {fileID: 3777800256508992118}
   - {fileID: 7915456699106812962}
   m_Father: {fileID: 7775807230432095766}
