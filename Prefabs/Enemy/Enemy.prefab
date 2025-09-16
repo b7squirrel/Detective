@@ -369,7 +369,7 @@ Animator:
   m_GameObject: {fileID: 5297514985837409348}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 704b18454902bd74b86cb0a9cb9e0370, type: 2}
+  m_Controller: {fileID: 22100000, guid: 57a4830e7d017784fa5a110712f790ff, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -506,6 +506,7 @@ MonoBehaviour:
   isChest: 0
   multiDropRate: 0
   specialDropRate: 0
+  dropAllItemList: 0
   isChestDebuggingOn: 0
   dropItemIndex: 0
 --- !u!114 &2566266023260407847
@@ -543,7 +544,7 @@ MonoBehaviour:
   sprRndBody: {fileID: 7866643054979264505}
   sprRndshadow: {fileID: 5974572655354779491}
   enemy: {fileID: 5297514985837409457}
-  verticalVelocity: 20
+  verticalVelocity: 40
   isGrounded: 0
 --- !u!1 &6160804460574017110
 GameObject:
@@ -783,7 +784,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3, y: 2.5166667}
+  m_Size: {x: 1.4571428, y: 1.3285714}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0

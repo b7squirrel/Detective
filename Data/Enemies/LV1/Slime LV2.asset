@@ -20,12 +20,13 @@ MonoBehaviour:
     damage: 12
     rangedDamage: 0
     experience_reward: 450
-  enemyType: 0
-  projectilePrefab: {fileID: 0}
+  enemyType: 1
+  projectilePrefab: {fileID: 455867368629588361, guid: d11fd6edfa338406b92a0ebb9cf9ba93, type: 3}
   dieEffectPrefab: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
   enemyColor: {r: 0.6509804, g: 0.70980394, b: 0.015686275, a: 1}
   enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
-  distanceToPlayer: 0
-  attackInterval: 0
+  distanceToPlayer: 10
+  attackInterval: 5
   jumpRate: 0
   jumpInterval: 0
+  dialogs: []
