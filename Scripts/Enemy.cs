@@ -187,7 +187,11 @@ public class Enemy : EnemyBase
         {
             if (DetectingPlayer())
             {
-                Attack(EnemyType.Ranged);
+                float randomValue = UnityEngine.Random.Range(0f, 1f);
+                if (randomValue <= .2f)
+                {
+                    Attack(EnemyType.Ranged); // 20%확률로 발사
+                }
             }
             nextAttackTime = Time.time + attackInterval;
         }
