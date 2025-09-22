@@ -89,7 +89,7 @@ public class Enemy : EnemyBase
         }
 
         // 범위 공격
-        if (enemyType == EnemyType.Ranged) AttackCoolDown();
+        if (enemyType == EnemyType.Ranged) RangedAttackCoolDown();
     }
     #endregion
 
@@ -106,6 +106,7 @@ public class Enemy : EnemyBase
 
         //범위 공격 변수 초기화
         attackInterval = _data.attackInterval;
+        attackInterval += UnityEngine.Random.Range(0, 6f); // 동시에 투사체를 쏘는 것을 막기 위해
         distanceToPlayer = _data.distanceToPlayer;
 
         InitHpBar();
@@ -167,35 +168,44 @@ public class Enemy : EnemyBase
     protected override void AttackRange(int _damage)
     {
         if (enemyProjectile == null) return;
-        GameObject projectile = GameManager.instance.poolManager.GetMisc(enemyProjectile);
-        if(projectile == null) return; // pooling key에서 개수 제한에 걸려서 더 이상 생성되지 않았다면
-        projectile.transform.position = transform.position;
+        // GameObject projectile = GameManager.instance.poolManager.GetMisc(enemyProjectile);
+        // if (projectile == null) return; // pooling key에서 개수 제한에 걸려서 더 이상 생성되지 않았다면
+        // projectile.transform.position = transform.position;
+
+        GameObject cannonBall = Instantiate(enemyProjectile, transform.position, Quaternion.identity);
+        cannonBall.GetComponentInChildren<IEnemyProjectile>().InitProjectileDamage(Stats.rangedDamage);
+        Debug.LogError($"데미지 = {Stats.rangedDamage}");
+        
 
         // enemyProjectile의 damage값을 _damage 값으로 초기화 시키기
-        EnemyProjectile proj = projectile.GetComponent<EnemyProjectile>();
-        if (proj == null) return;
-        proj.Init(_damage, Vector3.zero);
+        // EnemyProjectile proj = projectile.GetComponent<EnemyProjectile>();
+        // if (proj == null) return;
+        // proj.Init(_damage, Vector3.zero);
     }
     protected override void AttackExplode(int _damage)
     {
         AttackMelee(_damage);
         Die();
     }
-    void AttackCoolDown()
+
+    // 범위 공격에만 해당
+    void RangedAttackCoolDown()
     {
+        if (finishedSpawn == false) return; //스폰이 끝나지 않았다면 쿨다운을 카운트 하지 않기
         if (Time.time >= nextAttackTime)
         {
             if (DetectingPlayer())
             {
                 float randomValue = UnityEngine.Random.Range(0f, 1f);
-                if (randomValue <= .2f)
+                if (randomValue <= .5f)
                 {
-                    Attack(EnemyType.Ranged); // 20%확률로 발사
+                    Attack(EnemyType.Ranged); // 10%확률로 발사
                 }
             }
             nextAttackTime = Time.time + attackInterval;
         }
     }
+
     bool DetectingPlayer()
     {
         float squDist = (Target.position - (Vector2)transform.position).sqrMagnitude;

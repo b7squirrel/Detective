@@ -143,6 +143,9 @@ public class Character : MonoBehaviour
 
         anim.SetTrigger("Hurt");
         PlayHurtSound(hurtSound);
+
+        MessageSystem.instance.PostMessagePlayer(damage.ToString());
+
         if (isTearEffectActivated == false) StartCoroutine(DoTearParticle());
 
         currentHealth -= damage;

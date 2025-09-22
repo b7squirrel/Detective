@@ -101,15 +101,21 @@ public class ShadowHeightProjectile : MonoBehaviour
     }
     void CheckGroundHit()
     {
-        Debug.Log($"Body yPos = {trnsBody.position.y}, Shadow yPos = {trnsShadow.position.y}");
+        // Debug.Log($"Body yPos = {trnsBody.position.y}, Shadow yPos = {trnsShadow.position.y}");
         if (trnsBody.position.y <= trnsShadow.position.y && !isGrounded)
         {
-            Debug.Log("Is grounds Check");
+            // Debug.Log("Is grounds Check");
             // 몸체를 그림자 위치로 정확히 맞춤
             trnsBody.position = new Vector3(trnsBody.position.x, trnsShadow.position.y, trnsBody.position.z);
             isGrounded = true;
             GroundHit();
         }
+    }
+
+    //외부에서 바운싱이 완전히 끝나서 지면에 멈춰있는 상태인지 확인할 때
+    public bool GetIsDone()
+    {
+        return IsDone;
     }
 
     void GroundHit()
@@ -138,6 +144,6 @@ public class ShadowHeightProjectile : MonoBehaviour
         bounceCounter++;
         isGrounded = false;
 
-        Debug.Log($"Bouncing! New verticalVelocity: {verticalVelocity}, Remaining bounces: {bounceCounter}");
+        // Debug.Log($"Bouncing! New verticalVelocity: {verticalVelocity}, Remaining bounces: {bounceCounter}");
     }
 }

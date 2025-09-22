@@ -34,7 +34,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     float pastFacingDir, currentFacingDir;
 
     bool initDone;
-    public bool finishedSpawn; // 스폰이 끝나면 적이 이동하도록 하려고
+    protected bool finishedSpawn; // 스폰이 끝나면 적이 이동하도록 하려고
 
     Vector2 pastPos; // 벽 바깥으로 나가면 다시 되돌리기 위한 변수
 
@@ -516,6 +516,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         gameObject.SetActive(false);
     }
+
     // 보스가 등장할 때 적들은 모두 없어지도록 할 때 쓰는 Die
     // 아무것도 드롭하지 않도록 Drop on Destroy를 포함하지 않음
     // 플레이어의 kill수에도 포함시키지 않음

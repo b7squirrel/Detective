@@ -7,6 +7,7 @@ public class BossDrillBomb : MonoBehaviour
     [SerializeField] int damage;
     [SerializeField] float radius; // 폭발 범위
     [SerializeField] LayerMask targetLayer; // 플레이어를 선택하기
+    [SerializeField] Transform damageIndicator; // 데미지 인디케이터 스케일 조절
     Coroutine co;
     Animator anim;
 
@@ -18,6 +19,9 @@ public class BossDrillBomb : MonoBehaviour
     {
         if (co != null) co = null;
         StartCoroutine(ExplodeCo());
+
+        damageIndicator.gameObject.SetActive(false);
+        damageIndicator.localScale = radius * Vector2.one; 
     }
     IEnumerator ExplodeCo()
     {
@@ -25,7 +29,10 @@ public class BossDrillBomb : MonoBehaviour
         if (anim == null) anim = GetComponent<Animator>();
         anim.SetTrigger("Trigger");
 
-        yield return new WaitForSeconds(1f); // 폭탄 터지기 직전 애니메이션 길이 1초
+        damageIndicator.gameObject.SetActive(true);
+        damageIndicator.position = transform.position;
+
+        // yield return new WaitForSeconds(1f); // 폭탄 터지기 직전 애니메이션 길이 1초
 
         Collider2D playerInRange = Physics2D.OverlapCircle(transform.position, radius, targetLayer);
 
@@ -43,6 +50,8 @@ public class BossDrillBomb : MonoBehaviour
                 playerInRange.GetComponent<Character>().TakeDamage(damage, EnemyType.Melee);
             }
         }
+
+        damageIndicator.gameObject.SetActive(false);
 
         gameObject.SetActive(false);
     }

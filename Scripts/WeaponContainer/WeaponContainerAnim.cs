@@ -13,10 +13,12 @@ public class WeaponContainerAnim : MonoBehaviour
     [SerializeField] Transform handsGroup; // 손과 함께 움직이는 중비들은 모두 여기에 페어런트 시킨다
     [SerializeField] GameObject[] testParts; // 테스트 파츠. 생성되면 바로 숨기도록
     [SerializeField] Transform headMain; // 머리의 offset을 적용
+    [SerializeField] Sprite hurtExpressionSprite; // hurt 얼굴 표정 스프라이트
     Vector2 headOffset; // 여러 오리를 돌려쓰는 것이 아니니까 UI와는 다르게 그냥 offset 저장
     StartingDataContainer startingDataContainer;
 
     Sprite sprite; // 개별 무기들의 sprite
+    Sprite faceDefaultSprite; // 얼굴 스프라이트
 
     // 장비 스프라이트
     [SerializeField] SpriteRow[] equipSprites = new SpriteRow[4];
@@ -112,7 +114,13 @@ public class WeaponContainerAnim : MonoBehaviour
             }
         }
         face.sprite = _wd.faceImage;
+        faceDefaultSprite = _wd.faceImage; // 얼굴 표정 저장. hurt expression과 번갈아 교체하기 위행
         face.gameObject.SetActive(true);
+    }
+    // 애니메이션 이벤트로 제어. bool 매개 변수가 허용되지 않으니까 int로 bool처럼 사용. 1이면 디폴트. 0이면 hurt
+    public void SetFaceExpressionDefault(int isDefault)
+    {
+        face.sprite = isDefault == 1 ? faceDefaultSprite : hurtExpressionSprite;
     }
 
     // 따라다니는 아이들의 sprite는 모두 default로
@@ -285,6 +293,7 @@ public class WeaponContainerAnim : MonoBehaviour
             SetSpriteColorToDefault();
         }
     }
+    
     IEnumerator InvincibleSpriteChangeCo()
     {
         while(true)
