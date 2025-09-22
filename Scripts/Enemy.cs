@@ -174,8 +174,7 @@ public class Enemy : EnemyBase
 
         GameObject cannonBall = Instantiate(enemyProjectile, transform.position, Quaternion.identity);
         cannonBall.GetComponentInChildren<IEnemyProjectile>().InitProjectileDamage(Stats.rangedDamage);
-        Debug.LogError($"데미지 = {Stats.rangedDamage}");
-        
+        anim.SetBool("Attack", true); // 초록이의 공격 애니메이션 끝에 false로 만듬  
 
         // enemyProjectile의 damage값을 _damage 값으로 초기화 시키기
         // EnemyProjectile proj = projectile.GetComponent<EnemyProjectile>();
@@ -214,11 +213,17 @@ public class Enemy : EnemyBase
         return false;
     }
 
+    #region 애니메이션 이벤트
+    public void SetAttackAnimDone()
+    {
+        anim.SetBool("Attack", false);
+    }
+    #endregion
 
     #region Shadow Height에서 사용하기 위한 함수들
     public void ActivateCollider(bool activateCol)
     {
-        colEnemy.enabled= activateCol;
+        colEnemy.enabled = activateCol;
     }
 
     // 점프를 위해 매프레임마다 수평 이동 속도가 필요하다
