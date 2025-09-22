@@ -123,7 +123,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 744530775505448960}
-  m_LocalRotation: {x: -0, y: -0, z: 0.04540759, w: 0.99896854}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.99508613, y: 1.003096, z: 1}
   m_ConstrainProportionsScale: 0
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 921716937, guid: 3574a1381cbc65e4987e8ec9204eec06, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7fc856c3f18704744b7b3270e702d3fe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2722,6 +2722,7 @@ GameObject:
   - component: {fileID: 1671383692817570348}
   - component: {fileID: 6165448260430086524}
   - component: {fileID: 8917666631333972771}
+  - component: {fileID: 786991550350908684}
   m_Layer: 5
   m_Name: Loading Bar
   m_TagString: Untagged
@@ -2856,6 +2857,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.2}
   m_EffectDistance: {x: 16.37, y: -15}
   m_UseGraphicAlpha: 1
+--- !u!114 &786991550350908684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283054076678886667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 864d778ca4a024afd947868e973a30a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oriAnim: {fileID: 2250234584711402690}
 --- !u!1 &8519794442502995519
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class LoadingSceneManager : MonoBehaviour
         StartCoroutine(LoadSceneCo());
     }
 
-    // Àû¾îµµ 3ÃÊ°£ ·ÎµùÇÏµµ·Ï
+    // ìµœì†Œí•œ 3ì´ˆê°„ì€ ë¡œë”©ë˜ë„ë¡
     IEnumerator LoadSceneCo()
     {
         //yield return null;
@@ -27,18 +27,18 @@ public class LoadingSceneManager : MonoBehaviour
         AsyncOperation op1 = SceneManager.LoadSceneAsync("Essential", LoadSceneMode.Single);
         op1.allowSceneActivation = false;
 
-        float timer = 0f; // ·Îµù ½Ã°£ Àç±â
+        float timer = 0f; // ë¡œë”© ì‹œê°„ ì¸¡ì •ìš©
 
         while (!op1.isDone)
         {
-            // 90%±îÁö´Â ¾À·Îµù¿¡ µû¶ó ·Îµù¹Ù Áõ°¡
+            // 90%ê¹Œì§€ëŠ” ì‹¤ì œ ë¡œë”©ì´ ì§„í–‰ë¨
             if (op1.progress < 0.9f)
             {
-                // ±×·¡ÇÁ µî Ç¥½Ã
+                // ê·¸ êµ¬ê°„ê¹Œì§€ë§Œ ê²Œì´ì§€ í‘œì‹œ
                 progressBar.value = Mathf.MoveTowards(progressBar.value, 1f, Time.deltaTime);
                 SetProgressText();
             }
-            // ±× ÀÌÈÄ·Î´Â 100%±îÁö ÆäÀÌÅ© ·Îµù
+            // ê·¸ ì´í›„ë¶€í„°ëŠ” 100%ê¹Œì§€ ì¸ìœ„ì ìœ¼ë¡œ ì±„ì›€
             else
             {
                 timer += Time.unscaledDeltaTime;
