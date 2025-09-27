@@ -281,7 +281,7 @@ public class WeaponContainerAnim : MonoBehaviour
     #region 크기 변화
     public void Scale(float scaleFactor)
     {
-        
+        transform.localScale = scaleFactor * Vector2.one;
     }
     #endregion
 

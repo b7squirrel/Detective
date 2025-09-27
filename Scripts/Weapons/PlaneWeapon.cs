@@ -15,6 +15,7 @@ public class PlaneWeapon : WeaponBase
 
     protected override void Attack()
     {
+        base.Attack();
         StartCoroutine(AttackCo());
     }
     IEnumerator AttackCo()
@@ -34,7 +35,7 @@ public class PlaneWeapon : WeaponBase
         plane.transform.position = transform.position;
         //Vector3 target = transform.position - new Vector3(10f, 0, 0);
         //Instantiate(debugDot, GetTargetPos(), Quaternion.identity);
-        plane.GetComponent<PlaneProjectile>().Init(GetTargetPos());
+        plane.GetComponent<PlaneProjectile>().Init(GetTargetPos(), damage);
     }
 
     Vector2 GetTargetPos()

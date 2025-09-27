@@ -15,9 +15,9 @@ public class HoopWeapon : WeaponBase
     float projectileHealth;
     bool isProjectileActive;
 
-    public override void Init(WeaponStats stats)
+    public override void Init(WeaponStats stats, bool isLead)
     {
-        base.Init(stats);
+        base.Init(stats, isLead);
         projSpin = new GameObject("Projectile Spin Board").transform;
         projSpin.position = transform.position;
         projSpin.parent = transform;

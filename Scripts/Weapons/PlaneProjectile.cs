@@ -51,7 +51,7 @@ public class PlaneProjectile : ProjectileBase
             DieProjectile();
         }
     }
-    public void Init(Vector3 _taget)
+    public void Init(Vector3 _taget, int damage)
     {
         // 타겟과의 초기 각도 오프셋을 설정합니다.
         target = _taget;
@@ -61,6 +61,8 @@ public class PlaneProjectile : ProjectileBase
         //offsetDirection = (target - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, offsetDirection);
         transform.localScale = .5f * Vector3.one;
+
+        Damage = damage;
     }
 
     protected override void AttackCoolTimer()

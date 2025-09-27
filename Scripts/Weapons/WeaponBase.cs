@@ -13,9 +13,10 @@ public class WeaponBase : MonoBehaviour
     protected float knockback; // Attack이 시작되면 GetKnockBackChance()로 얻어냄
     [SerializeField] protected float knockbackSpeedFactor; // 각 무기의 프리펩에서 직접 입력
 
-    public Character Wielder {get; private set;}
+    public Character Wielder { get; private set; }
     protected bool isSynergyWeaponActivated;
     protected bool isCriticalDamage; // 크리티컬은 GetDamage에서 결정되고 필요하면 projectileBase에 넘겨진다
+    protected bool isLead; // 리드는 공격할 때 크기 변화가 없도록 하기위해
 
     public Animator anim;
     public Animator animExtra;
@@ -35,6 +36,7 @@ public class WeaponBase : MonoBehaviour
     protected Vector2 size;
     [SerializeField] protected LayerMask enemy;
     protected WeaponContainerAnim weaponContainerAnim;
+    Coroutine weaponContainerCo; // 스케일을 할 때는 이전 코루틴을 취소하기 위해
     protected Vector2 dir; // 가장 가까운 적으로의 방향
     protected Vector2 dirExtra;
     protected Vector2 direction;
@@ -43,11 +45,13 @@ public class WeaponBase : MonoBehaviour
 
     #endregion
 
-    public virtual void Init(WeaponStats stats)
+    public virtual void Init(WeaponStats stats, bool isLead)
     {
         weaponContainerAnim = GetComponentInParent<WeaponContainerAnim>();
         timer = stats.timeToAttack; // Init이 실행되는 시점에서 weaponStats이 초기화 되지 않아서 stats를 넘겨받아서 timer초기화
         isSynergyWeaponActivated = false;
+
+        this.isLead = isLead;
     }
     protected virtual void Awake()
     {
@@ -105,6 +109,7 @@ public class WeaponBase : MonoBehaviour
                             wd.stats.knockBackChance);
     }
 
+    #region 공격
     protected virtual void GetAttackParameters()
     {
         damage = GetDamage();
@@ -114,7 +119,19 @@ public class WeaponBase : MonoBehaviour
     protected virtual void Attack()
     {
         GetAttackParameters();
+        if (isLead == false) // 리드가 아닐 때만 공격 할 때 커지도록
+        {
+            if (weaponContainerCo != null) StopCoroutine(weaponContainerCo);
+            weaponContainerCo = StartCoroutine(SetOriScale(1.2f));
+        }
         // Do Attack
+    }
+
+    IEnumerator SetOriScale(float scaleFactor)
+    {
+        weaponContainerAnim.transform.localScale = scaleFactor * Vector2.one;
+        yield return new WaitForSeconds(.2f);
+        weaponContainerAnim.transform.localScale = .8f * Vector2.one;
     }
 
     /// <summary>
@@ -153,6 +170,7 @@ public class WeaponBase : MonoBehaviour
     {
         MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, isCriticalDamage);
     }
+    #endregion
 
     internal void Upgrade(UpgradeData upgradeData)
     {
@@ -206,7 +224,7 @@ public class WeaponBase : MonoBehaviour
         }
     }
 
-    //방향 관련
+    #region 방향 관련
     protected virtual List<Vector2> FindTarget(int numberOfTargets)
     {
         // 화면 안에서 공격 가능한 개체들 검색
@@ -328,6 +346,7 @@ public class WeaponBase : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z);
         }
     }
+    #endregion
 
     public virtual void ActivateSynergyWeapon()
     {
