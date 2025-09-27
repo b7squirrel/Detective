@@ -278,7 +278,14 @@ public class WeaponContainerAnim : MonoBehaviour
     {
         _sp.sprite = sprite;
     }
-    #region Invincible
+    #region 크기 변화
+    public void Scale(float scaleFactor)
+    {
+        
+    }
+    #endregion
+
+    #region 무적 모드
     public void SetSpritesInvincible(bool _isInvincible)
     {
         // 먼저 진행되고 있던 코루틴이 있다면 종료
