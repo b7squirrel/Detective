@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlaneWeapon : WeaponBase
@@ -35,7 +36,17 @@ public class PlaneWeapon : WeaponBase
         plane.transform.position = transform.position;
         //Vector3 target = transform.position - new Vector3(10f, 0, 0);
         //Instantiate(debugDot, GetTargetPos(), Quaternion.identity);
-        plane.GetComponent<PlaneProjectile>().Init(GetTargetPos(), damage);
+
+        // 가장 가까운 적을 향해 발사
+        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(1);
+        if (closestEnemyPosition == null) return;
+        if (closestEnemyPosition[0] == Vector2.zero)
+        {
+            return;
+        }
+
+        // plane.GetComponent<PlaneProjectile>().Init(GetTargetPos(), damage);
+        plane.GetComponent<PlaneProjectile>().Init(closestEnemyPosition[0], damage);
     }
 
     Vector2 GetTargetPos()

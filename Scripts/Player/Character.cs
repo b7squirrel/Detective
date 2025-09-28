@@ -111,6 +111,7 @@ public class Character : MonoBehaviour
 
         if (GameManager.instance.startingDataContainer == null)
         {
+            Debug.LogError("스타팅 데이터가 없습니다.");
             MaxHealth = 3000;
             DamageBonus = 0;
             return;

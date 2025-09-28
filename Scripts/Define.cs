@@ -205,7 +205,7 @@ public class Equation
 {
     public int GetDamage(int _originalDamage, int _damageBonus)
     {
-        int damage = (int)(_originalDamage + (_originalDamage * _damageBonus / 100));
+        int damage = Mathf.CeilToInt(_originalDamage + (_originalDamage * _damageBonus / 10)); // original damage가 작더라도 잘 반영되도록 무조건 올림
         return damage;
     }
 
@@ -222,9 +222,9 @@ public class Equation
         return _defaultCoolDownTime - (_rate * ((_grade + 4) + _evoStage));
     }
 
-    public int GetSkillDamage(float _rate, int _grade, int _evoStage, float _defaultDamage)
+    public int GetSkillDamage(float _rate, int _grade, int _evoStage, float _defaultDamageBonus)
     {
-        return (int)(_defaultDamage * (int)(_rate * ((_grade + 4) + _evoStage)));
+        return (int)(_defaultDamageBonus * (int)(_rate * ((_grade + 4) + _evoStage)));
     }
 
     public float GetSkillDuration(float _rate, int _grade, int _evoStage, float _defaultDuration)

@@ -35,6 +35,8 @@ public class Skill500 : SkillBase
 
         realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultDuration);
         realDamageBonus = new Equation().GetSkillDamageBonus(rate, Grade, EvoStage, defaultDamageBonus);
+
+        Debug.LogError($"디폴트 데미지 보너스 = {defaultDamageBonus} 리얼 데미지 보너스 = {realDamageBonus}");
     }
 
     public override void UseSkill()

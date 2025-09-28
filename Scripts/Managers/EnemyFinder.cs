@@ -23,7 +23,7 @@ public class EnemyFinder : MonoBehaviour
         instance = this;
         halfHeight = Camera.main.orthographicSize;
         halfWidth = Camera.main.aspect * halfHeight;
-        size = new Vector2(halfWidth * 1.6f, halfHeight * 1.6f);
+        size = new Vector2(halfWidth * .6f, halfHeight * .6f);
 
         pickedEnemies = new List<Vector2>();
         allEnemies = new();

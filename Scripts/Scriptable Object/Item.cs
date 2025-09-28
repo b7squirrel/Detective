@@ -97,6 +97,8 @@ public class Item : ScriptableObject
         character.HpRegenerationRate += stats.hpRegenRate;
 
         character.GetComponent<PassiveItems>().CheckIfMaxLevel(this);
+
+        Debug.LogError($"데미지 보너스 = {character.DamageBonus} 총 데미지 = {stats.damage}");
     }
 
     void CheckIfMaxLevel(Character character)
