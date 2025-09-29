@@ -55,17 +55,18 @@ public class CardData
         PassiveSkill = SafeParseInt(_passiveSkill, "PassiveSkill");
     }
     
+    // filedName은 디버깅을 위한 문자열
     private int SafeParseInt(string value, string fieldName)
     {
-        string cleanValue = value?.Trim();
-        if (int.TryParse(cleanValue, out int result))
+        string cleanValue = value?.Trim(); // 입력 문자열 앞뒤 공백 제거 (null도 안전하게 처리)
+        if (int.TryParse(cleanValue, out int result)) // 정수 변환 시도
         {
-            return result;
+            return result; // 변환 성공 → 정수 반환
         }
         else
         {
             Debug.LogWarning($"{fieldName} 파싱 실패: '{value}' - 기본값 0 사용");
-            return 0;
+            return 0; // 변환 실패 → 0 반환
         }
     }
 

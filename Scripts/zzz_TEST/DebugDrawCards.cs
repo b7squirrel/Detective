@@ -21,12 +21,14 @@ public class DebugDrawCards : MonoBehaviour
     int weaponIndex, itemIndex;
     int weaponGrade, itemGrade;
     string[] cardGrade = { "일반", "희귀", "고급", "전설", "신화" };
+    int weaponSkillIndex;
 
     [Header("UI")]
     [SerializeField] TMPro.TextMeshProUGUI weaponNumText;
     [SerializeField] TMPro.TextMeshProUGUI itemNumText;
     [SerializeField] TMPro.TextMeshProUGUI weaponGradeText;
     [SerializeField] TMPro.TextMeshProUGUI itemGradeText;
+    [SerializeField] TMPro.TextMeshProUGUI weaponSkillText;
 
     void Start()
     {
@@ -46,6 +48,8 @@ public class DebugDrawCards : MonoBehaviour
 
         SetWeaponGrade(0);
         SetItemGrade(0);
+
+        SetWeaponSkill(0);
     }
 
     public void InitWeaponSlot(WeaponData wd, CardData cardData)
@@ -79,7 +83,7 @@ public class DebugDrawCards : MonoBehaviour
         }
     }
 
-    #region UI
+    #region 등급 설정
     public void SetWeaponGrade(int steps)
     {
         weaponGrade += steps;
@@ -128,6 +132,21 @@ public class DebugDrawCards : MonoBehaviour
         // 등급이 올라가거나 내려가면 한 칸씩 이동. 범위를 벗어나면 순회
         SetItemCard(addition);
     }
+    #endregion
+
+    #region 스킬 설정
+    public void SetWeaponSkill(int steps)
+    {
+        weaponSkillIndex = steps == 0 ? weaponSkillIndex = 0 : weaponSkillIndex + steps; // 초기화를 위해
+        if (weaponSkillIndex < 0) weaponSkillIndex = 4;
+        if (weaponSkillIndex > 4) weaponSkillIndex = 0;
+
+        weaponSkillText.text = Skills.SkillNames[weaponSkillIndex];
+        Debug.Log($"스킬 인덱스 = {weaponSkillIndex}");
+    }
+    #endregion
+
+    #region 카드 개수 설정
     public void SetWeaponNum(bool addition)
     {
         weaponNum = addition ? weaponNum + 1 : weaponNum - 1;
@@ -141,6 +160,9 @@ public class DebugDrawCards : MonoBehaviour
         if (itemNum <= 0) itemNum = 1;
         itemNumText.text = itemNum.ToString();
     }
+    #endregion
+
+    #region 오리 종류 설정
     public void SetWeaponCard(int steps)
     {
         weaponIndex += steps;
@@ -156,14 +178,16 @@ public class DebugDrawCards : MonoBehaviour
         if (itemIndex > itemPools.Count - 1) itemIndex = 0; // 최대값을 넘어가면 0으로 가서 루프가 되도록
         InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[itemIndex]).itemData, itemPools[itemIndex]);
     }
+    #endregion
 
+    #region 특정 카드 뽑기
     public void DrawWeaponCard()
     {
-        gachaSystem.DrawSpecificCard("Weapon", weaponIndex, weaponGrade, weaponNum);
+        gachaSystem.DrawSpecificCard("Weapon", weaponIndex, weaponGrade, weaponNum, weaponSkillIndex);
     }
     public void DrawItemCard()
     {
-        gachaSystem.DrawSpecificCard("Item", itemIndex, weaponGrade, itemNum);
+        gachaSystem.DrawSpecificCard("Item", itemIndex, weaponGrade, itemNum, 0); // 아이템은 스킬이 없으니 그냥 0을 입력
     }
     #endregion
 }
