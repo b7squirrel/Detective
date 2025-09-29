@@ -107,14 +107,18 @@ public class GachaSystem : MonoBehaviour
             {
                 newCardData = CloneCardData(itemPools[index]);
                 newCardData.Grade = grade;
-                cardDataManager.AddNewCardToMyCardsList(newCardData);
+                // cardDataManager.AddNewCardToMyCardsList(newCardData);
+
+                newCardData.PassiveSkill = skill + 1;
+                newCardData.EvoStage = evo;
+                cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
 
                 cardsPicked.Add(newCardData);
 
                 // 카드 슬롯 풀에 카드 슬롯 추가
                 AddCardSlot(newCardData);
-                if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-                cardSlotManager.AddItemSlotOf(newCardData);
+                // if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+                // cardSlotManager.AddItemSlotOf(newCardData);
             }
         }
 

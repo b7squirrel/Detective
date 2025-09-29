@@ -27,6 +27,7 @@ public class EquipInfoPanel : MonoBehaviour
     // 처음 패널이 활성화 되면 초기화
     public void SetPanel(CardData cardData, Item itemData, CardDisp _cardDisp, bool isEquipButton, bool isEssential)
     {
+        Debug.LogError($"item data = {itemData.DisplayName}");
         this.cardDisp = _cardDisp;
 
         grade.text = MyGrade.mGrades[cardData.Grade].ToString();
@@ -37,6 +38,8 @@ public class EquipInfoPanel : MonoBehaviour
         NameLabelGlow.color = MyGrade.GradeGlowColors[cardData.Grade];
         SetItemCardBase(cardData.Grade);
         Level.text = "LV " + cardData.Level.ToString() + " / " + StaticValues.MaxLevel.ToString();
+
+        GetPassiveSkillLevel(cardData);
 
         grade.color = Color.black;
         Name.color = Color.black;
@@ -109,22 +112,22 @@ public class EquipInfoPanel : MonoBehaviour
     {
         if (_cardData.PassiveSkill >= 0 && _cardData.PassiveSkill < Skills.SkillNames.Length)
         {
-            skillName.text = Skills.SkillNames[_cardData.PassiveSkill].ToString();
-            skillDescription.text = Skills.SkillDescriptions[_cardData.PassiveSkill];
+            skillName.text = Skills.itemSkillNames[_cardData.PassiveSkill].ToString();
+            skillDescription.text = Skills.itemSkillDescriptions[_cardData.PassiveSkill];
             skillLabel.color = MyGrade.GradeColors[_cardData.Grade];
-            int skillFullNumber = GameManager.instance.startingDataContainer.GetSkillName();
-            if (skillFullNumber % 10 == 0)
-            {
-                skillEvoLevel.text = "I";
-            }
-            if (skillFullNumber % 10 == 1)
-            {
-                skillEvoLevel.text = "II";
-            }
-            if (skillFullNumber % 10 == 2)
-            {
-                skillEvoLevel.text = "III";
-            }
+            // int skillFullNumber = GameManager.instance.startingDataContainer.GetSkillName();
+            // if (skillFullNumber % 10 == 0)
+            // {
+            //     skillEvoLevel.text = "I";
+            // }
+            // if (skillFullNumber % 10 == 1)
+            // {
+            //     skillEvoLevel.text = "II";
+            // }
+            // if (skillFullNumber % 10 == 2)
+            // {
+            //     skillEvoLevel.text = "III";
+            // }
         }
     }
 }

@@ -176,6 +176,22 @@ public class Skills
         //"Grant periodic invincibility to the player.",
         //"Periodically boost the attack power of both the player and allies."
     };
+
+    // 아이템 스킬
+    public static string[] itemSkillNames = new string[]
+    {
+        "모든 공격",
+        "모든 방어",
+        "이동 속도",
+        "넓은 자석",
+    };
+    public static string[] itemSkillDescriptions = new string[]
+    {
+        "모든 오리들의 공격력을 높여줍니다.",
+        "리드 오리의 방어력을 높여줍니다.",
+        "리드 오리의 이동 속도를 높여줍니다.",
+        "자력 범위를 더 넓혀 줍니다.",
+    };
 }
 
 public class StaticValues
@@ -185,6 +201,7 @@ public class StaticValues
     public static int MaxGrade = 5; // grade 0, 1, 2, 3, 4
     public static int MaxItemGrade = 3; // grade 0, 1, 2
     public static int MaxSkillNumbers = 5; // skill 1, 2, 3, 4, 5 : 3자리수의 백자리가 0이 될 수 없음
+    public static int MaxItemSkillNumbers = 4; // skill 1, 2, 3, 4
     public static int MaxEnemyNumbers;
     public static int MaxGemNumbers;
 

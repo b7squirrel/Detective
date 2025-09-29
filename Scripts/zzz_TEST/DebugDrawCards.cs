@@ -20,9 +20,9 @@ public class DebugDrawCards : MonoBehaviour
     int weaponNum, itemNum;
     int weaponIndex, itemIndex;
     int weaponGrade, itemGrade;
-    int weaponEvoIndex, itemEvo;
+    int weaponEvoIndex, itemEvoIndex;
     string[] cardGrade = { "일반", "희귀", "고급", "전설", "신화" };
-    int weaponSkillIndex;
+    int weaponSkillIndex, itemSkillIndex;
 
     [Header("UI")]
     [SerializeField] TMPro.TextMeshProUGUI weaponNumText;
@@ -30,7 +30,9 @@ public class DebugDrawCards : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI weaponGradeText;
     [SerializeField] TMPro.TextMeshProUGUI itemGradeText;
     [SerializeField] TMPro.TextMeshProUGUI weaponSkillText;
-    [SerializeField] TMPro.TextMeshProUGUI weaponEVOText;
+    [SerializeField] TMPro.TextMeshProUGUI itemSkillText;
+    [SerializeField] TMPro.TextMeshProUGUI weaponEvoText;
+    [SerializeField] TMPro.TextMeshProUGUI itemEvoText;
 
     void Start()
     {
@@ -52,8 +54,10 @@ public class DebugDrawCards : MonoBehaviour
         SetItemGrade(0);
 
         SetWeaponSkill(0);
+        SetItemSkill(0);
 
         SetWeaponEvo(0);
+        SetItemEvo(0);
     }
 
     public void InitWeaponSlot(WeaponData wd, CardData cardData)
@@ -148,6 +152,16 @@ public class DebugDrawCards : MonoBehaviour
         weaponSkillText.text = Skills.SkillNames[weaponSkillIndex];
         Debug.Log($"스킬 인덱스 = {weaponSkillIndex}");
     }
+
+    public void SetItemSkill(int steps)
+    {
+        itemSkillIndex = steps == 0 ? itemSkillIndex = 0 : itemSkillIndex + steps; // 초기화를 위해
+        if (itemSkillIndex < 0) itemSkillIndex = 3;
+        if (itemSkillIndex > 3) itemSkillIndex = 0;
+
+        itemSkillText.text = Skills.itemSkillNames[itemSkillIndex];
+        Debug.Log($"아이템 스킬 인덱스 = {itemSkillIndex}");
+    }
     #endregion
 
     #region EVO 설정
@@ -157,8 +171,18 @@ public class DebugDrawCards : MonoBehaviour
         if (weaponEvoIndex < 0) weaponEvoIndex = 2;
         if (weaponEvoIndex > 2) weaponEvoIndex = 0;
 
-        weaponEVOText.text = (weaponEvoIndex + 1).ToString();
+        weaponEvoText.text = (weaponEvoIndex + 1).ToString();
         SetWeaponCard(0);
+    }
+
+    public void SetItemEvo(int steps)
+    {
+        itemEvoIndex = steps == 0 ? itemEvoIndex = 0 : itemEvoIndex + steps; // 초기화를 위해
+        if (itemEvoIndex < 0) itemEvoIndex = 2;
+        if (itemEvoIndex > 2) itemEvoIndex = 0;
+
+        itemEvoText.text = (itemEvoIndex + 1).ToString();
+        SetItemCard(0);
     }
     #endregion
 
@@ -194,6 +218,8 @@ public class DebugDrawCards : MonoBehaviour
         itemIndex += steps;
         if (itemIndex < 0) itemIndex = itemPools.Count - 1 - 4; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록 (다시 4를 빼서 일반 그레이드로 가도록)
         if (itemIndex > itemPools.Count - 1) itemIndex = 0; // 최대값을 넘어가면 0으로 가서 루프가 되도록
+
+        itemPools[itemIndex].EvoStage = itemEvoIndex;
         InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[itemIndex]).itemData, itemPools[itemIndex]);
     }
     #endregion
@@ -205,7 +231,7 @@ public class DebugDrawCards : MonoBehaviour
     }
     public void DrawItemCard()
     {
-        gachaSystem.DrawSpecificCard("Item", itemIndex, weaponGrade, itemNum, 0, 0); // 아이템은 스킬이 없으니 그냥 0을 입력
+        gachaSystem.DrawSpecificCard("Item", itemIndex, itemGrade, itemNum, itemSkillIndex, itemEvoIndex); 
     }
     #endregion
 }

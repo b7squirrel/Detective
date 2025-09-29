@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CowboyFace 1
   m_EditorClassIdentifier: 
   Name: Cowboy Mustache
-  DisplayName: 
+  DisplayName: "\uCE74\uC6B0\uC624\uB9AC \uC218\uC5FC"
   grade: 1
   charImage: {fileID: 21300000, guid: 4bbb6d9d3a7eddc45b99248c1f0d4603, type: 3}
   equippedImage: {fileID: 664530602, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
@@ -22,6 +22,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 7161e179c96f47a4e9578fe102787586, type: 3}
   needToOffset: 0
   posHead: {x: 0, y: 0}
+  worldPosHead: {x: 0, y: 0}
   CardItemAnimator:
     CardImageAnim: {fileID: 9100000, guid: b2cd7876cb0d1924195a8a0726003958, type: 2}
     InGamePlayerAnim: {fileID: 0}
@@ -44,3 +45,4 @@ MonoBehaviour:
     currentLevel: 0
   upgrades: []
   dropChance: 0
+  itemIndex: 6
