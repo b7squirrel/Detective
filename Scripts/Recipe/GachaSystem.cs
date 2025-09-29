@@ -83,7 +83,7 @@ public class GachaSystem : MonoBehaviour
         }
     }
     #region Debug 특정 카드 뽑기
-    public void DrawSpecificCard(string _cardType, int index, int grade, int num, int skill)
+    public void DrawSpecificCard(string _cardType, int index, int grade, int num, int skill, int evo)
     {
         for (int i = 0; i < num; i++)
         {
@@ -93,9 +93,9 @@ public class GachaSystem : MonoBehaviour
             {
                 newCardData = CloneCardData(weaponPools[index]);
                 newCardData.Grade = grade;
-                newCardData.PassiveSkill = skill + 1; // 스킬 데이터는 1부터 5까지니까
-                Debug.Log($"가챠 시스템. 패시브 스킬 = {newCardData.PassiveSkill} 스킬 인덱스 = {skill + 1}");
-                cardDataManager.AddNewCardToMyCardsList(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
+                newCardData.PassiveSkill = skill + 1; 
+                newCardData.EvoStage = evo;
+                cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
                 AddEssentialEquip(newCardData);
 
                 cardsPicked.Add(newCardData);

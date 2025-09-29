@@ -353,14 +353,29 @@ public class CardDataManager : MonoBehaviour
         MyCardsList.Add(_cardData);
         Save();
     }
+
+    // AddNewCardToMyCardsList와 동일. 디버그 용으로 특정 스킬을 지정해서 카드를 뽑을 때 사용하는 메서드
+    // 이미 카드 데이터에 Skill을 가지고 이 메서드로 오게 되므로 Add Random Skill이 없음
+    public void AddNewCardToMyCardsListWithSkill(CardData _cardData)
+    {
+        if (_cardData == null) return;
+
+        if (MyCardsList == null)
+            MyCardsList = new List<CardData>();
+
+        _cardData.ID = GenerateRandomId();
+        Debug.LogError($"카드 데이터 메니져. Skill = {_cardData.PassiveSkill}");
+        MyCardsList.Add(_cardData);
+        Save();
+    }
     
     public void AddUpgradedCardToMyCardList(CardData _cardData)
     {
         if (_cardData == null) return;
-        
+
         if (MyCardsList == null)
             MyCardsList = new List<CardData>();
-        
+
         MyCardsList.Add(_cardData);
         Save();
     }

@@ -20,6 +20,7 @@ public class DebugDrawCards : MonoBehaviour
     int weaponNum, itemNum;
     int weaponIndex, itemIndex;
     int weaponGrade, itemGrade;
+    int weaponEvoIndex, itemEvo;
     string[] cardGrade = { "일반", "희귀", "고급", "전설", "신화" };
     int weaponSkillIndex;
 
@@ -29,6 +30,7 @@ public class DebugDrawCards : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI weaponGradeText;
     [SerializeField] TMPro.TextMeshProUGUI itemGradeText;
     [SerializeField] TMPro.TextMeshProUGUI weaponSkillText;
+    [SerializeField] TMPro.TextMeshProUGUI weaponEVOText;
 
     void Start()
     {
@@ -50,6 +52,8 @@ public class DebugDrawCards : MonoBehaviour
         SetItemGrade(0);
 
         SetWeaponSkill(0);
+
+        SetWeaponEvo(0);
     }
 
     public void InitWeaponSlot(WeaponData wd, CardData cardData)
@@ -146,6 +150,18 @@ public class DebugDrawCards : MonoBehaviour
     }
     #endregion
 
+    #region EVO 설정
+    public void SetWeaponEvo(int steps)
+    {
+        weaponEvoIndex = steps == 0 ? weaponEvoIndex = 0 : weaponEvoIndex + steps; // 초기화를 위해
+        if (weaponEvoIndex < 0) weaponEvoIndex = 2;
+        if (weaponEvoIndex > 2) weaponEvoIndex = 0;
+
+        weaponEVOText.text = (weaponEvoIndex + 1).ToString();
+        SetWeaponCard(0);
+    }
+    #endregion
+
     #region 카드 개수 설정
     public void SetWeaponNum(bool addition)
     {
@@ -168,6 +184,8 @@ public class DebugDrawCards : MonoBehaviour
         weaponIndex += steps;
         if (weaponIndex < 0) weaponIndex = weaponPools.Count - 1 - 4; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록 (다시 4를 빼서 일반 그레이드로 가도록)
         if (weaponIndex > weaponPools.Count - 1) weaponIndex = 0; // 최대값을 넘어가면 0으로 가서 루프가 되도록
+
+        weaponPools[weaponIndex].EvoStage = weaponEvoIndex;
         InitWeaponSlot(cardDictionary.GetWeaponItemData(weaponPools[weaponIndex]).weaponData, weaponPools[weaponIndex]);
     }
 
@@ -183,11 +201,11 @@ public class DebugDrawCards : MonoBehaviour
     #region 특정 카드 뽑기
     public void DrawWeaponCard()
     {
-        gachaSystem.DrawSpecificCard("Weapon", weaponIndex, weaponGrade, weaponNum, weaponSkillIndex);
+        gachaSystem.DrawSpecificCard("Weapon", weaponIndex, weaponGrade, weaponNum, weaponSkillIndex, weaponEvoIndex);
     }
     public void DrawItemCard()
     {
-        gachaSystem.DrawSpecificCard("Item", itemIndex, weaponGrade, itemNum, 0); // 아이템은 스킬이 없으니 그냥 0을 입력
+        gachaSystem.DrawSpecificCard("Item", itemIndex, weaponGrade, itemNum, 0, 0); // 아이템은 스킬이 없으니 그냥 0을 입력
     }
     #endregion
 }
