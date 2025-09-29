@@ -19,10 +19,14 @@ public class DebugDrawCards : MonoBehaviour
     // 인덱스 및 개수
     int weaponNum, itemNum;
     int weaponIndex, itemIndex;
+    int weaponGrade, itemGrade;
+    string[] cardGrade = { "일반", "희귀", "고급", "전설", "신화" };
 
     [Header("UI")]
     [SerializeField] TMPro.TextMeshProUGUI weaponNumText;
     [SerializeField] TMPro.TextMeshProUGUI itemNumText;
+    [SerializeField] TMPro.TextMeshProUGUI weaponGradeText;
+    [SerializeField] TMPro.TextMeshProUGUI itemGradeText;
 
     void Start()
     {
@@ -39,6 +43,9 @@ public class DebugDrawCards : MonoBehaviour
         // UI에 현재 개수 업데이트. 디폴트 0이므로 1로 시작하게 됨
         SetWeaponNum(true);
         SetItemNum(true);
+
+        SetWeaponGrade(0);
+        SetItemGrade(0);
     }
 
     public void InitWeaponSlot(WeaponData wd, CardData cardData)
@@ -73,6 +80,54 @@ public class DebugDrawCards : MonoBehaviour
     }
 
     #region UI
+    public void SetWeaponGrade(int steps)
+    {
+        weaponGrade += steps;
+        int addition = steps > 0 ? 1 : -1; // 0에서 4 범위 안에 있다면 1 혹은 -1씩 이동
+        if (steps == 0) addition = 0; // 초기화 때 변화를 원치 않을 경우 0을 입력
+
+        // 0~4 범위로 제한하고 순환되도록 설정
+        if (weaponGrade < 0)
+        {
+            weaponGrade = 4;
+            addition = 4; // 4칸 올려서 해당 오리의 최고 등급으로 이동하도록 해서 순회하는 것처럼 보이게 하기
+        }
+        if (weaponGrade > 4)
+        {
+            weaponGrade = 0;
+            addition = -4; // 4칸 내려서 해당 오리의 최고 등급으로 이동하도록 해서 순회하는 것처럼 보이게 하기
+        }
+
+        weaponGradeText.text = cardGrade[weaponGrade];
+        weaponGradeText.color = MyGrade.GradeColors[weaponGrade]; // 등급별 색상 적용
+
+        // 등급이 올라가거나 내려가면 한 칸씩 이동. 범위를 벗어나면 순회
+        SetWeaponCard(addition);
+    }
+    public void SetItemGrade(int steps)
+    {
+        itemGrade += steps;
+        int addition = steps > 0 ? 1 : -1; // 0에서 4 범위 안에 있다면 1 혹은 -1씩 이동
+        if (steps == 0) addition = 0; // 초기화 때 변화를 원치 않을 경우 0을 입력
+
+        // 0~4 범위로 제한하고 순환되도록 설정
+        if (itemGrade < 0)
+        {
+            itemGrade = 4;
+            addition = 4; // 4칸 올려서 해당 오리의 최고 등급으로 이동하도록 해서 순회하는 것처럼 보이게 하기
+        }
+        if (itemGrade > 4)
+        {
+            itemGrade = 0;
+            addition = -4; // 4칸 내려서 해당 오리의 최고 등급으로 이동하도록 해서 순회하는 것처럼 보이게 하기
+        }
+
+        itemGradeText.text = cardGrade[itemGrade];
+        itemGradeText.color = MyGrade.GradeColors[itemGrade]; // 등급별 색상 적용
+
+        // 등급이 올라가거나 내려가면 한 칸씩 이동. 범위를 벗어나면 순회
+        SetItemCard(addition);
+    }
     public void SetWeaponNum(bool addition)
     {
         weaponNum = addition ? weaponNum + 1 : weaponNum - 1;
@@ -86,30 +141,29 @@ public class DebugDrawCards : MonoBehaviour
         if (itemNum <= 0) itemNum = 1;
         itemNumText.text = itemNum.ToString();
     }
-
-    public void SetWeaponCard(bool addition)
+    public void SetWeaponCard(int steps)
     {
-        weaponIndex = addition ? weaponIndex + 1 : weaponIndex - 1;
-        if (weaponIndex < 0) weaponIndex = weaponPools.Count - 1; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록
+        weaponIndex += steps;
+        if (weaponIndex < 0) weaponIndex = weaponPools.Count - 1 - 4; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록 (다시 4를 빼서 일반 그레이드로 가도록)
         if (weaponIndex > weaponPools.Count - 1) weaponIndex = 0; // 최대값을 넘어가면 0으로 가서 루프가 되도록
         InitWeaponSlot(cardDictionary.GetWeaponItemData(weaponPools[weaponIndex]).weaponData, weaponPools[weaponIndex]);
     }
 
-    public void SetItemCard(bool addition)
+    public void SetItemCard(int steps)
     {
-        itemIndex = addition ? itemIndex + 1 : itemIndex - 1;
-        if (itemIndex < 0) itemIndex = itemPools.Count - 1;
-        if (itemIndex > itemPools.Count - 1) itemIndex = 0;
+        itemIndex += steps;
+        if (itemIndex < 0) itemIndex = itemPools.Count - 1 - 4; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록 (다시 4를 빼서 일반 그레이드로 가도록)
+        if (itemIndex > itemPools.Count - 1) itemIndex = 0; // 최대값을 넘어가면 0으로 가서 루프가 되도록
         InitItemSlot(cardDictionary.GetWeaponItemData(itemPools[itemIndex]).itemData, itemPools[itemIndex]);
     }
 
     public void DrawWeaponCard()
     {
-        gachaSystem.DrawSpecificCard("Weapon", weaponIndex, weaponNum);
+        gachaSystem.DrawSpecificCard("Weapon", weaponIndex, weaponGrade, weaponNum);
     }
     public void DrawItemCard()
     {
-        gachaSystem.DrawSpecificCard("Item", itemIndex, itemNum);
+        gachaSystem.DrawSpecificCard("Item", itemIndex, weaponGrade, itemNum);
     }
     #endregion
 }

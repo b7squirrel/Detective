@@ -83,7 +83,7 @@ public class GachaSystem : MonoBehaviour
         }
     }
     #region Debug 특정 카드 뽑기
-    public void DrawSpecificCard(string _cardType, int index, int num)
+    public void DrawSpecificCard(string _cardType, int index, int grade, int num)
     {
         for (int i = 0; i < num; i++)
         {
@@ -92,6 +92,7 @@ public class GachaSystem : MonoBehaviour
             if (_cardType == "Weapon")
             {
                 newCardData = CloneCardData(weaponPools[index]);
+                newCardData.Grade = grade;
                 cardDataManager.AddNewCardToMyCardsList(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
                 AddEssentialEquip(newCardData);
 
@@ -103,6 +104,7 @@ public class GachaSystem : MonoBehaviour
             else if (_cardType == "Item")
             {
                 newCardData = CloneCardData(itemPools[index]);
+                newCardData.Grade = grade;
                 cardDataManager.AddNewCardToMyCardsList(newCardData);
 
                 cardsPicked.Add(newCardData);
