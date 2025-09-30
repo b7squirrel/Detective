@@ -231,7 +231,8 @@ public class DebugDrawCards : MonoBehaviour
     }
     public void DrawItemCard()
     {
-        gachaSystem.DrawSpecificCard("Item", itemIndex, itemGrade, itemNum, itemSkillIndex, itemEvoIndex); 
+        gachaSystem.DrawSpecificCard("Item", itemIndex, itemGrade, itemNum, itemSkillIndex, itemEvoIndex);
+        Debug.LogError($"아이템 스킬 = {itemSkillIndex}");
     }
     #endregion
 }

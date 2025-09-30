@@ -112,8 +112,8 @@ public class EquipInfoPanel : MonoBehaviour
     {
         if (_cardData.PassiveSkill >= 0 && _cardData.PassiveSkill < Skills.SkillNames.Length)
         {
-            skillName.text = Skills.itemSkillNames[_cardData.PassiveSkill].ToString();
-            skillDescription.text = Skills.itemSkillDescriptions[_cardData.PassiveSkill];
+            skillName.text = Skills.itemSkillNames[_cardData.PassiveSkill - 1].ToString();
+            skillDescription.text = Skills.itemSkillDescriptions[_cardData.PassiveSkill - 1];
             skillLabel.color = MyGrade.GradeColors[_cardData.Grade];
             // int skillFullNumber = GameManager.instance.startingDataContainer.GetSkillName();
             // if (skillFullNumber % 10 == 0)
