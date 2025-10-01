@@ -20,6 +20,7 @@ public class EquipmentSlotsManager : MonoBehaviour
         int charAtk = charCardData.Atk;
         int charHp = charCardData.Hp;
         currentAttribute = new OriAttribute(charAtk, charHp);
+        Debug.LogError($"Equipment Slot Manager. 오리만의 ATK = {charAtk}");
 
         EquipmentCard[] equips = cardList.GetEquipmentsCardData(charCardData);
         if (equips == null) return;
@@ -49,21 +50,19 @@ public class EquipmentSlotsManager : MonoBehaviour
         equipSlots[index].SetItemCard(cardToEquip, itemData, false);
 
         // 장비가 더해지면 오리 스탯 업데이트
-        UpdateAttribute(cardToEquip, true); // attr data 업데이트
+        UpdateAttributeOnEquipment(cardToEquip, 1); // attr data 업데이트
     }
 
     /// <summary>
     /// 장비가 장착될 때, 해제될 때 각각 스탯을 업데이트, UI도 업데이트
     /// </summary>
-    void UpdateAttribute(CardData _equipCardData, bool isAdding)
+    void UpdateAttributeOnEquipment(CardData _equipCardData, int addingFactor)
     {
         // 장비 카드의 attribute
         int Hp = _equipCardData.Hp;
         int Atk = _equipCardData.Atk;
 
-        int addingFactor = isAdding ? 1 : -1; // 장착이면 더하기, 해제면 빼기
-
-        // 해당 장비의 attribute 더해줌
+        // 해당 장비의 attribute 더해줌. 필수 무기들은 모두 공격력. 나머지는 모두 방어력
         if (_equipCardData.EssentialEquip == EssentialEquip.Essential.ToString())
         {
             currentAttribute = new OriAttribute(addingFactor * Atk + currentAttribute.Atk, currentAttribute.Hp);
@@ -74,9 +73,18 @@ public class EquipmentSlotsManager : MonoBehaviour
         }
 
         equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute, cardDictionary.GetDisplayName(instantCharCard)); // attr ui 업데이트
+        Debug.LogError($"Equipment Slot Manager. charATK 장비 모두 장착 후 = {currentAttribute.Atk}"); // 여기까지 좋음
     }
 
     public OriAttribute GetCurrentAttribute() => currentAttribute;
+
+    /// <summary>
+    /// 디스플레이 되고 있는 오리의 어트리뷰트 업데이트. 레벨업 시.
+    /// </summary>
+    public void UpdateCurrentAttribute(CardData cardOnDisplay)
+    {
+        InitEquipSlots(cardOnDisplay);
+    }
 
     public void ClearEquipSlots()
     {
@@ -93,7 +101,7 @@ public class EquipmentSlotsManager : MonoBehaviour
         CardData cardDataToRemove = equipSlots[index].GetCardData();
         equipSlots[index].EmptySlot();
 
-        UpdateAttribute(cardDataToRemove, false);
+        UpdateAttributeOnEquipment(cardDataToRemove, -1);
 
         // 장비가 빠지면 오리 스탯 업데이트
         // equipDisplayUI.SetEquipmentDisplay(cardDataToRemove, false);

@@ -16,6 +16,7 @@ public class OriAttribute
 public class StatManager : MonoBehaviour
 {
     [SerializeField] CardDataManager cardDataManager;
+    [SerializeField] EquipmentSlotsManager equipmentSlotManager;
     [SerializeField] EquipInfoPanel equipInfoPanel;
     [SerializeField] CardList cardList;
     [SerializeField] StartingDataContainer statContainer;
@@ -31,12 +32,17 @@ public class StatManager : MonoBehaviour
         int newHp = _cardData.Hp;
         int newAtk = _cardData.Atk;
 
-        if(_cardData.EquipmentType == "Ori") // 오리라면
+        Debug.LogError($"ATK = {_cardData.Atk}");
+        Debug.LogError($"Level = {_cardData.Level}");
+
+        if (_cardData.EquipmentType == "Ori") // 오리라면
         {
             newAtk += level; // Temp
             newHp += level; // Temp
+
+            
         }
-        else if(_cardData.EssentialEquip == EssentialEquip.Essential.ToString()) // 무기 카드라면
+        else if (_cardData.EssentialEquip == EssentialEquip.Essential.ToString()) // 무기 카드라면
         {
             newAtk += level; // Temp
         }
@@ -47,6 +53,7 @@ public class StatManager : MonoBehaviour
 
         level++;
         
+        Debug.LogError($"New ATK = {newAtk}");
         UpdateStat(_cardData, level, newHp, newAtk);
     }
     void UpdateStat(CardData _cardData, int _level, int _hp, int _atk)
@@ -55,7 +62,7 @@ public class StatManager : MonoBehaviour
 
         if (_cardData.EquipmentType == EquipmentType.Ori.ToString()) // 오리라면
         {
-            // 오리 레벨, 속성 UI 업데이트
+            // 오리 레벨, 속성 UI 업데이트 - 이걸 equipment panel manager의 UpgradeCardOnDisplay에서 해주고 있음
         }
         // 필수 무기라면 Atk을 info UI에 보여줌
         else if (_cardData.EssentialEquip == EssentialEquip.Essential.ToString())

@@ -320,8 +320,9 @@ public class EquipmentPanelManager : MonoBehaviour
         // 레벨업된 수치를 Level UI에 반영
         equipDisplayUI.SetLevelUI(CardOnDisplay);
 
-        // 레벨업 된 수치를 Atk, Hp UI에 반영
-        equipDisplayUI.SetAtkHpStats(CardOnDisplay.Atk, CardOnDisplay.Hp);
+        // 레벨업 된 수치를 Atk, Hp UI에 반영 - 오리만의 수치(Card On Display)가 아니라 장비의 수치까지 합쳐져야 함
+        equipmentSlotsManager.UpdateCurrentAttribute(CardOnDisplay);
+        equipDisplayUI.SetAtkHpStats(equipmentSlotsManager.GetCurrentAttribute().Atk, equipmentSlotsManager.GetCurrentAttribute().Hp);
 
         UpdateUpgradeCost(level, charUpgradeCost);
         if (CheckIfMaxLevel(CardOnDisplay)) SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생

@@ -351,6 +351,7 @@ public class CardDataManager : MonoBehaviour
         AddRandomSkill(_cardData);
         
         MyCardsList.Add(_cardData);
+        Debug.Log($"card data manager. starting card atk = {_cardData.Atk}");
         Save();
     }
 
