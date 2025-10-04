@@ -348,7 +348,7 @@ public class EquipmentDataManager : MonoBehaviour
         }
     }
     
-    // 모든 장비 데이터 초기화
+    // 모든 장비 데이터 초기화. debug delete files 버튼 이번트로 호출
     public void ClearAllEquipmentData()
     {
         try

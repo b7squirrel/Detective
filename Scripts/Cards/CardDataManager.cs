@@ -365,7 +365,7 @@ public class CardDataManager : MonoBehaviour
             MyCardsList = new List<CardData>();
 
         _cardData.ID = GenerateRandomId();
-        Debug.LogError($"카드 데이터 메니져. Skill = {_cardData.PassiveSkill}");
+        // Debug.LogError($"카드 데이터 메니져. Skill = {_cardData.PassiveSkill}");
         MyCardsList.Add(_cardData);
         Save();
     }

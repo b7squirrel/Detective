@@ -360,8 +360,8 @@ GameObject:
   - component: {fileID: 8503271524242975902}
   - component: {fileID: 6479801834563490973}
   - component: {fileID: 2300718156174267142}
-  - component: {fileID: 1537531298391062170}
   - component: {fileID: 2250234584711402690}
+  - component: {fileID: 7407264732060088541}
   m_Layer: 5
   m_Name: Loading dancing ori
   m_TagString: Untagged
@@ -426,21 +426,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1537531298391062170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1507960126502128420}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.2}
-  m_EffectDistance: {x: 4.17, y: -5.73}
-  m_UseGraphicAlpha: 1
 --- !u!95 &2250234584711402690
 Animator:
   serializedVersion: 5
@@ -462,6 +447,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7407264732060088541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507960126502128420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f9bd41562844ba3bc62cf5df6b9ed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dustPrefab: {fileID: 7247697113450315706, guid: 48ff1793bbbbb48f9886ffdd9da12dbe, type: 3}
+  spawnInterval: 0.07
+  dustLifetime: 29
+  myParent: {fileID: 7915456699106812962}
 --- !u!1 &1708238943180986494
 GameObject:
   m_ObjectHideFlags: 0
