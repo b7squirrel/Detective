@@ -72,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 99257bdc689094d3193d1b1c5c0145a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -364,6 +364,7 @@ MonoBehaviour:
   isChest: 0
   multiDropRate: 0
   specialDropRate: 0
+  dropAllItemList: 0
   isChestDebuggingOn: 0
   dropItemIndex: 0
 --- !u!114 &5185112901987257757
@@ -386,7 +387,6 @@ MonoBehaviour:
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
-  finishedSpawn: 0
   dieEffectPrefeab: {fileID: 0}
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
@@ -425,7 +425,6 @@ MonoBehaviour:
   dialogBubblePoint: {fileID: 6028977712580065188}
   dustPoint: {fileID: 365953730348053418}
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
-  teleportEffectPrefab: {fileID: 0}
   halfWallBouncerNumber: 13
   col: {fileID: 0}
   deadBody: {fileID: 1432597800540744455, guid: 5c1f04be75c8cde4ab66104ee2865cbb, type: 3}
@@ -529,7 +528,7 @@ MonoBehaviour:
   rotationSpeed: 35
   rotationDelay: 1
   retargetDelay: 0.3
-  laserWidth: 2
+  laserWidth: 7
   damage: 10
   destructables:
     serializedVersion: 2
@@ -537,7 +536,14 @@ MonoBehaviour:
   walls:
     serializedVersion: 2
     m_Bits: 4096
+  indicatorDuration: 1
+  indicatorColor: {r: 1, g: 0, b: 0, a: 0.3}
+  indicatorWidth: 2
+  indicatorMaxDistance: 50
   playerTag: Player
+  laserSound:
+  - {fileID: 8300000, guid: a36bda79409803b4db3c7762264fef0e, type: 3}
+  - {fileID: 8300000, guid: 0bf72749cab27f44ebef13bf446d34ee, type: 3}
 --- !u!114 &2264689055649237039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,12 +559,12 @@ MonoBehaviour:
   timeToDropSlime: 100
   bouncingBallPrefab: {fileID: 455867368629588361, guid: d11fd6edfa338406b92a0ebb9cf9ba93, type: 3}
   shootPoint: {fileID: 0}
-  maxProjectileNum: 10
-  ballSpeed: 16
-  randomAngleRange: 20
-  ballLifetime: 15
+  maxProjectileNum: 5
+  ballSpeed: 9
+  randomAngleRange: 50
+  ballLifetime: 7
   fireRate: 3
-  damage: 15
+  damage: 300
   playerLayer:
     serializedVersion: 2
     m_Bits: 256

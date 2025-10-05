@@ -3,6 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// 레이져의 지속 시간에 따라 상태의 지속시간이 결정됨
+/// 양방향으로 동시에 레이저 발사
 /// </summary>
 public class BossLaserThickLaser : MonoBehaviour
 {
@@ -23,11 +24,25 @@ public class BossLaserThickLaser : MonoBehaviour
     public LayerMask walls;             // 벽 레이어
     Coroutine co;
 
+    [Header("인디케이터 설정")]
+    public float indicatorDuration = 1f;    // 인디케이터 표시 시간
+    public Color indicatorColor = new Color(1f, 0f, 0f, 0.3f);  // 반투명 빨강
+    public float indicatorWidth = 2f;       // 인디케이터 두께
+    public float indicatorMaxDistance = 50f; // 인디케이터 최대 거리
+
     [Header("타겟 설정")]
     public string playerTag = "Player"; // 플레이어 태그
     private Transform player;
     private float nextFireTime = 0f;
-    private GameObject currentLaser;
+    
+    // 양방향 레이저를 위한 변수들
+    private GameObject currentLaser1;   // 첫 번째 레이저
+    private GameObject currentLaser2;   // 두 번째 레이저 (반대 방향)
+    
+    // 인디케이터를 위한 변수들
+    private LineRenderer indicator1;    // 첫 번째 인디케이터
+    private LineRenderer indicator2;    // 두 번째 인디케이터
+    
     private bool isLaserActive = false;
     private float currentAngle = 0f;    // 현재 레이저 발사 각도
     private float laserStartTime = 0f;  // 레이저 발사 시작 시간
@@ -51,6 +66,7 @@ public class BossLaserThickLaser : MonoBehaviour
         EnemyBoss.OnState2Exit -= InitState2Exit;
     }
     #endregion
+    
     void InitState2Enter()
     {
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
@@ -74,12 +90,17 @@ public class BossLaserThickLaser : MonoBehaviour
         {
             shootPoint = transform;
         }
+        
+        // 인디케이터 초기화
+        CreateIndicators();
+        
         co = null;
     }
+    
     void InitState2Update()
     {
         // 레이저가 활성화 상태일 때
-        if (isLaserActive && currentLaser != null)
+        if (isLaserActive && currentLaser1 != null && currentLaser2 != null)
         {
             // 회전 시작 시간 체크
             if (!isRotating && Time.time >= laserStartTime + rotationDelay)
@@ -90,7 +111,7 @@ public class BossLaserThickLaser : MonoBehaviour
                 // 이 시점의 플레이어 위치를 기준으로 회전 방향 결정
                 if (player != null)
                 {
-                    Vector3 targetDirection = (player.position - currentLaser.transform.position).normalized;
+                    Vector3 targetDirection = (player.position - shootPoint.position).normalized;
                     targetAngle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
                     
                     // 더 짧은 경로로 회전하도록 방향 결정
@@ -124,7 +145,7 @@ public class BossLaserThickLaser : MonoBehaviour
                     // 새로운 플레이어 위치로 재타겟팅
                     if (player != null)
                     {
-                        Vector3 newTargetDirection = (player.position - currentLaser.transform.position).normalized;
+                        Vector3 newTargetDirection = (player.position - shootPoint.position).normalized;
                         float newTargetAngle = Mathf.Atan2(newTargetDirection.y, newTargetDirection.x) * Mathf.Rad2Deg;
                         
                         // 새로운 회전 방향 결정
@@ -137,9 +158,11 @@ public class BossLaserThickLaser : MonoBehaviour
                     }
                 }
                 
-                // 회전 실행
+                // 회전 실행 - 두 레이저 모두 회전
                 currentAngle += rotationSpeed * rotationDirection * Time.deltaTime;
-                currentLaser.transform.rotation = Quaternion.AngleAxis(currentAngle, Vector3.forward);
+                currentLaser1.transform.rotation = Quaternion.AngleAxis(currentAngle, Vector3.forward);
+                // 두 번째 레이저는 180도 반대 방향
+                currentLaser2.transform.rotation = Quaternion.AngleAxis(currentAngle + 180f, Vector3.forward);
             }
         }
 
@@ -155,14 +178,84 @@ public class BossLaserThickLaser : MonoBehaviour
 
         enemyBoss.SlimeDropTimer(timeToDropSlime);
     }
+    
     void InitState2Exit()
     {
-        rotationSpeed += 10f; // 매번 10도씩 증가. 점점 빨라지도록
+        rotationSpeed += 5f; // 매번 5도씩 증가. 점점 빨라지도록
 
         enemyBoss.SetMovable(true);
     }
 
     #region 기타 함수들
+    void CreateIndicators()
+    {
+        // 인디케이터가 이미 존재하면 다시 만들지 않음
+        if (indicator1 != null && indicator2 != null) return;
+        
+        // 첫 번째 인디케이터 생성
+        GameObject indicatorObj1 = new GameObject("LaserIndicator1");
+        indicatorObj1.transform.parent = shootPoint;
+        indicatorObj1.transform.localPosition = Vector3.zero;
+        indicator1 = indicatorObj1.AddComponent<LineRenderer>();
+        
+        // 두 번째 인디케이터 생성
+        GameObject indicatorObj2 = new GameObject("LaserIndicator2");
+        indicatorObj2.transform.parent = shootPoint;
+        indicatorObj2.transform.localPosition = Vector3.zero;
+        indicator2 = indicatorObj2.AddComponent<LineRenderer>();
+        
+        // 인디케이터 설정 (공통)
+        SetupIndicator(indicator1);
+        SetupIndicator(indicator2);
+        
+        // 초기에는 비활성화
+        indicator1.enabled = false;
+        indicator2.enabled = false;
+    }
+    
+    void SetupIndicator(LineRenderer lineRenderer)
+    {
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.startColor = indicatorColor;
+        lineRenderer.endColor = indicatorColor;
+        lineRenderer.startWidth = indicatorWidth;
+        lineRenderer.endWidth = indicatorWidth;
+        lineRenderer.positionCount = 2;
+        lineRenderer.sortingLayerName = "Effect";
+        lineRenderer.sortingOrder = 5;
+    }
+    
+    IEnumerator ShowIndicatorsCo(float angle)
+    {
+        // 인디케이터 활성화
+        indicator1.enabled = true;
+        indicator2.enabled = true;
+        
+        // 인디케이터 위치 설정
+        Vector3 startPos = shootPoint.position;
+        
+        // 첫 번째 방향 (플레이어 방향)
+        Vector3 direction1 = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0);
+        Vector3 endPos1 = startPos + direction1 * indicatorMaxDistance;
+        
+        // 두 번째 방향 (반대 방향)
+        Vector3 direction2 = -direction1;
+        Vector3 endPos2 = startPos + direction2 * indicatorMaxDistance;
+        
+        indicator1.SetPosition(0, startPos);
+        indicator1.SetPosition(1, endPos1);
+        
+        indicator2.SetPosition(0, startPos);
+        indicator2.SetPosition(1, endPos2);
+        
+        // 인디케이터 표시 시간 동안 대기
+        yield return new WaitForSeconds(indicatorDuration);
+        
+        // 인디케이터 비활성화
+        indicator1.enabled = false;
+        indicator2.enabled = false;
+    }
+    
     IEnumerator FireLaserCo()
     {
         if (isLaserActive) yield break;
@@ -171,20 +264,30 @@ public class BossLaserThickLaser : MonoBehaviour
         Vector3 direction = (player.position - shootPoint.position).normalized;
         currentAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        // 너무 즉시 플레이어에게 레이져가 나가지 않도록
-        yield return new WaitForSeconds(.4f);
+        // 인디케이터 표시
+        yield return StartCoroutine(ShowIndicatorsCo(currentAngle));
 
-        // 레이저 생성
-        currentLaser = Instantiate(laserProjectile, shootPoint.position, Quaternion.AngleAxis(currentAngle, Vector3.forward));
+        // 첫 번째 레이저 생성 (플레이어 방향)
+        currentLaser1 = Instantiate(laserProjectile, shootPoint.position, Quaternion.AngleAxis(currentAngle, Vector3.forward));
+        
+        // 두 번째 레이저 생성 (반대 방향, 180도 회전)
+        currentLaser2 = Instantiate(laserProjectile, shootPoint.position, Quaternion.AngleAxis(currentAngle + 180f, Vector3.forward));
 
-        // 레이저 설정
-        EnemyLaserProjectile laserScript = currentLaser.GetComponent<EnemyLaserProjectile>();
-        if (laserScript == null)
+        // 첫 번째 레이저 설정
+        EnemyLaserProjectile laserScript1 = currentLaser1.GetComponent<EnemyLaserProjectile>();
+        if (laserScript1 == null)
         {
-            laserScript = currentLaser.AddComponent<EnemyLaserProjectile>();
+            laserScript1 = currentLaser1.AddComponent<EnemyLaserProjectile>();
         }
+        laserScript1.Initialize(damage, destructables, walls, laserWidth);
 
-        laserScript.Initialize(damage, destructables, walls, laserDuration, laserWidth);
+        // 두 번째 레이저 설정
+        EnemyLaserProjectile laserScript2 = currentLaser2.GetComponent<EnemyLaserProjectile>();
+        if (laserScript2 == null)
+        {
+            laserScript2 = currentLaser2.AddComponent<EnemyLaserProjectile>();
+        }
+        laserScript2.Initialize(damage, destructables, walls, laserWidth);
 
         // 레이저 상태 초기화
         isLaserActive = true;
@@ -192,13 +295,22 @@ public class BossLaserThickLaser : MonoBehaviour
         isRotating = false;
         hasPassedTarget = false;
 
+        
+
         // 레이저 지속 시간 후 비활성화
         yield return new WaitForSeconds(laserDuration);
 
-        if (currentLaser != null)
+        // 두 레이저 모두 제거
+        if (currentLaser1 != null)
         {
-            currentLaser.SetActive(false);
-            Destroy(currentLaser);
+            currentLaser1.SetActive(false);
+            Destroy(currentLaser1);
+        }
+        
+        if (currentLaser2 != null)
+        {
+            currentLaser2.SetActive(false);
+            Destroy(currentLaser2);
         }
 
         // 상태 초기화

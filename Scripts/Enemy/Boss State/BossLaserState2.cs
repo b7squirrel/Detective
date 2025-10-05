@@ -180,7 +180,7 @@ public class BossLaserState2 : MonoBehaviour
             laserScript = currentLaser.AddComponent<EnemyLaserProjectile>();
         }
 
-        laserScript.Initialize(damage, destructables, walls, laserDuration, laserWidth);
+        laserScript.Initialize(damage, destructables, walls, laserWidth);
 
         // 레이저 상태 초기화
         isLaserActive = true;

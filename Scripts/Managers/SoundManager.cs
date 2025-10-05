@@ -382,8 +382,57 @@ public class SoundManager : MonoBehaviour
                 }
             }
         }
-        
+
         loopingSounds.Clear();
+    }
+
+    #region 사운드 일시 정지/재생
+    /// <summary>
+    /// 특정 AudioClip이 재생 중이라면 일시 정지합니다.
+    /// (Time.timeScale이 0일 때 호출하면 효과적)
+    /// </summary>
+    public void PauseSound(AudioClip audioClip)
+    {
+        if (audioClip == null || audioSourcePool == null) return;
+
+        foreach (var audioSource in audioSourcePool)
+        {
+            if (audioSource != null && audioSource.isPlaying && audioSource.clip == audioClip)
+            {
+                try
+                {
+                    audioSource.Pause();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"사운드 일시정지 중 오류: {e.Message}");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 일시 정지된 특정 AudioClip을 다시 재생합니다.
+    /// (Time.timeScale이 1로 돌아올 때 호출하면 효과적)
+    /// </summary>
+    public void ResumeSound(AudioClip audioClip)
+    {
+        if (audioClip == null || audioSourcePool == null) return;
+
+        foreach (var audioSource in audioSourcePool)
+        {
+            if (audioSource != null && audioSource.clip == audioClip && !audioSource.isPlaying)
+            {
+                try
+                {
+                    audioSource.UnPause();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"사운드 재개 중 오류: {e.Message}");
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -392,9 +441,9 @@ public class SoundManager : MonoBehaviour
     public void SetState(bool _state)
     {
         isMuted = !_state;
-        
+
         if (audioSourcePool == null) return;
-        
+
         foreach (var audioSource in audioSourcePool)
         {
             if (audioSource != null)
@@ -410,6 +459,7 @@ public class SoundManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
     /// <summary>
     /// 모든 사운드 중단
@@ -417,7 +467,7 @@ public class SoundManager : MonoBehaviour
     public void StopAllSounds()
     {
         if (audioSourcePool == null) return;
-        
+
         foreach (var audioSource in audioSourcePool)
         {
             if (audioSource != null && audioSource.isPlaying)
@@ -432,7 +482,7 @@ public class SoundManager : MonoBehaviour
                 }
             }
         }
-        
+
         StopAllLoops();
     }
 

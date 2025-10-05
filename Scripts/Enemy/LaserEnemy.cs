@@ -80,7 +80,7 @@ public class LaserEnemy : MonoBehaviour
             laserScript = currentLaser.AddComponent<EnemyLaserProjectile>();
         }
         
-        laserScript.Initialize(damage, destructables, walls, laserDuration);
+        laserScript.Initialize(damage, destructables, walls);
         isLaserActive = true;
         
         // 레이저 지속 시간 후 비활성화

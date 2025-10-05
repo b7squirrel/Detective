@@ -4,27 +4,30 @@ using UnityEngine;
 public class EnemyLaserProjectile : MonoBehaviour
 {
     [SerializeField] LineRenderer laserLine;
-    [SerializeField] Transform hitEffect;
+    [SerializeField] GameObject hitEffectPrefab;
     [SerializeField] float maxDistance = 50f;
-    [SerializeField] float laserWidth = 1f; // 레이저 두께
+    [SerializeField] AudioClip[] laserSounds;
+    float laserWidth = 1f; // 레이저 두께
+    GameObject hitEffect;
+    ParticleSystem particleSys;
 
     private int damage;
     private LayerMask destructables;
     private LayerMask walls;
-    private float duration;
     private int frameCount = 5; // 데미지 처리 간격
+    bool isSoundPaused; // 사운드가 일시 정지 되었다면 timeScale이 0이 아닐 때 다시 재생하기 위해
 
     void Start()
     {
         // LineRenderer 설정
-        if (laserLine == null)
-        {
-            laserLine = GetComponent<LineRenderer>();
-            if (laserLine == null)
-            {
-                laserLine = gameObject.AddComponent<LineRenderer>();
-            }
-        }
+        // if (laserLine == null)
+        // {
+        //     laserLine = GetComponent<LineRenderer>();
+        //     if (laserLine == null)
+        //     {
+        //         laserLine = gameObject.AddComponent<LineRenderer>();
+        //     }
+        // }
 
         // LineRenderer 기본 설정
         laserLine.material = new Material(Shader.Find("Sprites/Default"));
@@ -38,17 +41,8 @@ public class EnemyLaserProjectile : MonoBehaviour
         // 히트 이펙트 설정
         if (hitEffect == null)
         {
-            GameObject hitEffectObj = new GameObject("HitEffect");
-            hitEffect = hitEffectObj.transform;
-            hitEffect.parent = transform;
-
-            // 간단한 히트 이펙트 (원형)
-            GameObject circle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            circle.transform.parent = hitEffect;
-            circle.transform.localPosition = Vector3.zero;
-            circle.transform.localScale = Vector3.one * 0.5f;
-            circle.GetComponent<Renderer>().material.color = Color.yellow;
-            Destroy(circle.GetComponent<Collider>());
+            hitEffect = Instantiate(hitEffectPrefab, transform);
+            particleSys = GetComponentInChildren<ParticleSystem>();
         }
     }
 
@@ -68,16 +62,20 @@ public class EnemyLaserProjectile : MonoBehaviour
         }
         if (hitEffect != null)
         {
-            hitEffect.gameObject.SetActive(false);
+            hitEffect.SetActive(false);
+        }
+        //사운드 정지
+        foreach (var item in laserSounds)
+        {
+            SoundManager.instance.StopLoop(item);
         }
     }
 
-    public void Initialize(int _damage, LayerMask _destructables, LayerMask _walls, float _duration, float _laserWidth = 1f)
+    public void Initialize(int _damage, LayerMask _destructables, LayerMask _walls, float _laserWidth = 1f)
     {
         damage = _damage;
         destructables = _destructables;
         walls = _walls;
-        duration = _duration;
         laserWidth = _laserWidth;
 
         // LineRenderer 두께 업데이트
@@ -86,13 +84,47 @@ public class EnemyLaserProjectile : MonoBehaviour
             laserLine.startWidth = laserWidth;
             laserLine.endWidth = laserWidth;
         }
+
+        foreach (var item in laserSounds)
+        {
+            SoundManager.instance.PlayLoop(item);
+        }
     }
 
     void Update()
     {
-        if (Time.timeScale == 0) return;
+        // 타임스케일이 0이 되었을 때 — 사운드 정지 (한 번만)
+    if (Time.timeScale == 0 && !isSoundPaused)
+    {
+        foreach (var item in laserSounds)
+        {
+            SoundManager.instance.StopLoop(item);
+        }
+        isSoundPaused = true; // 일시정지 상태로 표시
+    }
 
-        CastLaser();
+    // 타임스케일이 다시 1로 돌아왔을 때 — 사운드 재개 (한 번만)
+    else if (Time.timeScale > 0 && isSoundPaused)
+    {
+        foreach (var item in laserSounds)
+        {
+            SoundManager.instance.PlayLoop(item);
+        }
+        isSoundPaused = false;
+    }
+
+    // 플레이어가 죽으면 즉시 전기 사운드 중단
+    if (GameManager.instance.IsPlayerDead)
+    {
+        foreach (var item in laserSounds)
+        {
+            SoundManager.instance.StopLoop(item);
+        }
+        isSoundPaused = false;
+        return; // 이후 처리 생략
+    }
+
+    CastLaser();
     }
 
     void CastLaser()
@@ -114,8 +146,10 @@ public class EnemyLaserProjectile : MonoBehaviour
         // 히트 이펙트 위치 설정
         if (hitEffect != null)
         {
-            hitEffect.position = laserEndPoint;
-            hitEffect.gameObject.SetActive(hit.collider != null);
+            hitEffect.transform.position = laserEndPoint;
+            hitEffect.SetActive(hit.collider != null);
+
+            if (Time.frameCount % 30 == 0) particleSys.Play(); ;// 30프레임 간격으로 파티클 재생
         }
 
         // 데미지 처리 (일정 간격으로) - 두꺼운 레이저를 위해 여러 레이캐스트 사용
