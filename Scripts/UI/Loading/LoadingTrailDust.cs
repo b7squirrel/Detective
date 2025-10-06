@@ -42,7 +42,7 @@ public class LoadingTrailDust : MonoBehaviour
 
         // 현재 위치에 먼지 배치
         RectTransform dustRect = dust.GetComponent<RectTransform>();
-        Vector2 offset = new Vector2(Random.Range(-.6f, .6f), Random.Range(-.6f, .6f));
+        Vector2 offset = new Vector2(Random.Range(-.6f, .6f), Random.Range(-.2f, .2f));
         dustRect.position = (Vector2)rectTransform.position + offset;
         dustRect.localScale = rectTransform.localScale;
 

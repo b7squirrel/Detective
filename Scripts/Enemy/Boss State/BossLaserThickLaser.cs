@@ -29,6 +29,10 @@ public class BossLaserThickLaser : MonoBehaviour
     public Color indicatorColor = new Color(1f, 0f, 0f, 0.3f);  // 반투명 빨강
     public float indicatorWidth = 2f;       // 인디케이터 두께
     public float indicatorMaxDistance = 50f; // 인디케이터 최대 거리
+    [SerializeField] AudioClip[] indicatorSounds; // 인디케이터 단발성 사운드
+    [SerializeField] GameObject anticEffectaPrefab; // 인디케이터가 나올 때 지지징 하면서 레이져가 나올 것이라는 것을 알 수 있도록
+    GameObject anticEffect; // 인디케이터가 나올 때 지지징 하면서 레이져가 나올 것이라는 것을 알 수 있도록
+
 
     [Header("타겟 설정")]
     public string playerTag = "Player"; // 플레이어 태그
@@ -191,26 +195,35 @@ public class BossLaserThickLaser : MonoBehaviour
     {
         // 인디케이터가 이미 존재하면 다시 만들지 않음
         if (indicator1 != null && indicator2 != null) return;
-        
+
         // 첫 번째 인디케이터 생성
         GameObject indicatorObj1 = new GameObject("LaserIndicator1");
         indicatorObj1.transform.parent = shootPoint;
         indicatorObj1.transform.localPosition = Vector3.zero;
         indicator1 = indicatorObj1.AddComponent<LineRenderer>();
-        
+
         // 두 번째 인디케이터 생성
         GameObject indicatorObj2 = new GameObject("LaserIndicator2");
         indicatorObj2.transform.parent = shootPoint;
         indicatorObj2.transform.localPosition = Vector3.zero;
         indicator2 = indicatorObj2.AddComponent<LineRenderer>();
-        
+
         // 인디케이터 설정 (공통)
         SetupIndicator(indicator1);
         SetupIndicator(indicator2);
-        
+
         // 초기에는 비활성화
         indicator1.enabled = false;
         indicator2.enabled = false;
+
+        // 앤틱 이펙트 설정
+        // 머즐 플래시 설정
+        if (anticEffect == null)
+        {
+            anticEffect = Instantiate(anticEffectaPrefab, transform);
+            anticEffect.transform.localScale = .7f * Vector2.one;
+        }
+        anticEffect.SetActive(false);
     }
     
     void SetupIndicator(LineRenderer lineRenderer)
@@ -237,20 +250,30 @@ public class BossLaserThickLaser : MonoBehaviour
         // 첫 번째 방향 (플레이어 방향)
         Vector3 direction1 = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0);
         Vector3 endPos1 = startPos + direction1 * indicatorMaxDistance;
-        
+
         // 두 번째 방향 (반대 방향)
         Vector3 direction2 = -direction1;
         Vector3 endPos2 = startPos + direction2 * indicatorMaxDistance;
-        
+
         indicator1.SetPosition(0, startPos);
         indicator1.SetPosition(1, endPos1);
-        
+
         indicator2.SetPosition(0, startPos);
         indicator2.SetPosition(1, endPos2);
-        
+
+        // 인디케이터 사운드
+        foreach (var item in indicatorSounds)
+        {
+            SoundManager.instance.Play(item);
+        }
+
+        //앤틱 이펙트
+        anticEffect.transform.position = shootPoint.position;
+        anticEffect.SetActive(true);
+
         // 인디케이터 표시 시간 동안 대기
         yield return new WaitForSeconds(indicatorDuration);
-        
+
         // 인디케이터 비활성화
         indicator1.enabled = false;
         indicator2.enabled = false;

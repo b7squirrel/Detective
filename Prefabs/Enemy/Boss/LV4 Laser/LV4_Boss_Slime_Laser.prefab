@@ -528,7 +528,7 @@ MonoBehaviour:
   rotationSpeed: 35
   rotationDelay: 1
   retargetDelay: 0.3
-  laserWidth: 7
+  laserWidth: 6
   damage: 10
   destructables:
     serializedVersion: 2
@@ -540,10 +540,12 @@ MonoBehaviour:
   indicatorColor: {r: 1, g: 0, b: 0, a: 0.3}
   indicatorWidth: 2
   indicatorMaxDistance: 50
+  indicatorSounds:
+  - {fileID: 8300000, guid: ff0e242d5bc0fe1439a3b9a30346b2b1, type: 3}
+  - {fileID: 8300000, guid: 30910c9d17947064d99957f8db4648be, type: 3}
+  - {fileID: 8300000, guid: 828d44664fa8ddb4884f46b86bbe332c, type: 3}
+  anticEffectaPrefab: {fileID: 7583420107455328558, guid: ef1a8048b879e4326b7f7beccefff8f1, type: 3}
   playerTag: Player
-  laserSound:
-  - {fileID: 8300000, guid: a36bda79409803b4db3c7762264fef0e, type: 3}
-  - {fileID: 8300000, guid: 0bf72749cab27f44ebef13bf446d34ee, type: 3}
 --- !u!114 &2264689055649237039
 MonoBehaviour:
   m_ObjectHideFlags: 0

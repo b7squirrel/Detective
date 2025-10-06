@@ -49,10 +49,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laserLine: {fileID: 2347730820303633424}
   hitEffectPrefab: {fileID: 1299808863797833975, guid: 6793efd355e844bba9a16353ebeda0a7, type: 3}
+  muzzleFlashPrefab: {fileID: 7583420107455328558, guid: ef1a8048b879e4326b7f7beccefff8f1, type: 3}
   maxDistance: 50
-  laserSounds:
+  laserSoundLoops:
   - {fileID: 8300000, guid: a36bda79409803b4db3c7762264fef0e, type: 3}
   - {fileID: 8300000, guid: 0bf72749cab27f44ebef13bf446d34ee, type: 3}
+  laserSounds:
+  - {fileID: 8300000, guid: e4f28eed26173a54a819887b34352435, type: 3}
+  - {fileID: 8300000, guid: 5e9dbe119525ae948b64d5465696448e, type: 3}
 --- !u!120 &2347730820303633424
 LineRenderer:
   serializedVersion: 2
@@ -92,9 +96,9 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 327865993
+  m_SortingLayer: 8
+  m_SortingOrder: 1
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 43.18, y: 0, z: 0}

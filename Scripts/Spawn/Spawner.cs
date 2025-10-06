@@ -87,6 +87,26 @@ public class Spawner : MonoBehaviour
         // 적 수 계산
         AddEnemyNumber();
     }
+    public void SpawnSplit(EnemyData enemyToSpawn, int index, bool forceSpawn, Vector2 spawnPos)
+    {
+        // 적들이 몰려옵니다의 경우 강제로 스폰
+        if (forceSpawn == false)
+        {
+            if (currentEnemyNumbers >= maxEnemyInScene)
+                return;
+        }
+
+        // 스폰 가능한 지점 탐색하고 벽 안쪽에서 2 unit 더 안쪽에 스폰
+        GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
+        Vector2 offset = new Vector2(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-3f, 3f));
+        enemy.transform.position = spawnPos + offset;
+
+        // 초기화
+        enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
+
+        // 적 수 계산
+        AddEnemyNumber();
+    }
     public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
     {
         if (currentEnemyNumbers >= maxEnemyInScene)

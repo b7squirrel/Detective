@@ -5,10 +5,13 @@ public class EnemyLaserProjectile : MonoBehaviour
 {
     [SerializeField] LineRenderer laserLine;
     [SerializeField] GameObject hitEffectPrefab;
+    [SerializeField] GameObject muzzleFlashPrefab;
     [SerializeField] float maxDistance = 50f;
-    [SerializeField] AudioClip[] laserSounds;
+    [SerializeField] AudioClip[] laserSoundLoops; // 레이져 루프되는 사운드
+    [SerializeField] AudioClip[] laserSounds; // 레이져 단발성 사운드
     float laserWidth = 1f; // 레이저 두께
     GameObject hitEffect;
+    GameObject muzzleFlash;
     ParticleSystem particleSys;
 
     private int damage;
@@ -36,13 +39,20 @@ public class EnemyLaserProjectile : MonoBehaviour
         laserLine.endWidth = laserWidth;    // 끝점 두께
         laserLine.positionCount = 2;
         laserLine.sortingLayerName = "Effect"; // Sorting Layer를 Effect로 설정
-        laserLine.sortingOrder = 10;
+        laserLine.sortingOrder = 1;
 
         // 히트 이펙트 설정
         if (hitEffect == null)
         {
             hitEffect = Instantiate(hitEffectPrefab, transform);
             particleSys = GetComponentInChildren<ParticleSystem>();
+        }
+
+        // 머즐 플래시 설정
+        if (muzzleFlash == null)
+        {
+            muzzleFlash = Instantiate(muzzleFlashPrefab, transform);
+            muzzleFlash.transform.localScale = .7f * Vector2.one;
         }
     }
 
@@ -64,8 +74,21 @@ public class EnemyLaserProjectile : MonoBehaviour
         {
             hitEffect.SetActive(false);
         }
-        //사운드 정지
-        foreach (var item in laserSounds)
+        if (muzzleFlash != null)
+        {
+            muzzleFlash.SetActive(false);
+        }
+        //사운드 정지. 오디오클립이나 사운드매니져가 널이라면 건너뜀
+        if (laserSoundLoops == null || laserSoundLoops.Length == 0)
+            return;
+
+        var sm = SoundManager.instance;
+        if (sm == null)
+        {
+            Debug.LogWarning("SoundManager.instance가 null입니다. 사운드 중단을 건너뜁니다.");
+            return;
+        }
+        foreach (var item in laserSoundLoops)
         {
             SoundManager.instance.StopLoop(item);
         }
@@ -85,9 +108,13 @@ public class EnemyLaserProjectile : MonoBehaviour
             laserLine.endWidth = laserWidth;
         }
 
-        foreach (var item in laserSounds)
+        foreach (var item in laserSoundLoops)
         {
             SoundManager.instance.PlayLoop(item);
+        }
+        foreach (var item in laserSounds)
+        {
+            SoundManager.instance.Play(item);
         }
     }
 
@@ -96,7 +123,7 @@ public class EnemyLaserProjectile : MonoBehaviour
         // 타임스케일이 0이 되었을 때 — 사운드 정지 (한 번만)
     if (Time.timeScale == 0 && !isSoundPaused)
     {
-        foreach (var item in laserSounds)
+        foreach (var item in laserSoundLoops)
         {
             SoundManager.instance.StopLoop(item);
         }
@@ -106,7 +133,7 @@ public class EnemyLaserProjectile : MonoBehaviour
     // 타임스케일이 다시 1로 돌아왔을 때 — 사운드 재개 (한 번만)
     else if (Time.timeScale > 0 && isSoundPaused)
     {
-        foreach (var item in laserSounds)
+        foreach (var item in laserSoundLoops)
         {
             SoundManager.instance.PlayLoop(item);
         }
@@ -116,7 +143,7 @@ public class EnemyLaserProjectile : MonoBehaviour
     // 플레이어가 죽으면 즉시 전기 사운드 중단
     if (GameManager.instance.IsPlayerDead)
     {
-        foreach (var item in laserSounds)
+        foreach (var item in laserSoundLoops)
         {
             SoundManager.instance.StopLoop(item);
         }
@@ -152,15 +179,22 @@ public class EnemyLaserProjectile : MonoBehaviour
             if (Time.frameCount % 30 == 0) particleSys.Play(); ;// 30프레임 간격으로 파티클 재생
         }
 
-        // 데미지 처리 (일정 간격으로) - 두꺼운 레이저를 위해 여러 레이캐스트 사용
-        if (Time.frameCount % frameCount == 0)
+        // 머즐 플래시 위치 설정
+        if (muzzleFlash != null)
         {
-            // 레이저 중심선과 양쪽 가장자리에서 레이캐스트 실행
-            Vector2 perpendicular = new Vector2(-direction.y, direction.x); // 수직 벡터
-            float halfWidth = laserWidth / 2f;
+            muzzleFlash.transform.position = startPos;
+            muzzleFlash.SetActive(true);
+        }
 
-            // 중심, 위쪽, 아래쪽에서 레이캐스트
-            Vector2[] rayPositions = {
+        // 데미지 처리 (일정 간격으로) - 두꺼운 레이저를 위해 여러 레이캐스트 사용
+            if (Time.frameCount % frameCount == 0)
+            {
+                // 레이저 중심선과 양쪽 가장자리에서 레이캐스트 실행
+                Vector2 perpendicular = new Vector2(-direction.y, direction.x); // 수직 벡터
+                float halfWidth = laserWidth / 2f;
+
+                // 중심, 위쪽, 아래쪽에서 레이캐스트
+                Vector2[] rayPositions = {
                 startPos, // 중심
                 startPos + perpendicular * halfWidth, // 위쪽
                 startPos - perpendicular * halfWidth, // 아래쪽
@@ -168,20 +202,20 @@ public class EnemyLaserProjectile : MonoBehaviour
                 startPos - perpendicular * halfWidth * 0.5f  // 중간 아래
             };
 
-            foreach (Vector2 rayPos in rayPositions)
-            {
-                RaycastHit2D[] hits = Physics2D.RaycastAll(rayPos, direction, maxDistance, destructables);
-                foreach (var hitTarget in hits)
+                foreach (Vector2 rayPos in rayPositions)
                 {
-                    if (hit.collider == null) return;
-
-                    // 그냥 getcomponent와는 다르게 메모리 할당 없음
-                    if (hit.collider.TryGetComponent<Character>(out Character character))
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(rayPos, direction, maxDistance, destructables);
+                    foreach (var hitTarget in hits)
                     {
-                        character.TakeDamage(damage, EnemyType.Melee);
+                        if (hit.collider == null) return;
+
+                        // 그냥 getcomponent와는 다르게 메모리 할당 없음
+                        if (hit.collider.TryGetComponent<Character>(out Character character))
+                        {
+                            character.TakeDamage(damage, EnemyType.Melee);
+                        }
                     }
                 }
             }
-        }
     }
 }

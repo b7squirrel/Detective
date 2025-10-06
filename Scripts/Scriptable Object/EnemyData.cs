@@ -28,4 +28,8 @@ public class EnemyData : ScriptableObject
 
     [Header("보스 대사")]
     public List<string> dialogs;
+
+    [Header("쪼개짐")] // LV4처럼 쪼개지는 적
+    public EnemyData split;
+    public int splitNum; // 몇 개로 쪼개질지
 }

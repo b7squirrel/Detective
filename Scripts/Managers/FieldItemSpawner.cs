@@ -147,7 +147,7 @@ public class FieldItemSpawner : MonoBehaviour
             eggBugNums++;
         }
 
-        Debug.LogError($"알 스폰 오류 횟수 = {eggBugNums}");
+        // Debug.LogError($"알 스폰 오류 횟수 = {eggBugNums}");
         return spawnable;
     }
 }

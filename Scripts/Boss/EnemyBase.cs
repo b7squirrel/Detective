@@ -24,6 +24,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public Vector2 GroupDir { get; set; } // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
     protected EnemyType enemyType; // Melee, Explode 공격만 EnemyBase에서 정의하고 Ranged는 Enemy에서 정의
+    protected bool isSplitable; // 처치하면 쪼개지는 적인지
+    protected EnemyData splitableEnemyData; // 쪼개질 때의 적 데이터
+    protected int splitNum; // 몇 개로 쪼개질지
 
     protected bool isOffScreen; // 화면 밖에 있을 때 플레이어의 공격을 받지 않기 위한 플래그
     protected float offScreenCoolDown; // 너무 자주 콜라이더가 활성, 비활성 되지 않도록 쿨타임 주기
@@ -170,6 +173,21 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public virtual void InitEnemy(EnemyData _enemyToSpawn)
     {
         enemyColor = _enemyToSpawn.enemyColor;
+
+        // 쪼개지는 적 관련 초기화
+        if (_enemyToSpawn.split == null)
+        {
+            isSplitable = false;
+            splitableEnemyData = null;
+            splitNum = 0;
+        }
+        else
+        {
+            isSplitable = true;
+            splitableEnemyData = _enemyToSpawn.split;
+            splitNum = _enemyToSpawn.splitNum;
+            finishedSpawn = true;
+        }
         // 적과 보스 공통으로 사용하기 위해서 virtual로 했음
         // 각자 덮어쓰기 하면 됨
     }
@@ -512,6 +530,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
             wave.GetComponent<Shockwave>().Init(0, 10f, LayerMask.GetMask("Enemy"), transform.position);
 
             BossDieManager.instance.SlowMo(.5f, .5f);
+        }
+
+        if (isSplitable)
+        {
+            for (int i = 0; i < splitNum; i++)
+            {
+                Spawner.instance.SpawnSplit(splitableEnemyData, 0, true, transform.position); // 0번 프리펩(일반 적), 적의 수와 관계 없이 강제 스폰
+            }
         }
 
         gameObject.SetActive(false);
