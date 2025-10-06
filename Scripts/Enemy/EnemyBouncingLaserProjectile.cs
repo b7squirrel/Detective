@@ -19,9 +19,6 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
     /// <summary>
     /// 투사체를 초기화하고 지정된 방향과 속도로 발사
     /// </summary>
-    /// <param name="direction">정규화된 방향</param>
-    /// <param name="speed">이동 속도</param>
-    /// <param name="duration">활성화 시간</param>
     public void Initialize(Vector2 direction, float speed, int damage, float duration)
     {
         this.moveDirection = direction.normalized;

@@ -7,6 +7,8 @@ public class ShadowHeightEnemy : MonoBehaviour
     [SerializeField] string onLandingMask;
     [SerializeField] AudioClip jumpSound;
     [SerializeField] AudioClip landingSound;
+    [SerializeField] GameObject landingEffectPrefab;
+    [SerializeField] Transform landingEffectTrans;
     public bool IsDone { get; private set; }
     public UnityEvent onGroundHitEvent;
 
@@ -138,6 +140,9 @@ public class ShadowHeightEnemy : MonoBehaviour
         if (IsDone) return;
 
         SoundManager.instance.Play(landingSound);
+        GameObject landingEffect = GameManager.instance.poolManager.GetMisc(landingEffectPrefab);
+        landingEffect.transform.position = landingEffectTrans.position;
+        landingEffect.transform.localScale = 10f * Vector2.one;
         onGroundHitEvent?.Invoke();
     }
     #endregion

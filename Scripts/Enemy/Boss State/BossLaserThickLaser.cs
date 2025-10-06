@@ -217,7 +217,6 @@ public class BossLaserThickLaser : MonoBehaviour
         indicator2.enabled = false;
 
         // 앤틱 이펙트 설정
-        // 머즐 플래시 설정
         if (anticEffect == null)
         {
             anticEffect = Instantiate(anticEffectaPrefab, transform);
@@ -235,18 +234,18 @@ public class BossLaserThickLaser : MonoBehaviour
         lineRenderer.endWidth = indicatorWidth;
         lineRenderer.positionCount = 2;
         lineRenderer.sortingLayerName = "Effect";
-        lineRenderer.sortingOrder = 5;
+        lineRenderer.sortingOrder = 0;
     }
-    
+
     IEnumerator ShowIndicatorsCo(float angle)
     {
         // 인디케이터 활성화
         indicator1.enabled = true;
         indicator2.enabled = true;
-        
+
         // 인디케이터 위치 설정
         Vector3 startPos = shootPoint.position;
-        
+
         // 첫 번째 방향 (플레이어 방향)
         Vector3 direction1 = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0);
         Vector3 endPos1 = startPos + direction1 * indicatorMaxDistance;
@@ -277,6 +276,9 @@ public class BossLaserThickLaser : MonoBehaviour
         // 인디케이터 비활성화
         indicator1.enabled = false;
         indicator2.enabled = false;
+
+        // 앤틱 이펙트 비활성화
+        anticEffect.SetActive(false);
     }
     
     IEnumerator FireLaserCo()

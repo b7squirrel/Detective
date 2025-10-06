@@ -62,15 +62,12 @@ public class BossLaserReflectionLaser : MonoBehaviour
 
         // 플레이어에게 밀리지 않도록
         enemyBoss.SetMovable(false);
+
+        // 전기공 발사
+        StartCoroutine(FireBouncingBallCo());
     }
     void InitState3Update()
     {
-        if (Time.time >= nextFireTime && player != null)
-        {
-            StartCoroutine(FireBouncingBallCo());
-            nextFireTime = Time.time + fireRate;
-        }
-
         enemyBoss.SlimeDropTimer(timeToDropSlime);
     }
     void InitState3Exit()
