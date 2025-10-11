@@ -21,6 +21,8 @@ public class BossLaserThickLaser : MonoBehaviour
     public float retargetDelay = 2f;    // 재타겟팅 대기 시간 (초)
     public float laserWidth = 2f;       // 레이저 두께
     public int damage = 10;          // 데미지
+
+    public float additionalAngle = 5f; // 해당 값만큼 매 회 추가해서 레이져가 항상 다음 번에는 더 빨라지도록 
     public LayerMask destructables;     // 파괴 가능한 레이어
     public LayerMask walls;             // 벽 레이어
     Coroutine co;
@@ -197,7 +199,7 @@ public class BossLaserThickLaser : MonoBehaviour
 
     void InitState2Exit()
     {
-        rotationSpeed += 5f; // 매번 5도씩 증가. 점점 빨라지도록
+        rotationSpeed += additionalAngle; // 매번 5도씩 증가. 점점 빨라지도록
 
         enemyBoss.SetMovable(true);
     }
