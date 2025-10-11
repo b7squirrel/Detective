@@ -119,11 +119,11 @@ public class WeaponBase : MonoBehaviour
     protected virtual void Attack()
     {
         GetAttackParameters();
-        if (isLead == false) // 리드가 아닐 때만 공격 할 때 커지도록
-        {
-            if (weaponContainerCo != null) StopCoroutine(weaponContainerCo);
-            weaponContainerCo = StartCoroutine(SetOriScale(1.2f));
-        }
+        // if (isLead == false) // 리드가 아닐 때만 공격 할 때 커지도록
+        // {
+        //     if (weaponContainerCo != null) StopCoroutine(weaponContainerCo);
+        //     weaponContainerCo = StartCoroutine(SetOriScale(1f));
+        // }
         // Do Attack
     }
 

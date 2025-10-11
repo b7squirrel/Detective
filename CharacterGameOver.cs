@@ -13,6 +13,7 @@ public class CharacterGameOver : MonoBehaviour
 
     public void GameOver()
     {
+        SoundManager.instance.StopAllSounds();
         SoundManager.instance.Play(gameOverSound);
         MusicManager.instance.Stop();
         StartCoroutine(GameOverCo());

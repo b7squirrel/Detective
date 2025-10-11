@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -163,8 +164,9 @@ public class Character : MonoBehaviour
     }
     void PlayHurtSound(AudioClip _hurtSound)
     {
-        if (isHurtSoundPlaying) return;
+        if (isTearEffectActivated) return;
         SoundManager.instance.PlaySoundWith(_hurtSound, .4f, true, .2f);
+        
     }
     IEnumerator DoTearParticle()
     {

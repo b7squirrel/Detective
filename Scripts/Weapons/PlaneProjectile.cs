@@ -86,6 +86,7 @@ public class PlaneProjectile : ProjectileBase
         //offsetDirection = (target - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, offsetDirection);
         transform.localScale = .5f * Vector3.one;
+        // Debug.LogError($"비행기의 부모 = {transform.parent.name}");
 
         Damage = damage;
     }

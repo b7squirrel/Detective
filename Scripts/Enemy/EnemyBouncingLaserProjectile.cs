@@ -11,6 +11,9 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
 
     [SerializeField] LayerMask reflectLayerMask; // 반사될 수 있는 레이어 마스크
 
+    [Header("사운드")]
+    [SerializeField] AudioClip[] electricBallSound;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -28,6 +31,9 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
         isInitialized = true;
 
         rb.velocity = moveDirection * speed;
+
+        // 사운드
+        RegisterSound();
 
         Invoke(nameof(Deactivate), lifeTime);
     }
@@ -62,9 +68,29 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
             }
     }
 
+    void RegisterSound()
+    {
+        // 전기 루프 사운드
+        foreach (var item in electricBallSound)
+        {
+            GameManager.instance.loopSoundManager.RegisterAudio(item);
+        }
+    }
+    void UnregisterSound()
+    {
+        // 전기 루프 사운드 정지
+        foreach (var item in electricBallSound)
+        {
+            GameManager.instance.loopSoundManager.UnregisterAudio(item);
+        }
+    }
+
     void Deactivate()
     {
         isInitialized = false;
+
+        UnregisterSound();
+        
         gameObject.SetActive(false);
     }
 }

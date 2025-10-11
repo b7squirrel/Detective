@@ -40417,6 +40417,7 @@ GameObject:
   - component: {fileID: 1834188308}
   - component: {fileID: 1834188313}
   - component: {fileID: 1834188315}
+  - component: {fileID: 1834188316}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -40451,6 +40452,7 @@ MonoBehaviour:
   progressionBar: {fileID: 0}
   slimeDropManager: {fileID: 0}
   stickyStuffManager: {fileID: 0}
+  loopSoundManager: {fileID: 0}
   joystick: {fileID: 277539638}
   musicCreditManager: {fileID: 0}
   currentCamera: {fileID: 0}
@@ -41036,6 +41038,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slowDownFactor: 0.8
   damage: 10
+--- !u!114 &1834188316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834188279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13458b405a254a818239a80af4b81fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1834236530
 GameObject:
   m_ObjectHideFlags: 0

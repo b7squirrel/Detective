@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public ProgressionBar progressionBar;
     public SlimeDropManager slimeDropManager;
     public StickyStuffManager stickyStuffManager;
+    public LoopSoundManager loopSoundManager;
     
 
     public GameObject joystick;
@@ -84,6 +85,8 @@ public class GameManager : MonoBehaviour
 
         slimeDropManager = FindObjectOfType<SlimeDropManager>();
         stickyStuffManager = GetComponent<StickyStuffManager>();
+
+        loopSoundManager = GetComponent<LoopSoundManager>();
 
         confimationButton.SetActive(false);
 

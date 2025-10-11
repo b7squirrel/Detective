@@ -11,6 +11,7 @@ public class BossLaserReflectionLaser : MonoBehaviour
     public Transform shootPoint;            // 공 발사 위치
     [SerializeField] int maxProjectileNum;  // 공 개수 
     public float ballSpeed = 12f;           // 공 속도
+    [SerializeField] float ballSize;        // 공 크기
     [SerializeField] float randomAngleRange = 20f; // 무작위 각도 범위 (±도 단위)
     public float ballLifetime = 15f;        // 공 생존 시간
     public float fireRate = 4f;             // 발사 간격 (초)
@@ -23,6 +24,9 @@ public class BossLaserReflectionLaser : MonoBehaviour
 
     private Transform player;
     private float nextFireTime = 0f;
+
+    [Header("사운드")]
+    [SerializeField] AudioClip[] fireAudio; // 한 번 쏠 때 단발성으로
 
     #region 액션 이벤트
     void OnEnable()
@@ -91,6 +95,7 @@ public class BossLaserReflectionLaser : MonoBehaviour
 
             // 공 생성
             GameObject ball = Instantiate(bouncingBallPrefab, shootPoint.position, Quaternion.identity);
+            ball.transform.localScale = ballSize * Vector2.one;
 
             // 공 설정
             EnemyBouncingLaserProjectile ballScript = ball.GetComponent<EnemyBouncingLaserProjectile>();
@@ -105,6 +110,12 @@ public class BossLaserReflectionLaser : MonoBehaviour
 
             yield return new WaitForSeconds(.03f);
         }
+
+        foreach (var item in fireAudio)
+        {
+            SoundManager.instance.Play(item);
+        }
+
         enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
     }
     void FireBouncingBall()

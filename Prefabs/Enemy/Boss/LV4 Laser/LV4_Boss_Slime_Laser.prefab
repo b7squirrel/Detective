@@ -508,6 +508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDropSlime: 0.5
+  walkSound: {fileID: 8300000, guid: 6306b839779957c48a6a6e7a47d5168c, type: 3}
 --- !u!114 &2186079937195565773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,9 +538,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   indicatorDuration: 1
-  indicatorColor: {r: 1, g: 0, b: 0, a: 0.3}
-  indicatorWidth: 2
-  indicatorMaxDistance: 50
+  indicatorColor: {r: 1, g: 0, b: 0, a: 1}
+  indicatorEndColor: {r: 1, g: 0, b: 0, a: 0}
+  indicatorWidth: 1
+  indicatorEndWidth: 0.1
+  indicatorMaxDistance: 40
   indicatorSounds:
   - {fileID: 8300000, guid: ff0e242d5bc0fe1439a3b9a30346b2b1, type: 3}
   - {fileID: 8300000, guid: 30910c9d17947064d99957f8db4648be, type: 3}
@@ -563,6 +566,7 @@ MonoBehaviour:
   shootPoint: {fileID: 0}
   maxProjectileNum: 5
   ballSpeed: 9
+  ballSize: 1.4
   randomAngleRange: 50
   ballLifetime: 7
   fireRate: 3
@@ -574,6 +578,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   playerTag: Player
+  fireAudio:
+  - {fileID: 8300000, guid: 9157e7655b947604c83d375f53fcede2, type: 3}
+  - {fileID: 8300000, guid: e15ba9afbe39144439194a17f066ea71, type: 3}
 --- !u!1 &2760832794399453502
 GameObject:
   m_ObjectHideFlags: 0

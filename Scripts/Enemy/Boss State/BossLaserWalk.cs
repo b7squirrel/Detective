@@ -4,6 +4,7 @@ public class BossLaserWalk : MonoBehaviour
 {
     [Header("레이져걷기")]
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
+    [SerializeField] AudioClip walkSound;
     EnemyBoss enemyBoss;
     EnemyBase enemyBase;
 
@@ -27,6 +28,8 @@ public class BossLaserWalk : MonoBehaviour
         Debug.Log("State1 Enter");
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
         enemyBoss.DisplayCurrentState("레이져 슬라임 걷기 상태");
+
+        GameManager.instance.loopSoundManager.RegisterAudio(walkSound);
     }
     void InitState1Update()
     {
@@ -40,5 +43,6 @@ public class BossLaserWalk : MonoBehaviour
     void InitState1Exit()
     {
         Debug.Log("State1 Exit");
+        GameManager.instance.loopSoundManager.UnregisterAudio(walkSound);
     }
 }

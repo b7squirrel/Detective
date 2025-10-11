@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, Idamageable
@@ -42,6 +43,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     Vector2 pastPos; // 벽 바깥으로 나가면 다시 되돌리기 위한 변수
 
     bool isGrouned; // 점프 중이라면 플립을 하지 않도록 하기 위해
+
+    public event Action OnDeath; // 다른 클래스에서 죽을 때 실행해야하는 함수들 등록
     #endregion
 
     #region Component Variables
@@ -540,6 +543,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
             }
         }
 
+        // 구독이 있다면 이벤트 실행
+        OnDeath?.Invoke();
+        
         gameObject.SetActive(false);
     }
 

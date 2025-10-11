@@ -20,7 +20,7 @@ public class SlimeDropManager : MonoBehaviour
     public void DropObject(Vector2 dropPos)
     {
         // 보스의 현재 위치에 바로 점액을 떨어트림
-        Instantiate(dropPrefab, dropPos, Quaternion.identity);
+        GameObject drop = Instantiate(dropPrefab, dropPos, Quaternion.identity);
     }
     public void DropObjectOnLanding(Vector2 dropPos)
     {
