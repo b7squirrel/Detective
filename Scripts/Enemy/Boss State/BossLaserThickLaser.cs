@@ -61,6 +61,9 @@ public class BossLaserThickLaser : MonoBehaviour
     private float targetAngle = 0f;         // 목표 각도
     private float passedTargetTime = 0f;    // 타겟을 지나친 시간
 
+    [Header("사운드")]
+    [SerializeField] AudioClip anticSound;   // 힘을 모을 때 사운드
+
     #region 액션 이벤트
     void OnEnable()
     {
@@ -234,7 +237,7 @@ public class BossLaserThickLaser : MonoBehaviour
         if (anticEffect == null)
         {
             anticEffect = Instantiate(anticEffectaPrefab, transform);
-            anticEffect.transform.localScale = .7f * Vector2.one;
+            anticEffect.transform.localScale = .3f * Vector2.one;
         }
         anticEffect.SetActive(false);
     }
@@ -377,4 +380,13 @@ public class BossLaserThickLaser : MonoBehaviour
         }
     }
     #endregion
+
+    public void PlayAnticSound()
+    {
+        SoundManager.instance.Play(anticSound);
+    }
+    public void StopAnticSound()
+    {
+        SoundManager.instance.Stop(anticSound);
+    }
 }

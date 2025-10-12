@@ -197,11 +197,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70ac2ff8a8a744c25863378e21e086af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slimeDropType: 0
   life: 10
   mainBody: {fileID: 5212130134811567006}
   srBody: {fileID: 429762613844300463}
   srBodyCore: {fileID: 5880515696782505980}
   fadeDuration: 0.16
+  bubblePrefab: {fileID: 0}
+  range: 0
+  interval: 0
+  electricityPrefab: {fileID: 0}
 --- !u!1 &5212130134811567006
 GameObject:
   m_ObjectHideFlags: 0

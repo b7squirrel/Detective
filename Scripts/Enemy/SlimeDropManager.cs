@@ -15,12 +15,14 @@ public class SlimeDropManager : MonoBehaviour
     bool isTriggered; // 중첩되어 슬라임과 충돌했을 때 데미지가 너무 많이 들어가는 것을 방지
     int overrapingObjectsCount; // 슬라임 위에 있는지 체크하기 위한 플레이어와 중첩되는 슬라임 갯수
     bool isSlowDownActivated; // slow down factor가 활성화 되어 있는지 여부
+    SlimeAttackType slimeDropType = SlimeAttackType.None;
 
     #region 슬라임 드롭/슛
     public void DropObject(Vector2 dropPos)
     {
         // 보스의 현재 위치에 바로 점액을 떨어트림
         GameObject drop = Instantiate(dropPrefab, dropPos, Quaternion.identity);
+        if (slimeDropType == SlimeAttackType.None) slimeDropType = drop.GetComponentInChildren<SlimeDrop>().GetSlimeDropType();
     }
     public void DropObjectOnLanding(Vector2 dropPos)
     {
@@ -64,8 +66,8 @@ public class SlimeDropManager : MonoBehaviour
         if (isTriggered == false) return;
 
         // 3프레임에 한 번 공격
-        if (Time.frameCount % 10f == 0)
-            GameManager.instance.character.TakeDamage(dropDamage, EnemyType.Melee);
+        if (Time.frameCount % 3 == 0)
+            GameManager.instance.character.TakeDamage(dropDamage, EnemyType.Melee, slimeDropType);
     }
     #endregion
 

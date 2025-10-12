@@ -15,9 +15,13 @@ public class BossLaserReflectionLaser : MonoBehaviour
     [SerializeField] float randomAngleRange = 20f; // 무작위 각도 범위 (±도 단위)
     public float ballLifetime = 15f;        // 공 생존 시간
     public float fireRate = 4f;             // 발사 간격 (초)
+    public float fireBallInterval;          // 공격당 공을 쏘는 간격
     public int damage = 20;                 // 데미지
     public LayerMask playerLayer;           // 플레이어 레이어
     public LayerMask wallLayer;             // 벽 레이어
+    [Header("Muzzle Flash")]
+    [SerializeField] GameObject muzzleFlashPrefab;
+    GameObject muzzleFlash;
 
     [Header("타겟 설정")]
     public string playerTag = "Player";     // 플레이어 태그
@@ -108,13 +112,15 @@ public class BossLaserReflectionLaser : MonoBehaviour
 
             currentProjectileNums--;
 
-            yield return new WaitForSeconds(.03f);
+            foreach (var item in fireAudio)
+            {
+                SoundManager.instance.Play(item);
+            }
+
+            yield return new WaitForSeconds(fireBallInterval);
         }
 
-        foreach (var item in fireAudio)
-        {
-            SoundManager.instance.Play(item);
-        }
+
 
         enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
     }

@@ -1,10 +1,11 @@
 using System.Collections;
-using UnityEditor.Rendering;
 using UnityEngine;
 
+public enum SlimeAttackType {None, Slime, Electricity}
 public class SlimeDrop : MonoBehaviour
 {
     [Header("Drop")]
+    [SerializeField] SlimeAttackType slimeDropType;
     [SerializeField] float life;
     [SerializeField] GameObject mainBody; // 사라질 때 파괴할 오브젝트
     [SerializeField] SpriteRenderer srBody, srBodyCore;
@@ -16,6 +17,8 @@ public class SlimeDrop : MonoBehaviour
     GameObject bubbleObject; // 버블을 담아두고 슬라임 점액이 파괴될 때 버블도 파괴
     [SerializeField] float range;
     [SerializeField] float interval; // 버블이 생성되는 주기
+    [Header("전기")]
+    [SerializeField] GameObject electricityPrefab;
 
     #region OnTrigger
     void OnTriggerEnter2D(Collider2D collision)
@@ -82,7 +85,14 @@ public class SlimeDrop : MonoBehaviour
     #region 버블
     void OnEnable()
     {
-        StartCoroutine(GenerateRandomPositions());
+        if (slimeDropType == SlimeAttackType.Slime)
+        {
+            StartCoroutine(GenerateRandomPositions());
+        }
+        else if (slimeDropType == SlimeAttackType.Electricity)
+        {
+            GenerateElectricity();
+        }
     }
 
     IEnumerator GenerateRandomPositions()
@@ -107,4 +117,17 @@ public class SlimeDrop : MonoBehaviour
         return (Vector2)transform.position + Random.insideUnitCircle * range;
     }
     #endregion
+
+    #region 전기
+    void GenerateElectricity()
+    {
+        if (electricityPrefab == null) return;
+        Instantiate(electricityPrefab, transform.position, Quaternion.identity);
+    }
+    #endregion
+
+    public SlimeAttackType GetSlimeDropType()
+    {
+        return slimeDropType;
+    }
 }

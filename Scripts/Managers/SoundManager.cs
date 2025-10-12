@@ -328,6 +328,39 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 특정 AudioClip을 재생 중인 모든 사운드 정지 (루프 + 일반)
+    /// </summary>
+    public void Stop(AudioClip audioClip)
+    {
+        if (audioClip == null)
+        {
+            Debug.LogWarning("정지할 AudioClip이 null입니다.");
+            return;
+        }
+
+        // 루프 사운드 정지
+        StopLoop(audioClip);
+
+        // 일반 사운드 정지
+        if (audioSourcePool == null) return;
+
+        foreach (var audioSource in audioSourcePool)
+        {
+            if (audioSource != null && audioSource.isPlaying && audioSource.clip == audioClip)
+            {
+                try
+                {
+                    audioSource.Stop();
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"사운드 정지 중 오류: {e.Message}");
+                }
+            }
+        }
+    }
+
     public void StopLoop(AudioClip audioClip)
     {
         if (audioClip == null) return;

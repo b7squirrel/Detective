@@ -13,6 +13,7 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
 
     [Header("사운드")]
     [SerializeField] AudioClip[] electricBallSound;
+    [SerializeField] AudioClip[] bouncingSound; // 공이 반사될 때 나는 소리
 
     void Awake()
     {
@@ -53,19 +54,24 @@ public class EnemyBouncingLaserProjectile : MonoBehaviour
             if (character != null)
             {
                 // 데미지 주기
-                character.TakeDamage(damage, EnemyType.Melee);
+                character.TakeDamage(damage, EnemyType.Melee, SlimeAttackType.Electricity);
             }
         }
         // 지정된 레이어에 포함된 오브젝트에만 반사
-            if ((reflectLayerMask.value & (1 << other.gameObject.layer)) != 0)
-            {
-                Vector2 contactPoint = other.ClosestPoint(transform.position);
-                Vector2 normal = (transform.position - (Vector3)contactPoint).normalized;
+        if ((reflectLayerMask.value & (1 << other.gameObject.layer)) != 0)
+        {
+            Vector2 contactPoint = other.ClosestPoint(transform.position);
+            Vector2 normal = (transform.position - (Vector3)contactPoint).normalized;
 
-                // 벽의 표면 방향으로 반사
-                moveDirection = Vector2.Reflect(moveDirection, normal).normalized;
-                rb.velocity = moveDirection * speed;
+            // 벽의 표면 방향으로 반사
+            moveDirection = Vector2.Reflect(moveDirection, normal).normalized;
+            rb.velocity = moveDirection * speed;
+
+            foreach (var item in bouncingSound)
+            {
+                SoundManager.instance.PlaySoundWith(item, 1, true, 0.3f);
             }
+        }
     }
 
     void RegisterSound()

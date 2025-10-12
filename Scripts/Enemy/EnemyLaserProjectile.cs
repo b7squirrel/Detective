@@ -9,7 +9,7 @@ public class EnemyLaserProjectile : MonoBehaviour
     [SerializeField] float maxDistance = 50f;
     [SerializeField] AudioClip[] laserSoundLoops; // 레이져 루프되는 사운드
     [SerializeField] AudioClip[] laserSounds; // 레이져 단발성 사운드
-    float laserWidth = 1f; // 레이저 두께
+    float laserWidth = .05f; // 레이저 두께
     GameObject hitEffect;
     GameObject muzzleFlash;
     ParticleSystem particleSys;
@@ -52,7 +52,7 @@ public class EnemyLaserProjectile : MonoBehaviour
         if (muzzleFlash == null)
         {
             muzzleFlash = Instantiate(muzzleFlashPrefab, transform);
-            muzzleFlash.transform.localScale = .7f * Vector2.one;
+            muzzleFlash.transform.localScale = .4f * Vector2.one;
         }
     }
 
@@ -212,7 +212,7 @@ public class EnemyLaserProjectile : MonoBehaviour
                         // 그냥 getcomponent와는 다르게 메모리 할당 없음
                         if (hit.collider.TryGetComponent<Character>(out Character character))
                         {
-                            character.TakeDamage(damage, EnemyType.Melee);
+                            character.TakeDamage(damage, EnemyType.Melee, SlimeAttackType.Electricity);
                         }
                     }
                 }

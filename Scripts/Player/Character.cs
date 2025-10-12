@@ -122,7 +122,7 @@ public class Character : MonoBehaviour
         Debug.Log("In Character, Damage Bonus = " + DamageBonus);
     }
 
-    public void TakeDamage(int damage, EnemyType enemyType)
+    public void TakeDamage(int damage, EnemyType enemyType, SlimeAttackType attackType = SlimeAttackType.Electricity)
     {
         if (GameManager.instance.IsPlayerDead)
             return;
@@ -143,7 +143,14 @@ public class Character : MonoBehaviour
         // 투사체가 아닐 때만 3프레임에 한 번씩 데미지를 받기
         //if (Time.frameCount % 3 != 0 && enemyType != EnemyType.Projectile) return;
 
-        anim.SetTrigger("Hurt");
+        if (attackType == SlimeAttackType.Slime)
+        {
+            anim.SetTrigger("Hurt");
+        }
+        else if (attackType == SlimeAttackType.Electricity)
+        {
+            anim.SetTrigger("ElecHurt");
+        }
         PlayHurtSound(hurtSound);
 
         MessageSystem.instance.PostMessagePlayer(damage.ToString());
