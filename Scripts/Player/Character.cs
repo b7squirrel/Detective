@@ -122,7 +122,7 @@ public class Character : MonoBehaviour
         Debug.Log("In Character, Damage Bonus = " + DamageBonus);
     }
 
-    public void TakeDamage(int damage, EnemyType enemyType, SlimeAttackType attackType = SlimeAttackType.Electricity)
+    public void TakeDamage(int damage, EnemyType enemyType, SlimeAttackType attackType = SlimeAttackType.Slime)
     {
         if (GameManager.instance.IsPlayerDead)
             return;

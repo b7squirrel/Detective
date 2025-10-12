@@ -66,7 +66,7 @@ public class SlimeDropManager : MonoBehaviour
         if (isTriggered == false) return;
 
         // 3프레임에 한 번 공격
-        if (Time.frameCount % 3 == 0)
+        if (Time.frameCount % 10 == 0)
             GameManager.instance.character.TakeDamage(dropDamage, EnemyType.Melee, slimeDropType);
     }
     #endregion
