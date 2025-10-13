@@ -33,6 +33,7 @@ public class BossDieManager : MonoBehaviour
         Debug.Log("보스 다이 매니져에서 호출");
 
         MusicManager.instance.Stop();
+        SoundManager.instance.StopAllSounds();
 
         // 스테이지와 동전 저장
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();

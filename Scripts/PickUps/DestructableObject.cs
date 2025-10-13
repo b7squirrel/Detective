@@ -53,7 +53,7 @@ public class DestructableObject : MonoBehaviour, Idamageable
         {
             anim.SetTrigger("Hit");
         }
-        DropItem();
+        // DropItem();
     }
 
     void DropItem()

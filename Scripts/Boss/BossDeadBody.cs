@@ -11,6 +11,10 @@ public class BossDeadBody : MonoBehaviour, Idamageable
     [SerializeField] AudioClip squelchSFX;
     [SerializeField] AudioClip squeackSFX;
     Animator anim;
+
+    [Header("드롭")]
+    [SerializeField] GameObject dropPrefab;
+    [SerializeField] int dropNums; // 드롭할 기본 개수
     bool isDamageable; // 아이들 상태로 들어가면 그제서야 데미지를 받고 반응할 수 있다
     public bool FinishBossCam { get; private set; }
     void OnEnable()
@@ -58,6 +62,12 @@ public class BossDeadBody : MonoBehaviour, Idamageable
             // if (stateInfo.IsName("Hit")) return;
 
             anim.SetTrigger("Hit");
+
+            int num = dropNums + UnityEngine.Random.Range(0, 5);
+            for (int i = 0; i < num; i++)
+            {
+                Instantiate(dropPrefab, transform.position, Quaternion.identity);
+            }
         }
     }
 }

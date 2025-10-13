@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     public Collider2D cameraBoundary;
 
     public RectTransform CoinUIPosition;
+    public RectTransform CristalUIPosition;
     public StartingDataContainer startingDataContainer { get; private set; }
     public PlayerDataManager stageManager { get; private set; }
 

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -84,7 +86,9 @@ public class DropOnDestroy : MonoBehaviour
 
         if (dropItemProperty[itemIndex].isMultipleDropable && isMultiDrop) // 멀티플 드롭이 가능한 아이템이고, 확률로 멀티드롭이 뽑혔다면
         {
-            DropMultipleObjects(toDrop, dropItemProperty[itemIndex].numMultiple + UnityEngine.Random.Range(-5, 10));
+            int multiNum = dropItemProperty[itemIndex].numMultiple + UnityEngine.Random.Range(-5, 10); 
+            multiNum = Math.Max(1, multiNum); // 음수가 될 수 있으므로
+            DropMultipleObjects(toDrop, multiNum);
             return;
         }
 

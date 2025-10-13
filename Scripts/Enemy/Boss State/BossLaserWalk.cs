@@ -38,6 +38,11 @@ public class BossLaserWalk : MonoBehaviour
         enemyBase.ApplyMovement();
         enemyBoss.ShootTimer();
         enemyBoss.SlimeDropTimer(timeToDropSlime);
+
+        if (BossDieManager.instance.IsBossDead)
+        {
+            GameManager.instance.loopSoundManager.UnregisterAudio(walkSound);
+        }
         Debug.Log("State1 Update");
     }
     void InitState1Exit()
