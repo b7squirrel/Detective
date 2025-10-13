@@ -47,8 +47,10 @@ public class BossDieManager : MonoBehaviour
         FindObjectOfType<PauseManager>().UnPauseGame();
         if (anim != null) anim.SetTrigger("Die");
 
+        //모든 적과 벽 제거
         RemoveAllEnemies();
         RemoveAllWalls();
+
         //dropCoins.Init(amountOfCoins, deadBody.transform.position);
         yield return new WaitForSeconds(3f);
         if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();

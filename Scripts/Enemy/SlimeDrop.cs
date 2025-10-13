@@ -20,18 +20,21 @@ public class SlimeDrop : MonoBehaviour
     [Header("전기")]
     [SerializeField] GameObject electricityPrefab;
 
+    #region 초기화
+    public void InitDrop()
+    {
+        CachingReferences();
+    }
+    #endregion
+
     #region OnTrigger
     void OnTriggerEnter2D(Collider2D collision)
     {
-        CachingReferences();
-
         if (collision.CompareTag("Player"))
             slimeDropManager?.EnterSlime();
     }
     void OnTriggerExit2D(Collider2D collision)
     {
-        CachingReferences();
-
         if (collision.CompareTag("Player"))
         {
             slimeDropManager?.ExitSlime();
@@ -78,6 +81,8 @@ public class SlimeDrop : MonoBehaviour
         srBody.color = new Color(originalColorBody.r, originalColorBody.g, originalColorBody.b, 0f);
         srBodyCore.color = new Color(originalColorBodyCore.r, originalColorBodyCore.g, originalColorBodyCore.b, 0f);
 
+        //슬라임 드롭 매니져의 드롭리스트에서 자신을 제거하고 파괴
+        slimeDropManager.RemoveDrop(this.gameObject);
         Destroy(mainBody);
     }
     #endregion
