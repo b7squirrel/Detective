@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 /// <summary>
 /// 방향 전환을 주어진 횟수만큼 하면 상태 종료
@@ -14,6 +15,9 @@ public class BossDrillUnderground : MonoBehaviour
     [Header("상태 지속 시간")]
     [SerializeField] int maxDirChangeNum;
     int dirChangeCounter;
+
+    [Header("파티클")]
+    [SerializeField] ParticleSystem[] particleSystems;
 
     EnemyBoss enemyBoss;
     Transform playerTrns;
@@ -136,6 +140,22 @@ public class BossDrillUnderground : MonoBehaviour
             isMoving = false;
             rb.velocity = Vector2.zero;
             Debug.Log("벽에 충돌 - 이동 멈춤");
+        }
+    }
+
+    // 애니메이션 이벤트
+    public void StartParticles()
+    {
+        foreach (var item in particleSystems)
+        {
+            item.Play();
+        }
+    }
+    public void StopParticles()
+    {
+        foreach (var item in particleSystems)
+        {
+            item.Stop();
         }
     }
 }

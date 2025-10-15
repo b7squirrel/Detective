@@ -15,8 +15,8 @@ MonoBehaviour:
   Name: Drill Queen
   animController: {fileID: 22100000, guid: 59c871320d0a5446dbc3f5d63508d7e3, type: 2}
   stats:
-    hp: 40000
-    speed: 3
+    hp: 400000
+    speed: 8
     damage: 500
     rangedDamage: 0
     experience_reward: 1
@@ -27,9 +27,12 @@ MonoBehaviour:
   enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
   distanceToPlayer: 0
   attackInterval: 0
+  projectileDamage: 0
   jumpRate: 0
   jumpInterval: 0
   dialogs:
   - "\uB4DC\uB9B4\uB7EC!"
   - "\uC2AC\uB77C\uC784 \uD3ED\uD0C4!"
   - "\uD130\uB110 \uC774\uB3D9!"
+  split: {fileID: 0}
+  splitNum: 0

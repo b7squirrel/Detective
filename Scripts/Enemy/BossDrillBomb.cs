@@ -20,8 +20,11 @@ public class BossDrillBomb : MonoBehaviour
         if (co != null) co = null;
         StartCoroutine(ExplodeCo());
 
-        damageIndicator.gameObject.SetActive(false);
-        damageIndicator.localScale = radius * Vector2.one; 
+        if (damageIndicator != null)
+        {
+            damageIndicator.gameObject.SetActive(false);
+            damageIndicator.localScale = radius * Vector2.one;
+        }
     }
     IEnumerator ExplodeCo()
     {
@@ -29,8 +32,11 @@ public class BossDrillBomb : MonoBehaviour
         if (anim == null) anim = GetComponent<Animator>();
         anim.SetTrigger("Trigger");
 
-        damageIndicator.gameObject.SetActive(true);
-        damageIndicator.position = transform.position;
+        if (damageIndicator != null)
+        {
+            damageIndicator.gameObject.SetActive(true);
+            damageIndicator.position = transform.position;
+        }
 
         // yield return new WaitForSeconds(1f); // 폭탄 터지기 직전 애니메이션 길이 1초
 
@@ -51,7 +57,7 @@ public class BossDrillBomb : MonoBehaviour
             }
         }
 
-        damageIndicator.gameObject.SetActive(false);
+        if (damageIndicator != null) damageIndicator.gameObject.SetActive(false);
 
         gameObject.SetActive(false);
     }

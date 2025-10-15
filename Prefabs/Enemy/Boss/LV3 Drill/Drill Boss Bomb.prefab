@@ -349,7 +349,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -373,6 +373,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
+  damageIndicator: {fileID: 0}
   isDubugMode: 1
   debugCircleForCheckingRadius: {fileID: 2101900553215353305, guid: e14baa2d3babb4038a7965027a8d1154, type: 3}
 --- !u!95 &3338693995322511011

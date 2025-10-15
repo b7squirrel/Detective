@@ -4,6 +4,7 @@ using System.Collections;
 public class DialogBubble : MonoBehaviour
 {
     [SerializeField] GameObject dialogBubblePrefab;
+    [SerializeField] Transform dialogBubbleTrans;
     GameObject bubble;
     TMPro.TextMeshPro dialogText;
 
@@ -49,7 +50,8 @@ public class DialogBubble : MonoBehaviour
         // 말풍선 위치 업데이트 (LateUpdate: 카메라 이동 후 실행)
         if (bubble != null)
         {
-            bubble.transform.position = this.transform.position;
+            if (dialogBubbleTrans == null) dialogBubbleTrans = this.transform;
+            bubble.transform.position = dialogBubbleTrans.position;
         }
     }
 }
