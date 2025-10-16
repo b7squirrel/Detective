@@ -60,7 +60,7 @@ public class BossDrillUnderground : MonoBehaviour
         SetMoveDirection();
 
         // 착지 지점 인디케이터
-        enemyBoss.ActivateLandingIndicator(true);
+        // enemyBoss.ActivateLandingIndicator(true);
 
         // 플레이어 추적 코루틴 시작
         if (playerTrackingCoroutine != null)
@@ -89,7 +89,7 @@ public class BossDrillUnderground : MonoBehaviour
     void InitState3Exit()
     {
         Debug.Log("State3 Exit");
-        enemyBoss.ActivateLandingIndicator(false);
+        // enemyBoss.ActivateLandingIndicator(false);
         isMoving = false;
 
         // 플레이어 추적 코루틴 정지

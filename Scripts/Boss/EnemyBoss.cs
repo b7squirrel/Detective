@@ -355,6 +355,18 @@ public class EnemyBoss : EnemyBase, Idamageable
         }
         LandingIndicator.SetActive(_activate);
     }
+    // 애니메이션 이벤트로 쓰기 위해 매개 변수를 bool로 하지 않고 정수로 활성/비활성
+    public void ActivateLandingIndicator(int _activate)
+    {
+        if (LandingIndicator == null)
+        {
+            LandingIndicator = Instantiate(LandingIndicatorPrefab, transform);
+            LandingIndicator.transform.localPosition = Vector2.zero;
+            LandingIndicator.transform.localScale = .8f * Vector2.one;
+        }
+        bool active = _activate == 1 ? true : false;
+        LandingIndicator.SetActive(active);
+    }
     public void GenTeleportEffect()
     {
         GameObject teleEffect = Instantiate(teleEffectPrefab, transform.position, Quaternion.identity);
