@@ -18,6 +18,7 @@ public class BossDrillUnderground : MonoBehaviour
 
     [Header("파티클")]
     [SerializeField] ParticleSystem[] particleSystems;
+    [SerializeField] ParticleSystem[] explosiveDirtsPs;
 
     EnemyBoss enemyBoss;
     Transform playerTrns;
@@ -114,6 +115,16 @@ public class BossDrillUnderground : MonoBehaviour
         {
             yield return new WaitForSeconds(playerCheckInterval);
 
+            // isMoving이 false가 되면 상태 종료.
+            // 이 조건문이 없으면 벽에 부딪치면 아래의 isMoving && playerTrns != null을 통과하지 못해서 무한루프에 걸리게 됨 
+            if (!isMoving)
+            {
+                Debug.Log("이동 중단됨 - 상태3 종료");
+                dirChangeCounter = 0;
+                GetComponent<Animator>().SetTrigger("Settle");
+                yield break;
+            }
+        
             if (isMoving && playerTrns != null)
             {
                 // 새로운 목표 지점 설정
@@ -135,7 +146,7 @@ public class BossDrillUnderground : MonoBehaviour
     // 벽에 부딪치면 멈추게 했음. 벽 밖으로 나가는 것을 막기 위해서
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Wall"))
+        if (collision.collider.CompareTag("Wall") || collision.collider.CompareTag("Player"))
         {
             isMoving = false;
             rb.velocity = Vector2.zero;
@@ -154,6 +165,20 @@ public class BossDrillUnderground : MonoBehaviour
     public void StopParticles()
     {
         foreach (var item in particleSystems)
+        {
+            item.Stop();
+        }
+    }
+    public void StartExplosiveDirtPS()
+    {
+        foreach (var item in explosiveDirtsPs)
+        {
+            item.Play();
+        }
+    }
+    public void StopExplosiveDirtPS()
+    {
+        foreach (var item in explosiveDirtsPs)
         {
             item.Stop();
         }
