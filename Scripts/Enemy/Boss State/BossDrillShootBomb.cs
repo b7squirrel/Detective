@@ -10,6 +10,7 @@ public class BossDrillShootBomb : MonoBehaviour
     [SerializeField] float projectileSpeed; // 수평 속도
     [SerializeField] float verticalVelocity; // 수직 속도
     [SerializeField] float stateDuration; // 상태 지속 시간
+    [SerializeField] float damageRadius; // 데미지 범위
     float stateTimer;
 
     EnemyBoss enemyBoss;
@@ -80,6 +81,7 @@ public class BossDrillShootBomb : MonoBehaviour
         {
             GameObject egg = GameManager.instance.poolManager.GetMisc(eggPrefab);
             egg.transform.position = shootPoint.position;
+            egg.GetComponent<BossDrillBomb>().SetDamageRadius(damageRadius);
 
             // 0~360도 사이의 랜덤 각도
             float randomAngle = Random.Range(0f, 360f);

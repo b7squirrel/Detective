@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class DialogBubble : MonoBehaviour
 {
+    [SerializeField] bool showDialog; // 말풍선을 보여줄 것인지 여부
     [SerializeField] GameObject dialogBubblePrefab;
     [SerializeField] Transform dialogBubbleTrans;
     GameObject bubble;
@@ -12,10 +14,12 @@ public class DialogBubble : MonoBehaviour
 
     public void InitDialogBubble(Transform targetTransform)
     {
+        if (showDialog == false) return;
         // 말풍선 생성
         if (bubble == null)
         {
-            bubble = Instantiate(dialogBubblePrefab);
+            bubble = Instantiate(dialogBubblePrefab, dialogBubbleTrans);
+            bubble.transform.position = Vector2.zero;
             dialogText = bubble.GetComponentInChildren<TMPro.TextMeshPro>();
         }
 
@@ -31,13 +35,15 @@ public class DialogBubble : MonoBehaviour
 
     public void SetBubbleActive(bool active)
     {
+        if (showDialog == false) return;
+
         bubble.SetActive(active);
     }
-    IEnumerator DeactivateCo()
-    {
-        yield return new WaitForSeconds(3f);
-        SetBubbleActive(false);
-    }
+    // IEnumerator DeactivateCo()
+    // {
+    //     yield return new WaitForSeconds(3f);
+    //     SetBubbleActive(false);
+    // }
 
     public void DestroyBubble()
     {
@@ -45,13 +51,13 @@ public class DialogBubble : MonoBehaviour
             Destroy(bubble);
     }
 
-    void Update()
-    {
-        // 말풍선 위치 업데이트 (LateUpdate: 카메라 이동 후 실행)
-        if (bubble != null)
-        {
-            if (dialogBubbleTrans == null) dialogBubbleTrans = this.transform;
-            bubble.transform.position = dialogBubbleTrans.position;
-        }
-    }
+    // void Update()
+    // {
+    //     // 말풍선 위치 업데이트 (LateUpdate: 카메라 이동 후 실행)
+    //     if (bubble != null)
+    //     {
+    //         // if (dialogBubbleTrans == null) dialogBubbleTrans = this.transform;
+    //         bubble.transform.position = dialogBubbleTrans.position;
+    //     }
+    // }
 }

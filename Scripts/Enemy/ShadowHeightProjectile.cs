@@ -8,7 +8,8 @@ public class ShadowHeightProjectile : MonoBehaviour
     [SerializeField] int bounceCounter;
     [SerializeField] string onLandingMask;
     public bool IsDone { get; private set; }
-    public UnityEvent onGroundHitEvent;
+    public UnityEvent onGroundHitEvent; // 지면에 닿았을 때
+    public UnityEvent onDone; // 움직임이 완전히 끝났을 때
 
     [SerializeField] Transform trnsObject; // 부모 물체
     [SerializeField] Transform trnsBody; // 공중에 뜨는 스프라이트 오브젝트
@@ -124,6 +125,11 @@ public class ShadowHeightProjectile : MonoBehaviour
         onGroundHitEvent?.Invoke();
     }
 
+    void DoneBouncing()
+    {
+        onDone?.Invoke();
+    }
+
     // 애니메이션 이벤트들
     public void Bounce(float divisionFactor)
     {
@@ -135,6 +141,8 @@ public class ShadowHeightProjectile : MonoBehaviour
             rb.mass = 100f;
             rb.bodyType = RigidbodyType2D.Kinematic;
             bounceCounter = 0;
+
+            DoneBouncing();
             return;
         }
 

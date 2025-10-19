@@ -10860,6 +10860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cecc8a7bbf03243d592170ebf7e5a5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showDialog: 0
   dialogBubblePrefab: {fileID: 1817514581722573707, guid: 4b0fb1a40623948f086f6d38b7a61579, type: 3}
   dialogBubbleTrans: {fileID: 58517818666258269}
 --- !u!114 &7317872549419765963
@@ -10888,11 +10889,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eggPrefab: {fileID: 4996769589237571694, guid: ad823d1c67bf348baa9bdc3eacce1b42, type: 3}
-  projectileNums: 8
+  projectileNums: 5
   timeToDropSlime: 3
   projectileSpeed: 20
   verticalVelocity: 60
   stateDuration: 2
+  damageRadius: 7
 --- !u!114 &8253698559757532680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10905,10 +10907,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41daebcba606248f2948fe12cb13dca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 14
-  timeToDropSlime: 0.2
+  moveSpeed: 50
+  timeToDropSlime: 0.04
   playerCheckInterval: 0.5
-  maxDirChangeNum: 4
+  maxDirChangeNum: 0
   particleSystems:
   - {fileID: 7564694099523015027}
   - {fileID: 5953324240689334216}

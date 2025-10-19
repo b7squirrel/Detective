@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
 /// <summary>
 /// 방향 전환을 주어진 횟수만큼 하면 상태 종료
@@ -182,5 +181,9 @@ public class BossDrillUnderground : MonoBehaviour
         {
             item.Stop();
         }
+    }
+    public void ShakeCamera()
+    {
+        CameraShake.instance.Shake();
     }
 }

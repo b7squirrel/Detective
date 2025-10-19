@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1409729281484747840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1929600888132193626}
+  m_Layer: 11
+  m_Name: Center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1929600888132193626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409729281484747840}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7967737461537142143}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1523781852424034117
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,7 +136,7 @@ SpriteRenderer:
   m_SortingLayerID: -231762679
   m_SortingLayer: 10
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bbed0be182c0e478e879f03044ec40ff, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1a49f273ba2924ea2a30da6a8a754480, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -141,13 +172,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4284527030401885100}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.5499608, w: 0.83519053}
-  m_LocalPosition: {x: 0.275, y: -0.159, z: 0}
-  m_LocalScale: {x: 0.62835, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.87, z: 0}
+  m_LocalScale: {x: 1.2385, y: 0.4948, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1071436037384587578}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -66.729}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4433346863671822820
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -189,7 +220,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: bbed0be182c0e478e879f03044ec40ff, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c5fcea7ebbe7c40c296f0421ae3e12f5, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.29803923}
   m_FlipX: 0
   m_FlipY: 0
@@ -237,6 +268,7 @@ Transform:
   m_Children:
   - {fileID: 607099692589462937}
   - {fileID: 1071436037384587578}
+  - {fileID: 1929600888132193626}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2853080841986265317
@@ -296,6 +328,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDone:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4030257125410257184}
+        m_TargetAssemblyTypeName: BossDrillBomb, Assembly-CSharp
+        m_MethodName: Explode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   trnsObject: {fileID: 7967737461537142143}
   trnsBody: {fileID: 607099692589462937}
   trnsShadow: {fileID: 1071436037384587578}
@@ -352,7 +399,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.42}
   serializedVersion: 2
   m_Radius: 0.5
 --- !u!114 &4030257125410257184
@@ -367,13 +414,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3e0a4f4eb0d4a98936b7d8c443227e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitingTime: 3
+  waitingTime: 1
   damage: 1000
-  radius: 10
+  center: {fileID: 1929600888132193626}
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
-  damageIndicator: {fileID: 0}
+  damageIndicatorPrefab: {fileID: 2112945513603616502, guid: 3b290eba1b06f4573a10d39fb68cad10, type: 3}
+  shockWavePrefab: {fileID: 7822616154730464413, guid: ba3f36bc96e364b97931bbe1711ca4bb, type: 3}
   isDubugMode: 1
   debugCircleForCheckingRadius: {fileID: 2101900553215353305, guid: e14baa2d3babb4038a7965027a8d1154, type: 3}
 --- !u!95 &3338693995322511011
