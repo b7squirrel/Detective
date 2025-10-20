@@ -27,7 +27,8 @@ public class SlimeSticky : MonoBehaviour
 
     void StickToPlayer()
     {
-        transform.position = GameManager.instance.player.transform.position;
+        Vector3 offset = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, .1f), 0f);
+        transform.position = GameManager.instance.player.transform.position + offset;
     }
     
     void LifeCounter()
