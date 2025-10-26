@@ -198,6 +198,20 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #endregion
 
     #region Movement Functions
+    public void SetFlipEnabled(int enable) // 애니메이션 이벤트로 사용
+    {
+        if (enable == 0)
+        {
+            // Flip 비활성화 - 진행 중인 플립 코루틴 중지
+            StopFlipCoroutine();
+            isFlipping = true; // 플립이 일어나지 않도록 막음
+        }
+        else
+        {
+            // Flip 활성화
+            isFlipping = false; // 플립이 다시 일어날 수 있도록 허용
+        }
+    }
     public virtual void Flip()
     {
         if (gameObject.activeSelf == false) return;

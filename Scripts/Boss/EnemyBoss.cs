@@ -5,9 +5,15 @@ using UnityEngine;
 
 public class EnemyBoss : EnemyBase, Idamageable
 {
-    Spawner spawner;
     [field: SerializeField] public float moveSpeedInAir { get; private set; }
     [field: SerializeField] public bool IsInAir { get; set; }
+    Spawner spawner;
+
+    [Space]
+    [Header("상태 확률 입력 (%)")]
+    public float state1Probability = 30f;
+    public float state2Probability = 35f;
+    public float state3Probability = 35f;
 
     [Header("공격")]
     [SerializeField] EnemyData[] projectiles; // 날으는 슬라임 적
@@ -401,35 +407,46 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
 
     // 랜덤하게 3개의 공격 가운데 하나를 선택하기 위한 인덱스.
+    // animation settle의 끝에서 애니메이션 이벤트로 실행
     public void SetRandomState()
+{
+    string[] states = { "State1", "State2", "State3" };
+    
+    if (debugSetState)
     {
-        string[] states = { "State1", "State2", "State3" };
-
-        if (debugSetState)
-        {
-            anim.SetTrigger(states[desiredStateIndex]);
-            return;
-        }
-
-        // 0~99 사이의 난수를 생성
-        int rand = UnityEngine.Random.Range(0, 100);
-
-        int stateIndex;
-        if (rand < 20)
-        {
-            stateIndex = 0; // State1: 10%
-        }
-        else if (rand < 60)
-        {
-            stateIndex = 1; // State2: 45%
-        }
-        else
-        {
-            stateIndex = 2; // State3: 45%
-        }
-
-        anim.SetTrigger(states[stateIndex]);
+        anim.SetTrigger(states[desiredStateIndex]);
+        return;
     }
+    
+    // 확률의 합이 100이 아닐 경우 정규화
+    float totalProbability = state1Probability + state2Probability + state3Probability;
+    if (totalProbability <= 0)
+    {
+        Debug.LogWarning("Total probability is 0 or less. Using equal distribution.");
+        anim.SetTrigger(states[UnityEngine.Random.Range(0, 3)]);
+        return;
+    }
+    
+    // 0~100 사이의 난수를 생성
+    float rand = UnityEngine.Random.Range(0f, totalProbability);
+    int stateIndex;
+    
+    // 누적 확률로 상태 결정
+    if (rand < state1Probability)
+    {
+        stateIndex = 0; // State1
+    }
+    else if (rand < state1Probability + state2Probability)
+    {
+        stateIndex = 1; // State2
+    }
+    else
+    {
+        stateIndex = 2; // State3
+    }
+    
+    anim.SetTrigger(states[stateIndex]);
+}
     public void SetState(float state1Probability, float state2Probability, float state3Probability)
 {
     string[] states = { "State1", "State2", "State3" };
