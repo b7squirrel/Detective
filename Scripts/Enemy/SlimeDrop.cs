@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public enum SlimeAttackType {None, Slime, Electricity}
+public enum SlimeAttackType {None, Slime, Electricity, Fire}
 public class SlimeDrop : MonoBehaviour
 {
     [Header("Drop")]

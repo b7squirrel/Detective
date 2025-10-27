@@ -151,6 +151,10 @@ public class Character : MonoBehaviour
         {
             anim.SetTrigger("ElecHurt");
         }
+        else if (attackType == SlimeAttackType.Fire)
+        {
+            anim.SetTrigger("FireHurt");
+        }
         PlayHurtSound(hurtSound);
 
         MessageSystem.instance.PostMessagePlayer(damage.ToString());

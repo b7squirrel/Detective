@@ -7,6 +7,9 @@ public class EnemyHomingProjectile : MonoBehaviour
     public float rotationSpeed = 200f;           // 회전 속도 (도/초)
     public float homingDelay = 1f;               // 호밍 시작 지연 시간
     float lifeTime = 0f;                         // 미사일 생존 시간
+    [SerializeField] SlimeAttackType slimeAttackType;
+    [SerializeField] AudioClip initSound; // 투사체 생성 사운드
+
 
     private Rigidbody2D rb;
     private Transform target;
@@ -40,6 +43,9 @@ public class EnemyHomingProjectile : MonoBehaviour
 
         // 호밍 딜레이 설정
         this.homingDelay = homingDelay;
+
+        // 사운드 재생
+        if(initSound != null) SoundManager.instance.Play(initSound);
 
         // 일정 시간 후 미사일 제거
         this.lifeTime = lifeTime;
@@ -111,8 +117,9 @@ public class EnemyHomingProjectile : MonoBehaviour
 
             if (character != null)
             {
-                // 데미지 주기
-                character.TakeDamage(damage, EnemyType.Melee);
+                // 데미지 주기. slime attack type이 실수로 선택되지 않았다면 슬라임으로 설정
+                if (slimeAttackType == SlimeAttackType.None) slimeAttackType = SlimeAttackType.Slime;
+                character.TakeDamage(damage, EnemyType.Melee, slimeAttackType);
             }
         }
     }

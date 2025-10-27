@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5193283973920843581}
   - component: {fileID: 6950728616128082978}
   m_Layer: 0
-  m_Name: Enemy Homing Projectile
+  m_Name: Enemy Homing Projectile Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,6 +112,8 @@ MonoBehaviour:
   speed: 8
   rotationSpeed: 200
   homingDelay: 1
+  slimeAttackType: 3
+  initSound: {fileID: 8300000, guid: e15ba9afbe39144439194a17f066ea71, type: 3}
 --- !u!1 &6070471861172227659
 GameObject:
   m_ObjectHideFlags: 0
