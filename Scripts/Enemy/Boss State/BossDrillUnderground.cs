@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 /// <summary>
 /// 방향 전환을 주어진 횟수만큼 하면 상태 종료
@@ -18,6 +19,14 @@ public class BossDrillUnderground : MonoBehaviour
     [Header("파티클")]
     [SerializeField] ParticleSystem[] particleSystems;
     [SerializeField] ParticleSystem[] explosiveDirtsPs;
+
+    [Header("사운드")]
+    [SerializeField] AudioClip[] drillAnticReadySound;
+    [SerializeField] AudioClip[] drillAnticEndSound;
+    [SerializeField] AudioClip[] drillAntic;
+    [SerializeField] AudioClip[] drillDashSound;
+    bool drillDashPlaying; // 드릴대시 사운드는 루프니까 반복하지 않기 위해
+    [SerializeField] AudioClip landingSound;
 
     EnemyBoss enemyBoss;
     Transform playerTrns;
@@ -68,6 +77,9 @@ public class BossDrillUnderground : MonoBehaviour
             StopCoroutine(playerTrackingCoroutine);
         }
         playerTrackingCoroutine = StartCoroutine(TrackPlayerPosition());
+
+        // 드릴 루프 사운드 플래그 초기화
+        drillDashPlaying = false;
     }
 
     void InitState3Update()
@@ -185,5 +197,52 @@ public class BossDrillUnderground : MonoBehaviour
     public void ShakeCamera()
     {
         CameraShake.instance.Shake();
+    }
+
+    public void PlayDrillAnticSound()
+    {
+        foreach (var item in drillAntic)
+        {
+            SoundManager.instance.Play(item);
+        }
+    }
+    public void PlayDrillAnticReadySound()
+    {
+        // 공격 모션 앤틱이 시작되는 것을 알려주는 경고 사운드 "삥!"
+        foreach (var item in drillAnticReadySound)
+        {
+            SoundManager.instance.Play(item);
+        }
+    }
+    public void PlayDrillAnticEndSound()
+    {
+        // 드릴과 함께 땅에 들어가서 안보이게 되면 "뿅" 하는 사운드
+        foreach (var item in drillAnticEndSound)
+        {
+            SoundManager.instance.Play(item);
+        }
+    }
+    public void PlayDrillDashSound()
+    {
+        if (drillDashPlaying) return;
+
+        drillDashPlaying = true;
+        foreach (var item in drillDashSound)
+        {
+            SoundManager.instance.Play(item);
+        }
+    }
+    public void StopDrillDashsound()
+    {
+        drillDashPlaying = false;
+        foreach (var item in drillDashSound)
+        {
+            SoundManager.instance.Stop(item);
+        }
+    }
+    public void PlayLandingSound()
+    {
+        if (landingSound == null) return;
+        SoundManager.instance.Play(landingSound);
     }
 }

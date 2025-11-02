@@ -139,10 +139,14 @@ public class ShadowHeightEnemy : MonoBehaviour
     {
         if (IsDone) return;
 
-        SoundManager.instance.Play(landingSound);
-        GameObject landingEffect = GameManager.instance.poolManager.GetMisc(landingEffectPrefab);
-        landingEffect.transform.position = landingEffectTrans.position;
-        landingEffect.transform.localScale = 10f * Vector2.one;
+        if(landingSound != null) SoundManager.instance.Play(landingSound);
+        if (landingEffectPrefab != null)
+        {
+            GameObject landingEffect = GameManager.instance.poolManager.GetMisc(landingEffectPrefab);
+            landingEffect.transform.position = landingEffectTrans.position;
+            landingEffect.transform.localScale = 10f * Vector2.one;
+        }
+
         onGroundHitEvent?.Invoke();
     }
     #endregion

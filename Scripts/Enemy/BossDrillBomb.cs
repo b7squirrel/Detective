@@ -11,9 +11,13 @@ public class BossDrillBomb : MonoBehaviour
     [SerializeField] LayerMask targetLayer; // 플레이어를 선택하기
     [SerializeField] GameObject damageIndicatorPrefab; // 데미지 인디케이터 프리펩
     [SerializeField] GameObject shockWavePrefab;
+    [SerializeField] GameObject explosionEffect;
     Coroutine co;
     Animator anim;
     Action onDie; // 폭탄이 사라질 때 이벤트
+
+    [Header("사운드")]
+    [SerializeField] AudioClip[] explosionSounds;
 
     [Header("디버그")]
     [SerializeField] bool isDubugMode;
@@ -36,7 +40,9 @@ public class BossDrillBomb : MonoBehaviour
 
         yield return new WaitForSeconds(waitingTime);
 
-        Collider2D playerInRange = Physics2D.OverlapCircle(center.position, radius, targetLayer);
+        PlayExplosionSound(); // 사운드
+        CameraShake.instance.Shake(); // 카메라 쉐이크
+        Collider2D playerInRange = Physics2D.OverlapCircle(center.position, radius, targetLayer); // 충돌 체크
 
         if (isDubugMode)
         {
@@ -54,7 +60,9 @@ public class BossDrillBomb : MonoBehaviour
         }
 
         GameObject shockWave = GameManager.instance.poolManager.GetMisc(shockWavePrefab);
+        GameObject explosion = GameManager.instance.poolManager.GetMisc(explosionEffect);
         shockWave.GetComponent<Shockwave>().Init(0, radius, LayerMask.GetMask("Player"), center.position);
+        explosion.GetComponent<ExplosionEffect>().Init(radius, center.position);
 
         onDie?.Invoke(); // 연결되어 있던 인디케이터를 비활성화
         gameObject.SetActive(false);
@@ -65,7 +73,7 @@ public class BossDrillBomb : MonoBehaviour
     {
         GameObject damageIndicator = GameManager.instance.poolManager.GetMisc(damageIndicatorPrefab);
         damageIndicator.transform.position = center.position;
-        damageIndicator.transform.localScale = radius * Vector2.one;
+        damageIndicator.transform.localScale = radius * Vector2.one; // 인디케이터의 반지름이 1 unit으로 되어 있기 때문에 그냥 radius만 곱해줌
 
         DamageIndicator indicator = damageIndicator.GetComponent<DamageIndicator>();
         onDie += indicator.DeactivateIndicator; // BossDrillBomb에서 직접 등록
@@ -77,4 +85,15 @@ public class BossDrillBomb : MonoBehaviour
         Gizmos.color = new Color(1, 0, 0, .3f);
         Gizmos.DrawWireSphere(transform.position, radius);
     }
+
+    #region 사운드
+    void PlayExplosionSound()
+    {
+        if (explosionSounds == null) return;
+        foreach (var item in explosionSounds)
+        {
+            SoundManager.instance.Play(item);
+        }
+    }
+    #endregion
 }

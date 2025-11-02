@@ -10772,6 +10772,9 @@ MonoBehaviour:
   shockwave: {fileID: 7822616154730464413, guid: ba3f36bc96e364b97931bbe1711ca4bb, type: 3}
   <moveSpeedInAir>k__BackingField: 16
   <IsInAir>k__BackingField: 0
+  state1Probability: 30
+  state2Probability: 35
+  state3Probability: 35
   projectiles:
   - {fileID: 11400000, guid: 90f06bf610826bf448080ea909f77b4d, type: 2}
   - {fileID: 11400000, guid: 41e40d421b77bbc4282b92af34e4c6c0, type: 2}
@@ -10895,6 +10898,10 @@ MonoBehaviour:
   verticalVelocity: 60
   stateDuration: 2
   damageRadius: 7
+  bombAnticReadySound: {fileID: 8300000, guid: 4fc91bf8a877974479a243e8058cfa12, type: 3}
+  bombAnticSound: {fileID: 8300000, guid: 1be4eb1f3601632418733d735babe8fe, type: 3}
+  shootingBombStateSound: {fileID: 8300000, guid: 6f983d56ad85b6047a3bbfbfbe5060cb, type: 3}
+  shootingBombSound: {fileID: 8300000, guid: 9e7b00fb30590fd408d3c436a9f19f50, type: 3}
 --- !u!114 &8253698559757532680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10917,6 +10924,17 @@ MonoBehaviour:
   - {fileID: 563399268585258895}
   explosiveDirtsPs:
   - {fileID: 3634341207061137136}
+  drillAnticReadySound:
+  - {fileID: 8300000, guid: 7fe7aee0df141bf4397ff0a7a0338182, type: 3}
+  drillAnticEndSound:
+  - {fileID: 8300000, guid: ba7b2d74c213555458fe5ee246b673a7, type: 3}
+  drillAntic:
+  - {fileID: 8300000, guid: 8b1a4f3d8ecf4e825a9048f7c0e2dd73, type: 3}
+  - {fileID: 8300000, guid: b4ea8e5d783782946a614b58d36ccbca, type: 3}
+  - {fileID: 8300000, guid: 39b6849845af52b43b7543acc10d772d, type: 3}
+  drillDashSound:
+  - {fileID: 8300000, guid: 2900beb095d1a1541b910dbdcb0027db, type: 3}
+  landingSound: {fileID: 8300000, guid: 557add73d7670ac40a540ee95b46b156, type: 3}
 --- !u!1 &6616656374508502190
 GameObject:
   m_ObjectHideFlags: 0
@@ -10932,7 +10950,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3983396566423551033
 Transform:
   m_ObjectHideFlags: 0
