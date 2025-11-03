@@ -117,7 +117,7 @@ public class Enemy : EnemyBase
 
         Name = _data.Name;
 
-        canJump = UnityEngine.Random.Range(0, 1f) <= _data.jumpRate? true : false; // 점프 여부
+        canJump = _data.isJumper; // 점프 여부
         if(shadowHeightEnemy == null) shadowHeightEnemy = GetComponent<ShadowHeightEnemy>();
         shadowHeightEnemy.SetIsJumper(canJump, _data.jumpInterval);
     }
@@ -161,6 +161,7 @@ public class Enemy : EnemyBase
         return new Equation().IsOutOfRange(transform.position, spawnConst);
     }
 
+    #region 공격
     protected override void AttackMelee(int _damage)
     {
         Target.gameObject.GetComponent<Character>().TakeDamage(Stats.damage, EnemyType.Melee);
@@ -168,18 +169,9 @@ public class Enemy : EnemyBase
     protected override void AttackRange(int _damage)
     {
         if (enemyProjectile == null) return;
-        // GameObject projectile = GameManager.instance.poolManager.GetMisc(enemyProjectile);
-        // if (projectile == null) return; // pooling key에서 개수 제한에 걸려서 더 이상 생성되지 않았다면
-        // projectile.transform.position = transform.position;
-
         GameObject cannonBall = Instantiate(enemyProjectile, transform.position, Quaternion.identity);
         cannonBall.GetComponentInChildren<IEnemyProjectile>().InitProjectileDamage(Stats.rangedDamage);
         anim.SetBool("Attack", true); // 초록이의 공격 애니메이션 끝에 false로 만듬  
-
-        // enemyProjectile의 damage값을 _damage 값으로 초기화 시키기
-        // EnemyProjectile proj = projectile.GetComponent<EnemyProjectile>();
-        // if (proj == null) return;
-        // proj.Init(_damage, Vector3.zero);
     }
     protected override void AttackExplode(int _damage)
     {
@@ -204,6 +196,7 @@ public class Enemy : EnemyBase
             nextAttackTime = Time.time + attackInterval;
         }
     }
+    #endregion
 
     bool DetectingPlayer()
     {

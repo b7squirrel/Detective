@@ -60,8 +60,8 @@ public class BossDrillBomb : MonoBehaviour
         }
 
         GameObject shockWave = GameManager.instance.poolManager.GetMisc(shockWavePrefab);
-        GameObject explosion = GameManager.instance.poolManager.GetMisc(explosionEffect);
         shockWave.GetComponent<Shockwave>().Init(0, radius, LayerMask.GetMask("Player"), center.position);
+        GameObject explosion = GameManager.instance.poolManager.GetMisc(explosionEffect);
         explosion.GetComponent<ExplosionEffect>().Init(radius, center.position);
 
         onDie?.Invoke(); // 연결되어 있던 인디케이터를 비활성화
@@ -72,10 +72,9 @@ public class BossDrillBomb : MonoBehaviour
     void ShowIndicator()
     {
         GameObject damageIndicator = GameManager.instance.poolManager.GetMisc(damageIndicatorPrefab);
-        damageIndicator.transform.position = center.position;
-        damageIndicator.transform.localScale = radius * Vector2.one; // 인디케이터의 반지름이 1 unit으로 되어 있기 때문에 그냥 radius만 곱해줌
-
         DamageIndicator indicator = damageIndicator.GetComponent<DamageIndicator>();
+        indicator.Init(radius, center.position); // 인디케이터의 반지름이 1 unit으로 되어 있기 때문에 그냥 radius만 곱해줌
+
         onDie += indicator.DeactivateIndicator; // BossDrillBomb에서 직접 등록
     }
 

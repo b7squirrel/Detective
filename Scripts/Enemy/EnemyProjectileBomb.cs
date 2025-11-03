@@ -7,36 +7,38 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     int projectileDamage;
     [SerializeField] float radius; // 폭발 범위
     [SerializeField] LayerMask targetLayer; // 플레이어를 선택하기
-    [SerializeField] Transform damageIndicator; // 데미지 인디케이터 스케일 조절
     [SerializeField] Transform projBody; // 실제 투사체 스프라이트 위치에 인디케이터를 위치시키기 위해
     [SerializeField] ShadowHeightProjectile shadowHeightProj;
     Coroutine co;
     [SerializeField] Animator anim;
-    bool initDone; // Init Bomb을 한 번만 실행하도록 하기 위해
+
+    [Header("이펙트")]
+    [SerializeField] GameObject explosionEffectPrefab;
+    [SerializeField] GameObject shockWavePrefab;
+    [SerializeField] GameObject damageIndicatorPrefab;
+    DamageIndicator indicator; // 나중에 비활성화 시키기 위해
+
+    [Header("사운드")]
+    [SerializeField] AudioClip initSound;
+    [SerializeField] AudioClip explosionSound;
 
     [Header("디버그")]
-    [SerializeField] bool isDubugMode; 
+    [SerializeField] bool isDubugMode;
     [SerializeField] GameObject debugCircleForCheckingRadius; // 반경 체크를 위한 원
-
     void OnEnable()
     {
-        damageIndicator.gameObject.SetActive(false);
+        // 사운드
+        if(initSound != null) SoundManager.instance.Play(initSound);
     }
-
-    // 지면에 닿아서 움직이지 않게 되면 
-    void Update()
-    {   if (initDone) return;
-        if (shadowHeightProj.GetIsDone())
-        {
-            InitBomb();
-            initDone = true;
-        }
-    }
-    void InitBomb()
+    public void InitBomb()
     {
         if (co != null) co = null;
-        damageIndicator.gameObject.SetActive(false);
-        damageIndicator.localScale = radius * Vector2.one;
+
+        // 범위 인디케이터 생성
+        indicator = null;
+        GameObject damageIndicator = GameManager.instance.poolManager.GetMisc(damageIndicatorPrefab);
+        indicator = damageIndicator.GetComponent<DamageIndicator>();
+        indicator.Init(radius, transform.position);
 
         StartCoroutine(ExplodeCo());
     }
@@ -44,39 +46,48 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     // 진동하는 애니메이션을 시작하는 것만 실행. 애니메이션의 끝에 애니메이션 이벤트로 Cast Damage 함수 실행
     IEnumerator ExplodeCo()
     {
-        damageIndicator.gameObject.SetActive(true);
-        damageIndicator.position = projBody.position;
-
         yield return new WaitForSeconds(waitingTime);
-
-        // if (anim == null) anim = GetComponent<Animator>();
         anim.SetTrigger("Trigger");
-
     }
 
     public void CastDamage()
     {
-        Collider2D playerInRange = Physics2D.OverlapCircle(transform.position, radius, targetLayer);
+        GenEffects(); //이펙트 발생
+        DeactivateIndicator(); // 인디케이터는 비활성화
 
-        // if (isDubugMode)
-        // {
-        //     GameObject circle = Instantiate(debugCircleForCheckingRadius, transform.position, Quaternion.identity);
-        //     circle.transform.position = transform.position;
-        //     circle.transform.localScale = radius * Vector2.one;
-        // }
+        Collider2D playerInRange = Physics2D.OverlapCircle(transform.position, 2f * radius, targetLayer);
 
         if (playerInRange != null)
         {
-            if (playerInRange.GetComponent<Character>() != null)
+            Character character = playerInRange.GetComponent<Character>();
+            if (character != null)
             {
-                playerInRange.GetComponent<Character>().TakeDamage(projectileDamage, EnemyType.Melee);
+                character.TakeDamage(projectileDamage, EnemyType.Melee);
             }
         }
-
-        damageIndicator.gameObject.SetActive(false);
-
-        initDone = false;
         gameObject.SetActive(false);
+    }
+
+    // 이펙트
+    void GenEffects()
+    {
+        // 폭발 이펙트
+        GameObject explosion = GameManager.instance.poolManager.GetMisc(explosionEffectPrefab);
+        explosion.GetComponent<ExplosionEffect>().Init(radius, transform.position);
+
+        // 연기 등의 쇼크웨이브
+        GameObject shockWave = GameManager.instance.poolManager.GetMisc(shockWavePrefab);
+        shockWave.GetComponent<Shockwave>().Init(0, radius, LayerMask.GetMask("Player"), transform.position);
+
+        // 사운드 이펙트
+        if (explosionSound != null) SoundManager.instance.Play(explosionSound);
+        
+        // 카메라 쉐이크
+        CameraShake.instance.Shake();
+    }
+    void DeactivateIndicator()
+    {
+        indicator.gameObject.SetActive(false);
     }
 
     // 감지 범위 시각화 (Scene 뷰에서 확인 가능)

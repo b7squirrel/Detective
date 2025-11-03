@@ -11,6 +11,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     [SerializeField] Transform landingEffectTrans;
     public bool IsDone { get; private set; }
     public UnityEvent onGroundHitEvent;
+    public UnityEvent onDone; // 지면에서 완전히 멈췄을 떄의 이벤트
 
     [SerializeField] Transform trnsBody; // 공중에 뜨는 스프라이트 오브젝트
     [SerializeField] SpriteRenderer sprRndBody; // 공중에 뜨는 오브젝트의 스프라이트
@@ -160,6 +161,8 @@ public class ShadowHeightEnemy : MonoBehaviour
             enemy.ResumeEnemy();
             ActivateCollider(true);
             isFirstJump = true; // 점프가 완료되면 다음 점프 사이클을 위해 초기화
+
+            onDone?.Invoke(); // 완전히 멈췄을 때의 이벤트. 예를 들어 시한 폭탄의 경우 폭발하기
 
             return;
         }

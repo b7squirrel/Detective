@@ -136,7 +136,7 @@ public class ShadowHeightProjectile : MonoBehaviour
         if (bounceCounter > bouncingNumbers)
         {
             IsDone = true;
-            gameObject.layer = LayerMask.NameToLayer("Enemy");
+            SetLandingLayer();
             rb.velocity = Vector2.zero;
             rb.mass = 100f;
             rb.bodyType = RigidbodyType2D.Kinematic;
@@ -153,5 +153,27 @@ public class ShadowHeightProjectile : MonoBehaviour
         isGrounded = false;
 
         // Debug.Log($"Bouncing! New verticalVelocity: {verticalVelocity}, Remaining bounces: {bounceCounter}");
+    }
+
+    // 완전히 착지했을 때 레이어를 변경하는 메서드
+    void SetLandingLayer()
+    {
+        if (!string.IsNullOrEmpty(onLandingMask))
+        {
+            int layer = LayerMask.NameToLayer(onLandingMask);
+            if (layer != -1)
+            {
+                gameObject.layer = layer;
+            }
+            else
+            {
+                Debug.LogWarning($"Layer '{onLandingMask}' not found. Using 'Enemy' layer instead.");
+                gameObject.layer = LayerMask.NameToLayer("Enemy");
+            }
+        }
+        else
+        {
+            gameObject.layer = LayerMask.NameToLayer("Enemy");
+        }
     }
 }

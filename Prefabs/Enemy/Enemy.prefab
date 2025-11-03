@@ -369,7 +369,7 @@ Animator:
   m_GameObject: {fileID: 5297514985837409348}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: be250dbe10cb74489a040e6111ac6595, type: 2}
+  m_Controller: {fileID: 22100000, guid: e528fe5e406fa644a9a7f95329c2b329, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -524,6 +524,8 @@ MonoBehaviour:
   onLandingMask: Enemy
   jumpSound: {fileID: 0}
   landingSound: {fileID: 0}
+  landingEffectPrefab: {fileID: 0}
+  landingEffectTrans: {fileID: 0}
   onGroundHitEvent:
     m_PersistentCalls:
       m_Calls:
@@ -539,6 +541,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDone:
+    m_PersistentCalls:
+      m_Calls: []
   trnsBody: {fileID: 4230202729391454313}
   sprRndBody: {fileID: 7866643054979264505}
   sprRndshadow: {fileID: 5974572655354779491}

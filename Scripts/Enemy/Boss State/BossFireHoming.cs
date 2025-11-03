@@ -27,6 +27,13 @@ public class BossFireHoming : MonoBehaviour
     private float nextFireTime = 0f;
     private Coroutine co;                // 현재 실행 중인 코루틴
 
+    [Header("사운드")]
+    [SerializeField] AudioClip bombAnticReadySound;
+    [SerializeField] AudioClip bombAnticSound;
+    [SerializeField] AudioClip shootingBombStateSound;
+    [SerializeField] AudioClip shootingBombSound;
+    bool isPlayingShootingStateSound; // shooting state sound는 루프로 돌릴 예정
+
     #region 액션 이벤트
     void OnEnable()
     {
@@ -57,6 +64,8 @@ public class BossFireHoming : MonoBehaviour
 
         // 플레이어에게 밀리지 않도록
         enemyBoss.SetMovable(false);
+
+        PlayShootingFireHomingStateSound();
     }
 
     void InitHomingUpdate()
@@ -73,6 +82,7 @@ public class BossFireHoming : MonoBehaviour
 
     void InitHomingExit()
     {
+        StopShootingFireHomingStateSound();
         enemyBoss.SetMovable(true);
     }
 
@@ -116,4 +126,38 @@ public class BossFireHoming : MonoBehaviour
         // 코루틴 종료 시점에 null 처리 (중복 실행 방지용)
         co = null;
     }
+
+    #region 사운드
+    public void PlayFireHomingAnticReadySound()
+    {
+        if (bombAnticReadySound == null) return;
+        SoundManager.instance.Play(bombAnticReadySound);
+    }
+    public void PlayFireHomingAnticSound()
+    {
+        if (bombAnticSound == null) return;
+        SoundManager.instance.Play(bombAnticSound);
+    }
+    void PlayShootingFireHomingStateSound()
+    {
+        if (shootingBombStateSound == null) return;
+        if (isPlayingShootingStateSound) return;
+        SoundManager.instance.PlayLoop(shootingBombStateSound);
+        isPlayingShootingStateSound = true;
+    }
+    void StopShootingFireHomingStateSound()
+    {
+        if (shootingBombStateSound == null) return;
+        if (isPlayingShootingStateSound)
+        {
+            SoundManager.instance.StopLoop(shootingBombStateSound);
+            isPlayingShootingStateSound = false;
+        }
+    }
+    void PlayShootFireHomingSound()
+    {
+        if (shootingBombSound == null) return;
+        SoundManager.instance.Play(shootingBombSound);
+    }
+    #endregion
 }
