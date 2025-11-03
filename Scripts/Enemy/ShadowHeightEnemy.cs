@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -67,6 +68,7 @@ public class ShadowHeightEnemy : MonoBehaviour
 
     public void SetIsJumper(bool isJumper, float jumpInterval)
     {
+        Debug.LogError($"Is Jumper = {isJumper}");
         this.isJumper = isJumper;
         if (isJumper && jumpInterval == 0) this.isJumper = false; // 실수로 점프 가능이면서 인터벌이 0일 때는 그냥 점프불가로
         this.jumpFrequency = jumpInterval + UnityEngine.Random.Range(-1f, 1f);
@@ -95,7 +97,6 @@ public class ShadowHeightEnemy : MonoBehaviour
             }
 
             Initialize(verticalVelocity);
-            Debug.Log("Jump 실행");
             enemy.CastSlownessToEnemy(-1f);
             ActivateCollider(false);
         }

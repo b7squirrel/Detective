@@ -456,8 +456,8 @@ GameObject:
   - component: {fileID: 8170831695603223127}
   - component: {fileID: 8170831695603223219}
   - component: {fileID: 8170831695603223211}
-  - component: {fileID: 4172382219901582434}
   - component: {fileID: 7255073503352527799}
+  - component: {fileID: 4172382219901582434}
   m_Layer: 6
   m_Name: EnemySubBoss
   m_TagString: Enemy
@@ -640,24 +640,6 @@ MonoBehaviour:
   dropAllItemList: 1
   isChestDebuggingOn: 0
   dropItemIndex: 0
---- !u!114 &4172382219901582434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8170831695603223110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75c9b751aa4cfe7428ade22536fa0f14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ScreenCollision:
-    serializedVersion: 2
-    m_Bits: 1024
-  indicatorPrefab: {fileID: 7141555531057633907, guid: 3477d7e6cb348f844971662a0b9ba746, type: 3}
-  iconSprite: {fileID: 21300000, guid: d795a96a6ff0494439d1de55e3c3a596, type: 3}
-  onSpotSFX: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}
 --- !u!114 &7255073503352527799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,9 +685,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  onDone:
+    m_PersistentCalls:
+      m_Calls: []
   trnsBody: {fileID: 7359049792538786892}
   sprRndBody: {fileID: 1157535045955070963}
   sprRndshadow: {fileID: 5633993858387267651}
   enemy: {fileID: 8170831695603223219}
   verticalVelocity: 50
   isGrounded: 0
+--- !u!114 &4172382219901582434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170831695603223110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c9b751aa4cfe7428ade22536fa0f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScreenCollision:
+    serializedVersion: 2
+    m_Bits: 1024
+  indicatorPrefab: {fileID: 7141555531057633907, guid: 3477d7e6cb348f844971662a0b9ba746, type: 3}
+  iconSprite: {fileID: 21300000, guid: d795a96a6ff0494439d1de55e3c3a596, type: 3}
+  onSpotSFX: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}
