@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, Idamageable
@@ -79,6 +80,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [Header("Sounds")]
     [SerializeField] protected AudioClip[] hits;
     [SerializeField] protected AudioClip[] dies;
+    protected AudioClip hitSound;
+    protected AudioClip dieSound;
 
     [Header("HP Bar")]
     [SerializeField] GameObject HPbarPrefab;
@@ -190,7 +193,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
             splitableEnemyData = _enemyToSpawn.split;
             splitNum = _enemyToSpawn.splitNum;
             finishedSpawn = true;
+            dieEffectPrefeab = _enemyToSpawn.splitDieEffectPrefab; // 스플릿 적이라면 자체 die effect
         }
+
+        if (_enemyToSpawn.hitSound != null) hitSound = _enemyToSpawn.hitSound;
+        if (_enemyToSpawn.dieSound != null) dieSound = _enemyToSpawn.dieSound;
         // 적과 보스 공통으로 사용하기 위해서 virtual로 했음
         // 각자 덮어쓰기 하면 됨
     }
@@ -485,18 +492,32 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Stats.hp -= damage;
         if (Stats.hp < 1)
         {
-            for (int i = 0; i < dies.Length; i++)
+            if (dieSound != null)
             {
-                SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
+                SoundManager.instance.PlaySoundWith(dieSound, 1f, true, .2f);
+            }
+            else
+            {
+                for (int i = 0; i < dies.Length; i++)
+                {
+                    SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
+                }
             }
 
             Die();
         }
         else
         {
-            for (int i = 0; i < hits.Length; i++)
+            if (hitSound != null)
             {
-                SoundManager.instance.PlaySoundWith(hits[i], 1f, true, .2f);
+                SoundManager.instance.PlaySoundWith(hitSound, 1f, true, .2f);
+            }
+            else
+            {
+                for (int i = 0; i < hits.Length; i++)
+                {
+                    SoundManager.instance.PlaySoundWith(hits[i], 1f, true, .2f);
+                }
             }
 
             if (hpBar != null)
@@ -510,9 +531,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void Die()
     {
-        GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
-        if (explosionEffect != null) explosionEffect.transform.position = transform.position;
-
         GetComponent<DropOnDestroy>().CheckDrop();
 
         StopAllCoroutines();
@@ -555,11 +573,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
             {
                 Spawner.instance.SpawnSplit(splitableEnemyData, 0, true, transform.position); // 0번 프리펩(일반 적), 적의 수와 관계 없이 강제 스폰
             }
+            GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab); // 초기화에서 입력 받은 자체 die prefab
+            if (explosionEffect != null) explosionEffect.transform.position = transform.position;
+        }
+        else
+        {
+            GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect(); // 공용 die effect
+            if (explosionEffect != null) explosionEffect.transform.position = transform.position;
         }
 
         // 구독이 있다면 이벤트 실행
         OnDeath?.Invoke();
-        
+
         gameObject.SetActive(false);
     }
 

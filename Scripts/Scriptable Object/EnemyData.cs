@@ -12,7 +12,7 @@ public class EnemyData : ScriptableObject
 
     [Header("Prefabs")]
     public GameObject projectilePrefab;
-    public GameObject dieEffectPrefab;
+    public GameObject splitDieEffectPrefab; // 분리되며 사라지는 적의 이펙트
     //public EnemyColor enemyColor;
     public Color enemyColor;
     public Color enemyColorHighlight;
@@ -31,4 +31,8 @@ public class EnemyData : ScriptableObject
     [Header("쪼개짐")] // LV4처럼 쪼개지는 적
     public EnemyData split;
     public int splitNum; // 몇 개로 쪼개질지
+
+    [Header("사운드")]
+    public AudioClip hitSound;
+    public AudioClip dieSound;
 }

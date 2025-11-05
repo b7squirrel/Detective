@@ -22,14 +22,15 @@ MonoBehaviour:
     experience_reward: 2500
   enemyType: 0
   projectilePrefab: {fileID: 0}
-  dieEffectPrefab: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
+  splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 0.3647059, g: 0.67058825, b: 0.6, a: 1}
   enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
   distanceToPlayer: 0
   attackInterval: 0
-  projectileDamage: 0
-  jumpRate: 0
+  isJumper: 0
   jumpInterval: 0
   dialogs: []
   split: {fileID: 0}
   splitNum: 0
+  hitSound: {fileID: 8300000, guid: 19f72bd720c051b47b34c93667c1888b, type: 3}
+  dieSound: {fileID: 8300000, guid: 539d49aee15833e47ae3311f537e5a35, type: 3}

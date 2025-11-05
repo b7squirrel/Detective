@@ -113,7 +113,6 @@ public class Enemy : EnemyBase
 
         enemyType = _data.enemyType;
         enemyProjectile = _data.projectilePrefab;
-        dieEffectPrefeab = _data.dieEffectPrefab; // 자폭 죽음과 일반 죽음을 구별하기 위해서 
 
         Name = _data.Name;
 

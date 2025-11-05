@@ -15,14 +15,14 @@ MonoBehaviour:
   Name: Slime LV4
   animController: {fileID: 22100000, guid: 704b18454902bd74b86cb0a9cb9e0370, type: 2}
   stats:
-    hp: 500
+    hp: 5
     speed: 3
     damage: 52
     rangedDamage: 0
     experience_reward: 5000
   enemyType: 0
   projectilePrefab: {fileID: 0}
-  dieEffectPrefab: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
+  splitDieEffectPrefab: {fileID: 4990445564929892675, guid: dc5e853815df0468e814fc382c4bcd37, type: 3}
   enemyColor: {r: 0.3647059, g: 0.67058825, b: 0.6, a: 1}
   enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
   distanceToPlayer: 0
@@ -32,3 +32,5 @@ MonoBehaviour:
   dialogs: []
   split: {fileID: 11400000, guid: edc95058d20c4454d95c4291c5a69c22, type: 2}
   splitNum: 4
+  hitSound: {fileID: 8300000, guid: 19f72bd720c051b47b34c93667c1888b, type: 3}
+  dieSound: {fileID: 8300000, guid: 539d49aee15833e47ae3311f537e5a35, type: 3}
