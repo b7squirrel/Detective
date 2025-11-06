@@ -208,6 +208,7 @@ MonoBehaviour:
   isChest: 0
   multiDropRate: 0
   specialDropRate: 0
+  dropAllItemList: 0
   isChestDebuggingOn: 0
   dropItemIndex: 0
 --- !u!114 &8208861631688714840
@@ -230,7 +231,6 @@ MonoBehaviour:
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
-  finishedSpawn: 0
   dieEffectPrefeab: {fileID: 0}
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
@@ -238,6 +238,7 @@ MonoBehaviour:
   whiteFlashDuration: 0.08
   knockBackSpeed: 12
   knockBackDelay: 0
+  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hits:
   - {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
@@ -250,6 +251,9 @@ MonoBehaviour:
   shockwave: {fileID: 7822616154730464413, guid: ba3f36bc96e364b97931bbe1711ca4bb, type: 3}
   <moveSpeedInAir>k__BackingField: 16
   <IsInAir>k__BackingField: 0
+  state1Probability: 30
+  state2Probability: 35
+  state3Probability: 35
   projectiles:
   - {fileID: 11400000, guid: 90f06bf610826bf448080ea909f77b4d, type: 2}
   - {fileID: 11400000, guid: 41e40d421b77bbc4282b92af34e4c6c0, type: 2}
@@ -269,7 +273,6 @@ MonoBehaviour:
   dialogBubblePoint: {fileID: 0}
   dustPoint: {fileID: 3883101929143233562}
   dustEffect: {fileID: 974258225872523872, guid: 5c372296796bdd74694713c99da69a84, type: 3}
-  teleportEffectPrefab: {fileID: 0}
   halfWallBouncerNumber: 13
   col: {fileID: 0}
   deadBody: {fileID: 1432597800540744455, guid: 5c1f04be75c8cde4ab66104ee2865cbb, type: 3}
@@ -339,7 +342,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cecc8a7bbf03243d592170ebf7e5a5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showDialog: 0
   dialogBubblePrefab: {fileID: 1817514581722573707, guid: 4b0fb1a40623948f086f6d38b7a61579, type: 3}
+  dialogBubbleTrans: {fileID: 0}
 --- !u!114 &1254668060210418061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -527,7 +532,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: bea0536fd789a9b41b496e40c24379a5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

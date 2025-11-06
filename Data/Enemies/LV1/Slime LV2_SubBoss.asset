@@ -18,17 +18,19 @@ MonoBehaviour:
     hp: 2500
     speed: 8
     damage: 90
-    rangedDamage: 0
+    rangedDamage: 700
     experience_reward: 700
   enemyType: 0
-  projectilePrefab: {fileID: 0}
-  dieEffectPrefab: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
+  projectilePrefab: {fileID: 2430061364096046730, guid: 01f8bc472c75b445f9bd74dda9b8e328, type: 3}
+  splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 0.6509804, g: 0.70980394, b: 0.015686275, a: 1}
   enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
-  distanceToPlayer: 0
-  attackInterval: 0
+  distanceToPlayer: 20
+  attackInterval: 5
   isJumper: 1
   jumpInterval: 6
   dialogs: []
   split: {fileID: 0}
   splitNum: 0
+  hitSound: {fileID: 0}
+  dieSound: {fileID: 0}

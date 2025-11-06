@@ -57,7 +57,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     #region FeedBack Variables
     [Header("Effect")]
-    //[SerializeField] protected Material whiteMaterial;
     [SerializeField] protected GameObject dieEffectPrefeab;
     [SerializeField] protected GameObject dieExplosionPrefeab;
     [SerializeField] protected GameObject knockbackEffect;
@@ -69,8 +68,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected float enemyKnockBackSpeedFactor; // TakeDamage 때마다 인자로 넘어오는 knockBackSpeedFactor를 담아 두는 용도
     protected float stunnedDuration = .2f;
 
-    //protected Material initialMat;
-    //[SerializeField] protected Material whiteMat;
+    protected Material initialMat;
+    [SerializeField] protected Material whiteMat;
 
     [HideInInspector] public Vector2 targetDir;
     protected float stunnedSpeed = 14f;
@@ -526,7 +525,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             }
         }
 
-        WhiteFlash(whiteFlashDuration);
+        // WhiteFlash(whiteFlashDuration);
         KnockBack(target, _knockBackDelay, knockBackSpeedFactor);
     }
     public virtual void Die()
@@ -655,18 +654,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public void WhiteFlash(float delayTime)
     {
-        if (gameObject.activeSelf)
-        {
-            whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
-        }
+        // if (gameObject.activeSelf)
+        // {
+        //     whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
+        // }
     }
 
     protected IEnumerator WhiteFlashCo(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
-        //sr.material = whiteMat;
+        sr.material = whiteMat;
         yield return new WaitForSeconds(.1f);
-        //sr.material = initialMat;
+        sr.material = initialMat;
     }
     #endregion
 
