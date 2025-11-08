@@ -124,6 +124,16 @@ public class EnemyBoss : EnemyBase, Idamageable
         //대사 초기화
         this.dialogs.AddRange(_enemyToSpawn.dialogs);
 
+        // 화이트 플래시를 한 후 원래 재질로 되돌리기 위한 initial mat 초기화.
+        initialMat = new Material[srFlash.Length];
+        if (srFlash != null)
+        {
+            for (int i = 0; i < srFlash.Length; i++)
+            {
+                initialMat[i] = srFlash[i].material;
+            }
+        }
+
         if (debugState)
         {
             stateDisp = Instantiate(stateDisplayPrefab);

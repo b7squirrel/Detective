@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyBase : MonoBehaviour, Idamageable
@@ -64,11 +63,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected float whiteFlashDuration = 0.08f;
     [SerializeField] protected float knockBackSpeed;
     [SerializeField] protected float knockBackDelay;
+    [SerializeField] protected SpriteRenderer[] srFlash; // 깜빡이기 위한 스프라이트 렌더러들. 이 부분들의 색깔을 바꿔서 히트를 보여줌
     protected GameObject enemyProjectile;
     protected float enemyKnockBackSpeedFactor; // TakeDamage 때마다 인자로 넘어오는 knockBackSpeedFactor를 담아 두는 용도
     protected float stunnedDuration = .2f;
 
-    protected Material initialMat;
+    protected Material[] initialMat;
     [SerializeField] protected Material whiteMat;
 
     [HideInInspector] public Vector2 targetDir;
@@ -110,6 +110,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
             initDone = true;
         }
+
+        // 머티리얼 초기화 (오브젝트 풀에서 재사용될 때 필요)
+        if (initialMat != null && srFlash != null)
+        {
+            for (int i = 0; i < initialMat.Length && i < srFlash.Length; i++)
+            {
+                srFlash[i].material = initialMat[i];
+            }
+        }
+        whiteFlashCoroutine = null; // 코루틴 참조도 초기화
 
         //initialMat = sr.material;
         IsKnockBack = false;
@@ -197,6 +207,17 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (_enemyToSpawn.hitSound != null) hitSound = _enemyToSpawn.hitSound;
         if (_enemyToSpawn.dieSound != null) dieSound = _enemyToSpawn.dieSound;
+
+        // 화이트 플래시를 한 후 원래 재질로 되돌리기 위한 initial mat 초기화. 보스는 enemy boss에서 초기화
+        if (isSubBoss)
+        {
+            if (srFlash == null) return;
+            initialMat = new Material[srFlash.Length];
+            for (int i = 0; i < srFlash.Length; i++)
+            {
+                initialMat[i] = srFlash[i].material;
+            }
+        }
         // 적과 보스 공통으로 사용하기 위해서 virtual로 했음
         // 각자 덮어쓰기 하면 됨
     }
@@ -526,6 +547,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         // WhiteFlash(whiteFlashDuration);
+        if (isBoss || isSubBoss) SpriteFlash(whiteFlashDuration);
         KnockBack(target, _knockBackDelay, knockBackSpeedFactor);
     }
     public virtual void Die()
@@ -553,7 +575,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             FindObjectOfType<BossDieManager>().DieEvent(.1f, 2f);
         }
 
-        if (isSubBoss)
+        if (isSubBoss) // 프리펩에서 설정하는 is sub boss
         {
             CameraShake.instance.Shake();
         }
@@ -659,13 +681,44 @@ public class EnemyBase : MonoBehaviour, Idamageable
         //     whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
         // }
     }
+    void SpriteFlash(float delayTime)
+    {
+        if (srFlash == null) return;
+        if (gameObject.activeSelf)
+        {
+            if (whiteFlashCoroutine != null) return; // 플래시가 아직 끝나지 않았다면 또 다른 플래시를 실행하지 않음
+            whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
+        }
+    }
+    protected IEnumerator SpriteFlashCo(float delayTime)
+    {
+        // yield return new WaitForSeconds(delayTime);
+        foreach (var item in srFlash)
+        {
+            item.color = new Color(.5f, 0, 0, 1); // 빨강으로 바꾸기
+        }
+
+        yield return new WaitForSeconds(.1f);
+        foreach (var item in srFlash)
+        {
+            item.color = new Color(1, 1, 1, 1); // 다시 하얀색으로 되돌려서 원래 색으로 바꾸기
+        }
+    }
 
     protected IEnumerator WhiteFlashCo(float delayTime)
     {
-        yield return new WaitForSeconds(delayTime);
-        sr.material = whiteMat;
+        // yield return new WaitForSeconds(delayTime);
+        foreach (var item in srFlash)
+        {
+            item.material = whiteMat;
+        }
         yield return new WaitForSeconds(.1f);
-        sr.material = initialMat;
+        for (int i = 0; i < initialMat.Length; i++)
+        {
+            srFlash[i].material = initialMat[i];
+        }
+
+        whiteFlashCoroutine = null;
     }
     #endregion
 

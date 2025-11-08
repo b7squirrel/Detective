@@ -255,4 +255,13 @@ public class Character : MonoBehaviour
 
         GetComponent<CharacterGameOver>().GameOver();
     }
+
+    #region 디버그
+    public void MaxPlayerHealth()
+    {
+        currentHealth = 10000000;
+        MaxHealth = currentHealth;
+        hpBar.SetStatus(currentHealth, MaxHealth);
+    }
+    #endregion
 }
