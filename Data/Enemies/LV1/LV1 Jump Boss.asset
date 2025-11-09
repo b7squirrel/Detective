@@ -15,21 +15,25 @@ MonoBehaviour:
   Name: Slime Queen
   animController: {fileID: 22100000, guid: 62b537c17813b499ba51e1b4f29c6406, type: 2}
   stats:
-    hp: 40000
+    hp: 44
     speed: 5
     damage: 180
     rangedDamage: 0
     experience_reward: 1
   enemyType: 0
   projectilePrefab: {fileID: 0}
-  dieEffectPrefab: {fileID: 0}
+  splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 0.5943396, g: 0.16540584, b: 0.5814394, a: 1}
   enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
   distanceToPlayer: 0
   attackInterval: 0
-  jumpRate: 0
+  isJumper: 0
   jumpInterval: 0
   dialogs:
   - "\uAC77\uB294\uB2E4!"
   - "\uC2AC\uB77C\uC784 \uBC1C\uC0AC!"
   - "\uB192\uC774 \uB192\uC774 \uC810\uD504!"
+  split: {fileID: 0}
+  splitNum: 0
+  hitSound: {fileID: 0}
+  dieSound: {fileID: 0}

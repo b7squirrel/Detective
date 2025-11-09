@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using VHierarchy.Libs;
 
 /// <summary>
 /// Boss에 붙여서 슬라임 드롭을 관리

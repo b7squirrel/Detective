@@ -605,8 +605,24 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
   m_PositionCurves:
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: 0, y: -2.01, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: Trans/Enemy Shadow
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -910,7 +926,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: EnemyBoss
+    path: Trans/EnemyBoss
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -971,7 +987,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1068,13 +1084,14 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
+  m_ScaleCurves:
   - curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: 0, y: -2.01, z: 0}
+        value: {x: 7.6777725, y: 2.792578, z: 1}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -1084,8 +1101,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Enemy Shadow
-  m_ScaleCurves:
+    path: Trans/Enemy Shadow
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1551,7 +1567,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: EnemyBoss
+    path: Trans/EnemyBoss
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1612,7 +1628,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -1673,23 +1689,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: EnemyBoss/CrownV1/Sprite
-  - curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: {x: 7.6777725, y: 2.792578, z: 1}
-        inSlope: {x: 0, y: 0, z: 0}
-        outSlope: {x: 0, y: 0, z: 0}
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    path: Enemy Shadow
+    path: Trans/EnemyBoss/CrownV1/Sprite
   m_FloatCurves: []
   m_PPtrCurves:
   - serializedVersion: 2
@@ -1803,7 +1803,7 @@ AnimationClip:
     - time: 6.3166666
       value: {fileID: 21300000, guid: e7c4bdbb08a52604595a213f30716478, type: 3}
     attribute: m_Sprite
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
     classID: 212
     script: {fileID: 0}
     flags: 2
@@ -1815,7 +1815,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 2445478671
+      path: 1684880029
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -1824,7 +1824,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 273777371
+      path: 2973172266
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -1833,7 +1833,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 273777371
+      path: 2973172266
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -1842,7 +1842,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2445478671
+      path: 1684880029
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -1851,7 +1851,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1905244106
+      path: 687028716
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -1860,7 +1860,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1905244106
+      path: 4249576159
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -1869,7 +1869,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 4109338601
+      path: 687028716
       attribute: 1
       script: {fileID: 0}
       typeID: 4
@@ -1878,7 +1878,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 1905244106
+      path: 4249576159
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -1887,7 +1887,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 273777371
+      path: 687028716
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -1896,7 +1896,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 4109338601
+      path: 2973172266
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -1980,6 +1980,132 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.x
+    path: Trans/Enemy Shadow
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -2.01
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.y
+    path: Trans/Enemy Shadow
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.z
+    path: Trans/Enemy Shadow
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 7.6777725
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.x
+    path: Trans/Enemy Shadow
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 2.792578
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.y
+    path: Trans/Enemy Shadow
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.z
+    path: Trans/Enemy Shadow
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
   - serializedVersion: 2
     curve:
       serializedVersion: 2
@@ -2240,7 +2366,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: EnemyBoss
+    path: Trans/EnemyBoss
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2333,7 +2459,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: EnemyBoss
+    path: Trans/EnemyBoss
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2597,7 +2723,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: EnemyBoss
+    path: Trans/EnemyBoss
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -2798,7 +2924,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: EnemyBoss
+    path: Trans/EnemyBoss
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3044,7 +3170,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: EnemyBoss
+    path: Trans/EnemyBoss
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3290,7 +3416,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: EnemyBoss
+    path: Trans/EnemyBoss
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3356,7 +3482,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3422,7 +3548,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3488,7 +3614,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3554,7 +3680,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3620,7 +3746,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3686,7 +3812,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: EnemyBoss/Body
+    path: Trans/EnemyBoss/Body
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3788,7 +3914,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3890,7 +4016,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -3992,7 +4118,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -4058,7 +4184,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -4124,7 +4250,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -4721,7 +4847,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -4787,7 +4913,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -4853,7 +4979,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -4919,133 +5045,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: EnemyBoss/CrownV1/Sprite
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalPosition.x
-    path: Enemy Shadow
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: -2.01
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalPosition.y
-    path: Enemy Shadow
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalPosition.z
-    path: Enemy Shadow
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 7.6777725
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalScale.x
-    path: Enemy Shadow
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 2.792578
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalScale.y
-    path: Enemy Shadow
-    classID: 4
-    script: {fileID: 0}
-    flags: 0
-  - serializedVersion: 2
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    attribute: m_LocalScale.z
-    path: Enemy Shadow
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5058,7 +5058,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5070,7 +5070,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -5082,7 +5082,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: EnemyBoss/CrownV1/Sprite
+    path: Trans/EnemyBoss/CrownV1/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0

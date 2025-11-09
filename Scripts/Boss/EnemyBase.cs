@@ -712,11 +712,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             item.material = whiteMat;
         }
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.07f);
         for (int i = 0; i < initialMat.Length; i++)
         {
             srFlash[i].material = initialMat[i];
         }
+        yield return new WaitForSeconds(.07f); // 연속 공격을 당할 때 캐릭터가 아예 하얀색으로 보이지 않도록 딜레이를 주기
 
         whiteFlashCoroutine = null;
     }

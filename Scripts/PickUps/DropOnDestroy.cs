@@ -19,27 +19,17 @@ public class DropOnDestroy : MonoBehaviour
     [SerializeField] bool isChest; // 상자는 플레이어의 체력에 따라 우유를 떨어트려야 하므로 구별해야 함
     [SerializeField] float multiDropRate; // 무더기를 드롭할 확률
     [SerializeField] float specialDropRate; // 스페셜 드롭할 확률
-    [SerializeField] bool dropAllItemList; // 리스트의 아이템을 모두 들보할 것인지. 서브 보스처럼
-
-
-    bool isQuiting;
+    [SerializeField] bool dropAllItemList; // 리스트의 아이템을 모두 드롭할 것인지. 서브 보스처럼
 
     [Header("Debug")]
     [SerializeField] bool isChestDebuggingOn;
     [SerializeField] int dropItemIndex;
-
-    //void OnApplicationQuit()
-    //{
-    //    isQuiting = true;
-    //}
 
     /// <summary>
     /// 일반 드롭
     /// </summary>
     public void CheckDrop()
     {
-        //if (isQuiting) return;
-
         if (dropItemProperty.Count <= 0)
         {
             Debug.LogWarning("DropOnDestory, dropItemPrefab 리스트가 비어 있습니다.");
