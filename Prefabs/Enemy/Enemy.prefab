@@ -329,8 +329,8 @@ GameObject:
   - component: {fileID: 5297514985837409360}
   - component: {fileID: 5297514985837409365}
   - component: {fileID: 5297514985837409457}
-  - component: {fileID: 5297514985837409449}
   - component: {fileID: 2566266023260407847}
+  - component: {fileID: 5548818968600387970}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -462,7 +462,6 @@ MonoBehaviour:
   screenEdge:
     serializedVersion: 2
     m_Bits: 1024
-  whiteMaterial: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   dieEffectPrefeab: {fileID: 0}
   dieExplosionPrefeab: {fileID: 8342542712997089027, guid: 1feb77121f65f8346815d0b584df0f77, type: 3}
   knockbackEffect: {fileID: 1724609311885633146, guid: 83d5deb238425114e8b523d59bdecb73, type: 3}
@@ -470,6 +469,7 @@ MonoBehaviour:
   whiteFlashDuration: 0.01
   knockBackSpeed: 30
   knockBackDelay: 0.2
+  srFlash: []
   whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hits:
@@ -484,32 +484,6 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
---- !u!114 &5297514985837409449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5297514985837409348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropItemProperty:
-  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 0
-    hasSpecialItem: 0
-    numMultiple: 0
-  exp: 0
-  hp: 0
-  isChest: 0
-  multiDropRate: 0
-  specialDropRate: 0
-  dropAllItemList: 0
-  isChestDebuggingOn: 0
-  dropItemIndex: 0
 --- !u!114 &2566266023260407847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,6 +538,28 @@ MonoBehaviour:
   enemy: {fileID: 5297514985837409457}
   verticalVelocity: 40
   isGrounded: 0
+--- !u!114 &5548818968600387970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297514985837409348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b49231c47894f2f9eda80c57d60809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItemProperty:
+  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
+    numMultiple: 0
+  multiDropRate: 0
+  specialDropRate: 0
+  dropAllItemList: 0
+  exp: 0
 --- !u!1 &6160804460574017110
 GameObject:
   m_ObjectHideFlags: 0

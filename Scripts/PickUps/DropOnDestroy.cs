@@ -11,154 +11,43 @@ public class DropItemProperty
     public bool hasSpecialItem;
     public int numMultiple; // 몇 개를 한꺼번에 생성할 것인지.
 }
-public class DropOnDestroy : MonoBehaviour
-{
-    [SerializeField] List<DropItemProperty> dropItemProperty;
-    [SerializeField] int exp;
-    [SerializeField] int hp;
-    [SerializeField] bool isChest; // 상자는 플레이어의 체력에 따라 우유를 떨어트려야 하므로 구별해야 함
-    [SerializeField] float multiDropRate; // 무더기를 드롭할 확률
-    [SerializeField] float specialDropRate; // 스페셜 드롭할 확률
-    [SerializeField] bool dropAllItemList; // 리스트의 아이템을 모두 드롭할 것인지. 서브 보스처럼
 
-    [Header("Debug")]
-    [SerializeField] bool isChestDebuggingOn;
-    [SerializeField] int dropItemIndex;
+/// <summary>
+/// 드롭 로직의 기본 클래스
+/// </summary>
+public abstract class DropOnDestroy : MonoBehaviour
+{
+    [SerializeField] protected List<DropItemProperty> dropItemProperty;
+    [SerializeField] protected float multiDropRate; // 무더기를 드롭할 확률
+    [SerializeField] protected float specialDropRate; // 스페셜 드롭할 확률
+    [SerializeField] protected bool dropAllItemList; // 리스트의 아이템을 모두 드롭할 것인지. 서브 보스처럼
+
+    public abstract void CheckDrop();
 
     /// <summary>
-    /// 일반 드롭
+    /// 알 스폰 가능 여부 체크 (하위 클래스에서 오버라이드 가능)
     /// </summary>
-    public void CheckDrop()
+    protected virtual bool CanSpawnEgg(GameObject item)
     {
-        if (dropItemProperty.Count <= 0)
-        {
-            Debug.LogWarning("DropOnDestory, dropItemPrefab 리스트가 비어 있습니다.");
-            return;
-        }
-
-        // dropAllItemList가 true면 모든 아이템을 드롭
-        if (dropAllItemList)
-        {
-            DropAllItems();
-            return;
-        }
-
-        bool isGem = false;
-
-
-        int itemIndex = UnityEngine.Random.Range(0, dropItemProperty.Count);
-        GameObject toDrop = dropItemProperty[itemIndex].Item;
-
-        // 체력이 30%이하로 내려가면 무조건 힐링을 할 수 있는 아이템이 드롭되도록
-        if (isChest)
-        {
-            Character character = Player.instance.GetComponent<Character>();
-            if ((float)character.GetCurrentHP() / (float)character.MaxHealth < .3f)
-            {
-                for (int i = 0; i < dropItemProperty.Count; i++)
-                {
-                    if (dropItemProperty[i].Item.GetComponent<HealPickUpObject>() != null)
-                    {
-                        toDrop = dropItemProperty[i].Item;
-                        itemIndex = i; // 아래에서는 itemIndex로 아이템을 처리하므로
-                        break;
-                    }
-                }
-            }
-        } // 여기까지 상자만의 특성
-
-        // 무더기 드롭의 확률도 고려
-        // random Value 무더기 드롭확률이나 특수 아이템의 확률
-        float randomValue = UnityEngine.Random.Range(0f, 100f);
-        bool isMultiDrop = randomValue > multiDropRate ? false : true;
-
-        if (dropItemProperty[itemIndex].isMultipleDropable && isMultiDrop) // 멀티플 드롭이 가능한 아이템이고, 확률로 멀티드롭이 뽑혔다면
-        {
-            int multiNum = dropItemProperty[itemIndex].numMultiple + UnityEngine.Random.Range(-5, 10); 
-            multiNum = Math.Max(1, multiNum); // 음수가 될 수 있으므로
-            DropMultipleObjects(toDrop, multiNum);
-            return;
-        }
-
-        float specialRandomValue = UnityEngine.Random.Range(0f, 100f);
-        bool isSpecialDrop = specialRandomValue > specialDropRate ? false : true;
-        if (dropItemProperty[itemIndex].hasSpecialItem && isSpecialDrop) // 스페셜 드롭이 가능하고, 확률로 스페셜 드롭이 뽑혔다면
-        {
-            // 특수 우유처럼 특수한 아이템 드롭
-            if (dropItemProperty[itemIndex].SpecialDrop != null)
-            {
-                toDrop = dropItemProperty[itemIndex].SpecialDrop;
-            }
-        }
-
-        if (toDrop.GetComponent<EggPickUpObject>() != null)
-        {
-            bool spawnable = GameManager.instance.fieldItemSpawner.isEggSpawnable();
-            if (spawnable == false) return; // 알이 스폰될 것이지만 스폰되어서는 안될 조건이라면 여기서 끝 (알의 중복 생성 방지)
-        }
-
-        if (toDrop == null)
-        {
-            Debug.LogWarning("DropOnDestroy, drop Item Prefab이 null입니다.");
-            return;
-        }
-
-        // 적이라면 보석 드롭
-        if (GetComponent<Enemy>() != null)
-        {
-            exp = GetComponent<Enemy>().ExperienceReward;
-        }
-
-        // 보석인지 아닌지 판별
-        if (toDrop.GetComponent<Collectable>() != null)
-        {
-            isGem = toDrop.GetComponent<Collectable>().IsGem;
-        }
-
-        // 보석이라면 확률에 따라 드롭
-        if (isGem)
-        {
-            float randomDrop = UnityEngine.Random.Range(0f, 1f);
-            if (isChest)
-            {
-                randomDrop = 0; // 상자에서 보석이 나오는 경우라면 무조건 나오도록
-                exp = toDrop.GetComponent<GemPickUpObject>().ExpAmount;
-            }
-
-            if (randomDrop > StaticValues.GemDropRate)
-                return;
-        }
-
-        // 디버깅
-        if (isChestDebuggingOn) toDrop = dropItemProperty[dropItemIndex].Item;
-
-        SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, exp);
+        return true; // 기본적으로는 허용
     }
-    void DropAllItems()
+
+    /// <summary>
+    /// 리스트의 모든 아이템 드롭
+    /// </summary>
+    protected void DropAllItems()
     {
         for (int i = 0; i < dropItemProperty.Count; i++)
         {
             GameObject toDrop = dropItemProperty[i].Item;
-            bool isGem = false;
-            int itemExp = exp;
-
+            
             // 스페셜 드롭 확률 체크
-            float specialRandomValue = UnityEngine.Random.Range(0f, 100f);
-            bool isSpecialDrop = specialRandomValue <= specialDropRate;
-
-            if (dropItemProperty[i].hasSpecialItem && isSpecialDrop)
+            if (dropItemProperty[i].hasSpecialItem && CheckSpecialDropChance())
             {
                 if (dropItemProperty[i].SpecialDrop != null)
                 {
                     toDrop = dropItemProperty[i].SpecialDrop;
                 }
-            }
-
-            // 알 스폰 가능 여부 체크
-            if (toDrop.GetComponent<EggPickUpObject>() != null)
-            {
-                bool spawnable = GameManager.instance.fieldItemSpawner.isEggSpawnable();
-                if (!spawnable) continue; // 알이 스폰될 수 없다면 다음 아이템으로
             }
 
             if (toDrop == null)
@@ -167,62 +56,98 @@ public class DropOnDestroy : MonoBehaviour
                 continue;
             }
 
-            // 적이라면 보석 드롭
-            if (GetComponent<Enemy>() != null)
+            // 알 스폰 가능 여부 체크
+            if (!CanSpawnEgg(toDrop))
             {
-                itemExp = GetComponent<Enemy>().ExperienceReward;
-            }
-
-            // 보석인지 아닌지 판별
-            if (toDrop.GetComponent<Collectable>() != null)
-            {
-                isGem = toDrop.GetComponent<Collectable>().IsGem;
-            }
-
-            // 보석이라면 확률에 따라 드롭 (모든 아이템 드롭에서는 보석 드롭률 무시하고 모두 드롭)
-            if (isGem && toDrop.GetComponent<GemPickUpObject>() != null)
-            {
-                itemExp = toDrop.GetComponent<GemPickUpObject>().ExpAmount;
+                continue;
             }
 
             // 멀티플 드롭 체크
-            if (dropItemProperty[i].isMultipleDropable)
+            if (dropItemProperty[i].isMultipleDropable && CheckMultiDropChance())
             {
-                float randomValue = UnityEngine.Random.Range(0f, 100f);
-                bool isMultiDrop = randomValue <= multiDropRate;
-
-                if (isMultiDrop)
-                {
-                    DropMultipleObjects(toDrop, dropItemProperty[i].numMultiple + UnityEngine.Random.Range(-5, 10));
-                    continue;
-                }
+                int multiNum = dropItemProperty[i].numMultiple + UnityEngine.Random.Range(-5, 10);
+                multiNum = Math.Max(1, multiNum);
+                DropMultipleObjects(toDrop, multiNum);
+                continue;
             }
 
-            // 아이템 스폰
-            SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, itemExp);
+            // 아이템 스폰 (하위 클래스에서 구현)
+            SpawnItem(toDrop, i);
         }
     }
 
-    public void DropMultipleObjects(GameObject _toDrop, int _numberOfDrops)
+    /// <summary>
+    /// 무더기 드롭
+    /// </summary>
+    protected void DropMultipleObjects(GameObject toDrop, int numberOfDrops)
     {
-        if (GetComponent<Enemy>() != null)
-        {
-            exp = GetComponent<Enemy>().ExperienceReward;
-        }
-        else
-        {
-            GemPickUpObject gemPick = _toDrop.GetComponent<GemPickUpObject>();
-            if (gemPick != null)
-            {
-                exp = gemPick.ExpAmount;
-            }
-
-        }
-        GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(_numberOfDrops, _toDrop, transform.position, exp);
+        int exp = GetExperienceAmount(toDrop);
+        GameManager.instance.fieldItemSpawner.SpawnMultipleObjects(numberOfDrops, toDrop, transform.position, exp);
     }
 
-    public bool isThisChest()
+    /// <summary>
+    /// 경험치 양 계산 (하위 클래스에서 오버라이드 가능)
+    /// </summary>
+    protected virtual int GetExperienceAmount(GameObject toDrop)
     {
-        return isChest;
+        GemPickUpObject gemPick = toDrop.GetComponent<GemPickUpObject>();
+        if (gemPick != null)
+        {
+            return gemPick.ExpAmount;
+        }
+        return 0;
+    }
+
+    /// <summary>
+    /// 단일 아이템 스폰 (하위 클래스에서 구현)
+    /// </summary>
+    protected abstract void SpawnItem(GameObject toDrop, int itemIndex);
+
+    /// <summary>
+    /// 무더기 드롭 확률 체크
+    /// </summary>
+    protected bool CheckMultiDropChance()
+    {
+        float randomValue = UnityEngine.Random.Range(0f, 100f);
+        return randomValue <= multiDropRate;
+    }
+
+    /// <summary>
+    /// 스페셜 드롭 확률 체크
+    /// </summary>
+    protected bool CheckSpecialDropChance()
+    {
+        float randomValue = UnityEngine.Random.Range(0f, 100f);
+        return randomValue <= specialDropRate;
+    }
+
+    /// <summary>
+    /// 랜덤 아이템 인덱스 선택
+    /// </summary>
+    protected int SelectRandomItemIndex()
+    {
+        return UnityEngine.Random.Range(0, dropItemProperty.Count);
+    }
+
+    /// <summary>
+    /// 보석인지 확인
+    /// </summary>
+    protected bool IsGem(GameObject item)
+    {
+        Collectable collectable = item.GetComponent<Collectable>();
+        return collectable != null && collectable.IsGem;
+    }
+
+    /// <summary>
+    /// 아이템 리스트가 비어있는지 확인
+    /// </summary>
+    protected bool IsDropListEmpty()
+    {
+        if (dropItemProperty.Count <= 0)
+        {
+            Debug.LogWarning("DropOnDestroy, dropItemProperty 리스트가 비어 있습니다.");
+            return true;
+        }
+        return false;
     }
 }

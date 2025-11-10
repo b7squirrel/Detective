@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 76857048987349969}
   - component: {fileID: 76857048987349975}
-  - component: {fileID: 7289019394738531332}
   - component: {fileID: 5414075903067003892}
   - component: {fileID: 4056005053656988688}
   - component: {fileID: 2451556510503288373}
   - component: {fileID: 6653244738968789576}
   - component: {fileID: 5996623520424493420}
+  - component: {fileID: 672275266757205763}
   m_Layer: 16
   m_Name: Egg Box
   m_TagString: Props
@@ -54,31 +54,6 @@ MonoBehaviour:
   hp: 1
   hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
   destructableDieEffect: {fileID: 8774143540521336711, guid: da27312d14056244ca3be2c1ff5c707f, type: 3}
---- !u!114 &7289019394738531332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76857048987349971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropItemProperty:
-  - Item: {fileID: 3118075186976557793, guid: c9bef7141df0d4b4eb7f847536e5fa1a, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 0
-    hasSpecialItem: 0
-    numMultiple: 0
-  exp: 1000
-  hp: 0
-  isChest: 1
-  multiDropRate: 0
-  specialDropRate: 0
-  isChestDebuggingOn: 0
-  dropItemIndex: 6
 --- !u!114 &5414075903067003892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +169,28 @@ MonoBehaviour:
   indicatorPrefab: {fileID: 7141555531057633907, guid: 3477d7e6cb348f844971662a0b9ba746, type: 3}
   iconSprite: {fileID: 21300000, guid: 285ece9605284f940bf2aa971e26f5ea, type: 3}
   onSpotSFX: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}
+--- !u!114 &672275266757205763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76857048987349971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b94135bee6cc409a8849e59fb26f1ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItemProperty:
+  - Item: {fileID: 3118075186976557793, guid: c9bef7141df0d4b4eb7f847536e5fa1a, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
+    numMultiple: 0
+  multiDropRate: 0
+  specialDropRate: 0
+  dropAllItemList: 0
+  exp: 0
 --- !u!1 &6128416485384886840
 GameObject:
   m_ObjectHideFlags: 0

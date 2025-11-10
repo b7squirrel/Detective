@@ -455,9 +455,9 @@ GameObject:
   - component: {fileID: 8170831695603223122}
   - component: {fileID: 8170831695603223127}
   - component: {fileID: 8170831695603223219}
-  - component: {fileID: 8170831695603223211}
   - component: {fileID: 7255073503352527799}
   - component: {fileID: 4172382219901582434}
+  - component: {fileID: 3531870220605947261}
   m_Layer: 6
   m_Name: EnemySubBoss
   m_TagString: Enemy
@@ -613,37 +613,6 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 256
---- !u!114 &8170831695603223211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8170831695603223110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropItemProperty:
-  - Item: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 1
-    hasSpecialItem: 0
-    numMultiple: 100
-  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 1
-    hasSpecialItem: 0
-    numMultiple: 50
-  exp: 0
-  hp: 0
-  isChest: 0
-  multiDropRate: 100
-  specialDropRate: 0
-  dropAllItemList: 1
-  isChestDebuggingOn: 0
-  dropItemIndex: 0
 --- !u!114 &7255073503352527799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,3 +685,30 @@ MonoBehaviour:
   indicatorPrefab: {fileID: 7141555531057633907, guid: 3477d7e6cb348f844971662a0b9ba746, type: 3}
   iconSprite: {fileID: 21300000, guid: d795a96a6ff0494439d1de55e3c3a596, type: 3}
   onSpotSFX: {fileID: 8300000, guid: bece367fdfb86a84bb603846aa555caa, type: 3}
+--- !u!114 &3531870220605947261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170831695603223110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b49231c47894f2f9eda80c57d60809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItemProperty:
+  - Item: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
+    hasSpecialItem: 0
+    numMultiple: 100
+  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
+    hasSpecialItem: 0
+    numMultiple: 50
+  multiDropRate: 100
+  specialDropRate: 0
+  dropAllItemList: 0
+  exp: 0

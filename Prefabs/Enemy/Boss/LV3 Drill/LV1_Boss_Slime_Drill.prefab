@@ -10596,7 +10596,6 @@ GameObject:
   - component: {fileID: 4044793933754599964}
   - component: {fileID: 4482227093549384291}
   - component: {fileID: 452495449564984584}
-  - component: {fileID: 6587040244100229287}
   - component: {fileID: 8360687991056641939}
   - component: {fileID: 5603598336060603696}
   - component: {fileID: 1233400896952925331}
@@ -10604,6 +10603,7 @@ GameObject:
   - component: {fileID: 7317872549419765963}
   - component: {fileID: 7123509232804550367}
   - component: {fileID: 8253698559757532680}
+  - component: {fileID: 5350991801057352703}
   m_Layer: 6
   m_Name: LV1_Boss_Slime_Drill
   m_TagString: Enemy
@@ -10712,32 +10712,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &6587040244100229287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6488986989764395079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropItemProperty:
-  - Item: {fileID: 4428278910919695438, guid: 56489c3b413ce4bf0ba9965851cd2609, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 0
-    hasSpecialItem: 0
-    numMultiple: 0
-  exp: 0
-  hp: 0
-  isChest: 0
-  multiDropRate: 0
-  specialDropRate: 0
-  dropAllItemList: 0
-  isChestDebuggingOn: 0
-  dropItemIndex: 0
 --- !u!114 &8360687991056641939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10947,6 +10921,28 @@ MonoBehaviour:
   drillDashSound:
   - {fileID: 8300000, guid: 2900beb095d1a1541b910dbdcb0027db, type: 3}
   landingSound: {fileID: 8300000, guid: 557add73d7670ac40a540ee95b46b156, type: 3}
+--- !u!114 &5350991801057352703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488986989764395079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b49231c47894f2f9eda80c57d60809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItemProperty:
+  - Item: {fileID: 4428278910919695438, guid: 56489c3b413ce4bf0ba9965851cd2609, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
+    hasSpecialItem: 0
+    numMultiple: 1
+  multiDropRate: 10
+  specialDropRate: 0
+  dropAllItemList: 0
+  exp: 0
 --- !u!1 &6616656374508502190
 GameObject:
   m_ObjectHideFlags: 0

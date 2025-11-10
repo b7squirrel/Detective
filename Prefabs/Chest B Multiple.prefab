@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4346429525095610613}
   - component: {fileID: 4346429525095610611}
-  - component: {fileID: 6370164714015909664}
   - component: {fileID: 8530445320205127888}
   - component: {fileID: 362892234575460148}
   - component: {fileID: 2253275510906811665}
   - component: {fileID: 6995639833528854892}
+  - component: {fileID: 4489809864495350674}
   m_Layer: 16
   m_Name: Chest B Multiple
   m_TagString: Props
@@ -53,32 +53,6 @@ MonoBehaviour:
   hp: 1
   hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
   destructableDieEffect: {fileID: 8774143540521336711, guid: da27312d14056244ca3be2c1ff5c707f, type: 3}
---- !u!114 &6370164714015909664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4346429525095610615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropItemProperty:
-  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 1
-    hasSpecialItem: 0
-    numMultiple: 50
-  exp: 1000
-  hp: 0
-  isChest: 1
-  multiDropRate: 100
-  specialDropRate: 100
-  dropAllItemList: 0
-  isChestDebuggingOn: 0
-  dropItemIndex: 1
 --- !u!114 &8530445320205127888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,6 +150,31 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4489809864495350674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4346429525095610615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6ca978518dc4cdf9b849ea4cd429d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItemProperty:
+  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
+    hasSpecialItem: 0
+    numMultiple: 50
+  multiDropRate: 100
+  specialDropRate: 0
+  dropAllItemList: 0
+  exp: 0
+  hp: 0
+  isDebuggingOn: 0
+  dropItemIndex: 0
 --- !u!1 &7515401502365864220
 GameObject:
   m_ObjectHideFlags: 0

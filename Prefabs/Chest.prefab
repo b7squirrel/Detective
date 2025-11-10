@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1519986380285838771}
   - component: {fileID: 1519986380285838773}
-  - component: {fileID: 8155687002099685990}
   - component: {fileID: 6857776902098202006}
   - component: {fileID: 3188774486444296818}
   - component: {fileID: 3894684809936930903}
   - component: {fileID: 5214055996103988266}
+  - component: {fileID: 8492874725314832681}
   m_Layer: 16
   m_Name: Chest
   m_TagString: Props
@@ -53,51 +53,6 @@ MonoBehaviour:
   hp: 1
   hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
   destructableDieEffect: {fileID: 8774143540521336711, guid: da27312d14056244ca3be2c1ff5c707f, type: 3}
---- !u!114 &8155687002099685990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1519986380285838769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropItemProperty:
-  - Item: {fileID: 6656604424298050648, guid: 58138677c8288834aa35ee7cb6738cc8, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 0
-    hasSpecialItem: 0
-    numMultiple: 0
-  - Item: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 1
-    hasSpecialItem: 0
-    numMultiple: 40
-  - Item: {fileID: 7188308438288182905, guid: 7055ff343fdbd5a4d9783a4ec9861b2c, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 0
-    hasSpecialItem: 0
-    numMultiple: 0
-  - Item: {fileID: 8884259230644267150, guid: e3c3d9b88e9ead441aefd7102fd9764a, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 0
-    hasSpecialItem: 0
-    numMultiple: 0
-  - Item: {fileID: 6285321386345570014, guid: 4861f09f8920d47459768701a84685bb, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 0
-    hasSpecialItem: 0
-    numMultiple: 0
-  exp: 1000
-  hp: 0
-  isChest: 1
-  multiDropRate: 10
-  specialDropRate: 0
-  isChestDebuggingOn: 0
-  dropItemIndex: 0
 --- !u!114 &6857776902098202006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +150,51 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8492874725314832681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519986380285838769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6ca978518dc4cdf9b849ea4cd429d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItemProperty:
+  - Item: {fileID: 6656604424298050648, guid: 58138677c8288834aa35ee7cb6738cc8, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
+    numMultiple: 0
+  - Item: {fileID: 5780315627234978803, guid: d136ad1d27afd064c81321c16efb4b50, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
+    hasSpecialItem: 0
+    numMultiple: 40
+  - Item: {fileID: 7188308438288182905, guid: 7055ff343fdbd5a4d9783a4ec9861b2c, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
+    numMultiple: 0
+  - Item: {fileID: 8884259230644267150, guid: e3c3d9b88e9ead441aefd7102fd9764a, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
+    numMultiple: 0
+  - Item: {fileID: 6285321386345570014, guid: 4861f09f8920d47459768701a84685bb, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 0
+    hasSpecialItem: 0
+    numMultiple: 0
+  multiDropRate: 0
+  specialDropRate: 0
+  dropAllItemList: 0
+  exp: 0
+  hp: 0
+  isDebuggingOn: 0
+  dropItemIndex: 0
 --- !u!1 &4685323377475136602
 GameObject:
   m_ObjectHideFlags: 0

@@ -523,7 +523,6 @@ GameObject:
   - component: {fileID: 9063918615161019866}
   - component: {fileID: 1107227592599761436}
   - component: {fileID: 5592088151590274351}
-  - component: {fileID: 7649279383913775786}
   - component: {fileID: 7231704940389388298}
   - component: {fileID: 3148108158803683198}
   - component: {fileID: 7868696302565031092}
@@ -532,6 +531,7 @@ GameObject:
   - component: {fileID: 290168296122795700}
   - component: {fileID: 335978064760732970}
   - component: {fileID: 4650518365152346160}
+  - component: {fileID: 8363074730215957972}
   m_Layer: 6
   m_Name: LV2_Boss_Slime_Helmet
   m_TagString: Enemy
@@ -640,32 +640,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &7649279383913775786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6779923083274053433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d214beb2f16dca740afbb28b90f77e33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dropItemProperty:
-  - Item: {fileID: 4428278910919695438, guid: 56489c3b413ce4bf0ba9965851cd2609, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 0
-    hasSpecialItem: 0
-    numMultiple: 0
-  exp: 0
-  hp: 0
-  isChest: 0
-  multiDropRate: 0
-  specialDropRate: 0
-  dropAllItemList: 0
-  isChestDebuggingOn: 0
-  dropItemIndex: 0
 --- !u!114 &7231704940389388298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -861,6 +835,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounceDistance: 3
+--- !u!114 &8363074730215957972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6779923083274053433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b49231c47894f2f9eda80c57d60809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropItemProperty:
+  - Item: {fileID: 4428278910919695438, guid: 56489c3b413ce4bf0ba9965851cd2609, type: 3}
+    SpecialDrop: {fileID: 0}
+    isMultipleDropable: 1
+    hasSpecialItem: 0
+    numMultiple: 1
+  multiDropRate: 10
+  specialDropRate: 0
+  dropAllItemList: 0
+  exp: 0
 --- !u!1 &7201347227933336307
 GameObject:
   m_ObjectHideFlags: 0
