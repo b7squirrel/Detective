@@ -26,7 +26,7 @@ public class EggDrop : DropOnDestroy
         // 무더기 드롭 체크
         if (dropItemProperty[itemIndex].isMultipleDropable && CheckMultiDropChance())
         {
-            int multiNum = dropItemProperty[itemIndex].numMultiple + UnityEngine.Random.Range(0, 9);
+            int multiNum = dropItemProperty[itemIndex].numMultiple + UnityEngine.Random.Range(4, 9);
             multiNum = Mathf.Max(1, multiNum);
             DropMultipleObjects(toDrop, multiNum);
             return;

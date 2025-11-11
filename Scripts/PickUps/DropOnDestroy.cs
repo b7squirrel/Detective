@@ -65,7 +65,7 @@ public abstract class DropOnDestroy : MonoBehaviour
             // 멀티플 드롭 체크
             if (dropItemProperty[i].isMultipleDropable && CheckMultiDropChance())
             {
-                int multiNum = dropItemProperty[i].numMultiple + UnityEngine.Random.Range(-5, 10);
+                int multiNum = dropItemProperty[i].numMultiple + UnityEngine.Random.Range(4, 10);
                 multiNum = Math.Max(1, multiNum);
                 DropMultipleObjects(toDrop, multiNum);
                 continue;
