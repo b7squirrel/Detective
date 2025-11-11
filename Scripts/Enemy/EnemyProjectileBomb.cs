@@ -59,7 +59,8 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
 
         if (playerInRange != null)
         {
-            Character character = playerInRange.GetComponent<Character>();
+            Debug.LogError($"투사체 데미지 = {projectileDamage}");
+            Character character = GameManager.instance.character;
             if (character != null)
             {
                 character.TakeDamage(projectileDamage, EnemyType.Melee);
@@ -101,5 +102,6 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     public void InitProjectileDamage(int damage)
     {
         projectileDamage = damage;
+        Debug.LogError($"Projectile Damage Set to {projectileDamage}");
     }
 }
