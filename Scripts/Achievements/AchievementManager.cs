@@ -81,4 +81,19 @@ public class AchievementManager : MonoBehaviour
     {
         return achievements;
     }
+
+    /// <summary>
+    /// 테스트용: 모든 업적 초기화
+    /// </summary>
+    [ContextMenu("Reset All Achievements")]
+    public void ResetAllAchievements()
+    {
+        foreach (var ach in achievements)
+        {
+            ach.currentValue = 0;
+            ach.isCompleted = false;
+        }
+
+        Debug.Log("✅ 모든 업적 초기화 완료!");
+    }
 }
