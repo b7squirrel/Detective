@@ -8,13 +8,26 @@ public class KillManager : MonoBehaviour
 
     void Start()
     {
-        // Å³ ¼ö UI¸¦ 0À¸·Î ÃÊ±âÈ­
         OnKill?.Invoke();
     }
     public void UpdateCurrentKills()
     {
         currentKills++;
+
+        OnSlimeKilled();
+
         OnKill?.Invoke();
+    }
+
+    /// <summary>
+    /// ë„ì „ ê³¼ì œ. ìŠ¬ë¼ì„ í‚¬
+    /// </summary>
+    void OnSlimeKilled()
+    {
+        AchievementManager.Instance.AddProgress("KILL_100", 1);
+        AchievementManager.Instance.AddProgress("Kill_1000", 1);
+        AchievementManager.Instance.AddProgress("Kill_10000", 1);
+        AchievementManager.Instance.AddProgress("TEST_SLIME_10", 1);
     }
     public int GetCurrentKills() => currentKills;
 }
