@@ -1,22 +1,52 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 런타임용 업적 데이터
+[System.Serializable]
+public class RuntimeAchievement
+{
+    public AchievementSO originalSO; // 원본 참조
+    public int currentValue;
+    public bool isCompleted;
+
+    public RuntimeAchievement(AchievementSO so)
+    {
+        originalSO = so;
+        currentValue = 0;
+        isCompleted = false;
+    }
+
+    public void AddProgress(int amount = 1)
+    {
+        if (isCompleted) return;
+
+        currentValue += amount;
+        if (currentValue >= originalSO.targetValue)
+        {
+            currentValue = originalSO.targetValue;
+            isCompleted = true;
+        }
+    }
+}
+
 public class AchievementManager : MonoBehaviour
 {
     public static AchievementManager Instance;
 
-    [Header("업적 리스트")]
-    public List<AchievementSO> achievements; // 에디터에서 모든 업적 ScriptableObject 할당
+    [Header("업적 리스트 (SO)")]
+    public List<AchievementSO> achievements; // 에디터에서 할당
+
+    // 런타임 인스턴스
+    private Dictionary<string, RuntimeAchievement> runtimeAchievements = new Dictionary<string, RuntimeAchievement>();
 
     private void Awake()
     {
-        // 싱글톤 + DontDestroyOnLoad
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            LoadAchievements();
+            InitializeRuntimeAchievements();
         }
         else
         {
@@ -24,74 +54,68 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    // 업적 진행도 불러오기
-    private void LoadAchievements()
+    // SO → RuntimeAchievement 생성 및 저장된 진행도 로드
+    private void InitializeRuntimeAchievements()
     {
-        foreach (var ach in achievements)
+        foreach (var so in achievements)
         {
-            ach.isCompleted = PlayerPrefs.GetInt("ACH_" + ach.id, 0) == 1;
-            ach.currentValue = PlayerPrefs.GetInt("ACH_PROGRESS_" + ach.id, 0);
+            RuntimeAchievement runtime = new RuntimeAchievement(so);
+
+            // 저장된 값 불러오기
+            runtime.isCompleted = PlayerPrefs.GetInt("ACH_" + so.id, 0) == 1;
+            runtime.currentValue = PlayerPrefs.GetInt("ACH_PROGRESS_" + so.id, 0);
+
+            runtimeAchievements[so.id] = runtime;
         }
     }
 
-    // 업적 진행도 저장
-    private void SaveAchievement(AchievementSO ach)
+    // 진행도 저장
+    private void SaveAchievement(RuntimeAchievement runtime)
     {
-        PlayerPrefs.SetInt("ACH_" + ach.id, ach.isCompleted ? 1 : 0);
-        PlayerPrefs.SetInt("ACH_PROGRESS_" + ach.id, ach.currentValue);
+        PlayerPrefs.SetInt("ACH_" + runtime.originalSO.id, runtime.isCompleted ? 1 : 0);
+        PlayerPrefs.SetInt("ACH_PROGRESS_" + runtime.originalSO.id, runtime.currentValue);
     }
 
-    /// <summary>
-    /// 업적 진행 추가
-    /// id로 해당 업적 찾아서 AddProgress 호출
-    /// </summary>
+    // 진행 추가
     public void AddProgress(string id, int amount = 1)
     {
-        AchievementSO ach = achievements.Find(x => x.id == id);
-        if (ach == null || ach.isCompleted) return;
+        if (!runtimeAchievements.TryGetValue(id, out var runtime)) return;
+        if (runtime.isCompleted) return;
 
-        ach.AddProgress(amount);
+        runtime.AddProgress(amount);
 
-        // 진행도 저장
-        SaveAchievement(ach);
+        SaveAchievement(runtime);
+
+        if (runtime.isCompleted)
+        {
+            OnAchievementCompleted(runtime);
+        }
     }
 
-    /// <summary>
-    /// 업적이 완료되면 호출되는 함수
-    /// 보상 지급 및 팝업 처리
-    /// </summary>
-    public void OnAchievementCompleted(AchievementSO ach)
+    // 업적 완료 처리
+    private void OnAchievementCompleted(RuntimeAchievement runtime)
     {
-        // // 1. 보상 지급
-        // CurrencyManager.Instance.AddGem(ach.rewardAmount);
+        var so = runtime.originalSO;
 
-        // // 2. 저장
-        // SaveAchievement(ach);
-
-        // // 3. UI 팝업 표시
-        // PopupUI.Instance.ShowAchievement(ach.title, ach.icon);
-
-        // Debug.Log($"🏆 업적 달성: {ach.title} (+{ach.rewardAmount} 보석)");
+        // 예: 보상 지급, UI 팝업
+        Debug.Log($"🏆 업적 달성: {so.title} (+{so.rewardGem} 보석)");
     }
 
-    /// <summary>
-    /// 업적 전체 리스트 반환 (UI에서 사용)
-    /// </summary>
-    public List<AchievementSO> GetAchievements()
+    // UI용 전체 리스트 반환
+    public List<RuntimeAchievement> GetAllRuntimeAchievements()
     {
-        return achievements;
+        return new List<RuntimeAchievement>(runtimeAchievements.Values);
     }
 
-    /// <summary>
-    /// 테스트용: 모든 업적 초기화
-    /// </summary>
+    // 테스트용: 모든 업적 초기화
     [ContextMenu("Reset All Achievements")]
     public void ResetAllAchievements()
     {
-        foreach (var ach in achievements)
+        foreach (var runtime in runtimeAchievements.Values)
         {
-            ach.currentValue = 0;
-            ach.isCompleted = false;
+            runtime.currentValue = 0;
+            runtime.isCompleted = false;
+            SaveAchievement(runtime);
         }
 
         Debug.Log("✅ 모든 업적 초기화 완료!");
