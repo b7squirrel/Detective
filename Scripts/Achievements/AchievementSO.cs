@@ -49,11 +49,11 @@ public class AchievementSO : ScriptableObject
     /// </summary>
     public void CompleteAchievement()
     {
-        if (isCompleted) return;
+        // if (isCompleted) return;
 
-        isCompleted = true;
+        // isCompleted = true;
 
-        // 업적 매니저 호출
-        AchievementManager.Instance.OnAchievementCompleted(this);
+        // // 업적 매니저 호출
+        // AchievementManager.Instance.OnAchievementCompleted(this);
     }
 }
