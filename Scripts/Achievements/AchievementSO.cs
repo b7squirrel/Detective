@@ -15,7 +15,6 @@ public class AchievementSO : ScriptableObject
 {
     [Header("기본 정보")]
     public string id;                 // 업적 고유 ID
-    public string title;              // 업적 이름
     [TextArea] public string description; // 설명
     public string icon;               // UI 아이콘
 

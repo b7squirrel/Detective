@@ -54,7 +54,6 @@ public class AchievementImporter : EditorWindow
 
             var so = ScriptableObject.CreateInstance<AchievementSO>();
             so.id = id;
-            so.title = title;
             so.description = desc;
             so.targetValue = target;
             so.rewardGem = reward;

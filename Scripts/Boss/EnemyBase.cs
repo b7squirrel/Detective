@@ -560,7 +560,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         IsGrouping = false;
         ResetFlip();
 
-        GameManager.instance.KillManager.UpdateCurrentKills(); // 처치한 적의 수 세기
+        GameManager.instance.KillManager.UpdateCurrentKills(enemyType, isSubBoss, isBoss); // 처치한 적의 수 세기
 
         Spawner.instance.SubtractEnemyNumber();
         if (enemyFinder == null) enemyFinder = FindObjectOfType<EnemyFinder>();
