@@ -15,7 +15,7 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] GameObject CompletedPanel;
     [SerializeField] GameObject checkImage;
 
-    RuntimeAchievement ra;
+    [HideInInspector] public RuntimeAchievement ra;
     Animator anim;
 
     public void Bind(RuntimeAchievement runtime)
@@ -56,6 +56,5 @@ public class AchievementItemUI : MonoBehaviour
 
         if (anim == null) anim = GetComponent<Animator>();
         if (isActive) anim.SetTrigger("Completed");
-        if (isActive) Debug.LogError("Completed");
     }
 }
