@@ -17,6 +17,8 @@ public class AchievementManager : MonoBehaviour
     public event Action<RuntimeAchievement> OnAnyCompleted;
     public event Action<RuntimeAchievement> OnAnyRewarded;
 
+    [SerializeField] GemCollectFX gemCollectFX;
+
     private void Awake()
     {
         if (Instance == null)
@@ -43,6 +45,8 @@ public class AchievementManager : MonoBehaviour
 
             runtimeDict.Add(so.id, ra);
         }
+
+        if(gemCollectFX == null) gemCollectFX = FindObjectOfType<GemCollectFX>();
     }
 
     // ID 기반 진행 증가
@@ -69,15 +73,17 @@ public class AchievementManager : MonoBehaviour
     }
 
     // 보상 지급
-    public void Reward(string id)
+    public void Reward(string id, RectTransform pos)
     {
         if (!runtimeDict.TryGetValue(id, out var ra)) return;
         if (ra.isRewarded) return;
 
-        ra.Reward();
+        ra.Reward(); // "보상을 받았음"으로 체크해서 보상이 중복되지 않도록
         SaveAchievement(ra);
 
         OnAnyRewarded?.Invoke(ra);
+
+        gemCollectFX.PlayGemCollectFX(pos);
     }
 
     public void SaveAchievement(RuntimeAchievement ra)

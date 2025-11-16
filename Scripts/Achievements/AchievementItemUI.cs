@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 
 /// <summary>
 /// 슬라이더, 설명, 보상 버튼. RuntimeAchievement 이벤트 구독
@@ -31,7 +30,7 @@ public class AchievementItemUI : MonoBehaviour
 
         rewardButton.onClick.AddListener(() =>
         {
-            AchievementManager.Instance.Reward(ra.original.id);
+            AchievementManager.Instance.Reward(ra.original.id, GetComponent<RectTransform>());
         });
 
         SetCompleted(runtime.isCompleted);
