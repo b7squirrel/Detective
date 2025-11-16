@@ -83,7 +83,7 @@ public class AchievementManager : MonoBehaviour
 
         OnAnyRewarded?.Invoke(ra);
 
-        gemCollectFX.PlayGemCollectFX(pos);
+        gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardGem);
     }
 
     public void SaveAchievement(RuntimeAchievement ra)
@@ -120,7 +120,7 @@ public class AchievementManager : MonoBehaviour
             // 이벤트 호출 (원하면)
             OnAnyProgressChanged?.Invoke(ra);
         }
-
+        
         PlayerPrefs.Save();
     }
 }

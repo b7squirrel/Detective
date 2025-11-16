@@ -67,8 +67,9 @@ public class AchievementPanel : MonoBehaviour
 
     /// <summary>
     /// UI 정렬: 완료된 항목 위, 완료 항목끼리는 SO 리스트 순서
+    /// 디버그 모든 도전 과제 완료 버튼에서도 호출
     /// </summary>
-    private void RefreshUI()
+    public void RefreshUI()
     {
         var items = content.GetComponentsInChildren<AchievementItemUI>();
 
@@ -81,5 +82,17 @@ public class AchievementPanel : MonoBehaviour
         {
             sortedItems[i].transform.SetSiblingIndex(i);
         }
+    }
+
+    // Debug용도. 모든 도전 과제를 완료 상태로 설정
+    public void ForceCompleteAllAchievements()
+    {
+        foreach (var kvp in itemDict)
+        {
+            AchievementItemUI ui = kvp.Value;
+            ui.ForceComplete();
+        }
+
+        RefreshUI(); // 완료된 항목들을 위로 정렬
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 
@@ -10,25 +9,22 @@ public class GemCollectFX : MonoBehaviour
     public Camera uiCamera;                 // Canvas Render Camera
     public RectTransform gemTargetIcon;     // 목표 보석 아이콘
     public GameObject gemPrefab;            // 작은 보석 프리팹
-    public TextMeshProUGUI gemCountText;    // 보석 개수 표시 텍스트
 
     [Header("설정값")]
-    public int currentGem = 0;              // 현재 보석 개수
     public float spreadRadius = 200f;       // 퍼지는 범위
-    public int spawnCount = 10;             // 생성할 보석 수
 
-    [Header("Debug")]
-    public RectTransform testPos;
+    [Header("참조")]
+    [SerializeField] PlayerDataManager playerDataManager;
 
     /// <summary>
     /// 보석 FX 실행
     /// </summary>
-    public void PlayGemCollectFX(RectTransform pos)
+    public void PlayGemCollectFX(RectTransform pos, int gemAmount)
     {
         // 1) Canvas 내 UI RectTransform 위치 → 스크린 포지션
         Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(uiCamera, pos.position);
         
-        for (int i = 0; i < spawnCount; i++)
+        for (int i = 0; i < gemAmount; i++)
         {
             SpawnOneGem(screenPos);
         }
@@ -74,7 +70,8 @@ public class GemCollectFX : MonoBehaviour
         );
 
         // 2) 목표로 날아가기
-        gemRT.DOAnchorPos(localTargetPos, 0.35f).SetEase(Ease.InQuad)
+        float offset = UnityEngine.Random.Range(-.1f, .1f);
+        gemRT.DOAnchorPos(localTargetPos, 0.35f + offset).SetEase(Ease.InQuad)
             .OnComplete(() =>
             {
                 Destroy(gemRT.gameObject);
@@ -84,17 +81,17 @@ public class GemCollectFX : MonoBehaviour
 
     private void AddGem(int amount)
     {
-        int startValue = currentGem;
-        int endValue = currentGem + amount;
-        currentGem = endValue;
+        int currentValue = playerDataManager.GetCurrentHighCoinNumber();
 
-        // 3) 숫자 증가
-        DOTween.To(() => startValue, x =>
+        // 숫자 증가 (null-safe)
+        playerDataManager.SetCristalNumberAs(currentValue + 1);
+
+        // 아이콘 팝 효과
+        if (gemTargetIcon != null)
         {
-            gemCountText.text = x.ToString();
-        }, endValue, 0.3f);
-
-        // 4) 아이콘 팝 효과
-        gemTargetIcon.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 0.5f);
+            gemTargetIcon.DOKill(); // 기존 Tween 제거
+            gemTargetIcon.localScale = Vector3.one; // 스케일 초기화
+            gemTargetIcon.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 0.5f);
+        }
     }
 }

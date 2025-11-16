@@ -69,6 +69,19 @@ public class AchievementItemUI : MonoBehaviour
         {
             anim.Play("AchievementItem Completed", 0, 0f);
         }
+    }
 
+    // 디버그 용도
+    public void ForceComplete()
+    {
+        if (ra == null) return;
+
+        // 런타임 업적 데이터를 강제로 완료 상태로 설정
+        ra.progress = ra.original.targetValue;
+        ra.isCompleted = true;
+
+        // UI 업데이트
+        SetCompleted(true);
+        Refresh();
     }
 }
