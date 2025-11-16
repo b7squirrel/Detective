@@ -14,6 +14,7 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] Button rewardButton;
     [SerializeField] GameObject CompletedPanel;
     [SerializeField] GameObject checkImage;
+    [SerializeField] RectTransform GemPos;
 
     [HideInInspector] public RuntimeAchievement ra;
     Animator anim;
@@ -30,7 +31,7 @@ public class AchievementItemUI : MonoBehaviour
 
         rewardButton.onClick.AddListener(() =>
         {
-            AchievementManager.Instance.Reward(ra.original.id, GetComponent<RectTransform>());
+            AchievementManager.Instance.Reward(ra.original.id, GemPos);
         });
 
         SetCompleted(runtime.isCompleted);
