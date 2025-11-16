@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 /// <summary>
 /// 슬라이더, 설명, 보상 버튼. RuntimeAchievement 이벤트 구독
@@ -38,6 +39,16 @@ public class AchievementItemUI : MonoBehaviour
         Refresh();
     }
 
+    // 다른 탭에 갔다오면 (비활성화가 되었다가 다시 활성화가 되면) 다시 디폴트 애니메이션을 재생하는 것을 방지
+    void OnEnable()
+    {
+        if (ra != null && ra.isCompleted)
+        {
+            if (anim == null) anim = GetComponent<Animator>();
+            anim.Play("AchievementItem Completed", 0, 0f);
+        }
+    }
+
     public void Refresh()
     {
         progressSlider.value = ra.progress;
@@ -55,6 +66,10 @@ public class AchievementItemUI : MonoBehaviour
 
 
         if (anim == null) anim = GetComponent<Animator>();
-        if (isActive) anim.SetTrigger("Completed");
+        if (isActive)
+        {
+            anim.Play("AchievementItem Completed", 0, 0f);
+        }
+
     }
 }
