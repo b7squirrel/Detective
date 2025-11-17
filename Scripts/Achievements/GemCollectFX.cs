@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class GemCollectFX : MonoBehaviour
 {
@@ -16,11 +17,19 @@ public class GemCollectFX : MonoBehaviour
     [Header("참조")]
     [SerializeField] PlayerDataManager playerDataManager;
 
+    [Header("사운드")]
+    [SerializeField] AudioClip clipGemSpread;
+    [SerializeField] AudioClip clipGemHit;
+    bool hasPlayedCollectSound = false;
+
     /// <summary>
     /// 보석 FX 실행
     /// </summary>
     public void PlayGemCollectFX(RectTransform pos, int gemAmount)
     {
+        hasPlayedCollectSound = false; 
+        SoundManager.instance.Play(clipGemSpread);
+
         // 1) Canvas 내 UI RectTransform 위치 → 스크린 포지션
         Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(uiCamera, pos.position);
         
@@ -76,6 +85,12 @@ public class GemCollectFX : MonoBehaviour
             {
                 Destroy(gemRT.gameObject);
                 AddGem(1);
+
+                if (hasPlayedCollectSound == false)
+                {
+                    hasPlayedCollectSound = true;
+                    SoundManager.instance.Play(clipGemHit);
+                }
             });
     }
 

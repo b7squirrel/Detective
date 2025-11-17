@@ -7,6 +7,7 @@ using TMPro;
 /// </summary>
 public class AchievementItemUI : MonoBehaviour
 {
+    [Header("그래픽")]
     [SerializeField] TextMeshProUGUI description;
     [SerializeField] Slider progressSlider;
     [SerializeField] TextMeshProUGUI progressText;
@@ -15,6 +16,9 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] GameObject CompletedPanel;
     [SerializeField] GameObject checkImage;
     [SerializeField] RectTransform GemPos;
+
+    [Header("사운드")]
+    [SerializeField] AudioClip clipRewardButton;
 
     [HideInInspector] public RuntimeAchievement ra;
     Animator anim;
@@ -31,6 +35,7 @@ public class AchievementItemUI : MonoBehaviour
 
         rewardButton.onClick.AddListener(() =>
         {
+            SoundManager.instance.Play(clipRewardButton);
             AchievementManager.Instance.Reward(ra.original.id, GemPos);
         });
 
