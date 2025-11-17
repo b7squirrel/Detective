@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,15 +11,27 @@ public class AchievementPanel : MonoBehaviour
     Dictionary<string, AchievementItemUI> itemDict = new();
     CardSlotManager cardSlotManager;
 
+    // 🔥 삭제 대기 리스트 (코루틴 중단 대비)
+    private List<RuntimeAchievement> pendingRemoveList = new();
+
     private void OnEnable()
     {
         if (AchievementManager.Instance == null) return;
+
         AchievementManager.Instance.OnAnyProgressChanged += UpdateItem;
         AchievementManager.Instance.OnAnyCompleted += UpdateItem;
         AchievementManager.Instance.OnAnyRewarded += RemoveItem;
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Off");
+
+        // 🔥 패널이 다시 켜질 때, 삭제 대기 중이었던 항목들 마무리
+        foreach (var ra in pendingRemoveList.ToList())
+        {
+            FinishRemove(ra);
+        }
+
+        RefreshUI();
     }
 
     private void OnDisable()
@@ -54,7 +67,33 @@ public class AchievementPanel : MonoBehaviour
         RefreshUI();
     }
 
+    // =======================================================
+    //                   🔥 삭제 처리 시스템
+    // =======================================================
+
     private void RemoveItem(RuntimeAchievement ra)
+    {
+        // 삭제 대기 리스트에 먼저 등록
+        if (!pendingRemoveList.Contains(ra))
+            pendingRemoveList.Add(ra);
+
+        StartCoroutine(RemoveItemCo(ra));
+    }
+
+    IEnumerator RemoveItemCo(RuntimeAchievement ra)
+    {
+        if (itemDict.TryGetValue(ra.original.id, out var ui))
+        {
+            ui.GetComponent<Animator>().SetTrigger("Swipe");
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        // 🔥 코루틴 중단되어도 OnEnable에서 마무리됨
+        FinishRemove(ra);
+    }
+
+    // 🔥 실제 삭제 처리 (코루틴 성공/중단 상관없이 여기서 최종 처리)
+    private void FinishRemove(RuntimeAchievement ra)
     {
         if (itemDict.TryGetValue(ra.original.id, out var ui))
         {
@@ -62,20 +101,23 @@ public class AchievementPanel : MonoBehaviour
             itemDict.Remove(ra.original.id);
         }
 
+        pendingRemoveList.Remove(ra);
+
         RefreshUI();
     }
 
+    // =======================================================
+
     /// <summary>
-    /// UI 정렬: 완료된 항목 위, 완료 항목끼리는 SO 리스트 순서
-    /// 디버그 모든 도전 과제 완료 버튼에서도 호출
+    /// UI 정렬: 완료된 항목 위, 그 안에서는 SO 리스트 순서대로
     /// </summary>
     public void RefreshUI()
     {
         var items = content.GetComponentsInChildren<AchievementItemUI>();
 
         var sortedItems = items
-            .OrderByDescending(i => i.ra.isCompleted) // 완료된 항목 위
-            .ThenBy(i => AchievementManager.Instance.achievementSOList.IndexOf(i.ra.original)) // SO 리스트 순서
+            .OrderByDescending(i => i.ra.isCompleted)
+            .ThenBy(i => AchievementManager.Instance.achievementSOList.IndexOf(i.ra.original))
             .ToList();
 
         for (int i = 0; i < sortedItems.Count; i++)
@@ -84,7 +126,7 @@ public class AchievementPanel : MonoBehaviour
         }
     }
 
-    // Debug용도. 모든 도전 과제를 완료 상태로 설정
+    // Debug 용: 모든 업적 완료 표시
     public void ForceCompleteAllAchievements()
     {
         foreach (var kvp in itemDict)
@@ -93,6 +135,6 @@ public class AchievementPanel : MonoBehaviour
             ui.ForceComplete();
         }
 
-        RefreshUI(); // 완료된 항목들을 위로 정렬
+        RefreshUI();
     }
 }
