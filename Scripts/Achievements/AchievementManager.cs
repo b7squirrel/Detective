@@ -6,8 +6,11 @@ public class AchievementManager : MonoBehaviour
 {
     public static AchievementManager Instance;
 
-    [Header("업적 리스트 (SO)")]
-    public List<AchievementSO> achievementSOList;
+    [Header("Resources 폴더 경로 (예: Resources/Achievements)")]
+    [SerializeField] private string resourcePath = "Achievements";
+
+    // 자동 로드된 업적 리스트
+    public List<AchievementSO> achievementSOList = new();
 
     // 런타임 저장소
     public Dictionary<string, RuntimeAchievement> runtimeDict = new();
@@ -17,7 +20,7 @@ public class AchievementManager : MonoBehaviour
     public event Action<RuntimeAchievement> OnAnyCompleted;
     public event Action<RuntimeAchievement> OnAnyRewarded;
 
-    [SerializeField] GemCollectFX gemCollectFX;
+    [SerializeField] private GemCollectFX gemCollectFX;
 
     private void Awake()
     {
@@ -30,26 +33,48 @@ public class AchievementManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+
     private void Initialize()
     {
+        LoadAllSO();
+
+        runtimeDict.Clear();
+
         foreach (var so in achievementSOList)
         {
+            if (runtimeDict.ContainsKey(so.id))
+            {
+                Debug.LogError($"[AchievementManager] 중복 업적 ID: {so.id}");
+                continue;
+            }
+
             RuntimeAchievement ra = new RuntimeAchievement(so);
 
-            // 개별 이벤트 = 매니저 이벤트로 다시 전달
-            ra.OnProgressChanged += runtime =>
-                OnAnyProgressChanged?.Invoke(runtime);
-
-            ra.OnCompleted += runtime =>
-                OnAnyCompleted?.Invoke(runtime);
+            ra.OnProgressChanged += r => OnAnyProgressChanged?.Invoke(r);
+            ra.OnCompleted += r => OnAnyCompleted?.Invoke(r);
 
             runtimeDict.Add(so.id, ra);
         }
 
-        if(gemCollectFX == null) gemCollectFX = FindObjectOfType<GemCollectFX>();
+        if (gemCollectFX == null)
+            gemCollectFX = FindObjectOfType<GemCollectFX>();
     }
 
-    // ID 기반 진행 증가
+
+    // ★ Resources 폴더에서 AchievementSO 자동 로딩
+    private void LoadAllSO()
+    {
+        achievementSOList.Clear();
+
+        AchievementSO[] loaded = Resources.LoadAll<AchievementSO>(resourcePath);
+
+        if (loaded.Length == 0)
+            Debug.LogWarning($"[AchievementManager] Resources/{resourcePath} 에 업적이 없습니다.");
+
+        achievementSOList.AddRange(loaded);
+    }
+
+
     public void AddProgressByID(string id, int amount = 1)
     {
         if (runtimeDict.TryGetValue(id, out var ra))
@@ -59,7 +84,6 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    // 타입 기반 진행 증가
     public void AddProgress(AchievementType type, int amount = 1)
     {
         foreach (var ra in runtimeDict.Values)
@@ -72,55 +96,52 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    // 보상 지급
     public void Reward(string id, RectTransform pos)
     {
         if (!runtimeDict.TryGetValue(id, out var ra)) return;
         if (ra.isRewarded) return;
 
-        ra.Reward(); // "보상을 받았음"으로 체크해서 보상이 중복되지 않도록
+        ra.Reward();
         SaveAchievement(ra);
 
         OnAnyRewarded?.Invoke(ra);
 
-        gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardGem);
+        if (gemCollectFX != null)
+            gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardGem);
     }
+
 
     public void SaveAchievement(RuntimeAchievement ra)
     {
         string id = ra.original.id;
+
         PlayerPrefs.SetInt("ACH_" + id, ra.isCompleted ? 1 : 0);
         PlayerPrefs.SetInt("ACH_PROGRESS_" + id, ra.progress);
         PlayerPrefs.SetInt("ACH_REWARD_" + id, ra.isRewarded ? 1 : 0);
     }
 
-    // 전체 조회
     public List<RuntimeAchievement> GetAll()
     {
         return new List<RuntimeAchievement>(runtimeDict.Values);
     }
 
-    // 디버그 버튼으로 호출
-    // 모든 도전과제 초기화
+
     public void ResetAllAchievements()
     {
         foreach (var ra in runtimeDict.Values)
         {
-            // 런타임 값 초기화
             ra.progress = 0;
             ra.isCompleted = false;
             ra.isRewarded = false;
 
-            // PlayerPrefs 초기화
             string id = ra.original.id;
             PlayerPrefs.SetInt("ACH_" + id, 0);
             PlayerPrefs.SetInt("ACH_PROGRESS_" + id, 0);
             PlayerPrefs.SetInt("ACH_REWARD_" + id, 0);
 
-            // 이벤트 호출 (원하면)
             OnAnyProgressChanged?.Invoke(ra);
         }
-        
+
         PlayerPrefs.Save();
     }
 }
