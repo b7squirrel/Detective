@@ -21,6 +21,7 @@ public class AchievementManager : MonoBehaviour
     public event Action<RuntimeAchievement> OnAnyRewarded;
 
     [SerializeField] private GemCollectFX gemCollectFX;
+    PlayerDataManager playerDataManager; // 크리스탈의 실제 값을 더해주기 위해
 
     private void Awake()
     {
@@ -106,10 +107,14 @@ public class AchievementManager : MonoBehaviour
 
         OnAnyRewarded?.Invoke(ra);
 
+        // 먼저 실제 데이터에 크리스탈을 모두 추가 (UI 업데이트 없이)
+        if(playerDataManager == null) playerDataManager = FindObjectOfType<PlayerDataManager>();
+        int currentValue = playerDataManager.GetCurrentCristalNumber();
+        playerDataManager.SetCristalNumberAsSilent(currentValue + ra.original.rewardGem);
+
         if (gemCollectFX != null)
             gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardGem);
     }
-
 
     public void SaveAchievement(RuntimeAchievement ra)
     {

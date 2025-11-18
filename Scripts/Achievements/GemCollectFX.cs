@@ -1,92 +1,82 @@
 using UnityEngine;
-using TMPro;
 using DG.Tweening;
-using Unity.VisualScripting;
 
+/// <summary>
+/// 보석 UI
+/// 실제 보석의 수는 이 클래스를 호출하기 전에 더해지고 저장되어야 함
+/// </summary>
 public class GemCollectFX : MonoBehaviour
 {
     [Header("필요 요소")]
-    public RectTransform canvasRect;        // Canvas RectTransform
-    public Camera uiCamera;                 // Canvas Render Camera
-    public RectTransform gemTargetIcon;     // 목표 보석 아이콘
-    public GameObject gemPrefab;            // 작은 보석 프리팹
+    public RectTransform canvasRect;
+    public Camera uiCamera;
+    public RectTransform gemTargetIcon;
+    public GameObject gemPrefab;
 
     [Header("설정값")]
-    public float spreadRadius = 200f;       // 퍼지는 범위
+    public float spreadRadius = 200f;
 
     [Header("참조")]
     [SerializeField] PlayerDataManager playerDataManager;
+    DisplayCurrency displayCurrency; // ui업데이트를 한 번 더 해주기 위해. 누락될 수 있으므로
 
     [Header("사운드")]
     [SerializeField] AudioClip clipGemSpread;
     [SerializeField] AudioClip clipGemHit;
+
     bool hasPlayedCollectSound = false;
 
-    /// <summary>
-    /// 보석 FX 실행
-    /// </summary>
     public void PlayGemCollectFX(RectTransform pos, int gemAmount)
     {
-        hasPlayedCollectSound = false; 
+        hasPlayedCollectSound = false;
         SoundManager.instance.Play(clipGemSpread);
 
-        // 1) Canvas 내 UI RectTransform 위치 → 스크린 포지션
         Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(uiCamera, pos.position);
-        
+
         for (int i = 0; i < gemAmount; i++)
-        {
             SpawnOneGem(screenPos);
-        }
     }
 
     private void SpawnOneGem(Vector3 screenPos)
     {
-        // Canvas 좌표로 변환
         Vector2 uiStartPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRect,
-            screenPos,
-            uiCamera,
-            out uiStartPos
-        );
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, uiCamera, out uiStartPos);
 
-        // 보석 생성 (어떤 부모든 상관없음)
         GameObject gemObj = Instantiate(gemPrefab, canvasRect);
         RectTransform gemRT = gemObj.GetComponent<RectTransform>();
         gemRT.anchoredPosition = uiStartPos;
 
-        // 랜덤 퍼짐
         Vector2 randomOffset = Random.insideUnitCircle * spreadRadius;
         Vector2 spreadPos = uiStartPos + randomOffset;
 
-        // 1) 퍼짐
-        gemRT.DOAnchorPos(spreadPos, 0.25f).SetEase(Ease.OutQuad)
+        gemRT.DOAnchorPos(spreadPos, 0.25f)
+            .SetEase(Ease.OutQuad)
             .OnComplete(() => FlyToTarget(gemRT));
     }
 
     private void FlyToTarget(RectTransform gemRT)
     {
-        // 목표 아이콘의 월드 위치
         Vector3 worldTargetPos = gemTargetIcon.position;
 
-        // gemRT 부모 기준 로컬 좌표로 변환
         Vector2 localTargetPos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             gemRT.parent as RectTransform,
             RectTransformUtility.WorldToScreenPoint(uiCamera, worldTargetPos),
             uiCamera,
-            out localTargetPos
-        );
+            out localTargetPos);
 
-        // 2) 목표로 날아가기
-        float offset = UnityEngine.Random.Range(-.1f, .1f);
-        gemRT.DOAnchorPos(localTargetPos, 0.35f + offset).SetEase(Ease.InQuad)
+        float offset = Random.Range(-0.1f, 0.1f);
+
+        gemRT.DOAnchorPos(localTargetPos, 0.35f + offset)
+            .SetEase(Ease.InQuad)
             .OnComplete(() =>
             {
                 Destroy(gemRT.gameObject);
-                AddGem(1);
+                
+                // UI만 업데이트 (실제 값은 이미 추가됨)
+                UpdateUIOnly();
 
-                if (hasPlayedCollectSound == false)
+                if (!hasPlayedCollectSound)
                 {
                     hasPlayedCollectSound = true;
                     SoundManager.instance.Play(clipGemHit);
@@ -94,18 +84,17 @@ public class GemCollectFX : MonoBehaviour
             });
     }
 
-    private void AddGem(int amount)
+    void UpdateUIOnly()
     {
-        int currentValue = playerDataManager.GetCurrentHighCoinNumber();
+        // 빌드 안정성을 위해 강제 UI 업데이트
+        if (displayCurrency == null) displayCurrency = FindObjectOfType<DisplayCurrency>();
 
-        // 숫자 증가 (null-safe)
-        playerDataManager.SetCristalNumberAs(currentValue + 1);
+        if (displayCurrency != null) displayCurrency.UpdateUI();
 
-        // 아이콘 팝 효과
         if (gemTargetIcon != null)
         {
-            gemTargetIcon.DOKill(); // 기존 Tween 제거
-            gemTargetIcon.localScale = Vector3.one; // 스케일 초기화
+            gemTargetIcon.DOKill();
+            gemTargetIcon.localScale = Vector3.one;
             gemTargetIcon.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 0.5f);
         }
     }

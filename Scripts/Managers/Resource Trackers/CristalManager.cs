@@ -21,7 +21,7 @@ public class CristalManager : MonoBehaviour
         playerDataManager = FindObjectOfType<PlayerDataManager>();
         
         // 저장된 캔디(코인) 개수 불러오기
-        currentCristals = playerDataManager.GetCurrentHighCoinNumber();
+        currentCristals = playerDataManager.GetCurrentCristalNumber();
         
         // 현재 보유한 코인으로 UI 초기화 (증가량 0)
         updateCurrentCristalNumbers(0);

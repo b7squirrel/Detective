@@ -9,21 +9,30 @@ public class DisplayCurrency : MonoBehaviour
 
     PlayerDataManager playerDataManager;
 
-    void Start()
+    void OnEnable()
     {
-        playerDataManager = FindObjectOfType<PlayerDataManager>();
+        if (playerDataManager == null)
+            playerDataManager = FindObjectOfType<PlayerDataManager>();
 
-        // 이벤트 구독
         playerDataManager.OnCurrencyChanged += UpdateUI;
-
-        // 처음 UI 세팅
         UpdateUI();
     }
 
-    void UpdateUI()
+    void OnDisable()
     {
-        coinText.text = playerDataManager.GetCurrentCandyNumber().ToString();
-        cristalText.text = playerDataManager.GetCurrentHighCoinNumber().ToString();
+        if (playerDataManager != null)
+            playerDataManager.OnCurrencyChanged -= UpdateUI;
+    }
+
+    void Start()
+    {
+        UpdateUI();       
+    }
+
+    public void UpdateUI()
+    {
+        coinText.text = playerDataManager.GetCurrentCoinNumber().ToString();
+        cristalText.text = playerDataManager.GetCurrentCristalNumber().ToString();
         lightningText.text = playerDataManager.GetCurrentLightningNumber().ToString() + "/ 60";
     }
 }

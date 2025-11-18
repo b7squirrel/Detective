@@ -296,7 +296,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
         int level = CardOnDisplay.Level;
         int amountToUpgrade = GetAmountToUpgrade(level);
-        int candyNumbers = playerDataManager.GetCurrentCandyNumber();
+        int candyNumbers = playerDataManager.GetCurrentCoinNumber();
 
         if (amountToUpgrade > candyNumbers)
         {
@@ -312,7 +312,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         // 가지고 있는 재화에서 업그레이드 비용 빼주고 데이터 저장
-        playerDataManager.AddCandyNumber(-amountToUpgrade);
+        playerDataManager.AddCoin(-amountToUpgrade);
 
         // 레벨업 하고 card data에 저장
         statManager.LevelUp(CardOnDisplay);
@@ -340,7 +340,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
         int level = cardToEquip.Level;
         int amountToUpgrade = GetAmountToUpgrade(level);
-        int candyNumbers = playerDataManager.GetCurrentCandyNumber();
+        int candyNumbers = playerDataManager.GetCurrentCoinNumber();
 
         // 코인이 부족하면 경고 메시지를 띄우고 종료
         if (amountToUpgrade > candyNumbers)
@@ -357,7 +357,7 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         // 가지고 있는 재화에서 업그레이드 비용 빼주고 데이터 저장
-        playerDataManager.AddCandyNumber(-amountToUpgrade);
+        playerDataManager.AddCoin(-amountToUpgrade);
 
         // 레벨업 하고 card data에 저장
         statManager.LevelUp(cardToEquip);

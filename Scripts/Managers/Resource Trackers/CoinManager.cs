@@ -24,7 +24,7 @@ public class CoinManager : MonoBehaviour
         playerDataManager = FindObjectOfType<PlayerDataManager>();
         
         // 저장된 캔디(코인) 개수 불러오기
-        currentCoins = playerDataManager.GetCurrentCandyNumber();
+        currentCoins = playerDataManager.GetCurrentCoinNumber();
         
         // 현재 보유한 코인으로 UI 초기화 (증가량 0)
         updateCurrentCoinNumbers(0);

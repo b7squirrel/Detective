@@ -1,31 +1,27 @@
 ﻿using UnityEngine;
 using System.IO;
-
 [System.Serializable]
 public class PlayerData
 {
     public int currentStageNumber;
     public bool isNewStage;
 
-    public int currentCandyNumber;
-    public int currentHighCoinNumber;
+    public int currentCoinNumber;       // 기존 Candy → Coin
+    public int currentCristalNumber;    // 기존 HighCoin → Cristal
     public int currentLightningNumber;
     public int currentKillNumber;
 }
-
 public class PlayerDataManager : MonoBehaviour
 {
     [SerializeField] PlayerData playerData;
     string filePath;
     bool isStageCleared;
 
-    // 재화 값이 변경될 때 UI 등에서 구독하는 이벤트
     public event System.Action OnCurrencyChanged;
 
     void Awake()
     {
         filePath = Path.Combine(Application.persistentDataPath, "playerData.json");
-
         LoadPlayerData();
     }
 
@@ -42,8 +38,8 @@ public class PlayerDataManager : MonoBehaviour
             {
                 currentStageNumber = 1,
                 currentLightningNumber = 60,
-                currentCandyNumber = 100,
-                currentHighCoinNumber = 50
+                currentCoinNumber = 100,
+                currentCristalNumber = 50
             };
 
             SavePlayerData();
@@ -56,14 +52,11 @@ public class PlayerDataManager : MonoBehaviour
         File.WriteAllText(filePath, jsonData);
     }
 
-    void NotifyCurrencyChanged()
-    {
-        OnCurrencyChanged?.Invoke();
-    }
+    void NotifyCurrencyChanged() => OnCurrencyChanged?.Invoke();
+
 
     // --- Stage ---
     public int GetCurrentStageNumber() => playerData.currentStageNumber;
-
     public void SetCurrentStageNumber(int stageNumber)
     {
         playerData.currentStageNumber = stageNumber;
@@ -71,38 +64,57 @@ public class PlayerDataManager : MonoBehaviour
     }
 
     public bool IsNewStage() => playerData.isNewStage;
-
     public void SetIsNewStage(bool isNew)
     {
         playerData.isNewStage = isNew;
         SavePlayerData();
     }
 
-    public void SetCurrentStageCleared()
+    public void SetCurrentStageCleared() => isStageCleared = true;
+
+
+    // --- Coin ---
+    public int GetCurrentCoinNumber() => playerData.currentCoinNumber;
+    public void AddCoin(int amount)
     {
-        isStageCleared = true;
+        playerData.currentCoinNumber += amount;
+        SavePlayerData();
+        NotifyCurrencyChanged();
     }
-
-    // --- High Coin ---
-    public int GetCurrentHighCoinNumber() => playerData.currentHighCoinNumber;
-
-    public void AddHighCoin(int amount)
+    public void SetCoinNumberAs(int amount)
     {
-        playerData.currentHighCoinNumber += amount;
+        playerData.currentCoinNumber = amount;
         SavePlayerData();
         NotifyCurrencyChanged();
     }
 
+
+    // --- Cristal ---
+    public int GetCurrentCristalNumber() => playerData.currentCristalNumber;
+    public void AddCristal(int amount)
+    {
+        playerData.currentCristalNumber += amount;
+        SavePlayerData();
+        NotifyCurrencyChanged();
+    }
     public void SetCristalNumberAs(int amount)
     {
-        playerData.currentHighCoinNumber = amount;
+        playerData.currentCristalNumber = amount;
         SavePlayerData();
         NotifyCurrencyChanged();
     }
+
+    // UI 업데이트 없이 실제 값만 증가
+    public void SetCristalNumberAsSilent(int amount)
+{
+    playerData.currentCristalNumber = amount;
+    SavePlayerData();
+    // NotifyCurrencyChanged() 호출 안 함
+}
+
 
     // --- Lightning ---
     public int GetCurrentLightningNumber() => playerData.currentLightningNumber;
-
     public void AddLightning(int amount)
     {
         playerData.currentLightningNumber += amount;
@@ -110,22 +122,6 @@ public class PlayerDataManager : MonoBehaviour
         NotifyCurrencyChanged();
     }
 
-    // --- Candy ---
-    public int GetCurrentCandyNumber() => playerData.currentCandyNumber;
-
-    public void AddCandyNumber(int amount)
-    {
-        playerData.currentCandyNumber += amount;
-        SavePlayerData();
-        NotifyCurrencyChanged();
-    }
-
-    public void SetCandyNumberAs(int amount)
-    {
-        playerData.currentCandyNumber = amount;
-        SavePlayerData();
-        NotifyCurrencyChanged();
-    }
 
     // --- 게임 종료 전 저장 ---
     public void SaveResourcesBeforeQuitting()
@@ -144,10 +140,10 @@ public class PlayerDataManager : MonoBehaviour
         }
 
         int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
-        SetCandyNumberAs(coinNum);
+        SetCoinNumberAs(coinNum);
 
-        int hiCoinNum = FindObjectOfType<CristalManager>().GetCurrentCristals();
-        SetCristalNumberAs(hiCoinNum);
+        int cristalNum = FindObjectOfType<CristalManager>().GetCurrentCristals();
+        SetCristalNumberAs(cristalNum);
 
         FindObjectOfType<PauseManager>().PauseGame();
     }
