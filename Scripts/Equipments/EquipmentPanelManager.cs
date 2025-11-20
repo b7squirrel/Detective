@@ -32,6 +32,7 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] CanvasGroup warningLackCanvasGroup; // 아이템 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button upgradeButton;
     [SerializeField] GameObject EquipCoinImage;
+    [SerializeField] GameObject warningNoItemToEquip; // 장착 가능한 장비가 없을 때 경고
     Tween warningLack;
     Tween warningMax;
 
@@ -166,6 +167,14 @@ public class EquipmentPanelManager : MonoBehaviour
                     continue;
                 }
             }
+        }
+
+        // 조건에 맞는 카드가 있는지 확인
+        warningNoItemToEquip.SetActive(false);
+
+        if (card.Count == 0)
+        {
+            warningNoItemToEquip.SetActive(true);
         }
 
         field.GenerateAllCardsOfType(card, "Equip");
