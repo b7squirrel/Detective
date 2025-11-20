@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using JetBrains.Annotations;
 
 public class AchievementManager : MonoBehaviour
 {
@@ -113,7 +114,7 @@ public class AchievementManager : MonoBehaviour
         playerDataManager.SetCristalNumberAsSilent(currentValue + ra.original.rewardGem);
 
         if (gemCollectFX != null)
-            gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardGem);
+            gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardGem, true);
     }
 
     public void SaveAchievement(RuntimeAchievement ra)

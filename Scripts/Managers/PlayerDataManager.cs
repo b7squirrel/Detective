@@ -88,6 +88,14 @@ public class PlayerDataManager : MonoBehaviour
         NotifyCurrencyChanged();
     }
 
+    // UI 업데이트 없이 실제 값만 증가
+    public void SetCoinNumberAsSilent(int amount)
+    {
+        playerData.currentCoinNumber = amount;
+        SavePlayerData();
+        // NotifyCurrencyChanged() 호출 안 함
+    }
+
 
     // --- Cristal ---
     public int GetCurrentCristalNumber() => playerData.currentCristalNumber;
@@ -106,11 +114,11 @@ public class PlayerDataManager : MonoBehaviour
 
     // UI 업데이트 없이 실제 값만 증가
     public void SetCristalNumberAsSilent(int amount)
-{
-    playerData.currentCristalNumber = amount;
-    SavePlayerData();
-    // NotifyCurrencyChanged() 호출 안 함
-}
+    {
+        playerData.currentCristalNumber = amount;
+        SavePlayerData();
+        // NotifyCurrencyChanged() 호출 안 함
+    }
 
 
     // --- Lightning ---

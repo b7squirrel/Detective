@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class TextEditorStore : MonoBehaviour
 {
@@ -64,7 +65,21 @@ public class TextEditorStore : MonoBehaviour
         for (int i = 0; i < cristalNums.Length; i++)
         {
             cristalNums[i].text = cristalNumsText[i];
-            cristalCost[i].text = cristalCostText[i];
+            cristalCost[i].text = "$" + cristalCostText[i];
         }
+    }
+
+    public int GetCristalNums(int index)
+    {
+        return int.Parse(cristalNums[index].text);
+    }
+    public float GetCristalCost(int index)
+    {
+        return float.Parse(cristalCost[index].text);
+    }
+
+    public int GetCoinNum(int index)
+    {
+        return int.Parse(coinNums[index].text);
     }
 }
