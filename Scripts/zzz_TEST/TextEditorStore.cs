@@ -12,6 +12,8 @@ public class TextEditorStore : MonoBehaviour
     [SerializeField] string equipmentMultiText;
     [SerializeField] string HeroSingleText;
     [SerializeField] string HeroMultiText;
+    [SerializeField] string[] coinNumsText;
+    [SerializeField] string[] coinCostText;
     [SerializeField] string[] cristalNumsText;
     [SerializeField] string[] cristalCostText;
 
@@ -31,6 +33,10 @@ public class TextEditorStore : MonoBehaviour
     [SerializeField] TextMeshProUGUI HeroSingle;
     [SerializeField] TextMeshProUGUI HeroMulti;
 
+    [Header("코인")]
+    [SerializeField] TextMeshProUGUI[] coinNums;
+    [SerializeField] TextMeshProUGUI[] coinCost;
+
     [Header("보석")]
     [SerializeField] TextMeshProUGUI[] cristalNums;
     [SerializeField] TextMeshProUGUI[] cristalCost;
@@ -49,6 +55,12 @@ public class TextEditorStore : MonoBehaviour
         HeroSingle.text = HeroSingleText;
         HeroMulti.text = HeroMultiText;
 
+        for (int i = 0; i < coinNums.Length; i++)
+        {
+            coinNums[i].text = coinNumsText[i];
+            coinCost[i].text = coinCostText[i];
+        }
+        
         for (int i = 0; i < cristalNums.Length; i++)
         {
             cristalNums[i].text = cristalNumsText[i];
