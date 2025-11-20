@@ -46,8 +46,8 @@ public class TextEditorStore : MonoBehaviour
         equipmentSingle.text = equipmentSingleText;
         equipmentMulti.text = equipmentMultiText;
 
-        // HeroSingle.text = HeroSingleText;
-        // HeroMulti.text = HeroMultiText;
+        HeroSingle.text = HeroSingleText;
+        HeroMulti.text = HeroMultiText;
 
         for (int i = 0; i < cristalNums.Length; i++)
         {
