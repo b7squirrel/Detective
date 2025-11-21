@@ -55,7 +55,7 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
         GenEffects(); //이펙트 발생
         DeactivateIndicator(); // 인디케이터는 비활성화
 
-        Collider2D playerInRange = Physics2D.OverlapCircle(transform.position, 2f * radius, targetLayer);
+        Collider2D playerInRange = Physics2D.OverlapCircle(transform.position, radius, targetLayer);
 
         if (playerInRange != null)
         {

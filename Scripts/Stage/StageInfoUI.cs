@@ -1,5 +1,5 @@
-using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StageInfoUI : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class StageInfoUI : MonoBehaviour
     [Header("Boss Image")]
     [SerializeField] Animator anim;
     [SerializeField] Transform stageBossImageTrns; // 보스 이미지를 위치시킬 장소
+    [SerializeField] Image stageBG; // 스테이지 배경
     GameObject stageBossImage;
 
 
@@ -23,6 +24,8 @@ public class StageInfoUI : MonoBehaviour
         if (stageBossImage != null) Destroy(stageBossImage);
         stageBossImage = Instantiate(stageInfo.GetStageInfo(stageManager.GetCurrentStageNumber()).bossImagePrefab,
                                     stageBossImageTrns.position, Quaternion.identity);
+
+        stageBG.sprite = stageInfo.GetStageInfo(stageManager.GetCurrentStageNumber()).stageBG;
     }
 
     public void PlayFromStart()

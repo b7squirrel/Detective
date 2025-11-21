@@ -7,6 +7,7 @@ public class Stages
     public string Title;
     public RuntimeAnimatorController bossImage;
     public GameObject bossImagePrefab;
+    public Sprite stageBG;
 }
 
 public class StageInfo : MonoBehaviour

@@ -36,7 +36,8 @@ public class Level : MonoBehaviour
     {
         get
         {
-            return (int)(Mathf.Pow((level) / 3.5f, 2)) * 1000 + (100 * level);
+            float baseValue = Mathf.Pow(level / 2.5f, 2.5f);
+            return (int)baseValue * 1000 + 200 * level;
         }
     }
 
