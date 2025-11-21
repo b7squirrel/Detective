@@ -1,15 +1,16 @@
-using System.Collections;
 using UnityEngine;
+using DG.Tweening;
+using TMPro;
 
 public class EquipInfoPanel : MonoBehaviour
 {
-    [SerializeField] TMPro.TextMeshProUGUI grade;
-    [SerializeField] TMPro.TextMeshProUGUI Name;
-    [SerializeField] TMPro.TextMeshProUGUI Level;
-    [SerializeField] TMPro.TextMeshProUGUI attribute;
-    [SerializeField] TMPro.TextMeshProUGUI skillName;
-    [SerializeField] TMPro.TextMeshProUGUI skillDescription;
-    [SerializeField] TMPro.TextMeshProUGUI skillEvoLevel;
+    [SerializeField] TextMeshProUGUI grade;
+    [SerializeField] TextMeshProUGUI Name;
+    [SerializeField] TextMeshProUGUI Level;
+    [SerializeField] TextMeshProUGUI attribute;
+    [SerializeField] TextMeshProUGUI skillName;
+    [SerializeField] TextMeshProUGUI skillDescription;
+    [SerializeField] TextMeshProUGUI skillEvoLevel;
     [SerializeField] UnityEngine.UI.Image NameLabel;
     [SerializeField] UnityEngine.UI.Image GradeLabel;
     [SerializeField] UnityEngine.UI.Image NameLabelGlow;
@@ -23,6 +24,16 @@ public class EquipInfoPanel : MonoBehaviour
 
     [SerializeField] CardsDictionary cardDictionary;
     public CardDisp cardDisp;
+
+    float initLevelFontSize, initAttributeFontSize;
+    Tween levelPopTween, attributePopTween;
+
+    void Awake()
+    {
+        // 초기 폰트 사이즈 저장
+        if (Level != null) initLevelFontSize = Level.fontSize;
+        if (attribute != null) initAttributeFontSize = attribute.fontSize;
+    }
 
     // 처음 패널이 활성화 되면 초기화
     public void SetPanel(CardData cardData, Item itemData, CardDisp _cardDisp, bool isEquipButton, bool isEssential)
@@ -76,6 +87,18 @@ public class EquipInfoPanel : MonoBehaviour
         }
 
         unEquipButton.SetActive(!isEquipButton);
+
+        // 초기 폰트 사이즈 저장 (Awake에서 못 가져온 경우 대비)
+        if (initLevelFontSize == 0) initLevelFontSize = Level.fontSize;
+        if (initAttributeFontSize == 0) initAttributeFontSize = attribute.fontSize;
+
+        // 기존 애니메이션 정리
+        levelPopTween?.Kill();
+        attributePopTween?.Kill();
+
+        // 폰트 사이즈 초기화
+        Level.fontSize = initLevelFontSize;
+        attribute.fontSize = initAttributeFontSize;
     }
     
     // 레벨업을 하면 레벨과 속성을 업데이트
@@ -85,17 +108,30 @@ public class EquipInfoPanel : MonoBehaviour
         attribute.text = _attribute.ToString();
 
         Debug.Log("Ugraded");
-        StartCoroutine(PopFontSize(Level));
-        StartCoroutine(PopFontSize(attribute));
 
+        // 기존 애니메이션 중단
+        levelPopTween?.Kill();
+        attributePopTween?.Kill();
+
+        // 폰트 사이즈 초기화 후 애니메이션
+        Level.fontSize = initLevelFontSize;
+        attribute.fontSize = initAttributeFontSize;
+
+        levelPopTween = PopFontSizeTween(Level, initLevelFontSize);
+        attributePopTween = PopFontSizeTween(attribute, initAttributeFontSize);
     }
-    IEnumerator PopFontSize(TMPro.TMP_Text _text)
+
+    Tween PopFontSizeTween(TextMeshProUGUI text, float originalSize)
     {
-        float initFontSize = _text.fontSize;
-        _text.fontSize = _text.fontSize + 7f;
-        yield return new WaitForSeconds(.1f);
-        _text.fontSize = initFontSize;
+        float targetSize = originalSize + 7f;
+        return DOTween.To(() => text.fontSize, x => text.fontSize = x, targetSize, 0.1f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() => 
+            {
+                text.fontSize = originalSize;
+            });
     }
+
     void SetItemCardBase(int _index)
     {
         for (int i = 0; i < itemCardBase.Length; i++)
@@ -108,6 +144,7 @@ public class EquipInfoPanel : MonoBehaviour
             itemCardBase[i].SetActive(false);
         }
     }
+
     void GetPassiveSkillLevel(CardData _cardData)
     {
         if (_cardData.PassiveSkill >= 0 && _cardData.PassiveSkill < Skills.SkillNames.Length)
@@ -129,5 +166,12 @@ public class EquipInfoPanel : MonoBehaviour
             //     skillEvoLevel.text = "III";
             // }
         }
+    }
+
+    void OnDestroy()
+    {
+        // 파괴될 때 Tween 정리
+        levelPopTween?.Kill();
+        attributePopTween?.Kill();
     }
 }

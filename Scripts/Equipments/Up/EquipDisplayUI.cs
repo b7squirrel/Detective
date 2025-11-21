@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using TMPro;
 
 public class EquipDisplayUI : MonoBehaviour
 {
@@ -11,16 +13,16 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject titleRibbon;
     [SerializeField] GameObject titleRibbonShadow;
     [SerializeField] GameObject SkillDescriptionPanel;
-    [SerializeField] protected TMPro.TextMeshProUGUI Title;
-    [SerializeField] protected TMPro.TextMeshProUGUI Level;
-    [SerializeField] protected TMPro.TextMeshProUGUI LevelShadow;
-    [SerializeField] protected TMPro.TextMeshProUGUI SkillName;
-    [SerializeField] protected TMPro.TextMeshProUGUI SkillDescription;
+    [SerializeField] protected TextMeshProUGUI Title;
+    [SerializeField] protected TextMeshProUGUI Level;
+    [SerializeField] protected TextMeshProUGUI LevelShadow;
+    [SerializeField] protected TextMeshProUGUI SkillName;
+    [SerializeField] protected TextMeshProUGUI SkillDescription;
     [SerializeField] protected GameObject starPrefab;
     GameObject[] stars;
     SetCardDataOnSlot setCardDataOnSlot; // 카드 데이터와 슬롯을 넘겨 받아서 슬롯에 카드를 표시
 
-    [SerializeField] TMPro.TextMeshProUGUI atk, hp;
+    [SerializeField] TextMeshProUGUI atk, hp;
     [SerializeField] CardsDictionary cardDictionary;
     [SerializeField] GameObject atkLabel, hpLabel;
     [SerializeField] GameObject charButton;
@@ -33,7 +35,7 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject[] testParts;
 
     float initAtkFontSize, initHpFontSize;
-    Coroutine atkPopCo, hpPopCo;
+    Tween atkPopTween, hpPopTween;
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
     {
@@ -79,52 +81,52 @@ public class EquipDisplayUI : MonoBehaviour
             }
         }
 
-        if (atkPopCo != null)
-            StopCoroutine(atkPopCo);
-
-        if (hpPopCo != null)
-            StopCoroutine(hpPopCo);
+        // 기존 애니메이션 정리
+        atkPopTween?.Kill();
+        hpPopTween?.Kill();
 
         atk.text = currentAttr.Atk.ToString();
         hp.text = currentAttr.Hp.ToString();
 
-        initAtkFontSize = atk.fontSize;
-        initHpFontSize = hp.fontSize;
+        // 초기 폰트 사이즈 저장 (한 번만)
+        if (initAtkFontSize == 0) initAtkFontSize = atk.fontSize;
+        if (initHpFontSize == 0) initHpFontSize = hp.fontSize;
+
+        // 폰트 사이즈 초기화
+        atk.fontSize = initAtkFontSize;
+        hp.fontSize = initHpFontSize;
 
         charButton.SetActive(true);
         backButton.SetActive(true);
         charUpgradeButton.SetActive(true);
     }
+
     public void SetAtkHpStats(int _currentAtk, int _currnetHp)
     {
         atk.text = _currentAtk.ToString();
         hp.text = _currnetHp.ToString();
 
-        if (atkPopCo != null)
-            StopCoroutine(atkPopCo);
+        // 기존 애니메이션 중단
+        atkPopTween?.Kill();
+        hpPopTween?.Kill();
 
-        if (hpPopCo != null)
-            StopCoroutine(hpPopCo);
+        // 초기화 후 애니메이션
+        atk.fontSize = initAtkFontSize;
+        hp.fontSize = initHpFontSize;
 
-        atkPopCo = StartCoroutine(PopFontSize(true));
-        hpPopCo = StartCoroutine(PopFontSize(false));
+        atkPopTween = PopFontSizeTween(atk, initAtkFontSize);
+        hpPopTween = PopFontSizeTween(hp, initHpFontSize);
     }
-    IEnumerator PopFontSize(bool _atk)
+
+    Tween PopFontSizeTween(TextMeshProUGUI text, float originalSize)
     {
-        if (_atk)
-        {
-            atk.fontSize = initAtkFontSize;
-            atk.fontSize += 12f;
-            yield return new WaitForSeconds(.1f);
-            atk.fontSize = initAtkFontSize;
-        }
-        else
-        {
-            hp.fontSize = initHpFontSize;
-            hp.fontSize += 12f;
-            yield return new WaitForSeconds(.1f);
-            hp.fontSize = initHpFontSize;
-        }
+        float targetSize = originalSize + 12f;
+        return DOTween.To(() => text.fontSize, x => text.fontSize = x, targetSize, 0.1f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() => 
+            {
+                text.fontSize = originalSize;
+            });
     }
     
     public void SetLevelUI(CardData cardOnDisplay)
@@ -191,11 +193,18 @@ public class EquipDisplayUI : MonoBehaviour
         charButton.SetActive(false);
         charUpgradeButton.SetActive(false);
 
+        // Tween 정리
+        atkPopTween?.Kill();
+        hpPopTween?.Kill();
+        
+        // 폰트 사이즈 초기화
+        if (initAtkFontSize > 0) atk.fontSize = initAtkFontSize;
+        if (initHpFontSize > 0) hp.fontSize = initHpFontSize;
+
         GetComponentInParent<EquipmentPanelManager>().TempKillAllTweens();
         charWarningLackCanvasGroup.gameObject.SetActive(false);
-
-
     }
+
     public void OnDisplay(CardData cardData)
     {
         atkLabel.SetActive(true);

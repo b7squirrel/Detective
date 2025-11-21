@@ -32,8 +32,8 @@ public class StatManager : MonoBehaviour
         int newHp = _cardData.Hp;
         int newAtk = _cardData.Atk;
 
-        Debug.LogError($"ATK = {_cardData.Atk}");
-        Debug.LogError($"Level = {_cardData.Level}");
+        // Debug.LogError($"ATK = {_cardData.Atk}");
+        // Debug.LogError($"Level = {_cardData.Level}");
 
         if (_cardData.EquipmentType == "Ori") // 오리라면
         {
