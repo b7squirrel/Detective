@@ -55,7 +55,7 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
         GenEffects(); //이펙트 발생
         DeactivateIndicator(); // 인디케이터는 비활성화
 
-        Collider2D playerInRange = Physics2D.OverlapCircle(transform.position, radius, targetLayer);
+        Collider2D playerInRange = Physics2D.OverlapCircle(transform.position, radius - .5f, targetLayer);
 
         if (playerInRange != null)
         {
@@ -95,7 +95,7 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     void OnDrawGizmos()
     {
         Gizmos.color = new Color(1, 0, 0, .3f);
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireSphere(transform.position, radius - .5f);
     }
 
     // 데미지 초기화
