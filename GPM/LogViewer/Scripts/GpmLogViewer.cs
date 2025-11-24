@@ -57,9 +57,13 @@
                 Destroy(gameObject);
                 return;
             }
+#if !DEV_VER
+            Destroy(gameObject);
+            return;
+#endif
 
             Initialize();
-            DontDestroyOnLoad(gameObject);            
+            DontDestroyOnLoad(gameObject);
         }
 
         private void OnDestroy()

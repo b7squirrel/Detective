@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using JetBrains.Annotations;
 
 public class AchievementManager : MonoBehaviour
 {
@@ -98,23 +97,36 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    public void Reward(string id, RectTransform pos)
+    public void Reward(string id, RectTransform pos, RewardType rewardType)
     {
         if (!runtimeDict.TryGetValue(id, out var ra)) return;
         if (ra.isRewarded) return;
 
-        ra.Reward();
+        ra.Reward(); // 보상을 수령했음을 기록
         SaveAchievement(ra);
 
         OnAnyRewarded?.Invoke(ra);
 
-        // 먼저 실제 데이터에 크리스탈을 모두 추가 (UI 업데이트 없이)
-        if(playerDataManager == null) playerDataManager = FindObjectOfType<PlayerDataManager>();
-        int currentValue = playerDataManager.GetCurrentCristalNumber();
-        playerDataManager.SetCristalNumberAsSilent(currentValue + ra.original.rewardGem);
+        // 먼저 실제 데이터에 보석 혹은 코인을 모두 추가 (UI 업데이트 없이)
+        RewardType rType = rewardType;
+        if (playerDataManager == null) playerDataManager = FindObjectOfType<PlayerDataManager>();
 
-        if (gemCollectFX != null)
-            gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardGem, true);
+        if (rType == RewardType.GEM)
+        {
+            int currentValue = playerDataManager.GetCurrentCristalNumber();
+            playerDataManager.SetCristalNumberAsSilent(currentValue + ra.original.rewardNum);
+
+            if (gemCollectFX != null)
+                gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardNum, true);
+        }
+        else
+        {
+            int currentValue = playerDataManager.GetCurrentCoinNumber();
+            playerDataManager.SetCoinNumberAsSilent(currentValue + ra.original.rewardNum);
+
+            if (gemCollectFX != null)
+                gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardNum, false);
+        }
     }
 
     public void SaveAchievement(RuntimeAchievement ra)

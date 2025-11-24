@@ -12,10 +12,15 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] Slider progressSlider;
     [SerializeField] TextMeshProUGUI progressText;
     [SerializeField] TextMeshProUGUI rewardText;
+    [SerializeField] Image rewardIcon; // 보상 아이콘 이미지
     [SerializeField] Button rewardButton;
     [SerializeField] GameObject CompletedPanel;
     [SerializeField] GameObject checkImage;
-    [SerializeField] RectTransform GemPos;
+    [SerializeField] RectTransform effectStartPos; // 보상 이펙트가 나올 위치
+
+    [Header("보상 아이콘")]
+    [SerializeField] Sprite gemIcon; // 보석 아이콘
+    [SerializeField] Sprite coinIcon; // 코인 아이콘
 
     [Header("사운드")]
     [SerializeField] AudioClip clipRewardButton;
@@ -31,12 +36,26 @@ public class AchievementItemUI : MonoBehaviour
 
         progressSlider.maxValue = runtime.original.targetValue;
 
-        rewardText.text = runtime.original.rewardGem.ToString();
+        rewardText.text = runtime.original.rewardNum.ToString();
+
+        // 보상 타입에 따라 아이콘 설정
+        if (rewardIcon != null)
+        {
+            switch (runtime.original.rewardType)
+            {
+                case RewardType.GEM:
+                    rewardIcon.sprite = gemIcon;
+                    break;
+                case RewardType.COIN:
+                    rewardIcon.sprite = coinIcon;
+                    break;
+            }
+        }
 
         rewardButton.onClick.AddListener(() =>
         {
             SoundManager.instance.Play(clipRewardButton);
-            AchievementManager.Instance.Reward(ra.original.id, GemPos);
+            AchievementManager.Instance.Reward(ra.original.id, effectStartPos, ra.original.rewardType);
         });
 
         SetCompleted(runtime.isCompleted);

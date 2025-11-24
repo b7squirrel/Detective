@@ -27,9 +27,9 @@ public class AchievementImporter : EditorWindow
 
             string[] row = lines[i].Split(',');
 
-            if (row.Length < 6)
+            if (row.Length < 7)
             {
-                Debug.LogWarning($"필드 부족: line {i+1}");
+                Debug.LogWarning($"필드 부족: line {i+1} (최소 7개 필드 필요)");
                 continue;
             }
 
@@ -37,7 +37,7 @@ public class AchievementImporter : EditorWindow
             string title = row[1].Trim();
             string desc = row[2].Trim();
             string typeString = row[4].Trim();
-            string icon = row.Length > 6 ? row[6].Trim() : "";
+            string rewardTypeString = row[6].Trim();
 
             // 숫자 파싱
             if (!int.TryParse(row[3].Trim(), out int target))
@@ -56,11 +56,20 @@ public class AchievementImporter : EditorWindow
             so.id = id;
             so.description = desc;
             so.targetValue = target;
-            so.rewardGem = reward;
-            so.icon = icon;
+            so.rewardNum = reward;
+            so.icon = ""; // 빈 값으로 설정
 
-            if (System.Enum.TryParse(typeString, out AchievementType result))
-                so.type = result;
+            // AchievementType 파싱
+            if (System.Enum.TryParse(typeString, out AchievementType achievementType))
+                so.type = achievementType;
+            else
+                Debug.LogWarning($"AchievementType parse failed: '{typeString}' at line {i+1}");
+
+            // RewardType 파싱
+            if (System.Enum.TryParse(rewardTypeString, out RewardType rewardType))
+                so.rewardType = rewardType;
+            else
+                Debug.LogWarning($"RewardType parse failed: '{rewardTypeString}' at line {i+1}");
 
             string assetPath = $"{SAVE_PATH}{id}.asset";
             AssetDatabase.CreateAsset(so, assetPath);
