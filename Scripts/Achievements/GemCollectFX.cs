@@ -19,7 +19,6 @@ public class GemCollectFX : MonoBehaviour
     public float spreadRadius = 200f;
 
     [Header("참조")]
-    [SerializeField] PlayerDataManager playerDataManager;
     DisplayCurrency displayCurrency; // ui업데이트를 한 번 더 해주기 위해. 누락될 수 있으므로
 
     [Header("사운드")]
