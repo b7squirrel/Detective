@@ -27,9 +27,4 @@ public class StageInfoUI : MonoBehaviour
 
         stageBG.sprite = stageInfo.GetStageInfo(stageManager.GetCurrentStageNumber()).stageBG;
     }
-
-    public void PlayFromStart()
-    {
-        anim.SetTrigger("Init");
-    }
 }

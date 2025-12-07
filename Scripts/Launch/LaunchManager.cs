@@ -24,8 +24,6 @@ public class LaunchManager : MonoBehaviour
 
     void OnEnable()
     {
-        stageInfoUi.PlayFromStart();
-        
         // ⭐ 변경: 초기화 대기
         StartCoroutine(InitLead());
 

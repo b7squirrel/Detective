@@ -49,7 +49,7 @@ public class MainMenuManager : MonoBehaviour
 
     void Start()
     {
-        InitBlackTransition();
+        // InitBlackTransition();
 
         for (int i = 0; i < SIZE; i++)
         {
@@ -169,11 +169,6 @@ public class MainMenuManager : MonoBehaviour
     {
         yield return new WaitForSeconds(.2f);
         MusicManager.instance.Play(bgm, true);
-    }
-
-    void InitBlackTransition()
-    {
-        blackScreen.SetActive(false);
     }
 
     // 스타트 버튼을 누르면 이벤트로 실행
