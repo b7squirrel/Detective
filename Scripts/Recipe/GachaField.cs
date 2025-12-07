@@ -6,7 +6,6 @@ public class GachaField : MonoBehaviour
     #region 참조 변수
     [SerializeField] CardDataManager cardDataManager;
     [SerializeField] SetCardDataOnSlot displayCardOnSlot;
-    [SerializeField] SlotPool slotPool;
     #endregion
 
     #region 슬롯 생성 관련 변수
