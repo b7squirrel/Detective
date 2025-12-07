@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using TMPro;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -32,18 +31,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] AudioClip startButtonTouched;
     [SerializeField] AudioClip bgm;
 
-    [Header("Black FadeIn")]
-    [SerializeField] CanvasGroup BlackFadeIn;
-    [SerializeField] float blackOutTime;
-    [SerializeField] float fadeSpeed;
-    [SerializeField] GameObject LoadingOnStart; // 시작 시 로딩 화면
-    bool onStart = true;
-    bool shouldFadeIn;
-    Coroutine fadeInCoroutine;
-
     [Header("Black Transition")]
     [SerializeField] GameObject blackScreen;
-    Animator blackTransitionAnim;
 
     [Header("Swipe Transition")]
     [SerializeField] Animator loadingSwipe;
@@ -61,12 +50,6 @@ public class MainMenuManager : MonoBehaviour
     void Start()
     {
         InitBlackTransition();
-
-        if (onStart)
-        {
-            // BlackFadeIn.gameObject.SetActive(true);
-            fadeInCoroutine = StartCoroutine(FadeInCo());
-        }
 
         for (int i = 0; i < SIZE; i++)
         {
@@ -188,36 +171,6 @@ public class MainMenuManager : MonoBehaviour
         MusicManager.instance.Play(bgm, true);
     }
 
-    IEnumerator FadeInCo()
-    {
-        LoadingOnStart.SetActive(true);
-        yield return new WaitForSeconds(blackOutTime);
-        onStart = false;
-
-        FindObjectOfType<ImageBouncerManager>().Jump(150);
-        yield return new WaitForSeconds(1f);
-        LoadingOnStart.GetComponentInChildren<Image>().DOFade(0, .5f)
-        .OnComplete(() => { LoadingOnStart.SetActive(false); });
-        LoadingOnStart.GetComponentInChildren<TextMeshProUGUI>().DOFade(0, .5f);
-        // LoadingOnStart.SetActive(false);
-        // shouldFadeIn = true;
-        // while (shouldFadeIn)
-        // {
-        //     if (BlackFadeIn.alpha <= .01)
-        //     {
-        //         BlackFadeIn.alpha = 0f;
-        //         shouldFadeIn = false;
-        //     }
-        //     BlackFadeIn.alpha = Mathf.Lerp(BlackFadeIn.alpha, 0, fadeSpeed * Time.deltaTime);
-        //     yield return null;
-        // }
-        // LoadingOnStart.SetActive(false);
-    }
-    void StopFadeIn(Coroutine co)
-    {
-        BlackFadeIn.alpha = 0;
-        if (fadeInCoroutine != null) StopCoroutine(co);
-    }
     void InitBlackTransition()
     {
         blackScreen.SetActive(false);
@@ -239,13 +192,6 @@ public class MainMenuManager : MonoBehaviour
         LoadingSceneManager loadingSceneManager = FindObjectOfType<LoadingSceneManager>();
         loadingSceneManager.LoadScenes();
     }
-    //public void StartGame()
-    //{
-    //    int currentStage = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
-    //    string stageToPlay = "GamePlayStage" + currentStage.ToString();
-    //    SceneManager.LoadScene("Essential", LoadSceneMode.Single);
-    //    SceneManager.LoadScene("Stage", LoadSceneMode.Additive);
-    //}
 
     #region 탭 버튼 활성/비활성 제어
     public void SetButtonActive(int buttonIndex, bool active)
@@ -309,7 +255,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if(lead == null) 
         {
-            Debug.Log("리드 오리가 아직 저장되지 않았습니다. 확인해 주세요.");
+            Logger.Log("리드 오리가 아직 저장되지 않았습니다. 확인해 주세요.");
             return null;
         }
         return lead;

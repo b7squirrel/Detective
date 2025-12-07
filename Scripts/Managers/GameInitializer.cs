@@ -11,6 +11,11 @@ using UnityEngine;
 /// </summary>
 public class GameInitializer : MonoBehaviour
 {
+    /// <summary>
+    /// 싱글턴 인스턴스
+    /// </summary>
+    public static GameInitializer Instance { get; private set; }
+    
     [Header("초기화할 매니저들")]
     [Tooltip("ScriptableObject 데이터 관리")]
     [SerializeField] CardsDictionary cardsDictionary;
@@ -37,10 +42,28 @@ public class GameInitializer : MonoBehaviour
 
     void Awake()
     {
-        // 씬 전환 시에도 유지 (선택사항)
-        // DontDestroyOnLoad(gameObject);
+        // 싱글턴 설정
+        if (Instance == null)
+        {
+            Instance = this;
+            // 씬 전환 시에도 유지 (선택사항)
+            // DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
         
         StartCoroutine(InitializeGame());
+    }
+    
+    void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
     
     void OnApplicationQuit()
