@@ -155,7 +155,8 @@ public class CardDataManager : MonoBehaviour
     public TextAsset WeaponCardDatabase;
     public TextAsset ItemCardDatabase;
     public TextAsset startingCardData;
-    public List<CardData> AllCardsList, MyCardsList;
+    public List<CardData> MyCardsList;
+    public static bool IsDataLoaded {get; private set;} = false;
     
     string filePath;
     string myCards = "MyCards.txt";
@@ -300,20 +301,6 @@ public class CardDataManager : MonoBehaviour
             MyCardsList = new List<CardData>();
         }
         return MyCardsList;
-    }
-    
-    public List<CardData> GetAllCardList()
-    {
-        if (AllCardsList == null) 
-            AllCardsList = new List<CardData>();
-            
-        if (AllCardsList.Count == 0 && CardDatabase != null)
-        {
-            AllCardsList = new ReadCardData().GetCardsList(CardDatabase);
-        }
-        
-        Debug.Log($"전체 카드 리스트 개수: {AllCardsList.Count}");
-        return AllCardsList;
     }
 
     public void RemoveCardFromMyCardList(CardData cardToRemove)
