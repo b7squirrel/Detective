@@ -118,6 +118,8 @@ public class EquipmentDataManager : MonoBehaviour
     string filePath;
     string myEquips = "MyEquipments.txt";
     bool isSaving = false;
+    public static bool IsDataLoaded {get; private set;} = false;
+
 
     void Awake()
     {
@@ -127,9 +129,19 @@ public class EquipmentDataManager : MonoBehaviour
     {
         // CardList에서 여러가지 초기화가 되고 난 후에 실행되도록 Start에 넣었음
         Load();
+
+        IsDataLoaded = true;
+        Logger.Log($"Equipment Data Manager 데이터 로드 완료");
+
         InitializeCardList();
     }
-    
+
+    void OnApplicationQuit()
+    {
+        IsDataLoaded = false;       
+    }
+
+
     void InitializeDataDirectory()
     {
         try

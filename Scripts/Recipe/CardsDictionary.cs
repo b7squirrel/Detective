@@ -24,6 +24,7 @@ public class CardsDictionary : MonoBehaviour
     [SerializeField] List<WeaponData> weaponData;
     [SerializeField] List<Item> itemData;
     List<CardData> itemCardData;
+    public static bool IsDataLoaded {get; private set;} = false;
 
     void Awake()
     {
@@ -35,6 +36,13 @@ public class CardsDictionary : MonoBehaviour
         }
 
         SetIndex();
+
+        IsDataLoaded = true;
+        Logger.Log($"Cards Dictionary 데이터 로드 완료");
+    }
+    void OnApplicationQuit()
+    {
+        IsDataLoaded = false;       
     }
     public List<CardData> GetCardPool()
     {

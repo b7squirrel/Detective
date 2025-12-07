@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,12 +19,6 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] GameObject content; // 가챠 화면으로 넘어갈 때 상점을 숨기기 위해
     [SerializeField] GameObject darkBG; // 가챠 화면으로 넘어갈 때 칠판 배경으로 덮기 위해
 
-    // 검색 속도 향상을 위해 Dictionary 생성
-    // Key: (아이템 이름, 등급), Value: CardData
-    Dictionary<(string Name, int Grade), CardData> itemLookup;
-    List<Item> itemCardData;
-    List<Item> equipmentItemsToAdd;
-
     MainMenuManager mainMenuManager;
 
     Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
@@ -34,7 +29,6 @@ public class GachaSystem : MonoBehaviour
     };
 
     List<CardData> cardsPicked; // 뽑은 카드를 저장하는 리스트
-    bool donePicking;
 
     [Header("가챠 패널")]
     [SerializeField] GachaPanelManager gachaPanelManager;
@@ -50,8 +44,18 @@ public class GachaSystem : MonoBehaviour
     }
     void Start()
     {
+        StartCoroutine(InitializeGachaSystem());
+    }
+    IEnumerator InitializeGachaSystem()
+    {
+        // 게임 초기화 대기
+        yield return new WaitUntil(() => GameInitializer.IsInitialized);
+        
+        // 이제 안전하게 초기화
         weaponPools = new ReadCardData().GetCardsList(weaponPoolDatabase);
         itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
+        
+        Debug.Log("GachaSystem 초기화 완료");
     }
 
     void Draw(string _cardType)

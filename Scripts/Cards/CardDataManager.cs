@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public class Serialization<T>
@@ -165,10 +166,17 @@ public class CardDataManager : MonoBehaviour
     void Start()
     {
         InitializeDataDirectory();
-        Debug.Log(Application.persistentDataPath);
+        Logger.Log(Application.persistentDataPath);
+        IsDataLoaded = true;
+        Logger.Log($"Card Data Manager 데이터 로드 완료");
         Load();
     }
-    
+    void OnApplicationQuit()
+    {
+        IsDataLoaded = false;
+    }
+
+
     void InitializeDataDirectory()
     {
         try
