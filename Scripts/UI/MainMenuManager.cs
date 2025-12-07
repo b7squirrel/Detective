@@ -8,7 +8,6 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] Slider tabSlider;
     [SerializeField] Animator tabSliderAnim; // 왼쪽, 중앙, 오른쪽에 따라 모양이 달라지도록
     [SerializeField] GameObject[] tabPanels; // 시작할 떄 모두 비활성화 시킴. 빌드할 때 켜놓든 꺼놓든 상관없음
-    [SerializeField] GameObject[] PanelBGs; // Safe Area 바깥쪽에 BG 위치시키기. 화면에 꽉 차도록
     int tabIndex; // 지금 어떤 탭에 있는지 slot action에 알려주려고
 
     [SerializeField] RectTransform[] BtnRect;
@@ -30,9 +29,6 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] AudioClip tabTouched;
     [SerializeField] AudioClip startButtonTouched;
     [SerializeField] AudioClip bgm;
-
-    [Header("Black Transition")]
-    [SerializeField] GameObject blackScreen;
 
     [Header("Swipe Transition")]
     [SerializeField] Animator loadingSwipe;
@@ -117,7 +113,6 @@ public class MainMenuManager : MonoBehaviour
             BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .5f);
             BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(false); // setActive의 인자로 textActive를 넘기지만 임시로 모두 숨김
             tabPanels[i].SetActive(i == targetIndex);
-            // PanelBGs[i].SetActive(i == targetIndex);
 
             tabIndex = i == targetIndex ? i : tabIndex; // 어떤 탭에 들어와 있는지 저장
         }

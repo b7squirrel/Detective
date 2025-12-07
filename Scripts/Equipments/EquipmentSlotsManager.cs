@@ -20,7 +20,7 @@ public class EquipmentSlotsManager : MonoBehaviour
         int charAtk = charCardData.Atk;
         int charHp = charCardData.Hp;
         currentAttribute = new OriAttribute(charAtk, charHp);
-        Debug.LogError($"Equipment Slot Manager. 오리만의 ATK = {charAtk}");
+        Logger.Log($"Equipment Slot Manager. 오리만의 ATK = {charAtk}");
 
         EquipmentCard[] equips = cardList.GetEquipmentsCardData(charCardData);
         if (equips == null) return;
@@ -73,7 +73,7 @@ public class EquipmentSlotsManager : MonoBehaviour
         }
 
         equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute, cardDictionary.GetDisplayName(instantCharCard)); // attr ui 업데이트
-        Debug.LogError($"Equipment Slot Manager. charATK 장비 모두 장착 후 = {currentAttribute.Atk}"); // 여기까지 좋음
+        Logger.Log($"Equipment Slot Manager. charATK 장비 모두 장착 후 = {currentAttribute.Atk}"); // 여기까지 좋음
     }
 
     public OriAttribute GetCurrentAttribute() => currentAttribute;
