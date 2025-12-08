@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Net;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -89,8 +87,8 @@ public class DrawLineUI : MonoBehaviour
         float distance = direction.magnitude;
 
         // 디버그
-        Image endPoint = Instantiate(lineImage, endLocal, quaternion.identity);
-        Image startPoint = Instantiate(lineImage, startLocal, quaternion.identity);
+        Image endPoint = Instantiate(lineImage, endLocal, Quaternion.identity);
+        Image startPoint = Instantiate(lineImage, startLocal, Quaternion.identity);
         endPoint.name = "END POINT";
         startPoint.name = "START POINT";
         endPoint.transform.SetParent(this.transform);

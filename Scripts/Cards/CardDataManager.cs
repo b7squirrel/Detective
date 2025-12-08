@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
-using Unity.VisualScripting;
 
 [System.Serializable]
 public class Serialization<T>
@@ -152,9 +151,6 @@ public class ReadCardData
 
 public class CardDataManager : MonoBehaviour
 {
-    public TextAsset CardDatabase;
-    public TextAsset WeaponCardDatabase;
-    public TextAsset ItemCardDatabase;
     public TextAsset startingCardData;
     public List<CardData> MyCardsList;
     public static bool IsDataLoaded {get; private set;} = false;

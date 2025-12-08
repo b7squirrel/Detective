@@ -1,5 +1,4 @@
 using System.Diagnostics;
-
 // 추가적인 정보 표현 (ex.타임스탬프)
 // 출시용 빌드를 위한 로그 제거
 public static class Logger

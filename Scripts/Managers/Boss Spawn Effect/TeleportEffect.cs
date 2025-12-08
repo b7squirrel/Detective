@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class TeleportEffect : MonoBehaviour
@@ -23,7 +22,7 @@ public class TeleportEffect : MonoBehaviour
     }
     IEnumerator GenTeleportOutEffectCo(Vector2 _spawnPos)
     {
-        GameObject teleUpEffect = Instantiate(teleportUpEffectPrefab, _spawnPos, quaternion.identity);
+        GameObject teleUpEffect = Instantiate(teleportUpEffectPrefab, _spawnPos, Quaternion.identity);
         particleSys = teleUpEffect.GetComponentInChildren<ParticleSystem>();
         particleSys.Play();
 
