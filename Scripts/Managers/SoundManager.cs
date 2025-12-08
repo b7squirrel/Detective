@@ -50,7 +50,7 @@ public class SoundManager : MonoBehaviour
             CreateNewAudioSource();
         }
 
-        Debug.Log($"SoundManager 초기화 완료: {audioSourcePool.Count}개 AudioSource 생성");
+        Logger.Log($"SoundManager 초기화 완료: {audioSourcePool.Count}개 AudioSource 생성");
     }
 
     void CleanupAudioSourcePool()
@@ -95,14 +95,14 @@ public class SoundManager : MonoBehaviour
         {
             if (audioSourcePrefab == null)
             {
-                Debug.LogError("AudioSource Prefab이 설정되지 않았습니다.");
+                Logger.LogError("AudioSource Prefab이 설정되지 않았습니다.");
                 return null;
             }
 
             GameObject go = Instantiate(audioSourcePrefab, transform);
             if (go == null)
             {
-                Debug.LogError("AudioSource GameObject 생성 실패");
+                Logger.LogError("AudioSource GameObject 생성 실패");
                 return null;
             }
 
@@ -111,7 +111,7 @@ public class SoundManager : MonoBehaviour
 
             if (audioSource == null)
             {
-                Debug.LogError("AudioSource 컴포넌트를 찾을 수 없습니다.");
+                Logger.LogError("AudioSource 컴포넌트를 찾을 수 없습니다.");
                 Destroy(go);
                 return null;
             }
@@ -126,7 +126,7 @@ public class SoundManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"AudioSource 생성 중 오류: {e.Message}");
+            Logger.LogError($"AudioSource 생성 중 오류: {e.Message}");
             return null;
         }
     }
@@ -156,7 +156,7 @@ public class SoundManager : MonoBehaviour
     {
         if (audioClip == null)
         {
-            Debug.LogWarning("재생할 AudioClip이 null입니다.");
+            Logger.LogWarning("재생할 AudioClip이 null입니다.");
             return;
         }
 
@@ -171,7 +171,7 @@ public class SoundManager : MonoBehaviour
         AudioSource audioSource = GetAudioSourceFromPool();
         if (audioSource == null)
         {
-            Debug.LogWarning("사용 가능한 AudioSource를 찾을 수 없습니다.");
+            Logger.LogWarning("사용 가능한 AudioSource를 찾을 수 없습니다.");
             return;
         }
 
@@ -188,7 +188,7 @@ public class SoundManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"사운드 재생 중 오류: {e.Message}");
+            Logger.LogError($"사운드 재생 중 오류: {e.Message}");
         }
     }
 
@@ -236,7 +236,7 @@ public class SoundManager : MonoBehaviour
     {
         if (_audioClip == null)
         {
-            Debug.LogWarning("재생할 AudioClip이 null입니다.");
+            Logger.LogWarning("재생할 AudioClip이 null입니다.");
             return;
         }
 
@@ -256,7 +256,7 @@ public class SoundManager : MonoBehaviour
         AudioSource audioSource = GetAudioSourceFromPool();
         if (audioSource == null)
         {
-            Debug.LogWarning("사용 가능한 AudioSource를 찾을 수 없습니다.");
+            Logger.LogWarning("사용 가능한 AudioSource를 찾을 수 없습니다.");
             return;
         }
 
@@ -276,7 +276,7 @@ public class SoundManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"사운드 재생 중 오류: {e.Message}");
+            Logger.LogError($"사운드 재생 중 오류: {e.Message}");
         }
     }
 
@@ -284,7 +284,7 @@ public class SoundManager : MonoBehaviour
     {
         if (audioClip == null)
         {
-            Debug.LogWarning("재생할 AudioClip이 null입니다.");
+            Logger.LogWarning("재생할 AudioClip이 null입니다.");
             return null;
         }
 
@@ -323,7 +323,7 @@ public class SoundManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"루프 사운드 재생 중 오류: {e.Message}");
+            Logger.LogError($"루프 사운드 재생 중 오류: {e.Message}");
             return null;
         }
     }
@@ -335,7 +335,7 @@ public class SoundManager : MonoBehaviour
     {
         if (audioClip == null)
         {
-            Debug.LogWarning("정지할 AudioClip이 null입니다.");
+            Logger.LogWarning("정지할 AudioClip이 null입니다.");
             return;
         }
 
@@ -380,7 +380,7 @@ public class SoundManager : MonoBehaviour
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogError($"루프 사운드 중단 중 오류: {e.Message}");
+                    Logger.LogError($"루프 사운드 중단 중 오류: {e.Message}");
                 }
             }
 
@@ -402,7 +402,7 @@ public class SoundManager : MonoBehaviour
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogError($"루프 사운드 중단 중 오류: {e.Message}");
+                    Logger.LogError($"루프 사운드 중단 중 오류: {e.Message}");
                 }
             }
         }
@@ -425,7 +425,7 @@ public class SoundManager : MonoBehaviour
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogError($"사운드 일시정지 중 오류: {e.Message}");
+                    Logger.LogError($"사운드 일시정지 중 오류: {e.Message}");
                 }
             }
         }
@@ -445,7 +445,7 @@ public class SoundManager : MonoBehaviour
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogError($"사운드 재개 중 오류: {e.Message}");
+                    Logger.LogError($"사운드 재개 중 오류: {e.Message}");
                 }
             }
         }
@@ -467,7 +467,7 @@ public class SoundManager : MonoBehaviour
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogError($"AudioSource mute 설정 중 오류: {e.Message}");
+                    Logger.LogError($"AudioSource mute 설정 중 오류: {e.Message}");
                 }
             }
         }
@@ -488,7 +488,7 @@ public class SoundManager : MonoBehaviour
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogError($"사운드 중단 중 오류: {e.Message}");
+                    Logger.LogError($"사운드 중단 중 오류: {e.Message}");
                 }
             }
         }

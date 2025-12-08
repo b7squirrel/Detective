@@ -55,7 +55,7 @@ public class GachaSystem : MonoBehaviour
         weaponPools = new ReadCardData().GetCardsList(weaponPoolDatabase);
         itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
         
-        Debug.Log("GachaSystem 초기화 완료");
+        Logger.Log("GachaSystem 초기화 완료");
     }
 
     void Draw(string _cardType)
@@ -187,7 +187,7 @@ public class GachaSystem : MonoBehaviour
         // 필수 장비가 없는 경우 경고
         if (wd.defaultItems[index] == null)
         {
-            Debug.LogError("필수 장비가 인스펙터에 없습니다");
+            Logger.LogError("필수 장비가 인스펙터에 없습니다");
             return;
         }
 
@@ -203,12 +203,12 @@ public class GachaSystem : MonoBehaviour
                 {
                     cardDataManager.AddNewCardToMyCardsList(defaultEquip);
                     cardList.Equip(_oriCardData, defaultEquip);
-                    Debug.Log($"{defaultEquip.Name}을 장착합니다");
+                    Logger.Log($"{defaultEquip.Name}을 장착합니다");
                     // AddCardSlot(defaultEquip);
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Error adding default equipment: {e.Message}");
+                    Logger.LogError($"Error adding default equipment: {e.Message}");
                 }
             }
         }
@@ -278,7 +278,7 @@ public class GachaSystem : MonoBehaviour
 
         if (weaponCount > maxWeaponLimit)
         {
-            Debug.Log($"오리 카드의 갯수가 {maxWeaponLimit}개를 넘습니다. 현재 {weaponCount}개의 오리 카드가 있습니다.");
+            Logger.Log($"오리 카드의 갯수가 {maxWeaponLimit}개를 넘습니다. 현재 {weaponCount}개의 오리 카드가 있습니다.");
             GetComponent<CardLimitWarningDialog>().SetWarningText("오리", weaponCount);
             return; // 메서드 실행 중단
         }
@@ -295,7 +295,7 @@ public class GachaSystem : MonoBehaviour
         DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브re
 
 
-        Debug.Log("after save");
+        Logger.Log("after save");
 
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
@@ -337,7 +337,7 @@ public class GachaSystem : MonoBehaviour
 
         if (itemCount > maxItemLimit)
         {
-            Debug.Log($"아이템 카드의 갯수가 {maxItemLimit}개를 넘습니다. 현재 {itemCount}개의 아이템 카드가 있습니다.");
+            Logger.Log($"아이템 카드의 갯수가 {maxItemLimit}개를 넘습니다. 현재 {itemCount}개의 아이템 카드가 있습니다.");
             GetComponent<CardLimitWarningDialog>().SetWarningText("아이템", itemCount);
             return; // 메서드 실행 중단
         }
@@ -380,7 +380,7 @@ public class GachaSystem : MonoBehaviour
         foreach (var item in cards)
         {
             string grade = MyGrade.mGrades[item.Grade].ToString();
-            Debug.Log($"{grade} {item.Name}을 뽑았습니다.");
+            Logger.Log($"{grade} {item.Name}을 뽑았습니다.");
         }
     }
     // 무기 카드 수를 계산하는 메서드
@@ -424,6 +424,6 @@ public class GachaSystem : MonoBehaviour
     public void DelayedSaveEquipmentData()
     {
         cardList.DelayedSaveEquipments();
-        Debug.Log("Save on Gacha System");
+        Logger.Log("Save on Gacha System");
     }
 }

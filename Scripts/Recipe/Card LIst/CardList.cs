@@ -65,7 +65,7 @@ public class CardList : MonoBehaviour
     {
         if (charData == null || equipData == null)
         {
-            Debug.LogError("Cannot equip: charData or equipData is null");
+            Logger.LogError("Cannot equip: charData or equipData is null");
             return;
         }
 
@@ -74,7 +74,7 @@ public class CardList : MonoBehaviour
 
         if (charCard == null || equipmentCard == null)
         {
-            Debug.LogError($"Cannot equip: charCard or equipmentCard not found in lists");
+            Logger.LogError($"Cannot equip: charCard or equipmentCard not found in lists");
             return;
         }
 
@@ -111,7 +111,7 @@ public class CardList : MonoBehaviour
         if (charCardDict.TryGetValue(charCardData.ID, out CharCard card))
             return card;
 
-        Debug.Log("Can't find ID " + charCardData.ID);
+        Logger.Log("Can't find ID " + charCardData.ID);
         return null;
     }
     // 카드 데이터로 EquipmentCard 얻기
@@ -120,7 +120,7 @@ public class CardList : MonoBehaviour
         if (equipCardDict.TryGetValue(equipCardData.ID, out EquipmentCard card))
             return card;
 
-        Debug.Log("Can't find ID " + equipCardData.ID);
+        Logger.Log("Can't find ID " + equipCardData.ID);
         return null;
     }
     // 특정 오리 카드의 장비 카드 얻기
@@ -171,7 +171,7 @@ public class CardList : MonoBehaviour
     {
         if (_charCard == null)
         {
-            Debug.LogError("Cannot load equipment data: charCard is null");
+            Logger.LogError("Cannot load equipment data: charCard is null");
             return;
         }
 
@@ -198,7 +198,7 @@ public class CardList : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"Equipment with ID {equipData.IDs[i]} not found");
+                    Logger.LogWarning($"Equipment with ID {equipData.IDs[i]} not found");
                 }
             }
         }
@@ -235,13 +235,13 @@ public class CardList : MonoBehaviour
     public void DelayedSaveEquipments()
     {
         equipmentDataManager.DelayedSave();
-        Debug.Log("Save On Card List");
+        Logger.Log("Save On Card List");
     }
 
     public List<CardData> GetEquipCardDataOf(CardData oriCardData)
     {
         CharCard charCard = FindCharCard(oriCardData);
-        Debug.Log($"{charCard.cardName}");
+        Logger.Log($"{charCard.cardName}");
         List<CardData> equipCardDatas = new();
         for (int i = 0; i < 4; i++)
         {

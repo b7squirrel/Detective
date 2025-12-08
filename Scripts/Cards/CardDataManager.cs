@@ -33,7 +33,7 @@ public class CardData
             }
             else
             {
-                Debug.LogWarning($"ID 파싱 실패: '{_id}' - 기본값 -1 사용");
+                Logger.LogWarning($"ID 파싱 실패: '{_id}' - 기본값 -1 사용");
                 ID = -1;
             }
         }
@@ -65,7 +65,7 @@ public class CardData
         }
         else
         {
-            Debug.LogWarning($"{fieldName} 파싱 실패: '{value}' - 기본값 0 사용");
+            Logger.LogWarning($"{fieldName} 파싱 실패: '{value}' - 기본값 0 사용");
             return 0; // 변환 실패 → 0 반환
         }
     }
@@ -88,7 +88,7 @@ public class ReadCardData
         {
             if (cardDataText == null || string.IsNullOrEmpty(cardDataText.text))
             {
-                Debug.LogError("카드 데이터 파일이 비어있습니다.");
+                Logger.LogError("카드 데이터 파일이 비어있습니다.");
                 return cardList;
             }
             
@@ -114,7 +114,7 @@ public class ReadCardData
                     // 최소 필요한 열 개수 확인 (14개)
                     if (row.Length < 14)
                     {
-                        Debug.LogWarning($"라인 {i}: 열 개수 부족 ({row.Length}/14) - 건너뜀");
+                        Logger.LogWarning($"라인 {i}: 열 개수 부족 ({row.Length}/14) - 건너뜀");
                         continue;
                     }
                     
@@ -134,15 +134,15 @@ public class ReadCardData
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"라인 {i} 파싱 오류: {e.Message}");
+                    Logger.LogError($"라인 {i} 파싱 오류: {e.Message}");
                 }
             }
             
-            Debug.Log($"카드 데이터 로드 완료: {cardList.Count}개");
+            Logger.Log($"카드 데이터 로드 완료: {cardList.Count}개");
         }
         catch (Exception e)
         {
-            Debug.LogError($"카드 데이터 읽기 오류: {e.Message}");
+            Logger.LogError($"카드 데이터 읽기 오류: {e.Message}");
         }
         
         return cardList;
@@ -181,14 +181,14 @@ public class CardDataManager : MonoBehaviour
             if (!Directory.Exists(dataDir))
             {
                 Directory.CreateDirectory(dataDir);
-                Debug.Log($"플레이어 데이터 디렉토리 생성: {dataDir}");
+                Logger.Log($"플레이어 데이터 디렉토리 생성: {dataDir}");
             }
             
             filePath = Path.Combine(dataDir, myCards);
         }
         catch (Exception e)
         {
-            Debug.LogError($"데이터 디렉토리 초기화 오류: {e.Message}");
+            Logger.LogError($"데이터 디렉토리 초기화 오류: {e.Message}");
         }
     }
 
@@ -208,7 +208,7 @@ public class CardDataManager : MonoBehaviour
             string jsonData = JsonUtility.ToJson(new Serialization<CardData>(MyCardsList), true);
             File.WriteAllText(filePath, jsonData, System.Text.Encoding.UTF8);
             
-            Debug.Log($"카드 데이터 저장 완료: {MyCardsList.Count}개");
+            Logger.Log($"카드 데이터 저장 완료: {MyCardsList.Count}개");
             
             var cardListComponent = GetComponent<CardList>();
             if (cardListComponent != null)
@@ -218,7 +218,7 @@ public class CardDataManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"카드 데이터 저장 오류: {e.Message}");
+            Logger.LogError($"카드 데이터 저장 오류: {e.Message}");
         }
         finally
         {
@@ -232,7 +232,7 @@ public class CardDataManager : MonoBehaviour
         {
             if (!File.Exists(filePath))
             {
-                Debug.Log("저장된 카드 데이터가 없습니다. 초기 데이터로 시작합니다.");
+                Logger.Log("저장된 카드 데이터가 없습니다. 초기 데이터로 시작합니다.");
                 ResetCards();
                 return;
             }
@@ -241,7 +241,7 @@ public class CardDataManager : MonoBehaviour
             
             if (string.IsNullOrEmpty(jsonData))
             {
-                Debug.LogWarning("저장 파일이 비어있습니다. 초기화합니다.");
+                Logger.LogWarning("저장 파일이 비어있습니다. 초기화합니다.");
                 ResetCards();
                 return;
             }
@@ -249,11 +249,11 @@ public class CardDataManager : MonoBehaviour
             var serializedData = JsonUtility.FromJson<Serialization<CardData>>(jsonData);
             MyCardsList = serializedData?.Data ?? new List<CardData>();
             
-            Debug.Log($"카드 데이터 로드 완료: {MyCardsList.Count}개");
+            Logger.Log($"카드 데이터 로드 완료: {MyCardsList.Count}개");
         }
         catch (Exception e)
         {
-            Debug.LogError($"카드 데이터 로드 오류: {e.Message}. 초기화합니다.");
+            Logger.LogError($"카드 데이터 로드 오류: {e.Message}. 초기화합니다.");
             ResetCards();
         }
     }
@@ -262,7 +262,7 @@ public class CardDataManager : MonoBehaviour
     {
         try
         {
-            Debug.Log("카드 데이터 초기화");
+            Logger.Log("카드 데이터 초기화");
             
             if (MyCardsList == null)
                 MyCardsList = new List<CardData>();
@@ -271,7 +271,7 @@ public class CardDataManager : MonoBehaviour
             
             if (startingCardData != null)
             {
-                Debug.Log("시작 카드를 로드합니다");
+                Logger.Log("시작 카드를 로드합니다");
                 List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
                 
                 if (startingCards.Count > 0)
@@ -293,7 +293,7 @@ public class CardDataManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"카드 데이터 초기화 오류: {e.Message}");
+            Logger.LogError($"카드 데이터 초기화 오류: {e.Message}");
         }
     }
 
@@ -301,7 +301,7 @@ public class CardDataManager : MonoBehaviour
     {
         if (MyCardsList == null)
         {
-            Debug.LogWarning("내 카드 리스트가 null입니다. 빈 리스트를 반환합니다.");
+            Logger.LogWarning("내 카드 리스트가 null입니다. 빈 리스트를 반환합니다.");
             MyCardsList = new List<CardData>();
         }
         return MyCardsList;
@@ -327,7 +327,7 @@ public class CardDataManager : MonoBehaviour
         {
             MyCardsList.RemoveAt(indexToRemove);
             Save();
-            Debug.Log($"카드 제거 완료: ID {mID}");
+            Logger.Log($"카드 제거 완료: ID {mID}");
         }
     }
 
@@ -342,7 +342,7 @@ public class CardDataManager : MonoBehaviour
         AddRandomSkill(_cardData);
         
         MyCardsList.Add(_cardData);
-        Debug.Log($"card data manager. starting card atk = {_cardData.Atk}");
+        Logger.Log($"card data manager. starting card atk = {_cardData.Atk}");
         Save();
     }
 
@@ -414,7 +414,7 @@ public class CardDataManager : MonoBehaviour
             
             if (attempts > maxAttempts)
             {
-                Debug.LogError("고유 ID 생성 실패. 시스템 시간 기반 ID 사용.");
+                Logger.LogError("고유 ID 생성 실패. 시스템 시간 기반 ID 사용.");
                 return (int)(System.DateTime.Now.Ticks % 10000);
             }
         } while (ItemIdExists(randomId));
@@ -450,7 +450,7 @@ public class CardDataManager : MonoBehaviour
             }
         }
         Save();
-        Debug.Log("모든 카드 최대 레벨로 설정 완료");
+        Logger.Log("모든 카드 최대 레벨로 설정 완료");
     }
     #endregion
 }

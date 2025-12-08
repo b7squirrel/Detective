@@ -30,7 +30,7 @@ public class CardsDictionary : MonoBehaviour
     {
         if(ItemPool == null)
         {
-            Debug.Log("모든 아이템 종류를 로드합니다");
+            Logger.Log("모든 아이템 종류를 로드합니다");
             ItemPool = new();
             ItemPool = new ReadCardData().GetCardsList(itemPoolDataBase);
         }
@@ -92,7 +92,7 @@ public class CardsDictionary : MonoBehaviour
             CardData data = FindCardData(itemData[i]);
             if(data == null) 
             {
-                Debug.Log($"{itemData[i]}에 해당하는 카드 데이터가 없습니다");
+                Logger.Log($"{itemData[i]}에 해당하는 카드 데이터가 없습니다");
                 return;
             }
             itemCardData.Add(data);
@@ -100,11 +100,11 @@ public class CardsDictionary : MonoBehaviour
 
         if(itemData.Count == itemCardData.Count)
         {
-            Debug.Log("아이템 데이터와 아이템 카드 데이터가 동일하게 작성되었습니다.");
+            Logger.Log("아이템 데이터와 아이템 카드 데이터가 동일하게 작성되었습니다.");
         }
         else
         {
-            Debug.Log($"아이템 데이터 갯수 = {itemData.Count}, 아이템 카드 데이터 갯수 = {itemCardData.Count}");
+            Logger.Log($"아이템 데이터 갯수 = {itemData.Count}, 아이템 카드 데이터 갯수 = {itemCardData.Count}");
         }
     }
 
@@ -117,7 +117,7 @@ public class CardsDictionary : MonoBehaviour
             if (ItemPool[i].Name == item.Name && ItemPool[i].Grade == item.grade)
                 return ItemPool[i];
         }
-        Debug.Log("해당 item의 Card data를 찾을 수 없습니다.");
+        Logger.Log("해당 item의 Card data를 찾을 수 없습니다.");
         return null;
     }
     public Item GetItem(int index)

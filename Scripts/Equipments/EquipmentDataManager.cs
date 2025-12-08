@@ -30,7 +30,7 @@ public class CardEquipmentData
         }
         else
         {
-            Debug.LogWarning($"{fieldName} 파싱 실패: '{value}' - 기본값 0 사용");
+            Logger.LogWarning($"{fieldName} 파싱 실패: '{value}' - 기본값 0 사용");
             return 0;
         }
     }
@@ -52,7 +52,7 @@ public class ReadEquipmentsData
         {
             if (statsDataText == null || string.IsNullOrEmpty(statsDataText.text))
             {
-                Debug.LogError("장비 데이터 파일이 비어있습니다.");
+                Logger.LogError("장비 데이터 파일이 비어있습니다.");
                 return cardStatsList;
             }
             
@@ -78,7 +78,7 @@ public class ReadEquipmentsData
                     // 최소 필요한 열 개수 확인 (5개)
                     if (row.Length < 5)
                     {
-                        Debug.LogWarning($"라인 {i}: 열 개수 부족 ({row.Length}/5) - 건너뜀");
+                        Logger.LogWarning($"라인 {i}: 열 개수 부족 ({row.Length}/5) - 건너뜀");
                         continue;
                     }
                     
@@ -96,15 +96,15 @@ public class ReadEquipmentsData
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"라인 {i} 파싱 오류: {e.Message}");
+                    Logger.LogError($"라인 {i} 파싱 오류: {e.Message}");
                 }
             }
             
-            Debug.Log($"장비 데이터 로드 완료: {cardStatsList.Count}개");
+            Logger.Log($"장비 데이터 로드 완료: {cardStatsList.Count}개");
         }
         catch (Exception e)
         {
-            Debug.LogError($"장비 데이터 읽기 오류: {e.Message}");
+            Logger.LogError($"장비 데이터 읽기 오류: {e.Message}");
         }
         
         return cardStatsList;
@@ -150,14 +150,14 @@ public class EquipmentDataManager : MonoBehaviour
             if (!Directory.Exists(dataDir))
             {
                 Directory.CreateDirectory(dataDir);
-                Debug.Log($"장비 데이터 디렉토리 생성: {dataDir}");
+                Logger.Log($"장비 데이터 디렉토리 생성: {dataDir}");
             }
             
             filePath = Path.Combine(dataDir, myEquips);
         }
         catch (Exception e)
         {
-            Debug.LogError($"데이터 디렉토리 초기화 오류: {e.Message}");
+            Logger.LogError($"데이터 디렉토리 초기화 오류: {e.Message}");
         }
     }
     
@@ -173,7 +173,7 @@ public class EquipmentDataManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"카드 리스트 초기화 오류: {e.Message}");
+            Logger.LogError($"카드 리스트 초기화 오류: {e.Message}");
         }
     }
     
@@ -193,11 +193,11 @@ public class EquipmentDataManager : MonoBehaviour
             string jsonData = JsonUtility.ToJson(new Serialization<CardEquipmentData>(MyEquipmentsList), true);
             File.WriteAllText(filePath, jsonData, System.Text.Encoding.UTF8);
 
-            Debug.Log($"장비 데이터 저장 완료: {MyEquipmentsList.Count}개");
+            Logger.Log($"장비 데이터 저장 완료: {MyEquipmentsList.Count}개");
         }
         catch (Exception e)
         {
-            Debug.LogError($"장비 데이터 저장 오류: {e.Message}");
+            Logger.LogError($"장비 데이터 저장 오류: {e.Message}");
         }
         finally
         {
@@ -212,7 +212,7 @@ public class EquipmentDataManager : MonoBehaviour
             // 로드할 파일이 없으면 빈 리스트로 초기화
             if (!File.Exists(filePath))
             {
-                Debug.Log("저장된 장비 데이터가 없습니다. 빈 리스트로 시작합니다.");
+                Logger.Log("저장된 장비 데이터가 없습니다. 빈 리스트로 시작합니다.");
                 MyEquipmentsList = new List<CardEquipmentData>();
                 return;
             }
@@ -221,7 +221,7 @@ public class EquipmentDataManager : MonoBehaviour
             
             if (string.IsNullOrEmpty(jsonData))
             {
-                Debug.LogWarning("저장 파일이 비어있습니다. 빈 리스트로 초기화합니다.");
+                Logger.LogWarning("저장 파일이 비어있습니다. 빈 리스트로 초기화합니다.");
                 MyEquipmentsList = new List<CardEquipmentData>();
                 return;
             }
@@ -229,11 +229,11 @@ public class EquipmentDataManager : MonoBehaviour
             var serializedData = JsonUtility.FromJson<Serialization<CardEquipmentData>>(jsonData);
             MyEquipmentsList = serializedData?.Data ?? new List<CardEquipmentData>();
             
-            Debug.Log($"장비 데이터 로드 완료: {MyEquipmentsList.Count}개");
+            Logger.Log($"장비 데이터 로드 완료: {MyEquipmentsList.Count}개");
         }
         catch (Exception e)
         {
-            Debug.LogError($"장비 데이터 로드 오류: {e.Message}. 빈 리스트로 초기화합니다.");
+            Logger.LogError($"장비 데이터 로드 오류: {e.Message}. 빈 리스트로 초기화합니다.");
             MyEquipmentsList = new List<CardEquipmentData>();
         }
     }
@@ -242,7 +242,7 @@ public class EquipmentDataManager : MonoBehaviour
     {
         if (MyEquipmentsList == null)
         {
-            Debug.LogWarning("장비 리스트가 null입니다. 빈 리스트를 반환합니다.");
+            Logger.LogWarning("장비 리스트가 null입니다. 빈 리스트를 반환합니다.");
             MyEquipmentsList = new List<CardEquipmentData>();
         }
         return MyEquipmentsList;
@@ -256,13 +256,13 @@ public class EquipmentDataManager : MonoBehaviour
         {
             if (charCard?.CardData == null)
             {
-                Debug.LogError("UpdateEquipment: charCard 또는 CardData가 null입니다.");
+                Logger.LogError("UpdateEquipment: charCard 또는 CardData가 null입니다.");
                 return;
             }
             
             if (equipmentIndex < 0 || equipmentIndex >= 4)
             {
-                Debug.LogError($"UpdateEquipment: 잘못된 장비 인덱스 {equipmentIndex}");
+                Logger.LogError($"UpdateEquipment: 잘못된 장비 인덱스 {equipmentIndex}");
                 return;
             }
             
@@ -303,18 +303,18 @@ public class EquipmentDataManager : MonoBehaviour
                 );
                 
                 MyEquipmentsList.Add(newEquipData);
-                Debug.Log($"새 장비 데이터 생성: charID {charCardData.ID}");
+                Logger.Log($"새 장비 데이터 생성: charID {charCardData.ID}");
             }
             // 해당 charCard의 장비 데이터가 존재한다면 바뀌는 장비만 교체하고 저장
             else
             {
                 charEquipData.IDs[equipmentIndex] = equipmentCardID[equipmentIndex];
-                Debug.Log($"장비 데이터 업데이트: charID {charCardData.ID}, 슬롯 {equipmentIndex}");
+                Logger.Log($"장비 데이터 업데이트: charID {charCardData.ID}, 슬롯 {equipmentIndex}");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"UpdateEquipment 오류: {e.Message}");
+            Logger.LogError($"UpdateEquipment 오류: {e.Message}");
         }
     }
 
@@ -328,14 +328,14 @@ public class EquipmentDataManager : MonoBehaviour
         if (!isSaving)
         {
             StartCoroutine(WaitToStartMethodRunning());
-            Debug.Log("장비 데이터 지연 저장 시작");
+            Logger.Log("장비 데이터 지연 저장 시작");
         }
     }
     
     IEnumerator WaitToStartMethodRunning()
     {
         yield return new WaitForSeconds(0.04f);
-        Debug.Log("장비 데이터 지연 저장 실행");
+        Logger.Log("장비 데이터 지연 저장 실행");
         Save();
     }
     
@@ -351,12 +351,12 @@ public class EquipmentDataManager : MonoBehaviour
             {
                 MyEquipmentsList.Remove(equipData);
                 Save();
-                Debug.Log($"장비 데이터 제거: charID {charID}");
+                Logger.Log($"장비 데이터 제거: charID {charID}");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"RemoveEquipmentData 오류: {e.Message}");
+            Logger.LogError($"RemoveEquipmentData 오류: {e.Message}");
         }
     }
     
@@ -371,11 +371,11 @@ public class EquipmentDataManager : MonoBehaviour
                 MyEquipmentsList.Clear();
             
             Save();
-            Debug.Log("모든 장비 데이터 초기화 완료");
+            Logger.Log("모든 장비 데이터 초기화 완료");
         }
         catch (Exception e)
         {
-            Debug.LogError($"ClearAllEquipmentData 오류: {e.Message}");
+            Logger.LogError($"ClearAllEquipmentData 오류: {e.Message}");
         }
     }
 }

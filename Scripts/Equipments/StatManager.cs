@@ -53,7 +53,7 @@ public class StatManager : MonoBehaviour
 
         level++;
         
-        Debug.LogError($"New ATK = {newAtk}");
+        Logger.LogError($"New ATK = {newAtk}");
         UpdateStat(_cardData, level, newHp, newAtk);
     }
     void UpdateStat(CardData _cardData, int _level, int _hp, int _atk)
@@ -85,7 +85,7 @@ public class StatManager : MonoBehaviour
         int oriAtk = oriCard.Atk;
         int oriHp = oriCard.Hp;
         OriAttribute leadAttr = new OriAttribute(oriAtk, oriHp);
-        Debug.Log("Ori Atk = " + oriAtk + " Ori HP = " +  oriHp);
+        Logger.Log("Ori Atk = " + oriAtk + " Ori HP = " +  oriHp);
 
         if(lead != null)
         {
@@ -99,7 +99,7 @@ public class StatManager : MonoBehaviour
                 leadAttr = new OriAttribute(oriAtk + equipmentAtk, oriHp + equipmentHp);
             }
         }
-        Debug.Log(lead.CardData.Name + "의 HP = " + leadAttr.Hp + " Attk = " + leadAttr.Atk);
+        Logger.Log(lead.CardData.Name + "의 HP = " + leadAttr.Hp + " Attk = " + leadAttr.Atk);
         return leadAttr;
     }
 }
