@@ -15,7 +15,7 @@ MonoBehaviour:
   grade: 1
   Name: Cowboy
   DisplayName: "\uCE74\uC6B0 \uC624\uB9AC"
-  SynergyDispName: "\uBE75\uC57C \uBE75\uC57C"
+  SynergyDispName: "\uC30D\uAD8C\uCD1D \uC624\uB9AC"
   charImage: {fileID: 21300000, guid: a6589f57e09bb324ebca7250d7412b28, type: 3}
   faceImage: {fileID: 21300000, guid: 0f4e5fb61bc879748bb4378caf9e523c, type: 3}
   SynergyWeapon: Akimbo
@@ -33,23 +33,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f2b324984c1c3a5458c442f3149cb56b, type: 2}
   - {fileID: 11400000, guid: d161663d5cd473743b57872418a56548, type: 2}
   - {fileID: 11400000, guid: 4f70acf951212064fbe3d865b65389b5, type: 2}
-  equipSprites:
-  - sprites:
-    - {fileID: -1846063108, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
-  - sprites:
-    - {fileID: 21300000, guid: a23a92efd5e9d5a4a8941482d8a3b13c, type: 3}
-    - {fileID: 21300000, guid: 8f0e6ad16f30b4c4da3f354f340cc72a, type: 3}
-    - {fileID: 21300000, guid: 933972accbfb5364c81766b3f25e30a4, type: 3}
-    - {fileID: 21300000, guid: 822c1eaf8e5c0db4386d90ce5f7ddd3d, type: 3}
-    - {fileID: 21300000, guid: bf7a082d9e9cdee459d80beb9601042c, type: 3}
-    - {fileID: 21300000, guid: 1e258ff4f304a9449b2fd15df6db0e90, type: 3}
-    - {fileID: 21300000, guid: e87c0b86aeb63d0488b5c9aa6d8739f7, type: 3}
-  - sprites:
-    - {fileID: -1585628255, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
-  - sprites:
-    - {fileID: -544603694, guid: 14b6225c025dd2a4cb2b4869db0acad5, type: 3}
   charEffectImage: {fileID: 0}
-  costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 5831665795245939412, guid: 291aed483e7745e40b52be27fc10bc5a, type: 3}
   stats:
     damage: 30
@@ -60,7 +44,6 @@ MonoBehaviour:
     knockBackChance: 20
     currentLevel: 0
   weaponBasePrefab: {fileID: 7295769312407643447, guid: e58fa634116417b41abc98ada74e9ffa, type: 3}
-  animatorController: {fileID: 9100000, guid: 696f1de3340ac9d4b8d9bcf89966a2a2, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 6076ca1827a857a4e8ac0456e8ab1f7f, type: 2}
   - {fileID: 11400000, guid: c9bcffcaa95c224428aecd6cf479aec3, type: 2}
@@ -68,6 +51,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 033c7766652a53d49802d5a63d777316, type: 2}
   - {fileID: 11400000, guid: 81e2a91b8dc90db4fbba5ca39a58edb9, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: 325d4551f6ad0fe4eaafc13994aefc55, type: 2}
-  dropChance: 0
-  hideEssentialEquipmentOnPlay: 1
   equipmentType: 3

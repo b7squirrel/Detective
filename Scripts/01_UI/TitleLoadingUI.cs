@@ -118,26 +118,26 @@ public class TitleLoadingUI : MonoBehaviour
                 // 70% 이전이거나 최소 시간이 지났으면 실제 진행도 표시
                 displayProgress = realProgress;
             }
-            
+
             if (progressBar != null)
                 progressBar.value = displayProgress;
-            
+
             if (progressText != null)
                 progressText.text = $"{displayProgress * 100:F0}%";
-            
+
             // 진행 상태 텍스트
             if (statusText != null)
             {
                 if (displayProgress < 0.25f)
-                    statusText.text = "카드 데이터 로딩 중...";
+                    statusText.text = GameTextsManager.Texts.loadingCardData;
                 else if (displayProgress < 0.5f)
-                    statusText.text = "플레이어 데이터 로딩 중...";
+                    statusText.text = GameTextsManager.Texts.loadingPlayerData;
                 else if (displayProgress < 0.75f)
-                    statusText.text = "장비 데이터 로딩 중...";
+                    statusText.text = GameTextsManager.Texts.loadingEquipment;
                 else
-                    statusText.text = "초기화 완료 중...";
+                    statusText.text = GameTextsManager.Texts.loadingComplete;
             }
-            
+
             yield return null;
         }
         
@@ -175,7 +175,7 @@ public class TitleLoadingUI : MonoBehaviour
             progressText.text = "100%";
         
         if (statusText != null)
-            statusText.text = "준비 완료!";
+            statusText.text = GameTextsManager.Texts.loadingComplete;
         
         yield return new WaitForSeconds(0.5f);
         

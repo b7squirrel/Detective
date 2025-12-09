@@ -75,11 +75,13 @@ public class CardsDictionary : MonoBehaviour
         WeaponItemData weaponItemData = GetWeaponItemData(cardData);
         if (weaponItemData.weaponData == null)
         {
-            dispName = weaponItemData.itemData.DisplayName;
+            // dispName = weaponItemData.itemData.DisplayName;
+            dispName = GameTextsManager.Texts.GetWeaponDisplayName(weaponItemData.itemData.Name);
         }
         else
         {
-            dispName = weaponItemData.weaponData.DisplayName;
+            // dispName = weaponItemData.weaponData.DisplayName;
+            dispName = GameTextsManager.Texts.GetWeaponDisplayName(weaponItemData.weaponData.Name);
         }
         return dispName;
     }

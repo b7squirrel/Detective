@@ -15,7 +15,7 @@ MonoBehaviour:
   grade: 1
   Name: Tesla
   DisplayName: "\uCC9C\uB465 \uC624\uB9AC"
-  SynergyDispName: "\uD14C\uC2AC\uB77C \uB2C8\uCF5C\uB77C"
+  SynergyDispName: "\uCC9C\uB465 \uBC88\uAC1C \uC624\uB9AC"
   charImage: {fileID: 21300000, guid: bd0ed7115a9bdf74ca52d19b407fc9b5, type: 3}
   faceImage: {fileID: 21300000, guid: 227580c8b7dd3464fb5db3fb8264ec16, type: 3}
   SynergyWeapon: Teslection
@@ -33,17 +33,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75954b1cb373ccd429219a8c0e0940fd, type: 2}
   - {fileID: 11400000, guid: 3b46688c6ada57c43b897dce6e211ad1, type: 2}
   - {fileID: 0}
-  equipSprites:
-  - sprites:
-    - {fileID: 21300000, guid: 21bf7de8800f84e4da40177c2fe23530, type: 3}
-  - sprites:
-    - {fileID: 225234503, guid: 05525a3e6a7b5f948a2c3a48acc4f518, type: 3}
-  - sprites:
-    - {fileID: -1065537342, guid: 05525a3e6a7b5f948a2c3a48acc4f518, type: 3}
-  - sprites:
-    - {fileID: -518543177, guid: 05525a3e6a7b5f948a2c3a48acc4f518, type: 3}
   charEffectImage: {fileID: 21300000, guid: de298601b074ada4a86e794e0dac96ab, type: 3}
-  costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 6822868710250514242, guid: cced79b0b48cc454d829e8729681e188, type: 3}
   stats:
     damage: 40
@@ -54,7 +44,6 @@ MonoBehaviour:
     knockBackChance: 35
     currentLevel: 0
   weaponBasePrefab: {fileID: 7295769312407643447, guid: 9bf37590165248942857e426c05c8c91, type: 3}
-  animatorController: {fileID: 9100000, guid: 1ecb6fa94f9ad5942ab83e6eb5cf08ec, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 4c37a379cfe288b429d456815360bdce, type: 2}
   - {fileID: 11400000, guid: 2dbe2c252bd89d14a8eb502c152ec077, type: 2}
@@ -62,6 +51,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e98942f2835010245952945f16a54d83, type: 2}
   - {fileID: 11400000, guid: bac1aae47ea83024aa3e0af2369dcb8e, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: fce01bb0b5f90094e88d7e156a275f33, type: 2}
-  dropChance: 0
-  hideEssentialEquipmentOnPlay: 1
   equipmentType: 0

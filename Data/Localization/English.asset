@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e2519f0578324e178153d25d4a8c3fb, type: 3}
+  m_Name: English
+  m_EditorClassIdentifier: 
+  loadingCardData: Gathering duck friends...
+  loadingPlayerData: Preparing lead duck...
+  loadingEquipment: Getting gear ready...
+  loadingComplete: Ready to waddle...
+  loading: Loading
+  gradeNames:
+  - Common
+  - Rare
+  - Elite
+  - Legendary
+  - Mythic
+  weaponNames:
+  - weaponInternalName: Whistle
+    displayName: Toot Duck
+    synergyDisplayName: King Tooter
+  - weaponInternalName: Cowboy
+    displayName: Cow Duck
+    synergyDisplayName: Dual Quacker
+  - weaponInternalName: Tennis
+    displayName: Tennis Duck
+    synergyDisplayName: AceServer
+  - weaponInternalName: Tesla
+    displayName: Volt Duck
+    synergyDisplayName: Dual Volt
+  - weaponInternalName: Cannon
+    displayName: Header Duck
+    synergyDisplayName: Hat-Trick Hero
+  - weaponInternalName: Guitar
+    displayName: Guitar Duck
+    synergyDisplayName: Shredder Duck
+  - weaponInternalName: Yoyo
+    displayName: Yo-Yo Duck
+    synergyDisplayName: Yo-Yo-Yo-Yo Duck
+  - weaponInternalName: Laser
+    displayName: Laser Duck
+    synergyDisplayName: Ortital Blaster
+  - weaponInternalName: Origami
+    displayName: Origami Duck
+    synergyDisplayName: Origami Master
+  skillNames:
+  - Iron Feathers
+  - Sleepy Slime
+  - Quack Blast
+  - Super Quacker
+  - Party Buff
+  skillDescriptions:
+  - Your duck buddies shield you from enemy attacks.
+  - Hypnotize enemies to slow them down temporarily.
+  - Deals damage to all enemies on screen.
+  - Become invincible for a short time.
+  - Boosts attack power for you and your duck squad.
+  itemSkillNames:
+  - All Attack
+  - All Defense
+  - Move Speed
+  - Magnet Range
+  itemSkillDescriptions:
+  - Increases attack power for all ducks.
+  - Boosts the lead duck's defense.
+  - Increases the lead duck's movement speed.
+  - Extends your magnetic pickup range.
+  tabToSelectLead: Tap to select lead duck.
+  startButton: Start!
+  level: Level

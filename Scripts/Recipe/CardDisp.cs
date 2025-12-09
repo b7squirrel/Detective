@@ -54,7 +54,8 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         Level.text = "";
 
         // 카드 이름 텍스트
-        Title.text = weaponData.DisplayName;
+        // Title.text = weaponData.DisplayName;
+        Title.text = GameTextsManager.Texts.GetWeaponDisplayName(weaponData.Name);
 
         // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
         if (cardData == null) return;

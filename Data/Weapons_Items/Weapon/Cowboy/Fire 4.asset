@@ -15,7 +15,7 @@ MonoBehaviour:
   grade: 4
   Name: Cowboy
   DisplayName: "\uCE74\uC6B0 \uC624\uB9AC"
-  SynergyDispName: "\uBE75\uC57C \uBE75\uC57C"
+  SynergyDispName: "\uC30D\uAD8C\uCD1D \uC624\uB9AC"
   charImage: {fileID: 21300000, guid: a6589f57e09bb324ebca7250d7412b28, type: 3}
   faceImage: {fileID: 21300000, guid: 0f4e5fb61bc879748bb4378caf9e523c, type: 3}
   SynergyWeapon: Akimbo
@@ -33,17 +33,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 01ddf668cad70f14b8caa564d035e912, type: 2}
   - {fileID: 11400000, guid: bef4d2142a743de45bb907ebb91db080, type: 2}
   - {fileID: 11400000, guid: 56e095c1c2108ea43820db97f6a52336, type: 2}
-  equipSprites:
-  - sprites:
-    - {fileID: -1211334699, guid: 4542caa37a03a25488a8899ee65e7efa, type: 3}
-  - sprites:
-    - {fileID: -1984310479, guid: 4542caa37a03a25488a8899ee65e7efa, type: 3}
-  - sprites:
-    - {fileID: -1408137487, guid: 4542caa37a03a25488a8899ee65e7efa, type: 3}
-  - sprites:
-    - {fileID: 2036465471, guid: 4542caa37a03a25488a8899ee65e7efa, type: 3}
   charEffectImage: {fileID: 0}
-  costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 5831665795245939412, guid: 291aed483e7745e40b52be27fc10bc5a, type: 3}
   stats:
     damage: 60
@@ -54,7 +44,6 @@ MonoBehaviour:
     knockBackChance: 20
     currentLevel: 0
   weaponBasePrefab: {fileID: 7295769312407643447, guid: e58fa634116417b41abc98ada74e9ffa, type: 3}
-  animatorController: {fileID: 9100000, guid: 696f1de3340ac9d4b8d9bcf89966a2a2, type: 2}
   upgrades:
   - {fileID: 11400000, guid: e04378f761f451f479022bff2f0f31f9, type: 2}
   - {fileID: 11400000, guid: 937fd8db2a12d5a48868e3a15ecde225, type: 2}
@@ -62,6 +51,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fab32cad2b7e59443a725dca7785ce20, type: 2}
   - {fileID: 11400000, guid: 92578ebc1ce367246b8edbb2140121a6, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: 19b492576aa315a478c02fde296e453a, type: 2}
-  dropChance: 0
-  hideEssentialEquipmentOnPlay: 1
   equipmentType: 3

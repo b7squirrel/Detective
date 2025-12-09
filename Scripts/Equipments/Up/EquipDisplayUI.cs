@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 
@@ -69,7 +67,7 @@ public class EquipDisplayUI : MonoBehaviour
         titleRibbonShadow.SetActive(true);
         Title.text = dispName;
         // 카드 레벨 텍스트
-        Level.text = "레벨 " + charCardData.Level;
+        Level.text = GameTextsManager.Texts.level + " " + charCardData.Level;
         LevelShadow.text = Level.text;
 
         // 디버그

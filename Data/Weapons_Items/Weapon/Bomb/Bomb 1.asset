@@ -15,7 +15,7 @@ MonoBehaviour:
   grade: 1
   Name: Cannon
   DisplayName: "\uD5E4\uB529 \uD3ED\uD0C4"
-  SynergyDispName: "\uD574\uD2B8\uD2B8\uB9AD"
+  SynergyDispName: "\uD574\uD2B8\uD2B8\uB9AD \uC624\uB9AC"
   charImage: {fileID: 21300000, guid: a5d3436f7c44075478b2c138647635fe, type: 3}
   faceImage: {fileID: 21300000, guid: 775fb914c3c3b814a960c54d5233e9b4, type: 3}
   SynergyWeapon: Splash Bomb
@@ -33,17 +33,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5110fd1582951244499526de1eb8a0a0, type: 2}
   - {fileID: 11400000, guid: 692072b6509801b498e23a8d2bda03d0, type: 2}
   - {fileID: 11400000, guid: 63f405afeb0a16747b8a4d42ea46f3ac, type: 2}
-  equipSprites:
-  - sprites:
-    - {fileID: -1974788536, guid: d9b8d86b4994ebb478bd51353475ac93, type: 3}
-  - sprites:
-    - {fileID: -887719682, guid: d9b8d86b4994ebb478bd51353475ac93, type: 3}
-  - sprites:
-    - {fileID: 1863794995, guid: d9b8d86b4994ebb478bd51353475ac93, type: 3}
-  - sprites:
-    - {fileID: -894162024, guid: d9b8d86b4994ebb478bd51353475ac93, type: 3}
   charEffectImage: {fileID: 0}
-  costumeAnim: {fileID: 0}
   weaponPrefab: {fileID: 4994908367473084417, guid: ae8eac7649e801d4384d2264f1e612ad, type: 3}
   stats:
     damage: 300
@@ -54,7 +44,6 @@ MonoBehaviour:
     knockBackChance: 40
     currentLevel: 0
   weaponBasePrefab: {fileID: 2462116282299986100, guid: 7e17ae1cb82dbf140b28440bf12becf6, type: 3}
-  animatorController: {fileID: 9100000, guid: 3fd5a02571cc9bf408b1a92b0035517c, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 3d160c2d02a03ae43881052d1c996039, type: 2}
   - {fileID: 11400000, guid: c0d57359de43f7e43863c7e30e7e9738, type: 2}
@@ -62,6 +51,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e9ef9b493f121f84eaa150584734ea1b, type: 2}
   - {fileID: 11400000, guid: d07515518219dd0448ed27978007989d, type: 2}
   synergyUpgrade: {fileID: 11400000, guid: df31d77df64fe9343892964c37a845ab, type: 2}
-  dropChance: 0
-  hideEssentialEquipmentOnPlay: 0
   equipmentType: 0
