@@ -38,7 +38,7 @@ public class EquipInfoPanel : MonoBehaviour
     // 처음 패널이 활성화 되면 초기화
     public void SetPanel(CardData cardData, Item itemData, CardDisp _cardDisp, bool isEquipButton, bool isEssential)
     {
-        Debug.LogError($"item data = {itemData.DisplayName}");
+        Logger.LogWarning($"item data = {itemData.DisplayName}");
         this.cardDisp = _cardDisp;
 
         grade.text = MyGrade.mGrades[cardData.Grade].ToString();
@@ -107,7 +107,7 @@ public class EquipInfoPanel : MonoBehaviour
         Level.text = "LV " + _level.ToString() + " / " + StaticValues.MaxLevel.ToString();
         attribute.text = _attribute.ToString();
 
-        Debug.Log("Ugraded");
+        Logger.Log("Ugraded");
 
         // 기존 애니메이션 중단
         levelPopTween?.Kill();

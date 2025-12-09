@@ -4,16 +4,12 @@ using UnityEngine;
 using System.IO;
 using System;
 
-/// <summary>
-/// 내가 구글시트로 작성할 필요 없는 데이터
-/// </summary>
 [System.Serializable]
 public class CardEquipmentData
 {
     public CardEquipmentData(string _ori, string _head, string _chest,
         string _legs, string _weapon)
     {
-        // 안전한 파싱으로 변경
         charID = SafeParseInt(_ori, "charID");
         IDs[0] = SafeParseInt(_head, "head");
         IDs[1] = SafeParseInt(_chest, "chest");
@@ -56,12 +52,10 @@ public class ReadEquipmentsData
                 return cardStatsList;
             }
             
-            // 크로스 플랫폼 텍스트 정규화
             string normalizedText = statsDataText.text
-                .Replace("\r\n", "\n")  // Windows → Unix
-                .Replace("\r", "\n");   // Old Mac → Unix
+                .Replace("\r\n", "\n")
+                .Replace("\r", "\n");
             
-            // 마지막 줄바꿈 제거
             if (normalizedText.EndsWith("\n"))
             {
                 normalizedText = normalizedText.Substring(0, normalizedText.Length - 1);
@@ -75,14 +69,12 @@ public class ReadEquipmentsData
                 {
                     string[] row = lines[i].Split('\t');
                     
-                    // 최소 필요한 열 개수 확인 (5개)
                     if (row.Length < 5)
                     {
                         Logger.LogWarning($"라인 {i}: 열 개수 부족 ({row.Length}/5) - 건너뜀");
                         continue;
                     }
                     
-                    // 각 셀의 데이터 정리
                     for (int j = 0; j < row.Length && j < 5; j++)
                     {
                         row[j] = row[j].Trim();
@@ -118,30 +110,31 @@ public class EquipmentDataManager : MonoBehaviour
     string filePath;
     string myEquips = "MyEquipments.txt";
     bool isSaving = false;
-    public static bool IsDataLoaded {get; private set;} = false;
-
+    
+    // ⭐ 추가: 데이터 로드 완료 플래그
+    public static bool IsDataLoaded { get; private set; } = false;
 
     void Awake()
     {
-        InitializeDataDirectory(); // Start보다 Save가 먼저 호출되면 filepath가 만들어지지 않아서 오류가 생김.
+        InitializeDataDirectory();
     }
+    
     void Start()
     {
-        // CardList에서 여러가지 초기화가 되고 난 후에 실행되도록 Start에 넣었음
         Load();
-
+        
+        // ⭐ 로드 완료 표시
         IsDataLoaded = true;
-        Logger.Log($"Equipment Data Manager 데이터 로드 완료");
-
+        Logger.Log("[EquipmentDataManager] 데이터 로드 완료");
+        
         InitializeCardList();
     }
-
+    
     void OnApplicationQuit()
     {
-        IsDataLoaded = false;       
+        IsDataLoaded = false;
     }
-
-
+    
     void InitializeDataDirectory()
     {
         try
@@ -193,11 +186,11 @@ public class EquipmentDataManager : MonoBehaviour
             string jsonData = JsonUtility.ToJson(new Serialization<CardEquipmentData>(MyEquipmentsList), true);
             File.WriteAllText(filePath, jsonData, System.Text.Encoding.UTF8);
 
-            Logger.Log($"장비 데이터 저장 완료: {MyEquipmentsList.Count}개");
+            Logger.Log($"[EquipmentDataManager] 장비 데이터 저장 완료: {MyEquipmentsList.Count}개");
         }
         catch (Exception e)
         {
-            Logger.LogError($"장비 데이터 저장 오류: {e.Message}");
+            Logger.LogError($"[EquipmentDataManager] 장비 데이터 저장 오류: {e.Message}");
         }
         finally
         {
@@ -209,7 +202,6 @@ public class EquipmentDataManager : MonoBehaviour
     {
         try
         {
-            // 로드할 파일이 없으면 빈 리스트로 초기화
             if (!File.Exists(filePath))
             {
                 Logger.Log("저장된 장비 데이터가 없습니다. 빈 리스트로 시작합니다.");
@@ -248,8 +240,6 @@ public class EquipmentDataManager : MonoBehaviour
         return MyEquipmentsList;
     }
     
-    // 아이디로 charCard를 찾아서 장비 데이터(My Equipment List) 업데이트
-    // Card List의 Equip과 UnEquip이 호출.
     public void UpdateEquipment(CharCard charCard, int equipmentIndex)
     {
         try
@@ -271,12 +261,10 @@ public class EquipmentDataManager : MonoBehaviour
                 MyEquipmentsList = new List<CardEquipmentData>();
             }
             
-            // 오리ID 비교
             CardEquipmentData charEquipData = MyEquipmentsList.Find(x => x.charID == charCard.CardData.ID);
             CardData charCardData = charCard.CardData;
             int[] equipmentCardID = new int[4];
             
-            // 쓰기 편하게 equipmentCardID 에 아이디를 저장
             for (int i = 0; i < 4; i++)
             {
                 if (charCard.equipmentCards != null && 
@@ -287,11 +275,10 @@ public class EquipmentDataManager : MonoBehaviour
                 }
                 else
                 {
-                    equipmentCardID[i] = 0; // 장비가 없는 경우
+                    equipmentCardID[i] = 0;
                 }
             }
             
-            // 해당 charCard의 장비 데이터가 존재하지 않으면 새로 생성해서 저장
             if (charEquipData == null)
             {
                 CardEquipmentData newEquipData = new CardEquipmentData(
@@ -305,7 +292,6 @@ public class EquipmentDataManager : MonoBehaviour
                 MyEquipmentsList.Add(newEquipData);
                 Logger.Log($"새 장비 데이터 생성: charID {charCardData.ID}");
             }
-            // 해당 charCard의 장비 데이터가 존재한다면 바뀌는 장비만 교체하고 저장
             else
             {
                 charEquipData.IDs[equipmentIndex] = equipmentCardID[equipmentIndex];
@@ -328,18 +314,17 @@ public class EquipmentDataManager : MonoBehaviour
         if (!isSaving)
         {
             StartCoroutine(WaitToStartMethodRunning());
-            Logger.Log("장비 데이터 지연 저장 시작");
+            Logger.Log("[EquipmentDataManager] 장비 데이터 지연 저장 시작");
         }
     }
     
     IEnumerator WaitToStartMethodRunning()
     {
         yield return new WaitForSeconds(0.04f);
-        Logger.Log("장비 데이터 지연 저장 실행");
+        Logger.Log("[EquipmentDataManager] 장비 데이터 지연 저장 실행");
         Save();
     }
     
-    // 특정 캐릭터의 장비 데이터 제거
     public void RemoveEquipmentData(int charID)
     {
         try
@@ -360,7 +345,6 @@ public class EquipmentDataManager : MonoBehaviour
         }
     }
     
-    // 모든 장비 데이터 초기화. debug delete files 버튼 이번트로 호출
     public void ClearAllEquipmentData()
     {
         try

@@ -76,13 +76,13 @@ public class TitleLoadingUI : MonoBehaviour
     {
         loadingPanel.SetActive(true);
         
-        // GameInitializer가 없으면 간단한 페이드로 전환
-        if (GameInitializer.Instance == null)
-        {
-            Debug.LogWarning("GameInitializer를 찾을 수 없습니다. 간단한 로딩 화면으로 전환합니다.");
-            yield return StartCoroutine(SimpleLoadingScreen());
-            yield break;
-        }
+        // // GameInitializer가 없으면 간단한 페이드로 전환
+        // if (GameInitializer.Instance == null)
+        // {
+        //     Debug.LogWarning("GameInitializer를 찾을 수 없습니다. 간단한 로딩 화면으로 전환합니다.");
+        //     yield return StartCoroutine(SimpleLoadingScreen());
+        //     yield break;
+        // }
         
         while (!GameInitializer.IsInitialized)
         {

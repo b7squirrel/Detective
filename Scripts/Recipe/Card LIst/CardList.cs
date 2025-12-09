@@ -15,12 +15,12 @@ public class CharCard
         }
         cardName = _cardData.Name + "_" + _cardData.Grade;
     }
-    public string cardName; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
+    public string cardName;
     public int numberOfEquipments;
     public CardData CardData;
     public EquipmentCard[] equipmentCards;
     public int totalHp, totalAtk;
-    public bool IsEquipped; // 문법상 이상하지만 그냥 equipmentCard와 통일하기 위해
+    public bool IsEquipped;
 }
 
 [System.Serializable]
@@ -35,8 +35,8 @@ public class EquipmentCard
         EquippedWho = null;
     }
     public CardData EquippedWho;
-    public string cardName; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
-    public string equippedWho; // 그냥 인스펙터에서 보기 편하게 하기 위한 변수 
+    public string cardName;
+    public string equippedWho;
     public CardData CardData;
     public bool IsEquipped;
 }
@@ -53,12 +53,38 @@ public class CardList : MonoBehaviour
 
     Convert converter;
 
-
     void Awake()
     {
         cardDataManager = GetComponent<CardDataManager>();
         equipmentDataManager = GetComponent<EquipmentDataManager>();
         converter = new Convert();
+    }
+
+    // ⭐ 배치 모드 중 즉시 카드 추가
+    public void AddCardImmediately(CardData cardData)
+    {
+        if (cardData == null) return;
+        
+        // Dictionary 초기화 확인
+        if (charCardDict == null) charCardDict = new Dictionary<int, CharCard>();
+        if (equipCardDict == null) equipCardDict = new Dictionary<int, EquipmentCard>();
+        if (charCards == null) charCards = new List<CharCard>();
+        if (equipmentCards == null) equipmentCards = new List<EquipmentCard>();
+        
+        if (cardData.Type == CardType.Weapon.ToString())
+        {
+            CharCard _charCard = new CharCard(cardData);
+            charCards.Add(_charCard);
+            charCardDict[_charCard.CardData.ID] = _charCard;
+            Logger.Log($"[CardList] 오리 카드 즉시 추가: {cardData.Name} (ID: {cardData.ID})");
+        }
+        else if (cardData.Type == CardType.Item.ToString())
+        {
+            EquipmentCard equipCard = new EquipmentCard(cardData);
+            equipmentCards.Add(equipCard);
+            equipCardDict[equipCard.CardData.ID] = equipCard;
+            Logger.Log($"[CardList] 장비 카드 즉시 추가: {cardData.Name} (ID: {cardData.ID})");
+        }
     }
 
     public void Equip(CardData charData, CardData equipData)
@@ -87,49 +113,50 @@ public class CardList : MonoBehaviour
         charCard.numberOfEquipments++;
         charCard.IsEquipped = true;
 
-        EquipStats(charCard, equipData); // 장비의 스탯을 오리카드에 반영
-        equipmentDataManager.UpdateEquipment(charCard, index); // 데이터 업데이트 및 저장
+        EquipStats(charCard, equipData);
+        equipmentDataManager.UpdateEquipment(charCard, index);
     }
+    
     public void UnEquip(CardData charData, EquipmentCard _equipmentCard)
     {
         CharCard charCard = FindCharCard(charData);
 
-        int index =
-                converter.EquipmentTypeToInt(_equipmentCard.CardData.EquipmentType);
+        int index = converter.EquipmentTypeToInt(_equipmentCard.CardData.EquipmentType);
         charCard.equipmentCards[index] = null;
         _equipmentCard.IsEquipped = false;
         charCard.numberOfEquipments--;
-        charCard.IsEquipped = charCard.numberOfEquipments > 0; // 장비 수가 0이 되면 charCard의 IsEquipped false
+        charCard.IsEquipped = charCard.numberOfEquipments > 0;
 
-        UnEquipStats(charCard, _equipmentCard.CardData);  // 장비의 스탯을 오리카드에서 제거
+        UnEquipStats(charCard, _equipmentCard.CardData);
 
-        equipmentDataManager.UpdateEquipment(charCard, index);// 데이터 업데이트 및 저장
+        equipmentDataManager.UpdateEquipment(charCard, index);
     }
 
     public CharCard FindCharCard(CardData charCardData)
     {
-        if (charCardDict.TryGetValue(charCardData.ID, out CharCard card))
+        if (charCardDict != null && charCardDict.TryGetValue(charCardData.ID, out CharCard card))
             return card;
 
         Logger.Log("Can't find ID " + charCardData.ID);
         return null;
     }
-    // 카드 데이터로 EquipmentCard 얻기
+    
     public EquipmentCard FindEquipmentCard(CardData equipCardData)
     {
-        if (equipCardDict.TryGetValue(equipCardData.ID, out EquipmentCard card))
+        if (equipCardDict != null && equipCardDict.TryGetValue(equipCardData.ID, out EquipmentCard card))
             return card;
 
         Logger.Log("Can't find ID " + equipCardData.ID);
         return null;
     }
-    // 특정 오리 카드의 장비 카드 얻기
+    
     public EquipmentCard[] GetEquipmentsCardData(CardData charCardData)
     {
-        return FindCharCard(charCardData).equipmentCards;
+        CharCard charCard = FindCharCard(charCardData);
+        if (charCard == null) return new EquipmentCard[4];
+        return charCard.equipmentCards;
     }
 
-    // weapon과 item을 분리해서 저장
     public void InitCardList()
     {
         charCards = new();
@@ -155,18 +182,14 @@ public class CardList : MonoBehaviour
             }
         }
 
-        // 모든 카드가 분류되고 나면 장비 데이터대로 장비 장착하기
-        // 여기에서 모든 charCard를 순회하게 됨. 카드가 늘어날수록 시간이 더 걸림
-        // 추가된 charCard만 검색하는 것으로 바꿔보자
         for (int i = 0; i < charCards.Count; i++)
         {
             LoadEquipmentData(charCards[i]);
         }
-        DelayedSaveEquipments(); // 장비 장착 현황 저장
-
+        
+        DelayedSaveEquipments();
     }
-    // charCards에 장비 데이터 로드해서 장착하기
-    // 장착시킨 장비는 isEqupped로 설정하기
+    
     void LoadEquipmentData(CharCard _charCard)
     {
         if (_charCard == null)
@@ -175,7 +198,6 @@ public class CardList : MonoBehaviour
             return;
         }
 
-        // 매개 변수로 받은 오리카드의 장비 데이터를 찾아서 equipData에 저장
         List<CardEquipmentData> myEquipmentData = equipmentDataManager.GetMyEquipmentsList();
 
         if (myEquipmentData == null || myEquipmentData.Count == 0)
@@ -186,10 +208,9 @@ public class CardList : MonoBehaviour
         if (equipData == null)
             return;
 
-        // ID로 각각의 EquipmentCard를 찾아서 장비 카드만 모아둔 equipmentCards 리스트에서 찾아 준다
         for (int i = 0; i < 4; i++)
         {
-            if (equipData.IDs[i] > 0) // 해당 부위에 장비카드가 있다면 (아이디가 없으면 -1, 아이디는 1부터 부여되므로)
+            if (equipData.IDs[i] > 0)
             {
                 EquipmentCard equipCard = FindCardDataByID(equipData.IDs[i]);
                 if (equipCard != null)
@@ -202,11 +223,11 @@ public class CardList : MonoBehaviour
                 }
             }
         }
-
     }
+    
     EquipmentCard FindCardDataByID(int cardID)
     {
-        if (equipCardDict.TryGetValue(cardID, out EquipmentCard card))
+        if (equipCardDict != null && equipCardDict.TryGetValue(cardID, out EquipmentCard card))
             return card;
 
         return null;
@@ -217,6 +238,7 @@ public class CardList : MonoBehaviour
         _charCard.totalHp += _equipCard.Hp;
         _charCard.totalAtk += _equipCard.Atk;
     }
+    
     void UnEquipStats(CharCard _charCard, CardData _equipCard)
     {
         _charCard.totalHp -= _equipCard.Hp;
@@ -232,6 +254,7 @@ public class CardList : MonoBehaviour
     {
         equipmentDataManager.ImmediateSave();
     }
+    
     public void DelayedSaveEquipments()
     {
         equipmentDataManager.DelayedSave();
@@ -241,6 +264,12 @@ public class CardList : MonoBehaviour
     public List<CardData> GetEquipCardDataOf(CardData oriCardData)
     {
         CharCard charCard = FindCharCard(oriCardData);
+        if (charCard == null)
+        {
+            Logger.LogWarning($"[CardList] CharCard not found for {oriCardData.Name}");
+            return new List<CardData>();
+        }
+        
         Logger.Log($"{charCard.cardName}");
         List<CardData> equipCardDatas = new();
         for (int i = 0; i < 4; i++)

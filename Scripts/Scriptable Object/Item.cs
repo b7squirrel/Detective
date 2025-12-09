@@ -98,14 +98,14 @@ public class Item : ScriptableObject
 
         character.GetComponent<PassiveItems>().CheckIfMaxLevel(this);
 
-        Debug.LogError($"데미지 보너스 = {character.DamageBonus} 총 데미지 = {stats.damage}");
+        Logger.LogError($"데미지 보너스 = {character.DamageBonus} 총 데미지 = {stats.damage}");
     }
 
     void CheckIfMaxLevel(Character character)
     {
         if (stats.currentLevel == upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
         {
-            Debug.Log(Name + " is Max Level");
+            Logger.Log(Name + " is Max Level");
 
             WeaponData wd = null;
             for (int i=0;i < SynergyWeapons.Count;i++)

@@ -158,20 +158,78 @@ public class CardDataManager : MonoBehaviour
     string filePath;
     string myCards = "MyCards.txt";
     bool isInitializing = false;
+    
+    // ⭐ 배치 처리 플래그 추가
+    private bool isBatchMode = false;
+    private bool needsSave = false;
 
     void Start()
     {
         InitializeDataDirectory();
         Logger.Log(Application.persistentDataPath);
-        IsDataLoaded = true;
-        Logger.Log($"Card Data Manager 데이터 로드 완료");
         Load();
+        IsDataLoaded = true;
+        Logger.Log($"[CardDataManager] 데이터 로드 완료");
     }
+    
     void OnApplicationQuit()
     {
         IsDataLoaded = false;
     }
 
+    // ⭐ 배치 모드 시작
+    public void BeginBatchOperation()
+    {
+        isBatchMode = true;
+        needsSave = false;
+        Logger.Log("[CardDataManager] 배치 모드 시작");
+    }
+
+    // ⭐ 배치 모드 종료 및 저장
+    public void EndBatchOperation()
+    {
+        isBatchMode = false;
+        
+        if (needsSave)
+        {
+            SaveWithoutInitCardList();
+            needsSave = false;
+            Logger.Log("[CardDataManager] 배치 모드 종료 - 저장 완료");
+        }
+        else
+        {
+            Logger.Log("[CardDataManager] 배치 모드 종료 - 저장할 내용 없음");
+        }
+    }
+
+    // ⭐ InitCardList 호출 없는 순수 저장
+    void SaveWithoutInitCardList()
+    {
+        if (isInitializing) return;
+        
+        try
+        {
+            isInitializing = true;
+            
+            if (MyCardsList == null)
+            {
+                MyCardsList = new List<CardData>();
+            }
+            
+            string jsonData = JsonUtility.ToJson(new Serialization<CardData>(MyCardsList), true);
+            File.WriteAllText(filePath, jsonData, System.Text.Encoding.UTF8);
+            
+            Logger.Log($"[CardDataManager] 카드 데이터 저장 완료: {MyCardsList.Count}개");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[CardDataManager] 카드 데이터 저장 오류: {e.Message}");
+        }
+        finally
+        {
+            isInitializing = false;
+        }
+    }
 
     void InitializeDataDirectory()
     {
@@ -196,33 +254,44 @@ public class CardDataManager : MonoBehaviour
     {
         if (isInitializing) return;
         
-        try
+        // ⭐ 배치 모드면 저장 예약만
+        if (isBatchMode)
         {
-            isInitializing = true;
-            
-            if (MyCardsList == null)
-            {
-                MyCardsList = new List<CardData>();
-            }
-            
-            string jsonData = JsonUtility.ToJson(new Serialization<CardData>(MyCardsList), true);
-            File.WriteAllText(filePath, jsonData, System.Text.Encoding.UTF8);
-            
-            Logger.Log($"카드 데이터 저장 완료: {MyCardsList.Count}개");
-            
-            var cardListComponent = GetComponent<CardList>();
-            if (cardListComponent != null)
-            {
-                cardListComponent.InitCardList();
-            }
+            needsSave = true;
+            Logger.Log("[CardDataManager] 배치 모드: 저장 예약");
+            return;
         }
-        catch (Exception e)
+        
+        // 일반 저장
+        SaveWithoutInitCardList();
+        
+        // InitCardList는 필요할 때만 외부에서 호출
+        var cardListComponent = GetComponent<CardList>();
+        if (cardListComponent != null)
         {
-            Logger.LogError($"카드 데이터 저장 오류: {e.Message}");
+            cardListComponent.InitCardList();
         }
-        finally
+    }
+    
+    // ⭐ 외부에서 명시적으로 CardList 갱신
+    public void RefreshCardList()
+    {
+        var cardListComponent = GetComponent<CardList>();
+        if (cardListComponent != null)
         {
-            isInitializing = false;
+            Logger.Log("[CardDataManager] CardList 갱신 시작");
+            cardListComponent.InitCardList();
+            Logger.Log("[CardDataManager] CardList 갱신 완료");
+        }
+    }
+    
+    // ⭐ 배치 모드 중 CardList에 즉시 추가
+    void AddCardToCardListImmediately(CardData cardData)
+    {
+        var cardListComponent = GetComponent<CardList>();
+        if (cardListComponent != null)
+        {
+            cardListComponent.AddCardImmediately(cardData);
         }
     }
 
@@ -283,7 +352,6 @@ public class CardDataManager : MonoBehaviour
                     if (gachaSys != null)
                     {
                         gachaSys.AddEssentialEquip(startingCards[0]);
-                        // gachaSys.DelayedSaveEquipmentData();
                         gachaSys.ImmediateSaveEquipmentData();
                     }
                 }
@@ -342,12 +410,17 @@ public class CardDataManager : MonoBehaviour
         AddRandomSkill(_cardData);
         
         MyCardsList.Add(_cardData);
-        Logger.Log($"card data manager. starting card atk = {_cardData.Atk}");
+        Logger.Log($"[CardDataManager] 카드 추가: {_cardData.Name} (ID: {_cardData.ID})");
+        
+        // ⭐ 배치 모드 중에도 CardList에 즉시 추가
+        if (isBatchMode)
+        {
+            AddCardToCardListImmediately(_cardData);
+        }
+        
         Save();
     }
 
-    // AddNewCardToMyCardsList와 동일. 디버그 용으로 특정 스킬을 지정해서 카드를 뽑을 때 사용하는 메서드
-    // 이미 카드 데이터에 Skill을 가지고 이 메서드로 오게 되므로 Add Random Skill이 없음
     public void AddNewCardToMyCardsListWithSkill(CardData _cardData)
     {
         if (_cardData == null) return;
@@ -356,8 +429,14 @@ public class CardDataManager : MonoBehaviour
             MyCardsList = new List<CardData>();
 
         _cardData.ID = GenerateRandomId();
-        // Debug.LogError($"카드 데이터 메니져. Skill = {_cardData.PassiveSkill}");
         MyCardsList.Add(_cardData);
+        
+        // ⭐ 배치 모드 중에도 CardList에 즉시 추가
+        if (isBatchMode)
+        {
+            AddCardToCardListImmediately(_cardData);
+        }
+        
         Save();
     }
     

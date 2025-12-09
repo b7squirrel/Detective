@@ -13,12 +13,12 @@ public class CardSlotManager : MonoBehaviour
     #endregion
 
     [Header("필드 제어")]
-    [SerializeField] Animator fieldAnim; // 탭마다 다른 필드의 형태를 애니메이터로 제어
+    [SerializeField] Animator fieldAnim;
 
     #region 슬롯 생성 관련 변수
-    Dictionary<int, CardSlot> mySlots = new Dictionary<int, CardSlot>(); // 내가 가지고 있는 모든 슬롯을 ID로 검색하기 위해서
+    Dictionary<int, CardSlot> mySlots = new Dictionary<int, CardSlot>();
     [SerializeField] GameObject slotPrefab;
-    [SerializeField] Transform presentSlotField; // Grid Layout Group으로 슬롯들을 관리
+    [SerializeField] Transform presentSlotField;
     [SerializeField] Vector2 slotSize;
     Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
             { "Head", 0 },
@@ -29,12 +29,11 @@ public class CardSlotManager : MonoBehaviour
     #endregion
 
     #region 정렬 관련 변수
-    SortType currentSortType = SortType.Level; // 정렬 기본값은 레벨
-    bool ascending = false; // 기본값은 오름차순
+    SortType currentSortType = SortType.Level;
+    bool ascending = false;
     #endregion
 
     #region 초기화 플래그
-    // 슬롯이 초기화 되기 전에 SetSlot이 호출되면 알려주기 위한 플래그
     bool isInitialized = false;
     #endregion
 
@@ -48,22 +47,24 @@ public class CardSlotManager : MonoBehaviour
         StartCoroutine(DelayInitCo());
     }
 
-    // 기존에는 2초 후에 InitSlots를 했음. 그러면 슬롯이 초기화 되기 전에 다른 AllField 같은 곳에서 SetSlot을 하면 슬롯을 찾지 못함.
-    // 왜 그 때 2초를 지연시키기로 결정했을까?
+    // ⭐ 개선된 DelayInitCo - GameInitializer 대기
     IEnumerator DelayInitCo()
     {
-        yield return new WaitForSeconds(2f);
+        // GameInitializer가 모든 초기화를 완료할 때까지 대기
+        Logger.Log("[CardSlotManager] 게임 초기화 대기 중...");
+        yield return new WaitUntil(() => GameInitializer.IsInitialized);
+        
+        Logger.Log("[CardSlotManager] 초기화 시작");
         InitSlots();
-        isInitialized = true; // 초기화 완료 표시
+        isInitialized = true;
+        Logger.Log("[CardSlotManager] 초기화 완료");
     }
 
-    /// <summary>
-    /// 최초에는 그냥 Card data manager에 접근해서 내가 가진 모든 카드를 얻어와서 슬롯을 생성
-    /// my slots 딕셔너리에 id를 키로 해서 저장
-    /// </summary>
     void InitSlots()
     {
-        if (cardDataManager == null) cardDataManager = FindObjectOfType<CardDataManager>();
+        if (cardDataManager == null) 
+            cardDataManager = FindObjectOfType<CardDataManager>();
+        
         List<CardData> myAllCardDatas = new();
         myAllCardDatas.AddRange(cardDataManager.GetMyCardList());
 
@@ -74,42 +75,46 @@ public class CardSlotManager : MonoBehaviour
 
         InitialSortingByGrade();
     }
+    
     void GenSlots(CardData cardData)
     {
-        // 생성할 때만 cardSlot에 접근해서 getcomponent를 하니까 그냥 하자
         var slot = Instantiate(slotPrefab, presentSlotField);
         slot.transform.localScale = slotSize * Vector2.one;
         mySlots.Add(cardData.ID, slot.GetComponent<CardSlot>());
 
-        // 카드 디스플레이 업데이트
         UpdateCardDisplay(cardData);
     }
+    
     public void SetSlotActive(int cardID, bool _active)
     {
-        // mySlots[cardID].gameObject.SetActive(_active);
         if (!isInitialized)
         {
-            Debug.LogWarning($"슬롯 초기화 전 호출됨: ID {cardID}");
+            Logger.LogWarning($"[CardSlotManager] 슬롯 초기화 전 호출됨: ID {cardID}");
             return;
         }
+        
         if (mySlots.TryGetValue(cardID, out CardSlot slot))
         {
             slot.gameObject.SetActive(_active);
         }
         else
         {
-            Debug.LogWarning($"SetSlotActive 실패: ID {cardID} 슬롯이 존재하지 않습니다.");
+            Logger.LogWarning($"[CardSlotManager] SetSlotActive 실패: ID {cardID} 슬롯이 존재하지 않습니다.");
         }
     }
+    
     public void DestroySlot(int cardID)
     {
-        GameObject slotToDestroy = mySlots[cardID].gameObject;
-        mySlots.Remove(cardID); // 딕셔너리에서 제거
-        Destroy(slotToDestroy); // 실제 슬롯 오브젝트 제거
+        if (mySlots.TryGetValue(cardID, out CardSlot slot))
+        {
+            GameObject slotToDestroy = slot.gameObject;
+            mySlots.Remove(cardID);
+            Destroy(slotToDestroy);
+        }
     }
+    
     public void AddSlot(CardData card)
     {
-        // 빈 슬롯을 생성해서 필드에 배치, 최초에는 카드 데이터가 필요함
         var slot = Instantiate(slotPrefab, presentSlotField);
         slot.transform.position = Vector3.zero;
         slot.transform.localScale = slotSize;
@@ -127,16 +132,11 @@ public class CardSlotManager : MonoBehaviour
         }
         else
         {
-            // 카드가 없으면 안되는데 임시로 카드를 생성하게 했음. 왜 없는 경우가 생기는지 찾아야 함
             AddSlot(card);
-            Debug.Log("Weapon 슬롯 플에 해당 Card Data {card}에 해당하는 슬롯이 없습니다. 에러입니다.");
+            Logger.Log($"[CardSlotManager] Weapon 슬롯 풀에 해당 Card Data에 해당하는 슬롯이 없습니다. 슬롯 생성함.");
         }
     }
-    /// <summary>
-    /// 프레젠테이션 필드의 슬롯들을 모두 비활성화
-    /// 이전 탭의 슬롯들이 남아있지 않도록 하기 위해
-    /// 데이터 변화 없이 슬롯들만 필드에서 비활성화
-    /// </summary>
+
     public void ClearPresentationField()
     {
         foreach (var item in mySlots)
@@ -145,26 +145,14 @@ public class CardSlotManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 디버깅 용도. 카드의 레벨을 모두 최고 레벨로 올린 후 디스플레이 업데이트를 위해
-    /// </summary>
     public void UpdateAllCardSlotDisplay()
     {
-        // List<CardData> mCards = cardDataManager.GetMyCardList();
-        // foreach (var item in mCards)
-        // {
-        //     UpdateCardDisplay(item);
-        // }
         foreach (KeyValuePair<int, CardSlot> item in mySlots)
         {
             UpdateCardDisplay(item.Value.GetCardData());
         }
-
     }
 
-    /// <summary>
-    /// 디버그 용도. 카드 초기화 버튼에 연결되어 있음. 모든 슬롯들을 파괴하고 딕셔너리에서 제거하기
-    /// </summary>
     public void ClearAllSlots()
     {
         ClearPresentationField();
@@ -182,7 +170,6 @@ public class CardSlotManager : MonoBehaviour
         slotsToDestroy.Clear();
         mySlots.Clear();
 
-        // 리드 카드(시작 멤버)를 찾아 슬롯 초기화
         CardData leadCard = cardDataManager.GetMyCardList()
             .Find(x => x.StartingMember == StartingMember.Zero.ToString());
 
@@ -193,16 +180,12 @@ public class CardSlotManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("리드 카드를 찾을 수 없습니다.");
+            Logger.LogWarning("[CardSlotManager] 리드 카드를 찾을 수 없습니다.");
         }
     }
 
-    /// <summary>
-    /// 오리 카드를 생성한 후에 오리가 장착하고 있는 필수 아이템을 검색해서 슬롯으로 추가
-    /// </summary>
     public void AddItemSlotOf(CardData oriCard)
     {
-        // AddCardSlot(defaultEquip);
         if (cardList == null) cardList = FindObjectOfType<CardList>();
         List<CardData> equipCardDatas = cardList.GetEquipCardDataOf(oriCard);
 
@@ -218,11 +201,10 @@ public class CardSlotManager : MonoBehaviour
         SortByGrade();
     }
 
-    // 아이디를 가지고 mySlots를 검색해서 해당 카드슬롯을 반환
     public CardSlot GetSlotByID(int cardID)
     {
         mySlots.TryGetValue(cardID, out CardSlot slot);
-        return slot; // 없으면 자동으로 null 반환
+        return slot;
     }
 
     #region 정렬
@@ -252,7 +234,6 @@ public class CardSlotManager : MonoBehaviour
                 break;
         }
 
-        // Grid Layout Group에 반영
         for (int i = 0; i < cards.Count; i++)
         {
             if (mySlots.TryGetValue(cards[i].ID, out CardSlot slot))
@@ -270,14 +251,12 @@ public class CardSlotManager : MonoBehaviour
 
     void SortBy(SortType sortType)
     {
-        // 이미 해당 타입으로 정렬 중이면 오름차순/내림차순 토글
         if (currentSortType == sortType)
         {
             ascending = !ascending;
         }
         else
         {
-            // 새로운 정렬 타입이면 내림차순으로 시작
             currentSortType = sortType;
             ascending = false;
         }
@@ -285,7 +264,6 @@ public class CardSlotManager : MonoBehaviour
         SortSlots(sortType, ascending);
     }
     
-    // 버튼용 : 특정 속성으로 정렬 (버튼을 한 번 더 누르면 오름차순, 내림차순으로 토글)
     public void SortByName() => SortBy(SortType.Name);
     public void SortByGrade() => SortBy(SortType.Grade);
     public void SortByLevel() => SortBy(SortType.Level);

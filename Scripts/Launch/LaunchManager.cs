@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 대장 오리는 playerPref에 저장하자
 public class LaunchManager : MonoBehaviour
 {
     [SerializeField] CardSlot leadOriSlot;
@@ -14,8 +13,10 @@ public class LaunchManager : MonoBehaviour
 
     [SerializeField] GameObject fieldSlotPanel;
     [SerializeField] AllField field;
+
     [SerializeField] GameObject startButton;
     [SerializeField] GameObject BgToExitField;
+
     [SerializeField] StageInfoUI stageInfoUi;
     [SerializeField] StageInfo stageInfo;
 
@@ -24,7 +25,9 @@ public class LaunchManager : MonoBehaviour
 
     void OnEnable()
     {
-        // ⭐ 변경: 초기화 대기
+        // stageInfoUi.PlayFromStart();
+        
+        // ⭐ 초기화 대기
         StartCoroutine(InitLead());
 
         if (cardSlotManager == null) 
@@ -50,7 +53,7 @@ public class LaunchManager : MonoBehaviour
         stageInfoUi.Init(currentStage);
     }
 
-    // ⭐ 단순화: 항상 초기화 대기
+    // ⭐ 개선된 InitLead - GameInitializer 대기
     IEnumerator InitLead()
     {
         startButton.SetActive(false);
@@ -81,20 +84,32 @@ public class LaunchManager : MonoBehaviour
         
         Logger.Log("[LaunchManager] 리드 초기화 완료");
     }
-
+    
     void SetLead(CardData lead)
     {
         currentLead = lead;
+
+        // 리드오리 attr update
         currentAttr = statManager.GetLeadAttribute(currentLead);
+
         setCardDataOnSlot.PutCardDataIntoSlot(lead, leadOriSlot);
+
         startingDataContainer.SetLead(lead, currentAttr);
     }
 
+    // ⭐ 개선된 UpdateLead - 배치 모드 적용
     public void UpdateLead(CardData newLead)
     {
-        Logger.Log("Update Lead");
+        Logger.Log("[LaunchManager] Update Lead");
+        
+        // ⭐ 배치 모드로 두 번의 업데이트를 한 번에
+        cardDataManager.BeginBatchOperation();
+        
         cardDataManager.UpdateStartingmemberOfCard(currentLead, "N");
         cardDataManager.UpdateStartingmemberOfCard(newLead, "Zero");
+        
+        cardDataManager.EndBatchOperation();
+        cardDataManager.RefreshCardList();
 
         CardSlot currentCardSlot = cardSlotManager.GetSlotByID(currentLead.ID);
         cardSlotManager.UpdateCardDisplay(currentCardSlot.GetCardData());
@@ -114,6 +129,7 @@ public class LaunchManager : MonoBehaviour
     public void SetAllFieldTypeOf(string oriType, CardData currentLeadOri)
     {
         List<CardData> card = new();
+
         card = cardDataManager.GetMyCardList().FindAll(x => x.Type == oriType);
 
         if (cardSlotManager == null) 
@@ -121,8 +137,10 @@ public class LaunchManager : MonoBehaviour
         cardSlotManager.SettrigerAnim("Launch");
 
         field.GenerateAllCardsOfType(card, "Launch");
+
         BgToExitField.SetActive(true);
         startButton.SetActive(false);
+
         cardSlotManager.InitialSortingByGrade();
     }
 

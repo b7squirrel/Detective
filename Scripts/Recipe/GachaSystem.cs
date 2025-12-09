@@ -16,8 +16,8 @@ public class GachaSystem : MonoBehaviour
     List<CardData> itemPools;
 
     [Header("버튼 클릭 시 UI 관련 제어")]
-    [SerializeField] GameObject content; // 가챠 화면으로 넘어갈 때 상점을 숨기기 위해
-    [SerializeField] GameObject darkBG; // 가챠 화면으로 넘어갈 때 칠판 배경으로 덮기 위해
+    [SerializeField] GameObject content;
+    [SerializeField] GameObject darkBG;
 
     MainMenuManager mainMenuManager;
 
@@ -28,7 +28,7 @@ public class GachaSystem : MonoBehaviour
             { "Hand", 3 }
     };
 
-    List<CardData> cardsPicked; // 뽑은 카드를 저장하는 리스트
+    List<CardData> cardsPicked;
 
     [Header("가챠 패널")]
     [SerializeField] GachaPanelManager gachaPanelManager;
@@ -42,10 +42,12 @@ public class GachaSystem : MonoBehaviour
 
         mainMenuManager = FindObjectOfType<MainMenuManager>();
     }
+    
     void Start()
     {
         StartCoroutine(InitializeGachaSystem());
     }
+    
     IEnumerator InitializeGachaSystem()
     {
         // 게임 초기화 대기
@@ -55,7 +57,7 @@ public class GachaSystem : MonoBehaviour
         weaponPools = new ReadCardData().GetCardsList(weaponPoolDatabase);
         itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
         
-        Logger.Log("GachaSystem 초기화 완료");
+        Logger.Log("[GachaSystem] 초기화 완료");
     }
 
     void Draw(string _cardType)
@@ -66,12 +68,10 @@ public class GachaSystem : MonoBehaviour
         {
             int pickIndex = UnityEngine.Random.Range(0, weaponPools.Count);
             newCardData = CloneCardData(weaponPools[pickIndex]);
-            cardDataManager.AddNewCardToMyCardsList(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
+            cardDataManager.AddNewCardToMyCardsList(newCardData);
             AddEssentialEquip(newCardData);
 
             cardsPicked.Add(newCardData);
-
-            // 카드 슬롯 풀에 카드 슬롯 추가
             AddCardSlot(newCardData);
         }
         else if (_cardType == "Item")
@@ -81,52 +81,61 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.AddNewCardToMyCardsList(newCardData);
 
             cardsPicked.Add(newCardData);
-
-            // 카드 슬롯 풀에 카드 슬롯 추가
             AddCardSlot(newCardData);
         }
     }
+    
     #region Debug 특정 카드 뽑기
     public void DrawSpecificCard(string _cardType, int index, int grade, int num, int skill, int evo)
     {
-        for (int i = 0; i < num; i++)
+        // ⭐ 배치 모드 적용
+        cardDataManager.BeginBatchOperation();
+        Logger.Log($"[GachaSystem] {num}개 특정 카드 뽑기 시작");
+        
+        try
         {
-            CardData newCardData;
-
-            if (_cardType == "Weapon")
+            for (int i = 0; i < num; i++)
             {
-                newCardData = CloneCardData(weaponPools[index]);
-                newCardData.Grade = grade;
-                newCardData.PassiveSkill = skill + 1; 
-                newCardData.EvoStage = evo;
-                cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
-                AddEssentialEquip(newCardData);
+                CardData newCardData;
 
-                cardsPicked.Add(newCardData);
+                if (_cardType == "Weapon")
+                {
+                    newCardData = CloneCardData(weaponPools[index]);
+                    newCardData.Grade = grade;
+                    newCardData.PassiveSkill = skill + 1; 
+                    newCardData.EvoStage = evo;
+                    cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
+                    AddEssentialEquip(newCardData);
 
-                // 카드 슬롯 풀에 카드 슬롯 추가
-                AddCardSlot(newCardData);
+                    cardsPicked.Add(newCardData);
+                    AddCardSlot(newCardData);
+                }
+                else if (_cardType == "Item")
+                {
+                    newCardData = CloneCardData(itemPools[index]);
+                    newCardData.Grade = grade;
+                    newCardData.PassiveSkill = skill + 1;
+                    newCardData.EvoStage = evo;
+                    cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
+
+                    cardsPicked.Add(newCardData);
+                    AddCardSlot(newCardData);
+                }
             }
-            else if (_cardType == "Item")
-            {
-                newCardData = CloneCardData(itemPools[index]);
-                newCardData.Grade = grade;
-                // cardDataManager.AddNewCardToMyCardsList(newCardData);
-
-                newCardData.PassiveSkill = skill + 1;
-                newCardData.EvoStage = evo;
-                cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData); // 내 카드 데이터에 등록하고 아이디 부여, 바로 세이브
-
-                cardsPicked.Add(newCardData);
-
-                // 카드 슬롯 풀에 카드 슬롯 추가
-                AddCardSlot(newCardData);
-                // if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-                // cardSlotManager.AddItemSlotOf(newCardData);
-            }
+            
+            // ⭐ 배치 모드 종료
+            cardDataManager.EndBatchOperation();
+            cardDataManager.RefreshCardList();
+            DelayedSaveEquipmentData();
+            
+            Logger.Log("[GachaSystem] 특정 카드 뽑기 완료");
         }
-
-        DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브re
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 특정 카드 뽑기 오류: {e.Message}");
+            cardDataManager.EndBatchOperation();
+            throw;
+        }
     }
     #endregion
 
@@ -157,46 +166,31 @@ public class GachaSystem : MonoBehaviour
 
     public void AddEssentialEquip(CardData _oriCardData)
     {
-        // 아이템풀을 item pool database에서 불러와서 채워 넣기
         if (itemPools == null)
         {
             itemPools = new();
-
             itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
         }
 
-        // 카드데이터로 weapon data 얻어내기
         if (cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
         WeaponData wd = weaponItemData.weaponData;
 
-        // if (itemLookup == null)
-        // {
-        //     itemLookup = new Dictionary<(string, int), CardData>();
-        //     foreach (var item in itemPools)
-        //     {
-        //         itemLookup[(item.Name, item.Grade)] = item;
-        //     }
-        // }
-
-        // weaponData의 필수 장비 검색
         string part = _oriCardData.EssentialEquip;
         int index = defaultEquipIndex[part];
 
         CardData defaultEquip;
-        // 필수 장비가 없는 경우 경고
         if (wd.defaultItems[index] == null)
         {
             Logger.LogError("필수 장비가 인스펙터에 없습니다");
             return;
         }
 
-        // 스크립터블 오브젝트의 index로 검색
         int i = wd.defaultItems[index].itemIndex;
         CardData itemCardData = cardDictionary.GetItemCardData(i);
         if(itemCardData != null)
         {
-            defaultEquip = CloneCardData(itemCardData); // 복제 사용
+            defaultEquip = CloneCardData(itemCardData);
             if (defaultEquip != null)
             {
                 try
@@ -204,7 +198,6 @@ public class GachaSystem : MonoBehaviour
                     cardDataManager.AddNewCardToMyCardsList(defaultEquip);
                     cardList.Equip(_oriCardData, defaultEquip);
                     Logger.Log($"{defaultEquip.Name}을 장착합니다");
-                    // AddCardSlot(defaultEquip);
                 }
                 catch (Exception e)
                 {
@@ -216,43 +209,35 @@ public class GachaSystem : MonoBehaviour
 
     public void AddDefaultEquip(CardData _oriCardData)
     {
-        // 아이템풀을 item pool database에서 불러와서 채워 넣기
         if (itemPools == null)
         {
             itemPools = new();
-
             itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
         }
 
-        // 카드데이터로 weapon data 얻어내기
         if (cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
         WeaponData wd = weaponItemData.weaponData;
 
-        // 검색 속도 향상을 위해 Dictionary 생성
-        // Key: (아이템 이름, 등급), Value: CardData
         Dictionary<(string Name, int Grade), CardData> itemLookup = new Dictionary<(string, int), CardData>();
         foreach (var item in itemPools)
         {
             itemLookup[(item.Name, item.Grade)] = item;
         }
 
-        // weaponData의 디폴트 장비들을 탐색
         CardData[] defaultEquips = new CardData[4];
         for (int equipIndex = 0; equipIndex < 4; equipIndex++)
         {
-            // 기본 장비가 없는 경우 명시적으로 null 처리
             if (wd.defaultItems[equipIndex] == null)
             {
                 defaultEquips[equipIndex] = null;
                 continue;
             }
 
-            // Dictionary에서 직접 검색
             var searchKey = (wd.defaultItems[equipIndex].Name, wd.defaultItems[equipIndex].grade);
             if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
             {
-                defaultEquips[equipIndex] = CloneCardData(matchingItem); // 복제 사용
+                defaultEquips[equipIndex] = CloneCardData(matchingItem);
                 if (defaultEquips[equipIndex] != null)
                 {
                     try
@@ -269,55 +254,80 @@ public class GachaSystem : MonoBehaviour
         }
     }
 
-    // 상점 버튼
+    // ⭐ 개선된 DrawWeapons - 배치 모드 적용
     public void DrawWeapons(int num)
     {
         // 무기 카드 수 제한 확인
         int weaponCount = CountWeaponCards();
-        int maxWeaponLimit = 100; // 최대 무기 카드 제한
+        int maxWeaponLimit = 100;
 
         if (weaponCount > maxWeaponLimit)
         {
             Logger.Log($"오리 카드의 갯수가 {maxWeaponLimit}개를 넘습니다. 현재 {weaponCount}개의 오리 카드가 있습니다.");
             GetComponent<CardLimitWarningDialog>().SetWarningText("오리", weaponCount);
-            return; // 메서드 실행 중단
+            return;
         }
 
         mainMenuManager.SetActiveTopTabs(false);
         mainMenuManager.SetActiveBottomTabs(false);
 
+        // ⭐ 배치 모드 시작
+        cardDataManager.BeginBatchOperation();
+        Logger.Log($"[GachaSystem] {num}개 무기 뽑기 시작");
+        
         cardsPicked.Clear();
-        for (int i = 0; i < num; i++)
+        
+        try
         {
-            Draw("Weapon");
+            // 모든 뽑기 실행 (저장 예약만 됨)
+            for (int i = 0; i < num; i++)
+            {
+                Logger.Log($"[GachaSystem] Draw #{i+1}");
+                Draw("Weapon");
+            }
+            
+            // ⭐ 배치 모드 종료 (한 번만 저장)
+            cardDataManager.EndBatchOperation();
+            
+            // ⭐ CardList 한 번만 초기화
+            cardDataManager.RefreshCardList();
+            
+            // 장비 데이터도 저장
+            ImmediateSaveEquipmentData();
+            
+            Logger.Log("[GachaSystem] 가챠 완료 - 모든 데이터 저장됨");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 가챠 오류: {e.Message}");
+            cardDataManager.EndBatchOperation();
+            throw;
         }
 
-        DelayedSaveEquipmentData(); // 장비 장착을 모두 뽑고 나서 세이브re
-
-
-        Logger.Log("after save");
-
+        // UI 업데이트
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
 
-        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
+        if (cardSlotManager == null) 
+            cardSlotManager = FindObjectOfType<CardSlotManager>();
+        
         for (int i = 0; i < cardsPicked.Count; i++)
         {
             cardSlotManager.AddItemSlotOf(cardsPicked[i]);
         }
 
-        //가챠 패널로 넘어갈 때 상점 메뉴를 숨기고 배경으로 덮기
         content.SetActive(false);
         darkBG.SetActive(true);
     }
+    
     void AddCardSlot(CardData card)
     {
-        // 카드 슬롯 풀에 추가된 카드 슬롯 배치
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.AddSlot(card);
 
         Debug.Log($"{card.ID} : {card.Name} 이 슬롯에 추가되었습니다.");
     }
+    
     public void DrawWeaponsAboveGrade(int _grade)
     {
         mainMenuManager.SetActiveTopTabs(false);
@@ -329,33 +339,57 @@ public class GachaSystem : MonoBehaviour
         }
         DebugGacha(cardsPicked);
     }
+    
+    // ⭐ 개선된 DrawItems - 배치 모드 적용
     public void DrawItems(int num)
     {
         // 아이템 카드 수 제한 확인
         int itemCount = CountItemCards();
-        int maxItemLimit = 200; // 최대 아이템 카드 제한
+        int maxItemLimit = 200;
 
         if (itemCount > maxItemLimit)
         {
             Logger.Log($"아이템 카드의 갯수가 {maxItemLimit}개를 넘습니다. 현재 {itemCount}개의 아이템 카드가 있습니다.");
             GetComponent<CardLimitWarningDialog>().SetWarningText("아이템", itemCount);
-            return; // 메서드 실행 중단
+            return;
         }
 
         mainMenuManager.SetActiveTopTabs(false);
         mainMenuManager.SetActiveBottomTabs(false);
+        
+        // ⭐ 배치 모드 적용
+        cardDataManager.BeginBatchOperation();
+        Logger.Log($"[GachaSystem] {num}개 아이템 뽑기 시작");
+        
         cardsPicked.Clear();
-        for (int i = 0; i < num; i++)
+        
+        try
         {
-            Draw("Item");
+            for (int i = 0; i < num; i++)
+            {
+                Logger.Log($"[GachaSystem] DrawItem #{i+1}");
+                Draw("Item");
+            }
+            
+            cardDataManager.EndBatchOperation();
+            cardDataManager.RefreshCardList();
+            
+            Logger.Log("[GachaSystem] 아이템 가챠 완료");
         }
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 아이템 가챠 오류: {e.Message}");
+            cardDataManager.EndBatchOperation();
+            throw;
+        }
+        
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
 
-        //가챠 패널로 넘어갈 때 상점 메뉴를 숨기고 배경으로 덮기
         content.SetActive(false);
         darkBG.SetActive(true);
     }
+    
     public void DrawCombo(int num)
     {
         mainMenuManager.SetActiveTopTabs(false);
@@ -375,6 +409,7 @@ public class GachaSystem : MonoBehaviour
         }
         DebugGacha(cardsPicked);
     }
+    
     void DebugGacha(List<CardData> cards)
     {
         foreach (var item in cards)
@@ -383,7 +418,7 @@ public class GachaSystem : MonoBehaviour
             Logger.Log($"{grade} {item.Name}을 뽑았습니다.");
         }
     }
-    // 무기 카드 수를 계산하는 메서드
+    
     int CountWeaponCards()
     {
         List<CardData> myCards = cardDataManager.GetMyCardList();
@@ -399,7 +434,7 @@ public class GachaSystem : MonoBehaviour
 
         return count;
     }
-    // 아이템 카드 수를 계산하는 메서드
+    
     int CountItemCards()
     {
         List<CardData> myCards = cardDataManager.GetMyCardList();
@@ -424,6 +459,6 @@ public class GachaSystem : MonoBehaviour
     public void DelayedSaveEquipmentData()
     {
         cardList.DelayedSaveEquipments();
-        Logger.Log("Save on Gacha System");
+        Logger.Log("[GachaSystem] Save on Gacha System");
     }
 }
