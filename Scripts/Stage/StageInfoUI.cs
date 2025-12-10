@@ -17,7 +17,9 @@ public class StageInfoUI : MonoBehaviour
     internal void Init(Stages _currentStage)
     {
         stageManager = FindObjectOfType<PlayerDataManager>();
-        Title.text = stageManager.GetCurrentStageNumber().ToString() + ". " + _currentStage.Title;
+        int currentStageIndex = stageManager.GetCurrentStageNumber();
+        // Title.text = stageManager.GetCurrentStageNumber().ToString() + ". " + _currentStage.Title;
+        Title.text = currentStageIndex.ToString() + ". " + LocalizationManager.Game.stageBossName[currentStageIndex-1];
 
         StageInfo stageInfo = FindObjectOfType<StageInfo>();
         // anim.runtimeAnimatorController = stageInfo.GetStageInfo(stageManager.GetCurrentStageNumber()).bossImage;

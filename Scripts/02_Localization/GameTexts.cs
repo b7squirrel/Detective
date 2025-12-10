@@ -20,15 +20,34 @@ public class GameTexts : ScriptableObject
     public string level = "레벨";
     public string atk = "공격력";
     public string hp = "체력";
+
+    [Header("UI Buttons")]
+    public string buttonUpgrade = "업그레이드";
+    public string buttonEquip = "장착";
+    public string buttonUnequip = "장착 해제";
+    public string buttonStart = "시작!";
+    public string buttonBack = "뒤로";
+    public string buttonConfirm = "확인";
+    public string buttonCancel = "취소";
+    public string buttonSettings = "설정";
+    public string buttonMainMenu = "메인 메뉴";
     
+    [Header("Shop Panel")]
+    public string Shop = "상점";
+    public string beginnerPack = "초보자 지원 세트";
+    public string ExpertPack = "전문가 지원 세트";
+    public string luckyBox = "행운 상자";
+    public string duckCard = "오리 카드";
+    public string itemCard = "아이템 카드";
+    public string singleDraw = "1회 뽑기";
+    public string tenXDraw = "10회 뽑기";
+    public string watchAdToDraw = "광고 보고 뽑기";
+
     [Header("Launch Panel")]
     public string tabToSelectLead = "탭해서 리드 오리 선택.";
     public string startButton = "시작!";
 
     [Header("Equip Panel")]
-    public string upgrade = "업그레이드";
-    public string equip = "장착";
-    public string unequip = "장비 해제";
     public string duck = "오리";
     public string head = "머리";
     public string chest ="가슴";
