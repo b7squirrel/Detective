@@ -10,5 +10,6 @@ public class LoadingSwipeHint : MonoBehaviour
         if (hintsOnLoading == null) hintsOnLoading =FindObjectOfType<HintsOnLoading>();
         hintsOnLoading.Init();
         hintText.text = hintsOnLoading.GetHint();
+        hintText.text = LocalizationManager.Game.GetRandomHint();
     }
 }

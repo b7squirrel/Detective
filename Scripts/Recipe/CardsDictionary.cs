@@ -76,12 +76,12 @@ public class CardsDictionary : MonoBehaviour
         if (weaponItemData.weaponData == null)
         {
             // dispName = weaponItemData.itemData.DisplayName;
-            dispName = GameTextsManager.Texts.GetWeaponDisplayName(weaponItemData.itemData.Name);
+            dispName = LocalizationManager.Char.GetWeaponDisplayName(weaponItemData.itemData.Name);
         }
         else
         {
             // dispName = weaponItemData.weaponData.DisplayName;
-            dispName = GameTextsManager.Texts.GetWeaponDisplayName(weaponItemData.weaponData.Name);
+            dispName = LocalizationManager.Char.GetWeaponDisplayName(weaponItemData.weaponData.Name);
         }
         return dispName;
     }

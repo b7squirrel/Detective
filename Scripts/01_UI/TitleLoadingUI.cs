@@ -129,13 +129,13 @@ public class TitleLoadingUI : MonoBehaviour
             if (statusText != null)
             {
                 if (displayProgress < 0.25f)
-                    statusText.text = GameTextsManager.Texts.loadingCardData;
+                    statusText.text = LocalizationManager.Game.loadingCardData;
                 else if (displayProgress < 0.5f)
-                    statusText.text = GameTextsManager.Texts.loadingPlayerData;
+                    statusText.text = LocalizationManager.Game.loadingPlayerData;
                 else if (displayProgress < 0.75f)
-                    statusText.text = GameTextsManager.Texts.loadingEquipment;
+                    statusText.text = LocalizationManager.Game.loadingEquipment;
                 else
-                    statusText.text = GameTextsManager.Texts.loadingComplete;
+                    statusText.text = LocalizationManager.Game.loadingComplete;
             }
 
             yield return null;
@@ -175,7 +175,7 @@ public class TitleLoadingUI : MonoBehaviour
             progressText.text = "100%";
         
         if (statusText != null)
-            statusText.text = GameTextsManager.Texts.loadingComplete;
+            statusText.text = LocalizationManager.Game.loadingComplete;
         
         yield return new WaitForSeconds(0.5f);
         

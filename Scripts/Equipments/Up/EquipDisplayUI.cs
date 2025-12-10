@@ -46,9 +46,11 @@ public class EquipDisplayUI : MonoBehaviour
         SetNumStar(intEvoStage + 1);
 
         SkillDescriptionPanel.SetActive(true);
-        SkillName.text = Skills.SkillNames[charCardData.PassiveSkill - 1];
+        
+        // 스킬 이름 및 설명 (CharTexts 사용)
+        SkillName.text = LocalizationManager.Char.skillNames[charCardData.PassiveSkill - 1];
         SkillName.color = MyGrade.GradeColors[charCardData.Grade];
-        SkillDescription.text = Skills.SkillDescriptions[charCardData.PassiveSkill - 1];
+        SkillDescription.text = LocalizationManager.Char.skillDescriptions[charCardData.PassiveSkill - 1];
 
         for (int i = 0; i < 5; i++)
         {
@@ -66,8 +68,9 @@ public class EquipDisplayUI : MonoBehaviour
         titleRibbon.SetActive(true);
         titleRibbonShadow.SetActive(true);
         Title.text = dispName;
-        // 카드 레벨 텍스트
-        Level.text = GameTextsManager.Texts.level + " " + charCardData.Level;
+        
+        // 카드 레벨 텍스트 (GameTexts 사용)
+        Level.text = LocalizationManager.Game.level + " " + charCardData.Level;
         LevelShadow.text = Level.text;
 
         // 디버그
@@ -129,7 +132,8 @@ public class EquipDisplayUI : MonoBehaviour
     
     public void SetLevelUI(CardData cardOnDisplay)
     {
-        Level.text = "LV " + cardOnDisplay.Level;
+        // GameTexts 사용
+        Level.text = LocalizationManager.Game.level + " " + cardOnDisplay.Level;
         LevelShadow.text = Level.text;
     }
 

@@ -9,90 +9,83 @@ public class GameTexts : ScriptableObject
     public string loadingEquipment = "장비 준비 중...";
     public string loadingComplete = "출동 준비 중...";
     public string loading = "로딩 중";
-
+    
     [Header("Grade Names")]
     public string[] gradeNames = new string[]
     {
         "일반", "희귀", "고급", "전설", "신화"
     };
-    [Header("Weapon Display Names")]
-    [Tooltip("WeaponData의 Name과 매칭됩니다")]
-    public WeaponLocalizedName[] weaponNames = new WeaponLocalizedName[9];
-
-    [System.Serializable]
-    public class WeaponLocalizedName
-    {
-        [Tooltip("WeaponData.Name (내부 식별용)")]
-        public string weaponInternalName;
-
-        [Tooltip("화면에 표시될 이름")]
-        public string displayName;
-
-        [Tooltip("시너지 설명용 이름 (선택사항)")]
-        public string synergyDisplayName;
-    }
-
-    // 내부 이름으로 표시 이름 찾기
-    public string GetWeaponDisplayName(string weaponInternalName)
-    {
-        foreach (var weapon in weaponNames)
-        {
-            if (weapon.weaponInternalName == weaponInternalName)
-                return weapon.displayName;
-        }
-        return weaponInternalName; // 못 찾으면 내부 이름 그대로 반환
-    }
-
-    public string GetWeaponSynergyName(string weaponInternalName)
-    {
-        foreach (var weapon in weaponNames)
-        {
-            if (weapon.weaponInternalName == weaponInternalName)
-                return weapon.synergyDisplayName;
-        }
-        return weaponInternalName;
-    }
-
-    [Header("Skill Names")]
-    public string[] skillNames = new string[]
-    {
-        "강철 피부",
-        "느림보 최면술",
-        "넓은 공격",
-        "천하 무적",
-        "파티 타임"
-    };
-
-    [Header("Skill Descriptions")]
-    public string[] skillDescriptions = new string[]
-    {
-        "동료들이 몸으로 적들의 공격을 막아줍니다.",
-        "잠시 최면을 걸어 적들을 느려지게 합니다.",
-        "화면 안의 모든 적들에게 데미지를 줍니다.",
-        "잠시동안 무적이 됩니다.",
-        "잠시동안 자신과 동료들의 공격력을 올려줍니다."
-    };
-
-    [Header("Item Skill Names")]
-    public string[] itemSkillNames = new string[]
-    {
-        "모든 공격",
-        "모든 방어",
-        "이동 속도",
-        "넓은 자석",
-    };
-
-    [Header("Item Skill Descriptions")]
-    public string[] itemSkillDescriptions = new string[]
-    {
-        "모든 오리들의 공격력을 높여줍니다.",
-        "리드 오리의 방어력을 높여줍니다.",
-        "리드 오리의 이동 속도를 높여줍니다.",
-        "자력 범위를 더 넓혀 줍니다.",
-    };
-
+    
+    [Header("UI Labels")]
+    public string level = "레벨";
+    public string atk = "공격력";
+    public string hp = "체력";
+    
     [Header("Launch Panel")]
     public string tabToSelectLead = "탭해서 리드 오리 선택.";
     public string startButton = "시작!";
-    public string level = "레벨";
+
+    [Header("Equip Panel")]
+    public string upgrade = "업그레이드";
+    public string equip = "장착";
+    public string unequip = "장비 해제";
+    public string duck = "오리";
+    public string head = "머리";
+    public string chest ="가슴";
+    public string face = "얼굴";
+    public string hand = "손";
+
+    [Header("Stage Name")]
+    public string[] stageBossName = new string[]
+    {
+        "몰랑이 왕자",
+        "힘쎈이 왕자",
+        "날쎈이 왕자",
+        "거대미 왕자",
+        "파닥이 왕자",
+        "뽀글뽀글 여왕",
+        "몰랑이 왕자",
+        "힘쎈이 왕자",
+        "날쎈이 왕자",
+        "거대미 왕자",
+        "파닥이 왕자",
+        "데굴데굴 여왕",
+        "몰랑이 왕자",
+        "힘쎈이 왕자",
+        "날쎈이 왕자",
+        "거대미 왕자",
+        "파닥이 왕자",
+        "드릴드릴 여왕",
+        "몰랑이 왕자",
+        "힘쎈이 왕자",
+        "날쎈이 왕자",
+        "거대미 왕자",
+        "파닥이 왕자",
+        "삐용삐용 여왕",
+        "몰랑이 왕자",
+        "힘쎈이 왕자",
+        "날쎈이 왕자",
+        "거대미 왕자",
+        "파닥이 왕자",
+        "아뜨아뜨 여왕"
+    };
+
+    [Header("Game Hints")]
+    [Tooltip("로딩 중 표시될 힌트들")]
+    public string[] gameHints = new string[]
+    {
+        "팁: 체력이 낮을 때는\n상자에서 달콤우유가\n 나올 확률이\n높아집니다.",
+        "팁: 월계수는 잠시동안 오리를\n무적으로 만들어 줍니다.",
+        "팁: 각 오리들은 시너지 스킬을 얻으면\n시너지 오리로 변신할 수 있습니다.",
+        "팁: 동료 오리들이 리드 오리를\n둘러싸도록 해보세요.\n적들의 공격을 막아 줄거에요.",
+        "팁: 달콤 우유는 우주에서 가장 맛있는\n음료수입니다. 체력까지 채워줍니다!",
+        "팁: 스테이지 클리어를 계속 실패한다면\n카드를 업그레이드 시켜보세요.",
+    };
+    
+    // 랜덤 힌트 가져오기
+    public string GetRandomHint()
+    {
+        if (gameHints.Length == 0) return "";
+        return gameHints[Random.Range(0, gameHints.Length)];
+    }
 }
