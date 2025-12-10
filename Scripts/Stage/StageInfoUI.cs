@@ -9,24 +9,62 @@ public class StageInfoUI : MonoBehaviour
 
     [Header("Boss Image")]
     [SerializeField] Animator anim;
-    [SerializeField] Transform stageBossImageTrns; // 보스 이미지를 위치시킬 장소
-    [SerializeField] Image stageBG; // 스테이지 배경
+    [SerializeField] Transform stageBossImageTrns;
+    [SerializeField] Image stageBG;
     GameObject stageBossImage;
 
-
-    internal void Init(Stages _currentStage)
+    void OnEnable()
     {
-        stageManager = FindObjectOfType<PlayerDataManager>();
+        // OnEnable에서 이벤트 구독
+        LocalizationManager.OnLanguageChanged += UpdateLanguage;
+        
+        // 활성화 시 초기화
+        Init();
+    }
+    
+    void OnDisable()
+    {
+        // OnDisable에서 이벤트 구독 해제
+        LocalizationManager.OnLanguageChanged -= UpdateLanguage;
+    }
+    
+    // 언어 변경 시 텍스트만 업데이트
+    private void UpdateLanguage()
+    {
+        if (stageManager != null && LocalizationManager.Game != null)
+        {
+            int currentStageIndex = stageManager.GetCurrentStageNumber();
+            Title.text = currentStageIndex.ToString() + ". " + 
+                        LocalizationManager.Game.stageBossName[currentStageIndex - 1];
+        }
+    }
+    
+    internal void Init()
+    {
+        if (stageManager == null)
+            stageManager = FindObjectOfType<PlayerDataManager>();
+            
         int currentStageIndex = stageManager.GetCurrentStageNumber();
-        // Title.text = stageManager.GetCurrentStageNumber().ToString() + ". " + _currentStage.Title;
-        Title.text = currentStageIndex.ToString() + ". " + LocalizationManager.Game.stageBossName[currentStageIndex-1];
+        
+        // 텍스트 업데이트
+        if (LocalizationManager.Game != null)
+        {
+            Title.text = currentStageIndex.ToString() + ". " + 
+                        LocalizationManager.Game.stageBossName[currentStageIndex - 1];
+        }
 
         StageInfo stageInfo = FindObjectOfType<StageInfo>();
-        // anim.runtimeAnimatorController = stageInfo.GetStageInfo(stageManager.GetCurrentStageNumber()).bossImage;
-        if (stageBossImage != null) Destroy(stageBossImage);
-        stageBossImage = Instantiate(stageInfo.GetStageInfo(stageManager.GetCurrentStageNumber()).bossImagePrefab,
-                                    stageBossImageTrns.position, Quaternion.identity);
+        
+        // 보스 이미지 업데이트
+        if (stageBossImage != null) 
+            Destroy(stageBossImage);
+            
+        stageBossImage = Instantiate(
+            stageInfo.GetStageInfo(currentStageIndex).bossImagePrefab,
+            stageBossImageTrns.position, 
+            Quaternion.identity,
+            stageBossImageTrns); // 부모 설정 추가
 
-        stageBG.sprite = stageInfo.GetStageInfo(stageManager.GetCurrentStageNumber()).stageBG;
+        stageBG.sprite = stageInfo.GetStageInfo(currentStageIndex).stageBG;
     }
 }

@@ -62,6 +62,14 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.buttonMainMenu;
             case UITextKey.TapToSelectLead:
                 return LocalizationManager.Game.tabToSelectLead;
+            case UITextKey.Merge:
+                return LocalizationManager.Game.buttonMerge;
+            case UITextKey.DuckTab:
+                return LocalizationManager.Game.duckTab;
+            case UITextKey.ItemTab:
+                return LocalizationManager.Game.itemTab;
+            case UITextKey.TabToContinue:
+                return LocalizationManager.Game.tabToContinue;
             default:
                 return key.ToString();
         }
@@ -88,5 +96,9 @@ public enum UITextKey
     ItemCard,
     SingleDraw,
     tenXDraw,
-    WatchAdToDraw
+    WatchAdToDraw,
+    Merge,
+    DuckTab,
+    ItemTab,
+    TabToContinue
 }

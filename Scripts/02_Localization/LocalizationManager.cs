@@ -19,6 +19,9 @@ public class LocalizationManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private Language currentLanguage;
     
+    // Singleton 추가
+    public static LocalizationManager Instance { get; private set; }
+    
     // Static 접근자
     public static GameTexts Game { get; private set; }
     public static CharTexts Char { get; private set; }
@@ -28,11 +31,27 @@ public class LocalizationManager : MonoBehaviour
     // 언어 변경 이벤트
     public static event System.Action OnLanguageChanged;
     
+    // 초기화 완료 여부
+    public static bool IsInitialized { get; private set; }
+    
     void Awake()
     {
+        // Singleton 설정
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
         // 저장된 언어 불러오기 (기본: Korean = 0)
         int savedLangIndex = PlayerPrefs.GetInt("Language", 0);
         SetLanguage((Language)savedLangIndex);
+        
+        IsInitialized = true;
     }
     
     public void SetLanguage(Language language)
@@ -50,6 +69,8 @@ public class LocalizationManager : MonoBehaviour
         
         // 디버그
         currentLanguage = language;
+        
+        IsInitialized = true;
         
         // UI 갱신 이벤트 발생
         OnLanguageChanged?.Invoke();

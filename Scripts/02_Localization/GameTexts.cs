@@ -31,6 +31,10 @@ public class GameTexts : ScriptableObject
     public string buttonCancel = "취소";
     public string buttonSettings = "설정";
     public string buttonMainMenu = "메인 메뉴";
+    public string buttonMerge = "합성";
+    public string duckTab = "오리";
+    public string itemTab = "아이템";
+    public string tabToContinue = "화면을 터치해서 계속하기";
     
     [Header("Shop Panel")]
     public string Shop = "상점";
@@ -39,6 +43,8 @@ public class GameTexts : ScriptableObject
     public string luckyBox = "행운 상자";
     public string duckCard = "오리 카드";
     public string itemCard = "아이템 카드";
+    public string coin = "코인";
+    public string cristal = "크리스탈";
     public string singleDraw = "1회 뽑기";
     public string tenXDraw = "10회 뽑기";
     public string watchAdToDraw = "광고 보고 뽑기";

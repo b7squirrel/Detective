@@ -50,7 +50,7 @@ public class LaunchManager : MonoBehaviour
     {
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
         Stages currentStage = stageInfo.GetStageInfo(stageNum);
-        stageInfoUi.Init(currentStage);
+        stageInfoUi.Init();
     }
 
     // ⭐ 개선된 InitLead - GameInitializer 대기

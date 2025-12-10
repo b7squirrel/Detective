@@ -11,6 +11,8 @@ public class LocalizedShopUIText : MonoBehaviour
     [SerializeField] TextMeshProUGUI luckyBox;
     [SerializeField] TextMeshProUGUI duckCard;
     [SerializeField] TextMeshProUGUI itemCard;
+    [SerializeField] TextMeshProUGUI coin;
+    [SerializeField] TextMeshProUGUI cristal;
     [SerializeField] TextMeshProUGUI[] singleDraw;
     [SerializeField] TextMeshProUGUI[] tenxDraw;
     [SerializeField] TextMeshProUGUI watchAdToDraw;
@@ -35,6 +37,9 @@ public class LocalizedShopUIText : MonoBehaviour
         luckyBox.text = LocalizationManager.Game.luckyBox;
         duckCard.text = LocalizationManager.Game.duckCard;
         itemCard.text = LocalizationManager.Game.itemCard;
+        coin.text = LocalizationManager.Game.coin;
+        cristal.text = LocalizationManager.Game.cristal;
+
         foreach (var item in singleDraw)
         {
             item.text = LocalizationManager.Game.singleDraw;
