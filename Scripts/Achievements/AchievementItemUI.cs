@@ -18,6 +18,8 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] GameObject CompletedPanel;
     [SerializeField] GameObject checkImage;
     [SerializeField] RectTransform effectStartPos; // 보상 이펙트가 나올 위치
+    [SerializeField] GameObject postItYellow;
+    [SerializeField] GameObject postItPink;
 
     [Header("보상 아이콘")]
     [SerializeField] Sprite gemIcon; // 보석 아이콘
@@ -67,9 +69,13 @@ public class AchievementItemUI : MonoBehaviour
             {
                 case RewardType.GEM:
                     rewardIcon.sprite = gemIcon;
+                    postItPink.SetActive(true);
+                    postItYellow.SetActive(false);
                     break;
                 case RewardType.COIN:
                     rewardIcon.sprite = coinIcon;
+                    postItPink.SetActive(false);
+                    postItYellow.SetActive(true);
                     break;
             }
         }
