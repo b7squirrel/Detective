@@ -70,6 +70,14 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.itemTab;
             case UITextKey.TabToContinue:
                 return LocalizationManager.Game.tabToContinue;
+            case UITextKey.SortBy:
+                return LocalizationManager.Game.sortBy;
+            case UITextKey.SortByName:
+                return LocalizationManager.Game.sortByName;
+            case UITextKey.SortByLevel:
+                return LocalizationManager.Game.sortByLevel;
+            case UITextKey.SortByGrade:
+                return LocalizationManager.Game.sortByGrade;
             default:
                 return key.ToString();
         }
@@ -100,5 +108,9 @@ public enum UITextKey
     Merge,
     DuckTab,
     ItemTab,
-    TabToContinue
+    TabToContinue,
+    SortBy,
+    SortByName,
+    SortByLevel,
+    SortByGrade
 }

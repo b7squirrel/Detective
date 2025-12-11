@@ -35,6 +35,10 @@ public class GameTexts : ScriptableObject
     public string duckTab = "오리";
     public string itemTab = "아이템";
     public string tabToContinue = "화면을 터치해서 계속하기";
+    public string sortBy = "정렬";
+    public string sortByName = "이름";
+    public string sortByLevel = "등급";
+    public string sortByGrade = "레벨";
     
     [Header("Shop Panel")]
     public string Shop = "상점";
