@@ -29,23 +29,24 @@ public class AchievementItemUI : MonoBehaviour
     [HideInInspector] public RuntimeAchievement ra;
     Animator anim;
 
+    void Awake()
+    {
+        LocalizationManager.OnLanguageChanged += UpdateText;
+    }
+
+    void OnDestroy()
+    {
+        LocalizationManager.OnLanguageChanged -= UpdateText;
+    }
+
     void OnEnable()
     {
-        // 언어 변경 이벤트 구독
-        LocalizationManager.OnLanguageChanged += UpdateText;
-        
-        // 다른 탭에 갔다오면 (비활성화가 되었다가 다시 활성화가 되면) 다시 디폴트 애니메이션을 재생하는 것을 방지
+        // 애니메이션 처리만
         if (ra != null && ra.isCompleted)
         {
             if (anim == null) anim = GetComponent<Animator>();
             anim.Play("AchievementItem Completed", 0, 0f);
         }
-    }
-    
-    void OnDisable()
-    {
-        // 이벤트 구독 해제
-        LocalizationManager.OnLanguageChanged -= UpdateText;
     }
 
     public void Bind(RuntimeAchievement runtime)
@@ -93,6 +94,7 @@ public class AchievementItemUI : MonoBehaviour
         // LocalizationManager 초기화 확인
         if (!LocalizationManager.IsInitialized || LocalizationManager.Achievement == null)
         {
+            Logger.LogError($"Achievement Item UI 폴백");
             // 폴백: AchievementSO의 레거시 필드 사용
             if (titleText != null)
                 titleText.text = ra.original.title;

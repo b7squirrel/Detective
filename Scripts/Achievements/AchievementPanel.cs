@@ -21,6 +21,9 @@ public class AchievementPanel : MonoBehaviour
         AchievementManager.Instance.OnAnyProgressChanged += UpdateItem;
         AchievementManager.Instance.OnAnyCompleted += UpdateItem;
         AchievementManager.Instance.OnAnyRewarded += RemoveItem;
+        
+        // ★ 언어 변경 이벤트 구독 추가
+        LocalizationManager.OnLanguageChanged += RefreshAllText;
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Off");
@@ -36,13 +39,21 @@ public class AchievementPanel : MonoBehaviour
 
     private void OnDisable()
     {
-        AchievementManager.Instance.OnAnyProgressChanged -= UpdateItem;
-        AchievementManager.Instance.OnAnyCompleted -= UpdateItem;
-        AchievementManager.Instance.OnAnyRewarded -= RemoveItem;
+        if (AchievementManager.Instance != null)
+        {
+            AchievementManager.Instance.OnAnyProgressChanged -= UpdateItem;
+            AchievementManager.Instance.OnAnyCompleted -= UpdateItem;
+            AchievementManager.Instance.OnAnyRewarded -= RemoveItem;
+        }
+        
+        // ★ 언어 변경 이벤트 구독 해제 추가
+        LocalizationManager.OnLanguageChanged -= RefreshAllText;
     }
 
     private void Start()
     {
+        if (AchievementManager.Instance == null) return;
+        
         foreach (var ra in AchievementManager.Instance.GetAll())
         {
             if (ra.isRewarded) continue;
@@ -65,6 +76,21 @@ public class AchievementPanel : MonoBehaviour
             ui.Refresh();
 
         RefreshUI();
+    }
+
+    // ★ 모든 업적 텍스트 새로고침 (언어 변경 시)
+    private void RefreshAllText()
+    {
+        foreach (var kvp in itemDict)
+        {
+            AchievementItemUI ui = kvp.Value;
+            if (ui != null && ui.ra != null)
+            {
+                // AchievementItemUI의 UpdateText는 이벤트로 자동 호출되지만
+                // 혹시 모를 경우를 대비해 명시적으로 Refresh 호출
+                ui.Refresh();
+            }
+        }
     }
 
     // =======================================================
