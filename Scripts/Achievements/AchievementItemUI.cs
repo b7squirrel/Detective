@@ -8,7 +8,8 @@ using TMPro;
 public class AchievementItemUI : MonoBehaviour
 {
     [Header("그래픽")]
-    [SerializeField] TextMeshProUGUI description;
+    [SerializeField] TextMeshProUGUI titleText;        // 업적 제목 (추가)
+    [SerializeField] TextMeshProUGUI descriptionText;  // 업적 설명
     [SerializeField] Slider progressSlider;
     [SerializeField] TextMeshProUGUI progressText;
     [SerializeField] TextMeshProUGUI rewardText;
@@ -28,11 +29,31 @@ public class AchievementItemUI : MonoBehaviour
     [HideInInspector] public RuntimeAchievement ra;
     Animator anim;
 
+    void OnEnable()
+    {
+        // 언어 변경 이벤트 구독
+        LocalizationManager.OnLanguageChanged += UpdateText;
+        
+        // 다른 탭에 갔다오면 (비활성화가 되었다가 다시 활성화가 되면) 다시 디폴트 애니메이션을 재생하는 것을 방지
+        if (ra != null && ra.isCompleted)
+        {
+            if (anim == null) anim = GetComponent<Animator>();
+            anim.Play("AchievementItem Completed", 0, 0f);
+        }
+    }
+    
+    void OnDisable()
+    {
+        // 이벤트 구독 해제
+        LocalizationManager.OnLanguageChanged -= UpdateText;
+    }
+
     public void Bind(RuntimeAchievement runtime)
     {
         ra = runtime;
 
-        description.text = runtime.original.description;
+        // 다국어 적용
+        UpdateText();
 
         progressSlider.maxValue = runtime.original.targetValue;
 
@@ -52,6 +73,7 @@ public class AchievementItemUI : MonoBehaviour
             }
         }
 
+        rewardButton.onClick.RemoveAllListeners(); // 중복 방지
         rewardButton.onClick.AddListener(() =>
         {
             SoundManager.instance.Play(clipRewardButton);
@@ -63,14 +85,25 @@ public class AchievementItemUI : MonoBehaviour
         Refresh();
     }
 
-    // 다른 탭에 갔다오면 (비활성화가 되었다가 다시 활성화가 되면) 다시 디폴트 애니메이션을 재생하는 것을 방지
-    void OnEnable()
+    // 언어 변경 시 텍스트 업데이트
+    void UpdateText()
     {
-        if (ra != null && ra.isCompleted)
+        if (ra == null) return;
+        
+        // LocalizationManager 초기화 확인
+        if (!LocalizationManager.IsInitialized || LocalizationManager.Achievement == null)
         {
-            if (anim == null) anim = GetComponent<Animator>();
-            anim.Play("AchievementItem Completed", 0, 0f);
+            // 폴백: AchievementSO의 레거시 필드 사용
+            if (titleText != null)
+                titleText.text = ra.original.title;
+            descriptionText.text = ra.original.description;
+            return;
         }
+        
+        // 다국어 텍스트 적용
+        if (titleText != null)
+            titleText.text = ra.GetTitle();
+        descriptionText.text = ra.GetDescription();
     }
 
     public void Refresh()
@@ -87,7 +120,6 @@ public class AchievementItemUI : MonoBehaviour
         checkImage.SetActive(isActive);
         rewardButton.enabled = isActive;
         progressSlider.gameObject.SetActive(!isActive); // 완료 시 슬라이더 숨김
-
 
         if (anim == null) anim = GetComponent<Animator>();
         if (isActive)

@@ -2,8 +2,13 @@ using UnityEngine;
 
 public enum Language { Korean, English }
 
+[DefaultExecutionOrder(-100)] // 다른 스크립트보다 먼저 실행
 public class LocalizationManager : MonoBehaviour
 {
+    public static LocalizationManager Instance { get; private set; }
+    
+    public static bool IsInitialized { get; private set; }
+    
     [Header("Game Texts")]
     [SerializeField] private GameTexts koreanGameTexts;
     [SerializeField] private GameTexts englishGameTexts;
@@ -16,23 +21,22 @@ public class LocalizationManager : MonoBehaviour
     [SerializeField] private ItemTexts koreanItemTexts;
     [SerializeField] private ItemTexts englishItemTexts;
     
+    [Header("Achievement Texts")]
+    [SerializeField] private AchievementTexts koreanAchievementTexts;
+    [SerializeField] private AchievementTexts englishAchievementTexts;
+    
     [Header("Debug")]
     [SerializeField] private Language currentLanguage;
-    
-    // Singleton 추가
-    public static LocalizationManager Instance { get; private set; }
     
     // Static 접근자
     public static GameTexts Game { get; private set; }
     public static CharTexts Char { get; private set; }
     public static ItemTexts Item { get; private set; }
+    public static AchievementTexts Achievement { get; private set; }
     public static Language CurrentLanguage { get; private set; }
     
     // 언어 변경 이벤트
     public static event System.Action OnLanguageChanged;
-    
-    // 초기화 완료 여부
-    public static bool IsInitialized { get; private set; }
     
     void Awake()
     {
@@ -40,6 +44,7 @@ public class LocalizationManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -51,7 +56,10 @@ public class LocalizationManager : MonoBehaviour
         int savedLangIndex = PlayerPrefs.GetInt("Language", 0);
         SetLanguage((Language)savedLangIndex);
         
+        // ★ 이 줄 추가 (필수!)
         IsInitialized = true;
+        
+        Debug.Log("LocalizationManager initialized");
     }
     
     public void SetLanguage(Language language)
@@ -62,6 +70,14 @@ public class LocalizationManager : MonoBehaviour
         Game = language == Language.Korean ? koreanGameTexts : englishGameTexts;
         Char = language == Language.Korean ? koreanCharTexts : englishCharTexts;
         Item = language == Language.Korean ? koreanItemTexts : englishItemTexts;
+        Achievement = language == Language.Korean ? koreanAchievementTexts : englishAchievementTexts;
+        
+        // Null 체크
+        if (Game == null || Char == null || Item == null || Achievement == null)
+        {
+            Debug.LogError("LocalizationManager: One or more Texts assets are not assigned!");
+            return;
+        }
         
         // 언어 설정 저장
         PlayerPrefs.SetInt("Language", (int)language);
@@ -69,8 +85,6 @@ public class LocalizationManager : MonoBehaviour
         
         // 디버그
         currentLanguage = language;
-        
-        IsInitialized = true;
         
         // UI 갱신 이벤트 발생
         OnLanguageChanged?.Invoke();
