@@ -7,11 +7,11 @@ public class AchievementPanel : MonoBehaviour
 {
     [SerializeField] private Transform content;
     [SerializeField] private GameObject achievementItemPrefab;
+    [SerializeField] private int maxDisplayCount = 5; // ★ 인스펙터에서 설정
 
     Dictionary<string, AchievementItemUI> itemDict = new();
     CardSlotManager cardSlotManager;
 
-    // 🔥 삭제 대기 리스트 (코루틴 중단 대비)
     private List<RuntimeAchievement> pendingRemoveList = new();
 
     private void OnEnable()
@@ -22,13 +22,11 @@ public class AchievementPanel : MonoBehaviour
         AchievementManager.Instance.OnAnyCompleted += UpdateItem;
         AchievementManager.Instance.OnAnyRewarded += RemoveItem;
         
-        // ★ 언어 변경 이벤트 구독 추가
         LocalizationManager.OnLanguageChanged += RefreshAllText;
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Off");
 
-        // 🔥 패널이 다시 켜질 때, 삭제 대기 중이었던 항목들 마무리
         foreach (var ra in pendingRemoveList.ToList())
         {
             FinishRemove(ra);
@@ -46,7 +44,6 @@ public class AchievementPanel : MonoBehaviour
             AchievementManager.Instance.OnAnyRewarded -= RemoveItem;
         }
         
-        // ★ 언어 변경 이벤트 구독 해제 추가
         LocalizationManager.OnLanguageChanged -= RefreshAllText;
     }
 
@@ -54,6 +51,7 @@ public class AchievementPanel : MonoBehaviour
     {
         if (AchievementManager.Instance == null) return;
         
+        // ★ 모든 업적 생성 (표시는 RefreshUI에서 제어)
         foreach (var ra in AchievementManager.Instance.GetAll())
         {
             if (ra.isRewarded) continue;
@@ -78,7 +76,6 @@ public class AchievementPanel : MonoBehaviour
         RefreshUI();
     }
 
-    // ★ 모든 업적 텍스트 새로고침 (언어 변경 시)
     private void RefreshAllText()
     {
         foreach (var kvp in itemDict)
@@ -86,20 +83,13 @@ public class AchievementPanel : MonoBehaviour
             AchievementItemUI ui = kvp.Value;
             if (ui != null && ui.ra != null)
             {
-                // AchievementItemUI의 UpdateText는 이벤트로 자동 호출되지만
-                // 혹시 모를 경우를 대비해 명시적으로 Refresh 호출
                 ui.Refresh();
             }
         }
     }
 
-    // =======================================================
-    //                   🔥 삭제 처리 시스템
-    // =======================================================
-
     private void RemoveItem(RuntimeAchievement ra)
     {
-        // 삭제 대기 리스트에 먼저 등록
         if (!pendingRemoveList.Contains(ra))
             pendingRemoveList.Add(ra);
 
@@ -114,11 +104,9 @@ public class AchievementPanel : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
-        // 🔥 코루틴 중단되어도 OnEnable에서 마무리됨
         FinishRemove(ra);
     }
 
-    // 🔥 실제 삭제 처리 (코루틴 성공/중단 상관없이 여기서 최종 처리)
     private void FinishRemove(RuntimeAchievement ra)
     {
         if (itemDict.TryGetValue(ra.original.id, out var ui))
@@ -129,17 +117,20 @@ public class AchievementPanel : MonoBehaviour
 
         pendingRemoveList.Remove(ra);
 
-        RefreshUI();
+        RefreshUI(); // ★ 삭제 후 다음 업적이 자동으로 표시됨
     }
 
-    // =======================================================
-
     /// <summary>
-    /// UI 정렬: 완료된 항목 위, 그 안에서는 SO 리스트 순서대로
+    /// ★ UI 정렬 + 최대 표시 개수 제한
+    /// 완료된 항목 위, 그 안에서는 SO 리스트 순서대로
+    /// maxDisplayCount만큼만 활성화, 나머지는 비활성화
     /// </summary>
     public void RefreshUI()
     {
-        var items = content.GetComponentsInChildren<AchievementItemUI>();
+        // ★ itemDict에서 직접 가져오기 (Destroy된 것 제외)
+        var items = itemDict.Values
+            .Where(ui => ui != null && ui.gameObject != null)
+            .ToList();
 
         var sortedItems = items
             .OrderByDescending(i => i.ra.isCompleted)
@@ -149,10 +140,18 @@ public class AchievementPanel : MonoBehaviour
         for (int i = 0; i < sortedItems.Count; i++)
         {
             sortedItems[i].transform.SetSiblingIndex(i);
+
+            // ★ maxDisplayCount 이내만 활성화
+            bool shouldShow = (maxDisplayCount <= 0) || (i < maxDisplayCount);
+            sortedItems[i].gameObject.SetActive(shouldShow);
         }
     }
 
-    // Debug 용: 모든 업적 완료 표시
+    public void SetMaxDisplayCount(int count)
+    {
+        maxDisplayCount = count;
+    }
+
     public void ForceCompleteAllAchievements()
     {
         foreach (var kvp in itemDict)
