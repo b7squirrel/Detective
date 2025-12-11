@@ -9,13 +9,13 @@ public class GameTexts : ScriptableObject
     public string loadingEquipment = "장비 준비 중...";
     public string loadingComplete = "출동 준비 중...";
     public string loading = "로딩 중";
-    
+
     [Header("Grade Names")]
     public string[] gradeNames = new string[]
     {
         "일반", "희귀", "고급", "전설", "신화"
     };
-    
+
     [Header("UI Labels")]
     public string level = "레벨";
     public string atk = "공격력";
@@ -39,7 +39,7 @@ public class GameTexts : ScriptableObject
     public string sortByName = "이름";
     public string sortByLevel = "등급";
     public string sortByGrade = "레벨";
-    
+
     [Header("Shop Panel")]
     public string Shop = "상점";
     public string beginnerPack = "초보자 지원 세트";
@@ -60,9 +60,15 @@ public class GameTexts : ScriptableObject
     [Header("Equip Panel")]
     public string duck = "오리";
     public string head = "머리";
-    public string chest ="가슴";
+    public string chest = "가슴";
     public string face = "얼굴";
     public string hand = "손";
+
+    [Header("Merge Panel")]
+    public string useEquippedOneForMerge = "착용 중인 장비를 합성 재료로 쓸까요?";
+    public string UseForMerge = "사용";
+    public string Cancel = "취소";
+    public string Warning = "경고";
 
     [Header("Stage Name")]
     public string[] stageBossName = new string[]
@@ -110,7 +116,7 @@ public class GameTexts : ScriptableObject
         "팁: 달콤 우유는 우주에서 가장 맛있는\n음료수입니다. 체력까지 채워줍니다!",
         "팁: 스테이지 클리어를 계속 실패한다면\n카드를 업그레이드 시켜보세요.",
     };
-    
+
     // 랜덤 힌트 가져오기
     public string GetRandomHint()
     {

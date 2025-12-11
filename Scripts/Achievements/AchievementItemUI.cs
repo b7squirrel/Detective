@@ -127,7 +127,7 @@ public class AchievementItemUI : MonoBehaviour
         CompletedPanel.SetActive(isActive);
         checkImage.SetActive(isActive);
         rewardButton.enabled = isActive;
-        progressSlider.gameObject.SetActive(!isActive); // 완료 시 슬라이더 숨김
+        // progressSlider.gameObject.SetActive(!isActive); // 완료 시 슬라이더 숨김
 
         if (anim == null) anim = GetComponent<Animator>();
         if (isActive)
