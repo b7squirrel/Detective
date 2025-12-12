@@ -1,48 +1,88 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// equipped text는 카드슬롯이 생성될 때 정해짐. 
-// 장착되거나 해제되면 Equipment Panel Manager에서 업데이트
-// 지금은 Instantiate로 카드를 생성하고 destroy 하니까 상관없지만
-// 오브젝트 풀을 사용하면 비활성화 할 때 모든 animator=null, setactive=false 로 해야 함
 public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 {
-    [SerializeField] protected Transform cardBaseContainer; // 등급 5개
+    [SerializeField] protected Transform cardBaseContainer;
     [SerializeField] protected Transform starContainer;
     [SerializeField] protected Image charImage;
     [SerializeField] protected Image charFaceImage;
     [SerializeField] protected GameObject charFaceExpression;
     [SerializeField] Animator charAnim;
     [SerializeField] Image[] equipmentImages;
-    [SerializeField] Sprite emptyEquipment; // 장비가 없어서 비활성화 되는 부위의 이미지를 null로 만들 수는 없으니 그냥 투명한 이미지로 대체하기
+    [SerializeField] Sprite emptyEquipment;
     [SerializeField] RectTransform headMain;
     bool needToOffset;
-    [SerializeField] protected GameObject equippedText; // 카드가 장착이 되어있는지(오리/장비 모두)
+    [SerializeField] protected GameObject equippedText;
     [SerializeField] protected TMPro.TextMeshProUGUI Title;
     [SerializeField] protected TMPro.TextMeshProUGUI Level;
 
     [SerializeField] protected GameObject starPrefab;
-    [SerializeField] protected bool displayEquippedText; // 착용 중 표시를 할지 말지 여부. 인스펙터 창에서 설정
-    [SerializeField] GameObject button; // 버튼을 활성, 비활성 하기 위해
-    [SerializeField] GameObject haloSelected; // 선택된 카드 주변 Halo
-    [SerializeField] GameObject leadTag; // 리드 오리 태그
+    [SerializeField] protected bool displayEquippedText;
+    [SerializeField] GameObject button;
+    [SerializeField] GameObject haloSelected;
+    [SerializeField] GameObject leadTag;
 
     CardSpriteAnim cardSpriteAnim;
 
     [Header("MergedCard")]
-    [SerializeField] bool isMergedCard; // 합성된 카드일 때만 타이틀 리본을 보여주기 위해
+    [SerializeField] bool isMergedCard;
     [SerializeField] Transform ribbon;
     GameObject[] stars;
     MergedCardDescription mergedCardDescription;
 
-    
+    // ★ 현재 표시 중인 데이터 저장
+    private WeaponData currentWeaponData;
+    private Item currentItemData;
+    private CardData currentCardData;
+    private bool isWeaponCard; // true: 무기 카드, false: 아이템 카드
+
+    // ★ 언어 변경 이벤트 구독
+    void Awake()
+    {
+        LocalizationManager.OnLanguageChanged += UpdateText;
+    }
+
+    void OnDestroy()
+    {
+        LocalizationManager.OnLanguageChanged -= UpdateText;
+    }
+
+    // ★ 텍스트 업데이트 메서드
+    void UpdateText()
+    {
+        if (isWeaponCard && currentWeaponData != null)
+        {
+            // 무기 카드 텍스트 업데이트
+            Title.text = LocalizationManager.Char.GetWeaponDisplayName(currentWeaponData.Name);
+            
+            if (currentCardData != null)
+            {
+                Level.text = LocalizationManager.Game.level + " " + currentCardData.Level;
+            }
+        }
+        else if (!isWeaponCard && currentItemData != null)
+        {
+            // 아이템 카드 텍스트 업데이트
+            Title.text = LocalizationManager.Item.GetItemDisplayName(currentItemData.Name);
+            
+            if (currentCardData != null)
+            {
+                Level.text = LocalizationManager.Game.level + " " + currentCardData.Level;
+            }
+        }
+    }
 
     public void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
     {
+        // ★ 현재 데이터 저장
+        currentWeaponData = weaponData;
+        currentCardData = cardData;
+        isWeaponCard = true;
+
         needToOffset = false;
 
         // 캐릭터 이미지
-        //charImage.sprite = weaponData.charImage;
         charAnim.enabled = true;
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
@@ -53,8 +93,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         Level.text = "";
 
-        // 카드 이름 텍스트
-        // Title.text = weaponData.DisplayName;
+        // ★ 다국어 적용
         Title.text = LocalizationManager.Char.GetWeaponDisplayName(weaponData.Name);
 
         // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
@@ -64,7 +103,6 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         SetLeadTagActive(false);
         if (cardData.StartingMember == StartingMember.Zero.ToString())
         {
-            // Debug.Log($"{cardData.Name}의 Starting Member 값은 {cardData.StartingMember}입니다.");
             SetLeadTagActive(true);
         }
 
@@ -103,11 +141,10 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
             mergedCardDescription.UpdateSkillDescription(cardData);
         }
 
-        // 카드 레벨 텍스트
+        // ★ 다국어 적용
         Level.text = LocalizationManager.Game.level + " " + cardData.Level;
 
         // 오리카드는 착용 중 표시 안 함
-        // 장비카드만 착용 중 표시
         SetEquppiedTextActive(false);
 
         // 버튼 활성화
@@ -116,11 +153,16 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
     public void InitItemCardDisplay(Item itemData, CardData cardData, bool onEquipment)
     {
+        // ★ 현재 데이터 저장
+        currentItemData = itemData;
+        currentCardData = cardData;
+        isWeaponCard = false;
+
         // 리드오리 태그
         SetLeadTagActive(false);
 
-        // 카드 이름 텍스트
-        Title.text = itemData.DisplayName;
+        // ★ 다국어 적용
+        Title.text = LocalizationManager.Item.GetItemDisplayName(itemData.Name);
 
         charImage.gameObject.SetActive(true);
         charImage.sprite = itemData.charImage;
@@ -143,8 +185,8 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         }
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
-        // 카드 레벨 텍스트
-        Level.text = "레벨 " + cardData.Level;
+        // ★ 다국어 적용
+        Level.text = LocalizationManager.Game.level + " " + cardData.Level;
 
         // 임시로 타이틀을 없애보자. 작은 카드 안에 정보가 너무 많음.
         Title.text = "";
@@ -161,15 +203,12 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         if (cardSpriteAnim == null) cardSpriteAnim = GetComponentInChildren<CardSpriteAnim>();
         cardSpriteAnim.Init(equipmentImages);
     }
+    
     public void SetEquipCardDisplay(int index, SpriteRow spriteRow, bool needToOffset, Vector2 offset)
     {
-        // need to offset이 참이 되면 더 이상 변화가 없도록 남겨둠
         this.needToOffset = this.needToOffset ? true : needToOffset;
-
-        // offset을 하게 하는 아이템이 탈착 되었을 때를 위한 초기화
         headMain.anchoredPosition = this.needToOffset == false ? Vector2.zero : headMain.anchoredPosition;
 
-        // cardSpriteAnim.Init을 호출해서 해당 index 부위의 애니메이션 이미지들을 저장해 두기
         if (spriteRow == null)
         {
             equipmentImages[index].sprite = emptyEquipment;
@@ -179,10 +218,8 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         else
         {
             equipmentImages[index].gameObject.SetActive(true);
-
-            // 탈착, 장착이 반복될 수록 계속 offset이 더해지는 것을 막기 위해 원점이 아닐 때는 offset을 해주지 않기
             headMain.anchoredPosition = headMain.anchoredPosition == Vector2.zero ? headMain.anchoredPosition + offset : headMain.anchoredPosition;
-            cardSpriteAnim.StoreItemSpriteRow(index, spriteRow); // 이미지들을 저장해 두고 애니메이션 이벤트로 사용
+            cardSpriteAnim.StoreItemSpriteRow(index, spriteRow);
         }
     }
     #endregion
@@ -191,7 +228,6 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     {
         if (stars == null)
         {
-            // 최대 합성 레벨만큼 만들어서 비활성화
             stars = new GameObject[StaticValues.MaxEvoStage];
             for (int i = 0; i < stars.Length; i++)
             {
@@ -200,13 +236,11 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
             }
         }
 
-        // 일단 모든 별을 비활성화. 많은 별에서 적은 별로 업데이트 하면 많은 별로 남아있기 때문
         for (int i = 0; i < StaticValues.MaxEvoStage; i++)
         {
             stars[i].SetActive(false);
         }
 
-        // 등급만큼 별 활성화하고 별리스트에 넣기
         for (int i = 0; i < numStars; i++)
         {
             stars[i].SetActive(true);
@@ -229,22 +263,23 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         if (haloSelected == null) return;
         haloSelected.SetActive(_isActive);
     }
+    
     public void EmptyCardDisplay()
     {
-        // 별 비활성화
+        // ★ 데이터 초기화
+        currentWeaponData = null;
+        currentItemData = null;
+        currentCardData = null;
+
         DeactivateStars();
 
-        // 카드 레벨 텍스트
         Level.text = "";
         Title.text = "";
         if (isMergedCard) ribbon.gameObject.SetActive(false);
 
-        // 캐릭터 이미지
         cardBaseContainer.gameObject.SetActive(false);
-        // charImage.rectTransform.localScale = 1f * Vector3.one; // 오리 char image 크기
         charImage.gameObject.SetActive(false);
 
-        // 장비 이미지
         for (int i = 0; i < 4; i++)
         {
             if (equipmentImages[i] == null)
@@ -254,14 +289,12 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         SetEquppiedTextActive(false);
 
-        // 버튼 비활성화
         if(button == null) return;
         button.SetActive(false);
     }
 
     void DeactivateStars()
     {
-        // 별 비활성화
         if (stars != null)
         {
             for (int i = 0; i < stars.Length; i++)
