@@ -9,14 +9,10 @@ public class LocalizedEquipUIText : MonoBehaviour
     [SerializeField] TextMeshProUGUI chest;
     [SerializeField] TextMeshProUGUI face;
     [SerializeField] TextMeshProUGUI hand;
-    [SerializeField] TextMeshProUGUI itemGradeInfo;
-    [SerializeField] TextMeshProUGUI itemTitleInfo;
-    [SerializeField] TextMeshProUGUI itemSkillTitleInfo;
-    [SerializeField] TextMeshProUGUI itemSkillDescriptionInfo;
 
     void Awake()
     {
-             LocalizationManager.OnLanguageChanged += UpdateText;
+        LocalizationManager.OnLanguageChanged += UpdateText;
     }
     void Start()
     {
@@ -33,10 +29,5 @@ public class LocalizedEquipUIText : MonoBehaviour
         chest.text = LocalizationManager.Game.chest;
         face.text = LocalizationManager.Game.face;
         hand.text = LocalizationManager.Game.hand;
-
-        // itemGradeInfo.text = LocalizationManager.Game.hand;
-        // itemTitleInfo.text = LocalizationManager.Item.hand;
-        // itemSkillTitleInfo.text = LocalizationManager.Item.hand;
-        // itemSkillDescriptionInfo.text = LocalizationManager.Item.hand;
     }
 }

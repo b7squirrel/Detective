@@ -33,17 +33,17 @@ public class ItemTexts : ScriptableObject
     public string[] itemSkillNames = new string[]
     {
         "모든 공격",
-        "모든 방어",
+        "리드 방어",
         "이동 속도",
         "넓은 자석",
     };
-    
+
     [Header("Item Skill Descriptions")]
     public string[] itemSkillDescriptions = new string[]
     {
-        "모든 오리들의 공격력을 높여줍니다.",
-        "리드 오리의 방어력을 높여줍니다.",
-        "리드 오리의 이동 속도를 높여줍니다.",
-        "자력 범위를 더 넓혀 줍니다.",
+        "모든 오리의 공격력을 높입니다.",
+        "리드 오리의 방어력을 높입니다.",
+        "리드 오리의 이동 속도를 높입니다.",
+        "자석 범위를 넓힙니다.",
     };
 }

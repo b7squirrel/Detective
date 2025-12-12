@@ -28,27 +28,79 @@ public class EquipInfoPanel : MonoBehaviour
     float initLevelFontSize, initAttributeFontSize;
     Tween levelPopTween, attributePopTween;
 
+    // ★ 현재 표시 중인 데이터 저장
+    private CardData currentCardData;
+    private Item currentItemData;
+
     void Awake()
     {
         // 초기 폰트 사이즈 저장
         if (Level != null) initLevelFontSize = Level.fontSize;
         if (attribute != null) initAttributeFontSize = attribute.fontSize;
+        
+        // ★ 언어 변경 이벤트 구독
+        LocalizationManager.OnLanguageChanged += UpdateText;
+    }
+
+    void OnDestroy()
+    {
+        // 파괴될 때 Tween 정리
+        levelPopTween?.Kill();
+        attributePopTween?.Kill();
+        
+        // ★ 언어 변경 이벤트 구독 해제
+        LocalizationManager.OnLanguageChanged -= UpdateText;
+    }
+
+    // ★ 텍스트 업데이트 메서드
+    void UpdateText()
+    {
+        if (currentCardData == null || currentItemData == null) return;
+        
+        // 등급
+        grade.text = LocalizationManager.Game.gradeNames[currentCardData.Grade];
+        
+        // 아이템 이름
+        Name.text = LocalizationManager.Item.GetItemDisplayName(currentItemData.Name);
+        
+        // 레벨
+        Level.text = LocalizationManager.Game.level + " " + 
+                     currentCardData.Level.ToString() + " / " + 
+                     StaticValues.MaxLevel.ToString();
+        
+        // 스킬 이름 및 설명
+        if (currentCardData.PassiveSkill >= 0 && currentCardData.PassiveSkill < Skills.SkillNames.Length)
+        {
+            int passiveSkillIndex = currentCardData.PassiveSkill - 1;
+            skillName.text = LocalizationManager.Item.itemSkillNames[passiveSkillIndex];
+            skillDescription.text = LocalizationManager.Item.itemSkillDescriptions[passiveSkillIndex];
+        }
     }
 
     // 처음 패널이 활성화 되면 초기화
     public void SetPanel(CardData cardData, Item itemData, CardDisp _cardDisp, bool isEquipButton, bool isEssential)
     {
         Logger.LogWarning($"item data = {itemData.DisplayName}");
+        
+        // ★ 현재 데이터 저장
+        currentCardData = cardData;
+        currentItemData = itemData;
+        
         this.cardDisp = _cardDisp;
 
-        grade.text = MyGrade.mGrades[cardData.Grade].ToString();
-        Name.text = itemData.DisplayName;
-        // grade.color = MyGrade.GradeColors[cardData.Grade];
+        // ★ 다국어 적용
+        grade.text = LocalizationManager.Game.gradeNames[cardData.Grade];
+        Name.text = LocalizationManager.Item.GetItemDisplayName(itemData.Name);
+        
         NameLabel.color = MyGrade.GradeColors[cardData.Grade];
         GradeLabel.color = MyGrade.GradeColors[cardData.Grade];
         NameLabelGlow.color = MyGrade.GradeGlowColors[cardData.Grade];
         SetItemCardBase(cardData.Grade);
-        Level.text = "LV " + cardData.Level.ToString() + " / " + StaticValues.MaxLevel.ToString();
+        
+        // ★ 다국어 적용
+        Level.text = LocalizationManager.Game.level + " " + 
+                     cardData.Level.ToString() + " / " + 
+                     StaticValues.MaxLevel.ToString();
 
         GetPassiveSkillLevel(cardData);
 
@@ -72,11 +124,8 @@ public class EquipInfoPanel : MonoBehaviour
         }
 
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
-        // Debug.Log($"클릭한 장비는 {weaponItemData.itemData.Name} 입니다");
         itemImage.sprite = weaponItemData.itemData.charImage;
-        // anim.runtimeAnimatorController = itemData.CardItemAnimator.CardImageAnim;
         anim.enabled = false;
-        // anim.SetTrigger("Card");
 
         equipButton.SetActive(isEquipButton);
 
@@ -104,7 +153,16 @@ public class EquipInfoPanel : MonoBehaviour
     // 레벨업을 하면 레벨과 속성을 업데이트
     public void UpdatePanel(int _level, int _attribute)
     {
-        Level.text = "LV " + _level.ToString() + " / " + StaticValues.MaxLevel.ToString();
+        if (currentCardData != null)
+        {
+            // 레벨 데이터 업데이트
+            currentCardData.Level = _level;
+        }
+        
+        // ★ 다국어 적용
+        Level.text = LocalizationManager.Game.level + " " + 
+                     _level.ToString() + " / " + 
+                     StaticValues.MaxLevel.ToString();
         attribute.text = _attribute.ToString();
 
         Logger.Log("Ugraded");
@@ -149,29 +207,12 @@ public class EquipInfoPanel : MonoBehaviour
     {
         if (_cardData.PassiveSkill >= 0 && _cardData.PassiveSkill < Skills.SkillNames.Length)
         {
-            skillName.text = Skills.itemSkillNames[_cardData.PassiveSkill - 1].ToString();
-            skillDescription.text = Skills.itemSkillDescriptions[_cardData.PassiveSkill - 1];
-            skillLabel.color = MyGrade.GradeColors[_cardData.Grade];
-            // int skillFullNumber = GameManager.instance.startingDataContainer.GetSkillName();
-            // if (skillFullNumber % 10 == 0)
-            // {
-            //     skillEvoLevel.text = "I";
-            // }
-            // if (skillFullNumber % 10 == 1)
-            // {
-            //     skillEvoLevel.text = "II";
-            // }
-            // if (skillFullNumber % 10 == 2)
-            // {
-            //     skillEvoLevel.text = "III";
-            // }
-        }
-    }
+            // ★ 다국어 적용
+            int passiveSkillIndex = _cardData.PassiveSkill - 1;
+            skillName.text = LocalizationManager.Item.itemSkillNames[passiveSkillIndex];
+            skillDescription.text = LocalizationManager.Item.itemSkillDescriptions[passiveSkillIndex];
 
-    void OnDestroy()
-    {
-        // 파괴될 때 Tween 정리
-        levelPopTween?.Kill();
-        attributePopTween?.Kill();
+            skillLabel.color = MyGrade.GradeColors[_cardData.Grade];
+        }
     }
 }
