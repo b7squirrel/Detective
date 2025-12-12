@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LocalizedMergeUIText : MonoBehaviour
 {
-     [Header("Equip Panel")]
+    [Header("Equip Panel")]
     [SerializeField] TextMeshProUGUI useEquippedOneForMerge;
     [SerializeField] TextMeshProUGUI UseForMerge;
     [SerializeField] TextMeshProUGUI Cancel;
@@ -11,7 +11,7 @@ public class LocalizedMergeUIText : MonoBehaviour
 
     void Awake()
     {
-             LocalizationManager.OnLanguageChanged += UpdateText;
+        LocalizationManager.OnLanguageChanged += UpdateText;
     }
     void Start()
     {
@@ -27,6 +27,6 @@ public class LocalizedMergeUIText : MonoBehaviour
         UseForMerge.text = LocalizationManager.Game.UseForMerge;
         Cancel.text = LocalizationManager.Game.Cancel;
         Warning.text = LocalizationManager.Game.Warning;
-        
+
     }
 }

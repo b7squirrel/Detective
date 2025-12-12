@@ -104,7 +104,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         }
 
         // 카드 레벨 텍스트
-        Level.text = "레벨 " + cardData.Level;
+        Level.text = LocalizationManager.Game.level + " " + cardData.Level;
 
         // 오리카드는 착용 중 표시 안 함
         // 장비카드만 착용 중 표시

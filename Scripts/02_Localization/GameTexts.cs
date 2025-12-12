@@ -70,6 +70,9 @@ public class GameTexts : ScriptableObject
     public string Cancel = "취소";
     public string Warning = "경고";
 
+    [Header("Achievements Panel")]
+    public string achievementsTitle = "숙제";
+
     [Header("Stage Name")]
     public string[] stageBossName = new string[]
     {
@@ -103,6 +106,14 @@ public class GameTexts : ScriptableObject
         "거대미 왕자",
         "파닥이 왕자",
         "아뜨아뜨 여왕"
+    };
+
+    [Header("Game Warning")]
+    [TextArea(1, 2)]
+    public string[] cardLimitWarnings = new string[]
+    {
+        "카드가 가득 찼어요",
+        "카드를 판매하거나 합성해서 공간을 정리해 주세요"
     };
 
     [Header("Game Hints")]
