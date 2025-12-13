@@ -94,7 +94,7 @@ public class CardsDictionary : MonoBehaviour
             CardData data = FindCardData(itemData[i]);
             if(data == null) 
             {
-                Logger.Log($"{itemData[i]}에 해당하는 카드 데이터가 없습니다");
+                Logger.LogError($"{itemData[i]}에 해당하는 카드 데이터가 없습니다");
                 return;
             }
             itemCardData.Add(data);
