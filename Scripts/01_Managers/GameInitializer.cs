@@ -6,9 +6,10 @@ using UnityEngine;
 /// 초기화 순서:
 /// 1. CardsDictionary (ScriptableObject 데이터)
 /// 2. ProductDataTable (상품 데이터)
-/// 3. CardDataManager (플레이어 카드 데이터)
-/// 4. EquipmentDataManager (장비 장착 데이터)
-/// 5. CardList 초기화 (런타임 객체 생성)
+/// 3. PlayerDataManager (플레이어 진행 데이터)
+/// 4. CardDataManager (플레이어 카드 데이터)
+/// 5. EquipmentDataManager (장비 장착 데이터)
+/// 6. CardList 초기화 (런타임 객체 생성)
 /// </summary>
 public class GameInitializer : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class GameInitializer : MonoBehaviour
     
     [Tooltip("상품 데이터 테이블")]
     [SerializeField] ProductDataTable productDataTable;
+    
+    [Tooltip("플레이어 진행 데이터 관리")]
+    [SerializeField] PlayerDataManager playerDataManager;
     
     [Tooltip("플레이어 카드 데이터 관리")]
     [SerializeField] CardDataManager cardDataManager;
@@ -60,31 +64,37 @@ public class GameInitializer : MonoBehaviour
         InitializationProgress = 0f;
         
         // 1단계: CardsDictionary 초기화 대기 (Awake에서 실행됨)
-        Log("1/5: CardsDictionary 초기화 대기...");
+        Log("1/6: CardsDictionary 초기화 대기...");
         yield return new WaitUntil(() => CardsDictionary.IsDataLoaded);
         Log("✓ CardsDictionary 로드 완료");
-        InitializationProgress = 0.2f;
+        InitializationProgress = 0.16f;
         
         // 2단계: ProductDataTable 초기화 대기 (Awake에서 실행됨)
-        Log("2/5: ProductDataTable 초기화 대기...");
+        Log("2/6: ProductDataTable 초기화 대기...");
         yield return new WaitUntil(() => ProductDataTable.IsDataLoaded);
         Log("✓ ProductDataTable 로드 완료");
-        InitializationProgress = 0.4f;
+        InitializationProgress = 0.33f;
         
-        // 3단계: CardDataManager 초기화 대기 (Start에서 실행됨)
-        Log("3/5: CardDataManager 초기화 대기...");
+        // 3단계: PlayerDataManager 초기화 대기 (Awake에서 실행됨)
+        Log("3/6: PlayerDataManager 초기화 대기...");
+        yield return new WaitUntil(() => PlayerDataManager.IsDataLoaded);
+        Log("✓ PlayerDataManager 로드 완료");
+        InitializationProgress = 0.5f;
+        
+        // 4단계: CardDataManager 초기화 대기 (Start에서 실행됨)
+        Log("4/6: CardDataManager 초기화 대기...");
         yield return new WaitUntil(() => CardDataManager.IsDataLoaded);
         Log("✓ CardDataManager 로드 완료");
-        InitializationProgress = 0.6f;
+        InitializationProgress = 0.66f;
         
-        // 4단계: EquipmentDataManager 초기화 대기 (Start에서 실행됨)
-        Log("4/5: EquipmentDataManager 초기화 대기...");
+        // 5단계: EquipmentDataManager 초기화 대기 (Start에서 실행됨)
+        Log("5/6: EquipmentDataManager 초기화 대기...");
         yield return new WaitUntil(() => EquipmentDataManager.IsDataLoaded);
         Log("✓ EquipmentDataManager 로드 완료");
-        InitializationProgress = 0.8f;
+        InitializationProgress = 0.83f;
         
-        // 5단계: CardList 초기화 확인 (EquipmentDataManager.Start에서 실행됨)
-        Log("5/5: CardList 초기화 확인...");
+        // 6단계: CardList 초기화 확인 (EquipmentDataManager.Start에서 실행됨)
+        Log("6/6: CardList 초기화 확인...");
         // CardList는 EquipmentDataManager.Start()에서 InitCardList()가 호출되므로
         // 추가 대기 없이 다음 프레임만 기다림
         yield return null;

@@ -221,6 +221,47 @@ public class Colors
 #region 공식 관련
 public class Equation
 {
+    // 카드 업그레이드 비용
+    public int GetUpgradeCost(int level, int gradeIndex)
+    {
+        int baseCost;
+        int perLevelCost;
+
+        switch (gradeIndex)
+        {
+            case 0: // 일반
+                baseCost = 100;
+                perLevelCost = 50;
+                break;
+
+            case 1: // 희귀
+                baseCost = 300;
+                perLevelCost = 150;
+                break;
+
+            case 2: // 고급
+                baseCost = 1000;
+                perLevelCost = 500;
+                break;
+
+            case 3: // 전설
+                baseCost = 5000;
+                perLevelCost = 2500;
+                break;
+
+            case 4: // 신화
+                baseCost = 20000;
+                perLevelCost = 10000;
+                break;
+
+            default:
+                Debug.LogError($"Invalid gradeIndex: {gradeIndex}");
+                return 0;
+        }
+
+        return baseCost + (level * perLevelCost);
+    }
+
     public int GetDamage(int _originalDamage, int _damageBonus)
     {
         int damage = Mathf.CeilToInt(_originalDamage + (_originalDamage * _damageBonus / 10)); // original damage가 작더라도 잘 반영되도록 무조건 올림

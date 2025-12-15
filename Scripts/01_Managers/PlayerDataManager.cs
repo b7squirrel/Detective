@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.IO;
+
 [System.Serializable]
 public class PlayerData
 {
@@ -11,6 +12,7 @@ public class PlayerData
     public int currentLightningNumber;
     public int currentKillNumber;
 }
+
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 {
     [SerializeField] PlayerData playerData;
@@ -18,38 +20,73 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     bool isStageCleared;
 
     public event System.Action OnCurrencyChanged;
+    
+    // ⭐ 추가: 데이터 로드 완료 플래그
+    public static bool IsDataLoaded { get; private set; } = false;
 
-    void Awake()
+    // ⭐ SingletonBehaviour의 Init()을 override하여 초기화
+    protected override void Init()
     {
+        base.Init(); // ⭐ 반드시 base.Init() 호출하여 Instance 설정
+        
         filePath = Path.Combine(Application.persistentDataPath, "playerData.json");
         LoadPlayerData();
+        IsDataLoaded = true;
+        Logger.Log("[PlayerDataManager] 데이터 로드 완료");
+    }
+    
+    void OnApplicationQuit()
+    {
+        IsDataLoaded = false;
     }
 
     void LoadPlayerData()
     {
         if (File.Exists(filePath))
         {
-            string jsonData = File.ReadAllText(filePath);
-            playerData = JsonUtility.FromJson<PlayerData>(jsonData);
+            try
+            {
+                string jsonData = File.ReadAllText(filePath);
+                playerData = JsonUtility.FromJson<PlayerData>(jsonData);
+                Logger.Log($"[PlayerDataManager] 플레이어 데이터 로드: Stage {playerData.currentStageNumber}");
+            }
+            catch (System.Exception e)
+            {
+                Logger.LogError($"[PlayerDataManager] 데이터 로드 오류: {e.Message}");
+                CreateDefaultPlayerData();
+            }
         }
         else
         {
-            playerData = new PlayerData
-            {
-                currentStageNumber = 1,
-                currentLightningNumber = 60,
-                currentCoinNumber = 100,
-                currentCristalNumber = 50
-            };
-
-            SavePlayerData();
+            Logger.Log("[PlayerDataManager] 저장된 데이터 없음, 기본값 생성");
+            CreateDefaultPlayerData();
         }
+    }
+    
+    void CreateDefaultPlayerData()
+    {
+        playerData = new PlayerData
+        {
+            currentStageNumber = 1,
+            currentLightningNumber = 60,
+            currentCoinNumber = 100,
+            currentCristalNumber = 50
+        };
+
+        SavePlayerData();
     }
 
     void SavePlayerData()
     {
-        string jsonData = JsonUtility.ToJson(playerData);
-        File.WriteAllText(filePath, jsonData);
+        try
+        {
+            string jsonData = JsonUtility.ToJson(playerData, true);
+            File.WriteAllText(filePath, jsonData);
+        }
+        catch (System.Exception e)
+        {
+            Logger.LogError($"[PlayerDataManager] 데이터 저장 오류: {e.Message}");
+        }
     }
 
     void NotifyCurrencyChanged() => OnCurrencyChanged?.Invoke();
