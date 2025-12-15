@@ -3,6 +3,9 @@ using UnityEngine;
 public class GemBuyButton : MonoBehaviour
 {
     [SerializeField] RectTransform gemPoint;
+    [SerializeField] int m_productId;
+
+    [Header("gemNums는 나중에 없애기")]
     [SerializeField] int gemNums;
     GemCollectFX gemCollectFX;
     TextEditorStore textEditorStore;

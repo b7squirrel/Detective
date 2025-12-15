@@ -11,7 +11,7 @@ public class PlayerData
     public int currentLightningNumber;
     public int currentKillNumber;
 }
-public class PlayerDataManager : MonoBehaviour
+public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 {
     [SerializeField] PlayerData playerData;
     string filePath;

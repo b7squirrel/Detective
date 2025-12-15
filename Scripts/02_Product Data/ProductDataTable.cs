@@ -5,6 +5,7 @@ using System.Linq;
 
 public class ProductDataTable : MonoBehaviour
 {
+    public static ProductDataTable instance;
     [SerializeField] private string csvFileName = "productData.csv";
     [SerializeField] private string csvFolderPath = "DataTable"; // Resources 폴더 내 경로
     
