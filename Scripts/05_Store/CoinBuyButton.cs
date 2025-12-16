@@ -69,14 +69,15 @@ public class CoinBuyButton : MonoBehaviour
             return;
         }
         
-        if (ShopManager.Instance == null)
+        ShopManager shopManager = FindObjectOfType<ShopManager>();
+        if (shopManager == null)
         {
             Logger.LogError("[CoinBuyButton] ShopManager를 찾을 수 없습니다.");
             return;
         }
         
         // ⭐ ShopManager에게 구매 요청 + FX 위치 전달
-        ShopManager.Instance.PurchaseProduct(productData.ProductId, coinPoint);
+        shopManager.PurchaseProduct(productData.ProductId, coinPoint);
     }
     
     /// <summary>

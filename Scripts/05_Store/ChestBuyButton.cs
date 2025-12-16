@@ -82,7 +82,8 @@ public class ChestBuyButton : MonoBehaviour
             return;
         }
         
-        if (ShopManager.Instance == null)
+        ShopManager shopManager = FindObjectOfType<ShopManager>();
+        if (shopManager == null)
         {
             Logger.LogError("[GemBuyButton] ShopManager를 찾을 수 없습니다.");
             return;
@@ -91,6 +92,6 @@ public class ChestBuyButton : MonoBehaviour
         Logger.Log($"[GemBuyButton] 구매 버튼 클릭: {productData.ProductId}");
         
         // ⭐ ShopManager에게 구매 요청 + FX 위치 전달
-        ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint);
+        shopManager.PurchaseProduct(productData.ProductId, gemPoint);
     }
 }

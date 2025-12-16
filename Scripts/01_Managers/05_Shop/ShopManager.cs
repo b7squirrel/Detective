@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShopManager : SingletonBehaviour<ShopManager>
+public class ShopManager : MonoBehaviour
 {
     [Header("FX")]
     [SerializeField] private GemCollectFX gemCollectFX;
