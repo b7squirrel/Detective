@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91c4f1f2b759543ff8998f6292c800ca, type: 3}
   m_Name: DefaultEnemyScaling
   m_EditorClassIdentifier: 
-  baseHP: 100
-  baseSpeed: 5
-  baseDamage: 1
-  baseExperience: 10
+  baseHP: 60
+  baseSpeed: 4
+  baseMeleeDamage: 9
+  baseRangedDamage: 100
+  baseExperience: 130
   hpGrowth: 0.15
   hpExponent: 1.1
   speedGrowth: 0.05
@@ -23,4 +24,6 @@ MonoBehaviour:
   damageGrowth: 0.12
   damageExponent: 1
   experienceGrowth: 0.2
+  tankHPBonus: 0.2
+  attackerDamageBonus: 0.15
   stageModifiers: []

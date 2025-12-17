@@ -21,8 +21,16 @@ MonoBehaviour:
     rangedDamage: 0
     experience_reward: 3000
   enemyType: 0
+  enemyRole: 2
+  hpScalingMultiplier: 4.17
+  speedScalingMultiplier: 2.75
+  damageScalingMultiplier: 2.33
+  canDash: 0
+  dashCooldown: 3
+  dashSpeed: 15
+  hasJumpAttack: 0
   projectilePrefab: {fileID: 0}
-  dieEffectPrefab: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
+  splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 1, g: 0, b: 0.21311474, a: 1}
   enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
   distanceToPlayer: 0
@@ -32,3 +40,5 @@ MonoBehaviour:
   dialogs: []
   split: {fileID: 0}
   splitNum: 0
+  hitSound: {fileID: 0}
+  dieSound: {fileID: 0}
