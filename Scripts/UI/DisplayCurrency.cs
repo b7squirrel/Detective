@@ -65,12 +65,14 @@ public class DisplayCurrency : MonoBehaviour
         DOTween.Kill(targetText);
         DOTween.Kill(targetText.transform);
 
+        // displayedGem/Coin 값을 먼저 업데이트 (이게 중요!)
+        if (isGem) displayedGem = newValue;
+        else displayedCoin = newValue;
+
         // 카운트업 애니메이션
         DOTween.To(() => currentDisplay,
                    x =>
                    {
-                       if (isGem) displayedGem = x;
-                       else displayedCoin = x;
                        targetText.text = x.ToString();
                    },
                    newValue,
@@ -78,7 +80,7 @@ public class DisplayCurrency : MonoBehaviour
                .SetEase(Ease.OutQuad)
                .SetTarget(targetText);
 
-        // 스케일 펀치만
+        // 스케일 펀치
         targetText.transform.DOPunchScale(Vector3.one * 0.05f, 0.3f, 2, 1f)
             .OnComplete(() => targetText.transform.localScale = Vector3.one);
     }

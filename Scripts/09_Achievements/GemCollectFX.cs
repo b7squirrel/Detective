@@ -91,29 +91,27 @@ public class GemCollectFX : MonoBehaviour
     }
 
     void UpdateUIOnly(bool isGem)
+{
+    RectTransform targetPoint = isGem ? gemTargetIcon : coinTargetIcon;
+
+    if (displayCurrency == null) displayCurrency = FindObjectOfType<DisplayCurrency>();
+
+    if (displayCurrency != null) 
     {
-        RectTransform targetPoint = isGem ? gemTargetIcon : coinTargetIcon;
-
-        // 빌드 안정성을 위해 강제 UI 업데이트
-        if (displayCurrency == null) displayCurrency = FindObjectOfType<DisplayCurrency>();
-
-        if (displayCurrency != null)
-        {
-            // 숫자 텍스트 애니메이션 추가
-            displayCurrency.UpdateUI();
-            displayCurrency.AnimateTextChange(isGem); // ← 새로 추가할 메서드
-        }
-
-        // 아이콘 펀치 애니메이션
-        if (targetPoint != null)
-        {
-            targetPoint.DOKill();
-            targetPoint.localScale = Vector3.one;
-            targetPoint.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 1f)
-            .OnComplete(() =>
-            {
-                targetPoint.localScale = Vector3.one;
-            });
-        }
+        // UpdateUI() 호출 제거! AnimateTextChange()가 알아서 처리함
+        displayCurrency.AnimateTextChange(isGem); // 이것만 호출
     }
+
+    // 아이콘 펀치 애니메이션
+    if (targetPoint != null)
+    {
+        targetPoint.DOKill();
+        targetPoint.localScale = Vector3.one;
+        targetPoint.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 0.5f)
+        .OnComplete(() =>
+        {
+            targetPoint.localScale = Vector3.one;
+        });
+    }
+}
 }
