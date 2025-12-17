@@ -109,7 +109,7 @@ public class GemCollectFX : MonoBehaviour
         {
             targetPoint.DOKill();
             targetPoint.localScale = Vector3.one;
-            targetPoint.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 0.5f)
+            targetPoint.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 1f)
             .OnComplete(() =>
             {
                 targetPoint.localScale = Vector3.one;
