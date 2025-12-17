@@ -96,17 +96,18 @@ public class Enemy : EnemyBase
     #region 초기화
     public override void InitEnemy(EnemyData _data)
     {
-        base.InitEnemy(_data);
+        base.InitEnemy(_data); // 부모에서 스탯 계산 완료
+        
         anim.runtimeAnimatorController = _data.animController;
-        this.Stats = new EnemyStats(_data.stats);
+        
+        // ★ Stats는 이미 부모 InitEnemy에서 계산됨
         ExperienceReward = this.Stats.experience_reward;
-
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
 
-        //범위 공격 변수 초기화
+        // 범위 공격 변수 초기화
         attackInterval = _data.attackInterval;
-        attackInterval += UnityEngine.Random.Range(0, 6f); // 동시에 투사체를 쏘는 것을 막기 위해
+        attackInterval += UnityEngine.Random.Range(0, 6f);
         distanceToPlayer = _data.distanceToPlayer;
 
         InitHpBar();
@@ -116,10 +117,12 @@ public class Enemy : EnemyBase
 
         Name = _data.Name;
 
-        canJump = _data.isJumper; // 점프 여부
-        if(shadowHeightEnemy == null) shadowHeightEnemy = GetComponent<ShadowHeightEnemy>();
+        canJump = _data.isJumper;
+        if(shadowHeightEnemy == null) 
+            shadowHeightEnemy = GetComponent<ShadowHeightEnemy>();
         shadowHeightEnemy.SetIsJumper(canJump, _data.jumpInterval);
     }
+
     public void SetFlying(Vector2 target)
     {
         IsFlying = true;

@@ -109,6 +109,8 @@ public class EnemyBoss : EnemyBase, Idamageable
     #region Init/Shoot Cooldown
     public override void InitEnemy(EnemyData _enemyToSpawn)
     {
+        base.InitEnemy(_enemyToSpawn); 
+
         this.Stats = new EnemyStats(_enemyToSpawn.stats);
         spawner = FindObjectOfType<Spawner>(); // 입에서 enemy를 발사하기 위해서
         generateWalls = GetComponent<GenerateWalls>();

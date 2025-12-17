@@ -5,32 +5,39 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     [Header("Common")]
-    public string Name; // 보스를 위한 이름
+    public string Name;
     public RuntimeAnimatorController animController;
-    public EnemyStats stats;
+    public EnemyStats stats; // 이제 기본값으로만 사용
     public EnemyType enemyType;
+
+    [Header("Scaling Multipliers")]
+    [Tooltip("이 적 타입의 HP 스케일링 배율 (1.0 = 기본)")]
+    public float hpScalingMultiplier = 1.0f;
+    [Tooltip("이 적 타입의 속도 스케일링 배율 (1.0 = 기본)")]
+    public float speedScalingMultiplier = 1.0f;
+    [Tooltip("이 적 타입의 공격력 스케일링 배율 (1.0 = 기본)")]
+    public float damageScalingMultiplier = 1.0f;
 
     [Header("Prefabs")]
     public GameObject projectilePrefab;
-    public GameObject splitDieEffectPrefab; // 분리되며 사라지는 적의 이펙트
-    //public EnemyColor enemyColor;
+    public GameObject splitDieEffectPrefab;
     public Color enemyColor;
     public Color enemyColorHighlight;
 
     [Header("Ranged")]
-    public float distanceToPlayer; // 플레이어에게 공격을 시작할 거리
-    public float attackInterval; // 범위 공격 시간 간격
+    public float distanceToPlayer;
+    public float attackInterval;
 
     [Header("점프")]
-    public bool isJumper; // 점프를 하는 적인지
-    public float jumpInterval; // 점프 주기
+    public bool isJumper;
+    public float jumpInterval;
 
     [Header("보스 대사")]
     public List<string> dialogs;
 
-    [Header("쪼개짐")] // LV4처럼 쪼개지는 적
+    [Header("쪼개짐")]
     public EnemyData split;
-    public int splitNum; // 몇 개로 쪼개질지
+    public int splitNum;
 
     [Header("사운드")]
     public AudioClip hitSound;

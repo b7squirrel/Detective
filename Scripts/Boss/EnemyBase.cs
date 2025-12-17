@@ -12,6 +12,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [HideInInspector] public bool IsStunned { get; set; }
     [HideInInspector] public Rigidbody2D Target { get; set; }
     public EnemyStats Stats { get; set; }
+    protected EnemyStatCalculator calculator; // 스탯 계산을 위해
+    protected int currentStageNumber; // 스테이지에 따른 스탯 계산을 위해
     protected float DefaultSpeed; // 속도를 외부에서 변경할 때 원래 속도를 저장해 두기 위해
     protected float currentSpeed;
     public bool IsSlowed { get; set; } // 슬로우 스킬을 
@@ -189,6 +191,21 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         enemyColor = _enemyToSpawn.enemyColor;
 
+        // ★ 스테이지에 맞게 스탯 계산
+        if (currentStageNumber == 0) currentStageNumber = PlayerDataManager.Instance.GetCurrentStageNumber();
+        if (calculator == null) calculator = GameManager.instance.enemyStatCalculator;
+
+        if (calculator != null)
+        {
+            this.Stats = calculator.GetStatsForStage(currentStageNumber, _enemyToSpawn);
+        }
+        else
+        {
+            // Fallback: 기본 스탯 사용
+            this.Stats = new EnemyStats(_enemyToSpawn.stats);
+            Debug.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다. 기본 스탯을 사용합니다.");
+        }
+
         // 쪼개지는 적 관련 초기화
         if (_enemyToSpawn.split == null)
         {
@@ -202,13 +219,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
             splitableEnemyData = _enemyToSpawn.split;
             splitNum = _enemyToSpawn.splitNum;
             finishedSpawn = true;
-            dieEffectPrefeab = _enemyToSpawn.splitDieEffectPrefab; // 스플릿 적이라면 자체 die effect
+            dieEffectPrefeab = _enemyToSpawn.splitDieEffectPrefab;
         }
 
         if (_enemyToSpawn.hitSound != null) hitSound = _enemyToSpawn.hitSound;
         if (_enemyToSpawn.dieSound != null) dieSound = _enemyToSpawn.dieSound;
 
-        // 화이트 플래시를 한 후 원래 재질로 되돌리기 위한 initial mat 초기화. 보스는 enemy boss에서 초기화
+        // 화이트 플래시를 한 후 원래 재질로 되돌리기 위한 initial mat 초기화
         if (isSubBoss)
         {
             if (srFlash == null) return;
@@ -218,10 +235,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 initialMat[i] = srFlash[i].material;
             }
         }
-        // 적과 보스 공통으로 사용하기 위해서 virtual로 했음
-        // 각자 덮어쓰기 하면 됨
     }
-
     #endregion
 
     #region Movement Functions

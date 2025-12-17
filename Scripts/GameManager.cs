@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     public SlimeDropManager slimeDropManager;
     public StickyStuffManager stickyStuffManager;
     public LoopSoundManager loopSoundManager;
-    
+    public EnemyStatCalculator enemyStatCalculator;
 
     public GameObject joystick;
 
@@ -88,6 +88,8 @@ public class GameManager : MonoBehaviour
         stickyStuffManager = GetComponent<StickyStuffManager>();
 
         loopSoundManager = GetComponent<LoopSoundManager>();
+        
+        enemyStatCalculator = GetComponent<EnemyStatCalculator>();
 
         confimationButton.SetActive(false);
 
