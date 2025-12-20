@@ -18,11 +18,14 @@ public class EnemyStatCalculator : MonoBehaviour
         float roleHPBonus = GetRoleHPBonus(baseData.enemyRole);
         float roleDamageBonus = GetRoleDamageBonus(baseData.enemyRole);
         
-        stats.hp = CalculateHP(stage, baseData, roleHPBonus);
+        // 보스 타입에 따른 배율 적용
+        float bossMultiplier = GetBossMultiplier(stage, baseData);
+        
+        stats.hp = CalculateHP(stage, baseData, roleHPBonus, bossMultiplier);
         stats.speed = CalculateSpeed(stage, baseData);
-        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true); // melee
-        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false); // ranged
-        stats.experience_reward = CalculateExperience(stage, baseData);
+        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier); // melee
+        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier); // ranged
+        stats.experience_reward = CalculateExperience(stage, baseData, bossMultiplier);
         
         // 수동 오버라이드 적용
         ApplyManualOverrides(stage, ref stats);
@@ -30,16 +33,52 @@ public class EnemyStatCalculator : MonoBehaviour
         return stats;
     }
     
+    /// <summary>
+    /// 보스 타입과 스테이지에 따른 강화 배율 계산
+    /// </summary>
+    float GetBossMultiplier(int stage, EnemyData baseData)
+    {
+        // 기본 적이면 1.0
+        if (baseData.bossType == BossType.Normal)
+            return 1.0f;
+        
+        // 여왕 슬라임은 특별 배율
+        if (baseData.bossType == BossType.QueenBoss)
+            return scalingConfig.queenBossMultiplier;
+        
+        // 중간 보스와 스테이지 보스는 스테이지에 따라 동적으로 계산
+        int cycleStage = ((stage - 1) % 6) + 1; // 1-6으로 순환
+        int cycleNumber = (stage - 1) / 6; // 몇 번째 사이클인지 (0부터 시작)
+        
+        float baseMultiplier = 1.0f;
+        
+        if (baseData.bossType == BossType.SubBoss)
+        {
+            // 중간 보스 배율
+            baseMultiplier = scalingConfig.subBossMultiplier;
+        }
+        else if (baseData.bossType == BossType.StageBoss)
+        {
+            // 스테이지 보스 배율 (중간 보스보다 강함)
+            baseMultiplier = scalingConfig.stageBossMultiplier;
+        }
+        
+        // 사이클이 반복될수록 더 강해짐
+        float cycleBonus = 1.0f + (cycleNumber * scalingConfig.cycleGrowth);
+        
+        return baseMultiplier * cycleBonus;
+    }
+    
     float GetRoleHPBonus(EnemyRole role)
     {
         switch (role)
         {
             case EnemyRole.Tank:
-                return scalingConfig.tankHPBonus; // 20% 추가
+                return scalingConfig.tankHPBonus;
             case EnemyRole.GlassCannon:
-                return -0.2f; // 20% 감소
+                return -0.2f;
             case EnemyRole.Attacker:
-                return -0.1f; // 10% 감소
+                return -0.1f;
             default:
                 return 0f;
         }
@@ -51,30 +90,26 @@ public class EnemyStatCalculator : MonoBehaviour
         {
             case EnemyRole.Attacker:
             case EnemyRole.GlassCannon:
-                return scalingConfig.attackerDamageBonus; // 15% 추가
+                return scalingConfig.attackerDamageBonus;
             case EnemyRole.Tank:
-                return -0.15f; // 15% 감소
+                return -0.15f;
             default:
                 return 0f;
         }
     }
     
-    int CalculateHP(int stage, EnemyData baseData, float roleBonus)
+    int CalculateHP(int stage, EnemyData baseData, float roleBonus, float bossMultiplier)
     {
-        // 기본 공식: HP = baseHP * (1 + growth * stage)^exponent
         float stageMultiplier = Mathf.Pow(
             1 + scalingConfig.hpGrowth * stage, 
             scalingConfig.hpExponent
         );
         
-        // 타입별 배율
         float typeMultiplier = baseData.hpScalingMultiplier;
-        
-        // 역할별 보너스
         float roleFactor = 1f + roleBonus;
         
         int finalHP = Mathf.RoundToInt(
-            scalingConfig.baseHP * stageMultiplier * typeMultiplier * roleFactor
+            scalingConfig.baseHP * stageMultiplier * typeMultiplier * roleFactor * bossMultiplier
         );
         
         return finalHP;
@@ -85,11 +120,10 @@ public class EnemyStatCalculator : MonoBehaviour
         float speed = scalingConfig.baseSpeed * (1 + scalingConfig.speedGrowth * stage);
         speed *= baseData.speedScalingMultiplier;
         
-        // 최대 속도 제한
         return Mathf.Min(speed, scalingConfig.speedCap);
     }
     
-    int CalculateDamage(int stage, EnemyData baseData, float roleBonus, bool isMelee)
+    int CalculateDamage(int stage, EnemyData baseData, float roleBonus, bool isMelee, float bossMultiplier)
     {
         float baseDamage = isMelee ? 
             scalingConfig.baseMeleeDamage : 
@@ -102,27 +136,25 @@ public class EnemyStatCalculator : MonoBehaviour
         
         float typeMultiplier = baseData.damageScalingMultiplier;
         float roleFactor = 1f + roleBonus;
-        
-        // 원거리 공격은 추가 보너스
         float rangedBonus = isMelee ? 1f : 1.2f;
         
         int finalDamage = Mathf.RoundToInt(
-            baseDamage * stageMultiplier * typeMultiplier * roleFactor * rangedBonus
+            baseDamage * stageMultiplier * typeMultiplier * roleFactor * rangedBonus * bossMultiplier
         );
         
         return finalDamage;
     }
     
-    int CalculateExperience(int stage, EnemyData baseData)
+    int CalculateExperience(int stage, EnemyData baseData, float bossMultiplier)
     {
-        // 더 강한 적일수록 경험치 많이 줌
         float difficultyMultiplier = 
             (baseData.hpScalingMultiplier + baseData.damageScalingMultiplier) / 2f;
         
         int exp = Mathf.RoundToInt(
             scalingConfig.baseExperience * 
             (1 + scalingConfig.experienceGrowth * stage) * 
-            difficultyMultiplier
+            difficultyMultiplier *
+            bossMultiplier
         );
         
         return exp;

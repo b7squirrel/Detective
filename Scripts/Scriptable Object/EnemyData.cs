@@ -12,6 +12,9 @@ public class EnemyData : ScriptableObject
     
     [Header("Enemy Role")]
     public EnemyRole enemyRole = EnemyRole.Balanced;
+    
+    [Header("Boss Type")]
+    public BossType bossType = BossType.Normal;
 
     [Header("Scaling Multipliers")]
     [Tooltip("이 적 타입의 HP 스케일링 배율 (1.0 = 기본)")]
@@ -19,7 +22,7 @@ public class EnemyData : ScriptableObject
     public float hpScalingMultiplier = 1.0f;
     
     [Tooltip("이 적 타입의 속도 스케일링 배율 (1.0 = 기본)")]
-    [Range(0.1f, 5f)]
+    [Range(0.1f, 2.0f)]
     public float speedScalingMultiplier = 1.0f;
     
     [Tooltip("이 적 타입의 공격력 스케일링 배율 (1.0 = 기본)")]
@@ -68,4 +71,12 @@ public enum EnemyRole
     Attacker,    // 빨강 - 어택커
     Ranged,      // 초록 - 원거리
     GlassCannon  // 보라 - 유리대포
+}
+
+public enum BossType
+{
+    Normal,      // 일반 적
+    SubBoss,     // 중간 보스 (수염 달린 보스)
+    StageBoss,   // 스테이지 보스 (해당 스테이지 최종 보스)
+    QueenBoss    // 여왕 슬라임
 }
