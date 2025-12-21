@@ -12,6 +12,9 @@ public class ShopUI : MonoBehaviour
     
     [Header("크리스탈 구매 버튼")]
     [SerializeField] GemBuyButton[] gemBuyButtons;
+
+    [Header("시간 기반 상자 버튼")]
+    [SerializeField] TimeBoxButton timeBoxButton;
     
     private bool isInitialized = false;
 
@@ -46,6 +49,7 @@ public class ShopUI : MonoBehaviour
     {
         SetGoldProducts();
         SetCristalProducts();
+        SetTimeBoxProduct();
         // 필요시 다른 상품 타입도 추가
         // SetPackProducts();
         // SetBoxProducts();
@@ -150,6 +154,43 @@ public class ShopUI : MonoBehaviour
         
         Logger.Log($"[ShopUI] 크리스탈 상품 {count}개 설정 완료");
     }
+    #endregion
+
+    #region 시간 기반 상자 버튼 설정
+    /// <summary>
+    /// 시간 기반 무료 상자 버튼 설정 (box_005)
+    /// </summary>
+    void SetTimeBoxProduct()
+{
+    if (ProductDataTable.Instance == null)
+    {
+        Debug.LogError("[ShopUI] X ProductDataTable.Instance가 null입니다.");
+        return;
+    }
+    
+    var productData = ProductDataTable.Instance.GetProductById("box_005");
+    
+    if (productData == null)
+    {
+        Debug.LogError($"[ShopUI] X box_005를 찾을 수 없습니다.");
+        return;
+    }
+    
+    if (timeBoxButton == null)
+    {
+        Debug.LogError("[ShopUI] X timeBoxButton이 null입니다.");
+        return;
+    }
+    
+    Debug.Log("========================================");
+    Debug.Log("[ShopUI] V TimeBoxButton.SetInfo 호출 시작");
+    Debug.Log($"[ShopUI] ProductId: {productData.ProductId}");
+    Debug.Log("========================================");
+    
+    timeBoxButton.SetInfo(productData);
+    
+    Debug.Log("[ShopUI] V TimeBoxButton.SetInfo 호출 완료");
+}
     #endregion
     
     #region 외부에서 초기화 확인
