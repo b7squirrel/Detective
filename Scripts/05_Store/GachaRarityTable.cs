@@ -1,42 +1,34 @@
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public class GachaRarityTable : MonoBehaviour
 {
-    [SerializeField] private string csvFileName = "gachaRarityTable.csv";
-    [SerializeField] private string csvFolderPath = "DataTable";
+    [SerializeField] private TextAsset gachaRarityTableCSV;
+    
+    // ⭐ int로 변경
+    private Dictionary<string, Dictionary<int, int>> rarityTableData = new Dictionary<string, Dictionary<int, int>>();
 
-    // Key: "gachaTableId/slotType" (예: "single_duck/Normal")
-    // Value: Dictionary<등급, 확률>
-    private Dictionary<string, Dictionary<int, float>> rarityTableData;
+    public class RarityData
+    {
+        public string GachaTableId;
+        public string SlotType;
+        public int Rarity;
+        public int Probability;  // ⭐ float → int
+    }
 
     void Awake()
     {
-        LoadRarityTable();
-    }
-
-    void LoadRarityTable()
-    {
-        rarityTableData = new Dictionary<string, Dictionary<int, float>>();
-
-        string resourcePath = $"{csvFolderPath}/{Path.GetFileNameWithoutExtension(csvFileName)}";
-        Logger.Log($"[GachaRarityTable] CSV 로드 시도: Resources/{resourcePath}");
-
-        TextAsset csvFile = Resources.Load<TextAsset>(resourcePath);
-        
-        if (csvFile == null)
+        if (gachaRarityTableCSV != null)
         {
-            Logger.LogError($"[GachaRarityTable] CSV 파일을 찾을 수 없습니다: Resources/{resourcePath}");
-            Logger.LogError("[GachaRarityTable] Resources/DataTable/gachaRarityTable.csv 파일을 생성하세요!");
-            return;
+            ParseCSV(gachaRarityTableCSV.text);
         }
-
-        ParseCSV(csvFile.text);
-        Logger.Log($"[GachaRarityTable] 확률 테이블 로드 완료");
+        else
+        {
+            Logger.LogError("[GachaRarityTable] CSV 파일이 할당되지 않았습니다.");
+        }
     }
 
-    void ParseCSV(string csvText)
+    private void ParseCSV(string csvText)
     {
         if (string.IsNullOrEmpty(csvText))
         {
@@ -44,83 +36,100 @@ public class GachaRarityTable : MonoBehaviour
             return;
         }
 
-        string normalizedText = csvText.Replace("\r\n", "\n").Replace("\r", "\n");
+        string normalizedText = csvText
+            .Replace("\r\n", "\n")
+            .Replace("\r", "\n");
+
         string[] lines = normalizedText.Split('\n');
-        
         Logger.Log($"[GachaRarityTable] 총 {lines.Length}개 라인 읽음");
+
+        int parsedCount = 0;
+        int skippedCount = 0;
 
         // 첫 줄(헤더) 건너뛰기
         for (int i = 1; i < lines.Length; i++)
         {
             string line = lines[i].Trim();
-            
+
             if (string.IsNullOrEmpty(line))
+            {
+                skippedCount++;
                 continue;
+            }
 
             string[] fields = line.Split(',');
-            
+
             if (fields.Length < 4)
             {
                 Logger.LogWarning($"[GachaRarityTable] 라인 {i}: 필드 부족 ({fields.Length}/4)");
+                skippedCount++;
                 continue;
             }
 
             try
             {
-                string gachaTableId = GetField(fields, 0);
-                string slotType = GetField(fields, 1);
-                string rarityStr = GetField(fields, 2);
-                float probability = ParseFloat(GetField(fields, 3));
+                RarityData data = new RarityData
+                {
+                    GachaTableId = GetField(fields, 0),
+                    SlotType = GetField(fields, 1),
+                    Rarity = GetRarityValue(GetField(fields, 2)),
+                    Probability = ParseInt(GetField(fields, 3))  // ⭐ int로 파싱
+                };
 
-                // 등급 문자열을 숫자로 변환
-                int rarity = RarityStringToInt(rarityStr);
+                // 테이블 키 생성
+                string key = $"{data.GachaTableId}_{data.SlotType}";
 
-                // Key 생성: "gachaTableId/slotType"
-                string key = $"{gachaTableId}/{slotType}";
-
+                // 딕셔너리에 추가
                 if (!rarityTableData.ContainsKey(key))
                 {
-                    rarityTableData[key] = new Dictionary<int, float>();
+                    rarityTableData[key] = new Dictionary<int, int>();
                 }
 
-                rarityTableData[key][rarity] = probability;
+                rarityTableData[key][data.Rarity] = data.Probability;
+                parsedCount++;
 
-                if (i <= 5) // 처음 몇 개만 로그
+                // ⭐ 디버깅용 로그 (처음 몇 개만)
+                if (i <= 5)
                 {
-                    Logger.Log($"[GachaRarityTable] {key} → {rarityStr}({rarity}): {probability}%");
+                    Logger.Log($"[GachaRarityTable] Parsed: {data.GachaTableId}/{data.SlotType}/{GetRarityName(data.Rarity)} = {data.Probability}");
                 }
             }
             catch (System.Exception e)
             {
                 Logger.LogError($"[GachaRarityTable] 라인 {i} 파싱 오류: {e.Message}");
+                skippedCount++;
             }
         }
 
-        Logger.Log($"[GachaRarityTable] {rarityTableData.Count}개 테이블 로드 완료");
+        Logger.Log($"[GachaRarityTable] 파싱 완료: {parsedCount}개 성공, {skippedCount}개 건너뜀");
+        Logger.Log($"[GachaRarityTable] 총 {rarityTableData.Count}개 테이블 로드됨");
     }
 
-    /// <summary>
-    /// 확률 테이블 가져오기
-    /// </summary>
-    public Dictionary<int, float> GetProbabilities(string gachaTableId, string slotType)
+    // ⭐ 반환 타입을 Dictionary<int, int>로 변경
+    public Dictionary<int, int> GetProbabilities(string gachaTableId, string slotType)
     {
-        string key = $"{gachaTableId}/{slotType}";
-        
-        if (rarityTableData.ContainsKey(key))
+        string key = $"{gachaTableId}_{slotType}";
+
+        if (rarityTableData.TryGetValue(key, out var probs))
         {
-            return rarityTableData[key];
+            return probs;
         }
 
-        Logger.LogWarning($"[GachaRarityTable] 확률 테이블을 찾을 수 없습니다: {key}");
         return null;
     }
 
-    /// <summary>
-    /// 등급 문자열을 숫자로 변환
-    /// </summary>
-    private int RarityStringToInt(string rarity)
+    private string GetField(string[] fields, int index)
     {
-        switch (rarity.ToLower())
+        if (index < fields.Length)
+        {
+            return fields[index].Trim();
+        }
+        return string.Empty;
+    }
+
+    private int GetRarityValue(string rarityName)
+    {
+        switch (rarityName.ToLower())
         {
             case "common": return 0;
             case "rare": return 1;
@@ -128,24 +137,30 @@ public class GachaRarityTable : MonoBehaviour
             case "legendary": return 3;
             case "mythic": return 4;
             default:
-                Logger.LogWarning($"[GachaRarityTable] 알 수 없는 등급: {rarity}, Common으로 처리");
+                Logger.LogWarning($"[GachaRarityTable] 알 수 없는 등급: {rarityName}");
                 return 0;
         }
     }
 
-    private string GetField(string[] fields, int index)
+    private int ParseInt(string value)
     {
-        if (index >= 0 && index < fields.Length)
-        {
-            return fields[index].Trim();
-        }
-        return "";
+        if (int.TryParse(value, out int result))
+            return result;
+        
+        Logger.LogWarning($"[GachaRarityTable] 정수 파싱 실패: '{value}'");
+        return 0;
     }
 
-    private float ParseFloat(string value)
+    private string GetRarityName(int rarity)
     {
-        if (float.TryParse(value, out float result))
-            return result;
-        return 0f;
+        switch (rarity)
+        {
+            case 0: return "Common";
+            case 1: return "Rare";
+            case 2: return "Epic";
+            case 3: return "Legendary";
+            case 4: return "Mythic";
+            default: return "Unknown";
+        }
     }
 }

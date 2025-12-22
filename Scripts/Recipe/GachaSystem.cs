@@ -395,6 +395,7 @@ public class GachaSystem : MonoBehaviour
     // ⭐ 기존 DrawWeapons는 유지 (디버그/레거시 코드)
     public void DrawWeapons(int num)
     {
+        Logger.Log($"[GachaSystem] ★★★ DrawWeapons 호출됨! num={num}, Time={Time.time}");
         int weaponCount = CountWeaponCards();
         int totalMaxCardLimit = StaticValues.MaxCardNum;
 

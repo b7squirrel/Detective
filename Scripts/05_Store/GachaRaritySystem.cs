@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GachaRaritySystem : MonoBehaviour
@@ -8,27 +9,16 @@ public class GachaRaritySystem : MonoBehaviour
     void Awake()
     {
         rarityTable = GetComponent<GachaRarityTable>();
-        if (rarityTable == null)
-        {
-            Logger.LogError("[GachaRaritySystem] GachaRarityTable을 찾을 수 없습니다!");
-        }
     }
 
-    /// <summary>
-    /// 가챠 테이블 ID와 슬롯 타입에 따라 랜덤 등급 반환
-    /// </summary>
-    /// <param name="gachaTableId">가챠 테이블 ID (예: "single_duck", "ten_duck")</param>
-    /// <param name="isGuaranteedSlot">확정 슬롯 여부 (10연차의 마지막 슬롯)</param>
-    /// <returns>뽑힌 등급 (0=Common, 1=Rare, 2=Epic, 3=Legendary, 4=Mythic)</returns>
     public int GetRandomRarity(string gachaTableId, bool isGuaranteedSlot)
     {
         if (rarityTable == null)
         {
             Logger.LogError("[GachaRaritySystem] RarityTable이 없습니다. 기본값 반환.");
-            return 1; // 기본값: Rare
+            return 1;
         }
 
-        // 확률 테이블 가져오기
         string slotType = isGuaranteedSlot ? "Guarantee" : "Normal";
         var probabilities = rarityTable.GetProbabilities(gachaTableId, slotType);
 
@@ -38,53 +28,41 @@ public class GachaRaritySystem : MonoBehaviour
             return 1;
         }
 
-        // 가중치 기반 랜덤 선택
         int selectedRarity = WeightedRandomPick(probabilities);
-        
         Logger.Log($"[GachaRaritySystem] {gachaTableId}/{slotType} → Grade {selectedRarity} ({GetRarityName(selectedRarity)})");
-        
         return selectedRarity;
     }
 
-    /// <summary>
-    /// 가중치 기반 랜덤 선택
-    /// </summary>
-    private int WeightedRandomPick(Dictionary<int, float> probabilities)
+    private int WeightedRandomPick(Dictionary<int, int> probabilities)
     {
-        // 전체 확률 합계 계산
-        float totalWeight = 0f;
+        // ⭐ 총 가중치 계산 (10000 = 100%)
+        int totalWeight = 0;
         foreach (var prob in probabilities.Values)
         {
             totalWeight += prob;
         }
 
-        // 0~totalWeight 사이 랜덤값
-        float randomValue = Random.Range(0f, totalWeight);
-        
-        // 누적 확률로 선택
-        float cumulativeWeight = 0f;
+        // ⭐ 디버깅용 로그 (필요시 주석 해제)
+        // Logger.Log($"[GachaRaritySystem] Total Weight: {totalWeight}");
+
+        // ⭐ 0 ~ totalWeight 사이의 랜덤 값
+        int randomValue = UnityEngine.Random.Range(0, totalWeight);
+
+        // ⭐ 누적 확률로 선택
+        int currentWeight = 0;
         foreach (var kvp in probabilities)
         {
-            cumulativeWeight += kvp.Value;
-            if (randomValue <= cumulativeWeight)
+            currentWeight += kvp.Value;
+            if (randomValue < currentWeight)
             {
                 return kvp.Key; // 등급 반환
             }
         }
 
-        // 혹시 모를 오류 방지
-        Logger.LogWarning("[GachaRaritySystem] 가중치 선택 실패, 첫 번째 등급 반환");
-        foreach (var kvp in probabilities)
-        {
-            return kvp.Key;
-        }
-
-        return 1; // 최종 폴백
+        // ⭐ 만약 여기까지 왔다면 첫 번째 등급 반환 (fallback)
+        return probabilities.Keys.First();
     }
 
-    /// <summary>
-    /// 등급 숫자를 이름으로 변환 (디버깅용)
-    /// </summary>
     private string GetRarityName(int rarity)
     {
         switch (rarity)
