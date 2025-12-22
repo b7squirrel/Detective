@@ -9,6 +9,8 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     [Header("테스트 설정")]
     [SerializeField] private bool enableIAPTestMode = true;
 
+    GachaSystem gachaSystem;
+
     protected override void Init()
     {
         base.Init();
@@ -79,7 +81,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     /// 광고 시청으로 구매
     /// </summary>
     // ShopManager.cs의 PurchaseWithAd 수정
-
     async void PurchaseWithAd(ProductData productData, RectTransform fxStartPoint)
     {
         Logger.Log($"[ShopManager] 광고 구매 시작: {productData.ProductName}");
@@ -126,7 +127,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         });
     }
 
-    
+
 
     bool PurchaseWithCristal(ProductData productData)
     {
@@ -222,15 +223,15 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 break;
 
             case ProductType.Pack:
-                Logger.Log("[ShopManager] 팩 보상 처리");
-                // ⭐ GachaSystem 연동 (추후 구현)
-                // GachaSystem.Instance.OpenPack(productData.RewardItemId);
+                Logger.Log($"[ShopManager] 팩 보상 처리: {productData.ProductId}");
+                // ⭐ ProductData 직접 전달
+                OpenBox(productData, fxStartPoint);
                 break;
 
             case ProductType.Box:
-                Logger.Log($"[ShopManager] 상자 보상 처리: {productData.RewardItemId}");
-                // ⭐ 상자 열기 (랜덤 보상)
-                OpenBox(productData.RewardItemId, fxStartPoint);
+                Logger.Log($"[ShopManager] 상자 보상 처리: {productData.ProductId}");
+                // ⭐ ProductData 직접 전달
+                OpenBox(productData, fxStartPoint);
                 break;
         }
     }
@@ -243,54 +244,37 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     /// <summary>
     /// 상자 열기 (랜덤 보상)
     /// </summary>
-    void OpenBox(string boxId, RectTransform fxStartPoint)
+    void OpenBox(ProductData productData, RectTransform fxStartPoint)
     {
-        // ⭐ 추후 BoxRewardTable을 만들어서 관리하는 것이 좋습니다
-        // 지금은 간단하게 랜덤으로 구현
-
-        int random = UnityEngine.Random.Range(0, 100);
-
-        if (random < 40) // 40% 골드
+        if (productData == null)
         {
-            int goldAmount = UnityEngine.Random.Range(1000, 5000);
-            var playerDataManager = PlayerDataManager.Instance;
-            int currentGold = playerDataManager.GetCurrentCoinNumber();
-            playerDataManager.SetCoinNumberAsSilent(currentGold + goldAmount);
+            Logger.LogError($"[ShopManager] ProductData가 null입니다.");
+            return;
+        }
 
-            if (fxStartPoint != null)
+        // ⭐ GachaSystem에 위임
+        if (!string.IsNullOrEmpty(productData.GachaTableId))
+        {
+            var gachaSystem = FindObjectOfType<GachaSystem>();
+            if (gachaSystem != null)
             {
-                PlayGoldCollectFX(fxStartPoint, goldAmount);
+                Logger.Log($"[ShopManager] 가챠 실행: {productData.ProductId}, 테이블: {productData.GachaTableId}, {productData.DrawCount}개");
+
+                gachaSystem.OpenBox(
+                    productData.GachaTableId,
+                    productData.DrawCount,
+                    productData.GuaranteedCount,
+                    productData.GuaranteedRarity
+                );
             }
-
-            ShowRewardPopup($"상자에서 골드 {goldAmount}개 획득!");
-            Logger.Log($"[ShopManager] 상자 보상: 골드 {goldAmount}");
-        }
-        else if (random < 70) // 30% 크리스탈
-        {
-            int cristalAmount = UnityEngine.Random.Range(10, 50);
-            var playerDataManager = PlayerDataManager.Instance;
-            int currentCristal = playerDataManager.GetCurrentCristalNumber();
-            playerDataManager.SetCristalNumberAsSilent(currentCristal + cristalAmount);
-
-            if (fxStartPoint != null)
+            else
             {
-                PlayCristalCollectFX(fxStartPoint, cristalAmount);
+                Logger.LogError("[ShopManager] GachaSystem을 찾을 수 없습니다.");
             }
-
-            ShowRewardPopup($"상자에서 크리스탈 {cristalAmount}개 획득!");
-            Logger.Log($"[ShopManager] 상자 보상: 크리스탈 {cristalAmount}");
         }
-        else if (random < 90) // 20% 오리 카드
+        else
         {
-            // ⭐ CardDataManager 연동 필요
-            Logger.Log($"[ShopManager] 상자 보상: 오리 카드");
-            ShowRewardPopup($"상자에서 오리 카드 획득!");
-        }
-        else // 10% 아이템 카드
-        {
-            // ⭐ CardDataManager 연동 필요
-            Logger.Log($"[ShopManager] 상자 보상: 아이템 카드");
-            ShowRewardPopup($"상자에서 아이템 카드 획득!");
+            Logger.LogWarning($"[ShopManager] {productData.ProductId}는 가챠 테이블이 없습니다.");
         }
     }
 

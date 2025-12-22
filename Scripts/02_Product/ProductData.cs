@@ -9,6 +9,7 @@ public class ProductData
     public int RewardCristal;  // 오타 수정: Gem -> Cristal (데이터와 일치)
     public int RewardGold;
     public string RewardItemId;     // "duck_weapon", "item_equip" 등
+    public int DrawCount;           // 추가: 몇 개 뽑을지
     public string GachaTableId;     // 추가: "single_duck", "ten_duck" 등
     public int GuaranteedCount;     // 추가: 10연차의 경우 1
     public string GuaranteedRarity; // 추가: "Legendary" 등
