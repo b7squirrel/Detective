@@ -8,7 +8,10 @@ public class ProductData
     public int PurchaseCost;
     public int RewardCristal;  // 오타 수정: Gem -> Cristal (데이터와 일치)
     public int RewardGold;
-    public string RewardItemId;  // int -> string (pack_001 같은 형식 지원)
+    public string RewardItemId;     // "duck_weapon", "item_equip" 등
+    public string GachaTableId;     // 추가: "single_duck", "ten_duck" 등
+    public int GuaranteedCount;     // 추가: 10연차의 경우 1
+    public string GuaranteedRarity; // 추가: "Legendary" 등
 }
 
 public enum ProductType

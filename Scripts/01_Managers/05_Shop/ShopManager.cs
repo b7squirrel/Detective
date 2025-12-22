@@ -237,7 +237,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     IEnumerator GiveProductRewardCo(ProductData productData, RectTransform fxStartPoint)
     {
         yield return null;
-        ShopManager.Instance.GiveProductReward(productData, fxStartPoint);
+        GiveProductReward(productData, fxStartPoint);
     }
 
     /// <summary>
