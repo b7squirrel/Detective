@@ -85,6 +85,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     {
         Logger.Log($"[ShopManager] 광고 구매 시작: {productData.ProductName}");
 
+        // 쿨다운 확인
         if (productData.ProductType == ProductType.Box)
         {
             if (TimeBasedBoxManager.Instance == null)
@@ -93,7 +94,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 return;
             }
 
-            // ⭐ 서버 시간으로 쿨다운 확인
+            // 서버 시간으로 쿨다운 확인
             bool canClaim = await TimeBasedBoxManager.Instance.CanClaimBoxAsync();
 
             if (!canClaim)
@@ -105,9 +106,17 @@ public class ShopManager : SingletonBehaviour<ShopManager>
             }
         }
 
+        // 광고 준비 확인
         if (AdsManager.Instance == null)
         {
             Logger.LogError("[ShopManager] AdsManager가 없습니다.");
+            return;
+        }
+
+        if (!AdsManager.IsRewardedAdReady)
+        {
+            Logger.LogWarning("[ShopManager] 광고가 아직 준비되지 않았습니다. 잠시 후 다시 시도해주세요.");
+            ShowAdLoadingPopup();
             return;
         }
 
@@ -119,7 +128,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
             if (productData.ProductType == ProductType.Box)
             {
-                // ⭐ 서버 시간으로 기록
+                // 서버 시간으로 기록
                 await TimeBasedBoxManager.Instance.OnBoxClaimedAsync();
             }
 
@@ -127,7 +136,11 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         });
     }
 
-
+    void ShowAdLoadingPopup()
+    {
+        // TODO: "광고를 불러오는 중입니다..." 팝업
+        Logger.Log("[ShopManager] 광고 로딩 중... 잠시만 기다려주세요.");
+    }
 
     bool PurchaseWithCristal(ProductData productData)
     {

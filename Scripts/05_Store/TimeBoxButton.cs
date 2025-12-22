@@ -65,17 +65,28 @@ public class TimeBoxButton : MonoBehaviour
         {
             return;
         }
-        
+
         isReady = TimeBasedBoxManager.Instance.CanClaimBox();
-        
-        if (isReady)
+
+        // 광고 준비 상태도 확인
+        bool adReady = AdsManager.IsRewardedAdReady;
+
+        if (isReady && adReady)
         {
             if (boxButton != null) boxButton.interactable = true;
             if (timerText != null) timerText.text = "광고 보고 열기!";
             if (lockIcon != null) lockIcon.SetActive(false);
         }
+        else if (isReady && !adReady)
+        {
+            // 쿨다운은 끝났지만 광고 로딩 중
+            if (boxButton != null) boxButton.interactable = false;
+            if (timerText != null) timerText.text = "광고 로딩 중...";
+            if (lockIcon != null) lockIcon.SetActive(true);
+        }
         else
         {
+            // 클디은 증
             if (boxButton != null) boxButton.interactable = false;
             if (timerText != null)
             {

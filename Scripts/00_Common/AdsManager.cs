@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class AdsManager : SingletonBehaviour<AdsManager>
 {
+    
+
     protected override void Init()
     {
         base.Init();
@@ -20,6 +22,8 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     {
         MobileAds.Initialize(initStatus =>
         {
+            Logger.Log("[AdsManager] Google Ads 초기화 시작...");
+
             //Check if initialization was successful
             var isInitSuccess = true;
             var statusMap = initStatus.getAdapterStatusMap();
@@ -270,6 +274,8 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     #endregion
 
     #region RewardedAd
+    public static bool IsRewardedAdReady { get; private set; } = false; // 광고 준비 상태 플래그
+    
     private RewardedAd m_DailyFreeGemRewardedAd;
     private string m_DailyFreeGemRewardedAdId = string.Empty;
     private const string AOS_REWARDED_AD_TEST_AD_ID = "ca-app-pub-3940256099942544/5224354917";
@@ -302,6 +308,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     
     private void LoadDailyFreeGemRewardedAd()
     {
+        Logger.Log("[AdsManager] 보상형 광고 로드 시작...");
         var adRequest = new AdRequest();
 
         RewardedAd.Load(m_DailyFreeGemRewardedAdId, adRequest,
@@ -309,12 +316,13 @@ public class AdsManager : SingletonBehaviour<AdsManager>
             {
                 if(error != null || ad == null)
                 {
-                    Logger.LogError($"Rewarded ad failed to load. Error: {error}");
+                    Logger.LogError($"[AdsManager] 보상형 광고 로드 실패. Error: {error}");
                     return;
                 }
 
-                Logger.Log($"Rewarded ad loaded successfully. Response: {ad.GetResponseInfo()}");
+                Logger.Log($"[AdsManager] 보상형 광고 로드 성공! Response: {ad.GetResponseInfo()}");
                 m_DailyFreeGemRewardedAd = ad;
+                IsRewardedAdReady = true; // 광고 준비 완료 플래그
                 ListenToDailyFreeGemRewardedAdEvents();
             });
     }
@@ -362,7 +370,8 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
     public void ShowDailyFreeGemRewardedAd(Action onRewardDailyFreeGemAd = null)
     {
-        Logger.Log($"Show DailyFreeGemRewardedAd");
+        Logger.Log($"[AdsManager] Show DailyFreeGemRewardedAd 호출");
+        Logger.Log($"[AdsManager] 광고 준비 상태: {IsRewardedAdReady}");
 
         if(m_DailyFreeGemRewardedAd != null && m_DailyFreeGemRewardedAd.CanShowAd())
         {
