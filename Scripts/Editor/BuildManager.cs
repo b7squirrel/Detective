@@ -18,6 +18,10 @@ public class BuildManager : Editor
     public const string REAL_SCRIPTING_DEFINE_SYMBOLS = "UNITY_ANDROID;DOTWEEN";
     static BuildType m_buildType = BuildType.DEV;
 
+    // 빌드 실패시 버전 코드를 증가시켰다면 다시 되돌리기 위한 변수들
+    static int s_prevVersionCode = -1;
+    static bool s_versionCodeIncreased = false;
+
     [MenuItem("Build/1. Set AOS DEV Build Settings")]
     public static void SetAOSDEVBuildSettings()
     {
@@ -51,6 +55,8 @@ public class BuildManager : Editor
     [MenuItem("Build/- Start AOS Build")]
     public static void StartAOSBuild()
     {
+        TryIncreaseVersionCode();
+
         PlayerSettings.Android.keystoreName = "Builds/AOS/user.keystore";
         PlayerSettings.Android.keystorePass = "b7dotori!";
         PlayerSettings.Android.keyaliasName = "io";
@@ -92,8 +98,42 @@ public class BuildManager : Editor
         }
         else if (summary.result == BuildResult.Failed)
         {
+            RollbackVersionCodeIfNeeded();
             Debug.LogError($"빌드 실패!");
         }
+    }
+
+    static void TryIncreaseVersionCode()
+    {
+        s_versionCodeIncreased = false;
+        s_prevVersionCode = -1;
+
+        // TEST / REAL (AAB)만 증가
+        if (m_buildType != BuildType.TEST && m_buildType != BuildType.REAL)
+        {
+            Debug.Log("[Build] DEV 빌드 → Version Code 증가 안 함");
+            return;
+        }
+
+        s_prevVersionCode = PlayerSettings.Android.bundleVersionCode;
+        int nextCode = s_prevVersionCode + 1;
+
+        PlayerSettings.Android.bundleVersionCode = nextCode;
+        s_versionCodeIncreased = true;
+
+        Debug.Log(
+            $"[Build] Version Code 증가: {s_prevVersionCode} → {nextCode}");
+    }
+    static void RollbackVersionCodeIfNeeded()
+    {
+        if (!s_versionCodeIncreased)
+            return;
+
+        PlayerSettings.Android.bundleVersionCode = s_prevVersionCode;
+
+        Debug.LogWarning(
+            $"[Build] 빌드 실패 → Version Code 롤백: " +
+            $"{s_prevVersionCode}");
     }
 }
 #endif

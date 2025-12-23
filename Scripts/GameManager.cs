@@ -98,10 +98,6 @@ public class GameManager : MonoBehaviour
         IsBossStage = false;
     }
 
-    void Start()
-    {
-        AdsManager.Instance.EnableTopBannerAd(true);
-    }
     #endregion
 
     void OpenLoadingSwipe()

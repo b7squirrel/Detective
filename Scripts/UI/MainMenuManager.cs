@@ -72,8 +72,6 @@ public class MainMenuManager : MonoBehaviour
         // SetButtonActive(1, false);
         // SetButtonActive(3, false);
         // SetButtonActive(4, false);
-
-        AdsManager.Instance.EnableTopBannerAd(false);
     }
 
     void Update()

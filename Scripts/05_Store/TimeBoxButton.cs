@@ -18,7 +18,7 @@ public class TimeBoxButton : MonoBehaviour
     
     void Start()
     {
-        // ⭐ Inspector의 OnClick 이벤트 무시하고 코드로 직접 연결
+        // Inspector의 OnClick 이벤트 무시하고 코드로 직접 연결
         if (boxButton != null)
         {
             // 기존 이벤트 모두 제거
@@ -86,7 +86,7 @@ public class TimeBoxButton : MonoBehaviour
         }
         else
         {
-            // 클디은 증
+            // 쿨다운 증
             if (boxButton != null) boxButton.interactable = false;
             if (timerText != null)
             {
@@ -97,7 +97,7 @@ public class TimeBoxButton : MonoBehaviour
         }
     }
 
-    // ⭐ public으로 유지 (Inspector에서도 보이게)
+    // public으로 유지 (Inspector에서도 보이게)
     public void OnButtonClicked()
     {
         Debug.Log("========================================");

@@ -12,12 +12,22 @@ public class GemBuyButton : MonoBehaviour
     [SerializeField] TextMeshProUGUI rewardText;
     [SerializeField] TextMeshProUGUI costText;
     [SerializeField] Sprite productSprite;
+    [SerializeField] Button buyButton;
     
     [Header("FX 위치")]
     [SerializeField] RectTransform gemPoint;
     
     private ProductData productData;
     
+    void Awake()
+    {
+        if (buyButton == null)
+            buyButton = GetComponent<Button>();
+        
+        if (buyButton != null)
+            buyButton.onClick.AddListener(OnPurchaseButtonClicked);
+    }
+
     /// <summary>
     /// 상품 정보 설정 (ShopUI에서 호출)
     /// </summary>

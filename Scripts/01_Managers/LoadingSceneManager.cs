@@ -10,8 +10,6 @@ public class LoadingSceneManager : MonoBehaviour
 
     public void LoadScenes()
     {
-        AdsManager.Instance.EnableTopBannerAd(false);
-
         progressBar.value = 0;
         SetProgressText();
         StartCoroutine(LoadSceneCo());
