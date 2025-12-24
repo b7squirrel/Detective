@@ -102,6 +102,6 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     public void InitProjectileDamage(int damage)
     {
         projectileDamage = damage;
-        Debug.LogError($"Projectile Damage Set to {projectileDamage}");
+        // Logger.LogError($"Projectile Damage Set to {projectileDamage}");
     }
 }
