@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608ab2ae7154af4429ee6ffc8873925f, type: 3}
+  m_Name: Slime LV4 small
+  m_EditorClassIdentifier: 
+  Name: Slime LV4 small
+  animController: {fileID: 22100000, guid: be250dbe10cb74489a040e6111ac6595, type: 2}
+  stats:
+    hp: 250
+    speed: 5
+    damage: 25
+    rangedDamage: 0
+    experience_reward: 2500
+  enemyType: 0
+  projectilePrefab: {fileID: 0}
+  splitDieEffectPrefab: {fileID: 0}
+  enemyColor: {r: 0.3647059, g: 0.67058825, b: 0.6, a: 1}
+  enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
+  distanceToPlayer: 0
+  attackInterval: 0
+  isJumper: 0
+  jumpInterval: 0
+  dialogs: []
+  split: {fileID: 0}
+  splitNum: 0
+  hitSound: {fileID: 8300000, guid: 19f72bd720c051b47b34c93667c1888b, type: 3}
+  dieSound: {fileID: 8300000, guid: 539d49aee15833e47ae3311f537e5a35, type: 3}

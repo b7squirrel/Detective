@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608ab2ae7154af4429ee6ffc8873925f, type: 3}
+  m_Name: Slime LV1_SubBoss
+  m_EditorClassIdentifier: 
+  Name: "\uBAB0\uB791\uC774 \uC655\uC790"
+  animController: {fileID: 22100000, guid: b2f1e9d0a8138b744900a2e5ad277722, type: 2}
+  stats:
+    hp: 1500
+    speed: 6
+    damage: 60
+    rangedDamage: 0
+    experience_reward: 130
+  enemyType: 0
+  enemyRole: 0
+  bossType: 1
+  hpScalingMultiplier: 1
+  speedScalingMultiplier: 1.5
+  damageScalingMultiplier: 1
+  canDash: 0
+  dashCooldown: 3
+  dashSpeed: 15
+  hasJumpAttack: 1
+  projectilePrefab: {fileID: 0}
+  splitDieEffectPrefab: {fileID: 0}
+  enemyColor: {r: 0.9490197, g: 0.6745098, b: 0.3019608, a: 1}
+  enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
+  distanceToPlayer: 0
+  attackInterval: 0
+  isJumper: 1
+  jumpInterval: 6
+  dialogs: []
+  split: {fileID: 0}
+  splitNum: 0
+  hitSound: {fileID: 0}
+  dieSound: {fileID: 0}

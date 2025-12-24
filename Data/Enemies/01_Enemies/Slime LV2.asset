@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608ab2ae7154af4429ee6ffc8873925f, type: 3}
+  m_Name: Slime LV2
+  m_EditorClassIdentifier: 
+  Name: Slime LV2
+  animController: {fileID: 22100000, guid: e528fe5e406fa644a9a7f95329c2b329, type: 2}
+  stats:
+    hp: 160
+    speed: 1
+    damage: 12
+    rangedDamage: 1000
+    experience_reward: 450
+  enemyType: 1
+  enemyRole: 3
+  hpScalingMultiplier: 2.67
+  speedScalingMultiplier: 0.25
+  damageScalingMultiplier: 1.33
+  canDash: 0
+  dashCooldown: 3
+  dashSpeed: 15
+  hasJumpAttack: 0
+  projectilePrefab: {fileID: 2430061364096046730, guid: 01f8bc472c75b445f9bd74dda9b8e328, type: 3}
+  splitDieEffectPrefab: {fileID: 0}
+  enemyColor: {r: 0.6509804, g: 0.70980394, b: 0.015686275, a: 1}
+  enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
+  distanceToPlayer: 15
+  attackInterval: 5
+  isJumper: 0
+  jumpInterval: 0
+  dialogs: []
+  split: {fileID: 0}
+  splitNum: 0
+  hitSound: {fileID: 0}
+  dieSound: {fileID: 0}
