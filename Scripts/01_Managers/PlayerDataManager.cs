@@ -19,8 +19,11 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     string filePath;
     bool isStageCleared;
 
+    [Header("게임 모드")]
+    [SerializeField] GameMode currentGameMode;
+
     public event System.Action OnCurrencyChanged;
-    
+
     // ⭐ 추가: 데이터 로드 완료 플래그
     public static bool IsDataLoaded { get; private set; } = false;
 
@@ -28,13 +31,13 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     protected override void Init()
     {
         base.Init(); // ⭐ 반드시 base.Init() 호출하여 Instance 설정
-        
+
         filePath = Path.Combine(Application.persistentDataPath, "playerData.json");
         LoadPlayerData();
         IsDataLoaded = true;
         Logger.Log("[PlayerDataManager] 데이터 로드 완료");
     }
-    
+
     void OnApplicationQuit()
     {
         IsDataLoaded = false;
@@ -62,7 +65,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             CreateDefaultPlayerData();
         }
     }
-    
+
     void CreateDefaultPlayerData()
     {
         playerData = new PlayerData
@@ -191,5 +194,14 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         SetCristalNumberAs(cristalNum);
 
         FindObjectOfType<PauseManager>().PauseGame();
+    }
+
+    public void SetGameMode(GameMode mode)
+    {
+        currentGameMode = mode;
+    }
+    public GameMode GetGameMode()
+    {
+        return currentGameMode;
     }
 }

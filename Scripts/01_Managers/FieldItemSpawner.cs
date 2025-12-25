@@ -27,7 +27,7 @@ public class FieldItemSpawner : MonoBehaviour
 
     [Header("Egg Box")]
     [SerializeField] GameObject EggBoxPrefab;
-    float[] eggSpawnTime;
+    float[] eggSpawnTime = { 10f, 50f, 90f, 60f, 230f };
     float eggSpawnCoolDown;
     int eggSpawnIndex;
     int eggBoxNums; // 알 상자에 아이디 부여
@@ -35,11 +35,6 @@ public class FieldItemSpawner : MonoBehaviour
 
     // 알 디버그
     int eggBugNums; // 알의 갯수 오류가 난 횟수
-
-    public void Init(float[] _eggSpawnTime)
-    {
-        eggSpawnTime = _eggSpawnTime;
-    }
 
     void Start()
     {
@@ -147,7 +142,7 @@ public class FieldItemSpawner : MonoBehaviour
             eggBugNums++;
         }
 
-        // Debug.LogError($"알 스폰 오류 횟수 = {eggBugNums}");
+        // Logger.LogError($"알 스폰 오류 횟수 = {eggBugNums}");
         return spawnable;
     }
 }

@@ -5,11 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class LoadingSceneManager : MonoBehaviour
 {
+    GameMode currentMode = GameMode.Regular;
+
     [SerializeField] Slider progressBar;
     [SerializeField] TMPro.TextMeshProUGUI progressText;
 
+    // 레귤러 모드용
     public void LoadScenes()
     {
+        LoadScenes(GameMode.Regular);
+    }
+
+    // 게임 모드 선택 가능
+    public void LoadScenes(GameMode mode = GameMode.Regular)
+    {
+        currentMode = mode;
         progressBar.value = 0;
         SetProgressText();
         StartCoroutine(LoadSceneCo());
@@ -18,11 +28,7 @@ public class LoadingSceneManager : MonoBehaviour
     // 최소한 3초간은 로딩되도록
     IEnumerator LoadSceneCo()
     {
-        //yield return null;
-
-        int currentStage = FindAnyObjectByType<PlayerDataManager>().GetCurrentStageNumber();
-        //string stageToPlay = "GamePlayStage" + currentStage.ToString();
-        string stageToPlay = "Stage";
+        string stageToPlay = currentMode == GameMode.Infinite ? "InfiniteStage" : "Stage";
 
         AsyncOperation op1 = SceneManager.LoadSceneAsync("Essential", LoadSceneMode.Single);
         op1.allowSceneActivation = false;
@@ -48,8 +54,6 @@ public class LoadingSceneManager : MonoBehaviour
                 {
                     op1.allowSceneActivation = true;
                     SceneManager.LoadScene(stageToPlay, LoadSceneMode.Additive);
-
-                    StageManager stagemanager = FindObjectOfType<StageManager>();
                     yield break;
                 }
             }

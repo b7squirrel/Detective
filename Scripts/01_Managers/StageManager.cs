@@ -37,8 +37,6 @@ public class StageManager : MonoBehaviour
                                        contents.enemyData, contents.enemyNumForNextEvent,
                                        contents.stageMusicType);
 
-        fieldItemSpawner.Init(contents.eggSpawnTimes);
-
         spawnGemsOnStart.InitGemData(contents.gemToSpawn,
                                                    contents.numbersOfGemToSpawn,
                                                    contents.innerRadius, contents.outerRadius);

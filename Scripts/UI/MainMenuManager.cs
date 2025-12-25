@@ -166,22 +166,38 @@ public class MainMenuManager : MonoBehaviour
         MusicManager.instance.Play(bgm, true);
     }
 
-    // 스타트 버튼을 누르면 이벤트로 실행
+    // 스타트 버튼을 누르면 이벤트로 실행. 레귤러 스테이지
     public void StartTransition()
     {
         // transition animation 이 끝나면 loading scene manager 호출
         loadingSwipe.gameObject.SetActive(true);
         loadingSwipe.SetTrigger("Close");
 
-        StartCoroutine(LoadScenes());
+        StartCoroutine(LoadRegularMode());
     }
 
-    IEnumerator LoadScenes()
+    // 무한 모드 스타트 버튼을 누르면 이벤트로 실행. 무한 스테이지
+    public void StartInfiniteMode()
+    {
+        loadingSwipe.gameObject.SetActive(true);
+        loadingSwipe.SetTrigger("Close");
+        StartCoroutine(LoadInfiniteMode());
+    }
+
+    IEnumerator LoadRegularMode()
     {
         yield return new WaitForSecondsRealtime(1.23f);
         LoadingSceneManager loadingSceneManager = FindObjectOfType<LoadingSceneManager>();
-        loadingSceneManager.LoadScenes();
+        loadingSceneManager.LoadScenes(GameMode.Regular);
     }
+    
+    IEnumerator LoadInfiniteMode()
+    {
+        yield return new WaitForSecondsRealtime(1.23f);
+        LoadingSceneManager loadingSceneManager = FindObjectOfType<LoadingSceneManager>();
+        loadingSceneManager.LoadScenes(GameMode.Infinite);
+    }
+
 
     #region 탭 버튼 활성/비활성 제어
     public void SetButtonActive(int buttonIndex, bool active)

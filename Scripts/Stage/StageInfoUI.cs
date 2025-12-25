@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class StageInfoUI : MonoBehaviour
 {
-    [SerializeField] PlayerDataManager stageManager;
+    PlayerDataManager PlayerDataManager;
     [SerializeField] TMPro.TextMeshProUGUI Title;
     [SerializeField] TMPro.TextMeshProUGUI StageNumber;
 
@@ -19,7 +19,7 @@ public class StageInfoUI : MonoBehaviour
         LocalizationManager.OnLanguageChanged += UpdateLanguage;
         
         // 활성화 시 초기화
-        Init();
+        InitStageInfoUI();
     }
     
     void OnDisable()
@@ -31,20 +31,20 @@ public class StageInfoUI : MonoBehaviour
     // 언어 변경 시 텍스트만 업데이트
     private void UpdateLanguage()
     {
-        if (stageManager != null && LocalizationManager.Game != null)
+        if (PlayerDataManager != null && LocalizationManager.Game != null)
         {
-            int currentStageIndex = stageManager.GetCurrentStageNumber();
+            int currentStageIndex = PlayerDataManager.GetCurrentStageNumber();
             Title.text = currentStageIndex.ToString() + ". " + 
                         LocalizationManager.Game.stageBossName[currentStageIndex - 1];
         }
     }
     
-    internal void Init()
+    internal void InitStageInfoUI()
     {
-        if (stageManager == null)
-            stageManager = FindObjectOfType<PlayerDataManager>();
+        if (PlayerDataManager == null)
+            PlayerDataManager = FindObjectOfType<PlayerDataManager>();
             
-        int currentStageIndex = stageManager.GetCurrentStageNumber();
+        int currentStageIndex = PlayerDataManager.GetCurrentStageNumber();
         
         // 텍스트 업데이트
         if (LocalizationManager.Game != null)

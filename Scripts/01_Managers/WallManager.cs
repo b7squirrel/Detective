@@ -27,6 +27,18 @@ public class WallManager : MonoBehaviour
         //     StartCoroutine(MoveWalls());
         // }
     }
+    public void SetWallSize()
+    {
+        Vector2[] defaultStartPos =
+        {
+        new Vector2(-25f, 0f),
+        new Vector2(25f, 0f),
+        new Vector2(0f, 25f),
+        new Vector2(0f, -25f)
+    };
+
+        SetWallSize(defaultStartPos);
+    }
     public void SetWallSize(Vector2[] startPos)
     {
         for (int i = 0; i < starts.Length; i++)

@@ -22,6 +22,10 @@ public class PoolManager : MonoBehaviour
     [Header("Egg Box")]
     [SerializeField] GameObject eggBox;
 
+    #region 초기화
+    /// <summary>
+    /// 폴더 초기화
+    /// </summary>
     public void InitPools()
     {
         enemyFolder = new GameObject();
@@ -53,6 +57,34 @@ public class PoolManager : MonoBehaviour
             enemyPools[i] = new List<GameObject>();
         }
     }
+
+    /// <summary>
+    /// 무한 모드용 - 직접 적 목록을 전달받음
+    /// </summary>
+    public void InitInfiniteEnemyPools(GameObject[] infiniteEnemies)
+    {
+        if (infiniteEnemies == null || infiniteEnemies.Length == 0)
+        {
+            Logger.LogError("[PoolManager] Infinite enemies array is null or empty!");
+            return;
+        }
+
+        this.enemies = new GameObject[infiniteEnemies.Length];
+
+        for (int i = 0; i < this.enemies.Length; i++)
+        {
+            this.enemies[i] = infiniteEnemies[i];
+        }
+
+        enemyPools = new List<GameObject>[this.enemies.Length];
+        for (int i = 0; i < enemyPools.Length; i++)
+        {
+            enemyPools[i] = new List<GameObject>();
+        }
+
+        Logger.Log($"[PoolManager] Infinite enemy pools initialized with {this.enemies.Length} types");
+    }
+    #endregion
 
     #region GetEnemy
     public GameObject GetEnemy(int index)

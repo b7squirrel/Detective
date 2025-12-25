@@ -22,6 +22,13 @@ public enum DefaultItem { Default }
 #endregion
 
 #region 필드 관련
+// 게임 모드. 레귤러, 무한
+public enum GameMode
+{
+    Regular,
+    Infinite
+}
+
 // 필드에서 플레이어의 위치
 public enum Region
 {
