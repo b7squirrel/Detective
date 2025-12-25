@@ -5,7 +5,14 @@ public class ResultPanel : MonoBehaviour
 {
     [SerializeField] TMPro.TextMeshProUGUI killText;
     [SerializeField] TMPro.TextMeshProUGUI coinText;
+
+    [Header("일반 모드 요소")]
     [SerializeField] TMPro.TextMeshProUGUI stageNumber;
+
+    [Header("무한 모드 요소")]
+    [SerializeField] TMPro.TextMeshProUGUI survivalTimeText;
+    [SerializeField] TMPro.TextMeshProUGUI bestRecordText;
+
     [SerializeField] bool isDarkBG;
     [SerializeField] AudioClip resultSound;
     [SerializeField] CardDisp cardDisp; // 플레이어를 보여줄 cardDisp

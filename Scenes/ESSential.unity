@@ -40823,6 +40823,7 @@ MonoBehaviour:
   stickyStuffManager: {fileID: 0}
   loopSoundManager: {fileID: 0}
   enemyStatCalculator: {fileID: 0}
+  infiniteStageManager: {fileID: 0}
   joystick: {fileID: 277539638}
   musicCreditManager: {fileID: 0}
   currentCamera: {fileID: 0}
@@ -48064,6 +48065,8 @@ MonoBehaviour:
   killText: {fileID: 174097403}
   coinText: {fileID: 328792550}
   stageNumber: {fileID: 1992531691}
+  survivalTimeText: {fileID: 0}
+  bestRecordText: {fileID: 0}
   isDarkBG: 1
   resultSound: {fileID: 8300000, guid: ebed3159bc2b5624b8337d6aa64f4387, type: 3}
   cardDisp: {fileID: 3235164102203273248}
@@ -57383,7 +57386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3584133316096501515
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58788,6 +58791,8 @@ MonoBehaviour:
   killText: {fileID: 127999700}
   coinText: {fileID: 1944978781}
   stageNumber: {fileID: 776849980}
+  survivalTimeText: {fileID: 0}
+  bestRecordText: {fileID: 0}
   isDarkBG: 1
   resultSound: {fileID: 8300000, guid: 37aaa09ec686b15428e394fed462d131, type: 3}
   cardDisp: {fileID: 1471183876}

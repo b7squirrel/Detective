@@ -37,6 +37,9 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     float chestSpawnTimer = 0f;
     bool isInitialized = false;
 
+    // 성과
+    float survivalTime = 0f; // 생존 시간. 초 단위
+
     // 스폰 일시정지
     bool isSpawnPaused = false;
 
@@ -60,8 +63,14 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         // 스폰이 일시정지되었으면 상자 스폰도 중지
         if (isSpawnPaused) return;
 
+        // 생존 시간 증가
+        survivalTime += Time.deltaTime;
+
         UpdateChestSpawn();
     }
+
+    public int GetCurrentWave() => currentWave;
+    public float GetSurvivalTime() => survivalTime;
 
     // ISpawnController 구현
     public void PauseSpawn(bool pause)
