@@ -118,7 +118,7 @@ public class Character : MonoBehaviour
         }
         MaxHealth = GameManager.instance.startingDataContainer.GetLeadAttr().Hp;
         DamageBonus = GameManager.instance.startingDataContainer.GetLeadAttr().Atk;
-        Debug.Log("In Character, Damage Bonus = " + DamageBonus);
+        Logger.Log("In Character, Damage Bonus = " + DamageBonus);
     }
 
     public void TakeDamage(int damage, EnemyType enemyType, SlimeAttackType attackType = SlimeAttackType.Slime)
@@ -250,7 +250,7 @@ public class Character : MonoBehaviour
         playerData.SaveResourcesBeforeQuitting();
 
 
-        Debug.Log("In Die, Time Scale = " + Time.timeScale);
+        Logger.Log("In Die, Time Scale = " + Time.timeScale);
 
         GetComponent<CharacterGameOver>().GameOver();
     }
