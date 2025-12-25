@@ -18,14 +18,16 @@ public class StageInfoUI : MonoBehaviour
         // OnEnable에서 이벤트 구독
         LocalizationManager.OnLanguageChanged += UpdateLanguage;
         
-        // 활성화 시 초기화
-        InitStageInfoUI();
+        // 활성화 시 초기화. GameInitializer에서 초기화 되어야 InitStageInfoUI가 초기화 되도록 구독
+        GameInitializer.OnGameInitialized += InitStageInfoUI;
     }
     
     void OnDisable()
     {
         // OnDisable에서 이벤트 구독 해제
         LocalizationManager.OnLanguageChanged -= UpdateLanguage;
+
+        GameInitializer.OnGameInitialized -= InitStageInfoUI;
     }
     
     // 언어 변경 시 텍스트만 업데이트
@@ -38,14 +40,23 @@ public class StageInfoUI : MonoBehaviour
                         LocalizationManager.Game.stageBossName[currentStageIndex - 1];
         }
     }
-    
+
     internal void InitStageInfoUI()
     {
+        if (!GameInitializer.IsInitialized)
+        {
+            Debug.LogWarning("[StageInfoUI] Game not initialized yet");
+            return;
+        }
+
         if (PlayerDataManager == null)
             PlayerDataManager = FindObjectOfType<PlayerDataManager>();
-            
+
         int currentStageIndex = PlayerDataManager.GetCurrentStageNumber();
-        
+
+        Debug.LogError($"[StageInfoUI] currentStageIndex: {currentStageIndex}");
+        Debug.LogError($"[StageInfoUI] stageBossName Length: {LocalizationManager.Game.stageBossName.Length}");
+
         // 텍스트 업데이트
         if (LocalizationManager.Game != null)
         {

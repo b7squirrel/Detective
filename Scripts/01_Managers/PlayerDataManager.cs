@@ -96,7 +96,16 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 
 
     // --- Stage ---
-    public int GetCurrentStageNumber() => playerData.currentStageNumber;
+    public int GetCurrentStageNumber()
+    {
+        if (playerData == null)
+        {
+            Logger.LogWarning("[PlayerDataManager] playerData is null");
+            return 1;
+        }
+
+        return Mathf.Max(1, playerData.currentStageNumber);
+    }
     public void SetCurrentStageNumber(int stageNumber)
     {
         playerData.currentStageNumber = stageNumber;

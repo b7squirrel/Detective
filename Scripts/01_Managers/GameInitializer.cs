@@ -37,6 +37,7 @@ public class GameInitializer : MonoBehaviour
     /// 다른 스크립트에서 이 값을 체크하여 초기화 완료를 확인할 수 있음
     /// </summary>
     public static bool IsInitialized { get; private set; } = false;
+    public static event System.Action OnGameInitialized; // UI등이 실행되도록
     
     /// <summary>
     /// 초기화 진행률 (0.0 ~ 1.0)
@@ -103,6 +104,7 @@ public class GameInitializer : MonoBehaviour
         
         // 모든 초기화 완료
         IsInitialized = true;
+        OnGameInitialized?.Invoke();
         Log("=== 게임 초기화 완료 ===");
     }
     
