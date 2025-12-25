@@ -10,9 +10,26 @@ public class FieldItemEffect : MonoBehaviour
     [SerializeField] GameObject bombHitEffect;
     [SerializeField] GameObject bombExplosionEffect;
     [SerializeField] GameObject itemDieEffect; // 상자, 보석 등이 사라질 때의 이펙트
-    StageEvenetManager stageEventManager;
+    ISpawnController spawnController;
+    
     Coroutine coStopWatch, coInvincible;
     bool isStoppedWithStopwatch = false; // 스톱워치로 시간을 멈추었을 때
+
+    void Start()
+    {
+        // 어떤 스폰 컨트롤러든 찾기
+        spawnController = FindObjectOfType<StageEvenetManager>() as ISpawnController;
+        
+        if (spawnController == null)
+        {
+            spawnController = FindObjectOfType<InfiniteStageManager>() as ISpawnController;
+        }
+        
+        if (spawnController == null)
+        {
+            Logger.LogWarning("[FieldItemEffect] No spawn controller found!");
+        }
+    }
     #region 시간정지
     public void StopEnemies()
     {
@@ -23,9 +40,18 @@ public class FieldItemEffect : MonoBehaviour
     }
     IEnumerator StopEnemiesCo(EnemyBase[] _allEnemies, float _stopDuration)
     {
-        if (stageEventManager == null) stageEventManager = FindObjectOfType<StageEvenetManager>();
-        stageEventManager.PasueStageEvent(true);
+        // 스폰 컨트롤러가 있으면 일시정지
+        if (spawnController != null)
+        {
+            spawnController.PauseSpawn(true);
+            Logger.Log("[FieldItemEffect] 스폰이 정지되었습니다.");
+        }
+        else
+        {
+            Logger.LogWarning("[FieldItemEffect] 어떤 종류의 Spawn Controller도 없습니다.");
+        }
 
+        // 적들 일시정지
         for (int i = 0; i < _allEnemies.Length; i++)
         {
             if (_allEnemies[i] != null)
@@ -39,13 +65,18 @@ public class FieldItemEffect : MonoBehaviour
 
         yield return new WaitForSeconds(_stopDuration);
 
-        stageEventManager.PasueStageEvent(false);
+        // 스폰 재개
+        if (spawnController != null)
+        {
+            spawnController.PauseSpawn(false);
+            Logger.Log("[FieldItemEffect] Spawn resumed");
+        }
 
+        // 적들 재개
         for (int i = 0; i < _allEnemies.Length; i++)
         {
-            if (_allEnemies[i].gameObject.activeSelf)
+            if (_allEnemies[i] != null && _allEnemies[i].gameObject.activeSelf)
             {
-                //enemy.ResumeEnemy();
                 _allEnemies[i].ResumeEnemy();
             }
         }

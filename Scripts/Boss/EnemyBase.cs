@@ -355,7 +355,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             //rb.velocity = knockBackSpeed * enemyKnockBackSpeedFactor * targetDir;
             float randomOffsetX = UnityEngine.Random.Range(-.5f, .5f);
             float randomOffsetY = UnityEngine.Random.Range(-.5f, .5f);
-            SpawnManager.instance.SpawnObject(transform.position + new Vector3(randomOffsetX, randomOffsetY, 0), knockbackEffect, false, 0);
+            PickupSpawner.Instance.SpawnPickup(transform.position + new Vector3(randomOffsetX, randomOffsetY, 0), knockbackEffect, false, 0);
             return;
         }
         if (IsStunned)

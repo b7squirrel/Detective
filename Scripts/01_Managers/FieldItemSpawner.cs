@@ -122,7 +122,7 @@ public class FieldItemSpawner : MonoBehaviour
         {
             for (int i = 0; i < 10; i++)
             {
-                SpawnManager.instance.SpawnObject(_position, _toSpawn, _isGem, _exp);
+                PickupSpawner.Instance.SpawnPickup(_position, _toSpawn, _isGem, _exp);
                 numberOfItems--;
                 if (numberOfItems < 0) break;
             }

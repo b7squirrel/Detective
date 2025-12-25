@@ -98,7 +98,7 @@ public class Item : ScriptableObject
 
         character.GetComponent<PassiveItems>().CheckIfMaxLevel(this);
 
-        Logger.LogError($"데미지 보너스 = {character.DamageBonus} 총 데미지 = {stats.damage}");
+        Logger.Log($"데미지 보너스 = {character.DamageBonus} 총 데미지 = {stats.damage}");
     }
 
     void CheckIfMaxLevel(Character character)

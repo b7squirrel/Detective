@@ -300,7 +300,6 @@ GameObject:
   - component: {fileID: 1203505525}
   - component: {fileID: 1203505534}
   - component: {fileID: 1203505527}
-  - component: {fileID: 1203505529}
   - component: {fileID: 1203505526}
   - component: {fileID: 1203505531}
   - component: {fileID: 1203505532}
@@ -352,18 +351,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5aaa3c2f5ca917640a2e432d8cfc2082, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1203505529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203505524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9fb9b90ac5e05442b850f31b6091051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1203505531
@@ -431,9 +418,6 @@ MonoBehaviour:
     WallDuration: 0
     enemyNumForNextEvent: 30
     stageMusicType: 1
-    eggSpawnTimes:
-    - 20
-    - 60
     stageDataText: {fileID: 4900000, guid: c247027e61d352346932a8fb823fdf3f, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -478,9 +462,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 2
-    eggSpawnTimes:
-    - 10
-    - 50
     stageDataText: {fileID: 4900000, guid: 1a99e8411e401db49b0bb1f8fce9b33e, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -525,10 +506,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 3
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 120
     stageDataText: {fileID: 4900000, guid: fd61bf85cbe714d4cb3db70789cfa201, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -573,11 +550,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 0
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 120
-    - 190
     stageDataText: {fileID: 4900000, guid: 0074927116197b64dae42e2857a138a4, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -622,12 +594,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 4
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: fa5842de696948946aa1627739bfb750, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -672,12 +638,6 @@ MonoBehaviour:
     WallDuration: 114.4
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: 9e9bdf992dfbb4dae9f0f2b064a25af3, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -722,12 +682,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: ac89a14c98abfb2479ead5d0d8358044, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -772,12 +726,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: c7c57c14fc614aa4ca01737d01cdd888, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -822,12 +770,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: a369d2939d6ea0842baa49be2c610022, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -872,12 +814,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: 78250f7fada45834aabf42c91cd0f1e5, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -922,12 +858,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: f5127195530a47e41a11a582793b5264, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -972,12 +902,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: 9e9bdf992dfbb4dae9f0f2b064a25af3, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1022,9 +946,6 @@ MonoBehaviour:
     WallDuration: 0
     enemyNumForNextEvent: 30
     stageMusicType: 1
-    eggSpawnTimes:
-    - 20
-    - 60
     stageDataText: {fileID: 4900000, guid: c247027e61d352346932a8fb823fdf3f, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1069,9 +990,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 2
-    eggSpawnTimes:
-    - 10
-    - 50
     stageDataText: {fileID: 4900000, guid: 1a99e8411e401db49b0bb1f8fce9b33e, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1116,10 +1034,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 3
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 120
     stageDataText: {fileID: 4900000, guid: fd61bf85cbe714d4cb3db70789cfa201, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1164,11 +1078,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 0
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 120
-    - 190
     stageDataText: {fileID: 4900000, guid: 0074927116197b64dae42e2857a138a4, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1213,12 +1122,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 4
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: fa5842de696948946aa1627739bfb750, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1263,12 +1166,6 @@ MonoBehaviour:
     WallDuration: 114.4
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: 9e9bdf992dfbb4dae9f0f2b064a25af3, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1313,9 +1210,6 @@ MonoBehaviour:
     WallDuration: 0
     enemyNumForNextEvent: 30
     stageMusicType: 1
-    eggSpawnTimes:
-    - 20
-    - 60
     stageDataText: {fileID: 4900000, guid: c247027e61d352346932a8fb823fdf3f, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1360,9 +1254,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 2
-    eggSpawnTimes:
-    - 10
-    - 50
     stageDataText: {fileID: 4900000, guid: 1a99e8411e401db49b0bb1f8fce9b33e, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1407,10 +1298,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 3
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 120
     stageDataText: {fileID: 4900000, guid: fd61bf85cbe714d4cb3db70789cfa201, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1455,11 +1342,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 0
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 120
-    - 190
     stageDataText: {fileID: 4900000, guid: 0074927116197b64dae42e2857a138a4, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1504,12 +1386,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 4
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: fa5842de696948946aa1627739bfb750, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1554,12 +1430,6 @@ MonoBehaviour:
     WallDuration: 114.4
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: 9e9bdf992dfbb4dae9f0f2b064a25af3, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1604,9 +1474,6 @@ MonoBehaviour:
     WallDuration: 0
     enemyNumForNextEvent: 30
     stageMusicType: 1
-    eggSpawnTimes:
-    - 20
-    - 60
     stageDataText: {fileID: 4900000, guid: c247027e61d352346932a8fb823fdf3f, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1651,9 +1518,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 2
-    eggSpawnTimes:
-    - 10
-    - 50
     stageDataText: {fileID: 4900000, guid: 1a99e8411e401db49b0bb1f8fce9b33e, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1698,10 +1562,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 3
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 120
     stageDataText: {fileID: 4900000, guid: fd61bf85cbe714d4cb3db70789cfa201, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1746,11 +1606,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 0
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 120
-    - 190
     stageDataText: {fileID: 4900000, guid: 0074927116197b64dae42e2857a138a4, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1795,12 +1650,6 @@ MonoBehaviour:
     WallDuration: 120
     enemyNumForNextEvent: 30
     stageMusicType: 4
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: fa5842de696948946aa1627739bfb750, type: 3}
     stageEnmeyVariant: 0
     enemyData:
@@ -1845,12 +1694,6 @@ MonoBehaviour:
     WallDuration: 114.4
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    eggSpawnTimes:
-    - 10
-    - 50
-    - 90
-    - 160
-    - 230
     stageDataText: {fileID: 4900000, guid: 9e9bdf992dfbb4dae9f0f2b064a25af3, type: 3}
     stageEnmeyVariant: 0
     enemyData:

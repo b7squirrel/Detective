@@ -110,7 +110,7 @@ public class ChestDrop : DropOnDestroy
             }
         }
 
-        SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, itemExp);
+        PickupSpawner.Instance.SpawnPickup(transform.position, toDrop, isGem, itemExp);
     }
 
     protected override int GetExperienceAmount(GameObject toDrop)

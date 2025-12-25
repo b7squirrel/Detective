@@ -69,7 +69,7 @@ public class EnemyDrop : DropOnDestroy
                 return;
         }
 
-        SpawnManager.instance.SpawnObject(transform.position, toDrop, isGem, itemExp);
+        PickupSpawner.Instance.SpawnPickup(transform.position, toDrop, isGem, itemExp);
     }
 
     protected override int GetExperienceAmount(GameObject toDrop)

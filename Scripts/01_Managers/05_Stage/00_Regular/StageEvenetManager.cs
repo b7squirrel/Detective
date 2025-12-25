@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageEvenetManager : MonoBehaviour
+public class StageEvenetManager : MonoBehaviour, ISpawnController
 {
     [SerializeField] List<StageEvent> stageEvents;
     [SerializeField] int enemyNumForNextEvent; // 다음 이벤트를 시작하기 위한 최대 적 수
@@ -27,6 +27,7 @@ public class StageEvenetManager : MonoBehaviour
     public bool IsWinningStage { get; set; }
     Coroutine winStageCoroutine;
     bool winStageDone; // winStage 초기화가 update에서 일어나는데 반복해서 하지 않도록
+
 
     public void Init(TextAsset _stageTextData, EnemyData[] _enemyDatas, int _enemyNumForNextEvent, StageMusicType _stageMusicType)
     {
@@ -68,7 +69,7 @@ public class StageEvenetManager : MonoBehaviour
 
     void Update()
     {
-        //if (onStopWatchEffect) return; // 스톱위치가 작동 중이면 이벤트 홀드
+        if (onStopWatchEffect) return; // 스톱위치가 작동 중이면 이벤트 홀드
         if (IsWinningStage)
         {
             if (winStageDone == false)
@@ -171,6 +172,13 @@ public class StageEvenetManager : MonoBehaviour
         spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup, number);
     }
 
+    // 인터페이스 구현
+    public void PauseSpawn(bool pause)
+    {
+        onStopWatchEffect = pause;
+    }
+
+    // 기존 메서드 유지
     public void PasueStageEvent(bool _pause)
     {
         onStopWatchEffect = _pause;
@@ -186,5 +194,8 @@ public class StageEvenetManager : MonoBehaviour
         DebugManager debugManager = FindObjectOfType<DebugManager>();
         debugManager.SetStageEventIndex(_index);
     }
+
+    
+
     #endregion
 }

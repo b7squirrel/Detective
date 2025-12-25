@@ -18,6 +18,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     [SerializeField] PlayerData playerData;
     string filePath;
     bool isStageCleared;
+    StageInfo stageInfo;
 
     [Header("게임 모드")]
     [SerializeField] GameMode currentGameMode;
@@ -35,6 +36,12 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         filePath = Path.Combine(Application.persistentDataPath, "playerData.json");
         LoadPlayerData();
         IsDataLoaded = true;
+
+        stageInfo = FindObjectOfType<StageInfo>();
+        if(stageInfo == null)
+        {
+            Logger.LogWarning("[PlayerDataManager] StageInfo를 찾을 수 없습니다.");
+        }
         Logger.Log("[PlayerDataManager] 데이터 로드 완료");
     }
 
@@ -183,10 +190,10 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     // --- 게임 종료 전 저장 ---
     public void SaveResourcesBeforeQuitting()
     {
-        StageInfo stageinfo = GetComponent<StageInfo>();
+
         int currentStage = GetCurrentStageNumber();
 
-        if (stageinfo.IsFinalStage(currentStage) == false)
+        if (stageInfo.IsFinalStage(currentStage) == false)
         {
             if (isStageCleared)
             {

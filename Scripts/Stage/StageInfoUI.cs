@@ -45,7 +45,7 @@ public class StageInfoUI : MonoBehaviour
     {
         if (!GameInitializer.IsInitialized)
         {
-            Debug.LogWarning("[StageInfoUI] Game not initialized yet");
+            Logger.LogWarning("[StageInfoUI] Game not initialized yet");
             return;
         }
 
@@ -54,8 +54,8 @@ public class StageInfoUI : MonoBehaviour
 
         int currentStageIndex = PlayerDataManager.GetCurrentStageNumber();
 
-        Debug.LogError($"[StageInfoUI] currentStageIndex: {currentStageIndex}");
-        Debug.LogError($"[StageInfoUI] stageBossName Length: {LocalizationManager.Game.stageBossName.Length}");
+        // Logger.LogError($"[StageInfoUI] currentStageIndex: {currentStageIndex}");
+        // Logger.LogError($"[StageInfoUI] stageBossName Length: {LocalizationManager.Game.stageBossName.Length}");
 
         // 텍스트 업데이트
         if (LocalizationManager.Game != null)
