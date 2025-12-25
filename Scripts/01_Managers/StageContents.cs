@@ -14,9 +14,6 @@ public class StageContents
     public int enemyNumForNextEvent;
     public StageMusicType stageMusicType;
 
-    [Header("Egg Spawn Time")]
-    public float[] eggSpawnTimes;
-
     [Header("Stage Data")]
     public TextAsset stageDataText;
 
