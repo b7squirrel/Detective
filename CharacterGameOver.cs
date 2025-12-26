@@ -35,9 +35,34 @@ public class CharacterGameOver : MonoBehaviour
         int killNum = GameManager.instance.GetComponent<KillManager>().GetCurrentKills();
         int coinNum = GameManager.instance.GetComponent<CoinManager>().GetCoinNumPickedup();
 
-        // 현재 스테이지
-        int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
+        // 게임 모드 체크
+        GameMode mode = PlayerDataManager.Instance.GetGameMode();
+        if (mode == GameMode.Regular)
+        {
+            // 현재 스테이지
+            int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
+            gameOverPanel.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, false);
+        }
+        else
+        {
+            InfiniteStageManager infiniteManager = FindObjectOfType<InfiniteStageManager>();
+            if (infiniteManager == null)
+            {
+                Logger.LogError($"[Character Game Over] infinite manager null");
+                yield break;
+            }
 
-        gameOverPanel.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, false);
+            // 현재 기록
+            int currentWave = infiniteManager.GetCurrentWave();
+            float currentTime = infiniteManager.GetSurvivalTime();
+            string timeFormatted = new GeneralFuctions().FormatTime(currentTime);
+
+            // 최고 기록
+            int bestWave = PlayerDataManager.Instance.GetBestWave();
+            float bestTime = PlayerDataManager.Instance.GetBestSurvivalTime();
+            string bestRecordFormatted = new GeneralFuctions().FormatTime(bestTime);
+
+            gameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted);
+        }
     }
 }

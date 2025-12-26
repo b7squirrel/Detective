@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     public StickyStuffManager stickyStuffManager;
     public LoopSoundManager loopSoundManager;
     public EnemyStatCalculator enemyStatCalculator;
-    public InfiniteStageManager infiniteStageManager;
 
     public GameObject joystick;
 
@@ -91,12 +90,6 @@ public class GameManager : MonoBehaviour
         loopSoundManager = GetComponent<LoopSoundManager>();
         
         enemyStatCalculator = GetComponent<EnemyStatCalculator>();
-        infiniteStageManager = FindObjectOfType<InfiniteStageManager>();
-        // 있으면 로그, 없어도 에러 아님 (레귤러 모드)
-        if (infiniteStageManager != null)
-        {
-            Logger.Log("[GameManager] 무한 스테이지 매니져를 찾았습니다.");
-        }
 
         confimationButton.SetActive(false);
 

@@ -40,4 +40,11 @@ public class GeneralFuctions
 
         return new Vector2(x, y);
     }
+
+    public string FormatTime(float timeInSeconds)
+    {
+        int minutes = Mathf.FloorToInt(timeInSeconds / 60f);
+        int seconds = Mathf.FloorToInt(timeInSeconds % 60f);
+        return $"{minutes}분 {seconds}초";
+    }
 }

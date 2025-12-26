@@ -249,7 +249,6 @@ public class Character : MonoBehaviour
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
         playerData.SaveResourcesBeforeQuitting();
 
-
         Logger.Log("In Die, Time Scale = " + Time.timeScale);
 
         GetComponent<CharacterGameOver>().GameOver();
@@ -261,6 +260,12 @@ public class Character : MonoBehaviour
         currentHealth = 10000000;
         MaxHealth = currentHealth;
         hpBar.SetStatus(currentHealth, MaxHealth);
+    }
+    public void ZeroPlayerHealth()
+    {
+        currentHealth = 0;
+        hpBar.SetStatus(currentHealth, MaxHealth);
+        Die();
     }
     #endregion
 }

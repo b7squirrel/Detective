@@ -11,6 +11,9 @@ public class PlayerData
     public int currentCristalNumber;    // 기존 HighCoin → Cristal
     public int currentLightningNumber;
     public int currentKillNumber;
+
+    public int bestWave; // 무한모드 웨이브 최고 기록
+    public float bestSurvivalTime; // 무한 모드 시간 최고 기록
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -186,13 +189,41 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         NotifyCurrencyChanged();
     }
 
+    // Wave
+    public int GetBestWave() => playerData.bestWave;
+    public void SetBestWave(int wave)
+    {
+        playerData.bestWave = wave;
+        SavePlayerData();
+    }
+
+    // Survival Time
+    public float GetBestSurvivalTime() => playerData.bestSurvivalTime;
+    public void SetSurvivalTime(float survivalTime)
+    {
+        playerData.bestSurvivalTime = survivalTime;
+        SavePlayerData();
+    }
 
     // --- 게임 종료 전 저장 ---
+    // 최고 스테이지, 골드, 크리스탈 기록 저장
     public void SaveResourcesBeforeQuitting()
     {
+        Logger.Log($"[PlayerDataManager] {currentGameMode} 모드 리소스 저장 시작");
 
+        // ⭐ 모드별 분기
+        if (currentGameMode == GameMode.Regular)
+        {
+            SaveRegularModeResources();
+        }
+        else // Infinite
+        {
+            SaveInfiniteModeResources();
+        }
+    }
+    void SaveRegularModeResources()
+    {
         int currentStage = GetCurrentStageNumber();
-
         if (stageInfo.IsFinalStage(currentStage) == false)
         {
             if (isStageCleared)
@@ -211,7 +242,46 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 
         FindObjectOfType<PauseManager>().PauseGame();
     }
+    // 최고 웨이브 기록, 최고 생존 시간 기록, 골드, 크리스탈 기록 저장
+    public void SaveInfiniteModeResources()
+    {
+        InfiniteStageManager infiniteManager = FindObjectOfType<InfiniteStageManager>();
+        int currentWave = infiniteManager.GetCurrentWave();
+        float currentTime = infiniteManager.GetSurvivalTime();
 
+        // 최고 기록과 현재 기록 비교. 최고 기록 갱신
+        if (currentWave > playerData.bestWave) SetBestWave(currentWave);
+        if (currentTime > playerData.bestSurvivalTime) SetSurvivalTime(currentTime);
+
+        SaveCoinsAndCristals();
+        PauseGame();
+    }
+    
+    void SaveCoinsAndCristals()
+    {
+        CoinManager coinManager = FindObjectOfType<CoinManager>();
+        if (coinManager != null)
+        {
+            int coinNum = coinManager.GetCurrentCoins();
+            SetCoinNumberAs(coinNum);
+        }
+
+        CristalManager cristalManager = FindObjectOfType<CristalManager>();
+    if (cristalManager != null)
+        {
+            int cristalNum = cristalManager.GetCurrentCristals();
+            SetCristalNumberAs(cristalNum);
+        }
+    }
+
+    void PauseGame()
+    {
+        PauseManager pauseManager = FindObjectOfType<PauseManager>();
+        if (pauseManager != null)
+        {
+            pauseManager.PauseGame();
+        }
+    }
     public void SetGameMode(GameMode mode)
     {
         currentGameMode = mode;

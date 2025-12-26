@@ -188,6 +188,7 @@ public class MainMenuManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1.23f);
         LoadingSceneManager loadingSceneManager = FindObjectOfType<LoadingSceneManager>();
+        PlayerDataManager.Instance.SetGameMode(GameMode.Regular);
         loadingSceneManager.LoadScenes(GameMode.Regular);
     }
     
@@ -195,6 +196,7 @@ public class MainMenuManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(1.23f);
         LoadingSceneManager loadingSceneManager = FindObjectOfType<LoadingSceneManager>();
+        PlayerDataManager.Instance.SetGameMode(GameMode.Infinite);
         loadingSceneManager.LoadScenes(GameMode.Infinite);
     }
 
