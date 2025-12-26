@@ -24,10 +24,11 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] RectTransform survivalTimeRec;
     [SerializeField] RectTransform bestRecordRec;
     [SerializeField] TMPro.TextMeshProUGUI survivalTimeText;
+    [SerializeField] TMPro.TextMeshProUGUI survivalTimeTitleText;
     [SerializeField] TMPro.TextMeshProUGUI bestRecordText;
+    [SerializeField] TMPro.TextMeshProUGUI bestRecordTitleText;
 
     [SerializeField] bool isDarkBG;
-    [SerializeField] AudioClip resultSound;
     [SerializeField] CardDisp cardDisp; // 플레이어를 보여줄 cardDisp
     [SerializeField] Animator charAnim; // 오리의 애니메이터
 
@@ -36,9 +37,14 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] int confettiNums; // 오리 수
 
     [Header("사운드")]
+    [SerializeField] AudioClip resultSoundSuccess;
+    [SerializeField] AudioClip resultSoundFail;
     [SerializeField] AudioClip panelSound;
     [SerializeField] AudioClip failTitleSound;
     [SerializeField] AudioClip clearTitleSound;
+    [SerializeField] AudioClip TitleSound;
+    [SerializeField] AudioClip ContentsSound;
+    [SerializeField] AudioClip scribbleSound;
     [SerializeField] AudioClip popupSound;
     [SerializeField] AudioClip stampSound;
     
@@ -74,9 +80,15 @@ public class ResultPanel : MonoBehaviour
         yield return new WaitForSecondsRealtime(.5f);
 
         SetEquipSpriteRow();
-        if (isWinningStage == false) charAnim.SetTrigger("Hit"); // 패배 화면이라면 오리도 패배 모션으로
 
+        AudioClip resultSound = resultSoundSuccess;
+        if (isWinningStage == false) 
+        {
+            charAnim.SetTrigger("Hit"); // 패배 화면이라면 오리도 패배 모션으로
+            resultSound = resultSoundFail;
+        }
         SoundManager.instance.Play(resultSound);
+
         killText.text = killNum.ToString();
         coinText.text = coinNum.ToString();
         stageNumberText.text = stageNum.ToString();
@@ -84,6 +96,7 @@ public class ResultPanel : MonoBehaviour
         
         GameManager.instance.ActivateConfirmationButton(2.7f);
     }
+    #region 레귤러 애니메이션
     void PlayRegularAwardsSequence(int killNum, int coinNum, int stageNum, bool isWinningStage)
     {
         ResetRecs();
@@ -137,14 +150,28 @@ public class ResultPanel : MonoBehaviour
         );
         seq.AppendCallback(() => PlayUISound(stampSound));
     }
+    #endregion
+
+    #region 무한 스테이지 애니메이션
     void PlayInfiniteAwardsSequence(int killNum, int coinNum, int wave, string survivalTime, string bestRecord)
     {
+        bouncerManager.Jump(confettiNums); // 150마리 폭죽
+
         ResetRecs();
         titleText.text = "도전 결과";
         killText.text = killNum.ToString();
         coinText.text = coinNum.ToString();
         survivalTimeText.text = survivalTime;
         bestRecordText.text = bestRecord;
+
+        TMP_Typewriter survivalTimeTitle = survivalTimeTitleText.GetComponent<TMP_Typewriter>();
+        TMP_Typewriter survivalTimeContents = survivalTimeText.GetComponent<TMP_Typewriter>();
+        TMP_Typewriter bestRecordTimeTitle = bestRecordTitleText.GetComponent<TMP_Typewriter>();
+        TMP_Typewriter bestRecordTimeContents = bestRecordText.GetComponent<TMP_Typewriter>();
+        survivalTimeTitle.ResetMaxVisibleChar();
+        survivalTimeContents.ResetMaxVisibleChar();
+        bestRecordTimeTitle.ResetMaxVisibleChar();
+        bestRecordTimeContents.ResetMaxVisibleChar();
 
         stageNumRec.gameObject.SetActive(false);
 
@@ -154,55 +181,83 @@ public class ResultPanel : MonoBehaviour
 
         // panel
         seq.Append(panelRec.DOScale(.8f, .2f).SetEase(Ease.OutBack));
-        seq.AppendCallback(() => PlayUISound(panelSound));
-
-        // title
-        seq.AppendInterval(.05f);
-        seq.Append(titleRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
-        seq.AppendCallback(() => PlayUISound(popupSound));
-
-        // 현재 시간
-        seq.AppendInterval(.05f);
-        seq.Append(survivalTimeRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
-        seq.AppendCallback(() => PlayUISound(popupSound));
-
-        // 최고 기록
-        seq.AppendInterval(.05f);
-        seq.Append(bestRecordRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
-        seq.AppendCallback(() => PlayUISound(popupSound));
+        seq.AppendCallback(() =>
+        {
+            PlayUISound(panelSound);
+        });
 
         // ori
         charAnim.SetTrigger("Idle");
         oriRec.localRotation = Quaternion.Euler(0f, 0f, 0f);
-        seq.AppendInterval(.05f);
-        seq.Append(oriRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
+        seq.AppendInterval(.01f);
         seq.AppendCallback(() => PlayUISound(popupSound));
+        seq.Append(oriRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
+
+        // title
+        seq.AppendInterval(.05f);
+        titleRec.localScale = Vector2.one;
+        seq.AppendCallback(() =>
+        {
+            PlayUISound(popupSound);
+        });
+        
+        // 현재 시간
+        seq.AppendInterval(.5f);
+        survivalTimeRec.localScale = Vector2.one;
+        seq.AppendCallback(() => 
+        {
+            PlayUISound(scribbleSound);
+            survivalTimeTitle.Play();
+        });
+
+        seq.AppendInterval(.15f);
+        seq.AppendCallback(() => 
+        {
+            survivalTimeContents.Play();
+        });
+
+        // 최고 기록
+        seq.AppendInterval(.3f);
+        bestRecordRec.localScale = Vector2.one;
+        seq.AppendCallback(() =>
+        {
+            PlayUISound(scribbleSound);
+            bestRecordTimeTitle.Play();
+        });
+        
+        seq.AppendInterval(.15f);
+        seq.AppendCallback(() =>
+        {
+            bestRecordTimeContents.Play();
+        });
 
         // Coin
-        seq.AppendInterval(0.01f);
-        seq.Append(
-            coinRec.DOScale(1f, 0.15f)
-                    .SetEase(Ease.OutBack)
-        );
-        seq.AppendCallback(() => PlayUISound(popupSound));
+        seq.AppendInterval(0.5f);
+        seq.AppendCallback(() => PlayUISound(TitleSound));
+        seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
 
         // Kill
         seq.AppendInterval(0.01f);
-        seq.Append(
-            killRec.DOScale(1f, 0.3f)
-                    .SetEase(Ease.OutBack)
-        );
-        seq.AppendCallback(() => PlayUISound(popupSound));
+        seq.AppendCallback(() => PlayUISound(TitleSound));
+        seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
 
         // Stamp
         seq.AppendInterval(0.1f);
-        seq.Append(
-            stampRec.DOScale(1f, 0.3f)
-                    .SetEase(Ease.OutBack)
-        );
-        seq.AppendCallback(() => PlayUISound(stampSound));
+        seq.AppendCallback(() =>
+        {
+            PlayUISound(stampSound);
+            PlayUISound(resultSoundSuccess);
+            stampRec.localScale = Vector2.one;
+        });
 
+        // 탭해서 계속하기
+        seq.AppendInterval(0.5f);
+        seq.AppendCallback(() =>
+        {
+            GameManager.instance.ActivateConfirmationButtonWithoutDelay();
+        });
     }
+    #endregion
 
     void ResetRecs()
     {

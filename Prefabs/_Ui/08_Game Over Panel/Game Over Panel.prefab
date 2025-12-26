@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7978020936453297851}
   - component: {fileID: 7923045784233178690}
   m_Layer: 5
-  m_Name: Stage TitleText
+  m_Name: TitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,15 +67,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: "...\uC2E4\uD328..."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1e3b4f376c9a844e9b399ee2da02cd4e, type: 2}
-  m_sharedMaterial: {fileID: 8542653752763670082, guid: 1e3b4f376c9a844e9b399ee2da02cd4e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 313c90f5286498c43b090c0dde50ae06, type: 2}
+  m_sharedMaterial: {fileID: 5856212516427243686, guid: 313c90f5286498c43b090c0dde50ae06, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4292927712
-  m_fontColor: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
+    rgba: 4284966759
+  m_fontColor: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1215,6 +1215,7 @@ GameObject:
   - component: {fileID: 1318360723687427480}
   - component: {fileID: 603942656302431346}
   - component: {fileID: 2993646546558861960}
+  - component: {fileID: 2729037599171732375}
   m_Layer: 5
   m_Name: Survival Time Text (TMP)
   m_TagString: Untagged
@@ -1338,6 +1339,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2729037599171732375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276936987104657348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd6eabb72b404fee889746e716b1126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textUI: {fileID: 0}
+  charInterval: 0.04
+  typeSound: {fileID: 0}
+  ignoreTimeScale: 1
 --- !u!1 &1452503870709026045
 GameObject:
   m_ObjectHideFlags: 0
@@ -2821,6 +2838,7 @@ GameObject:
   - component: {fileID: 2025956709810771841}
   - component: {fileID: 2576204215959440552}
   - component: {fileID: 4101631285615319151}
+  - component: {fileID: 152264696321467488}
   m_Layer: 5
   m_Name: Best Records Time Text (TMP)
   m_TagString: Untagged
@@ -2944,6 +2962,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &152264696321467488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3357967864404041219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd6eabb72b404fee889746e716b1126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textUI: {fileID: 0}
+  charInterval: 0.04
+  typeSound: {fileID: 0}
+  ignoreTimeScale: 1
 --- !u!1 &3406176860030978657
 GameObject:
   m_ObjectHideFlags: 0
@@ -3158,16 +3192,22 @@ MonoBehaviour:
   survivalTimeRec: {fileID: 3659066446484668152}
   bestRecordRec: {fileID: 3283593355576275970}
   survivalTimeText: {fileID: 2993646546558861960}
+  survivalTimeTitleText: {fileID: 6838243510339353224}
   bestRecordText: {fileID: 4101631285615319151}
+  bestRecordTitleText: {fileID: 3361184154451604177}
   isDarkBG: 1
-  resultSound: {fileID: 8300000, guid: 37aaa09ec686b15428e394fed462d131, type: 3}
   cardDisp: {fileID: 5416082393595137997}
   charAnim: {fileID: 8768135359443507383}
   bouncerManager: {fileID: 0}
   confettiNums: 0
+  resultSoundSuccess: {fileID: 8300000, guid: ebed3159bc2b5624b8337d6aa64f4387, type: 3}
+  resultSoundFail: {fileID: 8300000, guid: 37aaa09ec686b15428e394fed462d131, type: 3}
   panelSound: {fileID: 8300000, guid: 89a821bb291d4cf4d994848d66eb87ad, type: 3}
-  failTitleSound: {fileID: 0}
-  clearTitleSound: {fileID: 0}
+  failTitleSound: {fileID: 8300000, guid: 37aaa09ec686b15428e394fed462d131, type: 3}
+  clearTitleSound: {fileID: 8300000, guid: ebed3159bc2b5624b8337d6aa64f4387, type: 3}
+  TitleSound: {fileID: 8300000, guid: 97857a9727d2848bc91eb4533df2d98a, type: 3}
+  ContentsSound: {fileID: 8300000, guid: e7f6afa460e494134a44de70eb526bf0, type: 3}
+  scribbleSound: {fileID: 8300000, guid: deca0b01907b642e4974041f5c13ab24, type: 3}
   popupSound: {fileID: 8300000, guid: 275814b80951f7f49ad96c7fcf33683e, type: 3}
   stampSound: {fileID: 8300000, guid: 831ffda2da0a13e489638c5d3ac167e0, type: 3}
 --- !u!1 &3510001530237476615
@@ -5020,6 +5060,7 @@ GameObject:
   - component: {fileID: 4524430346709477182}
   - component: {fileID: 3787085427635776560}
   - component: {fileID: 6838243510339353224}
+  - component: {fileID: 75483328084722640}
   m_Layer: 5
   m_Name: Survival Time Title Text (TMP)
   m_TagString: Untagged
@@ -5143,6 +5184,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &75483328084722640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5424222299420753735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd6eabb72b404fee889746e716b1126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textUI: {fileID: 0}
+  charInterval: 0.04
+  typeSound: {fileID: 0}
+  ignoreTimeScale: 1
 --- !u!1 &5731708942272392054
 GameObject:
   m_ObjectHideFlags: 0
@@ -7102,6 +7159,7 @@ GameObject:
   - component: {fileID: 5269338778233582424}
   - component: {fileID: 5826868420768045548}
   - component: {fileID: 3361184154451604177}
+  - component: {fileID: 2351985796517974937}
   m_Layer: 5
   m_Name: Best Records Title Text (TMP)
   m_TagString: Untagged
@@ -7225,6 +7283,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2351985796517974937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7313032163475282186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fd6eabb72b404fee889746e716b1126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textUI: {fileID: 0}
+  charInterval: 0.04
+  typeSound: {fileID: 0}
+  ignoreTimeScale: 1
 --- !u!1 &7351242056265424040
 GameObject:
   m_ObjectHideFlags: 0
@@ -8385,7 +8459,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8544976933165458064}
   - component: {fileID: 4233870823569062672}
-  - component: {fileID: 2858954511702446844}
   m_Layer: 5
   m_Name: Panel Generic
   m_TagString: Untagged
@@ -8428,22 +8501,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8453987859012799014}
   m_CullTransparentMesh: 1
---- !u!114 &2858954511702446844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8453987859012799014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a46803678620dae43910f8db9da03ee1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  assetUpSound: {fileID: 8300000, guid: 275814b80951f7f49ad96c7fcf33683e, type: 3}
-  resultPanelUpSound: {fileID: 8300000, guid: 89a821bb291d4cf4d994848d66eb87ad, type: 3}
-  stampSound: {fileID: 8300000, guid: 831ffda2da0a13e489638c5d3ac167e0, type: 3}
-  music: {fileID: 0}
 --- !u!1 &8521967985144304774
 GameObject:
   m_ObjectHideFlags: 0

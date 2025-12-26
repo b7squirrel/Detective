@@ -182,5 +182,9 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(_delayToActivate);
         confimationButton.SetActive(true);
     }
+    public void ActivateConfirmationButtonWithoutDelay()
+    {
+        confimationButton.SetActive(true);
+    }
     #endregion
 }
