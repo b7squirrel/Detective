@@ -53,7 +53,7 @@ public class ResultPanel : MonoBehaviour
         SetBG();
         PlayRegularAwardsSequence(killNum, coinNum, stageNum, isWinningStage);
     }
-    public void InitInfiniteAwards(int killNum, int coinNum, int currentWave, string survivalTime, string bestRecord)
+    public void InitInfiniteAwards(int killNum, int coinNum, int currentWave, string survivalTime, string bestRecord, bool isBestRecord)
     {
         SetBG();
         PlayInfiniteAwardsSequence(killNum, coinNum, currentWave, survivalTime, bestRecord);

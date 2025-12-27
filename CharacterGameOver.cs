@@ -62,7 +62,10 @@ public class CharacterGameOver : MonoBehaviour
             float bestTime = PlayerDataManager.Instance.GetBestSurvivalTime();
             string bestRecordFormatted = new GeneralFuctions().FormatTime(bestTime);
 
-            gameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted);
+            // 기록 갱신 체크
+            bool isBreakingRecords = currentTime > bestTime ? true : false;
+
+            gameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted, isBreakingRecords);
         }
     }
 }
