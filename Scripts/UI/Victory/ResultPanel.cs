@@ -180,11 +180,13 @@ public class ResultPanel : MonoBehaviour
         seq.SetUpdate(true);
 
         // panel
-        seq.Append(panelRec.DOScale(.8f, .2f).SetEase(Ease.OutBack));
+        seq.AppendInterval(1f);
         seq.AppendCallback(() =>
         {
             PlayUISound(panelSound);
+            PlayUISound(panelSound);
         });
+        seq.Append(panelRec.DOScale(.8f, .2f).SetEase(Ease.OutBack));
 
         // ori
         charAnim.SetTrigger("Idle");
@@ -246,8 +248,14 @@ public class ResultPanel : MonoBehaviour
         seq.AppendCallback(() =>
         {
             PlayUISound(stampSound);
-            PlayUISound(resultSoundSuccess);
             stampRec.localScale = Vector2.one;
+        });
+
+        // Result Sound
+        seq.AppendInterval(0.2f);
+        seq.AppendCallback(() =>
+        {
+            PlayUISound(resultSoundSuccess);
         });
 
         // 탭해서 계속하기
