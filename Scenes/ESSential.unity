@@ -4604,7 +4604,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &323266087
 RectTransform:
   m_ObjectHideFlags: 0
@@ -39652,16 +39652,18 @@ MonoBehaviour:
   bestRecordText: {fileID: 0}
   bestRecordTitleText: {fileID: 0}
   isDarkBG: 1
-  resultSound: {fileID: 8300000, guid: ebed3159bc2b5624b8337d6aa64f4387, type: 3}
   cardDisp: {fileID: 3235164102203273248}
   charAnim: {fileID: 4378192894805708650}
   bouncerManager: {fileID: 1933615685}
   confettiNums: 150
+  resultSoundSuccess: {fileID: 0}
+  resultSoundFail: {fileID: 0}
   panelSound: {fileID: 0}
   failTitleSound: {fileID: 0}
   clearTitleSound: {fileID: 0}
   TitleSound: {fileID: 0}
   ContentsSound: {fileID: 0}
+  scribbleSound: {fileID: 0}
   popupSound: {fileID: 0}
   stampSound: {fileID: 0}
 --- !u!222 &1091675952535401472
