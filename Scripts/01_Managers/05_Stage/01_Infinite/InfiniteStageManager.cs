@@ -31,6 +31,9 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     WallManager wallManager;
     FieldItemSpawner fieldItemSpawner;
 
+    [Header("UI")]
+    TimeWaveUI timeWaveUI;
+
     // 게임 상태
     int currentWave = 0;
     float currentDifficulty = 1f;
@@ -110,6 +113,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         Initialize();
     }
+    #region 초기화
     void Initialize()
     {
         Logger.Log("[InfiniteStage] Initializing Infinite Mode...");
@@ -143,13 +147,32 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         // 초기 보석 스폰
         SpawnInitialResources();
 
+        // UI 초기화
+        timeWaveUI = FindObjectOfType<TimeWaveUI>();
+
         // 초기화 완료
         isInitialized = true;
 
         // 웨이브 시작
         StartCoroutine(WaveLoop());
+        StartCoroutine(UpdateUI());
 
         Logger.Log("[InfiniteStage] Initialization complete!");
+    }
+    #endregion
+
+    IEnumerator UpdateUI()
+    {
+        while (true)
+        {
+            if (timeWaveUI != null)
+            {
+                float currentTime = GetSurvivalTime();
+                string timeFormatted = new GeneralFuctions().FormatTime(currentTime);
+                timeWaveUI.InitTimeWaveUI(timeFormatted, currentWave.ToString());
+            }
+            yield return new WaitForSeconds(.1f); // 0.1초마다 업데이트
+        }
     }
 
     bool ValidateConfiguration()

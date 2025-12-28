@@ -93,62 +93,90 @@ public class ResultPanel : MonoBehaviour
         coinText.text = coinNum.ToString();
         stageNumberText.text = stageNum.ToString();
 
-        
+
         GameManager.instance.ActivateConfirmationButton(2.7f);
     }
     #region 레귤러 애니메이션
     void PlayRegularAwardsSequence(int killNum, int coinNum, int stageNum, bool isWinningStage)
     {
         ResetRecs();
-        string title = isWinningStage? "축하해요!" : "이런...";
+        string title = isWinningStage ? "축하해요!" : "실패...";
+        string stamp = isWinningStage ? "참 잘했어요!" : "아쉬워요..";
         titleText.text = title;
         killText.text = killNum.ToString();
         coinText.text = coinNum.ToString();
         stageNumberText.text = stageNum.ToString();
+        stampText.text = stamp;
 
         Sequence seq = DOTween.Sequence();
         // UI는 타임스케일 무시
         seq.SetUpdate(true);
 
         // panel
+        seq.AppendInterval(1f);
+        seq.AppendCallback(() =>
+        {
+            PlayUISound(panelSound);
+            PlayUISound(panelSound);
+        });
         seq.Append(panelRec.DOScale(.8f, .2f).SetEase(Ease.OutBack));
 
-        // title
-        // title
-        seq.AppendInterval(.05f);
-        seq.Append(titleRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
-        seq.AppendCallback(() => PlayUISound(popupSound));
-
         // ori
-        charAnim.SetTrigger("Hit");
-        oriRec.localRotation = Quaternion.Euler(0f, 0f, 0f);
-        seq.AppendInterval(.05f);
-        seq.Append(oriRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
+        string trigger = isWinningStage ? "Idle" : "Hit";
+        float angle = isWinningStage ? 0f : 45f;
+        charAnim.SetTrigger(trigger);
+        oriRec.localRotation = Quaternion.Euler(0f, 0f, angle);
+
+        seq.AppendInterval(.01f);
         seq.AppendCallback(() => PlayUISound(popupSound));
+        seq.Append(oriRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
+
+        // title
+        seq.AppendInterval(.05f);
+        titleRec.localScale = Vector2.one;
+        seq.AppendCallback(() =>
+        {
+            PlayUISound(popupSound);
+        });
 
         // Coin
-        seq.AppendInterval(0.01f);
-        seq.Append(
-            coinRec.DOScale(1f, 0.15f)
-                    .SetEase(Ease.OutBack)
-        );
-        seq.AppendCallback(() => PlayUISound(popupSound));
+        seq.AppendInterval(0.5f);
+        seq.AppendCallback(() => PlayUISound(TitleSound));
+        seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
 
         // Kill
         seq.AppendInterval(0.01f);
-        seq.Append(
-            killRec.DOScale(1f, 0.3f)
-                    .SetEase(Ease.OutBack)
-        );
-        seq.AppendCallback(() => PlayUISound(popupSound));
+        seq.AppendCallback(() => PlayUISound(TitleSound));
+        seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
 
         // Stamp
         seq.AppendInterval(0.1f);
-        seq.Append(
-            stampRec.DOScale(1f, 0.3f)
-                    .SetEase(Ease.OutBack)
-        );
-        seq.AppendCallback(() => PlayUISound(stampSound));
+        seq.AppendCallback(() =>
+        {
+            PlayUISound(stampSound);
+            stampRec.localScale = Vector2.one;
+        });
+
+        // Result Sound
+        seq.AppendInterval(0.2f);
+        seq.AppendCallback(() =>
+        {
+            if(isWinningStage)
+            {
+                PlayUISound(resultSoundSuccess);
+            }
+            else
+            {
+                PlayUISound(resultSoundFail);
+            }
+        });
+
+        // 탭해서 계속하기
+        seq.AppendInterval(0.5f);
+        seq.AppendCallback(() =>
+        {
+            GameManager.instance.ActivateConfirmationButtonWithoutDelay();
+        });
     }
     #endregion
 
