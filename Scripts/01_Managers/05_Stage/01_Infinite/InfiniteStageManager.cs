@@ -48,26 +48,48 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
     void Awake()
     {
+        Debug.Log("========================================");
+        Debug.Log(">>> [InfiniteStage] AWAKE CALLED!");
+        Debug.Log("========================================");
+
         poolManager = FindObjectOfType<PoolManager>();
         spawner = FindObjectOfType<Spawner>();
         wallManager = FindObjectOfType<WallManager>();
         fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
+
+        Debug.Log($">>> [InfiniteStage] PoolManager: {(poolManager != null ? "FOUND" : "NULL")}");
+        Debug.Log($">>> [InfiniteStage] Spawner: {(spawner != null ? "FOUND" : "NULL")}");
     }
 
     void Start()
     {
+        Debug.Log(">>> [InfiniteStage] START CALLED!");
         StartCoroutine(WaitAndInitialize());
     }
 
     void Update()
     {
-        if (!isInitialized) return;
+        if (!isInitialized)
+        {
+            // ⭐ 초기화 대기 중 로그 (최초 1회만)
+            if (Time.frameCount % 60 == 0)
+            {
+                Debug.Log($">>> [InfiniteStage] Waiting for initialization... Frame: {Time.frameCount}");
+            }
+            return;
+        }
 
         // 스폰이 일시정지되었으면 상자 스폰도 중지
         if (isSpawnPaused) return;
 
         // 생존 시간 증가
         survivalTime += Time.deltaTime;
+
+        // 시간 업데이트 확인 로그 (1초마다)
+        if (Time.frameCount % 60 == 0)
+        {
+            Debug.Log($">>> [InfiniteStage] Update running - Time: {survivalTime:F1}s, Wave: {currentWave}");
+        }
 
         UpdateChestSpawn();
     }
@@ -94,6 +116,15 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
                 poolManager == null) &&
                waitedFrames < maxWaitFrames)
         {
+            // 무엇을 기다리는지 출력
+            if (waitedFrames % 30 == 0)
+            {
+                Debug.Log($">>> [InfiniteStage] Waiting... Frame {waitedFrames}/300");
+                Debug.Log($"    PickupSpawner: {(PickupSpawner.Instance != null ? "OK" : "NULL")}");
+                Debug.Log($"    GameManager: {(GameManager.instance != null ? "OK" : "NULL")}");
+                Debug.Log($"    Player: {(Player.instance != null ? "OK" : "NULL")}");
+                Debug.Log($"    PoolManager: {(poolManager != null ? "OK" : "NULL")}");
+            }
             yield return null;
             waitedFrames++;
         }
@@ -116,48 +147,50 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     #region 초기화
     void Initialize()
     {
-        Logger.Log("[InfiniteStage] Initializing Infinite Mode...");
+        Debug.Log(">>> [InfiniteStage] ========== INITIALIZE START ==========");
 
-        // 유효성 검사
         if (!ValidateConfiguration())
         {
-            Logger.LogError("[InfiniteStage] Invalid configuration! Check Inspector settings.");
+            Debug.LogError(">>> [InfiniteStage] Configuration INVALID!");
             return;
         }
+        Debug.Log(">>> [InfiniteStage] Configuration OK");
 
-        // 필수 매니저 재확인
         if (!ValidateManagers())
         {
-            Logger.LogError("[InfiniteStage] Required managers missing!");
+            Debug.LogError(">>> [InfiniteStage] Managers MISSING!");
             return;
         }
+        Debug.Log(">>> [InfiniteStage] Managers OK");
 
-        // 벽 설정
         if (wallManager != null)
         {
             wallManager.SetWallSize();
+            Debug.Log(">>> [InfiniteStage] Wall configured");
         }
 
-        // 기본 풀 초기화
         poolManager.InitPools();
+        Debug.Log(">>> [InfiniteStage] Base pools initialized");
 
-        // 무한 모드용 적 풀 초기화
         InitializeEnemyPools();
+        Debug.Log(">>> [InfiniteStage] Enemy pools initialized");
 
-        // 초기 보석 스폰
         SpawnInitialResources();
+        Debug.Log(">>> [InfiniteStage] Initial resources spawned");
 
-        // UI 초기화
         timeWaveUI = FindObjectOfType<TimeWaveUI>();
+        Debug.Log($">>> [InfiniteStage] TimeWaveUI: {(timeWaveUI != null ? "FOUND" : "NULL")}");
 
-        // 초기화 완료
         isInitialized = true;
+        Debug.Log(">>> [InfiniteStage] isInitialized = TRUE");
 
-        // 웨이브 시작
         StartCoroutine(WaveLoop());
+        Debug.Log(">>> [InfiniteStage] WaveLoop started");
+        
         StartCoroutine(UpdateUI());
+        Debug.Log(">>> [InfiniteStage] UpdateUI started");
 
-        Logger.Log("[InfiniteStage] Initialization complete!");
+        Debug.Log(">>> [InfiniteStage] ========== INITIALIZE COMPLETE ==========");
     }
     #endregion
 
@@ -275,16 +308,17 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
     IEnumerator WaveLoop()
     {
+        Debug.Log(">>> [InfiniteStage] WaveLoop STARTED");
+        
         while (true)
         {
             currentWave++;
-            Logger.Log($"[InfiniteStage] === Wave {currentWave} Starting ===");
+            Debug.Log($">>> [InfiniteStage] ========== WAVE {currentWave} START ==========");
 
             yield return StartCoroutine(SpawnWave());
 
-            Logger.Log($"[InfiniteStage] === Wave {currentWave} Complete ===");
+            Debug.Log($">>> [InfiniteStage] ========== WAVE {currentWave} COMPLETE ==========");
 
-            // 웨이브 간 휴식도 일시정지 영향 받음
             float waitedTime = 0f;
             while (waitedTime < waveInterval)
             {
@@ -295,7 +329,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
                 yield return null;
             }
 
-            // 난이도 증가
             IncreaseDifficulty();
         }
     }

@@ -16,6 +16,10 @@ public class EnemyData : ScriptableObject
     [Header("Boss Type")]
     public BossType bossType = BossType.Normal;
 
+    [Header("Special Ability")]
+    [Tooltip("이 적의 특수 능력")]
+    public SpecialAbility specialAbility = SpecialAbility.None;
+
     [Header("Scaling Multipliers")]
     [Tooltip("이 적 타입의 HP 스케일링 배율 (1.0 = 기본)")]
     [Range(0.5f, 15f)]
@@ -29,14 +33,23 @@ public class EnemyData : ScriptableObject
     [Range(0.5f, 10f)]
     public float damageScalingMultiplier = 1.0f;
     
-    [Header("Special Abilities")]
-    [Tooltip("대시 능력 (빨강)")]
-    public bool canDash = false;
+    [Header("Special Abilities - Dash")]
+    [Tooltip("대시 쿨다운 (초)")]
     public float dashCooldown = 3f;
+    [Tooltip("대시 속도")]
     public float dashSpeed = 15f;
+    [Tooltip("대시 거리")]
+    public float dashDistance = 5f;
     
-    [Tooltip("점프 공격 (파랑)")]
-    public bool hasJumpAttack = false;
+    [Header("Special Abilities - Laser")]
+    [Tooltip("레이저 발사 거리")]
+    public float laserRange = 8f;
+    [Tooltip("레이저 쿨다운 (초)")]
+    public float laserCooldown = 4f;
+    [Tooltip("레이저 지속 시간")]
+    public float laserDuration = 1.5f;
+    [Tooltip("레이저 프리펩")]
+    public GameObject laserPrefab;
 
     [Header("Prefabs")]
     public GameObject projectilePrefab;
@@ -62,6 +75,23 @@ public class EnemyData : ScriptableObject
     [Header("사운드")]
     public AudioClip hitSound;
     public AudioClip dieSound;
+}
+
+// 적을 스폰할 때 어떤 타입의 적을 스폰할지 정하기 위해
+public enum EnemyType
+{
+    Melee,
+    Ranged,
+    Explode,
+    Projectile
+}
+
+public enum SpecialAbility
+{
+    None,      // 특수 능력 없음
+    Dash,      // 대시 (빨강 - 어택커)
+    Laser,     // 레이저 (보라 - 유리대포)
+    Jump       // 점프 (파랑 - 탱커) - 기존 isJumper를 이것으로 대체 예정
 }
 
 public enum EnemyRole

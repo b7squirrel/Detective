@@ -397,6 +397,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public void TriggerFinishedSpawn()
     {
         finishedSpawn = true;
+
+        // 원거리 공격 컴포넌트에 알림
+        EnemyRangedAttack rangedAttack = GetComponent<EnemyRangedAttack>();
+        if (rangedAttack != null)
+        {
+            rangedAttack.SetFinishedSpawn(true);
+        }
     }
     #endregion
 

@@ -67,7 +67,8 @@ public class BuildManager : Editor
         {
         "Assets/Scenes/MainMenu.unity",
         "Assets/Scenes/ESSential.unity",
-        "Assets/Scenes/Stage.unity"
+        "Assets/Scenes/Stage.unity",
+        "Assets/Scenes/InfiniteStage.unity" 
     };
         buildPlayerOptions.target = BuildTarget.Android;
         string fileExtention = string.Empty;

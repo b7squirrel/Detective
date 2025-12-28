@@ -59,7 +59,7 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
 
         if (playerInRange != null)
         {
-            Debug.LogError($"투사체 데미지 = {projectileDamage}");
+            // Logger.LogError($"투사체 데미지 = {projectileDamage}");
             Character character = GameManager.instance.character;
             if (character != null)
             {

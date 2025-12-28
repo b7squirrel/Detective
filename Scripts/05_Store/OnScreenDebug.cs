@@ -9,10 +9,16 @@ public class OnScreenDebug : MonoBehaviour
     [Header("UI 설정")]
     [SerializeField] private TextMeshProUGUI debugText;
     
+    [Header("로그 타입 필터")]
+    [SerializeField] private bool showLog = true;         // Debug.Log
+    [SerializeField] private bool showWarning = true;     // Debug.LogWarning
+    [SerializeField] private bool showError = true;       // Debug.LogError
+    [SerializeField] private bool showException = true;   // Debug.LogException
+    
     [Header("필터 설정")]
     [SerializeField] private bool showAllLogs = false; // false면 특정 키워드만
     [SerializeField] private string[] filterKeywords = { "TimeBoxButton", "ShopManager", ">>>",  "[!]"};
-    
+
     [Header("표시 설정")]
     [SerializeField] private int maxLines = 30;
     [SerializeField] private bool showFrameInfo = true;
@@ -33,6 +39,12 @@ public class OnScreenDebug : MonoBehaviour
     
     void HandleLog(string logString, string stackTrace, LogType type)
     {
+        // 1단계: 로그 타입 필터링
+        if (!ShouldShowLogType(type))
+        {
+            return;
+        }
+
         // 필터링
         if (!showAllLogs)
         {
@@ -56,17 +68,39 @@ public class OnScreenDebug : MonoBehaviour
         
         // 로그 추가
         logs += $"\n<color={color}>[{logCount}] {logString}</color>";
-        
+
         // 최대 라인 수 유지
         string[] lines = logs.Split('\n');
         if (lines.Length > maxLines)
         {
             logs = string.Join("\n", lines, lines.Length - maxLines, maxLines);
         }
-        
+
         UpdateDebugText();
     }
-    
+
+    /// <summary>
+    /// 로그 타입에 따라 표시 여부 결정
+    /// </summary>
+    bool ShouldShowLogType(LogType type)
+    {
+        switch (type)
+        {
+            case LogType.Log:
+                return showLog;
+            case LogType.Warning:
+                return showWarning;
+            case LogType.Error:
+                return showError;
+            case LogType.Exception:
+                return showException;
+            case LogType.Assert:
+                return showError; // Assert는 Error와 동일하게 처리
+            default:
+                return true;
+        }
+    }
+
     void Update()
     {
         if (showFrameInfo)

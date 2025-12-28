@@ -26,12 +26,12 @@ public class Enemy : EnemyBase
     #region Variables
     public int ExperienceReward { get; private set; }
     bool isLive;
-    Vector2 currentPosition; // to store current position for reverting if enemies move outside walls
+    Vector2 currentPosition;
 
-    // 범위 공격 관련 변수
-    float attackInterval;
-    float nextAttackTime;
-    float distanceToPlayer;
+    // ⭐ 원거리 공격 관련 변수 제거됨 (컴포넌트로 이동)
+    // float attackInterval;
+    // float nextAttackTime;
+    // float distanceToPlayer;
 
     // 점프
     bool canJump;
@@ -48,6 +48,9 @@ public class Enemy : EnemyBase
 
     WallManager wallManager;
     float nextOutOfRangeCheckingTime;
+
+    // ⭐ 원거리 공격 컴포넌트 참조 추가
+    EnemyRangedAttack rangedAttack;
     #endregion
 
     #region 유니티 콜백 함수
@@ -55,16 +58,15 @@ public class Enemy : EnemyBase
     {
         base.OnEnable();
         isLive = true;
-        SetWalking(); // 날으는 상태로 소환되지 않도록
+        SetWalking();
     }
+
     void FixedUpdate()
     {
         if (!isLive)
             return;
         if (GameManager.instance.player == null)
             return;
-
-        // col.enabled = sr.isVisible;
 
         ApplyMovement();
     }
@@ -88,27 +90,26 @@ public class Enemy : EnemyBase
             SetWalking();
         }
 
-        // 범위 공격
-        if (enemyType == EnemyType.Ranged) RangedAttackCoolDown();
+        // ⭐ 원거리 공격 쿨다운 제거 (컴포넌트가 처리)
+        // if (enemyType == EnemyType.Ranged) RangedAttackCoolDown();
     }
     #endregion
 
     #region 초기화
     public override void InitEnemy(EnemyData _data)
     {
-        base.InitEnemy(_data); // 부모에서 스탯 계산 완료
+        base.InitEnemy(_data);
         
         anim.runtimeAnimatorController = _data.animController;
         
-        // ★ Stats는 이미 부모 InitEnemy에서 계산됨
         ExperienceReward = this.Stats.experience_reward;
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
 
-        // 범위 공격 변수 초기화
-        attackInterval = _data.attackInterval;
-        attackInterval += UnityEngine.Random.Range(0, 6f);
-        distanceToPlayer = _data.distanceToPlayer;
+        // ⭐ 원거리 공격 초기화 제거 (컴포넌트로 이동)
+        // attackInterval = _data.attackInterval;
+        // attackInterval += UnityEngine.Random.Range(0, 6f);
+        // distanceToPlayer = _data.distanceToPlayer;
 
         InitHpBar();
 
@@ -118,9 +119,32 @@ public class Enemy : EnemyBase
         Name = _data.Name;
 
         canJump = _data.isJumper;
-        if(shadowHeightEnemy == null) 
+        if (shadowHeightEnemy == null)
             shadowHeightEnemy = GetComponent<ShadowHeightEnemy>();
         shadowHeightEnemy.SetIsJumper(canJump, _data.jumpInterval);
+
+        // 모든 특수 능력 컴포넌트 초기화
+        InitSpecialAbilities(_data);
+    }
+
+    // 새로 추가: 특수 능력 컴포넌트 관리
+    void InitSpecialAbilities(EnemyData _data)
+    {
+        // 원거리 공격
+        if (rangedAttack == null)
+            rangedAttack = GetComponent<EnemyRangedAttack>();
+
+        if (rangedAttack != null)
+        {
+            rangedAttack.InitRangedAttack(_data);
+        }
+
+        // 앞으로 추가될 다른 능력들도 여기서 초기화
+        // EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
+        // if (dashAbility != null)
+        // {
+        //     dashAbility.InitDash(_data);
+        // }
     }
 
     public void SetFlying(Vector2 target)
@@ -133,6 +157,7 @@ public class Enemy : EnemyBase
 
         flyingTimeCounter = flyingTimeThreshold;
     }
+
     void SetWalking()
     {
         IsFlying = false;
@@ -168,45 +193,27 @@ public class Enemy : EnemyBase
     {
         Target.gameObject.GetComponent<Character>().TakeDamage(Stats.damage, EnemyType.Melee);
     }
+
     protected override void AttackRange(int _damage)
     {
+        // ⭐ 이 함수는 이제 EnemyBase의 OnCollisionStay에서만 호출됨
+        // 원거리 쿨다운 공격은 EnemyRangedAttack 컴포넌트가 처리
         if (enemyProjectile == null) return;
         GameObject cannonBall = Instantiate(enemyProjectile, transform.position, Quaternion.identity);
         cannonBall.GetComponentInChildren<IEnemyProjectile>().InitProjectileDamage(Stats.rangedDamage);
-        anim.SetBool("Attack", true); // 초록이의 공격 애니메이션 끝에 false로 만듬  
+        anim.SetBool("Attack", true);
     }
+
     protected override void AttackExplode(int _damage)
     {
         AttackMelee(_damage);
         Die();
     }
 
-    // 범위 공격에만 해당
-    void RangedAttackCoolDown()
-    {
-        if (finishedSpawn == false) return; //스폰이 끝나지 않았다면 쿨다운을 카운트 하지 않기
-        if (Time.time >= nextAttackTime)
-        {
-            if (DetectingPlayer())
-            {
-                float randomValue = UnityEngine.Random.Range(0f, 1f);
-                if (randomValue <= .5f)
-                {
-                    Attack(EnemyType.Ranged); // 10%확률로 발사
-                }
-            }
-            nextAttackTime = Time.time + attackInterval;
-        }
-    }
+    // ⭐ RangedAttackCoolDown 함수 제거 (컴포넌트로 이동)
     #endregion
 
-    bool DetectingPlayer()
-    {
-        float squDist = (Target.position - (Vector2)transform.position).sqrMagnitude;
-        if (squDist < MathF.Pow(distanceToPlayer,2f))
-            return true;
-        return false;
-    }
+    // ⭐ DetectingPlayer 함수 제거 (컴포넌트로 이동)
 
     #region 애니메이션 이벤트
     public void SetAttackAnimDone()
@@ -221,7 +228,6 @@ public class Enemy : EnemyBase
         colEnemy.enabled = activateCol;
     }
 
-    // 점프를 위해 매프레임마다 수평 이동 속도가 필요하다
     public Vector2 GetNextVec()
     {
         Vector2 dirVec = Target.position - (Vector2)rb.transform.position;
