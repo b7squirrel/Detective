@@ -7,9 +7,6 @@ public class StageContents
     [Header("Stage Number")]
     public string Name;
 
-    [Header("Stage Time")]
-    public float WallDuration;
-
     [Header("Stage Events")]
     public int enemyNumForNextEvent;
     public StageMusicType stageMusicType;
@@ -18,7 +15,6 @@ public class StageContents
     public TextAsset stageDataText;
 
     [Header("Enemy Data")]
-    public EnemyVariant stageEnmeyVariant;
     public EnemyData[] enemyData;
 
     [Header("Stage Asset Data")]
