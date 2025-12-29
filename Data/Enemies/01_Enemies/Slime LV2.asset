@@ -14,12 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Slime LV2
   animController: {fileID: 22100000, guid: e528fe5e406fa644a9a7f95329c2b329, type: 2}
-  stats:
-    hp: 160
-    speed: 1
-    damage: 12
-    rangedDamage: 1000
-    experience_reward: 450
   enemyType: 1
   enemyRole: 3
   bossType: 0
@@ -29,7 +23,7 @@ MonoBehaviour:
   damageScalingMultiplier: 1.33
   dashCooldown: 3
   dashSpeed: 15
-  dashDistance: 5
+  dashDuration: 0.5
   laserRange: 8
   laserCooldown: 4
   laserDuration: 1.5

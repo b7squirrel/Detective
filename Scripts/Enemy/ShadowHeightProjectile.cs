@@ -30,10 +30,13 @@ public class ShadowHeightProjectile : MonoBehaviour
     [SerializeField] float minVelocityToStop = 0.05f;
     [SerializeField] float checkInterval = 0.02f; // 감속 체크 주기 (FixedUpdate 비슷하게)
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateVerticalMovement();
         CheckGroundHit();
+    }
+    void Update()
+    {
         UpdateLayer();
     }
 
@@ -83,7 +86,8 @@ public class ShadowHeightProjectile : MonoBehaviour
             rb.velocity *= deceleration;
 
             // 부드러운 감속을 위해 짧은 간격으로 반복
-            yield return new WaitForSeconds(checkInterval);
+            // yield return new WaitForSeconds(checkInterval);
+            yield return new WaitForFixedUpdate();
         }
 
         // 완전히 멈춤
@@ -95,8 +99,8 @@ public class ShadowHeightProjectile : MonoBehaviour
     {
         if (!isGrounded)
         {
-            verticalVelocity += gravity * Time.deltaTime;
-            Vector3 newPosition = trnsBody.position + new Vector3(0, verticalVelocity * Time.deltaTime, 0);
+            verticalVelocity += gravity * Time.fixedDeltaTime;
+            Vector3 newPosition = trnsBody.position + new Vector3(0, verticalVelocity * Time.fixedDeltaTime, 0);
             trnsBody.position = newPosition;
         }
     }

@@ -3,36 +3,44 @@ using UnityEngine;
 public class EnemyStatCalculator : MonoBehaviour
 {
     [SerializeField] EnemyScalingConfig scalingConfig;
-    
+
     public EnemyStats GetStatsForStage(int stage, EnemyData baseData)
     {
         if (scalingConfig == null)
         {
             Debug.LogError("EnemyScalingConfig가 할당되지 않았습니다!");
-            return new EnemyStats(baseData.stats);
+            return CreateDefaultStats(); // 기본 스탯 생성
         }
-        
-        EnemyStats stats = new EnemyStats(baseData.stats);
-        
-        // 역할에 따른 추가 보너스 적용
+
+        // ⭐ 새로 생성 (복사 안 함)
+        EnemyStats stats = new EnemyStats();
+
         float roleHPBonus = GetRoleHPBonus(baseData.enemyRole);
         float roleDamageBonus = GetRoleDamageBonus(baseData.enemyRole);
-        
-        // 보스 타입에 따른 배율 적용
         float bossMultiplier = GetBossMultiplier(stage, baseData);
-        
+
         stats.hp = CalculateHP(stage, baseData, roleHPBonus, bossMultiplier);
         stats.speed = CalculateSpeed(stage, baseData);
-        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier); // melee
-        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier); // ranged
+        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier);
+        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier);
         stats.experience_reward = CalculateExperience(stage, baseData, bossMultiplier);
-        
-        // 수동 오버라이드 적용
+
         ApplyManualOverrides(stage, ref stats);
-        
+
         return stats;
     }
-    
+    EnemyStats CreateDefaultStats()
+    {
+        return new EnemyStats
+        {
+            hp = 100,
+            speed = 5,
+            damage = 10,
+            rangedDamage = 10,
+            experience_reward = 50
+        };
+    }
+
     /// <summary>
     /// 보스 타입과 스테이지에 따른 강화 배율 계산
     /// </summary>

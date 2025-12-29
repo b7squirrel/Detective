@@ -24,7 +24,7 @@ public class TriggerEnemyProjHeightShadow : MonoBehaviour
         float verticalVel;
 
         groundVelocity = horizontalVelociy * direction;
-        verticalVel = 80f;
+        verticalVel = 50f;
 
         shadowHeightProj.Initialize(groundVelocity, verticalVel);
         transform.SetParent(originalParent);

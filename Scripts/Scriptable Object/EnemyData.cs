@@ -7,7 +7,6 @@ public class EnemyData : ScriptableObject
     [Header("Common")]
     public string Name;
     public RuntimeAnimatorController animController;
-    public EnemyStats stats;
     public EnemyType enemyType;
     
     [Header("Enemy Role")]

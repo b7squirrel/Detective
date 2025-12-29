@@ -10,15 +10,15 @@ public class EnemyStats
     public int rangedDamage = 1;
     public int experience_reward = 0;
 
-    public EnemyStats(EnemyStats stats)
-    {
-        this.hp = stats.hp;
-        this.speed = stats.speed;
-        this.damage = stats.damage;
-        this.rangedDamage = stats.rangedDamage;
-        this.speed = stats.speed;
-        this.experience_reward = stats.experience_reward;
-    }
+    // public EnemyStats(EnemyStats stats)
+    // {
+    //     this.hp = stats.hp;
+    //     this.speed = stats.speed;
+    //     this.damage = stats.damage;
+    //     this.rangedDamage = stats.rangedDamage;
+    //     this.speed = stats.speed;
+    //     this.experience_reward = stats.experience_reward;
+    // }
 }
 
 public class Enemy : EnemyBase

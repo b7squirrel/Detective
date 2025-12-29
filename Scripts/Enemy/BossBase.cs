@@ -55,7 +55,9 @@ public class BossBase : EnemyBase, Idamageable
 
     public override void InitEnemy(EnemyData _enemyToSpawn)
     {
-        this.Stats = new EnemyStats(_enemyToSpawn.stats);
+        // base에서 Stats 계산
+        base.InitEnemy(_enemyToSpawn);
+        
         spawner = FindObjectOfType<Spawner>(); // 죽었을 때 enemy를 삭제하기 위해서
         col = GetComponent<CapsuleCollider2D>();
         Name = _enemyToSpawn.name;

@@ -78,6 +78,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
     Coroutine whiteFlashCoroutine;
     Color enemyColor; // die effect의 색깔을 정하기 위해서.
 
+    [Header("특수 능력")]
+    protected EnemyDashAbility dashAbility;
+    protected EnemyRangedAttack rangedAttack;
+
     [Header("Sounds")]
     [SerializeField] protected AudioClip[] hits;
     [SerializeField] protected AudioClip[] dies;
@@ -98,6 +102,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #endregion
 
     #region 유니티 콜백
+    
     protected virtual void OnEnable()
     {
         if (initDone == false)
@@ -107,6 +112,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
             anim = GetComponent<Animator>();
             sr = GetComponentInChildren<SpriteRenderer>();
             colEnemy = GetComponent<Collider2D>();
+
+            dashAbility = GetComponent<EnemyDashAbility>();
+            rangedAttack = GetComponent<EnemyRangedAttack>();
 
             pastPos = transform.position;
 
@@ -191,7 +199,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         enemyColor = _enemyToSpawn.enemyColor;
 
-        // 스테이지에 맞게 스탯 계산
         if (currentStageNumber == 0) currentStageNumber = PlayerDataManager.Instance.GetCurrentStageNumber();
         if (calculator == null) calculator = GameManager.instance.enemyStatCalculator;
 
@@ -201,8 +208,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
         else
         {
-            // Fallback: 기본 스탯 사용
-            this.Stats = new EnemyStats(_enemyToSpawn.stats);
+            // ⭐ Fallback 수정
+            this.Stats = new EnemyStats
+            {
+                hp = 100,
+                speed = 5,
+                damage = 10,
+                rangedDamage = 10,
+                experience_reward = 50
+            };
             Debug.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다. 기본 스탯을 사용합니다.");
         }
 
@@ -351,7 +365,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (finishedSpawn == false) return;
 
         // 대시 중이면 일반 이동하지 않음
-        EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
         if (dashAbility != null && dashAbility.IsDashing())
         {
             return; // 대시 컴포넌트가 움직임을 처리함
@@ -410,14 +423,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         finishedSpawn = true;
 
         // 원거리 공격 컴포넌트에 알림
-        EnemyRangedAttack rangedAttack = GetComponent<EnemyRangedAttack>();
         if (rangedAttack != null)
         {
             rangedAttack.SetFinishedSpawn(true);
         }
 
         // 대시 컴포넌트에 알림
-        EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
         if (dashAbility != null)
         {
             dashAbility.SetFinishedSpawn(true);
