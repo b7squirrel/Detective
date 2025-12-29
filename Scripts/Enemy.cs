@@ -139,6 +139,13 @@ public class Enemy : EnemyBase
             rangedAttack.InitRangedAttack(_data);
         }
 
+        // 대시 능력 추가
+        EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
+        if (dashAbility != null)
+        {
+            dashAbility.InitDash(_data);
+        }
+
         // 앞으로 추가될 다른 능력들도 여기서 초기화
         // EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
         // if (dashAbility != null)

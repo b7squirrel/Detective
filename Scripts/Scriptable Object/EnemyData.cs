@@ -32,15 +32,17 @@ public class EnemyData : ScriptableObject
     [Tooltip("이 적 타입의 공격력 스케일링 배율 (1.0 = 기본)")]
     [Range(0.5f, 10f)]
     public float damageScalingMultiplier = 1.0f;
-    
+
     [Header("Special Abilities - Dash")]
     [Tooltip("대시 쿨다운 (초)")]
     public float dashCooldown = 3f;
+
     [Tooltip("대시 속도")]
     public float dashSpeed = 15f;
-    [Tooltip("대시 거리")]
-    public float dashDistance = 5f;
-    
+
+    [Tooltip("대시 지속 시간 (초)")]
+    public float dashDuration = 0.5f;
+
     [Header("Special Abilities - Laser")]
     [Tooltip("레이저 발사 거리")]
     public float laserRange = 8f;

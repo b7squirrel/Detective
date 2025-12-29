@@ -14,7 +14,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public EnemyStats Stats { get; set; }
     protected EnemyStatCalculator calculator; // 스탯 계산을 위해
     protected int currentStageNumber; // 스테이지에 따른 스탯 계산을 위해
-    protected float DefaultSpeed; // 속도를 외부에서 변경할 때 원래 속도를 저장해 두기 위해
+    public float DefaultSpeed {get; protected set;} // 속도를 외부에서 변경할 때 원래 속도를 저장해 두기 위해
     protected float currentSpeed;
     public bool IsSlowed { get; set; } // 슬로우 스킬을 
     public bool IsBoss { get; set; }
@@ -191,7 +191,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         enemyColor = _enemyToSpawn.enemyColor;
 
-        // ★ 스테이지에 맞게 스탯 계산
+        // 스테이지에 맞게 스탯 계산
         if (currentStageNumber == 0) currentStageNumber = PlayerDataManager.Instance.GetCurrentStageNumber();
         if (calculator == null) calculator = GameManager.instance.enemyStatCalculator;
 
@@ -348,11 +348,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region Apply Movement
     public virtual void ApplyMovement()
     {
-        if (finishedSpawn == false) return; // 스폰이 완료되지 않았다면 이동 금지. 스폰 애니메이션에서 이벤트로 설정
+        if (finishedSpawn == false) return;
+
+        // 대시 중이면 일반 이동하지 않음
+        EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
+        if (dashAbility != null && dashAbility.IsDashing())
+        {
+            return; // 대시 컴포넌트가 움직임을 처리함
+        }
+
         if (IsKnockBack)
         {
             rb.velocity = knockBackSpeed * targetDir;
-            //rb.velocity = knockBackSpeed * enemyKnockBackSpeedFactor * targetDir;
             float randomOffsetX = UnityEngine.Random.Range(-.5f, .5f);
             float randomOffsetY = UnityEngine.Random.Range(-.5f, .5f);
             PickupSpawner.Instance.SpawnPickup(transform.position + new Vector3(randomOffsetX, randomOffsetY, 0), knockbackEffect, false, 0);
@@ -391,8 +398,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         isGrouned = _isGrouinded;
     }
+    public float GetCurrentSpeed()
+{
+    return currentSpeed;
+}
 
-    // animation events
+    #region 애니메이션 이벤트
     // 스폰 애니메이션이 끝나는 지점에 이벤트
     public void TriggerFinishedSpawn()
     {
@@ -404,7 +415,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             rangedAttack.SetFinishedSpawn(true);
         }
+
+        // 대시 컴포넌트에 알림
+        EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
+        if (dashAbility != null)
+        {
+            dashAbility.SetFinishedSpawn(true);
+        }
     }
+    #endregion
     #endregion
 
     #region 닿으면 player HP 감소

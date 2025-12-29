@@ -332,6 +332,7 @@ GameObject:
   - component: {fileID: 2566266023260407847}
   - component: {fileID: 5548818968600387970}
   - component: {fileID: 7081024413670957278}
+  - component: {fileID: 8967016695892023627}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -576,6 +577,23 @@ MonoBehaviour:
   attackInterval: 3
   distanceToPlayer: 10
   projectilePrefab: {fileID: 2430061364096046730, guid: 01f8bc472c75b445f9bd74dda9b8e328, type: 3}
+  showDebugLog: 0
+--- !u!114 &8967016695892023627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297514985837409348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0eb229f0a5b476f81b9c13757b2e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashCooldown: 3
+  dashSpeed: 15
+  dashDistance: 5
+  dashDuration: 0.3
 --- !u!1 &6160804460574017110
 GameObject:
   m_ObjectHideFlags: 0

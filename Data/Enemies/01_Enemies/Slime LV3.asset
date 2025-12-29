@@ -23,13 +23,17 @@ MonoBehaviour:
   enemyType: 0
   enemyRole: 2
   bossType: 0
+  specialAbility: 1
   hpScalingMultiplier: 2
   speedScalingMultiplier: 2
   damageScalingMultiplier: 2
-  canDash: 0
   dashCooldown: 3
   dashSpeed: 15
-  hasJumpAttack: 0
+  dashDistance: 5
+  laserRange: 8
+  laserCooldown: 4
+  laserDuration: 1.5
+  laserPrefab: {fileID: 0}
   projectilePrefab: {fileID: 0}
   splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 1, g: 0, b: 0.21311474, a: 1}
