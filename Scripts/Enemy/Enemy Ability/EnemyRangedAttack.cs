@@ -105,7 +105,7 @@ public class EnemyRangedAttack : MonoBehaviour
                 DebugLog("[RangedAttackCoolDown] 플레이어 감지됨");
                 
                 float randomValue = Random.Range(0f, 1f);
-                if (randomValue <= 1f)
+                if (randomValue <= .1f)
                 {
                     DebugLog($"[RangedAttackCoolDown] 공격 실행! (확률: {randomValue})");
                     FireProjectile();
