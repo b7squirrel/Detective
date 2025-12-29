@@ -81,6 +81,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [Header("특수 능력")]
     protected EnemyDashAbility dashAbility;
     protected EnemyRangedAttack rangedAttack;
+    protected EnemyLaserAbility laserAbility; 
 
     [Header("Sounds")]
     [SerializeField] protected AudioClip[] hits;
@@ -115,6 +116,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
             dashAbility = GetComponent<EnemyDashAbility>();
             rangedAttack = GetComponent<EnemyRangedAttack>();
+            laserAbility = GetComponent<EnemyLaserAbility>();
 
             pastPos = transform.position;
 
@@ -370,6 +372,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return; // 대시 컴포넌트가 움직임을 처리함
         }
 
+        // 레이져 발사 중이면 이동하지 않음
+        if (laserAbility != null && laserAbility.IsUsingLaser())
+        {
+            return;
+        }
+
         if (IsKnockBack)
         {
             rb.velocity = knockBackSpeed * targetDir;
@@ -432,6 +440,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (dashAbility != null)
         {
             dashAbility.SetFinishedSpawn(true);
+        }
+
+        // 레이저 컴포넌트에 알림 추가
+        if (laserAbility != null)
+        {
+            laserAbility.SetFinishedSpawn(true);
         }
     }
     #endregion

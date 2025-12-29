@@ -49,31 +49,33 @@ public class EnemyRangedAttack : MonoBehaviour
     #region Initialization
     public void InitRangedAttack(EnemyData data)
     {
-        DebugLog($"[InitRangedAttack] 호출됨 - enemyType: {data.enemyType}");
-        
+        Debug.Log($"[InitRangedAttack] 호출됨 - enemyType: {data.enemyType}");
+
         if (data.enemyType != EnemyType.Ranged)
         {
-            DebugLog($"[InitRangedAttack] Ranged 타입이 아니므로 비활성화");
+            Debug.Log($"[InitRangedAttack] Ranged 타입이 아니므로 비활성화");
             isInitialized = false;
             return;
         }
 
         attackInterval = data.attackInterval;
-        attackInterval += Random.Range(0f, 6f);
         distanceToPlayer = data.distanceToPlayer;
         projectilePrefab = data.projectilePrefab;
-        
-        DebugLog($"[InitRangedAttack] 초기화 완료 - Interval: {attackInterval}, Distance: {distanceToPlayer}, Prefab: {projectilePrefab?.name}");
-        
+
+        // 스폰 후 쿨다운 시간 대기
+        nextAttackTime = Time.time + attackInterval;
+
+        Debug.Log($"[InitRangedAttack] 초기화 완료 - 첫 공격은 {attackInterval}초 후");
+
         isInitialized = true;
-        
+
         StartCoroutine(AutoFinishSpawnCo());
     }
 
     IEnumerator AutoFinishSpawnCo()
     {
         yield return new WaitForSeconds(1f);
-        
+
         if (!finishedSpawn)
         {
             DebugLog("[AutoFinishSpawn] 자동으로 스폰 완료 처리");

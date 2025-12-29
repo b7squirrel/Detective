@@ -48,9 +48,6 @@ public class Enemy : EnemyBase
 
     WallManager wallManager;
     float nextOutOfRangeCheckingTime;
-
-    // ⭐ 원거리 공격 컴포넌트 참조 추가
-    EnemyRangedAttack rangedAttack;
     #endregion
 
     #region 유니티 콜백 함수
@@ -146,12 +143,12 @@ public class Enemy : EnemyBase
             dashAbility.InitDash(_data);
         }
 
-        // 앞으로 추가될 다른 능력들도 여기서 초기화
-        // EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
-        // if (dashAbility != null)
-        // {
-        //     dashAbility.InitDash(_data);
-        // }
+        // 레이저 능력 추가
+        EnemyLaserAbility laserAbility = GetComponent<EnemyLaserAbility>();
+        if (laserAbility != null)
+        {
+            laserAbility.InitLaser(_data);
+        }
     }
 
     public void SetFlying(Vector2 target)

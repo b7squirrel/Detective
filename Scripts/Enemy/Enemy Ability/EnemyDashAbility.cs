@@ -77,7 +77,10 @@ public class EnemyDashAbility : MonoBehaviour
         dashSpeed = data.dashSpeed;
         dashDuration = data.dashDuration;
 
-        Debug.Log($"[InitDash] 초기화 완료 - Cooldown: {dashCooldown}s, Speed: {dashSpeed}, Duration: {dashDuration}s");
+        // 스폰 후 쿨다운 시간 대기
+        nextDashTime = Time.time + dashCooldown;
+
+        Debug.Log($"[InitDash] 초기화 완료 - 첫 대시는 {dashCooldown}초 후");
 
         isInitialized = true;
 

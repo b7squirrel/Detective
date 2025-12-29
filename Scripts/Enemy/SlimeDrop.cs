@@ -42,7 +42,14 @@ public class SlimeDrop : MonoBehaviour
     }
     void CachingReferences()
     {
-        if (slimeDropManager == null) slimeDropManager = FindObjectOfType<SlimeDropManager>();
+        if (slimeDropManager == null)
+        {
+            slimeDropManager = FindObjectOfType<SlimeDropManager>();
+            if (slimeDropManager == null)
+            {
+                Debug.LogError("SlimeDropManager를 찾을 수 없습니다!");
+            }
+        }
         if (anim == null) anim = GetComponentInParent<Animator>();
     }
     #endregion
@@ -81,8 +88,11 @@ public class SlimeDrop : MonoBehaviour
         srBody.color = new Color(originalColorBody.r, originalColorBody.g, originalColorBody.b, 0f);
         srBodyCore.color = new Color(originalColorBodyCore.r, originalColorBodyCore.g, originalColorBodyCore.b, 0f);
 
-        //슬라임 드롭 매니져의 드롭리스트에서 자신을 제거하고 파괴
-        slimeDropManager.RemoveDrop(this.gameObject);
+        // null 체크 추가
+        if (slimeDropManager != null)
+        {
+            slimeDropManager.RemoveDrop(this.gameObject);
+        }
         Destroy(mainBody);
     }
     #endregion

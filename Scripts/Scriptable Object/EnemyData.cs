@@ -42,15 +42,25 @@ public class EnemyData : ScriptableObject
     [Tooltip("대시 지속 시간 (초)")]
     public float dashDuration = 0.5f;
 
+    //레이저 설정 추가
     [Header("Special Abilities - Laser")]
-    [Tooltip("레이저 발사 거리")]
-    public float laserRange = 8f;
     [Tooltip("레이저 쿨다운 (초)")]
-    public float laserCooldown = 4f;
-    [Tooltip("레이저 지속 시간")]
-    public float laserDuration = 1.5f;
-    [Tooltip("레이저 프리펩")]
-    public GameObject laserPrefab;
+    public float laserCooldown = 5f;
+    
+    [Tooltip("레이저 예고 시간 (초) - 빨간 선 표시")]
+    public float laserAnticipationTime = 1f;
+    
+    [Tooltip("레이저 발사 지속 시간 (초)")]
+    public float laserFireDuration = 0.3f;
+    
+    [Tooltip("레이저 데미지")]
+    public int laserDamage = 20;
+    
+    [Tooltip("레이저 사거리")]
+    public float laserRange = 100f;
+    
+    [Tooltip("레이저 두께")]
+    public float laserWidth = 0.2f;
 
     [Header("Prefabs")]
     public GameObject projectilePrefab;

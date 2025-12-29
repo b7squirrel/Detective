@@ -333,6 +333,7 @@ GameObject:
   - component: {fileID: 5548818968600387970}
   - component: {fileID: 7081024413670957278}
   - component: {fileID: 8967016695892023627}
+  - component: {fileID: 6925079293346068471}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -590,10 +591,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b0eb229f0a5b476f81b9c13757b2e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashCooldown: 3
-  dashSpeed: 15
-  dashDistance: 5
-  dashDuration: 0.3
+--- !u!114 &6925079293346068471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5297514985837409348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58c27f540a58d4487af331c1cd511fd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6160804460574017110
 GameObject:
   m_ObjectHideFlags: 0
