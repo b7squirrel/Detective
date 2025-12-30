@@ -60,7 +60,18 @@ public enum StageMusicType
     [Description("Battle with Beasts")]
     BattleWithBeasts,
     [Description("Final Showdown")]
-    FinalShowdown
+    FinalShowdown,
+    [Description("Stage 1")]
+    Stage1,
+    [Description("Stage 2")]
+    Stage2,
+    [Description("Stage 3")]
+    Stage3,
+    [Description("It's Bossing Time")]
+    ItsBossingTime,
+    [Description("Towel Defence Splash Screen")]
+    TowelDefenceSplashScreen
+
 }
 #endregion
 

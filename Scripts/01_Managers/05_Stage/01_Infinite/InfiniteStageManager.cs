@@ -58,6 +58,9 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     // 스폰 일시정지
     bool isSpawnPaused = false;
 
+    // ⭐⭐⭐ 웨이브 완료 이벤트 추가
+    public event System.Action<int> OnWaveComplete;
+
     void Awake()
     {
         poolManager = FindObjectOfType<PoolManager>();
@@ -211,6 +214,17 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         timeWaveUI = FindObjectOfType<TimeWaveUI>();
         enemyCountUI = FindObjectOfType<EnemyCountUI>();
+
+        // ⭐⭐⭐ 음악 초기화 추가
+        if (GameManager.instance != null && GameManager.instance.musicCreditManager != null)
+        {
+            GameManager.instance.musicCreditManager.Init();
+            Logger.Log("[InfiniteStage] MusicCreditManager.Init() called");
+        }
+        else
+        {
+            Logger.LogError("[InfiniteStage] GameManager or MusicCreditManager not found!");
+        }
 
         isInitialized = true;
 
@@ -369,6 +383,10 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             
             Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Complete ==========");
             Logger.Log($"[InfiniteStage] Killed: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
+
+            // ⭐⭐⭐ 웨이브 완료 이벤트 발생
+            OnWaveComplete?.Invoke(currentWave);
+            Logger.Log($"[InfiniteStage] OnWaveComplete event triggered for wave {currentWave}");
 
             // 3단계: 짧은 휴식
             float waitedTime = 0f;

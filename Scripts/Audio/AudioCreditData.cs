@@ -15,6 +15,10 @@ public class AudioCredit
 [CreateAssetMenu(menuName = "AudioCredit", fileName = "AudioCreditSo")]
 public class AudioCreditData : ScriptableObject
 {
+    [Header("일반 스테이지 음악")]
     [field: SerializeField] public AudioCredit[] AudioCredits;
 
+    [Header("무한 스테이지 음악")]
+    [Tooltip("무한 모드 전용 음악 (5개 권장)")]
+    [field: SerializeField] public AudioCredit[] InfiniteModeAudioCredits;
 }
