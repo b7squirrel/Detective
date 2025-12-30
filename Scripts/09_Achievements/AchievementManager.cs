@@ -34,6 +34,17 @@ public class AchievementManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    private void OnEnable()
+    {
+        // ⭐ 일일 리셋 이벤트 구독
+        DailyResetManager.OnDailyReset += ResetDailyQuests;
+    }
+
+    private void OnDisable()
+    {
+        // ⭐ 이벤트 구독 해제
+        DailyResetManager.OnDailyReset -= ResetDailyQuests;
+    }
 
     private void Initialize()
     {
@@ -131,11 +142,10 @@ public class AchievementManager : MonoBehaviour
 
     public void SaveAchievement(RuntimeAchievement ra)
     {
-        string id = ra.original.id;
-
-        PlayerPrefs.SetInt("ACH_" + id, ra.isCompleted ? 1 : 0);
-        PlayerPrefs.SetInt("ACH_PROGRESS_" + id, ra.progress);
-        PlayerPrefs.SetInt("ACH_REWARD_" + id, ra.isRewarded ? 1 : 0);
+        // ⭐ 동적 키 사용
+        PlayerPrefs.SetInt(ra.GetCompleteKey(), ra.isCompleted ? 1 : 0);
+        PlayerPrefs.SetInt(ra.GetProgressKey(), ra.progress);
+        PlayerPrefs.SetInt(ra.GetRewardKey(), ra.isRewarded ? 1 : 0);
     }
 
     public List<RuntimeAchievement> GetAll()
@@ -143,7 +153,59 @@ public class AchievementManager : MonoBehaviour
         return new List<RuntimeAchievement>(runtimeDict.Values);
     }
 
+    // ⭐ 일일 퀘스트만 가져오기
+    public List<RuntimeAchievement> GetDailyQuests()
+    {
+        List<RuntimeAchievement> dailyQuests = new();
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.isDailyQuest)
+                dailyQuests.Add(ra);
+        }
+        return dailyQuests;
+    }
 
+    // ⭐ 영구 업적만 가져오기
+    public List<RuntimeAchievement> GetPermanentAchievements()
+    {
+        List<RuntimeAchievement> permanentAchievements = new();
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (!ra.original.isDailyQuest)
+                permanentAchievements.Add(ra);
+        }
+        return permanentAchievements;
+    }
+
+    // ⭐ 일일 퀘스트 리셋 (매일 자정 호출됨)
+    public void ResetDailyQuests()
+    {
+        Logger.Log("[AchievementManager] 일일 퀘스트 리셋 시작");
+        
+        foreach (var ra in runtimeDict.Values)
+        {
+            // 일일 퀘스트만 리셋
+            if (ra.original.isDailyQuest)
+            {
+                ra.progress = 0;
+                ra.isCompleted = false;
+                ra.isRewarded = false;
+
+                // PlayerPrefs에 저장
+                PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
+                PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+                PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
+
+                // UI 갱신 이벤트
+                OnAnyProgressChanged?.Invoke(ra);
+            }
+        }
+
+        PlayerPrefs.Save();
+        Logger.Log("[AchievementManager] 일일 퀘스트 리셋 완료");
+    }
+
+    // ⭐ 모든 업적 리셋 (디버그용)
     public void ResetAllAchievements()
     {
         foreach (var ra in runtimeDict.Values)
@@ -152,10 +214,9 @@ public class AchievementManager : MonoBehaviour
             ra.isCompleted = false;
             ra.isRewarded = false;
 
-            string id = ra.original.id;
-            PlayerPrefs.SetInt("ACH_" + id, 0);
-            PlayerPrefs.SetInt("ACH_PROGRESS_" + id, 0);
-            PlayerPrefs.SetInt("ACH_REWARD_" + id, 0);
+            PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
+            PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+            PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
 
             OnAnyProgressChanged?.Invoke(ra);
         }

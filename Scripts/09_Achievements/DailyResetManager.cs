@@ -156,8 +156,8 @@ public class DailyResetManager : SingletonBehaviour<DailyResetManager>
         int secs = seconds % 60;
         return $"{hours:D2}:{minutes:D2}:{secs:D2}";
     }
-    
-    // ⭐ 디버그 테스트용
+
+    // 디버그 테스트용
     [ContextMenu("Debug: Simulate Next Day")]
     void DebugSimulateNextDay()
     {
@@ -166,13 +166,13 @@ public class DailyResetManager : SingletonBehaviour<DailyResetManager>
             Logger.LogError("[DEBUG] PlayerDataManager가 없습니다!");
             return;
         }
-        
+
         string yesterday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
         playerDataManager.SetLastLoginDate(yesterday);
         Logger.Log($"[DEBUG] 마지막 로그인을 어제로 설정: {yesterday}");
         Logger.Log("[DEBUG] 앱을 재시작하면 '연속 출석 유지' 메시지가 나옵니다.");
     }
-    
+
     [ContextMenu("Debug: Break Streak (3 days ago)")]
     void DebugBreakStreak()
     {
@@ -181,10 +181,38 @@ public class DailyResetManager : SingletonBehaviour<DailyResetManager>
             Logger.LogError("[DEBUG] PlayerDataManager가 없습니다!");
             return;
         }
-        
+
         string threeDaysAgo = DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd");
         playerDataManager.SetLastLoginDate(threeDaysAgo);
         Logger.Log($"[DEBUG] 마지막 로그인을 3일 전으로 설정: {threeDaysAgo}");
         Logger.Log("[DEBUG] 앱을 재시작하면 '연속 출석 초기화' 메시지가 나옵니다.");
+    }
+    // 특정 날짜로 설정
+    [ContextMenu("Debug: Set Day 1")]
+    void DebugSetDay1()
+    {
+        if (playerDataManager == null) return;
+
+        playerDataManager.SetConsecutiveDays(1);
+        playerDataManager.SetLastLoginDate(DailyResetManager.GetTodayString());
+        Logger.Log("[DEBUG] 연속 출석 1일로 설정");
+    }
+
+    [ContextMenu("Debug: Set Day 7")]
+    void DebugSetDay7()
+    {
+        if (playerDataManager == null) return;
+
+        playerDataManager.SetConsecutiveDays(7);
+        playerDataManager.SetLastLoginDate(DailyResetManager.GetTodayString());
+        Logger.Log("[DEBUG] 연속 출석 7일로 설정");
+    }
+
+    // 일일 퀘스트만 리셋 (연속 출석은 유지)
+    [ContextMenu("Debug: Reset Daily Quests Only")]
+    void DebugResetDailyQuestsOnly()
+    {
+        AchievementManager.Instance?.ResetDailyQuests();
+        Logger.Log("[DEBUG] 일일 퀘스트만 리셋");
     }
 }
