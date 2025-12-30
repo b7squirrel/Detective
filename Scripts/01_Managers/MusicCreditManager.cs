@@ -38,6 +38,10 @@ public class MusicCreditManager : MonoBehaviour
         if(musicVisualizer == null) musicVisualizer = GetComponent<MusicVisualizer>();
     }
 
+    public void InitBGMInfiniteStage()
+    {
+        
+    }
     void PlayBGM(int _index)
     {
         AudioClip stageMusic = creditData.AudioCredits[_index].Clip;

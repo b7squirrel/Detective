@@ -117,7 +117,9 @@ public class Spawner : MonoBehaviour
         enemy.transform.position = spawnPos + offset;
 
         // 초기화
-        enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
+        EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
+        enemyBase.InitEnemy(enemyToSpawn);
+        enemyBase.SetIsSplited(true);
 
         // 적 수 계산
         AddEnemyNumber();

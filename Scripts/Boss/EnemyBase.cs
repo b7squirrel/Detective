@@ -30,6 +30,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected bool isSplitable; // 처치하면 쪼개지는 적인지
     protected EnemyData splitableEnemyData; // 쪼개질 때의 적 데이터
     protected int splitNum; // 몇 개로 쪼개질지
+    protected bool isSplited; // 쪼개진 적이라면 킬 카운트 하지 않기
 
     protected bool isOffScreen; // 화면 밖에 있을 때 플레이어의 공격을 받지 않기 위한 플래그
     protected float offScreenCoolDown; // 너무 자주 콜라이더가 활성, 비활성 되지 않도록 쿨타임 주기
@@ -278,6 +279,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
             dieEffectPrefeab = _enemyToSpawn.splitDieEffectPrefab;
         }
 
+        isSplited = false; // 일단 false. 스포너의 spawnSplit에서 InitSplitedEnemy 호출해서 설정
+
         if (_enemyToSpawn.hitSound != null) hitSound = _enemyToSpawn.hitSound;
         if (_enemyToSpawn.dieSound != null) dieSound = _enemyToSpawn.dieSound;
 
@@ -291,6 +294,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 initialMat[i] = srFlash[i].material;
             }
         }
+    }
+
+    public void SetIsSplited(bool splited)
+    {
+        isSplited = splited;
     }
     #endregion
 
@@ -661,15 +669,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         StopAllCoroutines();
 
-        //sr.material = initialMat;
         IsGrouping = false;
         ResetFlip();
 
-        GameManager.instance.KillManager.UpdateCurrentKills(enemyType, isSubBoss, isBoss); // 처치한 적의 수 세기
+        GameManager.instance.KillManager.UpdateCurrentKills(enemyType, isSubBoss, isBoss);
 
         Spawner.instance.SubtractEnemyNumber();
         if (enemyFinder == null) enemyFinder = FindObjectOfType<EnemyFinder>();
-        //enemyFinder.RemoveEnemyFromList(transform);
 
         IsSlowed = false;
         finishedSpawn = false;
@@ -680,7 +686,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             FindObjectOfType<BossDieManager>().DieEvent(.1f, 2f);
         }
 
-        if (isSubBoss) // 프리펩에서 설정하는 is sub boss
+        if (isSubBoss)
         {
             CameraShake.instance.Shake();
         }
@@ -697,24 +703,23 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             for (int i = 0; i < splitNum; i++)
             {
-                Spawner.instance.SpawnSplit(splitableEnemyData, 0, true, transform.position); // 0번 프리펩(일반 적), 적의 수와 관계 없이 강제 스폰
+                Spawner.instance.SpawnSplit(splitableEnemyData, 0, true, transform.position);
             }
-            GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab); // 초기화에서 입력 받은 자체 die prefab
+            GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
             if (explosionEffect != null) explosionEffect.transform.position = transform.position;
         }
         else
         {
-            GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect(); // 공용 die effect
+            GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
             if (explosionEffect != null) explosionEffect.transform.position = transform.position;
         }
 
-        // 무한 모드에서만 호출 (조건 체크 후)
-        if (isInfiniteMode && infiniteStageManager != null)
+        // ⭐ 무한 모드 카운트, 쪼개진 조그만 적이 아닐 때만 카운트
+        if (isInfiniteMode && infiniteStageManager != null && isSplited == false)
         {
             infiniteStageManager.OnEnemyKilled();
         }
 
-        // 구독이 있다면 이벤트 실행
         OnDeath?.Invoke();
 
         gameObject.SetActive(false);

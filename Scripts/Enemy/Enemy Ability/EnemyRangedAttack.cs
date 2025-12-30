@@ -8,6 +8,8 @@ public class EnemyRangedAttack : MonoBehaviour
     [SerializeField] float attackInterval = 3f;
     [SerializeField] float distanceToPlayer = 5f;
     [SerializeField] GameObject projectilePrefab;
+    [Range(0.1f, 1f)]
+    [SerializeField] float shootRate;
     
     float nextAttackTime;
     bool finishedSpawn;
@@ -105,7 +107,7 @@ public class EnemyRangedAttack : MonoBehaviour
                 DebugLog("[RangedAttackCoolDown] 플레이어 감지됨");
                 
                 float randomValue = Random.Range(0f, 1f);
-                if (randomValue <= .1f)
+                if (randomValue <= shootRate)
                 {
                     DebugLog($"[RangedAttackCoolDown] 공격 실행! (확률: {randomValue})");
                     FireProjectile();

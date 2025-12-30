@@ -131,6 +131,15 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     {
         currentWaveEnemiesKilled++;
 
+        // ⭐ 디버그 로그
+        Logger.Log($">>> [Kill] Wave {currentWave}: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
+
+        // ⭐ 오버플로우 경고
+        if (currentWaveEnemiesKilled > currentWavePlannedEnemies)
+        {
+            Logger.LogWarning($">>> [Kill] WARNING: Killed ({currentWaveEnemiesKilled}) > Planned ({currentWavePlannedEnemies})!");
+        }
+
         // UI 업데이트
         if (enemyCountUI != null)
         {
@@ -139,7 +148,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
                 currentWavePlannedEnemies.ToString()
             );
         }
-        Logger.Log($"[InfiniteStage] Enemy killed: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
     }
 
     IEnumerator WaitAndInitialize()

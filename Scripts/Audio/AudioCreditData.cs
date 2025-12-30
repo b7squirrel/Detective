@@ -10,7 +10,7 @@ public class AudioCredit
 }
 
 /// <summary>
-/// Å¬¸³, Å¸ÀÌÆ², Å©·¹µ÷À» Æ÷ÇÔÇÏ´Â Å¬·¡½º ¸®½ºÆ®¸¦ °¡Áø SO
+/// ë°°ê²½ìŒì•… ë° ì‚¬ìš´ë“œ íš¨ê³¼ì˜ í¬ë ˆë”§ ì •ë³´ë¥¼ ì €ì¥í•˜ëŠ” ScriptableObject
 /// </summary>
 [CreateAssetMenu(menuName = "AudioCredit", fileName = "AudioCreditSo")]
 public class AudioCreditData : ScriptableObject

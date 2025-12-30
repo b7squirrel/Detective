@@ -578,6 +578,7 @@ MonoBehaviour:
   attackInterval: 3
   distanceToPlayer: 10
   projectilePrefab: {fileID: 2430061364096046730, guid: 01f8bc472c75b445f9bd74dda9b8e328, type: 3}
+  shootRate: 0.25
   showDebugLog: 0
 --- !u!114 &8967016695892023627
 MonoBehaviour:
@@ -603,6 +604,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58c27f540a58d4487af331c1cd511fd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anticipationLine: {fileID: 0}
+  fireLine: {fileID: 0}
 --- !u!1 &6160804460574017110
 GameObject:
   m_ObjectHideFlags: 0
