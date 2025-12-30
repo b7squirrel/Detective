@@ -14,6 +14,11 @@ public class PlayerData
 
     public int bestWave; // 무한모드 웨이브 최고 기록
     public float bestSurvivalTime; // 무한 모드 시간 최고 기록
+
+    // 일일 시스템 필드
+    public string lastLoginDate;        // "2025-12-30" 형식
+    public int consecutiveDays;         // 연속 출석일
+    public bool hasTakenDailyReward;    // 오늘 출석 보상 수령 여부
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -289,5 +294,27 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     public GameMode GetGameMode()
     {
         return currentGameMode;
+    }
+
+    // --- Daily System ---
+    public string GetLastLoginDate() => playerData.lastLoginDate ?? "";
+    public void SetLastLoginDate(string date)
+    {
+        playerData.lastLoginDate = date;
+        SavePlayerData();
+    }
+
+    public int GetConsecutiveDays() => playerData.consecutiveDays;
+    public void SetConsecutiveDays(int days)
+    {
+        playerData.consecutiveDays = days;
+        SavePlayerData();
+    }
+
+    public bool HasTakenDailyReward() => playerData.hasTakenDailyReward;
+    public void SetHasTakenDailyReward(bool taken)
+    {
+        playerData.hasTakenDailyReward = taken;
+        SavePlayerData();
     }
 }
