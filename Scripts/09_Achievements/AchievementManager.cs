@@ -70,6 +70,16 @@ public class AchievementManager : MonoBehaviour
 
         if (gemCollectFX == null)
             gemCollectFX = FindObjectOfType<GemCollectFX>();
+
+        // 디버그: 일일 퀘스트 목록 출력
+        Logger.Log($"[AchievementManager] 총 업적: {runtimeDict.Count}개");
+        Logger.Log($"[AchievementManager] 일일 퀘스트: {GetDailyQuests().Count}개");
+        Logger.Log($"[AchievementManager] 영구 업적: {GetPermanentAchievements().Count}개");
+
+        foreach (var daily in GetDailyQuests())
+        {
+            Logger.Log($"  - {daily.GetTitle()}: {daily.GetDescription()}");
+        }
     }
 
 
