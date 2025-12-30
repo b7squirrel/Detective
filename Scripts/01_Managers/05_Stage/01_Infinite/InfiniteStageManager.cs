@@ -434,7 +434,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         if (enemyIndex >= 0 && enemyIndex < enemyConfigs.Length)
         {
-            spawner.Spawn(enemyConfigs[enemyIndex].data, enemyIndex, false);
+            spawner.SpawnForInfiniteMode(enemyConfigs[enemyIndex].data, enemyIndex); // 무한 모드 전용 Spawner 메서드
         }
         else
         {

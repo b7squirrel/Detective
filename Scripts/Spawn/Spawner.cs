@@ -72,7 +72,7 @@ public class Spawner : MonoBehaviour
         // 적들이 몰려옵니다의 경우 강제로 스폰
         if (forceSpawn == false)
         {
-            if (currentEnemyNumbers >= maxEnemyInScene)
+            if (currentEnemyNumbers >= maxEnemyInScene) // 최대 적 수 제한
                 return;
         }
 
@@ -85,6 +85,21 @@ public class Spawner : MonoBehaviour
         enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
 
         // 적 수 계산
+        AddEnemyNumber();
+    }
+    /// <summary>
+    /// 무한 모드 전용 스폰 (maxEnemyInScene 제한 무시)
+    /// </summary>
+    public void SpawnForInfiniteMode(EnemyData enemyToSpawn, int index)
+    {
+        // ⭐ maxEnemyInScene 체크 없이 바로 스폰
+
+        GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
+        Vector2 spawnPoint = GetAvailablePoints();
+        enemy.transform.position = new Vector2(spawnPoint.x, spawnPoint.y);
+
+        enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
+
         AddEnemyNumber();
     }
     public void SpawnSplit(EnemyData enemyToSpawn, int index, bool forceSpawn, Vector2 spawnPos)
