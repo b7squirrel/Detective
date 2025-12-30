@@ -14,7 +14,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public EnemyStats Stats { get; set; }
     protected EnemyStatCalculator calculator; // 스탯 계산을 위해
     protected int currentStageNumber; // 스테이지에 따른 스탯 계산을 위해
-    public float DefaultSpeed {get; protected set;} // 속도를 외부에서 변경할 때 원래 속도를 저장해 두기 위해
+    public float DefaultSpeed { get; protected set; } // 속도를 외부에서 변경할 때 원래 속도를 저장해 두기 위해
     protected float currentSpeed;
     public bool IsSlowed { get; set; } // 슬로우 스킬을 
     public bool IsBoss { get; set; }
@@ -46,6 +46,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     bool isGrouned; // 점프 중이라면 플립을 하지 않도록 하기 위해
 
+    // static (모든 적이 공유)
+    static InfiniteStageManager infiniteStageManager;
+    static bool isInfiniteMode = false;
+    static bool hasCheckedMode = false;
     public event Action OnDeath; // 다른 클래스에서 죽을 때 실행해야하는 함수들 등록
     #endregion
 
@@ -81,7 +85,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [Header("특수 능력")]
     protected EnemyDashAbility dashAbility;
     protected EnemyRangedAttack rangedAttack;
-    protected EnemyLaserAbility laserAbility; 
+    protected EnemyLaserAbility laserAbility;
 
     [Header("Sounds")]
     [SerializeField] protected AudioClip[] hits;
@@ -103,9 +107,22 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #endregion
 
     #region 유니티 콜백
-    
+
     protected virtual void OnEnable()
     {
+        // 최초 1회만 체크 (게임 시작 시)
+        if (!hasCheckedMode)
+        {
+            infiniteStageManager = FindObjectOfType<InfiniteStageManager>();
+            isInfiniteMode = (infiniteStageManager != null);
+            hasCheckedMode = true;
+
+            if (isInfiniteMode)
+            {
+                Logger.Log("[EnemyBase] Infinite mode detected");
+            }
+        }
+
         if (initDone == false)
         {
             Target = GameManager.instance.player.GetComponent<Rigidbody2D>();
@@ -201,16 +218,35 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         enemyColor = _enemyToSpawn.enemyColor;
 
-        if (currentStageNumber == 0) currentStageNumber = PlayerDataManager.Instance.GetCurrentStageNumber();
-        if (calculator == null) calculator = GameManager.instance.enemyStatCalculator;
+        // ⭐ 무한 모드와 레귤러 모드 분기
+        if (isInfiniteMode && infiniteStageManager != null)
+        {
+            // 무한 모드: 웨이브를 스테이지로 사용 (최대 30)
+            int waveNumber = infiniteStageManager.GetCurrentWave();
+            currentStageNumber = Mathf.Min(waveNumber, 30);
+
+            Logger.Log($"[Enemy] Infinite mode - Wave {waveNumber} → Stage {currentStageNumber}");
+        }
+        else
+        {
+            // 레귤러 모드: 현재 스테이지
+            if (currentStageNumber == 0)
+            {
+                currentStageNumber = PlayerDataManager.Instance.GetCurrentStageNumber();
+            }
+            Logger.Log($"[Enemy] Regular mode - Stage {currentStageNumber}");
+        }
+
+        if (calculator == null)
+            calculator = GameManager.instance.enemyStatCalculator;
 
         if (calculator != null)
         {
             this.Stats = calculator.GetStatsForStage(currentStageNumber, _enemyToSpawn);
+            Logger.Log($"[Enemy] Stats - Speed: {Stats.speed}, HP: {Stats.hp}, Damage: {Stats.damage}");
         }
         else
         {
-            // ⭐ Fallback 수정
             this.Stats = new EnemyStats
             {
                 hp = 100,
@@ -219,8 +255,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 rangedDamage = 10,
                 experience_reward = 50
             };
-            Debug.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다. 기본 스탯을 사용합니다.");
+            Debug.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다.");
         }
+
+        // 속도 설정
+        DefaultSpeed = Stats.speed;
+        currentSpeed = DefaultSpeed;
 
         // 쪼개지는 적 관련 초기화
         if (_enemyToSpawn.split == null)
@@ -420,9 +460,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         isGrouned = _isGrouinded;
     }
     public float GetCurrentSpeed()
-{
-    return currentSpeed;
-}
+    {
+        return currentSpeed;
+    }
 
     #region 애니메이션 이벤트
     // 스폰 애니메이션이 끝나는 지점에 이벤트
@@ -666,6 +706,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect(); // 공용 die effect
             if (explosionEffect != null) explosionEffect.transform.position = transform.position;
+        }
+
+        // 무한 모드에서만 호출 (조건 체크 후)
+        if (isInfiniteMode && infiniteStageManager != null)
+        {
+            infiniteStageManager.OnEnemyKilled();
         }
 
         // 구독이 있다면 이벤트 실행

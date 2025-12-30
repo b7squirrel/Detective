@@ -7,12 +7,18 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     [Header("Enemy Configuration")]
     [SerializeField] InfiniteEnemyConfig[] enemyConfigs;
 
-    [Header("Wave Settings")]
-    [SerializeField] float baseSpawnInterval = 2f;
-    [SerializeField] float waveInterval = 10f;
-    [SerializeField] int baseEnemiesPerWave = 5;
-    [SerializeField] float difficultyMultiplier = 1.2f;
-    [SerializeField] int enemiesIncreasePerWave = 2;
+    [Header("Wave Settings - Exponential Growth")]
+    [SerializeField] int baseEnemiesPerWave = 15;
+    [SerializeField] float enemyGrowthRate = 1.35f;
+    [SerializeField] int maxEnemiesPerWave = 120;
+    
+    [Header("Spawn Timing")]
+    [SerializeField] float baseSpawnInterval = 1.0f;
+    [SerializeField] float minSpawnInterval = 0.25f;
+    [SerializeField] float waveInterval = 3f;  // ⭐ 웨이브 클리어 후 짧은 휴식
+    
+    [Header("Difficulty")]
+    [SerializeField] float difficultyMultiplier = 1.15f;
 
     [Header("Initial Setup")]
     [SerializeField] int initialGemCount = 15;
@@ -33,6 +39,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
     [Header("UI")]
     TimeWaveUI timeWaveUI;
+    EnemyCountUI enemyCountUI;
 
     // 게임 상태
     int currentWave = 0;
@@ -40,69 +47,101 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     float chestSpawnTimer = 0f;
     bool isInitialized = false;
 
+    // ⭐ 웨이브 추적 변수들
+    int currentWaveEnemiesSpawned = 0;     // 현재 웨이브에서 스폰된 적 수
+    int currentWaveEnemiesKilled = 0;      // 현재 웨이브에서 처치한 적 수
+    int currentWavePlannedEnemies = 0;     // 현재 웨이브 목표 적 수
+
     // 성과
-    float survivalTime = 0f; // 생존 시간. 초 단위
+    float survivalTime = 0f;
 
     // 스폰 일시정지
     bool isSpawnPaused = false;
 
     void Awake()
     {
-        Debug.Log("========================================");
-        Debug.Log(">>> [InfiniteStage] AWAKE CALLED!");
-        Debug.Log("========================================");
-
         poolManager = FindObjectOfType<PoolManager>();
         spawner = FindObjectOfType<Spawner>();
         wallManager = FindObjectOfType<WallManager>();
         fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
-
-        Debug.Log($">>> [InfiniteStage] PoolManager: {(poolManager != null ? "FOUND" : "NULL")}");
-        Debug.Log($">>> [InfiniteStage] Spawner: {(spawner != null ? "FOUND" : "NULL")}");
     }
 
     void Start()
     {
-        Debug.Log(">>> [InfiniteStage] START CALLED!");
         StartCoroutine(WaitAndInitialize());
     }
 
     void Update()
     {
-        if (!isInitialized)
-        {
-            // ⭐ 초기화 대기 중 로그 (최초 1회만)
-            if (Time.frameCount % 60 == 0)
-            {
-                Debug.Log($">>> [InfiniteStage] Waiting for initialization... Frame: {Time.frameCount}");
-            }
-            return;
-        }
-
-        // 스폰이 일시정지되었으면 상자 스폰도 중지
+        if (!isInitialized) return;
         if (isSpawnPaused) return;
 
-        // 생존 시간 증가
         survivalTime += Time.deltaTime;
-
-        // 시간 업데이트 확인 로그 (1초마다)
-        if (Time.frameCount % 60 == 0)
-        {
-            Debug.Log($">>> [InfiniteStage] Update running - Time: {survivalTime:F1}s, Wave: {currentWave}");
-        }
-
         UpdateChestSpawn();
     }
 
+    // ⭐ Public Getter 메서드들
     public int GetCurrentWave() => currentWave;
     public float GetSurvivalTime() => survivalTime;
+    
+    /// <summary>
+    /// 현재 살아있는 적의 수
+    /// </summary>
+    public int GetCurrentEnemyCount()
+    {
+        if (spawner == null) return 0;
+        return spawner.GetCurrentEnemyNums();
+    }
+    
+    /// <summary>
+    /// 현재 웨이브에서 처치한 적의 수
+    /// </summary>
+    public int GetCurrentWaveKilledCount()
+    {
+        return currentWaveEnemiesKilled;
+    }
+    
+    /// <summary>
+    /// 현재 웨이브에서 스폰될 예정인 총 적 수
+    /// </summary>
+    public int GetCurrentWavePlannedCount()
+    {
+        return currentWavePlannedEnemies;
+    }
+    
+    /// <summary>
+    /// 현재 웨이브 진행도 (0.0 ~ 1.0)
+    /// </summary>
+    public float GetCurrentWaveProgress()
+    {
+        if (currentWavePlannedEnemies == 0) return 0f;
+        return (float)currentWaveEnemiesKilled / currentWavePlannedEnemies;
+    }
 
-    // ISpawnController 구현
     public void PauseSpawn(bool pause)
     {
         isSpawnPaused = pause;
         Logger.Log($"[InfiniteStage] Spawn {(pause ? "paused" : "resumed")}");
     }
+
+    /// <summary>
+    /// ⭐ 적이 죽었을 때 호출 (외부에서)
+    /// </summary>
+    public void OnEnemyKilled()
+    {
+        currentWaveEnemiesKilled++;
+
+        // UI 업데이트
+        if (enemyCountUI != null)
+        {
+            enemyCountUI.UpdateWaveProgress(
+                currentWaveEnemiesKilled.ToString(),
+                currentWavePlannedEnemies.ToString()
+            );
+        }
+        Logger.Log($"[InfiniteStage] Enemy killed: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
+    }
+
     IEnumerator WaitAndInitialize()
     {
         Logger.Log("[InfiniteStage] Waiting for Essential scene...");
@@ -116,15 +155,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
                 poolManager == null) &&
                waitedFrames < maxWaitFrames)
         {
-            // 무엇을 기다리는지 출력
-            if (waitedFrames % 30 == 0)
-            {
-                Debug.Log($">>> [InfiniteStage] Waiting... Frame {waitedFrames}/300");
-                Debug.Log($"    PickupSpawner: {(PickupSpawner.Instance != null ? "OK" : "NULL")}");
-                Debug.Log($"    GameManager: {(GameManager.instance != null ? "OK" : "NULL")}");
-                Debug.Log($"    Player: {(Player.instance != null ? "OK" : "NULL")}");
-                Debug.Log($"    PoolManager: {(poolManager != null ? "OK" : "NULL")}");
-            }
             yield return null;
             waitedFrames++;
         }
@@ -144,68 +174,42 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         Initialize();
     }
+
     #region 초기화
     void Initialize()
     {
-        Debug.Log(">>> [InfiniteStage] ========== INITIALIZE START ==========");
+        Logger.Log("[InfiniteStage] Initializing Infinite Mode...");
 
         if (!ValidateConfiguration())
         {
-            Debug.LogError(">>> [InfiniteStage] Configuration INVALID!");
+            Logger.LogError("[InfiniteStage] Invalid configuration!");
             return;
         }
-        Debug.Log(">>> [InfiniteStage] Configuration OK");
 
         if (!ValidateManagers())
         {
-            Debug.LogError(">>> [InfiniteStage] Managers MISSING!");
+            Logger.LogError("[InfiniteStage] Required managers missing!");
             return;
         }
-        Debug.Log(">>> [InfiniteStage] Managers OK");
 
         if (wallManager != null)
         {
             wallManager.SetWallSize();
-            Debug.Log(">>> [InfiniteStage] Wall configured");
         }
 
         poolManager.InitPools();
-        Debug.Log(">>> [InfiniteStage] Base pools initialized");
-
         InitializeEnemyPools();
-        Debug.Log(">>> [InfiniteStage] Enemy pools initialized");
-
         SpawnInitialResources();
-        Debug.Log(">>> [InfiniteStage] Initial resources spawned");
 
         timeWaveUI = FindObjectOfType<TimeWaveUI>();
-        Debug.Log($">>> [InfiniteStage] TimeWaveUI: {(timeWaveUI != null ? "FOUND" : "NULL")}");
+        enemyCountUI = FindObjectOfType<EnemyCountUI>();
 
         isInitialized = true;
-        Debug.Log(">>> [InfiniteStage] isInitialized = TRUE");
 
         StartCoroutine(WaveLoop());
-        Debug.Log(">>> [InfiniteStage] WaveLoop started");
-        
         StartCoroutine(UpdateUI());
-        Debug.Log(">>> [InfiniteStage] UpdateUI started");
 
-        Debug.Log(">>> [InfiniteStage] ========== INITIALIZE COMPLETE ==========");
-    }
-    #endregion
-
-    IEnumerator UpdateUI()
-    {
-        while (true)
-        {
-            if (timeWaveUI != null)
-            {
-                float currentTime = GetSurvivalTime();
-                string timeFormatted = new GeneralFuctions().FormatTime(currentTime);
-                timeWaveUI.InitTimeWaveUI(timeFormatted, currentWave.ToString());
-            }
-            yield return new WaitForSeconds(.1f); // 0.1초마다 업데이트
-        }
+        Logger.Log("[InfiniteStage] Initialization complete!");
     }
 
     bool ValidateConfiguration()
@@ -232,6 +236,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         return true;
     }
+
     bool ValidateManagers()
     {
         bool allValid = true;
@@ -268,24 +273,21 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         return allValid;
     }
+
     void InitializeEnemyPools()
     {
-        // enemyConfigs에서 프리팹만 추출
         GameObject[] prefabs = new GameObject[enemyConfigs.Length];
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
             prefabs[i] = enemyConfigs[i].prefab;
         }
 
-        // 풀 초기화
         poolManager.InitInfiniteEnemyPools(prefabs);
-
         Logger.Log($"[InfiniteStage] Initialized {prefabs.Length} enemy types");
     }
 
     void SpawnInitialResources()
     {
-        // 초기 보석 스폰
         for (int i = 0; i < initialGemCount; i++)
         {
             Vector2 pos = GetRandomSpawnPosition();
@@ -296,7 +298,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             }
         }
 
-        // 초기 상자 스폰
         if (chestPrefab != null && fieldItemSpawner != null)
         {
             Vector2 chestPos = GetRandomPointInRing(chestInnerRadius, chestOuterRadius);
@@ -305,20 +306,63 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         Logger.Log($"[InfiniteStage] Spawned {initialGemCount} gems and 1 chest");
     }
+    #endregion
 
+    IEnumerator UpdateUI()
+    {
+        while (true)
+        {
+            if (timeWaveUI != null)
+            {
+                float currentTime = GetSurvivalTime();
+                string timeFormatted = new GeneralFuctions().FormatTime(currentTime);
+                timeWaveUI.InitTimeWaveUI(timeFormatted, currentWave.ToString());
+            }
+
+            if(enemyCountUI != null)
+            {
+                enemyCountUI.InitDebugCurrentEnemies(GetCurrentEnemyCount().ToString());
+            }
+            yield return new WaitForSeconds(.1f);
+        }
+    }
+
+    // ⭐⭐⭐ 핵심 변경: 웨이브 루프
     IEnumerator WaveLoop()
     {
-        Debug.Log(">>> [InfiniteStage] WaveLoop STARTED");
-        
         while (true)
         {
             currentWave++;
-            Debug.Log($">>> [InfiniteStage] ========== WAVE {currentWave} START ==========");
 
+            // 웨이브 시작 시 카운터 초기화
+            currentWaveEnemiesSpawned = 0;
+            currentWaveEnemiesKilled = 0;
+
+            // 이번 웨이브 목표 적 수 계산
+            float rawCount = baseEnemiesPerWave * Mathf.Pow(enemyGrowthRate, currentWave - 1);
+            currentWavePlannedEnemies = Mathf.Min(Mathf.RoundToInt(rawCount), maxEnemiesPerWave);
+
+            // 이제 UI 업데이트 (계산 후!)
+            if (enemyCountUI != null)
+            {
+                enemyCountUI.UpdateWaveProgress("0", currentWavePlannedEnemies.ToString());
+            }
+
+            Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Start ==========");
+            Logger.Log($"[InfiniteStage] Target: {currentWavePlannedEnemies} enemies");
+
+            // 1단계: 적 스폰
             yield return StartCoroutine(SpawnWave());
 
-            Debug.Log($">>> [InfiniteStage] ========== WAVE {currentWave} COMPLETE ==========");
+            Logger.Log($"[InfiniteStage] Spawning complete. Waiting for wave clear...");
+            
+            // 2단계: 모든 적 처치 대기
+            yield return StartCoroutine(WaitForWaveClear());
+            
+            Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Complete ==========");
+            Logger.Log($"[InfiniteStage] Killed: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
 
+            // 3단계: 짧은 휴식
             float waitedTime = 0f;
             while (waitedTime < waveInterval)
             {
@@ -329,35 +373,59 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
                 yield return null;
             }
 
+            // 4단계: 난이도 증가
             IncreaseDifficulty();
         }
     }
 
+    // 새로운 메서드: 웨이브 클리어 대기
+    IEnumerator WaitForWaveClear()
+    {
+        // 모든 적이 죽을 때까지 대기
+        while (GetCurrentEnemyCount() > 0)
+        {
+            // 플레이어가 죽었으면 중단
+            if (GameManager.instance != null && GameManager.instance.IsPlayerDead)
+            {
+                Logger.Log("[InfiniteStage] Player dead during wave clear");
+                yield break;
+            }
+            
+            yield return new WaitForSeconds(0.5f);  // 0.5초마다 체크
+        }
+        
+        Logger.Log("[InfiniteStage] All enemies cleared!");
+    }
+
     IEnumerator SpawnWave()
     {
-        int enemiesToSpawn = baseEnemiesPerWave + (currentWave - 1) * enemiesIncreasePerWave;
-        float spawnDelay = baseSpawnInterval / Mathf.Max(1f, currentDifficulty * 0.5f);
+        int enemiesToSpawn = currentWavePlannedEnemies;
+        
+        float spawnDelay = baseSpawnInterval / currentDifficulty;
+        spawnDelay = Mathf.Max(spawnDelay, minSpawnInterval);
 
-        Logger.Log($"[InfiniteStage] Wave {currentWave}: Spawning {enemiesToSpawn} enemies (delay: {spawnDelay:F2}s)");
+        Logger.Log($"[InfiniteStage] Spawning {enemiesToSpawn} enemies with {spawnDelay:F2}s delay");
 
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             if (GameManager.instance != null && GameManager.instance.IsPlayerDead)
             {
-                Logger.Log("[InfiniteStage] Player dead, stopping wave");
+                Logger.Log("[InfiniteStage] Player dead, stopping spawn");
                 yield break;
             }
 
-            // 스폰 일시정지 체크
             while (isSpawnPaused)
             {
                 yield return null;
             }
 
             SpawnRandomEnemy();
+            currentWaveEnemiesSpawned++;  // ⭐ 카운트 증가
 
             yield return new WaitForSeconds(spawnDelay);
         }
+        
+        Logger.Log($"[InfiniteStage] Spawned {currentWaveEnemiesSpawned} / {currentWavePlannedEnemies}");
     }
 
     void SpawnRandomEnemy()
@@ -376,7 +444,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
     int GetWeightedRandomEnemyIndex()
     {
-        // 현재 웨이브에서 사용 가능한 적들만 필터링
         List<int> availableIndices = new List<int>();
         List<int> availableWeights = new List<int>();
 
@@ -395,7 +462,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             return 0;
         }
 
-        // 가중치 기반 랜덤 선택
         int totalWeight = 0;
         for (int i = 0; i < availableWeights.Count; i++)
         {
@@ -420,7 +486,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     void IncreaseDifficulty()
     {
         currentDifficulty *= difficultyMultiplier;
-        Logger.Log($"[InfiniteStage] Difficulty increased to {currentDifficulty:F2}");
+        Logger.Log($"[InfiniteStage] Difficulty: {currentDifficulty:F2}x");
     }
 
     void UpdateChestSpawn()
@@ -435,8 +501,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             Vector2 chestPos = GetRandomPointInRing(chestInnerRadius, chestOuterRadius);
             fieldItemSpawner.SpawnEggBox(chestPos);
             chestSpawnTimer = 0f;
-
-            Logger.Log($"[InfiniteStage] Spawned chest at {chestPos}");
         }
     }
 
@@ -454,11 +518,20 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     }
 
     #region Debug
-    [ContextMenu("Force Next Wave")]
-    void DebugForceNextWave()
+    [ContextMenu("Print Wave Preview (Next 10 Waves)")]
+    void DebugPrintWavePreview()
     {
-        StopAllCoroutines();
-        StartCoroutine(WaveLoop());
+        Logger.Log("=== Wave Preview ===");
+        for (int wave = 1; wave <= 10; wave++)
+        {
+            float rawCount = baseEnemiesPerWave * Mathf.Pow(enemyGrowthRate, wave - 1);
+            int count = Mathf.Min(Mathf.RoundToInt(rawCount), maxEnemiesPerWave);
+            float difficulty = Mathf.Pow(difficultyMultiplier, wave - 1);
+            float spawnDelay = Mathf.Max(baseSpawnInterval / difficulty, minSpawnInterval);
+            float duration = count * spawnDelay;
+            
+            Logger.Log($"Wave {wave}: {count} enemies, {spawnDelay:F2}s interval, ~{duration:F0}s spawn time");
+        }
     }
 
     [ContextMenu("Print Current State")]
@@ -466,21 +539,10 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     {
         Logger.Log($"=== Infinite Stage State ===");
         Logger.Log($"Current Wave: {currentWave}");
-        Logger.Log($"Difficulty: {currentDifficulty:F2}");
-        Logger.Log($"Available Enemies: {GetAvailableEnemyCount()}");
-    }
-
-    int GetAvailableEnemyCount()
-    {
-        int count = 0;
-        for (int i = 0; i < enemyConfigs.Length; i++)
-        {
-            if (enemyConfigs[i].IsAvailableAtWave(currentWave))
-            {
-                count++;
-            }
-        }
-        return count;
+        Logger.Log($"Wave Progress: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
+        Logger.Log($"Enemies Alive: {GetCurrentEnemyCount()}");
+        Logger.Log($"Difficulty: {currentDifficulty:F2}x");
+        Logger.Log($"Survival Time: {survivalTime:F1}s");
     }
     #endregion
 }

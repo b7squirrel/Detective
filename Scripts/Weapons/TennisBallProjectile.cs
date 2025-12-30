@@ -33,12 +33,7 @@ public class TennisBallProjectile : ProjectileBase
         if (other.contacts.Length > 0)
         {
             Vector2 normalVector = other.contacts[0].normal;
-            Debug.Log("Normal Vector: " + normalVector);
             HandleCollisionWithNormal(other, normalVector, hitEffect);
-        }
-        else
-        {
-            Debug.LogWarning("No contacts available in the collision.");
         }
     }
 
@@ -67,7 +62,29 @@ public class TennisBallProjectile : ProjectileBase
             TriggerHitEffects();
         }
     }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
 
+        if (other.gameObject.CompareTag("Props"))
+        {
+            // 데미지 처리
+            other.gameObject.GetComponent<Idamageable>()?.TakeDamage(
+                Damage,
+                KnockBackChance,
+                KnockBackSpeedFactor,
+                transform.position,
+                hitEffect);
+
+            // 트리거 오브젝트는 단순 반대 방향 반사
+            // (Chest 같은 소품은 정확한 물리 반사가 덜 중요)
+            Direction = -Direction.normalized;
+            rb.velocity = Vector2.zero;
+
+            TriggerHitEffects();
+            HitObject();
+        }
+    }
     private void ReflectDirection(Vector2 normalVector)
     {
         Vector2 incomingVector = Direction.normalized;

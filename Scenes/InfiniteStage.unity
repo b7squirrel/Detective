@@ -340,25 +340,27 @@ MonoBehaviour:
     unlockWave: 0
   - prefab: {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
     data: {fileID: 11400000, guid: bcbd177aa303021469fd61e76005ade5, type: 2}
-    weight: 3
-    unlockWave: 1
+    weight: 5
+    unlockWave: 0
   - prefab: {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
     data: {fileID: 11400000, guid: 172a2ed0371e4464c815c3f6f9e29142, type: 2}
-    weight: 2
-    unlockWave: 2
+    weight: 5
+    unlockWave: 0
   - prefab: {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
     data: {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
-    weight: 1
-    unlockWave: 3
+    weight: 5
+    unlockWave: 0
   - prefab: {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
     data: {fileID: 11400000, guid: 92d6de594e5b3974d8ec573903e0d7f7, type: 2}
-    weight: 0
-    unlockWave: 4
-  baseSpawnInterval: 2
-  waveInterval: 10
-  baseEnemiesPerWave: 20
-  difficultyMultiplier: 1.2
-  enemiesIncreasePerWave: 5
+    weight: 5
+    unlockWave: 0
+  baseEnemiesPerWave: 50
+  enemyGrowthRate: 2.5
+  maxEnemiesPerWave: 700
+  baseSpawnInterval: 0.1
+  minSpawnInterval: 0.05
+  waveInterval: 2
+  difficultyMultiplier: 1.25
   initialGemCount: 15
   gemPrefab: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
   spawnRadius: 20
