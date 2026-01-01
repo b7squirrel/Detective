@@ -2,12 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class AchievementPanel : MonoBehaviour
 {
     [SerializeField] private Transform content;
     [SerializeField] private GameObject achievementItemPrefab;
-    [SerializeField] private int maxDisplayCount = 5; // ★ 인스펙터에서 설정
+    [SerializeField] private int maxDisplayCount = 5;
+
+    [Header("⭐ 탭 시스템")]
+    [SerializeField] private Button tabPermanentButton;  // 영구 업적 탭
+    [SerializeField] private Button tabDailyButton;      // 일일 퀘스트 탭
+    [SerializeField] private TextMeshProUGUI titleText;  // 패널 제목
+
+    [Header("탭 색상 설정")]
+    [SerializeField] private Color activeTabColor = Color.white;
+    [SerializeField] private Color inactiveTabColor = Color.gray;
+
+    private enum TabType { Permanent, Daily }
+    private TabType currentTab = TabType.Daily;  // 기본: 일일 퀘스트
 
     Dictionary<string, AchievementItemUI> itemDict = new();
     CardSlotManager cardSlotManager;
@@ -25,14 +39,15 @@ public class AchievementPanel : MonoBehaviour
         LocalizationManager.OnLanguageChanged += RefreshAllText;
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        cardSlotManager.SettrigerAnim("Off");
+        cardSlotManager?.SettrigerAnim("Off");
 
         foreach (var ra in pendingRemoveList.ToList())
         {
             FinishRemove(ra);
         }
 
-        RefreshUI();
+        // ⭐ 기본 탭으로 설정 (일일 퀘스트)
+        SwitchTab(TabType.Daily);
     }
 
     private void OnDisable()
@@ -51,7 +66,14 @@ public class AchievementPanel : MonoBehaviour
     {
         if (AchievementManager.Instance == null) return;
         
-        // ★ 모든 업적 생성 (표시는 RefreshUI에서 제어)
+        // ⭐ 탭 버튼 이벤트 연결
+        if (tabPermanentButton != null)
+            tabPermanentButton.onClick.AddListener(() => SwitchTab(TabType.Permanent));
+        
+        if (tabDailyButton != null)
+            tabDailyButton.onClick.AddListener(() => SwitchTab(TabType.Daily));
+        
+        // 모든 업적 생성 (표시는 RefreshUI에서 제어)
         foreach (var ra in AchievementManager.Instance.GetAll())
         {
             if (ra.isRewarded) continue;
@@ -66,6 +88,50 @@ public class AchievementPanel : MonoBehaviour
         RefreshUI();
     }
 
+    // ⭐ 탭 전환
+    private void SwitchTab(TabType tabType)
+    {
+        currentTab = tabType;
+        
+        // 탭 버튼 색상 업데이트
+        UpdateTabButtonColors();
+        
+        // 제목 업데이트
+        UpdateTitle();
+        
+        // UI 갱신
+        RefreshUI();
+    }
+
+    // ⭐ 탭 버튼 색상 업데이트
+    private void UpdateTabButtonColors()
+    {
+        if (tabPermanentButton != null)
+        {
+            var img = tabPermanentButton.GetComponent<Image>();
+            if (img != null)
+                img.color = currentTab == TabType.Permanent ? activeTabColor : inactiveTabColor;
+        }
+
+        if (tabDailyButton != null)
+        {
+            var img = tabDailyButton.GetComponent<Image>();
+            if (img != null)
+                img.color = currentTab == TabType.Daily ? activeTabColor : inactiveTabColor;
+        }
+    }
+
+    // ⭐ 패널 제목 업데이트
+    private void UpdateTitle()
+    {
+        if (titleText == null) return;
+
+        if (currentTab == TabType.Daily)
+            titleText.text = LocalizationManager.Game.dailyQuestsTitle;
+        else
+            titleText.text = LocalizationManager.Game.achievementsTitle;
+    }
+
     private void UpdateItem(RuntimeAchievement ra)
     {
         if (ra.isRewarded) return;
@@ -78,6 +144,8 @@ public class AchievementPanel : MonoBehaviour
 
     private void RefreshAllText()
     {
+        UpdateTitle();
+        
         foreach (var kvp in itemDict)
         {
             AchievementItemUI ui = kvp.Value;
@@ -117,31 +185,55 @@ public class AchievementPanel : MonoBehaviour
 
         pendingRemoveList.Remove(ra);
 
-        RefreshUI(); // ★ 삭제 후 다음 업적이 자동으로 표시됨
+        RefreshUI();
     }
 
     /// <summary>
-    /// ★ UI 정렬 + 최대 표시 개수 제한
-    /// 완료된 항목 위, 그 안에서는 SO 리스트 순서대로
-    /// maxDisplayCount만큼만 활성화, 나머지는 비활성화
+    /// ⭐ UI 정렬 + 탭에 따라 필터링
     /// </summary>
     public void RefreshUI()
     {
-        // ★ itemDict에서 직접 가져오기 (Destroy된 것 제외)
+        // itemDict에서 직접 가져오기 (Destroy된 것 제외)
         var items = itemDict.Values
             .Where(ui => ui != null && ui.gameObject != null)
             .ToList();
 
-        var sortedItems = items
+        // ⭐ 현재 탭에 맞는 항목만 필터링
+        List<AchievementItemUI> filteredItems;
+        
+        if (currentTab == TabType.Daily)
+        {
+            // 일일 퀘스트만
+            filteredItems = items
+                .Where(i => i.ra.original.isDailyQuest)
+                .ToList();
+        }
+        else
+        {
+            // 영구 업적만
+            filteredItems = items
+                .Where(i => !i.ra.original.isDailyQuest)
+                .ToList();
+        }
+
+        // 정렬: 완료된 것 위, 그 안에서는 SO 순서대로
+        var sortedItems = filteredItems
             .OrderByDescending(i => i.ra.isCompleted)
             .ThenBy(i => AchievementManager.Instance.achievementSOList.IndexOf(i.ra.original))
             .ToList();
 
+        // 모든 아이템 비활성화
+        foreach (var item in items)
+        {
+            item.gameObject.SetActive(false);
+        }
+
+        // 현재 탭의 아이템만 활성화 및 정렬
         for (int i = 0; i < sortedItems.Count; i++)
         {
             sortedItems[i].transform.SetSiblingIndex(i);
 
-            // ★ maxDisplayCount 이내만 활성화
+            // maxDisplayCount 이내만 활성화
             bool shouldShow = (maxDisplayCount <= 0) || (i < maxDisplayCount);
             sortedItems[i].gameObject.SetActive(shouldShow);
         }

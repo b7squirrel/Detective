@@ -110,13 +110,39 @@ public class GameInitializer : MonoBehaviour
         yield return null;
         Log("✓ CardList 초기화 완료");
         InitializationProgress = 1f;
-        
+
         // 모든 초기화 완료
         IsInitialized = true;
         OnGameInitialized?.Invoke();
+
+        // 초기화 완료 후 일일 보상 체크
+        yield return new WaitForSeconds(0.5f); // UI 안정화 대기
+        CheckAndShowDailyReward();
+
         Log("=== 게임 초기화 완료 ===");
     }
-    
+
+    void CheckAndShowDailyReward()
+    {
+        PlayerDataManager pdm = PlayerDataManager.Instance;
+
+        if (pdm == null) return;
+
+        // 오늘 출석 보상을 아직 안 받았으면
+        if (!pdm.HasTakenDailyReward())
+        {
+            // 일일 보상 팝업 표시
+            // DailyRewardPanel panel = FindObjectOfType<DailyRewardPanel>(true);
+            DailyTest testPanel = FindObjectOfType<DailyTest>(true);
+
+            if (testPanel != null)
+            {
+                testPanel.gameObject.SetActive(true);
+                Logger.Log("[GameInitializer] 일일 출석 보상 팝업 표시");
+            }
+        }
+    }
+
     void Log(string message)
     {
         if (showDebugLogs)

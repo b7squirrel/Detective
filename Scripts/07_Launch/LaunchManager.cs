@@ -53,7 +53,7 @@ public class LaunchManager : MonoBehaviour
         stageInfoUi.InitStageInfoUI();
     }
 
-    // ⭐ 개선된 InitLead - GameInitializer 대기
+    // 개선된 InitLead - GameInitializer 대기
     IEnumerator InitLead()
     {
         startButton.SetActive(false);
@@ -156,6 +156,17 @@ public class LaunchManager : MonoBehaviour
             }
         }
     }
+
+    // void UpdateDailyRewardBadge()
+    // {
+    //     PlayerDataManager pdm = PlayerDataManager.Instance;
+
+    //     if (pdm == null || dailyRewardBadge == null) return;
+
+    //     // 받지 않았으면 빨간 점 표시
+    //     bool shouldShow = !pdm.HasTakenDailyReward();
+    //     dailyRewardBadge.SetActive(shouldShow);
+    // }
 
     public void CloseField()
     {

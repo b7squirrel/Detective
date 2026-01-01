@@ -72,6 +72,35 @@ public class GameTexts : ScriptableObject
 
     [Header("Achievements Panel")]
     public string achievementsTitle = "숙제";
+    public string dailyQuestsTitle = "일일 퀘스트";
+
+    [Header("Daily Reward Panel")]
+    public string dailyRewardTitle = "일일 출석";
+    public string claimReward = "보상 받기";
+    public string alreadyClaimed = "오늘은 이미 받았습니다";
+    public string day1 = "1일차";
+    public string day2 = "2일차";
+    public string day3 = "3일차";
+    public string day4 = "4일차";
+    public string day5 = "5일차";
+    public string day6 = "6일차";
+    public string day7 = "7일차";
+
+    // 헬퍼 메서드
+    public string GetDayText(int day)
+    {
+        switch (day)
+        {
+            case 1: return day1;
+            case 2: return day2;
+            case 3: return day3;
+            case 4: return day4;
+            case 5: return day5;
+            case 6: return day6;
+            case 7: return day7;
+            default: return $"{day}일차";
+        }
+    }
 
     [Header("Stage Name")]
     public string[] stageBossName = new string[]
