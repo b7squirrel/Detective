@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 /// <summary>
 /// 안드로이드 기기에서 로그를 화면에 표시
@@ -8,23 +9,28 @@ public class OnScreenDebug : MonoBehaviour
 {
     [Header("UI 설정")]
     [SerializeField] private TextMeshProUGUI debugText;
+    [SerializeField] private ScrollRect scrollRect; // 추가
+    
+    [Header("스크롤 설정")]
+    [SerializeField] private bool autoScrollToBottom = true; // 새 로그 시 자동 스크롤
     
     [Header("로그 타입 필터")]
-    [SerializeField] private bool showLog = true;         // Debug.Log
-    [SerializeField] private bool showWarning = true;     // Debug.LogWarning
-    [SerializeField] private bool showError = true;       // Debug.LogError
-    [SerializeField] private bool showException = true;   // Debug.LogException
+    [SerializeField] private bool showLog = true;
+    [SerializeField] private bool showWarning = true;
+    [SerializeField] private bool showError = true;
+    [SerializeField] private bool showException = true;
     
     [Header("필터 설정")]
-    [SerializeField] private bool showAllLogs = false; // false면 특정 키워드만
-    [SerializeField] private string[] filterKeywords = { "TimeBoxButton", "ShopManager", ">>>",  "[!]"};
+    [SerializeField] private bool showAllLogs = false;
+    [SerializeField] private string[] filterKeywords = { "TimeBoxButton", "ShopManager", ">>>", "[!]"};
 
     [Header("표시 설정")]
-    [SerializeField] private int maxLines = 30;
+    [SerializeField] private int maxLines = 100; // 스크롤 가능하니 더 많이
     [SerializeField] private bool showFrameInfo = true;
     
     private string logs = "";
     private int logCount = 0;
+    private bool needScrollUpdate = false;
     
     void OnEnable()
     {
@@ -39,13 +45,11 @@ public class OnScreenDebug : MonoBehaviour
     
     void HandleLog(string logString, string stackTrace, LogType type)
     {
-        // 1단계: 로그 타입 필터링
         if (!ShouldShowLogType(type))
         {
             return;
         }
 
-        // 필터링
         if (!showAllLogs)
         {
             bool shouldShow = false;
@@ -63,13 +67,10 @@ public class OnScreenDebug : MonoBehaviour
         
         logCount++;
         
-        // 타입별 색상
         string color = GetColorForLogType(type);
         
-        // 로그 추가
         logs += $"\n<color={color}>[{logCount}] {logString}</color>";
 
-        // 최대 라인 수 유지
         string[] lines = logs.Split('\n');
         if (lines.Length > maxLines)
         {
@@ -77,11 +78,14 @@ public class OnScreenDebug : MonoBehaviour
         }
 
         UpdateDebugText();
+        
+        // 자동 스크롤 플래그 설정
+        if (autoScrollToBottom)
+        {
+            needScrollUpdate = true;
+        }
     }
 
-    /// <summary>
-    /// 로그 타입에 따라 표시 여부 결정
-    /// </summary>
     bool ShouldShowLogType(LogType type)
     {
         switch (type)
@@ -95,7 +99,7 @@ public class OnScreenDebug : MonoBehaviour
             case LogType.Exception:
                 return showException;
             case LogType.Assert:
-                return showError; // Assert는 Error와 동일하게 처리
+                return showError;
             default:
                 return true;
         }
@@ -107,6 +111,14 @@ public class OnScreenDebug : MonoBehaviour
         {
             UpdateDebugText();
         }
+        
+        // 스크롤을 맨 아래로
+        if (needScrollUpdate && scrollRect != null)
+        {
+            Canvas.ForceUpdateCanvases();
+            scrollRect.verticalNormalizedPosition = 0f;
+            needScrollUpdate = false;
+        }
     }
     
     void UpdateDebugText()
@@ -115,7 +127,6 @@ public class OnScreenDebug : MonoBehaviour
         
         string output = "";
         
-        // 프레임 정보
         if (showFrameInfo)
         {
             output += $"<color=cyan>===== 디버그 정보 =====</color>\n";
@@ -135,11 +146,10 @@ public class OnScreenDebug : MonoBehaviour
     {
         string info = "";
         
-        // 주요 매니저 확인
         info += $"TimeBoxButton: {(FindObjectOfType<TimeBoxButton>() != null ? "V" : "X")}\n";
         info += $"ShopManager: {(ShopManager.Instance != null ? "V" : "X")}\n";
         info += $"TimeBasedBoxManager: {(TimeBasedBoxManager.Instance != null ? "V" : "X")}\n";
-        info += $"AdsManager: {(AdsManager.Instance != null ? "V" : "XS")}\n";
+        info += $"AdsManager: {(AdsManager.Instance != null ? "V" : "X")}\n";
         
         return info;
     }
@@ -158,13 +168,33 @@ public class OnScreenDebug : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// 로그 초기화 (버튼에서 호출 가능)
-    /// </summary>
     public void ClearLogs()
     {
         logs = "";
         logCount = 0;
         UpdateDebugText();
+    }
+    
+    /// <summary>
+    /// 스크롤을 맨 위로
+    /// </summary>
+    public void ScrollToTop()
+    {
+        if (scrollRect != null)
+        {
+            scrollRect.verticalNormalizedPosition = 1f;
+        }
+    }
+    
+    /// <summary>
+    /// 스크롤을 맨 아래로
+    /// </summary>
+    public void ScrollToBottom()
+    {
+        if (scrollRect != null)
+        {
+            Canvas.ForceUpdateCanvases();
+            scrollRect.verticalNormalizedPosition = 0f;
+        }
     }
 }

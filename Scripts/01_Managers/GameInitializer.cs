@@ -70,37 +70,37 @@ public class GameInitializer : MonoBehaviour
         // 1단계: CardsDictionary 초기화 대기 (Awake에서 실행됨)
         Log("1/7: CardsDictionary 초기화 대기...");
         yield return new WaitUntil(() => CardsDictionary.IsDataLoaded);
-        Log("✓ CardsDictionary 로드 완료");
+        Log("v CardsDictionary 로드 완료");
         InitializationProgress = 0.16f;
         
         // 2단계: ProductDataTable 초기화 대기 (Awake에서 실행됨)
         Log("2/7: ProductDataTable 초기화 대기...");
         yield return new WaitUntil(() => ProductDataTable.IsDataLoaded);
-        Log("✓ ProductDataTable 로드 완료");
+        Log("v ProductDataTable 로드 완료");
         InitializationProgress = 0.33f;
 
         // 3단계: PlayerDataManager 초기화 대기 (Awake에서 실행됨)
         Log("3/7: PlayerDataManager 초기화 대기...");
         yield return new WaitUntil(() => PlayerDataManager.IsDataLoaded);
-        Log("✓ PlayerDataManager 로드 완료");
+        Log("v PlayerDataManager 로드 완료");
         InitializationProgress = 0.5f;
 
         // 4단계: DailyResetManager (Awake에서 실행됨)
         Log("4/7: DailyResetManager 초기화 대기...");
         yield return new WaitUntil(() => DailyResetManager.IsInitialized);
-        Log("✓ DailyResetManager 로드 완료");
+        Log("v DailyResetManager 로드 완료");
         InitializationProgress = 0.57f;
 
         // 5단계: CardDataManager 초기화 대기 (Start에서 실행됨)
         Log("5/7: CardDataManager 초기화 대기...");
         yield return new WaitUntil(() => CardDataManager.IsDataLoaded);
-        Log("✓ CardDataManager 로드 완료");
+        Log("v CardDataManager 로드 완료");
         InitializationProgress = 0.66f;
         
         // 6단계: EquipmentDataManager 초기화 대기 (Start에서 실행됨)
         Log("6/7: EquipmentDataManager 초기화 대기...");
         yield return new WaitUntil(() => EquipmentDataManager.IsDataLoaded);
-        Log("✓ EquipmentDataManager 로드 완료");
+        Log("v EquipmentDataManager 로드 완료");
         InitializationProgress = 0.83f;
         
         // 7단계: CardList 초기화 확인 (EquipmentDataManager.Start에서 실행됨)
@@ -108,7 +108,7 @@ public class GameInitializer : MonoBehaviour
         // CardList는 EquipmentDataManager.Start()에서 InitCardList()가 호출되므로
         // 추가 대기 없이 다음 프레임만 기다림
         yield return null;
-        Log("✓ CardList 초기화 완료");
+        Log("v CardList 초기화 완료");
         InitializationProgress = 1f;
 
         // 모든 초기화 완료

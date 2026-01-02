@@ -5,7 +5,8 @@ using TMPro;
 public class DailyRewardPanel : MonoBehaviour
 {
     [Header("보상 데이터")]
-    [SerializeField] private DailyRewardData rewardData;
+    [SerializeField] DailyRewardData rewardData;
+    [SerializeField] private string rewardDataPath = "DailyReward/DailyRewardData";
 
     [SerializeField] DailyRewardButton[] dailyButtons;
     PlayerDataManager playerDataManager;
@@ -29,14 +30,35 @@ public class DailyRewardPanel : MonoBehaviour
     void OnEnable()
     {
         Debug.Log("[DailyRewardPanel] OnEnable 시작");
-        
+
+        // rewardData가 없으면 런타임에서 생성
+        if (rewardData == null)
+        {
+            Debug.LogWarning("[DailyRewardPanel] rewardData가 null, 런타임에서 생성");
+            rewardData = ScriptableObject.CreateInstance<DailyRewardData>();
+
+            // 7일 보상 데이터 직접 설정
+            rewardData.rewards = new DailyRewardItem[7]
+            {
+            new DailyRewardItem { day = 1, coinReward = 100, gemReward = 0, isSpecial = false },
+            new DailyRewardItem { day = 2, coinReward = 0, gemReward = 10, isSpecial = false },
+            new DailyRewardItem { day = 3, coinReward = 200, gemReward = 0, isSpecial = false },
+            new DailyRewardItem { day = 4, coinReward = 0, gemReward = 20, isSpecial = false },
+            new DailyRewardItem { day = 5, coinReward = 300, gemReward = 0, isSpecial = false },
+            new DailyRewardItem { day = 6, coinReward = 0, gemReward = 30, isSpecial = false },
+            new DailyRewardItem { day = 7, coinReward = 500, gemReward = 50, isSpecial = true }
+            };
+
+            Debug.Log("[DailyRewardPanel] v 런타임 rewardData 생성 완료");
+        }
+
         if (!hasSubscribed)
         {
             GameInitializer.OnGameInitialized += OnGameReady;
             hasSubscribed = true;
             Debug.Log("[DailyRewardPanel] 이벤트 구독 완료");
         }
-        
+
         // ⭐ 이미 초기화되었다면 바로 UpdateUI
         if (GameInitializer.IsInitialized && !hasGameInitialized)
         {
@@ -55,14 +77,14 @@ public class DailyRewardPanel : MonoBehaviour
     void Start()
     {
         Debug.Log("[DailyRewardPanel] Start");
-        
+
         if (gemCollectFX == null)
             gemCollectFX = FindObjectOfType<GemCollectFX>();
     }
 
     void OnGameReady()
     {
-        Debug.Log("[DailyRewardPanel] ⭐ OnGameReady 호출됨!");
+        Debug.Log("[DailyRewardPanel]  OnGameReady 호출됨!");
         hasGameInitialized = true;
         
         if (playerDataManager == null)
@@ -160,7 +182,7 @@ public class DailyRewardPanel : MonoBehaviour
                 {
                     button.onClick.RemoveAllListeners();
                     button.onClick.AddListener(ClaimReward);
-                    Debug.Log($"[DailyRewardPanel] ✓ {buttonDay}일차 버튼 클릭 이벤트 등록!");
+                    Debug.Log($"[DailyRewardPanel] v {buttonDay}일차 버튼 클릭 이벤트 등록!");
                 }
                 else
                 {
@@ -190,12 +212,12 @@ public class DailyRewardPanel : MonoBehaviour
             Debug.LogError("[DailyRewardPanel] X claimRewardMessagePanel이 null!");
         }
         
-        Debug.Log("[DailyRewardPanel] ✓ UpdateUI 완료!");
+        Debug.Log("[DailyRewardPanel] v UpdateUI 완료!");
     }
 
     void ClaimReward()
     {
-        Debug.Log("[DailyRewardPanel] ⭐ ClaimReward 호출!");
+        Debug.Log("[DailyRewardPanel]  ClaimReward 호출!");
         
         if (playerDataManager == null || rewardData == null)
         {
@@ -260,7 +282,7 @@ public class DailyRewardPanel : MonoBehaviour
             launchManager.UpdateDailyRewardBadge();
         }
 
-        Debug.Log($"[DailyRewardPanel] ✓ {currentDay}일차 출석 보상 수령 완료!");
+        Debug.Log($"[DailyRewardPanel] v {currentDay}일차 출석 보상 수령 완료!");
     }
 
     private string GetDayKey(int day)
