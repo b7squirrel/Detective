@@ -11,7 +11,7 @@ public class DailyRewardPanel : MonoBehaviour
     PlayerDataManager playerDataManager;
 
     [Header("UI 요소")]
-    [SerializeField] TextMeshProUGUI dayText;           
+    [SerializeField] TextMeshProUGUI dayText;
     [SerializeField] GameObject alreadyClaimedMessagePanel; // 이미 받았습니다. 설명
     [SerializeField] GameObject claimRewardMessagePanel; // 매일 매일 선물을 받아가세요. 설명
 
@@ -24,16 +24,28 @@ public class DailyRewardPanel : MonoBehaviour
 
     void OnEnable()
     {
-        if (playerDataManager == null)
-            playerDataManager = PlayerDataManager.Instance;
-
-        UpdateUI();
+        GameInitializer.OnGameInitialized += OnGameReady;
+    }
+    void OnDisable()
+    {
+        GameInitializer.OnGameInitialized -= OnGameReady;
     }
 
     void Start()
     {
         if (gemCollectFX == null)
             gemCollectFX = FindObjectOfType<GemCollectFX>();
+    }
+
+    // 게임 초기화 완료 시 호출됨
+    void OnGameReady()
+    {
+        Logger.Log("[DailyRewardPanel] 게임 초기화 완료, UI 업데이트 시작");
+
+        if (playerDataManager == null)
+            playerDataManager = PlayerDataManager.Instance;
+
+        UpdateUI();
     }
 
     void UpdateUI()
@@ -131,6 +143,13 @@ public class DailyRewardPanel : MonoBehaviour
 
         // UI 갱신
         UpdateUI();
+
+        // 론치 패널 뱃지 갱신
+        LaunchManager launchManager = FindObjectOfType<LaunchManager>();
+        if (launchManager != null)
+        {
+            launchManager.UpdateDailyRewardBadge();
+        }
 
         Logger.Log($"[DailyRewardPanel] {currentDay}일차 출석 보상 수령 완료!");
     }

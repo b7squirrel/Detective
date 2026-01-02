@@ -89,6 +89,12 @@ public class LaunchManager : MonoBehaviour
         Logger.Log("[LaunchManager] 리드 초기화 완료");
 
         // 일일 보상 버튼 UI 업데이트
+        UpdateDailyRewardBadge();
+    }
+
+    public void UpdateDailyRewardBadge()
+    {
+        // 일일 보상 버튼 UI 업데이트
         if(playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
         bool shouldShow = !playerDataManager.HasTakenDailyReward();
         dailyButtonUI.ActivateBadge(shouldShow);

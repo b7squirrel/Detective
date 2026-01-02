@@ -125,7 +125,7 @@ public class GameInitializer : MonoBehaviour
     void CheckAndShowDailyReward()
     {
         PlayerDataManager pdm = PlayerDataManager.Instance;
-
+ 
         if (pdm == null) return;
 
         // 오늘 출석 보상을 아직 안 받았으면
