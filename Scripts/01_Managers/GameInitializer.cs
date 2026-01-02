@@ -132,12 +132,11 @@ public class GameInitializer : MonoBehaviour
         if (!pdm.HasTakenDailyReward())
         {
             // 일일 보상 팝업 표시
-            // DailyRewardPanel panel = FindObjectOfType<DailyRewardPanel>(true);
-            DailyTest testPanel = FindObjectOfType<DailyTest>(true);
+            DailyRewardPanel panel = FindObjectOfType<DailyRewardPanel>(true);
 
-            if (testPanel != null)
+            if (panel != null)
             {
-                testPanel.gameObject.SetActive(true);
+                panel.gameObject.SetActive(true);
                 Logger.Log("[GameInitializer] 일일 출석 보상 팝업 표시");
             }
         }

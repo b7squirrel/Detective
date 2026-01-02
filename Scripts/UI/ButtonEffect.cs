@@ -14,10 +14,14 @@ public class ButtonEffect : MonoBehaviour
     [SerializeField] bool ignoreButtonEffectAnim;
     public bool ShoutldBeInitialSound { get; set; } = true;
     Button myButton;
+    Animator bottonAnim;
+    void Awake()
+    {
+        myButton = GetComponent<Button>();
+        bottonAnim = GetComponent<Animator>();
+    }
     void Start()
     {
-        if (myButton == null)
-            myButton = GetComponent<Button>();
         if (myButton != null)
         {
             myButton.onClick.AddListener(LockButton);
@@ -34,8 +38,8 @@ public class ButtonEffect : MonoBehaviour
     public void PlayAnimation()
     {
         if (ignoreButtonEffectAnim) return;
-        if (myButton.GetComponent<Animator>() == null) return;
-        myButton.GetComponent<Animator>().SetTrigger("Pressed");
+        if (bottonAnim == null) return;
+        bottonAnim.SetTrigger("Pressed");
         ButtonParticleEffect();
     }
 

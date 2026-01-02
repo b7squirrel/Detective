@@ -10,6 +10,7 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] StatManager statManager;
     [SerializeField] StartingDataContainer startingDataContainer;
     CardSlotManager cardSlotManager;
+    PlayerDataManager playerDataManager;
 
     [SerializeField] GameObject fieldSlotPanel;
     [SerializeField] AllField field;
@@ -22,6 +23,9 @@ public class LaunchManager : MonoBehaviour
 
     CardData currentLead;
     OriAttribute currentAttr;
+
+    [Header("일일 보상 버튼")]
+    [SerializeField] ButtonBadgeUI dailyButtonUI;
 
     void OnEnable()
     {
@@ -83,6 +87,11 @@ public class LaunchManager : MonoBehaviour
         InitStageInfo();
         
         Logger.Log("[LaunchManager] 리드 초기화 완료");
+
+        // 일일 보상 버튼 UI 업데이트
+        if(playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
+        bool shouldShow = !playerDataManager.HasTakenDailyReward();
+        dailyButtonUI.ActivateBadge(shouldShow);
     }
     
     void SetLead(CardData lead)
