@@ -9,6 +9,7 @@ public class GameTexts : ScriptableObject
     public string loadingEquipment = "장비 준비 중...";
     public string loadingComplete = "출동 준비 중...";
     public string loading = "로딩 중";
+    public string loadingBackToLobby = "집으로 돌아가는 중...";
 
     [Header("Grade Names")]
     public string[] gradeNames = new string[]

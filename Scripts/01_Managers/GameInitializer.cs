@@ -47,6 +47,9 @@ public class GameInitializer : MonoBehaviour
     /// </summary>
     public static float InitializationProgress { get; private set; } = 0f;
 
+    // 세션 동안 한 번만 실행되도록 플래그 추가
+    private static bool hasShownDailyRewardThisSession = false;
+
     void Awake()
     {
         // 씬 전환 시에도 유지 (선택사항)
@@ -59,6 +62,7 @@ public class GameInitializer : MonoBehaviour
     {
         IsInitialized = false;
         InitializationProgress = 0f;
+        hasShownDailyRewardThisSession = false;
     }
     
     IEnumerator InitializeGame()
@@ -117,7 +121,11 @@ public class GameInitializer : MonoBehaviour
 
         // 초기화 완료 후 일일 보상 체크
         yield return new WaitForSeconds(0.5f); // UI 안정화 대기
-        CheckAndShowDailyReward();
+        if (hasShownDailyRewardThisSession == false)
+        {
+            CheckAndShowDailyReward();
+            hasShownDailyRewardThisSession = true;
+        }
 
         Log("=== 게임 초기화 완료 ===");
     }

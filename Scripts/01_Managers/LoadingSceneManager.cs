@@ -5,7 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class LoadingSceneManager : MonoBehaviour
 {
+    public enum LoadingType
+    {
+        ToStage,      // 스테이지로 이동
+        ToLobby       // 로비로 귀환
+    }
+
     GameMode currentMode = GameMode.Regular;
+    LoadingType currentLoadingType = LoadingType.ToStage;
 
     [SerializeField] Slider progressBar;
     [SerializeField] TMPro.TextMeshProUGUI progressText;
@@ -20,9 +27,19 @@ public class LoadingSceneManager : MonoBehaviour
     public void LoadScenes(GameMode mode = GameMode.Regular)
     {
         currentMode = mode;
+        currentLoadingType = LoadingType.ToStage;
         progressBar.value = 0;
         SetProgressText();
         StartCoroutine(LoadSceneCo());
+    }
+
+    // 로비로 돌아가기 로딩
+    public void LoadLobby()
+    {
+        currentLoadingType = LoadingType.ToLobby;
+        progressBar.value = 0;
+        SetProgressText();
+        StartCoroutine(LoadLobbyCo());
     }
 
     // 최소한 3초간은 로딩되도록
@@ -54,6 +71,36 @@ public class LoadingSceneManager : MonoBehaviour
                 {
                     op1.allowSceneActivation = true;
                     SceneManager.LoadScene(stageToPlay, LoadSceneMode.Additive);
+                    yield break;
+                }
+            }
+            yield return null;
+        }
+    }
+
+    // 로비 로딩
+    IEnumerator LoadLobbyCo()
+    {
+        AsyncOperation op = SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Single);
+        op.allowSceneActivation = false;
+        float timer = 0f;
+        
+        while (!op.isDone)
+        {
+            if (op.progress < 0.9f)
+            {
+                progressBar.value = Mathf.MoveTowards(progressBar.value, 1f, Time.deltaTime);
+                SetProgressText();
+            }
+            else
+            {
+                timer += Time.unscaledDeltaTime;
+                progressBar.value = Mathf.MoveTowards(progressBar.value, 1f, Time.deltaTime);
+                SetProgressText();
+                
+                if (timer > 2f) // 로비는 좀 더 빠르게 (2초)
+                {
+                    op.allowSceneActivation = true;
                     yield break;
                 }
             }
