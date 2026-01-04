@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class DailyRewardButton : MonoBehaviour
 {
@@ -14,6 +15,15 @@ public class DailyRewardButton : MonoBehaviour
     
     Button dailyButton;
     Animator anim;
+
+    void Awake()
+    {
+        anim = GetComponent<Animator>();
+        if (anim == null)
+        {
+            Debug.LogWarning($"[DailyRewardButton] Animator가 없습니다!");
+        }
+    }
 
     public void UpdateDailyRewardButton(int coinReward, int cristalReward, int currentDay, int buttonDay, bool hasClaimed)
     {
@@ -70,22 +80,16 @@ public class DailyRewardButton : MonoBehaviour
         {
             if (currentDay == buttonDay) // 오늘
             {
+                anim.SetTrigger("Ready");
                 bool shouldShowPostIt = !hasClaimed;
                 
-
                 postIt.SetActive(shouldShowPostIt);
 
-                // ⭐ circle은 포스트잇이 보일 때만 (즉, 아직 안 받았을 때만)
+                // circle은 포스트잇이 보일 때만 (즉, 아직 안 받았을 때만)
                 if (availableIcons != null)
                 {
                     availableIcons.SetActive(shouldShowPostIt);
                 }
-
-                // 포스트잇 랜덤 회전
-                // if (shouldShowPostIt)
-                // {
-                //     ApplyRandomRotation(postIt);
-                // }
 
                 Debug.Log($"[DailyRewardButton] {buttonDay}일차 포스트잇: {shouldShowPostIt}, circle: {shouldShowPostIt}");
             }
@@ -100,27 +104,42 @@ public class DailyRewardButton : MonoBehaviour
                 }
 
                 Debug.Log($"[DailyRewardButton] {buttonDay}일차 포스트잇 (과거): false");
-    }
-    else // 미래
-    {
-        postIt.SetActive(true);
-        
-        // circle 숨김 (아직 수령할 날이 아님)
-        if (availableIcons != null)
-        {
-            availableIcons.SetActive(false);
+            }
+            else // 미래
+            {
+                postIt.SetActive(true);
+                anim.SetTrigger("Idle");                
+                // circle 숨김 (아직 수령할 날이 아님)
+                if (availableIcons != null)
+                {
+                    availableIcons.SetActive(false);
+                }
+                
+                Debug.Log($"[DailyRewardButton] {buttonDay}일차 포스트잇 (미래): true, circle: false");
+            }
         }
-        
-        // 포스트잇 랜덤 회전
-        // ApplyRandomRotation(postIt);
-        
-        Debug.Log($"[DailyRewardButton] {buttonDay}일차 포스트잇 (미래): true, circle: false");
+        else
+        {
+            Debug.LogError($"[DailyRewardButton] 버튼 {buttonDay} postIt이 null!");
+        }
     }
-}
-else
-{
-    Debug.LogError($"[DailyRewardButton] 버튼 {buttonDay} postIt이 null!");
-}
+
+    // ⭐ 새로 추가: 포스트잇 떨어지는 애니메이션 재생
+    public IEnumerator PlayClaimAnimation()
+    {
+        if (anim != null)
+        {
+            Debug.Log($"[DailyRewardButton] Claim 애니메이션 시작");
+            anim.SetTrigger("Claim");
+            
+            // 애니메이션 길이만큼 대기 (애니메이션 클립 길이에 맞게 조정)
+            yield return new WaitForSeconds(0.4f); // 애니메이션 길이에 맞게 수정
+        }
+        else
+        {
+            Debug.LogWarning($"[DailyRewardButton] Animator 없음, 애니메이션 스킵");
+            yield return null;
+        }
     }
 
     void ApplyRandomRotation(GameObject postIt)
