@@ -13,6 +13,7 @@ public class DailyRewardButton : MonoBehaviour
     [SerializeField] GameObject availableIcons;
     
     Button dailyButton;
+    Animator anim;
 
     public void UpdateDailyRewardButton(int coinReward, int cristalReward, int currentDay, int buttonDay, bool hasClaimed)
     {
@@ -63,41 +64,42 @@ public class DailyRewardButton : MonoBehaviour
         {
             Debug.LogError($"[DailyRewardButton] X 버튼 {buttonDay} Button 컴포넌트 없음!");
         }
-        
+
         // 포스트잇 표시
         if (postIt != null)
-{
-    if (currentDay == buttonDay) // 오늘
-    {
-        bool shouldShowPostIt = !hasClaimed;
-        
-        postIt.SetActive(shouldShowPostIt);
-        
-        // ⭐ circle은 포스트잇이 보일 때만 (즉, 아직 안 받았을 때만)
-        if (availableIcons != null)
         {
-            availableIcons.SetActive(shouldShowPostIt);
-        }
-        
-        // 포스트잇 랜덤 회전
-        // if (shouldShowPostIt)
-        // {
-        //     ApplyRandomRotation(postIt);
-        // }
-        
-        Debug.Log($"[DailyRewardButton] {buttonDay}일차 포스트잇: {shouldShowPostIt}, circle: {shouldShowPostIt}");
-    }
-    else if (currentDay > buttonDay) // 과거
-    {
-        postIt.SetActive(false);
-        
-        // circle도 숨김
-        if (availableIcons != null)
-        {
-            availableIcons.SetActive(false);
-        }
-        
-        Debug.Log($"[DailyRewardButton] {buttonDay}일차 포스트잇 (과거): false");
+            if (currentDay == buttonDay) // 오늘
+            {
+                bool shouldShowPostIt = !hasClaimed;
+                
+
+                postIt.SetActive(shouldShowPostIt);
+
+                // ⭐ circle은 포스트잇이 보일 때만 (즉, 아직 안 받았을 때만)
+                if (availableIcons != null)
+                {
+                    availableIcons.SetActive(shouldShowPostIt);
+                }
+
+                // 포스트잇 랜덤 회전
+                // if (shouldShowPostIt)
+                // {
+                //     ApplyRandomRotation(postIt);
+                // }
+
+                Debug.Log($"[DailyRewardButton] {buttonDay}일차 포스트잇: {shouldShowPostIt}, circle: {shouldShowPostIt}");
+            }
+            else if (currentDay > buttonDay) // 과거
+            {
+                postIt.SetActive(false);
+
+                // circle도 숨김
+                if (availableIcons != null)
+                {
+                    availableIcons.SetActive(false);
+                }
+
+                Debug.Log($"[DailyRewardButton] {buttonDay}일차 포스트잇 (과거): false");
     }
     else // 미래
     {
