@@ -26,7 +26,7 @@ public class GameTexts : ScriptableObject
     public string buttonUpgrade = "업그레이드";
     public string buttonEquip = "장착";
     public string buttonUnequip = "장착 해제";
-    public string buttonStart = "시작!";
+    public string buttonStart = "출동!";
     public string buttonBack = "뒤로";
     public string buttonConfirm = "확인";
     public string buttonCancel = "취소";
