@@ -80,7 +80,7 @@ public class DailyRewardButton : MonoBehaviour
         {
             if (currentDay == buttonDay) // 오늘
             {
-                anim.SetTrigger("Ready");
+                if(anim != null) anim.SetTrigger("Ready");
                 bool shouldShowPostIt = !hasClaimed;
                 
                 postIt.SetActive(shouldShowPostIt);
@@ -108,7 +108,7 @@ public class DailyRewardButton : MonoBehaviour
             else // 미래
             {
                 postIt.SetActive(true);
-                anim.SetTrigger("Idle");                
+                if(anim != null) anim.SetTrigger("Idle");                
                 // circle 숨김 (아직 수령할 날이 아님)
                 if (availableIcons != null)
                 {
