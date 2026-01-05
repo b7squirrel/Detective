@@ -10,7 +10,7 @@ public class TimeWaveUI : MonoBehaviour
     public void InitTimeWaveUI(string _time, string _wave)
     {
         timeText.text = _time;
-        waveText.text = _wave;
+        waveText.text = $"웨이브 {_wave}";
         stageText.gameObject.SetActive(false);
     }
     public void InitTimeUI(string _time)
