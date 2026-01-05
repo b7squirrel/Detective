@@ -5,11 +5,11 @@ public class TimeWaveUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] TextMeshProUGUI waveText;
+    [SerializeField] TextMeshProUGUI stageText;
 
     public void InitTimeWaveUI(string _time, string _wave)
     {
         timeText.text = _time;
-        waveText.text = "웨이브 " + _wave;
     }
     public void InitTimeUI(string _time)
     {
@@ -17,6 +17,8 @@ public class TimeWaveUI : MonoBehaviour
     }
     public void InitStageUI(string _stage)
     {
-        waveText.text = "스테이지 " + _stage;
+        stageText.text = "스테이지 " + _stage;
+        waveText.gameObject.SetActive(false);
+        
     }
 }

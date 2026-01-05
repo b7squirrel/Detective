@@ -96,21 +96,24 @@ public class EquipInfoPanel : MonoBehaviour
         GradeLabel.color = MyGrade.GradeColors[cardData.Grade];
         NameLabelGlow.color = MyGrade.GradeGlowColors[cardData.Grade];
         SetItemCardBase(cardData.Grade);
-        
+
         // ★ 다국어 적용
-        Level.text = LocalizationManager.Game.level + " " + 
-                     cardData.Level.ToString() + " / " + 
+        Level.text = LocalizationManager.Game.level + " " +
+                     cardData.Level.ToString() + " / " +
                      StaticValues.MaxLevel.ToString();
 
         GetPassiveSkillLevel(cardData);
 
-        grade.color = Color.black;
-        Name.color = Color.black;
-        if (cardData.Grade == 4)
-        {
-            grade.color = Color.white;
-            Name.color = Color.white;
-        }
+        grade.color = Color.white;
+        Name.color = Color.white;
+
+        // grade.color = Color.black;
+        // Name.color = Color.black;
+        // if (cardData.Grade == 4)
+        // {
+        //     grade.color = Color.white;
+        //     Name.color = Color.white;
+        // }
 
         if (cardData.Atk != 0)
         {

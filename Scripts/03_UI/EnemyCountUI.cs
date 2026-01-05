@@ -9,6 +9,14 @@ public class EnemyCountUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI currentEnemiesText;
 
     /// <summary>
+    /// 무한 모드일때만 progress text 보이기
+    /// </summary>
+    public void InitProgressText()
+    {
+        waveProgressText.gameObject.SetActive(true);
+    }
+
+    /// <summary>
     /// wave가 변할 때마다, 적이 죽을 때마다 업데이트
     /// </summary>
     public void UpdateWaveProgress(string currentWaveEnemiesKilled, string currentWavePlannedEnemies)
