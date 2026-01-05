@@ -16,6 +16,7 @@ public class DailyRewardPanel : MonoBehaviour
     [SerializeField] GameObject alreadyClaimedMessagePanel;
     [SerializeField] GameObject claimRewardMessagePanel;
     [SerializeField] GameObject closeButton;
+    [SerializeField] RectTransform hand;
     Animator anim;
 
     [Header("보상 이펙트")]
@@ -230,6 +231,38 @@ public class DailyRewardPanel : MonoBehaviour
             Debug.LogError("[DailyRewardPanel] X claimRewardMessagePanel이 null!");
         }
 
+        // ⭐ hand 위치 설정 (아직 수령하지 않은 경우에만)
+if (hand != null)
+{
+    if (!hasClaimed && currentDay >= 1 && currentDay <= dailyButtons.Length)
+    {
+        // 현재 날짜의 버튼
+        DailyRewardButton currentButton = dailyButtons[currentDay - 1];
+        RectTransform currentButtonRect = currentButton.GetComponent<RectTransform>();
+        
+        if (currentButtonRect != null)
+        {
+            // ⭐ hand를 버튼의 직접적인 자식으로 설정
+            hand.SetParent(currentButtonRect, false);
+            
+            // ⭐ 로컬 위치를 0,0,0으로 (부모 버튼의 중앙)
+            hand.anchoredPosition = Vector2.zero;
+            hand.localPosition = Vector3.zero;
+            
+            // ⭐ 버튼보다 앞에 보이도록
+            hand.SetAsLastSibling();
+            
+            hand.gameObject.SetActive(true);
+            Debug.Log($"[DailyRewardPanel] hand를 {currentDay}일차 버튼의 자식으로 설정");
+        }
+    }
+    else
+    {
+        // 이미 수령했으면 hand 숨김
+        hand.gameObject.SetActive(false);
+        Debug.Log("[DailyRewardPanel] 보상 수령 완료, hand 숨김");
+    }
+}
         Debug.Log("[DailyRewardPanel] v UpdateUI 완료!");
     }
 
@@ -242,6 +275,19 @@ public class DailyRewardPanel : MonoBehaviour
     IEnumerator ClaimRewardCoroutine()
     {
         Debug.Log("[DailyRewardPanel] ⭐ ClaimReward 호출!");
+
+        // ⭐ 클릭 즉시 hand 숨김
+        if (hand != null)
+        {
+            hand.gameObject.SetActive(false);
+            Debug.Log("[DailyRewardPanel] hand 즉시 숨김");
+        }
+
+        if (playerDataManager == null || rewardData == null)
+        {
+            Debug.LogError("[DailyRewardPanel] X ClaimReward: manager가 null!");
+            yield break;
+        }
 
         if (playerDataManager == null || rewardData == null)
         {
