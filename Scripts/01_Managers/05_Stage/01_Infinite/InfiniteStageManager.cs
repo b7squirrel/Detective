@@ -11,12 +11,12 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     [SerializeField] int baseEnemiesPerWave = 15;
     [SerializeField] float enemyGrowthRate = 1.35f;
     [SerializeField] int maxEnemiesPerWave = 120;
-    
+
     [Header("Spawn Timing")]
     [SerializeField] float baseSpawnInterval = 1.0f;
     [SerializeField] float minSpawnInterval = 0.25f;
     [SerializeField] float waveInterval = 3f;  // ⭐ 웨이브 클리어 후 짧은 휴식
-    
+
     [Header("Difficulty")]
     [SerializeField] float difficultyMultiplier = 1.15f;
 
@@ -30,6 +30,11 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     [SerializeField] float chestSpawnInterval = 30f;
     [SerializeField] float chestInnerRadius = 10f;
     [SerializeField] float chestOuterRadius = 18f;
+
+    [Header("Speed Settings")]
+    [SerializeField] float gameSpeedMultiplier = 1.5f;
+    float originalTimeScale = 1.0f;
+    float originalFixedDeltaTime = 0.02f;
 
     // 캐시된 매니저들
     PoolManager poolManager;
@@ -63,11 +68,22 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
     void Awake()
     {
+        originalTimeScale = Time.timeScale;
+        originalFixedDeltaTime = Time.fixedDeltaTime;
+
         poolManager = FindObjectOfType<PoolManager>();
         spawner = FindObjectOfType<Spawner>();
         wallManager = FindObjectOfType<WallManager>();
         fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
     }
+
+    // ⭐ 게임 종료 시 원래대로
+    // void OnDisable()
+    // {
+    //     Time.timeScale = 1.0f;
+    //     Time.fixedDeltaTime = 0.02f;
+    //     Logger.Log("[InfiniteStage] Game speed reset to normal");
+    // }
 
     void Start()
     {
@@ -86,7 +102,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     // ⭐ Public Getter 메서드들
     public int GetCurrentWave() => currentWave;
     public float GetSurvivalTime() => survivalTime;
-    
+
     /// <summary>
     /// 현재 살아있는 적의 수
     /// </summary>
@@ -95,7 +111,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         if (spawner == null) return 0;
         return spawner.GetCurrentEnemyNums();
     }
-    
+
     /// <summary>
     /// 현재 웨이브에서 처치한 적의 수
     /// </summary>
@@ -103,7 +119,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     {
         return currentWaveEnemiesKilled;
     }
-    
+
     /// <summary>
     /// 현재 웨이브에서 스폰될 예정인 총 적 수
     /// </summary>
@@ -111,7 +127,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     {
         return currentWavePlannedEnemies;
     }
-    
+
     /// <summary>
     /// 현재 웨이브 진행도 (0.0 ~ 1.0)
     /// </summary>
@@ -215,6 +231,12 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         timeWaveUI = FindObjectOfType<TimeWaveUI>();
         enemyCountUI = FindObjectOfType<EnemyCountUI>();
 
+        // ⭐ 무한 모드 속도 적용
+        Time.timeScale = gameSpeedMultiplier;
+        Time.fixedDeltaTime = 0.02f * gameSpeedMultiplier;  // 물리 업데이트도 조정
+
+        Logger.Log($"[InfiniteStage] Game speed set to {gameSpeedMultiplier}x");
+
         // ⭐⭐⭐ 음악 초기화 추가
         if (GameManager.instance != null && GameManager.instance.musicCreditManager != null)
         {
@@ -226,12 +248,30 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             Logger.LogError("[InfiniteStage] GameManager or MusicCreditManager not found!");
         }
 
+        ApplyGameSpeed();
+
         isInitialized = true;
 
         StartCoroutine(WaveLoop());
         StartCoroutine(UpdateUI());
 
         Logger.Log("[InfiniteStage] Initialization complete!");
+    }
+
+    // ⭐ 새로운 메서드: 게임 속도 적용
+    void ApplyGameSpeed()
+    {
+        Time.timeScale = gameSpeedMultiplier;
+        Time.fixedDeltaTime = originalFixedDeltaTime * gameSpeedMultiplier;
+
+        // ⭐ PauseManager에게 알려주기
+        PauseManager pauseManager = FindObjectOfType<PauseManager>();
+        if (pauseManager != null)
+        {
+            pauseManager.SetNormalTimeScale(gameSpeedMultiplier);
+        }
+
+        Logger.Log($"[InfiniteStage] Game speed: {gameSpeedMultiplier}x");
     }
 
     bool ValidateConfiguration()
@@ -257,6 +297,30 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         }
 
         return true;
+    }
+    // ⭐ 게임 종료/비활성화 시 원래대로
+    void OnDisable()
+    {
+        ResetGameSpeed();
+    }
+
+    void OnDestroy()
+    {
+        ResetGameSpeed();
+    }
+    void ResetGameSpeed()
+    {
+        Time.timeScale = originalTimeScale;
+        Time.fixedDeltaTime = originalFixedDeltaTime;
+
+        // ⭐ PauseManager도 원래대로
+        PauseManager pauseManager = FindObjectOfType<PauseManager>();
+        if (pauseManager != null)
+        {
+            pauseManager.SetNormalTimeScale(1.0f);
+        }
+
+        Logger.Log("[InfiniteStage] Game speed reset to normal");
     }
 
     bool ValidateManagers()
@@ -341,7 +405,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
                 timeWaveUI.InitTimeWaveUI(timeFormatted, currentWave.ToString());
             }
 
-            if(enemyCountUI != null)
+            if (enemyCountUI != null)
             {
                 enemyCountUI.InitDebugCurrentEnemies(GetCurrentEnemyCount().ToString());
             }
@@ -377,10 +441,10 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             yield return StartCoroutine(SpawnWave());
 
             Logger.Log($"[InfiniteStage] Spawning complete. Waiting for wave clear...");
-            
+
             // 2단계: 모든 적 처치 대기
             yield return StartCoroutine(WaitForWaveClear());
-            
+
             Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Complete ==========");
             Logger.Log($"[InfiniteStage] Killed: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
 
@@ -416,17 +480,17 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
                 Logger.Log("[InfiniteStage] Player dead during wave clear");
                 yield break;
             }
-            
+
             yield return new WaitForSeconds(0.5f);  // 0.5초마다 체크
         }
-        
+
         Logger.Log("[InfiniteStage] All enemies cleared!");
     }
 
     IEnumerator SpawnWave()
     {
         int enemiesToSpawn = currentWavePlannedEnemies;
-        
+
         float spawnDelay = baseSpawnInterval / currentDifficulty;
         spawnDelay = Mathf.Max(spawnDelay, minSpawnInterval);
 
@@ -450,7 +514,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
             yield return new WaitForSeconds(spawnDelay);
         }
-        
+
         Logger.Log($"[InfiniteStage] Spawned {currentWaveEnemiesSpawned} / {currentWavePlannedEnemies}");
     }
 
@@ -555,7 +619,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             float difficulty = Mathf.Pow(difficultyMultiplier, wave - 1);
             float spawnDelay = Mathf.Max(baseSpawnInterval / difficulty, minSpawnInterval);
             float duration = count * spawnDelay;
-            
+
             Logger.Log($"Wave {wave}: {count} enemies, {spawnDelay:F2}s interval, ~{duration:F0}s spawn time");
         }
     }
