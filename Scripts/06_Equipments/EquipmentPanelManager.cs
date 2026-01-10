@@ -43,6 +43,7 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] GameObject charMaxLevel;
     [SerializeField] GameObject charUpgradeText; // 최고 레벨일 때 업그레이드 텍스트 숨기기
     [SerializeField] CanvasGroup charWarningLackCanvasGroup; // 오리 업그레이드 코인 부족 경고 메시지
+    [SerializeField] GameObject lackOfCoinWarningPopup; // 오리 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button charUpgradeButton;
     [SerializeField] GameObject CharCoinImage;
     [SerializeField] GameObject GearBGToExitField;
@@ -94,6 +95,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
+        lackOfCoinWarningPopup.SetActive(false);
 
         cardSlotManager.InitialSortingByGrade();
     }
@@ -311,10 +313,12 @@ public class EquipmentPanelManager : MonoBehaviour
             charUpgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = false;
 
             // 코인 부족 경고 메시지 띄우고 종료해서 업그레이드가 되지 않도록 하기
-            charWarningLack = charWarningLackCanvasGroup.DOFade(1, 1f);
+            // charWarningLack = charWarningLackCanvasGroup.DOFade(1, 1f);
 
-            if (hideCoroutine != null) StopCoroutine(hideCoroutine);
-            hideCoroutine = StartCoroutine(HideWarning(charWarningLackCanvasGroup));
+            // if (hideCoroutine != null) StopCoroutine(hideCoroutine);
+            // hideCoroutine = StartCoroutine(HideWarning(charWarningLackCanvasGroup));
+            lackOfCoinWarningPopup.SetActive(true);
+
             return;
         }
 
@@ -355,10 +359,11 @@ public class EquipmentPanelManager : MonoBehaviour
             upgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = false;
 
             // 업그레이드가 가능하지 않게 하기
-            warningLack = warningLackCanvasGroup.DOFade(1, 1f);
+            // warningLack = warningLackCanvasGroup.DOFade(1, 1f);
 
-            if (hideCoroutine != null) StopCoroutine(hideCoroutine);
-            hideCoroutine = StartCoroutine(HideWarning(warningLackCanvasGroup));
+            // if (hideCoroutine != null) StopCoroutine(hideCoroutine);
+            // hideCoroutine = StartCoroutine(HideWarning(warningLackCanvasGroup));
+            lackOfCoinWarningPopup.SetActive(true);
             return;
         }
 
