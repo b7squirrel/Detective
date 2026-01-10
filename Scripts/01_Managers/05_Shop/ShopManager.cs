@@ -12,6 +12,10 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     [Header("카드 제한 경고")]
     [SerializeField] private CardLimitWarningDialog cardLimitWarningDialog;
 
+    [Header("재화 부족 경고")]
+    [SerializeField] GameObject lackOfCristalWarningPanel;
+    [SerializeField] GameObject lackOfGoldWarningPanel;
+
     GachaSystem gachaSystem;
 
     protected override void Init()
@@ -23,6 +27,8 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         {
             cardLimitWarningDialog = FindObjectOfType<CardLimitWarningDialog>();
         }
+        lackOfCristalWarningPanel.SetActive(false);
+        lackOfGoldWarningPanel.SetActive(false);
     }
 
     /// <summary>
@@ -293,7 +299,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         if (currentCristal < productData.PurchaseCost)
         {
             Logger.Log($"[ShopManager] 크리스탈 부족: {currentCristal}/{productData.PurchaseCost}");
-            ShowInsufficientCurrencyPopup("크리스탈");
+            ShowInsufficientCurrencyPopup("Cristal");
             return false;
         }
 
@@ -316,7 +322,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         if (currentGold < productData.PurchaseCost)
         {
             Logger.Log($"[ShopManager] 골드 부족: {currentGold}/{productData.PurchaseCost}");
-            ShowInsufficientCurrencyPopup("골드");
+            ShowInsufficientCurrencyPopup("Gold");
             return false;
         }
 
@@ -468,6 +474,9 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     void ShowInsufficientCurrencyPopup(string currencyType)
     {
         // TODO: 부족 알림 팝업 표시
+        bool isCristal = currencyType == "Cristal" ? true : false;
+        lackOfCristalWarningPanel.SetActive(isCristal);
+        lackOfGoldWarningPanel.SetActive(!isCristal);
         Logger.Log($"[ShopManager] {currencyType}이(가) 부족합니다!");
     }
 

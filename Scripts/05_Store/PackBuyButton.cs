@@ -7,7 +7,6 @@ using TMPro;
 /// </summary>
 public class PackBuyButton : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI productNameText;
     [SerializeField] private TextMeshProUGUI priceText;
     
     private ProductData productData;
@@ -19,8 +18,8 @@ public class PackBuyButton : MonoBehaviour
     {
         productData = data;
         
-        if (productNameText != null)
-            productNameText.text = data.ProductName;
+        // if (productNameText != null)
+        //     productNameText.text = data.ProductName;
             
         if (priceText != null)
         {
