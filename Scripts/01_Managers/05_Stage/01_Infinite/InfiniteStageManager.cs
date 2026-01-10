@@ -11,6 +11,8 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     [SerializeField] int baseEnemiesPerWave = 15;
     [SerializeField] float enemyGrowthRate = 1.35f;
     [SerializeField] int maxEnemiesPerWave = 120;
+    [SerializeField] int infiniteDifficultyCap; // 난이도 상한선을 위한 최대 웨이브
+    [SerializeField] int difficultyFactor; // 커질수록 난이도가 가파르게 상승
 
     [Header("Spawn Timing")]
     [SerializeField] float baseSpawnInterval = 1.0f;
@@ -135,6 +137,11 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     {
         if (currentWavePlannedEnemies == 0) return 0f;
         return (float)currentWaveEnemiesKilled / currentWavePlannedEnemies;
+    }
+
+    public int GetDifficultyFactor()
+    {
+        return difficultyFactor;
     }
 
     public void PauseSpawn(bool pause)

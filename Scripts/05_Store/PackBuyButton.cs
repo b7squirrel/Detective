@@ -2,37 +2,47 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// 팩 구매 버튼 (Inspector에서 Button.onClick에 연결하는 방식)
+/// </summary>
 public class PackBuyButton : MonoBehaviour
 {
-    [SerializeField] private Button buyButton;
     [SerializeField] private TextMeshProUGUI productNameText;
     [SerializeField] private TextMeshProUGUI priceText;
     
     private ProductData productData;
 
-    void Awake()
-    {
-        if (buyButton == null)
-            buyButton = GetComponent<Button>();
-        
-        if (buyButton != null)
-            buyButton.onClick.AddListener(OnButtonClick);
-    }
-
+    /// <summary>
+    /// 상품 정보 설정 (ShopUI에서 호출)
+    /// </summary>
     public void SetInfo(ProductData data)
     {
         productData = data;
         
         if (productNameText != null)
             productNameText.text = data.ProductName;
-        
+            
         if (priceText != null)
-            priceText.text = $"{data.PurchaseCost}";
-        
+        {
+            // IAP인 경우 달러 표시
+            if (data.PurchaseType == PurchaseType.IAP)
+            {
+                float dollars = data.PurchaseCost / 100f;
+                priceText.text = $"${dollars:F2}";
+            }
+            else
+            {
+                priceText.text = data.PurchaseCost.ToString();
+            }
+        }
+            
         Logger.Log($"[PackBuyButton] 설정 완료: {data.ProductId}");
     }
 
-    void OnButtonClick()
+    /// <summary>
+    /// 버튼 클릭 시 호출 (Inspector에서 Button.onClick에 연결)
+    /// </summary>
+    public void OnPurchaseButtonClicked()
     {
         if (productData == null)
         {
@@ -41,7 +51,7 @@ public class PackBuyButton : MonoBehaviour
         }
 
         Logger.Log($"[PackBuyButton] 클릭: {productData.ProductId}");
-        
+
         if (ShopManager.Instance != null)
         {
             ShopManager.Instance.PurchaseProduct(productData.ProductId);

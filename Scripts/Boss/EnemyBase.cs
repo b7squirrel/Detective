@@ -224,7 +224,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             // 무한 모드: 웨이브를 스테이지로 사용 (최대 30)
             int waveNumber = infiniteStageManager.GetCurrentWave();
-            currentStageNumber = Mathf.Min(waveNumber, 30);
+            currentStageNumber = Mathf.Min(Mathf.RoundToInt(Mathf.Pow(waveNumber, 1.2f)), 30);
 
             Logger.Log($"[Enemy] Infinite mode - Wave {waveNumber} → Stage {currentStageNumber}");
         }

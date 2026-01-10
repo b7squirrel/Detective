@@ -24,6 +24,8 @@ public class SoundManager : MonoBehaviour
     Dictionary<string, float> lastPlayedTime;
     Dictionary<string, AudioSource> loopingSounds;
 
+    Transform audioSourceContainer; // 컨테이너 추가
+
     AudioClip singleSound;
     bool isMuted;
     bool isPlayingHurtSound;
@@ -38,6 +40,15 @@ public class SoundManager : MonoBehaviour
         if (audioSourcePool != null)
         {
             CleanupAudioSourcePool();
+        }
+
+        // AudioSource 컨테이너 생성
+        if (audioSourceContainer == null)
+        {
+            GameObject container = new GameObject("AudioSources");
+            container.transform.SetParent(transform);
+            container.transform.localPosition = Vector3.zero;
+            audioSourceContainer = container.transform;
         }
 
         audioSourcePool = new List<AudioSource>();
@@ -99,7 +110,8 @@ public class SoundManager : MonoBehaviour
                 return null;
             }
 
-            GameObject go = Instantiate(audioSourcePrefab, transform);
+            // 컨테이너 아래에 생성
+            GameObject go = Instantiate(audioSourcePrefab, audioSourceContainer);
             if (go == null)
             {
                 Logger.LogError("AudioSource GameObject 생성 실패");

@@ -9,11 +9,20 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     [Header("테스트 설정")]
     [SerializeField] private bool enableIAPTestMode = true;
 
+    [Header("카드 제한 경고")]
+    [SerializeField] private CardLimitWarningDialog cardLimitWarningDialog;
+
     GachaSystem gachaSystem;
 
     protected override void Init()
     {
         base.Init();
+
+        // CardLimitWarningDialog 자동 찾기
+        if (cardLimitWarningDialog == null)
+        {
+            cardLimitWarningDialog = FindObjectOfType<CardLimitWarningDialog>();
+        }
     }
 
     /// <summary>
@@ -41,6 +50,16 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         }
 
         Logger.Log($"[ShopManager] 구매 시도: {productData.ProductName} (ID: {productId})");
+
+        // ⭐ 상자/팩 구매 시 카드 수 체크
+        if (productData.ProductType == ProductType.Box || productData.ProductType == ProductType.Pack)
+        {
+            if (!CanPurchaseCards(productData))
+            {
+                Logger.Log($"[ShopManager] 카드 수 초과로 구매 불가: {productData.ProductId}");
+                return; // 구매 취소
+            }
+        }
 
         switch (productData.PurchaseType)
         {
@@ -78,9 +97,127 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     }
 
     /// <summary>
+    /// ⭐ 카드 구매 가능 여부 체크 (최대 카드 수 확인)
+    /// </summary>
+    bool CanPurchaseCards(ProductData productData)
+    {
+        if (productData == null)
+            return false;
+
+        // ⭐ 초기화 확인 (이중 체크)
+        if (!GameInitializer.IsInitialized)
+        {
+            Logger.LogError("[ShopManager] 게임 초기화가 완료되지 않았습니다.");
+            return false;
+        }
+
+        // ⭐ CardDataManager 확인
+        var cardDataManager = FindObjectOfType<CardDataManager>();
+        if (cardDataManager == null || !CardDataManager.IsDataLoaded)
+        {
+            Logger.LogError("[ShopManager] CardDataManager가 아직 준비되지 않았습니다.");
+            return false;
+        }
+
+        // GachaTableId로 카드 타입 판단
+        string cardType = GetCardTypeFromTableId(productData.GachaTableId);
+
+        // 현재 카드 수 조회
+        int currentCardCount = GetCurrentCardCount(cardType);
+
+        // 뽑을 카드 수
+        int drawCount = productData.DrawCount;
+
+        // 최대 카드 수
+        int maxCardCount = StaticValues.MaxCardNum;
+
+        Logger.Log($"[ShopManager] 카드 수 체크: {cardType} - 현재 {currentCardCount}개, +{drawCount}개 = {currentCardCount + drawCount}개 (최대 {maxCardCount}개)");
+
+        // 구매 후 최대치를 넘는지 체크
+        if (currentCardCount + drawCount > maxCardCount)
+        {
+            // ⭐ 경고 다이얼로그 표시
+            if (cardLimitWarningDialog != null)
+            {
+                string cardTypeName = cardType == "Weapon" ? "오리" : "아이템";
+                cardLimitWarningDialog.SetWarningText(
+                    cardTypeName,
+                    currentCardCount + drawCount,
+                    maxCardCount
+                );
+            }
+            else
+            {
+                Logger.LogWarning("[ShopManager] CardLimitWarningDialog를 찾을 수 없습니다.");
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// ⭐ 현재 보유 카드 수 조회
+    /// </summary>
+    int GetCurrentCardCount(string cardType)
+    {
+        var cardDataManager = FindObjectOfType<CardDataManager>();
+
+        // ⭐ 안전성 체크 (이미 CanPurchaseCards에서 체크하지만 방어적 코딩)
+        if (cardDataManager == null)
+        {
+            Logger.LogError("[ShopManager] CardDataManager를 찾을 수 없습니다.");
+            return 0;
+        }
+
+        var myCards = cardDataManager.GetMyCardList();
+
+        // ⭐ null 체크
+        if (myCards == null)
+        {
+            Logger.LogWarning("[ShopManager] 카드 리스트가 null입니다.");
+            return 0;
+        }
+
+        int count = 0;
+
+        foreach (var card in myCards)
+        {
+            if (cardType == "Weapon" && card.Type == CardType.Weapon.ToString())
+            {
+                count++;
+            }
+            else if (cardType == "Item" && card.Type == CardType.Item.ToString())
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    /// <summary>
+    /// ⭐ 테이블 ID로 카드 타입 판단
+    /// </summary>
+    string GetCardTypeFromTableId(string gachaTableId)
+    {
+        if (string.IsNullOrEmpty(gachaTableId))
+            return "Weapon"; // 기본값
+
+        if (gachaTableId.Contains("duck") || gachaTableId.Contains("random") ||
+            gachaTableId.Contains("starter") || gachaTableId.Contains("pro"))
+            return "Weapon";
+        else if (gachaTableId.Contains("item"))
+            return "Item";
+
+        Logger.LogWarning($"[ShopManager] 알 수 없는 테이블 ID: {gachaTableId}, Weapon으로 처리");
+        return "Weapon";
+    }
+
+    /// <summary>
     /// 광고 시청으로 구매
     /// </summary>
-    // ShopManager.cs의 PurchaseWithAd 수정
     async void PurchaseWithAd(ProductData productData, RectTransform fxStartPoint)
     {
         Logger.Log($"[ShopManager] 광고 구매 시작: {productData.ProductName}");
@@ -237,17 +374,16 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
             case ProductType.Pack:
                 Logger.Log($"[ShopManager] 팩 보상 처리: {productData.ProductId}");
-                // ⭐ ProductData 직접 전달
                 OpenBox(productData, fxStartPoint);
                 break;
 
             case ProductType.Box:
                 Logger.Log($"[ShopManager] 상자 보상 처리: {productData.ProductId}");
-                // ⭐ ProductData 직접 전달
                 OpenBox(productData, fxStartPoint);
                 break;
         }
     }
+
     IEnumerator GiveProductRewardCo(ProductData productData, RectTransform fxStartPoint)
     {
         yield return null;
@@ -268,7 +404,11 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         // ⭐ GachaSystem에 위임
         if (!string.IsNullOrEmpty(productData.GachaTableId))
         {
-            var gachaSystem = FindObjectOfType<GachaSystem>();
+            if (gachaSystem == null)
+            {
+                gachaSystem = FindObjectOfType<GachaSystem>();
+            }
+
             if (gachaSystem != null)
             {
                 Logger.Log($"[ShopManager] 가챠 실행: {productData.ProductId}, 테이블: {productData.GachaTableId}, {productData.DrawCount}개");

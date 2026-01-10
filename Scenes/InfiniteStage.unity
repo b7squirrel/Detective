@@ -357,6 +357,8 @@ MonoBehaviour:
   baseEnemiesPerWave: 15
   enemyGrowthRate: 1.45
   maxEnemiesPerWave: 300
+  infiniteDifficultyCap: 50
+  difficultyFactor: 2
   baseSpawnInterval: 0.5
   minSpawnInterval: 0.15
   waveInterval: 2
@@ -368,6 +370,7 @@ MonoBehaviour:
   chestSpawnInterval: 30
   chestInnerRadius: 10
   chestOuterRadius: 18
+  gameSpeedMultiplier: 1.5
 --- !u!1001 &1834807250
 PrefabInstance:
   m_ObjectHideFlags: 0

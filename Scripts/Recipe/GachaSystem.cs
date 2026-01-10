@@ -401,8 +401,8 @@ public class GachaSystem : MonoBehaviour
 
         if (weaponCount > totalMaxCardLimit)
         {
-            Logger.Log($"오리 카드의 갯수가 {totalMaxCardLimit}개를 넘습니다.");
-            GetComponent<CardLimitWarningDialog>().SetWarningText("오리", weaponCount);
+            Logger.Log($"[GachaSystem] 오리 카드의 갯수가 {totalMaxCardLimit}개를 넘습니다.");
+            GetComponent<CardLimitWarningDialog>().SetWarningText("오리", weaponCount, totalMaxCardLimit);
             return;
         }
 
@@ -478,7 +478,7 @@ public class GachaSystem : MonoBehaviour
         if (itemCount > maxTotalCardLimit)
         {
             Logger.Log($"아이템 카드의 갯수가 {maxTotalCardLimit}개를 넘습니다.");
-            GetComponent<CardLimitWarningDialog>().SetWarningText("아이템", itemCount);
+            GetComponent<CardLimitWarningDialog>().SetWarningText("아이템", itemCount, maxTotalCardLimit);
             return;
         }
 

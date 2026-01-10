@@ -70,7 +70,10 @@ public enum StageMusicType
     [Description("It's Bossing Time")]
     ItsBossingTime,
     [Description("Towel Defence Splash Screen")]
-    TowelDefenceSplashScreen
+    TowelDefenceSplashScreen,
+    [Description("Ori March")]
+    OriMarch
+
 
 }
 #endregion

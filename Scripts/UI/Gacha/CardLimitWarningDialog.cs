@@ -22,7 +22,7 @@ public class CardLimitWarningDialog : MonoBehaviour
     Coroutine co;
     bool isManuallyClose = false; // 수동으로 닫혔는지 플래그
 
-    public void SetWarningText(string cardType, int cardCount)
+    public void SetWarningText(string cardType, int cardCount, int maxCardCount)
     {
         int maxCardNum = cardType == "오리" ? maxOriCard : maxItemCard;
         // string warning = $"{cardType} 카드가 {maxCardNum}장을 넘겼어요! ({cardCount}/{maxCardNum})\n\n" +
@@ -31,7 +31,7 @@ public class CardLimitWarningDialog : MonoBehaviour
         
         // warningText.text = warning;
 
-        string nums = $"(<color=red>{cardCount}</color>/800)";
+        string nums = $"(<color=red>{cardCount}</color>/{maxCardCount})";
         currentNumMaxNum.text = nums;
 
         // 기존 코루틴 정리
