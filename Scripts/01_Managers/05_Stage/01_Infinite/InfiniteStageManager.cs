@@ -11,13 +11,11 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     [SerializeField] int baseEnemiesPerWave = 15;
     [SerializeField] float enemyGrowthRate = 1.35f;
     [SerializeField] int maxEnemiesPerWave = 120;
-    [SerializeField] int infiniteDifficultyCap; // 난이도 상한선을 위한 최대 웨이브
-    [SerializeField] int difficultyFactor; // 커질수록 난이도가 가파르게 상승
 
     [Header("Spawn Timing")]
     [SerializeField] float baseSpawnInterval = 1.0f;
     [SerializeField] float minSpawnInterval = 0.25f;
-    [SerializeField] float waveInterval = 3f;  // ⭐ 웨이브 클리어 후 짧은 휴식
+    [SerializeField] float waveInterval = 3f;
 
     [Header("Difficulty")]
     [SerializeField] float difficultyMultiplier = 1.15f;
@@ -54,10 +52,10 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     float chestSpawnTimer = 0f;
     bool isInitialized = false;
 
-    // ⭐ 웨이브 추적 변수들
-    int currentWaveEnemiesSpawned = 0;     // 현재 웨이브에서 스폰된 적 수
-    int currentWaveEnemiesKilled = 0;      // 현재 웨이브에서 처치한 적 수
-    int currentWavePlannedEnemies = 0;     // 현재 웨이브 목표 적 수
+    // 웨이브 추적 변수들
+    int currentWaveEnemiesSpawned = 0;
+    int currentWaveEnemiesKilled = 0;
+    int currentWavePlannedEnemies = 0;
 
     // 성과
     float survivalTime = 0f;
@@ -65,7 +63,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     // 스폰 일시정지
     bool isSpawnPaused = false;
 
-    // ⭐⭐⭐ 웨이브 완료 이벤트 추가
+    // 웨이브 완료 이벤트
     public event System.Action<int> OnWaveComplete;
 
     void Awake()
@@ -78,14 +76,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         wallManager = FindObjectOfType<WallManager>();
         fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
     }
-
-    // ⭐ 게임 종료 시 원래대로
-    // void OnDisable()
-    // {
-    //     Time.timeScale = 1.0f;
-    //     Time.fixedDeltaTime = 0.02f;
-    //     Logger.Log("[InfiniteStage] Game speed reset to normal");
-    // }
 
     void Start()
     {
@@ -105,43 +95,26 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     public int GetCurrentWave() => currentWave;
     public float GetSurvivalTime() => survivalTime;
 
-    /// <summary>
-    /// 현재 살아있는 적의 수
-    /// </summary>
     public int GetCurrentEnemyCount()
     {
         if (spawner == null) return 0;
         return spawner.GetCurrentEnemyNums();
     }
 
-    /// <summary>
-    /// 현재 웨이브에서 처치한 적의 수
-    /// </summary>
     public int GetCurrentWaveKilledCount()
     {
         return currentWaveEnemiesKilled;
     }
 
-    /// <summary>
-    /// 현재 웨이브에서 스폰될 예정인 총 적 수
-    /// </summary>
     public int GetCurrentWavePlannedCount()
     {
         return currentWavePlannedEnemies;
     }
 
-    /// <summary>
-    /// 현재 웨이브 진행도 (0.0 ~ 1.0)
-    /// </summary>
     public float GetCurrentWaveProgress()
     {
         if (currentWavePlannedEnemies == 0) return 0f;
         return (float)currentWaveEnemiesKilled / currentWavePlannedEnemies;
-    }
-
-    public int GetDifficultyFactor()
-    {
-        return difficultyFactor;
     }
 
     public void PauseSpawn(bool pause)
@@ -156,15 +129,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     public void OnEnemyKilled()
     {
         currentWaveEnemiesKilled++;
-
-        // ⭐ 디버그 로그
-        Logger.Log($">>> [Kill] Wave {currentWave}: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
-
-        // ⭐ 오버플로우 경고
-        if (currentWaveEnemiesKilled > currentWavePlannedEnemies)
-        {
-            Logger.LogWarning($">>> [Kill] WARNING: Killed ({currentWaveEnemiesKilled}) > Planned ({currentWavePlannedEnemies})!");
-        }
 
         // UI 업데이트
         if (enemyCountUI != null)
@@ -238,24 +202,15 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         timeWaveUI = FindObjectOfType<TimeWaveUI>();
         enemyCountUI = FindObjectOfType<EnemyCountUI>();
 
-        // ⭐ 무한 모드 속도 적용
-        Time.timeScale = gameSpeedMultiplier;
-        Time.fixedDeltaTime = 0.02f * gameSpeedMultiplier;  // 물리 업데이트도 조정
+        // 무한 모드 속도 적용
+        ApplyGameSpeed();
 
-        Logger.Log($"[InfiniteStage] Game speed set to {gameSpeedMultiplier}x");
-
-        // ⭐⭐⭐ 음악 초기화 추가
+        // 음악 초기화
         if (GameManager.instance != null && GameManager.instance.musicCreditManager != null)
         {
             GameManager.instance.musicCreditManager.Init();
             Logger.Log("[InfiniteStage] MusicCreditManager.Init() called");
         }
-        else
-        {
-            Logger.LogError("[InfiniteStage] GameManager or MusicCreditManager not found!");
-        }
-
-        ApplyGameSpeed();
 
         isInitialized = true;
 
@@ -305,6 +260,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         return true;
     }
+
     // ⭐ 게임 종료/비활성화 시 원래대로
     void OnDisable()
     {
@@ -315,6 +271,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     {
         ResetGameSpeed();
     }
+
     void ResetGameSpeed()
     {
         Time.timeScale = originalTimeScale;
@@ -420,46 +377,65 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         }
     }
 
-    // ⭐⭐⭐ 핵심 변경: 웨이브 루프
+    // ⭐⭐⭐ 핵심: 웨이브 루프 (보스 시스템 통합)
     IEnumerator WaveLoop()
     {
         while (true)
         {
             currentWave++;
-
-            // 웨이브 시작 시 카운터 초기화
+            
             currentWaveEnemiesSpawned = 0;
             currentWaveEnemiesKilled = 0;
-
-            // 이번 웨이브 목표 적 수 계산
-            float rawCount = baseEnemiesPerWave * Mathf.Pow(enemyGrowthRate, currentWave - 1);
-            currentWavePlannedEnemies = Mathf.Min(Mathf.RoundToInt(rawCount), maxEnemiesPerWave);
-
-            // 이제 UI 업데이트 (계산 후!)
-            if (enemyCountUI != null)
+            
+            // ⭐ 6의 배수면 보스 웨이브
+            bool isBossWave = (currentWave % 6 == 0);
+            
+            if (isBossWave)
             {
-                enemyCountUI.UpdateWaveProgress("0", currentWavePlannedEnemies.ToString());
+                Logger.Log($"[InfiniteStage] ========== BOSS Wave {currentWave} Start ==========");
+                
+                // 보스 1마리만
+                currentWavePlannedEnemies = 1;
+                
+                if (enemyCountUI != null)
+                {
+                    enemyCountUI.UpdateWaveProgress("0", "1");
+                }
+                
+                yield return StartCoroutine(SpawnBossWave());
             }
-
-            Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Start ==========");
-            Logger.Log($"[InfiniteStage] Target: {currentWavePlannedEnemies} enemies");
-
-            // 1단계: 적 스폰
-            yield return StartCoroutine(SpawnWave());
+            else
+            {
+                Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Start ==========");
+                
+                // 일반 적 수 계산
+                float rawCount = baseEnemiesPerWave * Mathf.Pow(enemyGrowthRate, currentWave - 1);
+                int normalEnemies = Mathf.Min(Mathf.RoundToInt(rawCount), maxEnemiesPerWave);
+                
+                // 일반 적 + SubBoss 1마리
+                currentWavePlannedEnemies = normalEnemies + 1;
+                
+                if (enemyCountUI != null)
+                {
+                    enemyCountUI.UpdateWaveProgress("0", currentWavePlannedEnemies.ToString());
+                }
+                
+                Logger.Log($"[InfiniteStage] Target: {normalEnemies} enemies + 1 sub-boss");
+                
+                yield return StartCoroutine(SpawnNormalWave(normalEnemies));
+            }
 
             Logger.Log($"[InfiniteStage] Spawning complete. Waiting for wave clear...");
 
-            // 2단계: 모든 적 처치 대기
             yield return StartCoroutine(WaitForWaveClear());
 
             Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Complete ==========");
             Logger.Log($"[InfiniteStage] Killed: {currentWaveEnemiesKilled} / {currentWavePlannedEnemies}");
 
-            // ⭐⭐⭐ 웨이브 완료 이벤트 발생
             OnWaveComplete?.Invoke(currentWave);
             Logger.Log($"[InfiniteStage] OnWaveComplete event triggered for wave {currentWave}");
 
-            // 3단계: 짧은 휴식
+            // 휴식
             float waitedTime = 0f;
             while (waitedTime < waveInterval)
             {
@@ -470,83 +446,144 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
                 yield return null;
             }
 
-            // 4단계: 난이도 증가
             IncreaseDifficulty();
         }
     }
 
-    // 새로운 메서드: 웨이브 클리어 대기
     IEnumerator WaitForWaveClear()
     {
-        // 모든 적이 죽을 때까지 대기
         while (GetCurrentEnemyCount() > 0)
         {
-            // 플레이어가 죽었으면 중단
             if (GameManager.instance != null && GameManager.instance.IsPlayerDead)
             {
                 Logger.Log("[InfiniteStage] Player dead during wave clear");
                 yield break;
             }
 
-            yield return new WaitForSeconds(0.5f);  // 0.5초마다 체크
+            yield return new WaitForSeconds(0.5f);
         }
 
         Logger.Log("[InfiniteStage] All enemies cleared!");
     }
 
-    IEnumerator SpawnWave()
+    // ⭐ 일반 웨이브 스폰 (일반 적 + SubBoss)
+    IEnumerator SpawnNormalWave(int normalEnemyCount)
     {
-        int enemiesToSpawn = currentWavePlannedEnemies;
-
         float spawnDelay = baseSpawnInterval / currentDifficulty;
         spawnDelay = Mathf.Max(spawnDelay, minSpawnInterval);
 
-        Logger.Log($"[InfiniteStage] Spawning {enemiesToSpawn} enemies with {spawnDelay:F2}s delay");
-
-        for (int i = 0; i < enemiesToSpawn; i++)
+        // 1. 일반 적 스폰
+        for (int i = 0; i < normalEnemyCount; i++)
         {
             if (GameManager.instance != null && GameManager.instance.IsPlayerDead)
-            {
-                Logger.Log("[InfiniteStage] Player dead, stopping spawn");
                 yield break;
-            }
 
             while (isSpawnPaused)
-            {
                 yield return null;
-            }
 
-            SpawnRandomEnemy();
-            currentWaveEnemiesSpawned++;  // ⭐ 카운트 증가
+            SpawnRandomNormalEnemy();
+            currentWaveEnemiesSpawned++;
 
             yield return new WaitForSeconds(spawnDelay);
         }
 
-        Logger.Log($"[InfiniteStage] Spawned {currentWaveEnemiesSpawned} / {currentWavePlannedEnemies}");
+        // 2. SubBoss 순서대로 스폰
+        SpawnSubBossInOrder();
+        currentWaveEnemiesSpawned++;
+
+        Logger.Log($"[InfiniteStage] Spawned {normalEnemyCount} normal + 1 sub-boss");
     }
 
-    void SpawnRandomEnemy()
+    // ⭐ 보스 웨이브 스폰 (보스만)
+    IEnumerator SpawnBossWave()
     {
-        int enemyIndex = GetWeightedRandomEnemyIndex();
+        SpawnBossInOrder(currentWave);
+        currentWaveEnemiesSpawned++;
+
+        Logger.Log($"[InfiniteStage] Spawned boss for wave {currentWave}");
+
+        yield return null;
+    }
+
+    // ⭐ 일반 적만 랜덤 스폰
+    void SpawnRandomNormalEnemy()
+    {
+        int enemyIndex = GetWeightedRandomNormalEnemyIndex();
 
         if (enemyIndex >= 0 && enemyIndex < enemyConfigs.Length)
         {
-            spawner.SpawnForInfiniteMode(enemyConfigs[enemyIndex].data, enemyIndex); // 무한 모드 전용 Spawner 메서드
-        }
-        else
-        {
-            Logger.LogError($"[InfiniteStage] Invalid enemy index: {enemyIndex}");
+            spawner.SpawnForInfiniteMode(enemyConfigs[enemyIndex].data, enemyIndex);
         }
     }
 
-    int GetWeightedRandomEnemyIndex()
+    // ⭐ SubBoss 순서대로 스폰 (Wave 1-5, 7-11, 13-17...)
+    void SpawnSubBossInOrder()
+    {
+        int waveInCycle = currentWave % 6;
+        if (waveInCycle == 0) waveInCycle = 6;
+        int subBossOrder = waveInCycle - 1;  // 0~4
+
+        for (int i = 0; i < enemyConfigs.Length; i++)
+        {
+            if (enemyConfigs[i].IsSubBoss() &&
+                enemyConfigs[i].orderIndex == subBossOrder)
+            {
+                spawner.SpawnForInfiniteMode(enemyConfigs[i].data, i);
+                Logger.Log($"[InfiniteStage] SubBoss[{subBossOrder}] spawned: {enemyConfigs[i].data.Name}");
+                return;
+            }
+        }
+
+        Logger.LogWarning($"[InfiniteStage] No SubBoss found for order {subBossOrder}!");
+    }
+
+    // ⭐ Boss 순서대로 스폰 (Wave 6, 12, 18...)
+    void SpawnBossInOrder(int wave)
+    {
+        int bossNumber = (wave / 6) - 1;
+
+        int bossCount = 0;
+        for (int i = 0; i < enemyConfigs.Length; i++)
+        {
+            if (enemyConfigs[i].IsStageBoss())
+                bossCount++;
+        }
+
+        if (bossCount == 0)
+        {
+            Logger.LogError("[InfiniteStage] No boss configured!");
+            return;
+        }
+
+        int bossOrder = bossNumber % bossCount;
+
+        for (int i = 0; i < enemyConfigs.Length; i++)
+        {
+            if (enemyConfigs[i].IsStageBoss() &&
+                enemyConfigs[i].orderIndex == bossOrder)
+            {
+                // ⭐ isBoss = true 전달
+                spawner.SpawnForInfiniteMode(enemyConfigs[i].data, i, isBoss: true);
+
+                Logger.Log($"[InfiniteStage] Boss[{bossOrder}] spawned: {enemyConfigs[i].data.Name} (Wave {wave})");
+                return;
+            }
+        }
+
+        Logger.LogWarning($"[InfiniteStage] No Boss found for order {bossOrder}!");
+    }
+
+    // ⭐ 일반 적만 가중치 랜덤 (보스 제외)
+    int GetWeightedRandomNormalEnemyIndex()
     {
         List<int> availableIndices = new List<int>();
         List<int> availableWeights = new List<int>();
 
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
-            if (enemyConfigs[i].IsAvailableAtWave(currentWave))
+            // Normal 타입만 필터링
+            if (enemyConfigs[i].IsNormalEnemy() &&
+                enemyConfigs[i].IsAvailableAtWave(currentWave))
             {
                 availableIndices.Add(i);
                 availableWeights.Add(enemyConfigs[i].weight);
@@ -555,14 +592,14 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         if (availableIndices.Count == 0)
         {
-            Logger.LogError("[InfiniteStage] No available enemies for current wave!");
+            Logger.LogError("[InfiniteStage] No normal enemies available!");
             return 0;
         }
 
         int totalWeight = 0;
-        for (int i = 0; i < availableWeights.Count; i++)
+        foreach (int w in availableWeights)
         {
-            totalWeight += availableWeights[i];
+            totalWeight += w;
         }
 
         int randomValue = Random.Range(0, totalWeight);

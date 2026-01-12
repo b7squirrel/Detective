@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Queen Driller
   animController: {fileID: 22100000, guid: 59c871320d0a5446dbc3f5d63508d7e3, type: 2}
-  stats:
-    hp: 400000
-    speed: 8
-    damage: 500
-    rangedDamage: 0
-    experience_reward: 1
   enemyType: 0
   enemyRole: 0
-  bossType: 0
+  bossType: 3
+  specialAbility: 0
   hpScalingMultiplier: 1
   speedScalingMultiplier: 1
   damageScalingMultiplier: 1
-  canDash: 0
   dashCooldown: 3
   dashSpeed: 15
-  hasJumpAttack: 0
+  dashDuration: 0.5
+  laserCooldown: 5
+  laserAnticipationTime: 1
+  laserFireDuration: 0.3
+  laserDamage: 20
+  laserRange: 100
+  laserWidth: 0.2
   projectilePrefab: {fileID: 0}
   splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 0, g: 0, b: 0, a: 0}

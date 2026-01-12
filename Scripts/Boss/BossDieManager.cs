@@ -4,7 +4,7 @@ using UnityEngine;
 public class BossDieManager : MonoBehaviour
 {
     public static BossDieManager instance;
-    public bool IsBossDead { get; private set; } // 죽은 후부터는 player의 takeDamage가 작동 안하도록
+    public bool IsBossDead { get; private set; }
     GameObject deadBody;
     int amountOfCoins;
     Animator anim;
@@ -22,12 +22,13 @@ public class BossDieManager : MonoBehaviour
         IsBossDead = true;
         this.deadBody = Instantiate(deadBody, boss.position, boss.rotation);
         anim = this.deadBody.GetComponent<Animator>();
-        //this.amountOfCoins = amountOfCoins;
     }
+    
     public void DieEvent(float desiredTimeScale, float waitingTime)
     {
         StartCoroutine(DieEventCo(desiredTimeScale, waitingTime));
     }
+    
     IEnumerator DieEventCo(float desiredTimeScale, float waitingTime)
     {
         Debug.Log("보스 다이 매니져에서 호출");
@@ -35,10 +36,7 @@ public class BossDieManager : MonoBehaviour
         MusicManager.instance.Stop();
         SoundManager.instance.StopAllSounds();
 
-        // 스테이지와 동전 저장
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
-
-        // 스테이지가 클리어 된 것을 기록
         playerData.SetCurrentStageCleared(); 
         playerData.SaveResourcesBeforeQuitting();
 
@@ -48,11 +46,9 @@ public class BossDieManager : MonoBehaviour
         FindObjectOfType<PauseManager>().UnPauseGame();
         if (anim != null) anim.SetTrigger("Die");
 
-        //모든 적과 벽 제거
         RemoveAllEnemies();
         RemoveAllWalls();
 
-        //dropCoins.Init(amountOfCoins, deadBody.transform.position);
         yield return new WaitForSeconds(3f);
         if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();
 
@@ -62,34 +58,31 @@ public class BossDieManager : MonoBehaviour
     
     public void BossCameraOff()
     {
-        //StartCoroutine(PlayerCamera());
     }
-    //IEnumerator PlayerCamera()
-    //{
-    //    yield return new WaitForSeconds(2f);
-    //    Player.instance.ShouldBeStill = false;
-    //}
-
-    //IEnumerator WinMessage()
-    //{
-    //    yield return new WaitForSeconds(7f);
-    //    GameManager.instance.GetComponent<WinStage>().OpenPanel(); 
-    //}
     
+    // ⭐ 수정: 원래 timeScale 저장 후 복구
     public void SlowMo(float _desiredTimeScale, float _duration)
     {
         StartCoroutine(SlowMoCo(_desiredTimeScale, _duration));
     }
+    
     IEnumerator SlowMoCo(float _desiredTimeScale, float _duration)
     {
+        // ⭐ 현재 timeScale 저장
+        float originalTimeScale = Time.timeScale;
+        
         Time.timeScale = _desiredTimeScale;
         yield return new WaitForSecondsRealtime(_duration);
-        Time.timeScale = 1f;
+        
+        // ⭐ 저장된 값으로 복구
+        Time.timeScale = originalTimeScale;
+        
+        Logger.Log($"[BossDieManager] SlowMo done, restored timeScale to {originalTimeScale}");
     }
 
     void RemoveAllEnemies()
     {
-        LayerMask enemyLayer = LayerMask.NameToLayer("Enmey"); // 이상하게 GetMask가 안됨
+        LayerMask enemyLayer = LayerMask.NameToLayer("Enmey");
 
         Collider2D[] enemies = 
             Physics2D.OverlapCircleAll(Player.instance.transform.position, 1000f, enemyLayer);
@@ -103,13 +96,13 @@ public class BossDieManager : MonoBehaviour
             }
         }
     }
+    
     void RemoveAllWalls()
     {
-        LayerMask wallLayer = LayerMask.GetMask("Wall"); // 이상하게 NameToLayer가 안됨
+        LayerMask wallLayer = LayerMask.GetMask("Wall");
 
         Collider2D[] walls = 
             Physics2D.OverlapCircleAll(Player.instance.transform.position, 1000f, wallLayer);
-
 
         for (int i = 0; i < walls.Length; i++)
         {

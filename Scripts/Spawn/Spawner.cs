@@ -90,15 +90,24 @@ public class Spawner : MonoBehaviour
     /// <summary>
     /// 무한 모드 전용 스폰 (maxEnemyInScene 제한 무시)
     /// </summary>
-    public void SpawnForInfiniteMode(EnemyData enemyToSpawn, int index)
+    public void SpawnForInfiniteMode(EnemyData enemyToSpawn, int index, bool isBoss = false)
     {
-        // ⭐ maxEnemyInScene 체크 없이 바로 스폰
-
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         Vector2 spawnPoint = GetAvailablePoints();
         enemy.transform.position = new Vector2(spawnPoint.x, spawnPoint.y);
 
-        enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
+        EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
+        enemyBase.InitEnemy(enemyToSpawn);
+
+        // ⭐ 보스 플래그 설정
+        if (isBoss)
+        {
+            enemyBase.IsBoss = true;
+            Logger.Log($"[Spawner] Boss spawned in infinite mode: {enemyToSpawn.Name}");
+
+            // ⭐ 보스 스테이지 설정 (선택사항 - 무한 모드에서 필요한지 확인)
+            // GameManager.instance.SetBossStage(true);
+        }
 
         AddEnemyNumber();
     }
