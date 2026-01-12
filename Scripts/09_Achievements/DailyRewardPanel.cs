@@ -71,6 +71,9 @@ public class DailyRewardPanel : MonoBehaviour
             OnGameReady();
         }
 
+        if (clipPanelUp != null)
+            SoundManager.instance?.Play(clipPanelUp);
+
         // ⭐ 패널이 활성화될 때마다 닫기 버튼 숨김
         if (closeButton != null)
             closeButton.SetActive(false);

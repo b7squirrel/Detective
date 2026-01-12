@@ -17,8 +17,8 @@ public class ButtonEffect : MonoBehaviour
     Animator bottonAnim;
     void Awake()
     {
-        myButton = GetComponent<Button>();
-        bottonAnim = GetComponent<Animator>();
+        myButton = GetComponentInChildren<Button>();
+        bottonAnim = GetComponentInChildren<Animator>();
     }
     void Start()
     {
@@ -40,6 +40,7 @@ public class ButtonEffect : MonoBehaviour
         if (ignoreButtonEffectAnim) return;
         if (bottonAnim == null) return;
         bottonAnim.SetTrigger("Pressed");
+        Logger.LogError($"[Button Effect] 버튼 애니메이션 재생");
         ButtonParticleEffect();
     }
 

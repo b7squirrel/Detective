@@ -18,6 +18,10 @@ public class InfiniteStagePanel : MonoBehaviour
     Coroutine co;
     PlayerDataManager playerDataManager;
 
+    [Header("사운드")]
+    [SerializeField] AudioClip clipPanelUp;
+    [SerializeField] AudioClip clipPanelDown; // 패널 닫힐 때 사운드
+
     public void InitInfinitePanel()
     {
         if (playerDataManager == null) playerDataManager = FindObjectOfType<PlayerDataManager>();
@@ -49,12 +53,18 @@ public class InfiniteStagePanel : MonoBehaviour
         infinitePanelOpenerAnim.SetTrigger("Off");
         if(co != null) StopCoroutine(co);
         DeactivateStartButton();
+
+        if (clipPanelUp != null)
+            SoundManager.instance?.Play(clipPanelUp);     
     }
     public void DeactivateInfinitePanel()
     {
-        infiniteModePanelAnim.gameObject.SetActive(false);
+        // infiniteModePanelAnim.gameObject.SetActive(false);
         infiniteModePanelAnim.SetTrigger("Down");
         infinitePanelOpenerAnim.SetTrigger("On");
         ActivateStartButton();
+
+        if (clipPanelDown != null)
+            SoundManager.instance?.Play(clipPanelDown);     
     }
 }
