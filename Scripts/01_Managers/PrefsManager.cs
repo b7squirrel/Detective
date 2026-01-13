@@ -3,10 +3,12 @@ using UnityEngine;
 public class PrefsManager : MonoBehaviour
 {
     [Header("Sound")]
-    [SerializeField] ButtonToggle buttonToggle;
+    [SerializeField] ButtonToggle buttonToggleSound;
+    [SerializeField] ButtonToggle buttonToggleMusic;
     SoundManager soundManager;
     MusicManager musicManager;
     bool soundState;
+    bool musicState;
 
     private void Start()
     {
@@ -17,6 +19,7 @@ public class PrefsManager : MonoBehaviour
         musicManager = FindObjectOfType<MusicManager>();
         soundManager.Init();
         InitSoundState(soundState);
+        InitMusicState(musicState);
         Save();
 
     }
@@ -35,19 +38,40 @@ public class PrefsManager : MonoBehaviour
         {
             soundState = PlayerPrefs.GetInt("SoundState") != 0;
         }
+
+        if (!PlayerPrefs.HasKey("MusicState"))
+        {
+            musicState = true;
+            Save();
+        }
+        else
+        {
+            soundState = PlayerPrefs.GetInt("MusicState") != 0;
+        }
     }
     void InitSoundState(bool _soundState)
     {
         // 사운드 매니저, 음악 매니저, 옵션 토글 버튼에 상태 반영
         soundManager.SetState(_soundState);
-        musicManager.SetState(_soundState);
-
-        buttonToggle.SetImage(_soundState); // 버튼 이미지도 상태에 맞게 설정
+        buttonToggleSound.SetImage(_soundState); // 버튼 이미지도 상태에 맞게 설정
     }
-    public void SetSouindState() // Toggle 버튼을 눌렀을 때 호출됨
+    void InitMusicState(bool _musicState)
+    {
+        musicManager.SetState(_musicState);
+        buttonToggleMusic.SetImage(_musicState); // 버튼 이미지도 상태에 맞게 설정
+    }
+
+    // 버튼 이벤트
+    public void SetSoundState() // Toggle 버튼을 눌렀을 때 호출됨
     {
         soundState = !soundState;
         InitSoundState(soundState);
+        Save();
+    }
+    public void SetMusicState() // 음악 토글 버튼
+    {
+        musicState = !musicState;
+        InitMusicState(musicState);
         Save();
     }
 

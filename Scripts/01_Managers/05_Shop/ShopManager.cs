@@ -475,8 +475,18 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     {
         // TODO: 부족 알림 팝업 표시
         bool isCristal = currencyType == "Cristal" ? true : false;
-        lackOfCristalWarningPanel.SetActive(isCristal);
-        lackOfGoldWarningPanel.SetActive(!isCristal);
+
+        if (isCristal)
+        {
+            lackOfCristalWarningPanel.SetActive(true);
+            lackOfCristalWarningPanel.GetComponentInChildren<PanelTween>().ShowWithScale();
+        }
+        else
+        {
+            lackOfGoldWarningPanel.SetActive(false);
+            lackOfGoldWarningPanel.GetComponentInChildren<PanelTween>().ShowWithScale();
+        }
+
         Logger.Log($"[ShopManager] {currencyType}이(가) 부족합니다!");
     }
 

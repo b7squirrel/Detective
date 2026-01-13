@@ -11,9 +11,9 @@ public class EnemyCountUI : MonoBehaviour
     /// <summary>
     /// 무한 모드일때만 progress text 보이기
     /// </summary>
-    public void InitProgressText()
+    public void InitProgressText(bool activate)
     {
-        waveProgressText.gameObject.SetActive(true);
+        waveProgressText.gameObject.SetActive(activate);
     }
 
     /// <summary>

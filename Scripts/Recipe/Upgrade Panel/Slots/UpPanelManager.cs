@@ -346,6 +346,11 @@ public class UpPanelManager : MonoBehaviour
     void AskUnequip()
     {
         askUnequipPopup.SetActive(true);
+        PanelTween tween = askUnequipPopup.GetComponentInChildren<PanelTween>();
+        if(tween != null)
+        {
+            tween.ShowWithBounce();
+        }
     }
     // 버튼 이벤트
     public void AcceptUnequip()
@@ -388,7 +393,15 @@ public class UpPanelManager : MonoBehaviour
     }
     public void CloseAskUnequipPopup()
     {
-        askUnequipPopup.SetActive(false);
+        PanelTween tween = askUnequipPopup.GetComponentInChildren<PanelTween>();
+        if (tween != null)
+        {
+            tween.HidePanel();
+        }
+        else
+        {
+            askUnequipPopup.SetActive(false);
+        }
         pendingCardData = null;
     }
     #endregion

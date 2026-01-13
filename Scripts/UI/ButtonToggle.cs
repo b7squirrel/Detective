@@ -2,15 +2,27 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ButtonToggle : MonoBehaviour
-{
-    [SerializeField] Sprite soundOnSprite;
-    [SerializeField] Sprite soundOffSprite;
-    [SerializeField] Image buttonImage;
-    [SerializeField] TMPro.TextMeshProUGUI text;
+{   
+    [SerializeField] Image buttonIcon;
+    [SerializeField] Sprite onSprite;
+    [SerializeField] Sprite offSprite;
+    [SerializeField] GameObject onObject;
+    [SerializeField] GameObject offObject;
 
-    public void SetImage(bool soundState)
+    public void SetImage(bool state)
     {
-        buttonImage.sprite = soundState ? soundOnSprite : soundOffSprite;
-        text.text = soundState ? "Sound Off" : "Sound On";
+        if(state)
+        {
+            buttonIcon.sprite = onSprite;
+
+            onObject.SetActive(true);
+            offObject.SetActive(false);
+        }
+        else
+        {
+            buttonIcon.sprite = offSprite;
+            onObject.SetActive(false);
+            offObject.SetActive(true);
+        }
     }
 }
