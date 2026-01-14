@@ -29,16 +29,16 @@ public class DailyRewardButton : MonoBehaviour
     {
         Debug.Log($"[DailyRewardButton] 버튼 {buttonDay} 업데이트: 현재일={currentDay}, 수령={hasClaimed}");
         
-        // postIt 날짜 표시
-        if (dayText != null)
-        {
-            dayText.text = buttonDay.ToString();
-            Debug.Log($"[DailyRewardButton] {buttonDay}일차 dayText 설정");
-        }
-        else
-        {
-            Debug.LogError($"[DailyRewardButton] X 버튼 {buttonDay} dayText가 null!");
-        }
+        // // postIt 날짜 표시
+        // if (dayText != null)
+        // {
+        //     dayText.text = buttonDay.ToString();
+        //     Debug.Log($"[DailyRewardButton] {buttonDay}일차 dayText 설정");
+        // }
+        // else
+        // {
+        //     Debug.LogError($"[DailyRewardButton] X 버튼 {buttonDay} dayText가 null!");
+        // }
         
         // 코인 보상 표시
         bool hasCoin = coinReward > 0;

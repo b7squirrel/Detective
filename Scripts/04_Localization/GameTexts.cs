@@ -87,6 +87,13 @@ public class GameTexts : ScriptableObject
     public string day6 = "6일차";
     public string day7 = "7일차";
 
+    [Header("무한 모드")]
+    public string duckChallenge = "오리 도전";
+
+    [Header("Options")]
+    public string language = "언어";
+    public string sound = "사운드";
+    public string music = "음악";
     // 헬퍼 메서드
     public string GetDayText(int day)
     {

@@ -78,6 +78,34 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.sortByLevel;
             case UITextKey.SortByGrade:
                 return LocalizationManager.Game.sortByGrade;
+            case UITextKey.Language:
+                return LocalizationManager.Game.language;
+            case UITextKey.Sound:
+                return LocalizationManager.Game.sound;
+            case UITextKey.Music:
+                return LocalizationManager.Game.music;
+            case UITextKey.DuckChallenge:
+                return LocalizationManager.Game.duckChallenge;
+            case UITextKey.DailyRewardTitle:
+                return LocalizationManager.Game.dailyRewardTitle;
+            case UITextKey.ClaimReward:
+                return LocalizationManager.Game.claimReward;
+            case UITextKey.AlreadyClaimed:
+                return LocalizationManager.Game.alreadyClaimed;
+            case UITextKey.Day1:
+                return LocalizationManager.Game.day1;
+            case UITextKey.Day2:
+                return LocalizationManager.Game.day2;
+            case UITextKey.Day3:
+                return LocalizationManager.Game.day3;
+            case UITextKey.Day4:
+                return LocalizationManager.Game.day4;
+            case UITextKey.Day5:
+                return LocalizationManager.Game.day5;
+            case UITextKey.Day6:
+                return LocalizationManager.Game.day6;
+            case UITextKey.Day7:
+                return LocalizationManager.Game.day7;
             default:
                 return key.ToString();
         }
@@ -112,5 +140,19 @@ public enum UITextKey
     SortBy,
     SortByName,
     SortByLevel,
-    SortByGrade
+    SortByGrade,
+    Language,
+    Sound,
+    Music,
+    DuckChallenge,
+    DailyRewardTitle,
+    ClaimReward,
+    AlreadyClaimed,
+    Day1,
+    Day2,
+    Day3,
+    Day4,
+    Day5,
+    Day6,
+    Day7
 }
