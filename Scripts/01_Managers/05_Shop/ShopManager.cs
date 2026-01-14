@@ -13,8 +13,11 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     [SerializeField] private CardLimitWarningDialog cardLimitWarningDialog;
 
     [Header("재화 부족 경고")]
-    [SerializeField] GameObject lackOfCristalWarningPanel;
-    [SerializeField] GameObject lackOfGoldWarningPanel;
+    [SerializeField] GameObject lackOfCristalWarningPanelPrefab;
+    // [SerializeField] GameObject lackOfGoldWarningPanelPrefab;
+
+    GameObject lackOfCristalWarningPanel;
+    // GameObject lackOfGoldWarningPanel;
 
     GachaSystem gachaSystem;
 
@@ -27,8 +30,39 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         {
             cardLimitWarningDialog = FindObjectOfType<CardLimitWarningDialog>();
         }
-        lackOfCristalWarningPanel.SetActive(false);
-        lackOfGoldWarningPanel.SetActive(false);
+
+        // ⭐ 경고 패널 생성
+        CreateWarningPanels();
+    }
+
+    /// <summary>
+    /// ⭐ 경고 패널 프리팹 인스턴스 생성
+    /// </summary>
+    void CreateWarningPanels()
+    {
+        // Canvas 찾기 (UI는 Canvas 아래에 있어야 함)
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            Logger.LogError("[ShopManager] Canvas를 찾을 수 없습니다!");
+            return;
+        }
+
+        // ⭐ 크리스탈 부족 경고 패널 생성
+        if (lackOfCristalWarningPanelPrefab != null && lackOfCristalWarningPanel == null)
+        {
+            lackOfCristalWarningPanel = Instantiate(lackOfCristalWarningPanelPrefab, canvas.transform);
+            lackOfCristalWarningPanel.SetActive(false);
+            DontDestroyOnLoad(lackOfCristalWarningPanel); // ⭐ 씬 전환 시에도 유지
+        }
+
+        // // ⭐ 골드 부족 경고 패널 생성
+        // if (lackOfGoldWarningPanelPrefab != null && lackOfGoldWarningPanel == null)
+        // {
+        //     lackOfGoldWarningPanel = Instantiate(lackOfGoldWarningPanelPrefab, canvas.transform);
+        //     lackOfGoldWarningPanel.SetActive(false);
+        //     DontDestroyOnLoad(lackOfGoldWarningPanel); // ⭐ 씬 전환 시에도 유지
+        // }
     }
 
     /// <summary>
@@ -476,18 +510,47 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         // TODO: 부족 알림 팝업 표시
         bool isCristal = currencyType == "Cristal" ? true : false;
 
+        // ⭐ 경고 패널 생성
+        if(lackOfCristalWarningPanel == null) CreateWarningPanels();
+
         if (isCristal)
         {
-            lackOfCristalWarningPanel.SetActive(true);
-            lackOfCristalWarningPanel.GetComponentInChildren<PanelTween>().ShowWithScale();
+            if (lackOfCristalWarningPanel != null)
+            {
+                lackOfCristalWarningPanel.SetActive(true);
+                lackOfCristalWarningPanel.GetComponentInChildren<PanelTween>()?.ShowWithScale();
+            }
+            else
+            {
+                Logger.LogError("[ShopManager] lackOfCristalWarningPanel이 생성되지 않았습니다!");
+            }
         }
-        else
-        {
-            lackOfGoldWarningPanel.SetActive(false);
-            lackOfGoldWarningPanel.GetComponentInChildren<PanelTween>().ShowWithScale();
-        }
+        // else
+        // {
+        //     if (lackOfGoldWarningPanel != null)
+        //     {
+        //         lackOfGoldWarningPanel.SetActive(true);
+        //         lackOfGoldWarningPanel.GetComponentInChildren<PanelTween>()?.ShowWithScale();
+        //     }
+        //     else
+        //     {
+        //         Logger.LogError("[ShopManager] lackOfGoldWarningPanel이 생성되지 않았습니다!");
+        //     }
+        // }
 
         Logger.Log($"[ShopManager] {currencyType}이(가) 부족합니다!");
+    }
+
+    // ⭐ 파괴 시 정리
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (lackOfCristalWarningPanel != null)
+            Destroy(lackOfCristalWarningPanel);
+
+        // if (lackOfGoldWarningPanel != null)
+        //     Destroy(lackOfGoldWarningPanel);
     }
 
     /// <summary>

@@ -43,7 +43,6 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] GameObject charMaxLevel;
     [SerializeField] GameObject charUpgradeText; // 최고 레벨일 때 업그레이드 텍스트 숨기기
     [SerializeField] CanvasGroup charWarningLackCanvasGroup; // 오리 업그레이드 코인 부족 경고 메시지
-    [SerializeField] GameObject lackOfCoinWarningPopup; // 오리 업그레이드 코인 부족 경고 메시지
     [SerializeField] Button charUpgradeButton;
     [SerializeField] GameObject CharCoinImage;
     [SerializeField] GameObject GearBGToExitField;
@@ -52,6 +51,10 @@ public class EquipmentPanelManager : MonoBehaviour
     Tween charWarningMax;
     float textOffset = 23.5f;
     Coroutine hideCoroutine;
+
+    [Header("코인 부족 경고 팝업")]
+    [SerializeField] GameObject lackOfCoinWarningPopup; // Canvas에 미리 만들어둔 팝업
+    PanelTween lackOfCoinWarningPopupTween; // PanelTween 컴포넌트 캐싱
 
     CardSlotManager cardSlotManager; // 카드 슬롯 풀
 
@@ -74,6 +77,16 @@ public class EquipmentPanelManager : MonoBehaviour
 
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
+
+        // ⭐ PanelTween 컴포넌트 캐싱
+        if (lackOfCoinWarningPopup != null)
+        {
+            lackOfCoinWarningPopupTween = lackOfCoinWarningPopup.GetComponent<PanelTween>();
+            if (lackOfCoinWarningPopupTween == null)
+            {
+                Debug.LogWarning("[EquipmentPanelManager] lackOfCoinWarningPopup에 PanelTween 컴포넌트가 없습니다!");
+            }
+        }
     }
 
     void OnEnable()
@@ -82,11 +95,6 @@ public class EquipmentPanelManager : MonoBehaviour
         SetAllFieldTypeOf("Weapon");
         DeActivateEquipInfoPanel();
         CardOnDisplay = null;
-        // // 패널에 진입하면 기본적으로 리드 오리를 디스플레이 하고 있도록
-        // CardOnDisplay = cardDataManager.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
-        // InitDisplay(CardOnDisplay);
-        // Debug.Log($"Lead Card Data Name = {CardOnDisplay.Name}");
-        // SetAllFieldTypeOf("Item");
 
         charUpgradeButton.gameObject.SetActive(false);
         ClearAllEquipmentSlots(); // logic, UI 모두 처리
@@ -95,7 +103,12 @@ public class EquipmentPanelManager : MonoBehaviour
 
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
-        lackOfCoinWarningPopup.SetActive(false);
+
+        // ⭐ null 체크 추가
+        if (lackOfCoinWarningPopup != null)
+        {
+            lackOfCoinWarningPopup.SetActive(false);
+        }
 
         cardSlotManager.InitialSortingByGrade();
     }
@@ -121,8 +134,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         isEquipped = false;
         Debug.Log("Card on Display = " + CardOnDisplay.Name);
-
     }
+
     public void SetAllFieldTypeOf(string cardType)
     {
         cardToEquip = null;
@@ -137,7 +150,6 @@ public class EquipmentPanelManager : MonoBehaviour
             ClearAllEquipmentSlots(); // logic, UI 모두 처리
 
             card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field에는 오리만 보여줌
-                                                                                     //card.Remove(CardOnDisplay);
         }
         else if (cardType == CardType.Item.ToString())
         {
@@ -146,12 +158,6 @@ public class EquipmentPanelManager : MonoBehaviour
                 if (item.IsEquipped) // 다른 오리에 장착된 카드는 보여주지 않음
                 {
                     continue;
-                    // 장착된 카드일 경우
-                    // 카드에 있는 반투명 Equipped 활성화 시키기
-                    // slot type 추가 : Equipped
-                    // Equipped 카드는 터치하면 장착을 해제할 것인지 팝업을 띄움
-                    // 장착에서는 아이템만 Equipped 처리하면 됨
-                    // 장착해제를 선택하면 장착되어 있던 오리에게서 장착해제가 됨
                 }
 
                 // 범용이거나 해당 오리에 바인딩 되어 있는 장비라면 필드에 추가
@@ -185,6 +191,7 @@ public class EquipmentPanelManager : MonoBehaviour
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim(fieldAnimTrigger); // 오리 혹은 아이템 필드를 보여주기.
     }
+
     void ClearAllEquipmentSlots()
     {
         // Display의 장비 슬롯들을 모두 비우기
@@ -223,12 +230,6 @@ public class EquipmentPanelManager : MonoBehaviour
         cardList.DelayedSaveEquipments();
         DeActivateEquipInfoPanel();
     }
-
-    // public void EquipCard(CardData oriCard, CardData equipCard)
-    // {
-    //     cardList.Equip(oriCard, equipCard);
-    //     cardList.DelayedSaveEquipments();
-    // }
 
     // info panel의 UnEquip 버튼
     public void OnUnEquipButton()
@@ -312,13 +313,8 @@ public class EquipmentPanelManager : MonoBehaviour
             // 업그레이드 버튼 사운드 다르게 
             charUpgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = false;
 
-            // 코인 부족 경고 메시지 띄우고 종료해서 업그레이드가 되지 않도록 하기
-            // charWarningLack = charWarningLackCanvasGroup.DOFade(1, 1f);
-
-            // if (hideCoroutine != null) StopCoroutine(hideCoroutine);
-            // hideCoroutine = StartCoroutine(HideWarning(charWarningLackCanvasGroup));
-            lackOfCoinWarningPopup.SetActive(true);
-
+            // ⭐ 코인 부족 경고 팝업 표시
+            ShowLackOfCoinWarning();
             return;
         }
 
@@ -358,12 +354,8 @@ public class EquipmentPanelManager : MonoBehaviour
             // 업그레이드 버튼 사운드 다르게 
             upgradeButton.GetComponent<ButtonEffect>().ShoutldBeInitialSound = false;
 
-            // 업그레이드가 가능하지 않게 하기
-            // warningLack = warningLackCanvasGroup.DOFade(1, 1f);
-
-            // if (hideCoroutine != null) StopCoroutine(hideCoroutine);
-            // hideCoroutine = StartCoroutine(HideWarning(warningLackCanvasGroup));
-            lackOfCoinWarningPopup.SetActive(true);
+            // ⭐ 코인 부족 경고 팝업 표시
+            ShowLackOfCoinWarning();
             return;
         }
 
@@ -402,17 +394,35 @@ public class EquipmentPanelManager : MonoBehaviour
     }
     #endregion
 
+    #region 코인 부족 경고 팝업
+    /// <summary>
+    /// ⭐ 코인 부족 경고 팝업 표시
+    /// </summary>
+    void ShowLackOfCoinWarning()
+    {
+        if (lackOfCoinWarningPopup == null)
+        {
+            Debug.LogError("[EquipmentPanelManager] lackOfCoinWarningPopup이 할당되지 않았습니다!");
+            return;
+        }
+
+        // PanelTween이 있으면 애니메이션과 함께 표시
+        if (lackOfCoinWarningPopupTween != null)
+        {
+            lackOfCoinWarningPopupTween.ShowWithScale();
+        }
+        else
+        {
+            // PanelTween이 없으면 그냥 활성화
+            lackOfCoinWarningPopup.SetActive(true);
+        }
+    }
+    #endregion
+
     #region 버튼 상태 업데이트
     // 조건에 따라 업그레이드 버튼을 활성/비활성 시킴
     void UpdateButtonState(Button button, bool isChar)
     {
-        // CharCoinImage.SetActive(true);
-        // EquipCoinImage.SetActive(true);
-        // charUpgradeText.SetActive(true);
-
-        // charMaxLevel.SetActive(false);
-        // itemMaxLevel.SetActive(false);
-
         if (isChar)
         {
             if (CardOnDisplay.Level == StaticValues.MaxLevel)
@@ -446,12 +456,12 @@ public class EquipmentPanelManager : MonoBehaviour
             {
                 itemMaxLevel.SetActive(false);
                 itemUpgradeText.SetActive(true);
-                // upgradeCost.text = "";
                 EquipCoinImage.SetActive(true);
             }
         }
         button.interactable = true;
     }
+
     bool CheckIfMaxLevel(CardData _cardData)
     {
         if (_cardData.Level == StaticValues.MaxLevel)
@@ -465,6 +475,7 @@ public class EquipmentPanelManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         canvasGroupToHide.DOFade(0, 1f);
     }
+
     public void TempKillAllTweens()
     {
         DOTween.KillAll();

@@ -1212,6 +1212,7 @@ GameObject:
   - component: {fileID: 6082536906306137182}
   - component: {fileID: 2158767600388237664}
   - component: {fileID: 2529425594486302682}
+  - component: {fileID: -2500388845523316985}
   m_Layer: 5
   m_Name: Daily Button Day 1
   m_TagString: Untagged
@@ -1336,6 +1337,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-2500388845523316985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6461262678661578956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 798e263560093b142914725fbc2f0960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonSound: {fileID: 8300000, guid: ca023f0a588a84e7ca48551fbe9639da, type: 3}
+  buttonSoundAlt: {fileID: 8300000, guid: 4aa1f73d3001fd649b89df34987ba2b7, type: 3}
+  buttonEffect: {fileID: 0}
+  shouldBeLocked: 0
+  ignoreButtonEffectAnim: 0
 --- !u!1 &6479946410342327674
 GameObject:
   m_ObjectHideFlags: 0
