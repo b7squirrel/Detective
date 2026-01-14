@@ -8,7 +8,7 @@ public class LocalizedUIText : MonoBehaviour
     
     private TextMeshProUGUI textComponent;
     
-    void Awake()
+    void Start()
     {
         textComponent = GetComponent<TextMeshProUGUI>();
         if (textComponent == null)
@@ -19,10 +19,7 @@ public class LocalizedUIText : MonoBehaviour
         
         // 언어 변경 이벤트 구독
         LocalizationManager.OnLanguageChanged += UpdateText;
-    }
-    
-    void Start()
-    {
+
         UpdateText();
     }
     
@@ -86,6 +83,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.music;
             case UITextKey.DuckChallenge:
                 return LocalizationManager.Game.duckChallenge;
+            case UITextKey.Daily:
+                return LocalizationManager.Game.daily;
             case UITextKey.DailyRewardTitle:
                 return LocalizationManager.Game.dailyRewardTitle;
             case UITextKey.ClaimReward:
@@ -146,6 +145,7 @@ public enum UITextKey
     Music,
     DuckChallenge,
     DailyRewardTitle,
+    Daily,
     ClaimReward,
     AlreadyClaimed,
     Day1,

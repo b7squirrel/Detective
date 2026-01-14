@@ -76,6 +76,7 @@ public class GameTexts : ScriptableObject
     public string dailyQuestsTitle = "일일 퀘스트";
 
     [Header("Daily Reward Panel")]
+    public string daily = "일일 보상";
     public string dailyRewardTitle = "일일 출석";
     public string claimReward = "보상 받기";
     public string alreadyClaimed = "오늘은 이미 받았습니다";
@@ -88,7 +89,7 @@ public class GameTexts : ScriptableObject
     public string day7 = "7일차";
 
     [Header("무한 모드")]
-    public string duckChallenge = "오리 도전";
+    public string duckChallenge = "도전 오리!!";
 
     [Header("Options")]
     public string language = "언어";
