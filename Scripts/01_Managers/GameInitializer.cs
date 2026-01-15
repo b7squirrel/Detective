@@ -145,6 +145,7 @@ public class GameInitializer : MonoBehaviour
             if (panel != null)
             {
                 panel.gameObject.SetActive(true);
+                panel.GetComponent<Animator>().SetTrigger("Up");
                 Logger.Log("[GameInitializer] 일일 출석 보상 팝업 표시");
             }
         }

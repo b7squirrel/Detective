@@ -105,6 +105,14 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.day6;
             case UITextKey.Day7:
                 return LocalizationManager.Game.day7;
+            case UITextKey.Wave:
+                return LocalizationManager.Game.wave;
+            case UITextKey.SurvivalTime:
+                return LocalizationManager.Game.survivalTime;
+            case UITextKey.BestWave:
+                return LocalizationManager.Game.bestWave;
+            case UITextKey.NextTarget:
+                return LocalizationManager.Game.nextTarget;
             default:
                 return key.ToString();
         }
@@ -154,5 +162,9 @@ public enum UITextKey
     Day4,
     Day5,
     Day6,
-    Day7
+    Day7,
+    Wave,
+    SurvivalTime,
+    BestWave,
+    NextTarget
 }

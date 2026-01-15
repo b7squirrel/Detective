@@ -46,6 +46,7 @@ public class InfiniteStagePanel : MonoBehaviour
         startButton.SetActive(false);
     }
 
+    // 애니메이션 이벤트
     public void ActivateInfinitePanel()
     {
         infiniteModePanelAnim.gameObject.SetActive(true);
@@ -53,6 +54,8 @@ public class InfiniteStagePanel : MonoBehaviour
         infinitePanelOpenerAnim.SetTrigger("Off");
         if(co != null) StopCoroutine(co);
         DeactivateStartButton();
+
+        InitInfinitePanel();
 
         if (clipPanelUp != null)
             SoundManager.instance?.Play(clipPanelUp);     

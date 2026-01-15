@@ -90,6 +90,10 @@ public class GameTexts : ScriptableObject
 
     [Header("무한 모드")]
     public string duckChallenge = "도전 오리!!";
+    public string wave = "웨이브";
+    public string survivalTime = "생존 시간";
+    public string bestWave = "최고 기록";
+    public string nextTarget = "다음 목표";
 
     [Header("Options")]
     public string language = "언어";

@@ -45,6 +45,6 @@ public class GeneralFuctions
     {
         int minutes = Mathf.FloorToInt(timeInSeconds / 60f);
         int seconds = Mathf.FloorToInt(timeInSeconds % 60f);
-        return $"{minutes}: {seconds}";
+        return $"{minutes:00}: {seconds:00}";
     }
 }
