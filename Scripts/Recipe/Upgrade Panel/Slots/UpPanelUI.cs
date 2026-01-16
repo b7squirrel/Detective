@@ -111,6 +111,7 @@ public class UpPanelUI : MonoBehaviour
         upgradeConfirmationButton.localScale = .7f * Vector2.one;
         upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -560f), .15f).SetEase(Ease.OutBack);
         upgradeConfirmationButton.DOScale(1f, .15f).SetEase(Ease.OutBack);
+        Logger.LogError($"[Up Panel UI] 합성 확인 버튼");
     }
     void DeactivateUpgradeConfimation()
     {
