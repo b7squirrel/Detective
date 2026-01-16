@@ -486,11 +486,11 @@ public class UpPanelManager : MonoBehaviour
         // 합성 연출 동안 터치가 안되도록 하기
         blockTouchPanel.SetActive(true);
 
-        // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록. tab to continue 버튼으로 다시 활성화
-        mainMenuManager.SetActiveBottomTabs(false);
+        // // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록. tab to continue 버튼으로 다시 활성화
+        // mainMenuManager.SetActiveBottomTabs(false);
 
-        // 위쪽의 재화 탭을 숨기기. tab to continue 버튼으로 다시 활성화
-        currencyTab.SetActive(false);
+        // // 위쪽의 재화 탭을 숨기기. tab to continue 버튼으로 다시 활성화
+        // currencyTab.SetActive(false);
 
         // 강화 연출 UI
         upPanelUI.MergingCardsUI();

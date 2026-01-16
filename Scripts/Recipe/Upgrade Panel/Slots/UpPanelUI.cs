@@ -6,7 +6,8 @@ using DG.Tweening;
 public class UpPanelUI : MonoBehaviour
 {
     [SerializeField] GameObject confirmationButtonContainer;
-    [SerializeField] Transform upgradeConfirmationButton;
+    [SerializeField] RectTransform upgradeButtonsContainer; // 합성 확인 패널의 버튼들
+    [SerializeField] TMPro.TextMeshProUGUI confirmationWarningText; // 합성을 할까요 텍스트
     [SerializeField] GameObject fieldSlotPanel;
     [SerializeField] GameObject upgradeSuccessPanel;
     [SerializeField] RectTransform scrollContent;
@@ -27,16 +28,20 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] RectTransform whiteEffectOnMerge;
     [SerializeField] GameObject newStatPanel;
     [SerializeField] GameObject tabToContinue;
+    [SerializeField] AudioClip scribbleSound; // 타이핑 소리 추가
     UpPanelManager upPanelManager;
     UICameraShake uiCameraShake;
     Coroutine starCoroutine;
 
-    [Header("아래쪽 탭 제어")]
-    [SerializeField] RectTransform tabs;
-    Button[] tabButtons = new Button[5];
+    [Header("위 아래 탭 제어")]
+    [SerializeField] GameObject currencyTab; // 합성 연출 동안 재화 탭 숨기기. tap to continue 버튼으로 다시 활성화
+    MainMenuManager mainMenuManager; // 탭을 아래로 내리기 위해. tap to continue 버튼으로 다시 활성화
 
     public void Init()
     {
+        if (upPanelManager == null)
+        upPanelManager = GetComponent<UpPanelManager>();
+
         upSlot.gameObject.SetActive(true);
         matSlot.gameObject.SetActive(false);
         fieldSlotPanel.gameObject.SetActive(true);
@@ -47,11 +52,11 @@ public class UpPanelUI : MonoBehaviour
         blingBlingEffect.SetActive(false);
         starBlingEffect.gameObject.SetActive(false);
 
+        upgradeButtonsContainer.localScale = Vector2.zero; // 추가: Buttons 컨테이너 초기화
         fieldSlotPanel.transform.localScale = Vector2.one;
-        //fieldSlotPanel.transform.localScale = new Vector2(.95f, 1f);
-        //fieldSlotPanel.transform.DOScale(1, .3f).SetEase(Ease.OutBack);
 
-        //UpSlotInitAnimtion();
+        if(mainMenuManager == null) mainMenuManager = FindObjectOfType<MainMenuManager>();
+
         BGInitAnimation();
     }
 
@@ -72,9 +77,7 @@ public class UpPanelUI : MonoBehaviour
     IEnumerator UpSlotInitAnimationCo() // 업그레이드 슬롯이 조금 늦게 나타나도록
     {
         upSlot.transform.localScale = Vector2.one;
-        //upSlot.transform.localScale = Vector2.zero;
         yield return new WaitForSeconds(.1f);
-        //upSlot.DOScale(1f, .15f).SetEase(Ease.OutBack);
     }
     void UpCardAcquiredAnimation() // 업그레이드 슬롯에 카드를 올렸을 때 애님
     {
@@ -98,45 +101,33 @@ public class UpPanelUI : MonoBehaviour
 
     void UpgradeConfirmationAnimation() // 강화 확인 애님
     {
-        upgradeConfirmationButton.localScale = Vector2.zero;
+        upgradeButtonsContainer.localScale = Vector2.zero; // Buttons 컨테이너를 0으로
         fieldSlotPanel.transform.localScale = Vector2.zero;
 
-        //fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(0, 0), .15f).SetEase(Ease.InBack);
-        upgradeConfirmationButton.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -560f);
         StartCoroutine(UpgradeConfirmationAnimationCo());
     }
     IEnumerator UpgradeConfirmationAnimationCo() // 강화 확인 버튼이 살짝 늦게 나오도록
     {
+        // 경고 메시지의 타이프라이터 효과
+        TMP_Typewriter warning = confirmationWarningText.GetComponent<TMP_Typewriter>();
+        warning.ResetMaxVisibleChar();
+
+        // 타이핑 소리와 함께 시작
+        SoundManager.instance.Play(scribbleSound);
+        warning.Play(); // 타이핑 시작!
+
         yield return new WaitForSeconds(.15f);
-        upgradeConfirmationButton.localScale = .7f * Vector2.one;
-        upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -560f), .15f).SetEase(Ease.OutBack);
-        upgradeConfirmationButton.DOScale(1f, .15f).SetEase(Ease.OutBack);
-        Logger.LogError($"[Up Panel UI] 합성 확인 버튼");
+
+        // Buttons 컨테이너 전체를 애니메이션
+        upgradeButtonsContainer.localScale = .7f * Vector2.one;
+        upgradeButtonsContainer.DOScale(1f, .15f).SetEase(Ease.OutBack);
     }
     void DeactivateUpgradeConfimation()
     {
-        // StartCoroutine(DeactivateUpgradeConfirmationCo());
-
-        upgradeConfirmationButton.transform.localScale = 0f * Vector2.one;
+        // upgradeButtonsContainer.transform.localScale = 0f * Vector2.one; // Buttons 컨테이너 숨김
+        confirmationButtonContainer.SetActive(false);
         fieldSlotPanel.gameObject.SetActive(true);
         fieldSlotPanel.transform.localScale = Vector2.one;
-    }
-    IEnumerator DeactivateUpgradeConfirmationCo()
-    {
-        // upgradeConfirmationButton.GetComponent<RectTransform>().DOAnchorPos(new Vector2(0, -560), .15f).SetEase(Ease.OutBack);
-        // upgradeConfirmationButton.DOScale(0, .15f).SetEase(Ease.InBack);
-
-        upgradeConfirmationButton.transform.localScale = 0f * Vector2.one;
-
-        yield return new WaitForSeconds(.15f);
-
-        fieldSlotPanel.gameObject.SetActive(true);
-        //fieldSlotPanel.GetComponent<RectTransform>().DOScale(new Vector2(1, 1), .15f).SetEase(Ease.InBack);
-        //fieldSlotPanel.transform.localScale = new Vector2(.8f, .8f);
-        //fieldSlotPanel.transform.DOScale(1, .15f).SetEase(Ease.OutBack);
-        fieldSlotPanel.transform.localScale = Vector2.one;
-
-
     }
     #endregion
 
@@ -162,6 +153,12 @@ public class UpPanelUI : MonoBehaviour
 
     public void UpgradeConfirmationUI() // 강화 확인 UI
     {
+        // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록. tab to continue 버튼으로 다시 활성화
+        mainMenuManager.SetActiveBottomTabs(false);
+
+        // 위쪽의 재화 탭을 숨기기. tab to continue 버튼으로 다시 활성화
+        currencyTab.SetActive(false);
+        
         confirmationButtonContainer.SetActive(true);
         UpgradeConfirmationAnimation();
     }
@@ -178,8 +175,6 @@ public class UpPanelUI : MonoBehaviour
     public void MergingCardsUI() // 카드 합치기 UI
     {
         // 합성 연출 동안 클릭이 안되도록 하기
-
-
         plus.transform.localScale = new Vector3(.6f, .6f, .6f); // default .48f
         plus.DOScale(0, .2f).SetEase(Ease.InBack);
         upSlot.DOAnchorPos(new Vector2(0, 26), .15f).SetEase(Ease.InBack); // 0.15초 동안 가운데로 이동
@@ -211,7 +206,6 @@ public class UpPanelUI : MonoBehaviour
         whiteEffectOnMerge.gameObject.SetActive(true);
         whiteEffectOnMerge.GetComponent<Image>().color = Color.white;
         whiteEffectOnMerge.localScale = Vector2.one;
-        // whiteEffectOnMerge.DOScale(1.2f, .4f);
         whiteEffectOnMerge.DOScale(.5f, 1f); // 1초 동안 절반으로 줄어들기 (antic)
         
         yield return new WaitForSeconds(1.7f);
@@ -234,8 +228,6 @@ public class UpPanelUI : MonoBehaviour
         newStatPanel.SetActive(true);
         tabToContinue.SetActive(true);
         upgradeEffect.SetActive(false);
-        //upSuccess.localScale = .8f * Vector2.one;
-        //upSuccess.DOScale(1f, .5f).SetEase(Ease.OutBack);
 
         whiteEffectOnMerge.gameObject.SetActive(false);
 
@@ -267,15 +259,20 @@ public class UpPanelUI : MonoBehaviour
 
         starBlingEffect.gameObject.SetActive(false);
 
-
-
         Animator[] starAnims = stars.GetComponentsInChildren<Animator>();
-        for(int i = 0; i < starAnims.Length; i++)
+        for (int i = 0; i < starAnims.Length; i++)
         {
             starAnims[i].SetTrigger("Blink");
             SoundManager.instance.Play(starBlingSound);
             yield return new WaitForSeconds(.1f);
         }
+    }
+
+    // 합성 취소 버튼에서 호출
+    public void OnCancelButtonClicked()
+    {
+        confirmationButtonContainer.SetActive(false);
+        upPanelManager.BackToMatField();
     }
 
     // upgrade success 버튼에서 호출
