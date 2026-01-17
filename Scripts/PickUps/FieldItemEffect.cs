@@ -5,6 +5,7 @@ public class FieldItemEffect : MonoBehaviour
 {
     [SerializeField] float stopDuration;
     [SerializeField] float invincibaleDuration;
+    [SerializeField] CountdownTimer stopCounterUI;
     [SerializeField] InvincibleCounterUI invincibleCounterUI;
     [SerializeField] int bombDamage;
     [SerializeField] GameObject bombHitEffect;
@@ -29,6 +30,8 @@ public class FieldItemEffect : MonoBehaviour
         {
             Logger.LogWarning("[FieldItemEffect] No spawn controller found!");
         }
+
+        stopCounterUI.gameObject.SetActive(false);
     }
     #region 시간정지
     public void StopEnemies()
@@ -37,6 +40,8 @@ public class FieldItemEffect : MonoBehaviour
         if (allEnemies == null) return;
         if (coStopWatch != null) StopCoroutine(coStopWatch);
         coStopWatch = StartCoroutine(StopEnemiesCo(allEnemies, stopDuration));
+        stopCounterUI.StartTimer(stopDuration);
+
     }
     IEnumerator StopEnemiesCo(EnemyBase[] _allEnemies, float _stopDuration)
     {
@@ -50,6 +55,8 @@ public class FieldItemEffect : MonoBehaviour
         {
             Logger.LogWarning("[FieldItemEffect] 어떤 종류의 Spawn Controller도 없습니다.");
         }
+
+        stopCounterUI.gameObject.SetActive(true);
 
         // 적들 일시정지
         for (int i = 0; i < _allEnemies.Length; i++)
@@ -82,6 +89,7 @@ public class FieldItemEffect : MonoBehaviour
         }
 
         isStoppedWithStopwatch = false;
+        stopCounterUI.gameObject.SetActive(false);
     }
     public bool IsStopedWithStopwatch()
     {

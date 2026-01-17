@@ -66,7 +66,8 @@ public class GameTexts : ScriptableObject
     public string hand = "손";
 
     [Header("Merge Panel")]
-    public string useEquippedOneForMerge = "착용 중인 장비를 합성 재료로 쓸까요?";
+    [TextArea(2, 4)]
+    public string useEquippedOneForMerge = "머지를 진행하면 재료 카드에 장착된 장비가 자동으로 해제됩니다.";
     public string UseForMerge = "사용";
     public string Cancel = "취소";
     public string Warning = "경고";
