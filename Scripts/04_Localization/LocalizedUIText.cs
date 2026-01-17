@@ -113,6 +113,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.bestWave;
             case UITextKey.NextTarget:
                 return LocalizationManager.Game.nextTarget;
+            case UITextKey.UnequipBeforeMerging:
+                return LocalizationManager.Game.unequipBeforeMerging;
             default:
                 return key.ToString();
         }
@@ -166,5 +168,7 @@ public enum UITextKey
     Wave,
     SurvivalTime,
     BestWave,
-    NextTarget
+    NextTarget,
+    Warning,
+    UnequipBeforeMerging
 }

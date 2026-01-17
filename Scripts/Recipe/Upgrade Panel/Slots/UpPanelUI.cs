@@ -153,14 +153,20 @@ public class UpPanelUI : MonoBehaviour
 
     public void UpgradeConfirmationUI() // 강화 확인 UI
     {
-        // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록. tab to continue 버튼으로 다시 활성화
-        mainMenuManager.SetActiveBottomTabs(false);
-
-        // 위쪽의 재화 탭을 숨기기. tab to continue 버튼으로 다시 활성화
-        currencyTab.SetActive(false);
+        ActivateTabs(false);
         
         confirmationButtonContainer.SetActive(true);
         UpgradeConfirmationAnimation();
+    }
+
+    // 재화 탭과 아래쪽 탭들을 숨기기. 합성 취소 버튼에서도 호출해서 탭들을 다시 보여주기 On Cancel Button Clicked
+    void ActivateTabs(bool activate)
+    {
+        // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록. tab to continue 버튼으로 다시 활성화
+        mainMenuManager.SetActiveBottomTabs(activate);
+
+        // 위쪽의 재화 탭을 숨기기. tab to continue 버튼으로 다시 활성화
+        currencyTab.SetActive(activate);
     }
 
     public void MatSlotCanceled()
@@ -273,6 +279,8 @@ public class UpPanelUI : MonoBehaviour
     {
         confirmationButtonContainer.SetActive(false);
         upPanelManager.BackToMatField();
+
+        ActivateTabs(true);
     }
 
     // upgrade success 버튼에서 호출

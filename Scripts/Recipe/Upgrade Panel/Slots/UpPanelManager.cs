@@ -317,13 +317,14 @@ public class UpPanelManager : MonoBehaviour
             pendingCardData = _cardData;
             AskUnequip();
         }
+        // 장착을 하고 있지 않다면 Acquire Card 실행. 합성 확인 팝업
         else
         {
             AcquireCard(_cardData);
             return;
         }
 
-        // 장착을 하고 있지 않다면 Acquire Card 실행
+        
     }
     void AcquireCard(CardData cardData)
     {

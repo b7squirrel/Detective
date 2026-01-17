@@ -67,7 +67,7 @@ public class GameTexts : ScriptableObject
 
     [Header("Merge Panel")]
     [TextArea(2, 4)]
-    public string useEquippedOneForMerge = "머지를 진행하면 재료 카드에 장착된 장비가 자동으로 해제됩니다.";
+    public string unequipBeforeMerging = "머지를 진행하면 재료 카드에 장착된 장비가 자동으로 해제됩니다.";
     public string UseForMerge = "사용";
     public string Cancel = "취소";
     public string Warning = "경고";
