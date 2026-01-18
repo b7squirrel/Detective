@@ -7,60 +7,53 @@
 /// </summary>
 public class Skill100 : SkillBase
 {
-    [SerializeField] float defaultDuration; // 인스펙터에서 입력
+    public override SkillType SkillType => SkillType.SteelBody;
     float realDuration;
-    float durationTImer;
-
-    float slownessFactor; // 적의 속도 앞에 곱해줘서 속도를 낮추는 역할을 하는 팩터
-
+    float durationTimer;
+    float slownessFactor;
+    
     [Header("Debug")]
     [SerializeField] float _cooldownCounter;
     [SerializeField] float _realCoolDownTime;
     [SerializeField] float _realDuration;
-    [SerializeField] float _durationTImer;
-    private void Awake()
-    {
-        Name = 100;
-        CoolDownTime = 5f;
-    }
-    public override void Init(SkillManager _skillManager, CardData _cardData)
-    {
-        base.Init(_skillManager, _cardData);
+    [SerializeField] float _durationTimer;
 
-        _skillManager.onSkill += UseSkill;
-        realCoolDownTime = new Equation().GetCoolDownTime(rate, Grade, EvoStage, CoolDownTime);
-        realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultDuration);
+    public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
+    {
+        base.Init(skillManager, cardData, data);
+
+        realDuration = new Equation().GetSkillDuration(
+            rate, Grade, EvoStage, data.baseDuration);
+
         slownessFactor = new Equation().GetSlowSpeedFactor(Grade, EvoStage);
     }
 
     public override void UseSkill()
     {
-        //DebugValues();
         base.UseSkill();
-        //DebugValues();
+
         if (skillCounter > realCoolDownTime)
         {
-            if (durationTImer > realDuration)
+            if (durationTimer > realDuration)
             {
                 skillCounter = 0;
-                durationTImer = 0;
-                
-                // 초기화 시키기
+                durationTimer = 0;
+                // 초기화
             }
             else
             {
                 // duration 쿨타임이 끝나지 않았다면 콜라이더 유지
-                
-                durationTImer += Time.deltaTime;
+                durationTimer += Time.deltaTime;
                 return;
             }
         }
     }
+
     void DebugValues()
     {
         _cooldownCounter = skillCounter;
         _realCoolDownTime = realCoolDownTime;
         _realDuration = realDuration;
-        _durationTImer = durationTImer;
+        _durationTimer = durationTimer;
     }
 }

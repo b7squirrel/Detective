@@ -1,46 +1,46 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Invincible Body, 일정 시간동안 무적
+/// 천하 무적 - Invincible Body
 /// </summary>
 public class Skill400 : SkillBase
 {
-    [SerializeField] float defaultInvincibleDuration;
+    public override SkillType SkillType => SkillType.InvincibleBody;
     float realDuration;
-    float durationTImer;
+    float durationTimer;
 
-    private void Awake()
+    public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
-        Name = 400;
-        CoolDownTime = 5f;
+        base.Init(skillManager, cardData, data);
+
+        realDuration = new Equation().GetSkillDuration(
+            rate, Grade, EvoStage, data.baseDuration);
     }
-    public override void Init(SkillManager _skillManager, CardData _cardData)
-    {
-        base.Init(_skillManager, _cardData);
-        realDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, defaultInvincibleDuration);
-    }
+
     public override void UseSkill()
     {
-        // 월계수로 무적 상태라면 모든 타이머를 정지시킴.
-        if (GameManager.instance.IsPlayerItemInvincible) return; 
-
+        // 월계수로 무적 상태라면 모든 타이머를 정지시킴
+        if (GameManager.instance.IsPlayerItemInvincible) return;
+        
         base.UseSkill();
 
         if (skillCounter > realCoolDownTime)
         {
             // 스킬 발동 시간 끝나면 초기화
-            if (durationTImer > realDuration)
+            if (durationTimer > realDuration)
             {
                 skillCounter = 0;
-                durationTImer = 0;
+                durationTimer = 0;
                 GameManager.instance.IsPlayerInvincible = false;
                 return;
             }
+            
             // 스킬 계속 유지
-            durationTImer += Time.deltaTime;
+            durationTimer += Time.deltaTime;
             GameManager.instance.IsPlayerInvincible = true;
             return;
         }
+        
         skillCounter += Time.deltaTime;
     }
 }

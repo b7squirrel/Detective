@@ -107,8 +107,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     EnemyFinder enemyFinder;
     #endregion
 
-    #region 유니티 콜백
+    // 시각적 효과 (느림보 최면술)
+    Color originalColor = Color.white;
+    bool isColorChanged = false;
 
+    #region 유니티 콜백
     protected virtual void OnEnable()
     {
         // 최초 1회만 체크 (게임 시작 시)
@@ -218,6 +221,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public virtual void InitEnemy(EnemyData _enemyToSpawn)
     {
         enemyColor = _enemyToSpawn.enemyColor;
+
+        // 상태 초기화
+        ResetTintColor(); // ⭐ 색상 초기화 추가
+        IsSlowed = false; // 느림 상태도 초기화
 
         // ⭐ 무한 모드와 레귤러 모드 분기
         if (isInfiniteMode && infiniteStageManager != null)
@@ -843,10 +850,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public void CastSlownessToEnemy(float _slownessFactor)
     {
         if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
+
+        float previousSpeed = currentSpeed;
         currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
-        //currentSpeed = DefaultSpeed - DefaultSpeed * .2f;
+
+        // 최대 속도 제한
         if (currentSpeed >= 15f) currentSpeed = 15f;
-        Debug.Log($"Default Speed = {DefaultSpeed}, Current Speed = {currentSpeed}");
+
+        // 최소 속도 제한 추가 (너무 느려지지 않도록)
+        if (currentSpeed < 1f) currentSpeed = 1f;
+
+        Logger.Log($"[{Name}] 느림 효과 - Default: {DefaultSpeed}, Factor: {_slownessFactor}, " +
+                  $"Previous: {previousSpeed:F2} → Current: {currentSpeed:F2}");
     }
     public void ResetCurrentSpeedToDefault()
     {
@@ -874,6 +889,69 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public bool isTimeStopped()
     {
         return currentSpeed == 0f ? true : false;
+    }
+
+    /// <summary>
+    /// 느림 효과 등 상태 이상 색상 적용
+    /// </summary>
+    public void SetTintColor(Color tintColor)
+    {
+        // 첫 색상 변경 시 원래 색상 저장
+        if (!isColorChanged)
+        {
+            if (sr != null)
+            {
+                originalColor = sr.color;
+            }
+            isColorChanged = true;
+        }
+
+        // 메인 스프라이트
+        if (sr != null)
+        {
+            sr.color = tintColor;
+        }
+
+        // 서브보스/보스의 경우 여러 스프라이트
+        if (srFlash != null && srFlash.Length > 0)
+        {
+            Logger.LogError($"스프라이트가 있습니다.");
+            foreach (var sprite in srFlash)
+            {
+                if (sprite != null)
+                {
+                    sprite.color = tintColor;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 원래 색상으로 복구 (InitEnemy에서도 호출)
+    /// </summary>
+    public void ResetTintColor()
+    {
+        // 색상 상태 초기화
+        isColorChanged = false;
+        originalColor = Color.white;
+
+        // 메인 스프라이트
+        if (sr != null)
+        {
+            sr.color = Color.white;
+        }
+
+        // 서브보스/보스의 경우 여러 스프라이트
+        if (srFlash != null && srFlash.Length > 0)
+        {
+            foreach (var sprite in srFlash)
+            {
+                if (sprite != null)
+                {
+                    sprite.color = Color.white;
+                }
+            }
+        }
     }
     #endregion
 }

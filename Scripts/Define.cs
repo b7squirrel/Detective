@@ -21,6 +21,18 @@ public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
 public enum DefaultItem { Default }
 #endregion
 
+#region 스킬 관련 Enum
+public enum SkillType
+{
+    None = 0,
+    SteelBody = 100,      // 강철 피부
+    SluggishSlumber = 200, // 느림보 최면술
+    FlashDamage = 300,     // 넓은 공격
+    InvincibleBody = 400,  // 천하 무적
+    PartyTime = 500        // 파티 타임
+}
+#endregion
+
 #region 필드 관련
 // 게임 모드. 레귤러, 무한
 public enum GameMode
@@ -318,10 +330,13 @@ public class Equation
 
     public float GetSlowSpeedFactor(int _grade, int _evoStage)
     {
-        // grade 0 부터 evo stage0 => 0,1,2,3,4,5.... 가 되도록 식을 만들었음.
-        float slownessFactor = _evoStage * (3f + _grade);
+        // 기본 50% 느림 + 등급/진화에 따라 최대 80%까지
+        float baseSlow = 0.5f; // 50% 기본 감소
+        float bonusSlow = (_evoStage * (3f + _grade)) * 0.02f;
+        float totalSlow = Mathf.Clamp(baseSlow + bonusSlow, 0.5f, 0.8f);
 
-        return (float)(.3f + (0.01 * slownessFactor));
+        Logger.Log($"[SlowFactor] Grade: {_grade}, Evo: {_evoStage} → {totalSlow * 100}% 감소");
+        return totalSlow;
     }
 
     public Vector2 GetSpawnablePos(float spawnConst, float offset)

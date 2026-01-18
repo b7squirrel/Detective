@@ -1,10 +1,9 @@
 public interface ISkill
 {
-    int Name { get; set; }
+    SkillType SkillType { get; }  // 👈 get만 남김
     int Grade { get; set; }
     int EvoStage { get; set; }
-    float CoolDownTime { get; set; }
     void UseSkill();
-    void Init(SkillManager _skillManager, CardData _cardData);
+    void Init(SkillManager skillManager, CardData cardData, SkillData data);
     bool IsActivated();
 }
