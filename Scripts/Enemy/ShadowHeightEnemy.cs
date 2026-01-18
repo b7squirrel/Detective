@@ -96,7 +96,7 @@ public class ShadowHeightEnemy : MonoBehaviour
             }
 
             Initialize(verticalVelocity);
-            enemy.CastSlownessToEnemy(-1f);
+            enemy.SpeedUpOnJump(-1f); // 점프 중 속도 2배. 이렇게 하지 않으면 플레이어에게 위협이 되지 않음
             ActivateCollider(false);
         }
     }

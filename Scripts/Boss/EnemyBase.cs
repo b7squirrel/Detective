@@ -860,13 +860,30 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // 최소 속도 제한 추가 (너무 느려지지 않도록)
         if (currentSpeed < 1f) currentSpeed = 1f;
 
-        Logger.Log($"[{Name}] 느림 효과 - Default: {DefaultSpeed}, Factor: {_slownessFactor}, " +
-                  $"Previous: {previousSpeed:F2} → Current: {currentSpeed:F2}");
+        anim.SetBool("Hypnotized", true);
     }
+    // 점프 중 속도를 증가시키기 위해 Shadow Height Enemy에서 호출
+    // 최면 애니메이션을 재생하지 않음
+    public void SpeedUpOnJump(float _slownessFactor)
+    {
+        if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
+
+        float previousSpeed = currentSpeed;
+        currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
+
+        // 최대 속도 제한
+        if (currentSpeed >= 15f) currentSpeed = 15f;
+
+        // 최소 속도 제한 추가 (너무 느려지지 않도록)
+        if (currentSpeed < 1f) currentSpeed = 1f;
+    }
+
     public void ResetCurrentSpeedToDefault()
     {
         if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
         currentSpeed = DefaultSpeed;
+
+        anim.SetBool("Hypnotized",false);
     }
     public void SpeedUpEnemy()
     {
