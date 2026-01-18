@@ -915,7 +915,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // 서브보스/보스의 경우 여러 스프라이트
         if (srFlash != null && srFlash.Length > 0)
         {
-            Logger.LogError($"스프라이트가 있습니다.");
             foreach (var sprite in srFlash)
             {
                 if (sprite != null)
