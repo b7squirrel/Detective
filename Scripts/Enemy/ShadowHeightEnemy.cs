@@ -24,6 +24,13 @@ public class ShadowHeightEnemy : MonoBehaviour
     float currentVerticalVel;
     float jumpCounter; // 점프 주기를 재는 카운터
 
+    [Header("Slow Effect")]
+    bool isSlowed; // 현재 느림 상태인지
+    float originalVerticalVelocity; // 원래 점프 속도
+    float originalGravity; // 원래 중력
+    float slowedVerticalVelocity; // 느려진 점프 속도
+    float slowedGravity; // 느려진 중력
+
     float gravity = -100f;
     float lastInitaialVerticalVelocity;
     [SerializeField] bool isGrounded;
@@ -55,7 +62,7 @@ public class ShadowHeightEnemy : MonoBehaviour
             isInitialized = true;
         }
         IsDone = false;
-        
+
         ActivateCollider(true);
 
         isGrounded = false;
@@ -80,7 +87,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     {
         if (isGrounded)
         {
-            jumpCounter += Time.deltaTime; // 점프를 하고 있지 않을 때만 카운터가 돌아간다
+            jumpCounter += Time.deltaTime;
             if (enemyBase == null) enemyBase = GetComponent<EnemyBase>();
             enemyBase.SetGrounded(isGrounded);
         }
@@ -88,15 +95,27 @@ public class ShadowHeightEnemy : MonoBehaviour
         {
             jumpCounter = 0;
 
-            // 점프 사운드 재생 (첫 번째 점프이거나 바운스가 아닌 일반 점프일 때)
+            // 점프 사운드 재생
             if (isFirstJump)
             {
-                if (jumpSound != null) SoundManager.instance.Play(jumpSound); //
+                if (jumpSound != null) SoundManager.instance.Play(jumpSound);
                 isFirstJump = false;
             }
 
             Initialize(verticalVelocity);
-            enemy.SpeedUpOnJump(-1f); // 점프 중 속도 2배. 이렇게 하지 않으면 플레이어에게 위협이 되지 않음
+
+            // ⭐ 느림 상태 확인
+            if (enemyBase.IsSlowed)
+            {
+                // 느림 상태일 때는 수평 속도를 증가시키지 않거나, 약간만 증가
+                enemy.SpeedUpOnJump(-0.2f); // 원래 속도의 1.2배 (거의 그대로)
+            }
+            else
+            {
+                // 정상 상태일 때는 기존대로 2배
+                enemy.SpeedUpOnJump(-1f);
+            }
+
             ActivateCollider(false);
         }
     }
@@ -140,7 +159,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     {
         if (IsDone) return;
 
-        if(landingSound != null) SoundManager.instance.Play(landingSound);
+        if (landingSound != null) SoundManager.instance.Play(landingSound);
         if (landingEffectPrefab != null)
         {
             GameObject landingEffect = GameManager.instance.poolManager.GetMisc(landingEffectPrefab);
@@ -178,7 +197,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     {
         anim.SetTrigger(animation);
     }
-    
+
     // 점프 사운드 재생 함수
     void PlayJumpSound()
     {
@@ -186,6 +205,68 @@ public class ShadowHeightEnemy : MonoBehaviour
         {
             SoundManager.instance.Play(jumpSound);
         }
+    }
+    #endregion
+
+    #region 느림 효과
+    /// <summary>
+    /// 점프에 느림 효과 적용 (수직 속도와 중력 모두 감소)
+    /// </summary>
+    public void ApplySlowToJump(float slownessFactor)
+    {
+        if (!isJumper) return; // 점프 캐릭터가 아니면 무시
+
+        if (!isSlowed)
+        {
+            // 첫 적용 시 원래 값 저장
+            originalVerticalVelocity = verticalVelocity;
+            originalGravity = gravity;
+        }
+
+        isSlowed = true;
+
+        // 중력 감소 (느린 느낌)
+        float gravityFactor = (1f - slownessFactor * 1.2f);
+        slowedGravity = originalGravity * gravityFactor;
+
+        // 수직 속도는 제곱근보다 더 많이 감소 (낮은 점프)
+        // 0.7을 곱해서 원래 높이의 약 70% 정도로 낮춤
+        slowedVerticalVelocity = originalVerticalVelocity * Mathf.Sqrt(gravityFactor) * 0.7f;
+
+        // 현재 진행 중인 점프에도 즉시 적용
+        if (!isGrounded)
+        {
+            float currentRatio = currentVerticalVel / verticalVelocity;
+            currentVerticalVel = slowedVerticalVelocity * currentRatio;
+        }
+
+        verticalVelocity = slowedVerticalVelocity;
+        gravity = slowedGravity;
+
+        Debug.Log($"[ShadowHeight] 💤 느리고 낮은 점프 - 수직속도: {originalVerticalVelocity:F1} → {slowedVerticalVelocity:F1}, 중력: {originalGravity:F1} → {slowedGravity:F1}");
+    }
+
+    /// <summary>
+    /// 점프 느림 효과 해제
+    /// </summary>
+    public void ReleaseSlowFromJump()
+    {
+        if (!isJumper || !isSlowed) return;
+
+        isSlowed = false;
+
+        // 원래 값으로 복구
+        verticalVelocity = originalVerticalVelocity;
+        gravity = originalGravity;
+
+        // 현재 진행 중인 점프에도 즉시 적용
+        if (!isGrounded)
+        {
+            float currentRatio = currentVerticalVel / slowedVerticalVelocity;
+            currentVerticalVel = originalVerticalVelocity * currentRatio;
+        }
+
+        Debug.Log($"[ShadowHeight] 점프 느림 해제 - 수직속도: {slowedVerticalVelocity} → {originalVerticalVelocity}, 중력: {slowedGravity} → {originalGravity}");
     }
     #endregion
 }

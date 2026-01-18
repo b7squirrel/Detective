@@ -9,6 +9,7 @@ public class WeaponContainer : MonoBehaviour
     Player player;
     GameObject weaponContainerGroup; // 아이들을 묶어주는 부모 오브젝트
     List<WeaponContainerAnim> weaponContainerAnims; // 아이들의 방향에 접근하기 위해
+    List<Collider2D> colliders; // 아이들의 콜라이더에 접근하기 위해
 
     private void Awake()
     {
@@ -83,6 +84,11 @@ public class WeaponContainer : MonoBehaviour
         WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
         weaponContainerAnims.Add(wa);
 
+        // 콜라이더를 관리 리스트에 추가함
+        if (colliders == null) colliders = new List<Collider2D>();
+        Collider2D col = container.GetComponentInChildren<Collider2D>();
+        colliders.Add(col);
+
         // 대장 오리에 붙는 무기인지 아닌지 구별해서 부모 설정
         // 레이져 같은 무기는 부모 설정하지 않고 따라다니도록 하기
         // weapon data와 item data를 container anim에 넘겨줌
@@ -99,6 +105,8 @@ public class WeaponContainer : MonoBehaviour
             container.transform.localScale = .8f * Vector2.one;
             //container.transform.localScale = Vector2.one;
             wa.SetEquipmentSprites(wd);
+
+            // col.enabled = false;
         }
 
         return container;
@@ -172,5 +180,13 @@ public class WeaponContainer : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void ActivateCollider(bool activate)
+    {
+        for (int i = colliders.Count - 1; i > 0; i--)
+        {
+            colliders[i].enabled = activate;
+        }
     }
 }

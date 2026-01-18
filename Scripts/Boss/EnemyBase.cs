@@ -861,6 +861,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (currentSpeed < 1f) currentSpeed = 1f;
 
         anim.SetBool("Hypnotized", true);
+
+        // ⭐ 애니메이터 속도 감소 (느린 모션 효과)
+        anim.speed = 1f - _slownessFactor;
+
+        // ⭐ 점프 느림 효과 추가
+        ShadowHeightEnemy shadowHeight = GetComponent<ShadowHeightEnemy>();
+        if (shadowHeight != null)
+        {
+            shadowHeight.ApplySlowToJump(_slownessFactor);
+        }
     }
     // 점프 중 속도를 증가시키기 위해 Shadow Height Enemy에서 호출
     // 최면 애니메이션을 재생하지 않음
@@ -883,7 +893,17 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
         currentSpeed = DefaultSpeed;
 
-        anim.SetBool("Hypnotized",false);
+        anim.SetBool("Hypnotized", false);
+
+        // ⭐ 애니메이터 속도 복구
+        anim.speed = 1f;
+
+        // ⭐ 점프 느림 효과 해제
+        ShadowHeightEnemy shadowHeight = GetComponent<ShadowHeightEnemy>();
+        if (shadowHeight != null)
+        {
+            shadowHeight.ReleaseSlowFromJump();
+        }
     }
     public void SpeedUpEnemy()
     {
