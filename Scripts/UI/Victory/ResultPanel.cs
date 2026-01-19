@@ -82,7 +82,7 @@ public class ResultPanel : MonoBehaviour
     }
     IEnumerator InitAwardsCo(int killNum, int coinNum, int stageNum, bool isWinningStage)
     {
-        if (isWinningStage) bouncerManager.Jump(confettiNums); // 150마리 폭죽
+        if (isWinningStage) bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
 
 
         yield return new WaitForSecondsRealtime(.5f);
@@ -107,6 +107,15 @@ public class ResultPanel : MonoBehaviour
     #region 레귤러 애니메이션
     void PlayRegularAwardsSequence(int killNum, int coinNum, int stageNum, bool isWinningStage)
     {
+        if (isWinningStage)
+        {
+            bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
+        }
+        else
+        {
+            bouncerManager.JumpSad(10); // 150마리 폭죽
+        }
+
         ResetRecs();
         string title = isWinningStage ? "축하해요!" : "실패...";
         string stamp = isWinningStage ? "참\n잘했어요!" : "아쉬워요..";
@@ -194,7 +203,7 @@ public class ResultPanel : MonoBehaviour
     #region 무한 스테이지 애니메이션
     void PlayInfiniteAwardsSequence(int killNum, int coinNum, int wave, string survivalTime, string bestRecord)
     {
-        bouncerManager.Jump(confettiNums); // 150마리 폭죽
+        bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
 
         ResetRecs();
         titleText.text = "도전 결과";

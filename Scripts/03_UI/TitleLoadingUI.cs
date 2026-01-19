@@ -128,7 +128,7 @@ public class TitleLoadingUI : MonoBehaviour
         ImageBouncerManager bouncer = FindObjectOfType<ImageBouncerManager>();
         if (bouncer != null)
         {
-            bouncer.Jump(150);
+            bouncer.JumpHappy(150);
         }
 
         yield return new WaitForSeconds(1f);

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ImageBouncerManager : MonoBehaviour
 {
-    [SerializeField] GameObject objectToJump; // 튀어 오를 이미지 프리펩
+    [SerializeField] GameObject[] objectToJump; // 튀어 오를 이미지 프리펩
     [SerializeField] Transform[] rootObjs; // 모든 점프 이미지들의 부모가 될 오브젝트
     [SerializeField] float verticalVelocity;
     [SerializeField] float horizontalVelocity;
@@ -16,20 +16,24 @@ public class ImageBouncerManager : MonoBehaviour
 
     public void Jump(int nums, float timeOffset)
     {
-        StartCoroutine(JumpCo(nums, timeOffset));
+        StartCoroutine(JumpCo(nums, timeOffset, 0));
     }
 
     // Launch Button을 누르면 호출
     public void JumpWithDelay(int nums)
     {
-        StartCoroutine(JumpCo(nums, .4f));
+        StartCoroutine(JumpCo(nums, .4f, 0));
     }
-    public void Jump(int nums)
+    public void JumpHappy(int nums)
     {
-        StartCoroutine(JumpCo(nums, 0f));
+        StartCoroutine(JumpCo(nums, 0f, 0));
+    }
+    public void JumpSad(int nums)
+    {
+        StartCoroutine(JumpCo(nums, 0f, 1));
     }
 
-    IEnumerator JumpCo(int nums, float timeOffset)
+    IEnumerator JumpCo(int nums, float timeOffset, int spriteIndex)
     {
         // WaitForSecondsRealtime 사용 (타임스케일 무시)
         yield return new WaitForSecondsRealtime(timeOffset);
@@ -46,7 +50,7 @@ public class ImageBouncerManager : MonoBehaviour
 
                 float horizontalVel = (dir * horizontalVelocity) + UnityEngine.Random.Range(-300f, 300f);
 
-                GameObject go = Instantiate(objectToJump, item);
+                GameObject go = Instantiate(objectToJump[spriteIndex], item);
                 float xOffset = dir * UnityEngine.Random.Range(-xOffsetRange, xOffsetRange);
                 float yOffset = UnityEngine.Random.Range(-yOffsetRange, yOffsetRange);
 

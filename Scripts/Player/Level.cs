@@ -71,6 +71,8 @@ public class Level : MonoBehaviour
 
     public void AddExperience(int expAmount)
     {
+        bool bossDead = BossDieManager.instance.IsBossDead;
+        if(bossDead) return;
         experience += expAmount;
         Exp = experience;
         ExpToLevelUp = To_Level_Up;
