@@ -12,7 +12,7 @@ public class ImageBouncerManager : MonoBehaviour
     [SerializeField] float yOffsetRange;
     
     [Header("Sound")]
-    [SerializeField] AudioClip oriSound;
+    [SerializeField] AudioClip[] oriSound;
 
     public void Jump(int nums, float timeOffset)
     {
@@ -71,6 +71,6 @@ public class ImageBouncerManager : MonoBehaviour
                 go.GetComponent<ImageBouncer>().InitBouncer(verticalVel, horizontalVel, gravity, root.position.y);
             }
         }
-        SoundManager.instance.Play(oriSound);
+        SoundManager.instance.Play(oriSound[spriteIndex]);
     }
 }

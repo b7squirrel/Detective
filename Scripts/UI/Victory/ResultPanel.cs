@@ -113,7 +113,7 @@ public class ResultPanel : MonoBehaviour
         }
         else
         {
-            bouncerManager.JumpSad(10); // 150마리 폭죽
+            bouncerManager.JumpSad(30); // 50마리 슬픈 폭죽
         }
 
         ResetRecs();
