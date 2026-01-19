@@ -20,6 +20,6 @@ public class WinStage : MonoBehaviour
         winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, true);
 
         GetComponent<PauseManager>().PauseGame();
-        Debug.Log("윈 스테이지");
+        Logger.Log("윈 스테이지");
     }
 }

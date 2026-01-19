@@ -4,20 +4,26 @@ using UnityEngine;
 public class CharacterGameOver : MonoBehaviour
 {
     public GameObject gameOverPanel;
+    public GameObject infiniteGameOverPanel;
     [SerializeField] GameObject weaponsGroup;
 
-    [Header("Feedback")]
+    [Header("Regular Feedback")]
     [SerializeField] AudioClip gameOverSound;
     [SerializeField] AudioClip gameOverVocalSound;
     [SerializeField] AudioClip gameOverPanelSound;
 
+    
+    GameMode gameMode;
+
     public void GameOver()
     {
+        gameMode = PlayerDataManager.Instance.GetGameMode();
+
         SoundManager.instance.StopAllSounds();
         SoundManager.instance.Play(gameOverSound);
         MusicManager.instance.Stop();
         StartCoroutine(GameOverCo());
-        // GameManager.instance.joystick.SetActive(false);
+        GameManager.instance.joystick.SetActive(false);
     }
     IEnumerator GameOverCo()
     {
@@ -28,7 +34,6 @@ public class CharacterGameOver : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.2f);
         SoundManager.instance.Play(gameOverPanelSound);
 
-        gameOverPanel.SetActive(true);
         weaponsGroup.SetActive(false);
 
         // 스테이지에서 획득한 코인만 표시.
@@ -36,15 +41,18 @@ public class CharacterGameOver : MonoBehaviour
         int coinNum = GameManager.instance.GetComponent<CoinManager>().GetCoinNumPickedup();
 
         // 게임 모드 체크
-        GameMode mode = PlayerDataManager.Instance.GetGameMode();
-        if (mode == GameMode.Regular)
+        if (gameMode == GameMode.Regular)
         {
+            gameOverPanel.SetActive(true);
+
             // 현재 스테이지
             int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
             gameOverPanel.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, false);
         }
         else
         {
+            infiniteGameOverPanel.SetActive(true);
+
             InfiniteStageManager infiniteManager = FindObjectOfType<InfiniteStageManager>();
             if (infiniteManager == null)
             {
@@ -65,7 +73,7 @@ public class CharacterGameOver : MonoBehaviour
             // 기록 갱신 체크
             bool isBreakingRecords = currentTime > bestTime ? true : false;
 
-            gameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted, isBreakingRecords);
+            infiniteGameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted, isBreakingRecords);
         }
     }
 }

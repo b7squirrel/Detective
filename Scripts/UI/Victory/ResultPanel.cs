@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class ResultPanel : MonoBehaviour
@@ -15,7 +16,7 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI killText;
     [SerializeField] TMPro.TextMeshProUGUI coinText;
     [SerializeField] TMPro.TextMeshProUGUI stampText;
-
+    
     [Header("일반 모드 요소")]
     [SerializeField] RectTransform stageNumRec;
     [SerializeField] TMPro.TextMeshProUGUI stageNumberText;
@@ -27,6 +28,8 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI survivalTimeTitleText;
     [SerializeField] TMPro.TextMeshProUGUI bestRecordText;
     [SerializeField] TMPro.TextMeshProUGUI bestRecordTitleText;
+    [SerializeField] GameObject bestRecordCircle;
+    bool isNewRecord; // 웨이브 기록이 갱신이 되었는지
 
     [SerializeField] bool isDarkBG;
     [SerializeField] CardDisp cardDisp; // 플레이어를 보여줄 cardDisp
@@ -47,6 +50,10 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] AudioClip scribbleSound;
     [SerializeField] AudioClip popupSound;
     [SerializeField] AudioClip stampSound;
+
+    [Header("무한모드 사운드")]
+    [SerializeField] AudioClip[] newRecordSound;
+
     
     public void InitAwards(int killNum, int coinNum, int stageNum, bool isWinningStage)
     {
@@ -56,6 +63,7 @@ public class ResultPanel : MonoBehaviour
     public void InitInfiniteAwards(int killNum, int coinNum, int currentWave, string survivalTime, string bestRecord, bool isBestRecord)
     {
         SetBG();
+        isNewRecord = isBestRecord;
         PlayInfiniteAwardsSequence(killNum, coinNum, currentWave, survivalTime, bestRecord);
     }
 
@@ -101,7 +109,7 @@ public class ResultPanel : MonoBehaviour
     {
         ResetRecs();
         string title = isWinningStage ? "축하해요!" : "실패...";
-        string stamp = isWinningStage ? "참 잘했어요!" : "아쉬워요..";
+        string stamp = isWinningStage ? "참\n잘했어요!" : "아쉬워요..";
         titleText.text = title;
         killText.text = killNum.ToString();
         coinText.text = coinNum.ToString();
@@ -155,6 +163,9 @@ public class ResultPanel : MonoBehaviour
         {
             PlayUISound(stampSound);
             stampRec.localScale = Vector2.one;
+
+            panelRec.DOShakePosition(.5f, strength: 20f, vibrato: 30, randomness: 30)
+            .SetUpdate(true);
         });
 
         // Result Sound
@@ -191,6 +202,8 @@ public class ResultPanel : MonoBehaviour
         coinText.text = coinNum.ToString();
         survivalTimeText.text = survivalTime;
         bestRecordText.text = bestRecord;
+
+        bestRecordCircle.SetActive(false);
 
         TMP_Typewriter survivalTimeTitle = survivalTimeTitleText.GetComponent<TMP_Typewriter>();
         TMP_Typewriter survivalTimeContents = survivalTimeText.GetComponent<TMP_Typewriter>();
@@ -238,12 +251,14 @@ public class ResultPanel : MonoBehaviour
         {
             PlayUISound(scribbleSound);
             survivalTimeTitle.Play();
+
         });
 
         seq.AppendInterval(.15f);
         seq.AppendCallback(() => 
         {
             survivalTimeContents.Play();
+            
         });
 
         // 최고 기록
@@ -254,12 +269,54 @@ public class ResultPanel : MonoBehaviour
             PlayUISound(scribbleSound);
             bestRecordTimeTitle.Play();
         });
-        
+
         seq.AppendInterval(.15f);
         seq.AppendCallback(() =>
         {
             bestRecordTimeContents.Play();
         });
+
+     
+/// ⭐ 신기록 연출 (핵심)
+seq.AppendInterval(0.3f);
+seq.AppendCallback(() =>
+{
+    if(isNewRecord)
+    {
+        foreach (var clip in newRecordSound)
+            SoundManager.instance.Play(clip);
+
+        bestRecordCircle.SetActive(true);
+
+        // 텍스트 색상 반짝임 효과
+        Color originalColor = bestRecordTitleText.color;
+        Color flashColor = Color.white; // 원하는 색상으로 변경 가능 (예: Color.white, new Color(1f, 0.8f, 0f))
+        
+        bestRecordTitleText.DOColor(flashColor, 0.1f)
+            .SetEase(Ease.OutQuad)
+            .SetUpdate(true)
+            .OnComplete(() => 
+                bestRecordTitleText.DOColor(originalColor, 0.1f).SetEase(Ease.InQuad).SetUpdate(true)
+            );
+        
+        bestRecordText.DOColor(flashColor, 0.1f)
+            .SetEase(Ease.OutQuad)
+            .SetUpdate(true)
+            .OnComplete(() => 
+                bestRecordText.DOColor(originalColor, 0.1f).SetEase(Ease.InQuad).SetUpdate(true)
+            );
+
+        bestRecordRec
+            .DOScale(1.25f, 0.1f)
+            .SetEase(Ease.OutBack)
+            .SetUpdate(true)
+            .OnComplete(() =>
+                bestRecordRec.DOScale(1f, 0.1f)
+                    .SetEase(Ease.OutQuad)
+                    .SetUpdate(true)
+            );
+    }
+});
 
         // Coin
         seq.AppendInterval(0.5f);
@@ -277,6 +334,10 @@ public class ResultPanel : MonoBehaviour
         {
             PlayUISound(stampSound);
             stampRec.localScale = Vector2.one;
+            
+            panelRec.DOShakePosition(.5f, strength: 20f, vibrato: 30, randomness: 30)
+            .SetUpdate(true);
+
         });
 
         // Result Sound
