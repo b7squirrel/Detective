@@ -14,6 +14,7 @@ public class EggButton : MonoBehaviour
 
     [Header("White Flash")]
     [SerializeField] Material whiteMat;
+    Coroutine whiteFlashCo; 
     Material initMat;
     Image image;
     [SerializeField] Image[] gradeTags;
@@ -112,7 +113,7 @@ public class EggButton : MonoBehaviour
     // 버튼이 눌러지면 이벤트로 실행
     public void EggClickedFeedback()
     {
-        if (isClicked) return;
+        if (isClicked || isGradeFixed) return; // isGradeFixed 체크 추가
 
         OnButtonClick();
 
@@ -122,7 +123,9 @@ public class EggButton : MonoBehaviour
         UpdateGradeTitle();
         UpdateRateForGameManager();
 
-        StartCoroutine(EggWhiteFlashCo());
+        // 기존 코루틴 중단 후 새로 시작
+        if (whiteFlashCo != null) StopCoroutine(whiteFlashCo);
+        whiteFlashCo = StartCoroutine(EggWhiteFlashCo());
     }
 
     IEnumerator EggWhiteFlashCo()
@@ -214,10 +217,15 @@ public class EggButton : MonoBehaviour
     public void PlayGradePanelFixedAnim()
     {
         PlayGradePanelAnim("Fixed");
-        image.material = initMat;
 
-        // if (popFeedbackCo != null) StopCoroutine(popFeedbackCo);
+        // 실행 중인 white flash 코루틴 즉시 중단
+        if (whiteFlashCo != null)
+        {
+            StopCoroutine(whiteFlashCo);
+            whiteFlashCo = null;
+        }
 
+        image.material = initMat; // 확실하게 초기화
         isGradeFixed = true;
 
         for (int i = 0; i < MyGrade.mGrades.Length; i++)

@@ -45,6 +45,7 @@ public class WeaponManager : MonoBehaviour
         {
             wd = weaponData;
             container = weaponContainer.CreateContainer(weaponData, isInitialWeapon);
+            Logger.LogError($"[WeaponManager] {wd.DisplayName} 컨테이너를 생성합니다.");
 
             // Pause Panel에서 동료 오리들의 장비 상태를 보여줌
             GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, false);
@@ -109,6 +110,7 @@ public class WeaponManager : MonoBehaviour
         if (level != null)
         {
             level.AddUpgradesIntoTheListOfAvailableUpgrades(weaponData.upgrades);
+            Logger.LogError($"[WeaponManager] {weaponData.DisplayName}를 upgrades 리스트에 추가합니다.");
         }
     }
 

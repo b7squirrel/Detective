@@ -153,6 +153,7 @@ public class Level : MonoBehaviour
                 break;
             case UpgradeType.WeaponGet:
                 weaponManager.AddWeapon(upgradeData.weaponData, false);
+                Logger.LogError($"[Level] {upgradeData.weaponData.DisplayName} 을 Weapon Manager에 추가합니다.");
                 break;
             case UpgradeType.ItemGet:
                 itemsAquired++;

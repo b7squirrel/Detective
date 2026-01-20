@@ -34,11 +34,13 @@ public class EggPickUpObject : Collectable, IPickUpObject
             // 해당 스테이지에서 얻을 수 있는 무기를 모두 얻은 상태라면,
             // 아이템을 드롭하도록 구현하기
             // 지금은 일단 아무것도 하지 않게 했음
+            // 생각해 보니까 혼란스러울 수 있음. 그냥 오리만 나오도록. 한 스테이지에 얻을 수 있는 알의 수를 제한해서 해결
             return;
         }
         int index = Random.Range(0, upgradeToPick.Count);
 
         string weaponName = upgradeToPick[index].weaponData.Name;
+        Logger.LogError($"[EggPickupObject] {weaponName}을 얻었습니다.");
 
         GameManager.instance.eggPanelManager.EggPanelUP();
         GameManager.instance.eggPanelManager.SetWeaponName(weaponName);
