@@ -40,7 +40,7 @@ public class EggPickUpObject : Collectable, IPickUpObject
         int index = Random.Range(0, upgradeToPick.Count);
 
         string weaponName = upgradeToPick[index].weaponData.Name;
-        Logger.LogError($"[EggPickupObject] {weaponName}을 얻었습니다.");
+        // Logger.LogError($"[EggPickupObject] {weaponName}을 얻었습니다.");
 
         GameManager.instance.eggPanelManager.EggPanelUP();
         GameManager.instance.eggPanelManager.SetWeaponName(weaponName);

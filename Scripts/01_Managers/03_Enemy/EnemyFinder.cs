@@ -1,131 +1,156 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 플레이어에 붙여서 사용. safe area를 턈색해야 하므로 플레이어에 붙어서 이동하는 것이 좋음
-/// </summary>
 public class EnemyFinder : MonoBehaviour
 {
     public static EnemyFinder instance;
-    float halfHeight, halfWidth;
-    Vector2 size;
-
-    List<Vector2> allEnemies;
-
+    
     [SerializeField] LayerMask enemy;
-
-    List<Vector2> pickedEnemies;
-
-    int delay; // 적을 찾는 함수를 얼마나 자주 할 것인지
-
+    [SerializeField] float updateInterval = 0.1f;
+    
+    // 화면 크기
+    private float halfHeight, halfWidth;
+    private float searchRadius;
+    
+    // 버퍼 (재사용으로 GC 제거)
+    private Collider2D[] hitBuffer = new Collider2D[250];
+    private List<EnemyDistance> enemyDistanceBuffer = new List<EnemyDistance>(250);
+    
+    // 캐싱된 결과
+    private List<Vector2> cachedEnemyPositions = new List<Vector2>();
+    private float lastUpdateTime = -1f;
+    
     void Awake()
     {
         instance = this;
+        
         halfHeight = Camera.main.orthographicSize;
         halfWidth = Camera.main.aspect * halfHeight;
-        size = new Vector2(halfWidth * .6f, halfHeight * .6f);
-
-        pickedEnemies = new List<Vector2>();
-        allEnemies = new();
+        
+        // 화면 대각선 길이를 반지름으로 사용
+        searchRadius = Mathf.Sqrt(halfWidth * halfWidth + halfHeight * halfHeight) * 0.6f;
     }
 
     void Update()
     {
-        delay++;
-        if (delay < 10) return;
-        pickedEnemies.Clear();
-        FindTarget(2);
-        delay = 0;
+        if (Time.time - lastUpdateTime >= updateInterval)
+        {
+            UpdateEnemyCache();
+            lastUpdateTime = Time.time;
+        }
     }
 
-    void FindTarget(int numberOfTargets)
+    private void UpdateEnemyCache()
     {
-        // 화면 안에서 공격 가능한 개체들 검색
-        Collider2D[] hits =
-            Physics2D.OverlapBoxAll(transform.position, size, 0f, enemy);
-
-        allEnemies.Clear();
-
-        for (int i = 0; i < hits.Length; i++)
+        Vector2 playerPosition = transform.position;
+        
+        // OverlapCircleNonAlloc 사용
+        int hitCount = Physics2D.OverlapCircleNonAlloc(
+            playerPosition,
+            searchRadius,
+            hitBuffer,
+            enemy
+        );
+        
+        // 버퍼 클리어
+        enemyDistanceBuffer.Clear();
+        
+        // Idamageable을 가진 적들만 필터링하고 거리 계산
+        for (int i = 0; i < hitCount; i++)
         {
-            Idamageable Idamage = hits[i].GetComponent<Idamageable>();
-            if (Idamage != null)
+            Idamageable damageable = hitBuffer[i].GetComponent<Idamageable>();
+            if (damageable != null)
             {
-                allEnemies.Add(hits[i].GetComponent<Transform>().position);
-            }
-        }
-
-        // 순회하면서 원하는 갯수만큼 공격 가능한 개체들을 수집
-        float distanceToclosestEnemy = float.MaxValue;
-        Vector2 closestEnemy = Vector2.zero;
-
-        for (int i = 0; i < numberOfTargets; i++)
-        {
-            for (int y = 0; y < allEnemies.Count; y++)
-            {
-                float distanceToEnmey =
-                Vector3.Distance(allEnemies[y], transform.position);
-
-                if (distanceToEnmey < distanceToclosestEnemy)
+                Vector2 enemyPosition = hitBuffer[i].transform.position;
+                float sqrDistance = (enemyPosition - playerPosition).sqrMagnitude;
+                
+                enemyDistanceBuffer.Add(new EnemyDistance
                 {
-                    distanceToclosestEnemy = distanceToEnmey;
-                    closestEnemy = allEnemies[y];
-                }
+                    position = enemyPosition,
+                    sqrDistance = sqrDistance
+                });
             }
-
-            // foreach가 다 돌고 나서 가장 가까운 적이 존재하면
-            // 반환할 pickedEnemies에 추가하고, 그 적을 제외하고 다시 순회검색 
-            if (closestEnemy != Vector2.zero)
-            {
-                pickedEnemies.Add(closestEnemy);
-                allEnemies.Remove(closestEnemy);
-            }
-            else
-            {
-                pickedEnemies.Add(Vector2.zero);
-            }
+        }
+        
+        // 거리순 정렬
+        enemyDistanceBuffer.Sort((a, b) => a.sqrDistance.CompareTo(b.sqrDistance));
+        
+        // 캐시 업데이트
+        cachedEnemyPositions.Clear();
+        for (int i = 0; i < enemyDistanceBuffer.Count; i++)
+        {
+            cachedEnemyPositions.Add(enemyDistanceBuffer[i].position);
         }
     }
-    public List<Vector2> GetEnemies(int _enemyNumbers)
+
+    public List<Vector2> GetEnemies(int numberOfEnemies)
     {
-        List<Vector2> enemies = new();
-        if (pickedEnemies.Count == 0) return null;
-        for (int i = 0; i < _enemyNumbers; i++)
+        // 캐시가 비어있으면 Vector2.zero로 채워서 반환
+        if (cachedEnemyPositions.Count == 0)
         {
-            enemies.Add(pickedEnemies[i]);
+            List<Vector2> emptyResult = new List<Vector2>(numberOfEnemies);
+            for (int i = 0; i < numberOfEnemies; i++)
+            {
+                emptyResult.Add(Vector2.zero);
+            }
+            return emptyResult;
         }
-        return enemies;
+        
+        // 요청한 개수만큼 반환
+        List<Vector2> result = new List<Vector2>(numberOfEnemies);
+        int count = Mathf.Min(numberOfEnemies, cachedEnemyPositions.Count);
+        
+        for (int i = 0; i < count; i++)
+        {
+            result.Add(cachedEnemyPositions[i]);
+        }
+        
+        // 부족한 개수만큼 Vector2.zero 추가
+        while (result.Count < numberOfEnemies)
+        {
+            result.Add(Vector2.zero);
+        }
+        
+        return result;
     }
 
     public Collider2D[] GetAllEnemies()
     {
         Vector2 center = GameManager.instance.player.transform.position;
-
-        Collider2D[] enemies =
-                Physics2D.OverlapAreaAll(center - new Vector2(halfWidth * 1f, halfHeight * 1f),
-                                            center + new Vector2(halfWidth * 1f, halfHeight * 1f), enemy);
+        float allEnemiesRadius = Mathf.Sqrt(halfWidth * halfWidth + halfHeight * halfHeight) * 1f;
+        
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(
+            center,
+            allEnemiesRadius,
+            enemy
+        );
         return enemies;
     }
-    public Transform GetAllEnemyTransform()
+
+    public int GetCachedEnemyCount()
     {
-        return null;
+        return cachedEnemyPositions.Count;
     }
 
-    #region 적 등록, 제거, Get
-    //public void AddEnemyToList(Transform _enemyToAdd)
-    //{
-    //    if (fieldEnemies == null) fieldEnemies = new List<Transform>();
-    //    fieldEnemies.Add(_enemyToAdd);
-    //    enemyNames.Add(_enemyToAdd.name);
-    //}
-    //public void RemoveEnemyFromList(Transform _enemyToRemove)
-    //{
-    //    fieldEnemies.Remove(_enemyToRemove);
-    //    enemyNames.Remove(_enemyToRemove.name);
-    //}
-    //public List<Transform> GetEnemyList()
-    //{
-    //    return fieldEnemies;
-    //}
-    #endregion
+    private struct EnemyDistance
+    {
+        public Vector2 position;
+        public float sqrDistance;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!Application.isPlaying) return;
+        
+        // 탐색 범위 (원형)
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, searchRadius);
+        
+        // 캐시된 적들
+        Gizmos.color = Color.red;
+        for (int i = 0; i < cachedEnemyPositions.Count && i < 5; i++)
+        {
+            Gizmos.DrawWireSphere(cachedEnemyPositions[i], 0.3f);
+        }
+    }
 }

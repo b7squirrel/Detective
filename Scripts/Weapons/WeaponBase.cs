@@ -82,18 +82,32 @@ public class WeaponBase : MonoBehaviour
     protected virtual void SetAngle()
     {
         List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(2);
-        if (closestEnemyPosition == null) return;
+
+        // null 체크 및 빈 리스트 체크
+        if (closestEnemyPosition == null || closestEnemyPosition.Count == 0)
+            return;
+
+        // 첫 번째 적 방향 설정
         dir = GetDirection(closestEnemyPosition[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        if (closestEnemyPosition[1] == Vector2.zero)
+        // 두 번째 적 처리 (안전하게)
+        if (closestEnemyPosition.Count > 1)
         {
-            angleExtra = angle + 120f;
+            if (closestEnemyPosition[1] == Vector2.zero)
+            {
+                angleExtra = angle + 120f;
+            }
+            else
+            {
+                dirExtra = GetDirection(closestEnemyPosition[1]);
+                angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
+            }
         }
         else
         {
-            dirExtra = GetDirection(closestEnemyPosition[1]);
-            angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
+            // 두 번째 적이 없으면 기본값
+            angleExtra = angle + 120f;
         }
     }
 
@@ -187,14 +201,14 @@ public class WeaponBase : MonoBehaviour
             Item item = Wielder.GetComponent<PassiveItems>().GetSynergyCouple(weaponData.SynergyWeapon);
             if (item == null)
             {
-                // Debug.Log("시너지 커플 아이템이 없습니다");
+                Logger.LogError("시너지 커플 아이템이 없습니다");
                 return;
             }
 
             // if (item.stats.currentLevel == item.upgrades.Count + 1)
             if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
             {
-                // Debug.Log("wb시너지 웨폰 활성화");
+                Logger.LogError($"[WeaponBase]{weaponData.DisplayName}시너지 웨폰 활성화");
                 Wielder.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(weaponData);
             }
             else
@@ -225,57 +239,6 @@ public class WeaponBase : MonoBehaviour
     }
 
     #region 방향 관련
-    protected virtual List<Vector2> FindTarget(int numberOfTargets)
-    {
-        // 화면 안에서 공격 가능한 개체들 검색
-        Collider2D[] hits =
-            Physics2D.OverlapBoxAll(transform.position, size, 0f, enemy);
-        List<Transform> allEnemies = new List<Transform>();
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            Idamageable Idamage = hits[i].GetComponent<Idamageable>();
-            if (Idamage != null)
-            {
-                allEnemies.Add(hits[i].GetComponent<Transform>());
-            }
-        }
-
-        // 순회하면서 원하는 갯수만큼 공격 가능한 개체들을 수집
-        float distanceToclosestEnemy = 20f;
-        Transform closestEnemy = null;
-        List<Vector2> pickedEnemies = new List<Vector2>();
-
-        for (int i = 0; i < numberOfTargets; i++)
-        {
-            distanceToclosestEnemy = 20f;
-            for (int y = 0; y < allEnemies.Count; y++)
-            {
-                float distanceToEnmey =
-                Vector3.Distance(allEnemies[y].position, transform.position);
-
-                if (distanceToEnmey < distanceToclosestEnemy)
-                {
-                    distanceToclosestEnemy = distanceToEnmey;
-                    closestEnemy = allEnemies[y];
-                }
-            }
-            
-            // foreach가 다 돌고 나서 가장 가까운 적이 존재하면
-            // 반환할 pickedEnemies에 추가하고, 그 적을 제외하고 다시 순회검색 
-            if(closestEnemy != null)
-            {
-                pickedEnemies.Add(closestEnemy.position);
-                allEnemies.Remove(closestEnemy);
-            }
-            else
-            {
-                pickedEnemies.Add(Vector2.zero);
-            }
-        }
-        return pickedEnemies;
-    }
-
     protected Vector2 GetDirection(Vector2 closestEnemy)
     {
         direction =

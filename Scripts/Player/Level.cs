@@ -72,7 +72,11 @@ public class Level : MonoBehaviour
     public void AddExperience(int expAmount)
     {
         bool bossDead = BossDieManager.instance.IsBossDead;
-        if(bossDead) return;
+        if(bossDead)
+        {
+            Logger.LogError($"[Level] 보스가 죽어서 경험치 증가를 막습니다.");
+            return;
+        }
         experience += expAmount;
         Exp = experience;
         ExpToLevelUp = To_Level_Up;
@@ -153,7 +157,7 @@ public class Level : MonoBehaviour
                 break;
             case UpgradeType.WeaponGet:
                 weaponManager.AddWeapon(upgradeData.weaponData, false);
-                Logger.LogError($"[Level] {upgradeData.weaponData.DisplayName} 을 Weapon Manager에 추가합니다.");
+                // Logger.LogError($"[Level] {upgradeData.weaponData.DisplayName} 을 Weapon Manager에 추가합니다.");
                 break;
             case UpgradeType.ItemGet:
                 itemsAquired++;

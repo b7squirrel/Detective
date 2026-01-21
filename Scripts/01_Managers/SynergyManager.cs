@@ -18,8 +18,14 @@ public class SynergyManager : MonoBehaviour
         {
             synergyUpgrades = new List<UpgradeData>();
         }
+        if(weaponData.synergyUpgrade == null)
+    {
+        Logger.LogError($"{weaponData.name}의 synergyUpgrade가 null입니다!");
+        return;
+    }
 
         synergyUpgrades.Add(weaponData.synergyUpgrade);
+        Logger.LogError($"시너지 추가됨: {weaponData.synergyUpgrade.name}, 현재 풀 크기: {synergyUpgrades.Count}");
     }
 
     public UpgradeData GetSynergyUpgrade()
