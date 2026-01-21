@@ -2,70 +2,93 @@ using UnityEngine;
 
 public class TennisBallProjectile : ProjectileBase
 {
-    [SerializeField] int deflection;
+    [SerializeField] int deflection = 3;
     [SerializeField] AudioClip hitSound;
+    
     Rigidbody2D rb;
     Animator anim;
     TrailRenderer trailRenderer;
-
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         trailRenderer = GetComponent<TrailRenderer>();
     }
-
-    // 다시 활성화 될 때 트레일이 이상하게 시작되는 문제를 해결하기 위해서
+    
     private void OnDisable()
     {
-        trailRenderer.Clear();
+        if (trailRenderer != null)
+        {
+            trailRenderer.Clear();
+        }
     }
-
-    protected override void HitObject()
-    {
-        deflection--;
-    }
-
+    
     private void OnCollisionEnter2D(Collision2D other)
     {
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-
+        
         if (other.contacts.Length > 0)
         {
             Vector2 normalVector = other.contacts[0].normal;
             HandleCollisionWithNormal(other, normalVector, hitEffect);
         }
     }
-
+    
     private void HandleCollisionWithNormal(Collision2D other, Vector2 normalVector, GameObject hitEffect)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage,
-                                                                    KnockBackChance,
-                                                                    KnockBackSpeedFactor,
-                                                                    transform.position,
-                                                                    hitEffect);
+            // 데미지 처리
+            other.gameObject.GetComponent<Idamageable>().TakeDamage(
+                Damage,
+                KnockBackChance,
+                KnockBackSpeedFactor,
+                transform.position,
+                hitEffect);
             PostMessage(Damage, other.transform.position);
-
-            ReflectDirection(normalVector);
+            
+            // 반사 및 효과
+            HandleReflection(normalVector, rb);
             TriggerHitEffects();
+            
+            // deflection 체크
+            if (ShouldDeactivate(ref deflection))
+            {
+                DeactivateBall();
+            }
         }
-        else if (other.gameObject.CompareTag("MainCamera") || other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Props"))
+        else if (other.gameObject.CompareTag("MainCamera") || 
+                 other.gameObject.CompareTag("Wall") || 
+                 other.gameObject.CompareTag("Props"))
         {
+            // 소품이면 데미지 처리
             if (other.gameObject.CompareTag("Props"))
             {
-                other.gameObject.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, KnockBackSpeedFactor, transform.position, hitEffect);
+                other.gameObject.GetComponent<Idamageable>()?.TakeDamage(
+                    Damage, 
+                    KnockBackChance, 
+                    KnockBackSpeedFactor, 
+                    transform.position, 
+                    hitEffect);
             }
-
-            ReflectDirection(normalVector);
+            
+            // 반사 및 효과
+            HandleReflection(normalVector, rb);
             TriggerHitEffects();
+            
+            // deflection 체크
+            if (ShouldDeactivate(ref deflection))
+            {
+                DeactivateBall();
+            }
         }
     }
+    
     void OnTriggerEnter2D(Collider2D other)
     {
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-
+        
         if (other.gameObject.CompareTag("Props"))
         {
             // 데미지 처리
@@ -75,30 +98,41 @@ public class TennisBallProjectile : ProjectileBase
                 KnockBackSpeedFactor,
                 transform.position,
                 hitEffect);
-
-            // 트리거 오브젝트는 단순 반대 방향 반사
-            // (Chest 같은 소품은 정확한 물리 반사가 덜 중요)
+            
+            // 트리거는 단순 반대 방향 반사
             Direction = -Direction.normalized;
             rb.velocity = Vector2.zero;
-
             TriggerHitEffects();
-            HitObject();
+            
+            // deflection 체크
+            if (ShouldDeactivate(ref deflection))
+            {
+                DeactivateBall();
+            }
         }
     }
-    private void ReflectDirection(Vector2 normalVector)
-    {
-        Vector2 incomingVector = Direction.normalized;
-        Vector2 deflectionVector = Vector2.Reflect(incomingVector, normalVector).normalized;
-        Direction = deflectionVector;
-        rb.velocity = Vector2.zero;
-    }
-
+    
     private void TriggerHitEffects()
     {
-        anim.SetTrigger("Hit");
-        SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .034f);
+        if (anim != null)
+        {
+            anim.SetTrigger("Hit");
+        }
+        
+        if (hitSound != null)
+        {
+            SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .034f);
+        }
     }
-
+    
+    private void DeactivateBall()
+    {
+        deflection = 3; // 초기값으로 리셋
+        TimeToLive = 3f;
+        transform.localScale = new Vector3(1, 1, 1);
+        gameObject.SetActive(false);
+    }
+    
     protected override void CastDamage()
     {
         // do nothing in tennis projectile

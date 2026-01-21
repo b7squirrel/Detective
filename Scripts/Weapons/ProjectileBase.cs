@@ -78,4 +78,21 @@ public class ProjectileBase : MonoBehaviour
         transform.localScale = new Vector3(1, 1, 1);
         gameObject.SetActive(false);
     }
+
+    #region 반사 로직
+    protected void HandleReflection(Vector2 normalVector, Rigidbody2D rb)
+    {
+        Vector2 incomingVector = Direction.normalized;
+        Vector2 deflectionVector = Vector2.Reflect(incomingVector, normalVector).normalized;
+        Direction = deflectionVector;
+        rb.velocity = Vector2.zero;
+    }
+    
+    // 공통 메서드: deflection 감소 및 비활성화 체크
+    protected bool ShouldDeactivate(ref int deflection)
+    {
+        deflection--;
+        return deflection < 0;
+    }
+    #endregion
 }
