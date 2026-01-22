@@ -6,6 +6,11 @@ public class EggPickUpObject : Collectable, IPickUpObject
 {
     [SerializeField] List<UpgradeData> upgradeToPick;
 
+    [Header("디버그")]
+    // 알에서 나오게 할 무기 선택. 0을 선택하면 매번 upgradeToPick의 첫 번쨰 항목을 가져오게 됨.
+    [SerializeField] bool isDebugging; // 알에서 나올 무기를 선택하게 할 것인지
+    [SerializeField] int indexWeapon; 
+
     public override void OnHitMagnetField(Vector2 direction)
     {
         // 알은 자력에 영향을 받지 않는다
@@ -18,7 +23,6 @@ public class EggPickUpObject : Collectable, IPickUpObject
         // upgradeToPick을 remove하면서 탐색하면 에러가 생기므로 똑같은 리스트를 만들어서 반복탐색
         List<UpgradeData> checks = new List<UpgradeData>();
         checks.AddRange(upgradeToPick);
-
         for (int i = 0; i < checks.Count; i++)
         {
             if (character.GetComponent<Level>().HavingWeapon(checks[i]))
@@ -30,14 +34,22 @@ public class EggPickUpObject : Collectable, IPickUpObject
 
         if (upgradeToPick.Count == 0)
         {
-            // 알에서 무기 말고 아이템을 나오게 할 생각임
-            // 해당 스테이지에서 얻을 수 있는 무기를 모두 얻은 상태라면,
-            // 아이템을 드롭하도록 구현하기
-            // 지금은 일단 아무것도 하지 않게 했음
-            // 생각해 보니까 혼란스러울 수 있음. 그냥 오리만 나오도록. 한 스테이지에 얻을 수 있는 알의 수를 제한해서 해결
             return;
         }
-        int index = Random.Range(0, upgradeToPick.Count);
+
+        // 디버그 모드 체크
+        int index;
+        if (isDebugging)
+        {
+            // 디버그 모드: indexWeapon 사용 (범위 체크)
+            index = Mathf.Clamp(indexWeapon, 0, upgradeToPick.Count - 1);
+            Debug.Log($"[디버그 모드] 선택된 무기 인덱스: {index}");
+        }
+        else
+        {
+            // 일반 모드: 랜덤 선택
+            index = Random.Range(0, upgradeToPick.Count);
+        }
 
         string weaponName = upgradeToPick[index].weaponData.Name;
         // Logger.LogError($"[EggPickupObject] {weaponName}을 얻었습니다.");
