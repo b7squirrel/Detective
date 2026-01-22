@@ -42,30 +42,45 @@ public class ShadowHeightProjectile : MonoBehaviour
 
     public void Initialize(Vector2 groundVelocity, float verticalVelocity)
     {
-        if (!isInitialized)
-        {
-            isInitialized = true;
-        }
         IsDone = false;
-
         isGrounded = false;
+        bounceCounter = 0; // ← 추가! 바운스 카운터 리셋
+        trnsBody.position = Vector2.zero;
         this.verticalVelocity = verticalVelocity;
 
-        anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        // rb와 anim은 한 번만 초기화
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+        if (anim == null)
+        {
+            anim = GetComponent<Animator>();
+        }
 
-        // 현재 속도 초기화 (선택 사항)
+        // ★ Body와 Shadow 위치 초기화 (추가!)
+        if (trnsBody != null && trnsShadow != null)
+        {
+            // Body를 Shadow와 같은 높이로 리셋
+            trnsBody.localPosition = new Vector3(0, 0, 0);
+            trnsShadow.localPosition = new Vector3(0, -0.3f, 0); // Inspector에서 설정한 값과 동일하게
+        }
+
+        // 매번 초기화되어야 하는 것들
         rb.velocity = Vector2.zero;
-
-        gameObject.layer = LayerMask.NameToLayer("InAir");
+        rb.angularVelocity = 0f;
         rb.mass = 1f;
         rb.bodyType = RigidbodyType2D.Dynamic;
+        gameObject.layer = LayerMask.NameToLayer("InAir");
 
         // 힘을 적용
         rb.AddForce(groundVelocity * forceMultiplier, ForceMode2D.Impulse);
+
+        // 기존 코루틴 정리 후 시작
+        StopAllCoroutines();
         StartCoroutine(SlowDownCoroutine());
 
-        
+        isInitialized = true;
     }
 
     void UpdateLayer()
