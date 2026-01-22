@@ -7,9 +7,12 @@ public class BaseballProjectile : ProjectileBase
     [SerializeField] float deadVerticalSpeed;
     [SerializeField] SpriteRenderer deadSprite;
     
+    [Header("Rotation Settings")]
+    [SerializeField] bool rotateToDirection = true; // 회전 활성화 여부
+    [SerializeField] float rotationOffset = 0f;     // 각도 보정값 (필요시)
+    
     Animator anim;
     TrailRenderer trailRenderer;
-    
     bool hasHitOnce = false;
     
     private void Awake()
@@ -31,18 +34,40 @@ public class BaseballProjectile : ProjectileBase
         }
     }
     
-    // ★ Trigger만 사용
+    // ★ 회전 업데이트 추가
+    protected override void Update()
+    {
+        base.Update(); // ProjectileBase의 Update 실행
+        
+        if (rotateToDirection && !hasHitOnce)
+        {
+            RotateToDirection();
+        }
+    }
+
+    // ★ 방향으로 회전
+    void RotateToDirection()
+    {
+        if (Direction != Vector3.zero && deadSprite != null)
+        {
+            float angle = Mathf.Atan2(Direction.y, Direction.x) * Mathf.Rad2Deg;
+
+            // ★ 스프라이트만 회전
+            deadSprite.transform.rotation = Quaternion.Euler(0, 0, angle + rotationOffset);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (hasHitOnce) return;
         
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-
-        // ★ Normal Vector 계산
+        
+        // Normal Vector 계산
         Vector2 hitPosition = transform.position;
         Vector2 otherPosition = other.transform.position;
         Vector2 normalVector = (hitPosition - otherPosition).normalized;
-
+        
         GenDeadProjectile(normalVector * Speed, deadVerticalSpeed, deadSprite.sprite);
         
         // Enemy에 충돌
@@ -82,7 +107,7 @@ public class BaseballProjectile : ProjectileBase
             gameObject.SetActive(false);
         }
     }
-
+    
     private void TriggerHitEffects()
     {
         if (anim != null)
@@ -100,14 +125,11 @@ public class BaseballProjectile : ProjectileBase
     {
         // do nothing
     }
-
+    
     void GenDeadProjectile(Vector2 groundVel, float verticalVelocity, Sprite sprite)
     {
         GameObject deadPr = GameManager.instance.poolManager.GetMisc(deadProjectile);
-
-        // ★ 위치 설정 추가!
         deadPr.transform.position = transform.position;
-
-        deadPr.GetComponent<ShadowHeightDeadProjectile>().Initialize(groundVel, verticalVelocity, sprite);
+        deadPr.GetComponent<ShadowHeightDeadProjectile>().Initialize(groundVel / 8f, verticalVelocity, sprite);
     }
 }

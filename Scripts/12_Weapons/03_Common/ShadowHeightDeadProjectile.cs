@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 public class ShadowHeightDeadProjectile : MonoBehaviour
 {
@@ -9,22 +10,25 @@ public class ShadowHeightDeadProjectile : MonoBehaviour
     [SerializeField] Transform trnsShadow;
     [SerializeField] SpriteRenderer sprRndshadow;
 
+    [Header("Blink Settings")]
+    [SerializeField] float blinkInterval = 0.1f; // 깜빡이는 간격
+    [SerializeField] float blinkAlpha = 0.3f;    // 반투명 정도 (0~1)
+
     Vector2 shadowOffset = new Vector2(.1f, -.2f);
     [SerializeField] int bouncingNumbers;
     [SerializeField] bool noHeightShadow;
     [SerializeField] string onLandingMask;
     
-    // IsDone을 프로퍼티로 변경
     private bool isDone;
     public bool IsDone 
     { 
         get => isDone;
         private set 
         {
-            if (!isDone && value) // false에서 true로 변경될 때만
+            if (!isDone && value)
             {
                 isDone = value;
-                onDoneEvent?.Invoke(); // 이벤트 실행
+                onDoneEvent?.Invoke();
             }
             else
             {
@@ -34,7 +38,7 @@ public class ShadowHeightDeadProjectile : MonoBehaviour
     }
     
     public UnityEvent onGroundHitEvent;
-    public UnityEvent onDoneEvent; // 새로운 이벤트 추가
+    public UnityEvent onDoneEvent;
 
     Transform trnsObject;
 
@@ -70,6 +74,9 @@ public class ShadowHeightDeadProjectile : MonoBehaviour
         useTargetBasedTrajectory = false;
 
         if(sprite != null) sprRndBody.sprite = sprite;
+        
+        // ★ 깜빡임 시작
+        StartCoroutine(BlinkEffect());
     }
 
     void InitializeCommon()
@@ -77,7 +84,49 @@ public class ShadowHeightDeadProjectile : MonoBehaviour
         if (!isInitialized)
         {
             trnsObject = transform;
+            
+            // Body 찾기
+            if (trnsBody == null)
+            {
+                Transform bodyTransform = transform.Find("BodyTrns");
+                if (bodyTransform == null)
+                    bodyTransform = transform.Find("Body");
+                
+                if (bodyTransform != null)
+                {
+                    trnsBody = bodyTransform;
+                    sprRndBody = bodyTransform.GetComponentInChildren<SpriteRenderer>();
+                }
+            }
+            
+            // Shadow 찾기
+            if (noHeightShadow == false && trnsShadow == null)
+            {
+                Transform shadowTransform = transform.Find("Shadow Trns");
+                if (shadowTransform == null)
+                    shadowTransform = transform.Find("Shadow");
+                
+                if (shadowTransform != null)
+                {
+                    trnsShadow = shadowTransform;
+                    sprRndshadow = shadowTransform.GetComponentInChildren<SpriteRenderer>();
+                }
+            }
+            
             isInitialized = true;
+        }
+        
+        // Body 초기 위치
+        if (trnsBody != null)
+        {
+            trnsBody.localPosition = Vector3.zero;
+        }
+        
+        // ★ 스프라이트 색상 초기화
+        if (sprRndBody != null)
+        {
+            Color originalColor = sprRndBody.color;
+            sprRndBody.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
         }
         
         IsDone = false;
@@ -85,14 +134,26 @@ public class ShadowHeightDeadProjectile : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    void CalculateTrajectoryVelocities()
+    // ★ 깜빡임 코루틴
+    IEnumerator BlinkEffect()
     {
-        Vector2 horizontalDistance = new Vector2(targetPosition.x - startPosition.x, 0);
-        groundVelocity = horizontalDistance / trajectoryTime;
-
-        float verticalDistance = targetPosition.y - startPosition.y;
-        verticalVelocity = (verticalDistance / trajectoryTime) - (0.5f * gravity * trajectoryTime);
-        lastInitaialVerticalVelocity = verticalVelocity;
+        if (sprRndBody == null) yield break;
+        
+        Color originalColor = sprRndBody.color;
+        
+        while (!IsDone)
+        {
+            // 반투명
+            sprRndBody.color = new Color(originalColor.r, originalColor.g, originalColor.b, blinkAlpha);
+            yield return new WaitForSeconds(blinkInterval);
+            
+            // 불투명
+            sprRndBody.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
+            yield return new WaitForSeconds(blinkInterval);
+        }
+        
+        // 완료 후 원래 색상으로
+        sprRndBody.color = originalColor;
     }
 
     void UpdatePosition()
@@ -100,8 +161,13 @@ public class ShadowHeightDeadProjectile : MonoBehaviour
         if (!isGrounded)
         {
             verticalVelocity += gravity * Time.deltaTime;
-            trnsBody.position += new Vector3(0, verticalVelocity, 0) * Time.deltaTime;
+            
+            // ★ Local position 사용
+            Vector3 currentLocalPos = trnsBody.localPosition;
+            currentLocalPos.y += verticalVelocity * Time.deltaTime;
+            trnsBody.localPosition = currentLocalPos;
         }
+        
         if (IsDone == false)
         {
             trnsObject.position += (Vector3)groundVelocity * Time.deltaTime;
@@ -147,9 +213,10 @@ public class ShadowHeightDeadProjectile : MonoBehaviour
 
     void CheckGroundHit()
     {
-        if (!useTargetBasedTrajectory && trnsBody.position.y < trnsObject.position.y && !isGrounded)
+        // ★ Local position 체크
+        if (!useTargetBasedTrajectory && trnsBody.localPosition.y < 0 && !isGrounded)
         {
-            trnsBody.position = trnsObject.position;
+            trnsBody.localPosition = new Vector3(trnsBody.localPosition.x, 0, trnsBody.localPosition.z);
             isGrounded = true;
             GroundHit();
         }
@@ -222,8 +289,24 @@ public class ShadowHeightDeadProjectile : MonoBehaviour
             anim.SetTrigger("Idle");
         }
     }
+    
     public void Deactivate()
     {
+        // ★ 비활성화 전 코루틴 정리
+        StopAllCoroutines();
         gameObject.SetActive(false);
+    }
+    
+    // ★ OnDisable에서도 정리
+    void OnDisable()
+    {
+        StopAllCoroutines();
+        
+        // 스프라이트 색상 초기화
+        if (sprRndBody != null)
+        {
+            Color originalColor = sprRndBody.color;
+            sprRndBody.color = new Color(originalColor.r, originalColor.g, originalColor.b, 1f);
+        }
     }
 }
