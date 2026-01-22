@@ -15,6 +15,10 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     CardSpriteAnim cardSpriteAnim;
     public void InitWeaponIcon(WeaponData wd)
     {
+        // ⭐ 초기화 추가
+        needToOffset = false;
+        headMain.anchoredPosition = Vector2.zero;
+
         if (leadWeaponData == null) leadWeaponData = GameManager.instance.startingDataContainer.GetLeadWeaponData();
 
         bool isLead = false;
@@ -37,7 +41,7 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
 
             if (item == null)
             {
-                SetEquipCardDisplay(i, null, false, Vector2.zero); // 이미지 오브젝트를 비활성화
+                SetEquipCardDisplay(i, null, false, Vector2.zero);
                 continue;
             }
             SpriteRow equipmentSpriteRow = item.spriteRow;
@@ -71,13 +75,6 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     }
     void SetEquipCardDisplay(int index, SpriteRow spriteRow, bool needToOffset, Vector2 offset)
     {
-        // need to offset이 참이 되면 더 이상 변화가 없도록 남겨둠
-        this.needToOffset = this.needToOffset ? true : needToOffset;
-
-        // offset을 하게 하는 아이템이 탈착 되었을 때를 위한 초기화
-        headMain.anchoredPosition = this.needToOffset == false ? Vector2.zero : headMain.anchoredPosition;
-
-        // cardSpriteAnim.Init을 호출해서 해당 index 부위의 애니메이션 이미지들을 저장해 두기
         if (spriteRow == null)
         {
             equipmentImages[index].gameObject.SetActive(false);
@@ -86,9 +83,14 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         {
             equipmentImages[index].gameObject.SetActive(true);
 
-            // 탈착, 장착이 반복될 수록 계속 offset이 더해지는 것을 막기 위해 원점이 아닐 때는 offset을 해주지 않기
-            headMain.anchoredPosition = headMain.anchoredPosition == Vector2.zero ? headMain.anchoredPosition + offset : headMain.anchoredPosition;
-            cardSpriteAnim.StoreItemSpriteRow(index, spriteRow); // 이미지들을 저장해 두고 애니메이션 이벤트로 사용
+            // needToOffset이 true인 아이템이 있으면 offset 적용
+            if (needToOffset && !this.needToOffset)
+            {
+                this.needToOffset = true;
+                headMain.anchoredPosition += offset;
+            }
+
+            cardSpriteAnim.StoreItemSpriteRow(index, spriteRow);
         }
     }
     #endregion
