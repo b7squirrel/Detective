@@ -46,7 +46,8 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     // 진동하는 애니메이션을 시작하는 것만 실행. 애니메이션의 끝에 애니메이션 이벤트로 Cast Damage 함수 실행
     IEnumerator ExplodeCo()
     {
-        yield return new WaitForSeconds(waitingTime);
+        float offsetWaitingTime = waitingTime + UnityEngine.Random.Range(-.5f, .5f);
+        yield return new WaitForSeconds(offsetWaitingTime);
         anim.SetTrigger("Trigger");
     }
 

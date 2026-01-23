@@ -60,17 +60,15 @@ public class BaseballProjectile : ProjectileBase
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (hasHitOnce) return;
-        
+        hasHitOnce = true;  // ★ 먼저 설정!
+
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-        
-        // Normal Vector 계산
         Vector2 hitPosition = transform.position;
         Vector2 otherPosition = other.transform.position;
         Vector2 normalVector = (hitPosition - otherPosition).normalized;
-        
+
         GenDeadProjectile(normalVector * Speed, deadVerticalSpeed, deadSprite.sprite);
-        
-        // Enemy에 충돌
+
         if (other.CompareTag("Enemy"))
         {
             other.GetComponent<Idamageable>()?.TakeDamage(
@@ -80,34 +78,27 @@ public class BaseballProjectile : ProjectileBase
                 transform.position,
                 hitEffect);
             PostMessage(Damage, other.transform.position);
-            
             TriggerHitEffects();
-            hasHitOnce = true;
             gameObject.SetActive(false);
         }
-        // Props에 충돌
         else if (other.CompareTag("Props"))
         {
             other.GetComponent<Idamageable>()?.TakeDamage(
-                Damage, 
-                KnockBackChance, 
-                KnockBackSpeedFactor, 
-                transform.position, 
+                Damage,
+                KnockBackChance,
+                KnockBackSpeedFactor,
+                transform.position,
                 hitEffect);
-            
             TriggerHitEffects();
-            hasHitOnce = true;
             gameObject.SetActive(false);
         }
-        // 벽이나 경계에 충돌
         else if (other.CompareTag("Wall") || other.CompareTag("MainCamera"))
         {
             TriggerHitEffects();
-            hasHitOnce = true;
             gameObject.SetActive(false);
         }
     }
-    
+
     private void TriggerHitEffects()
     {
         if (anim != null)
@@ -117,7 +108,8 @@ public class BaseballProjectile : ProjectileBase
         
         if (hitSound != null)
         {
-            SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .034f);
+            Logger.LogError($"[BeasballProjectil] 사운드 재생");
+            SoundManager.instance.Play(hitSound);
         }
     }
     

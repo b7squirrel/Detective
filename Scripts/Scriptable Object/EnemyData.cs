@@ -29,7 +29,7 @@ public class EnemyData : ScriptableObject
     public float speedScalingMultiplier = 1.0f;
     
     [Tooltip("이 적 타입의 공격력 스케일링 배율 (1.0 = 기본)")]
-    [Range(0.5f, 10f)]
+    [Range(0.5f, 30f)]
     public float damageScalingMultiplier = 1.0f;
 
     [Header("Special Abilities - Dash")]

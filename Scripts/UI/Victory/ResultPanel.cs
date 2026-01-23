@@ -16,7 +16,7 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI killText;
     [SerializeField] TMPro.TextMeshProUGUI coinText;
     [SerializeField] TMPro.TextMeshProUGUI stampText;
-    
+
     [Header("일반 모드 요소")]
     [SerializeField] RectTransform stageNumRec;
     [SerializeField] TMPro.TextMeshProUGUI stageNumberText;
@@ -29,6 +29,7 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI bestRecordText;
     [SerializeField] TMPro.TextMeshProUGUI bestRecordTitleText;
     [SerializeField] GameObject bestRecordCircle;
+    [SerializeField] RectTransform shineEffect;
     bool isNewRecord; // 웨이브 기록이 갱신이 되었는지
 
     [SerializeField] bool isDarkBG;
@@ -54,7 +55,7 @@ public class ResultPanel : MonoBehaviour
     [Header("무한모드 사운드")]
     [SerializeField] AudioClip[] newRecordSound;
 
-    
+
     public void InitAwards(int killNum, int coinNum, int stageNum, bool isWinningStage)
     {
         SetBG();
@@ -90,7 +91,7 @@ public class ResultPanel : MonoBehaviour
         SetEquipSpriteRow();
 
         AudioClip resultSound = resultSoundSuccess;
-        if (isWinningStage == false) 
+        if (isWinningStage == false)
         {
             charAnim.SetTrigger("Hit"); // 패배 화면이라면 오리도 패배 모션으로
             resultSound = resultSoundFail;
@@ -181,7 +182,7 @@ public class ResultPanel : MonoBehaviour
         seq.AppendInterval(0.2f);
         seq.AppendCallback(() =>
         {
-            if(isWinningStage)
+            if (isWinningStage)
             {
                 PlayUISound(resultSoundSuccess);
             }
@@ -252,11 +253,11 @@ public class ResultPanel : MonoBehaviour
         {
             PlayUISound(popupSound);
         });
-        
+
         // 현재 시간
         seq.AppendInterval(.5f);
         survivalTimeRec.localScale = Vector2.one;
-        seq.AppendCallback(() => 
+        seq.AppendCallback(() =>
         {
             PlayUISound(scribbleSound);
             survivalTimeTitle.Play();
@@ -264,10 +265,10 @@ public class ResultPanel : MonoBehaviour
         });
 
         seq.AppendInterval(.15f);
-        seq.AppendCallback(() => 
+        seq.AppendCallback(() =>
         {
             survivalTimeContents.Play();
-            
+
         });
 
         // 최고 기록
@@ -285,47 +286,78 @@ public class ResultPanel : MonoBehaviour
             bestRecordTimeContents.Play();
         });
 
-     
-/// ⭐ 신기록 연출 (핵심)
-seq.AppendInterval(0.3f);
-seq.AppendCallback(() =>
-{
-    if(isNewRecord)
-    {
-        foreach (var clip in newRecordSound)
-            SoundManager.instance.Play(clip);
 
-        bestRecordCircle.SetActive(true);
+        /// ⭐ 신기록 연출 (핵심)
+        seq.AppendInterval(0.3f);
+        seq.AppendCallback(() =>
+        {
+            if (isNewRecord)
+            {
+                foreach (var clip in newRecordSound)
+                    SoundManager.instance.Play(clip);
 
-        // 텍스트 색상 반짝임 효과
-        Color originalColor = bestRecordTitleText.color;
-        Color flashColor = Color.white; // 원하는 색상으로 변경 가능 (예: Color.white, new Color(1f, 0.8f, 0f))
-        
-        bestRecordTitleText.DOColor(flashColor, 0.1f)
-            .SetEase(Ease.OutQuad)
-            .SetUpdate(true)
-            .OnComplete(() => 
-                bestRecordTitleText.DOColor(originalColor, 0.1f).SetEase(Ease.InQuad).SetUpdate(true)
-            );
-        
-        bestRecordText.DOColor(flashColor, 0.1f)
-            .SetEase(Ease.OutQuad)
-            .SetUpdate(true)
-            .OnComplete(() => 
-                bestRecordText.DOColor(originalColor, 0.1f).SetEase(Ease.InQuad).SetUpdate(true)
-            );
+                bestRecordCircle.SetActive(true);
 
-        bestRecordRec
-            .DOScale(1.25f, 0.1f)
-            .SetEase(Ease.OutBack)
-            .SetUpdate(true)
-            .OnComplete(() =>
-                bestRecordRec.DOScale(1f, 0.1f)
+                // ⭐ Shine Effect 추가
+                shineEffect.gameObject.SetActive(true);
+                // shineEffect.position = bestRecordRec.position;
+                shineEffect.localScale = Vector3.one;
+
+                // CanvasGroup이 있다면 alpha 조절용
+                CanvasGroup shineCanvas = shineEffect.GetComponent<CanvasGroup>();
+                if (shineCanvas != null)
+                {
+                    shineCanvas.alpha = 1f;
+                    shineCanvas.DOFade(0f, .6f).SetEase(Ease.OutQuad).SetUpdate(true);
+                }
+                // 또는 Image 컴포넌트가 있다면
+                else
+                {
+                    Image shineImage = shineEffect.GetComponent<Image>();
+                    if (shineImage != null)
+                    {
+                        Color c = shineImage.color;
+                        c.a = 1f;
+                        shineImage.color = c;
+                        shineImage.DOFade(0f, 0.4f).SetEase(Ease.OutQuad).SetUpdate(true);
+                    }
+                }
+
+                // x축만 1.5배 스케일업 애니메이션
+                shineEffect.DOScale(new Vector3(1.5f, 2f, 1f), 0.4f)
                     .SetEase(Ease.OutQuad)
                     .SetUpdate(true)
-            );
-    }
-});
+                    .OnComplete(() => shineEffect.gameObject.SetActive(false));
+
+                // 텍스트 색상 반짝임 효과
+                Color originalColor = bestRecordTitleText.color;
+                Color flashColor = Color.white; // 원하는 색상으로 변경 가능 (예: Color.white, new Color(1f, 0.8f, 0f))
+
+                bestRecordTitleText.DOColor(flashColor, 0.1f)
+                    .SetEase(Ease.OutQuad)
+                    .SetUpdate(true)
+                    .OnComplete(() =>
+                        bestRecordTitleText.DOColor(originalColor, 0.1f).SetEase(Ease.InQuad).SetUpdate(true)
+                    );
+
+                bestRecordText.DOColor(flashColor, 0.1f)
+                    .SetEase(Ease.OutQuad)
+                    .SetUpdate(true)
+                    .OnComplete(() =>
+                        bestRecordText.DOColor(originalColor, 0.1f).SetEase(Ease.InQuad).SetUpdate(true)
+                    );
+
+                bestRecordRec
+                    .DOScale(1.25f, 0.1f)
+                    .SetEase(Ease.OutBack)
+                    .SetUpdate(true)
+                    .OnComplete(() =>
+                        bestRecordRec.DOScale(1f, 0.1f)
+                            .SetEase(Ease.OutQuad)
+                            .SetUpdate(true)
+                    );
+            }
+        });
 
         // Coin
         seq.AppendInterval(0.5f);
@@ -343,7 +375,7 @@ seq.AppendCallback(() =>
         {
             PlayUISound(stampSound);
             stampRec.localScale = Vector2.one;
-            
+
             panelRec.DOShakePosition(.5f, strength: 20f, vibrato: 30, randomness: 30)
             .SetUpdate(true);
 

@@ -72,7 +72,8 @@ public class Level : MonoBehaviour
     public void AddExperience(int expAmount)
     {
         bool bossDead = BossDieManager.instance.IsBossDead;
-        if(bossDead)
+        GameMode gameMode = PlayerDataManager.Instance.GetGameMode();
+        if(bossDead && gameMode == GameMode.Regular)
         {
             Logger.LogError($"[Level] 보스가 죽어서 경험치 증가를 막습니다.");
             return;
@@ -86,17 +87,24 @@ public class Level : MonoBehaviour
     public void CheckLevelUp()
     {
         // 레벨업을 했는데도 경험치가 레벨업 경험치보다 높으면 계속 레벨업
-        // Upgrade Panel Manager에서 패널을 닫으면서 CheckLevelUp 호출
-        if (experience >= To_Level_Up) 
+        while (experience >= To_Level_Up)
         {
-            //LevelUp();
-            UIEvent upgradeEvent = new UIEvent(() => LevelUp(), "Upgrade");
-            GameManager.instance.popupManager.EnqueueUIEvent(upgradeEvent);
+            if (NoMoreUpgrade)
+            {
+                // 업그레이드 없이 자동 레벨업
+                level++;
+                experience -= To_Level_Up;
+                experienceBar.SetLevelText(level);
+            }
+            else
+            {
+                UIEvent upgradeEvent = new UIEvent(() => LevelUp(), "Upgrade");
+                GameManager.instance.popupManager.EnqueueUIEvent(upgradeEvent);
+                break; // 패널을 열 때는 한 번만
+            }
         }
-        else
-        {
-            experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
-        }
+
+        experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
     }
 
     void LevelUp()

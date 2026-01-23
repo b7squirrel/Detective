@@ -161,6 +161,7 @@ public class GameTexts : ScriptableObject
 
     [Header("Game Hints")]
     [Tooltip("로딩 중 표시될 힌트들")]
+    [TextArea]
     public string[] gameHints = new string[]
     {
         "팁: 체력이 낮을 때는\n상자에서 달콤우유가\n 나올 확률이\n높아집니다.",
