@@ -59,6 +59,9 @@ public class BombWeapon : WeaponBase
             projectileBase.KnockBackChance = GetKnockBackChance();
             projectileBase.IsCriticalDamageProj = isCriticalDamage;
 
+            // ✨ 투사체에 무기 이름 전달
+            projectileBase.WeaponName = weaponData.DisplayName;
+
             BombProjectile proj = bombObject.GetComponent<BombProjectile>();
             proj.Init(targetVec, weaponStats);
             ProjectileHeight projHeight = bombObject.GetComponent<ProjectileHeight>();

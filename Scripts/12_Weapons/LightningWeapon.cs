@@ -122,8 +122,12 @@ public class LightningWeapon : WeaponBase
                 enemy.TakeDamage(damage, 
                                  knockback, 
                                  knockbackSpeedFactor,
-                                 Player.instance.transform.position, 
+                                 Player.instance.transform.position,
                                  hitEffect);
+
+                // ✨ 데미지 기록 추가
+                // ✨ weaponData.DisplayName 사용
+                DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
             }
         }
     }

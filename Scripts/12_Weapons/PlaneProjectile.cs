@@ -83,10 +83,11 @@ public class PlaneProjectile : ProjectileBase
 
         float randomAngle = UnityEngine.Random.Range(-70f, 70f);
         offsetDirection = Quaternion.Euler(0, 0, randomAngle) * (target - transform.position).normalized;
-        //offsetDirection = (target - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, offsetDirection);
-        transform.localScale = .5f * Vector3.one;
-        // Debug.LogError($"비행기의 부모 = {transform.parent.name}");
+
+        // ✨ 부모 관계없이 일정한 크기 유지
+        transform.SetParent(null);
+        transform.localScale = 0.5f * Vector3.one;
 
         Damage = damage;
     }
@@ -124,6 +125,13 @@ public class PlaneProjectile : ProjectileBase
                                                              KnockBackSpeedFactor,
                                                              transform.position,
                                                              hitEffect);
+
+                // ✨ 데미지 기록 추가
+                if (!string.IsNullOrEmpty(WeaponName))
+                {
+                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
+                }
+
                 hitDetected = true;
             }
         }

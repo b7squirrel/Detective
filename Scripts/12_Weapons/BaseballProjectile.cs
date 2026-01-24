@@ -78,6 +78,13 @@ public class BaseballProjectile : ProjectileBase
                 transform.position,
                 hitEffect);
             PostMessage(Damage, other.transform.position);
+
+            // ✨ 데미지 기록 추가. 적에게의 공격에만 데미지 기록
+            if (!string.IsNullOrEmpty(WeaponName))
+            {
+                DamageTracker.instance.RecordDamage(WeaponName, Damage);
+            }
+
             TriggerHitEffects();
             gameObject.SetActive(false);
         }
@@ -108,7 +115,6 @@ public class BaseballProjectile : ProjectileBase
         
         if (hitSound != null)
         {
-            Logger.LogError($"[BeasballProjectil] 사운드 재생");
             SoundManager.instance.Play(hitSound);
         }
     }

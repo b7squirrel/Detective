@@ -88,9 +88,9 @@ public class BeamWeapon : WeaponBase
             projectiles.Add(laserObject);
         }
 
-        if(isSynergyWeaponActivated)
+        if (isSynergyWeaponActivated)
         {
-            for(int i = 0;i < projectiles.Count;i++)
+            for (int i = 0; i < projectiles.Count; i++)
             {
                 projectiles[i].GetComponent<BeamProjectile>().SetAnimToSynergy();
             }
@@ -110,21 +110,24 @@ public class BeamWeapon : WeaponBase
 
             ProjectileBase projectile = projectiles[i].GetComponent<ProjectileBase>();
             projectile.Damage = damage;
-            projectile.KnockBackChance = knockback;;
+            projectile.KnockBackChance = knockback; ;
             projectile.KnockBackSpeedFactor = knockbackSpeedFactor;
             projectile.IsCriticalDamageProj = isCriticalDamage;
+
+            // ✨ 투사체에 무기 이름 전달
+            projectile.WeaponName = weaponData.DisplayName;
         }
 
         // 눈 반짝
         AnimShoot();
 
         // muzzle flash
-        if(muzzle == null)
+        if (muzzle == null)
         {
             muzzle = GameManager.instance.poolManager.GetMisc(muzzleFlash);
             muzzle2 = GameManager.instance.poolManager.GetMisc(muzzleFlash);
 
-            if(muzzle != null)
+            if (muzzle != null)
             {
                 muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
                 muzzle.transform.position = ShootPoint.position - new Vector3(.2f, 0, 0);

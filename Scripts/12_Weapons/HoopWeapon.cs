@@ -102,6 +102,9 @@ public class HoopWeapon : WeaponBase
 
             HoopProjectile hoopProjectile = projectiles[i].GetComponentInChildren<HoopProjectile>();
             hoopProjectile.Init(this);
+
+            // ✨ 투사체에 무기 이름 전달
+            hoopProjectile.WeaponName = weaponData.DisplayName;
         }
         isProjectileActive = true;
     }

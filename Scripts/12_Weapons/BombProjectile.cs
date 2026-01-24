@@ -39,11 +39,18 @@ public class BombProjectile : ProjectileBase
                     PostMessage(Damage, enmey.transform.position);
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enmey.GetComponent<Idamageable>().TakeDamage(Damage, 
-                                                             KnockBackChance, 
+                enmey.GetComponent<Idamageable>().TakeDamage(Damage,
+                                                             KnockBackChance,
                                                              KnockBackSpeedFactor,
-                                                             transform.position, 
+                                                             transform.position,
                                                              hitEffect);
+
+                // ✨ 데미지 기록 추가
+                if (!string.IsNullOrEmpty(WeaponName))
+                {
+                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
+                }
+
                 hitDetected = true;
             }
         }

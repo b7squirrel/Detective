@@ -43,6 +43,10 @@ public class GarlicWeapon : WeaponBase
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
                 enemy.TakeDamage(damage, knockback, knockbackSpeedFactor, hitPoint, hitEffect);
+
+                // ✨ 데미지 기록 추가
+                // ✨ weaponData.DisplayName 사용
+                DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
             }
         }
     }

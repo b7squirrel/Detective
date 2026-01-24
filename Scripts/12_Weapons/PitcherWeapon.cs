@@ -51,7 +51,9 @@ public class PitcherWeapon : WeaponBase
         projectile.KnockBackChance = GetKnockBackChance();
         projectile.TimeToLive = 1.5f;  // 필요시 조정
 
-        Debug.Log($"야구공 발사 - 데미지: {projectile.Damage}, 속도: {projectile.Speed}");
+        // ✨ 투사체에 무기 이름 전달
+        projectile.WeaponName = weaponData.DisplayName;
+        // Logger.Log($"야구공 발사 - 데미지: {projectile.Damage}, 속도: {projectile.Speed}");
     }
 
     protected override void FlipWeaponTools()

@@ -45,8 +45,11 @@ public class PlaneWeapon : WeaponBase
             return;
         }
 
-        // plane.GetComponent<PlaneProjectile>().Init(GetTargetPos(), damage);
-        plane.GetComponent<PlaneProjectile>().Init(closestEnemyPosition[0], damage);
+        PlaneProjectile planeProj = plane.GetComponent<PlaneProjectile>();
+        planeProj.Init(closestEnemyPosition[0], damage);
+
+        // ✨ 투사체에 무기 이름 전달
+        planeProj.WeaponName = weaponData.DisplayName;
     }
 
     Vector2 GetTargetPos()

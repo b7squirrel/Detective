@@ -11,6 +11,9 @@ public class ProjectileBase : MonoBehaviour
     public bool IsCriticalDamageProj {get; set;}
     [field : SerializeField] public float TimeToLive {get; set;} = 3f;
 
+    // ✨ 투사체를 발사한 무기 이름
+    public string WeaponName { get; set; }
+
     protected virtual void Update()
     {
         if (Time.timeScale == 0)
@@ -49,10 +52,16 @@ public class ProjectileBase : MonoBehaviour
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
                 enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, KnockBackSpeedFactor, transform.position, hitEffect);
                 hitDetected = true;
+
+                // ✨ 무기 이름과 함께 데미지 기록
+                if (!string.IsNullOrEmpty(WeaponName))
+                {
+                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
+                }
+
                 break;
             }
         }
-        
         if (hitDetected == true)
         {
             HitObject();

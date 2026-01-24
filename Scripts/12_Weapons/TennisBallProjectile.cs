@@ -47,11 +47,17 @@ public class TennisBallProjectile : ProjectileBase
                 transform.position,
                 hitEffect);
             PostMessage(Damage, other.transform.position);
-            
+
+            // ✨ 데미지 기록 추가
+            if (!string.IsNullOrEmpty(WeaponName))
+            {
+                DamageTracker.instance.RecordDamage(WeaponName, Damage);
+            }
+
             // 반사 및 효과
             HandleReflection(normalVector, rb);
             TriggerHitEffects();
-            
+
             // deflection 체크
             if (ShouldDeactivate(ref deflection))
             {

@@ -61,6 +61,12 @@ public class PunchWeapon : WeaponBase
         {
             enemy.TakeDamage(damage, knockback, knockbackSpeedFactor, transform.position, hitEffect);
         }
+        
+        // ✨ 데미지 기록 추가
+        if (weaponData != null)
+        {
+            DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
+        }
     }
 
     // 공격을 할 동안은 무기의 회전이나 Flip이 없어야 함

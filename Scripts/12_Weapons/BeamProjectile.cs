@@ -134,5 +134,11 @@ public class BeamProjectile : ProjectileBase
                                                      KnockBackSpeedFactor,
                                                      _object.transform.position,
                                                      hitEffect);
+        
+        // ✨ 무기 이름과 함께 데미지 기록
+        if (!string.IsNullOrEmpty(WeaponName))
+        {
+            DamageTracker.instance.RecordDamage(WeaponName, Damage);
+        }
     }
 }

@@ -61,6 +61,9 @@ public class FireBallWeapon : WeaponBase
                 projectile.Damage = GetDamage();
                 projectile.KnockBackChance = GetKnockBackChance();
                 projectile.IsCriticalDamageProj = isCriticalDamage;
+
+                // ✨ 투사체에 무기 이름 전달
+                projectile.WeaponName = weaponData.DisplayName;
             }
 
             if (isSynergyWeaponActivated)
@@ -84,6 +87,9 @@ public class FireBallWeapon : WeaponBase
                     projectileEx.Damage = GetDamage();
                     projectileEx.KnockBackChance = GetKnockBackChance();
                     projectileEx.IsCriticalDamageProj = isCriticalDamage;
+
+                    // ✨ 시너지 투사체에도 무기 이름 전달
+                    projectileEx.WeaponName = weaponData.DisplayName;
                 }
             }
         }

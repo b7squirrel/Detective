@@ -34,6 +34,39 @@ public class HoopProjectile : ProjectileBase
         SetLinePositions(transform.position, hoopWeapon.transform.position);
     }
 
+    protected override void CastDamage()
+    {
+        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, .7f);
+        for (int i = 0; i < hit.Length; i++)
+        {
+            Transform enmey = hit[i].GetComponent<Transform>();
+            if (enmey.GetComponent<Idamageable>() != null)
+            {
+                if (enmey.GetComponent<DestructableObject>() == null)
+                    PostMessage(Damage, enmey.transform.position);
+
+                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+                enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, KnockBackSpeedFactor, transform.position, hitEffect);
+
+                // ✨ HoopWeapon 이름으로 데미지 기록
+                // ✨ WeaponName 프로퍼티 사용
+                if (!string.IsNullOrEmpty(WeaponName))
+                {
+                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
+                }
+
+                hitDetected = true;
+                break;
+            }
+        }
+
+        if (hitDetected == true)
+        {
+            HitObject();
+            hitDetected = false;
+        }
+    }
+
     protected override void HitObject()
     {
         GetComponentInParent<HoopWeapon>().TakeDamageProjectile();

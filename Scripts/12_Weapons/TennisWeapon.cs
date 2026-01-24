@@ -137,6 +137,10 @@ public class TennisWeapon : WeaponBase
             projectile.IsCriticalDamageProj = isCriticalDamage;
             projectile.KnockBackChance = GetKnockBackChance();
             projectile.TimeToLive = 1.5f;
+
+            // ✨ 투사체에 무기 이름 전달
+            projectile.WeaponName = weaponData.DisplayName;
+
         }
     }
 

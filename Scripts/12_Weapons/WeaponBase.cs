@@ -8,6 +8,10 @@ public class WeaponBase : MonoBehaviour
 
     public WeaponStats weaponStats;
 
+    // ✨ 데미지 트래커용 무기 이름
+    [Header("데미지 트래커")]
+    [SerializeField] protected string weaponName;
+
     protected float timer;
     protected int damage; // Attack이 시작되면 GetDamage()로 얻어냄
     protected float knockback; // Attack이 시작되면 GetKnockBackChance()로 얻어냄
@@ -319,5 +323,14 @@ public class WeaponBase : MonoBehaviour
     public bool IsSynergyWeaponActivated()
     {
         return isSynergyWeaponActivated;
+    }
+
+    // 데미지 트래커
+    public string GetWeaponName()
+    {
+        if (weaponData != null)
+            return weaponData.DisplayName;
+        
+        return gameObject.name; // fallback
     }
 }
