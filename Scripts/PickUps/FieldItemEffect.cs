@@ -7,9 +7,14 @@ public class FieldItemEffect : MonoBehaviour
     [SerializeField] float invincibaleDuration;
     [SerializeField] CountdownTimer stopCounterUI;
     [SerializeField] InvincibleCounterUI invincibleCounterUI;
+    [Header("폭탄 설정")]
     [SerializeField] int bombDamage;
+    [SerializeField] float bombRadius = 5f; // 폭탄 폭발 범위
+    [SerializeField] LayerMask enemyLayer; // 적 레이어
     [SerializeField] GameObject bombHitEffect;
     [SerializeField] GameObject bombExplosionEffect;
+    [SerializeField] GameObject damageIndicatorPrefab; // 디버그용 인디케이터
+    [SerializeField] float indicatorDisplayTime = 0.5f; // 인디케이터 표시 시간
     [SerializeField] GameObject itemDieEffect; // 상자, 보석 등이 사라질 때의 이펙트
     ISpawnController spawnController;
     
@@ -132,36 +137,65 @@ public class FieldItemEffect : MonoBehaviour
     #region 폭탄
     public void Explode(Vector2 _pos)
     {
+        // 디버그 인디케이터 표시
+        if (damageIndicatorPrefab != null)
+        {
+            StartCoroutine(ShowBombIndicator(_pos));
+        }
+
+        // 폭발 이펙트
         GameObject effect = GameManager.instance.poolManager.GetMisc(bombExplosionEffect);
         effect.transform.position = _pos;
 
-        Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
-        if (allEnemies.Length == 0) return;
-
-        int number = 1;
-        int nullNumbers = 0;
-        int notActiveNumbers = 0;
-        for (int i = 0; i < allEnemies.Length; i++)
+        // 범위 내의 적만 찾기
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(_pos, bombRadius, enemyLayer);
+        
+        if (enemiesInRange.Length == 0)
         {
-            Idamageable enemy = allEnemies[i].GetComponent<Idamageable>();
-            GameObject enemyObject = allEnemies[i].gameObject;
+            Logger.Log("[FieldItemEffect] 폭탄 범위 내에 적이 없습니다.");
+            return;
+        }
 
-            if (enemy == null) nullNumbers++;
-            if (enemyObject == null) notActiveNumbers++;
+        int damagedEnemies = 0;
+        for (int i = 0; i < enemiesInRange.Length; i++)
+        {
+            Idamageable enemy = enemiesInRange[i].GetComponent<Idamageable>();
+            GameObject enemyObject = enemiesInRange[i].gameObject;
 
             if (enemy != null && enemyObject.activeSelf)
             {
-                PostMessage(bombDamage, allEnemies[i].transform.position);
+                PostMessage(bombDamage, enemiesInRange[i].transform.position);
 
-                number++;
                 enemy.TakeDamage(bombDamage,
                                  0,
                                  0,
                                  _pos,
                                  bombHitEffect);
+                damagedEnemies++;
             }
         }
+
+        Logger.Log($"[FieldItemEffect] 폭탄으로 {damagedEnemies}마리의 적에게 데미지를 입혔습니다.");
     }
+
+    IEnumerator ShowBombIndicator(Vector2 _pos)
+    {
+        // 인디케이터 생성
+        GameObject indicator = GameManager.instance.poolManager.GetMisc(damageIndicatorPrefab);
+        DamageIndicator damageIndicator = indicator.GetComponent<DamageIndicator>();
+        
+        if (damageIndicator != null)
+        {
+            damageIndicator.Init(bombRadius, _pos);
+        }
+
+        // 지정된 시간만큼 표시
+        yield return new WaitForSeconds(indicatorDisplayTime);
+
+        // 인디케이터 비활성화
+        indicator.SetActive(false);
+    }
+
     void PostMessage(int damage, Vector3 targetPosition)
     {
         MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, false);
