@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
   m_Name: Volley 4
   m_EditorClassIdentifier: 
-  grade: 0
+  grade: 4
   Name: Volley
   DisplayName: "\uBC30\uAD6C \uC624\uB9AC"
   SynergyDispName: "\uAC15\uC2A4\uD30C\uC774\uD06C \uC624\uB9AC"
-  charImage: {fileID: 21300000, guid: 3bafff59f3f379c41b65e97e6ae1f871, type: 3}
+  charImage: {fileID: 0}
   faceImage: {fileID: 21300000, guid: 8e3c2434f22c67542b84e5fed018d197, type: 3}
-  SynergyWeapon: PowerSpike
+  SynergyWeapon: Volley Synergy
   SynergyItem: {fileID: 11400000, guid: 7a64f5031e72cd64581e534d57086656, type: 2}
   Animators:
     CardImageAnim: {fileID: 22100000, guid: 8da414d99ee926343b79c22299e05734, type: 2}
@@ -29,10 +29,10 @@ MonoBehaviour:
   DefaultFace: {fileID: 0}
   DefaultHands: {fileID: 0}
   defaultItems:
-  - {fileID: 11400000, guid: 61312ac412d8f1142bf94a20a92f68b0, type: 2}
-  - {fileID: 11400000, guid: de9a4dbe4dc259b49a16a88a906d278e, type: 2}
   - {fileID: 0}
-  - {fileID: 11400000, guid: 85eba9ad6cea19e4287d73493f6ef87d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   charEffectImage: {fileID: 0}
   weaponPrefab: {fileID: 1322226256919037930, guid: a41f421e8582c424d94aaa1115e0914d, type: 3}
   stats:
@@ -45,10 +45,10 @@ MonoBehaviour:
     currentLevel: 0
   weaponBasePrefab: {fileID: 5958538054296379712, guid: 3fd80b85360eb48129efc737bfda5e79, type: 3}
   upgrades:
-  - {fileID: 11400000, guid: 926684d42c3e84847a61163444486130, type: 2}
-  - {fileID: 11400000, guid: 6b9eaf739c316468a88617a2ddc1c6ad, type: 2}
-  - {fileID: 11400000, guid: 5858587e158494b0fb6cd4594c0669f9, type: 2}
-  - {fileID: 11400000, guid: 72417e76b74674cafbf2f9941f99d64f, type: 2}
-  - {fileID: 11400000, guid: c19bbcf45639a41ca96d7ec5c5421b67, type: 2}
-  synergyUpgrade: {fileID: 11400000, guid: 36e70aac75dc14429a9f677fa0c4fbf5, type: 2}
+  - {fileID: 11400000, guid: e629c45a544db4f1784278fb94564be5, type: 2}
+  - {fileID: 11400000, guid: 7b831870123d347f8bed9dd4dd5d9eb4, type: 2}
+  - {fileID: 11400000, guid: 1a5a9177043eb41c583c422294fc8ff0, type: 2}
+  - {fileID: 11400000, guid: fc61d59e7ad8c4f7ea01e4a5f4784596, type: 2}
+  - {fileID: 11400000, guid: 653aaf33655a443b28809280a350740b, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: a7d38c9bf1d974c1582b2294277fe436, type: 2}
   equipmentType: 3

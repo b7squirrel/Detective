@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: -100
   m_Sprite: {fileID: 21300000, guid: 401215933d2504b83bbc102aa000faee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -508,6 +508,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -1.37
       objectReference: {fileID: 0}
+    - target: {fileID: 4785763044888253379, guid: 57aa371eb6cc2fe4fa41adfc5b12970e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 5331664381359299567, guid: 57aa371eb6cc2fe4fa41adfc5b12970e, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -18,6 +18,7 @@ public class DropItemProperty
 public abstract class DropOnDestroy : MonoBehaviour
 {
     [SerializeField] protected List<DropItemProperty> dropItemProperty;
+    [Tooltip("1-100")]
     [SerializeField] protected float multiDropRate; // 무더기를 드롭할 확률
     [SerializeField] protected float specialDropRate; // 스페셜 드롭할 확률
     [SerializeField] protected bool dropAllItemList; // 리스트의 아이템을 모두 드롭할 것인지. 서브 보스처럼
