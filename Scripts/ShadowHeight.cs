@@ -6,7 +6,7 @@ public class ShadowHeight : MonoBehaviour
     Vector2 shadowOffset = new Vector2(.1f, -.2f);
     [SerializeField] int bouncingNumbers;
     [SerializeField] bool noHeightShadow;
-    [SerializeField] string onLandingMask;
+    [SerializeField] string onLandingMask = "Shadow";
     public bool IsDone { get; private set; }
     public UnityEvent onGroundHitEvent;
 
@@ -33,7 +33,7 @@ public class ShadowHeight : MonoBehaviour
     float currentTime;
     bool useTargetBasedTrajectory;
 
-    void Update()
+    void FixedUpdate()
     {
         if (useTargetBasedTrajectory)
         {
@@ -43,7 +43,7 @@ public class ShadowHeight : MonoBehaviour
         {
             UpdatePosition();
         }
-        
+
         UpdateShadow();
         CheckGroundHit();
     }

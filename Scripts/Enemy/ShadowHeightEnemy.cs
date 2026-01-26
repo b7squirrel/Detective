@@ -23,6 +23,8 @@ public class ShadowHeightEnemy : MonoBehaviour
     float jumpFrequency; // 점프를 하는 주기
     float currentVerticalVel;
     float jumpCounter; // 점프 주기를 재는 카운터
+                       // ⭐ 추가: 점프 시 수평 이동 속도 저장
+    Vector2 jumpHorizontalVelocity;
 
     [Header("Slow Effect")]
     bool isSlowed; // 현재 느림 상태인지
@@ -70,6 +72,9 @@ public class ShadowHeightEnemy : MonoBehaviour
         lastInitaialVerticalVelocity = verticalVel;
 
         anim = GetComponent<Animator>();
+
+        // ⭐ 점프 시작 시 현재 이동 방향과 속도 저장
+        jumpHorizontalVelocity = enemy.GetNextVec();
     }
 
     public void SetIsJumper(bool isJumper, float jumpInterval)
@@ -205,6 +210,24 @@ public class ShadowHeightEnemy : MonoBehaviour
         {
             SoundManager.instance.Play(jumpSound);
         }
+    }
+    #endregion
+
+    #region 점프 중 수평 이동 속도 반환
+    /// <summary>
+    /// 점프 중 수평 이동 속도 반환
+    /// </summary>
+    public Vector2 GetJumpHorizontalVelocity()
+    {
+        return jumpHorizontalVelocity;
+    }
+
+    /// <summary>
+    /// 착지 여부 반환
+    /// </summary>
+    public bool IsGrounded()
+    {
+        return isGrounded;
     }
     #endregion
 

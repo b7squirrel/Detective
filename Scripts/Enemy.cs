@@ -181,6 +181,15 @@ public class Enemy : EnemyBase
             }
             return;
         }
+
+        // ⭐ 점프 중이면 저장된 수평 속도로만 이동 (플레이어 추적 안 함)
+        if (canJump && shadowHeightEnemy != null && !shadowHeightEnemy.IsGrounded())
+        {
+            rb.MovePosition((Vector2)rb.transform.position + shadowHeightEnemy.GetJumpHorizontalVelocity());
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         base.ApplyMovement();
     }
 

@@ -60,7 +60,9 @@ public class WeaponData : ScriptableObject
     public string SynergyDispName;
     public Sprite charImage;
     public Sprite faceImage;
+    [Tooltip("시너지 커플 검색용 키워드")]
     public string SynergyWeapon;
+    [Tooltip("시너지 커플을 이루는 아이템 데이터")]
     public Item SynergyItem;
     public AnimatorData Animators;
     

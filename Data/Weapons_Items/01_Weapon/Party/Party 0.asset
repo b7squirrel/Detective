@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Party 0
+  m_EditorClassIdentifier: 
+  grade: 0
+  Name: Party
+  DisplayName: "\uD30C\uD2F0 \uC624\uB9AC"
+  SynergyDispName: "\uD2B9\uAE09 \uD30C\uD2F0 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 8e3c2434f22c67542b84e5fed018d197, type: 3}
+  SynergyWeapon: Party Synergy
+  SynergyItem: {fileID: 11400000, guid: 6fed794634024654c8c2ee88559e9bae, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 4
+    timeToAttack: 2
+    numberOfAttacks: 1
+    sizeOfArea: 6
+    projectileSpeed: 16
+    knockBackChance: 25
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 1448644997306806806, guid: 79e60c4ae242a4099aef56b8a40dd5bd, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 5f9c5264e5e9e4c4b8a88b9ec0f937a4, type: 2}
+  - {fileID: 11400000, guid: f5c8778a18593473080a970dd4941668, type: 2}
+  - {fileID: 11400000, guid: 8d868d4a1ca8641e0b81fbbe3ac9f8fd, type: 2}
+  - {fileID: 11400000, guid: d57576d45735946d28b98d98e7d020de, type: 2}
+  - {fileID: 11400000, guid: 353b13a4a4eff4b76a146fd8bd72f3b0, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 423c8835e007440a4a372199c2a6d079, type: 2}
+  equipmentType: 0

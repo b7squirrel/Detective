@@ -212,7 +212,7 @@ public class WeaponBase : MonoBehaviour
             // if (item.stats.currentLevel == item.upgrades.Count + 1)
             if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
             {
-                Logger.LogError($"[WeaponBase]{weaponData.DisplayName}시너지 웨폰 활성화");
+                Logger.Log($"[WeaponBase]{weaponData.DisplayName}시너지 웨폰 활성화");
                 Wielder.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(weaponData);
             }
             else

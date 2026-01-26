@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1448644997306806806
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6327805308310754467}
+  - component: {fileID: 8745517261497920154}
+  m_Layer: 0
+  m_Name: wp_party
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6327805308310754467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448644997306806806}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8745517261497920154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448644997306806806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 663e79f3006f44280b3ca0d3a4245d49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponData: {fileID: 0}
+  weaponStats:
+    damage: 0
+    timeToAttack: 0
+    numberOfAttacks: 0
+    sizeOfArea: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    currentLevel: 0
+  weaponName: 
+  knockbackSpeedFactor: 0
+  anim: {fileID: 0}
+  animExtra: {fileID: 0}
+  ShootPoint: {fileID: 0}
+  EffectPoint: {fileID: 0}
+  weaponTools: {fileID: 0}
+  weaponToolsExtra: {fileID: 0}
+  ShootPointExtra: {fileID: 0}
+  EffectPointExtra: {fileID: 0}
+  <NeedParent>k__BackingField: 0
+  enemy:
+    serializedVersion: 2
+    m_Bits: 81984
+  partyProjectilePrefab: {fileID: 2055027908291373737, guid: 09925554ebc604241bbe088f8b63b63b, type: 3}
+  synergyProjectilePrefab: {fileID: 2055027908291373737, guid: 09925554ebc604241bbe088f8b63b63b, type: 3}
+  shoot: {fileID: 8300000, guid: ec6de165432da8c40b6dba6386f62f83, type: 3}
+  positionOffsetRange: 2
+  directionOffsetAngle: 15
+  shotDelay: 0.1
+  projectileSpeed: 10
+  verticalVelocity: 30
+  muzzleFlash: {fileID: 5419914140758713295, guid: ffe4beb20f6de764297dae70b8b5ccc5, type: 3}

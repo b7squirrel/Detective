@@ -83,5 +83,11 @@ public class DamageTrackerUI : MonoBehaviour
             Debug.Log("모든 데미지 데이터와 UI 카드가 초기화되었습니다.");
         }
     }
+
+    // UI 토글 메서드
+    public void ToggleDamageTrackerUI()
+    {
+        gameObject.SetActive(gameObject.activeSelf);
+    }
     #endregion
 }
