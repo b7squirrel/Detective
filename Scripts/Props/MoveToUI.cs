@@ -12,6 +12,9 @@ public class MoveToUI : MonoBehaviour
     [Header("오브젝트 타입")]
     [SerializeField] TypeOfMoveToUI typeOfMoveToUI;
 
+    [Header("2라면 실제 획득하는 수의 절만만 UI로 생성")]
+    [SerializeField] int divideFactor;
+
     [Header("World Object")]
     [SerializeField] float moveSpeed;
     [SerializeField] AudioClip hitSound;
@@ -72,11 +75,12 @@ public class MoveToUI : MonoBehaviour
             yield return null;
         }
 
+        divideFactor = divideFactor == 0 ? 1 : divideFactor;
         if (typeOfMoveToUI == TypeOfMoveToUI.Coin)
         {
             coinManager.updateCurrentCoinNumbers(1);
         }
-        else if(typeOfMoveToUI == TypeOfMoveToUI.Cristal)
+        else if (typeOfMoveToUI == TypeOfMoveToUI.Cristal)
         {
             cristalManager.updateCurrentCristalNumbers(1);
         }

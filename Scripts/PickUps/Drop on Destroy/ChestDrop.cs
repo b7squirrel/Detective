@@ -8,7 +8,7 @@ public class ChestDrop : DropOnDestroy
 {
     [SerializeField] private int exp;
     [SerializeField] private int hp;
-
+    
     [Header("Debug")]
     [SerializeField] private bool isDebuggingOn;
     [SerializeField] private int dropItemIndex;
@@ -17,37 +17,12 @@ public class ChestDrop : DropOnDestroy
     {
         if (IsDropListEmpty()) return;
 
-        // dropAllItemList가 true면 모든 아이템을 드롭
-        if (dropAllItemList)
-        {
-            DropAllItems();
-            return;
-        }
-
         // 랜덤 아이템 선택
         int itemIndex = SelectRandomItemIndex();
         GameObject toDrop = dropItemProperty[itemIndex].Item;
 
         // 체력이 30% 이하로 내려가면 무조건 힐링 아이템 드롭
         toDrop = SelectItemBasedOnPlayerHealth(ref itemIndex, toDrop);
-
-        // 무더기 드롭 체크
-        if (dropItemProperty[itemIndex].isMultipleDropable && CheckMultiDropChance())
-        {
-            int multiNum = dropItemProperty[itemIndex].numMultiple + UnityEngine.Random.Range(4, 9);
-            multiNum = Mathf.Max(1, multiNum);
-            DropMultipleObjects(toDrop, multiNum);
-            return;
-        }
-
-        // 스페셜 드롭 체크
-        if (dropItemProperty[itemIndex].hasSpecialItem && CheckSpecialDropChance())
-        {
-            if (dropItemProperty[itemIndex].SpecialDrop != null)
-            {
-                toDrop = dropItemProperty[itemIndex].SpecialDrop;
-            }
-        }
 
         if (toDrop == null)
         {
@@ -67,7 +42,7 @@ public class ChestDrop : DropOnDestroy
             toDrop = dropItemProperty[dropItemIndex].Item;
         }
 
-        // 아이템 스폰
+        // 아이템 스폰 (단일 아이템만)
         SpawnItem(toDrop, itemIndex);
     }
 
@@ -100,7 +75,7 @@ public class ChestDrop : DropOnDestroy
         bool isGem = IsGem(toDrop);
         int itemExp = exp;
 
-        // 보석이라면 무조건 드롭 (상자에서 나오는 보석)
+        // 보석이라면 경험치 정보 가져오기
         if (isGem)
         {
             GemPickUpObject gemPick = toDrop.GetComponent<GemPickUpObject>();
