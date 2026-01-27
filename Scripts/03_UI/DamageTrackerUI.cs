@@ -10,13 +10,16 @@ public class DamageTrackerUI : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float updateInterval = 0.1f;
     private float updateTimer;
-    
+
+    [Header("UI 토글")]
+    bool isToggle = false;
+
     private Dictionary<string, DamageTrackerCard> weaponCards = new Dictionary<string, DamageTrackerCard>();
 
     void Update()
     {
         if (GameManager.instance.IsPaused) return;
-        
+
         updateTimer += Time.deltaTime;
         if (updateTimer >= updateInterval)
         {
@@ -87,7 +90,8 @@ public class DamageTrackerUI : MonoBehaviour
     // UI 토글 메서드
     public void ToggleDamageTrackerUI()
     {
-        gameObject.SetActive(gameObject.activeSelf);
+        isToggle = !isToggle;
+        gameObject.SetActive(isToggle);
     }
     #endregion
 }

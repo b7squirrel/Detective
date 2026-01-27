@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 상자 전용 드롭 시스템
 /// 플레이어 체력에 따라 힐링 아이템 우선 드롭
+/// MultiPropCreator 지원 추가
 /// </summary>
 public class ChestDrop : DropOnDestroy
 {
@@ -42,8 +43,16 @@ public class ChestDrop : DropOnDestroy
             toDrop = dropItemProperty[dropItemIndex].Item;
         }
 
-        // 아이템 스폰 (단일 아이템만)
-        SpawnItem(toDrop, itemIndex);
+        // ⭐ MultiPropCreator 여부 체크 후 처리
+        if (IsMultiPropCreator(toDrop))
+        {
+            SpawnMultiPropCreator(toDrop);
+        }
+        else
+        {
+            // 일반 아이템 스폰
+            SpawnItem(toDrop, itemIndex);
+        }
     }
 
     /// <summary>
@@ -68,6 +77,43 @@ public class ChestDrop : DropOnDestroy
         }
 
         return defaultItem;
+    }
+
+    /// <summary>
+    /// ⭐ MultiPropCreator인지 확인
+    /// </summary>
+    private bool IsMultiPropCreator(GameObject prefab)
+    {
+        return prefab.GetComponent<MultiPropCreator>() != null;
+    }
+
+    /// <summary>
+    /// ⭐ MultiPropCreator 스폰 (풀링 + Initialize)
+    /// </summary>
+    private void SpawnMultiPropCreator(GameObject creatorPrefab)
+    {
+        // 풀에서 가져오기
+        GameObject creator = GameManager.instance.poolManager.GetMisc(creatorPrefab);
+        
+        if (creator == null)
+        {
+            Logger.LogError("[ChestDrop] MultiPropCreator를 풀에서 가져올 수 없습니다!");
+            return;
+        }
+
+        creator.SetActive(true);
+
+        // Initialize 메서드로 명시적 초기화
+        MultiPropCreator script = creator.GetComponent<MultiPropCreator>();
+        if (script != null)
+        {
+            script.Initialize(transform.position);
+            Logger.Log($"[ChestDrop] MultiPropCreator 스폰 at {transform.position}");
+        }
+        else
+        {
+            Logger.LogError("[ChestDrop] MultiPropCreator 컴포넌트를 찾을 수 없습니다!");
+        }
     }
 
     protected override void SpawnItem(GameObject toDrop, int itemIndex)

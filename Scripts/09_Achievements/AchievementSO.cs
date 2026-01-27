@@ -14,6 +14,7 @@ public enum RewardType
 {
     GEM,
     COIN,
+    NONE
 }
 
 [CreateAssetMenu(fileName = "NewAchievement", menuName = "Achievement/New Achievement", order = 0)]
