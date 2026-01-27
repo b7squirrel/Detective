@@ -205,7 +205,7 @@ public class WeaponBase : MonoBehaviour
             Item item = Wielder.GetComponent<PassiveItems>().GetSynergyCouple(weaponData.SynergyWeapon);
             if (item == null)
             {
-                Logger.LogError("시너지 커플 아이템이 없습니다");
+                Logger.Log("시너지 커플 아이템이 없습니다 아이템을 아직 획득하지 못했습니다.");
                 return;
             }
 
