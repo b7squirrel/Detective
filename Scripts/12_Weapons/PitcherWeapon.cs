@@ -42,18 +42,18 @@ public class PitcherWeapon : WeaponBase
         
         ball.transform.position = ShootPoint.position;
 
-        // 발사체 설정
-        ProjectileBase projectile = ball.GetComponent<ProjectileBase>();
-        projectile.Speed = weaponStats.projectileSpeed;
-        projectile.Direction = dir;  // WeaponBase에서 계산된 방향 사용
-        projectile.Damage = GetDamage();
-        projectile.IsCriticalDamageProj = isCriticalDamage;
-        projectile.KnockBackChance = GetKnockBackChance();
-        projectile.TimeToLive = 1.5f;  // 필요시 조정
+        // // 발사체 설정
+        // ProjectileBase projectile = ball.GetComponent<ProjectileBase>();
+        // projectile.Speed = weaponStats.projectileSpeed;
+        // projectile.Direction = dir;  // WeaponBase에서 계산된 방향 사용
+        // projectile.Damage = GetDamage();
+        // projectile.IsCriticalDamageProj = isCriticalDamage;
+        // projectile.KnockBackChance = GetKnockBackChance();
+        // projectile.TimeToLive = 1.5f;  // 필요시 조정
 
-        // ✨ 투사체에 무기 이름 전달
-        projectile.WeaponName = weaponData.DisplayName;
-        // Logger.Log($"야구공 발사 - 데미지: {projectile.Damage}, 속도: {projectile.Speed}");
+        // // ✨ 투사체에 무기 이름 전달
+        // projectile.WeaponName = weaponData.DisplayName;
+        // // Logger.Log($"야구공 발사 - 데미지: {projectile.Damage}, 속도: {projectile.Speed}");
     }
 
     protected override void FlipWeaponTools()

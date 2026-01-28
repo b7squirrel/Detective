@@ -10,6 +10,7 @@ public class WeaponStats
     public int numberOfAttacks;
     public float sizeOfArea;
     public float projectileSpeed;
+    [Tooltip("1-100")]
     public float knockBackChance;
     public int currentLevel;
 

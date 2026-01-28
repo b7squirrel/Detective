@@ -101,7 +101,6 @@ public class BaseballProjectile : ProjectileBase
         }
         else if (other.CompareTag("Wall") || other.CompareTag("MainCamera"))
         {
-            Logger.LogError($"[BaseballProjectil] 벽이나 카메라엣지에 충돌");
             TriggerHitEffects();
             gameObject.SetActive(false);
         }

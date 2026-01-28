@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Bowling 4
+  m_EditorClassIdentifier: 
+  grade: 4
+  Name: Bowling
+  DisplayName: "\uBCFC\uB9C1 \uC624\uB9AC"
+  SynergyDispName: "\uBCFC\uB9C1\uBCFC\uB9C1 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 775fb914c3c3b814a960c54d5233e9b4, type: 3}
+  SynergyWeapon: Bowling Synergy
+  SynergyItem: {fileID: 11400000, guid: 0a8e636c5e214834084a4fc0390cc2a3, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 100
+    timeToAttack: 5
+    numberOfAttacks: 1
+    sizeOfArea: 2
+    projectileSpeed: 12
+    knockBackChance: 30
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 3151599576962117163, guid: ad8309eb3c72148d7a22191f21da8013, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: dbccadc35b4384acb935d13de2ed151c, type: 2}
+  - {fileID: 11400000, guid: 405bec2ea6ff74901a29ffa1a5824434, type: 2}
+  - {fileID: 11400000, guid: 77308299896524a1fa2b2dd5d540220b, type: 2}
+  - {fileID: 11400000, guid: c47466c38b53d4f91b417c29375b1f3a, type: 2}
+  - {fileID: 11400000, guid: 55dd0b02291454060bd21b9e3fe5ac8d, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 31af33c20411c48a29b8ee98f946e425, type: 2}
+  equipmentType: 3
