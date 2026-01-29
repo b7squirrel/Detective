@@ -95,8 +95,8 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     // 감지 범위 시각화 (Scene 뷰에서 확인 가능)
     void OnDrawGizmos()
     {
-        Gizmos.color = new Color(1, 0, 0, .3f);
-        Gizmos.DrawWireSphere(transform.position, radius - .5f);
+        // Gizmos.color = new Color(1, 0, 0, .3f);
+        // Gizmos.DrawWireSphere(transform.position, radius - .5f);
     }
 
     // 데미지 초기화

@@ -5,175 +5,253 @@ using UnityEngine;
 public class WhipWeapon : WeaponBase
 {
     [SerializeField] GameObject weapon;
-    BoxCollider2D boxCol;
-    Player player;
+    [SerializeField] Transform hitPoint; // ⭐ 공격 중심점
+    
     bool canMultiStrike;
     bool multiStrikeDone;
 
     [Header("Sounds")]
-    [SerializeField] AudioClip punch;
+    [SerializeField] AudioClip shootSound;
+    [SerializeField] AudioClip hitSound;
 
     [Header("Hit Effects")]
-    [SerializeField] GameObject hitEffectPrefab; // Inspector에서 직접 할당
+    [SerializeField] GameObject hitEffectPrefab;
 
-    // 중복 타격 방지
     private HashSet<Collider2D> hitEnemiesThisAttack = new HashSet<Collider2D>();
+
+    // 공격 방향 고정용
+    private bool isAttacking = false;
+    private bool attackFacingRight = true;
 
     protected override void Awake()
     {
         base.Awake();
-        boxCol = GetComponent<BoxCollider2D>();
-        anim = GetComponent<Animator>();
-        player = FindObjectOfType<Player>();
         
-        if (boxCol != null)
-            boxCol.enabled = false; // 초기에는 꺼둠
+        anim = GetComponentInChildren<Animator>();
         
         if (weapon != null)
-            weapon.SetActive(true); // 망치는 항상 보임 (Idle 상태)
+            weapon.SetActive(true);
     }
 
     public override void SetData(WeaponData wd)
     {
         base.SetData(wd);
-        weaponName = wd.DisplayName; // ⭐ DamageTracker용 weaponName 설정
+        weaponName = wd.DisplayName;
+    }
+
+    public override void ActivateSynergyWeapon()
+    {
+        base.ActivateSynergyWeapon();
+        Logger.Log($"[WhipWeapon] 시너지 활성화!");
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        
+        if (isAttacking)
+        {
+            LockAttackDirection();
+        }
     }
 
     protected override void Attack()
     {
-        base.Attack(); // GetAttackParameters() 호출 (damage, knockback 계산)
+        base.Attack();
         
-        // 중복 타격 방지 리스트 초기화
         hitEnemiesThisAttack.Clear();
         multiStrikeDone = false;
-
-        // 멀티 스트라이크 가능 여부 체크
         canMultiStrike = weaponStats.numberOfAttacks >= 2;
 
-        // 방향에 따른 애니메이션 재생
-        if (player.FacingDir < 0)
+        StartAttack();
+
+        if (!isSynergyWeaponActivated)
         {
-            anim.SetTrigger("PunchL");
+            anim.SetTrigger("Attack");
         }
         else
         {
-            anim.SetTrigger("PunchR");
+            anim.SetTrigger("SAttack");
         }
-
-        SoundManager.instance.Play(punch);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    void StartAttack()
     {
-        // 이미 타격한 적은 건너뛰기
-        if (hitEnemiesThisAttack.Contains(collision))
+        isAttacking = true;
+        
+        if (weaponContainerAnim != null)
+        {
+            attackFacingRight = weaponContainerAnim.FacingRight;
+        }
+        else
+        {
+            attackFacingRight = dir.x >= 0;
+        }
+    }
+
+    void LockAttackDirection()
+    {
+        float yRotation = attackFacingRight ? 0f : 180f;
+        transform.eulerAngles = new Vector3(0, yRotation, 0);
+    }
+
+    void EndAttack()
+    {
+        isAttacking = false;
+    }
+
+    /// <summary>
+    /// ⭐ 범위 공격 (애니메이션 이벤트에서 호출)
+    /// hitPoint 위치에서 sizeOfArea 반지름의 원 안에 있는 모든 적 공격
+    /// </summary>
+    void AttackAtHitPoint()
+    {
+        if (hitPoint == null)
+        {
+            Debug.LogWarning("[WhipWeapon] hitPoint가 설정되지 않았습니다!");
             return;
+        }
 
-        // Enemy 태그 체크
-        if (collision.CompareTag("Enemy"))
+        // ⭐ hitPoint 위치에서 원형 범위 공격
+        Vector2 attackPosition = hitPoint.position;
+        float attackRadius = weaponStats.sizeOfArea;
+
+        // 범위 내 모든 콜라이더 찾기
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
+            attackPosition, 
+            attackRadius, 
+            enemy // WeaponBase의 enemy LayerMask 사용
+        );
+
+        // 각 적에게 데미지
+        foreach (Collider2D collision in hitColliders)
         {
-            Idamageable enemy = collision.GetComponent<Idamageable>();
-            if (enemy != null)
+            // 이미 타격한 적은 건너뛰기
+            if (hitEnemiesThisAttack.Contains(collision))
+                continue;
+
+            if (collision.CompareTag("Enemy"))
             {
-                // 타격 처리
-                PostMessage(damage, collision.transform.position);
-                
-                // 히트 이펙트
-                GameObject hitEffect = hitEffectPrefab;
-                if (hitEffect == null)
+                Idamageable enemyTarget = collision.GetComponent<Idamageable>();
+                if (enemyTarget != null)
                 {
-                    // Fallback: HitEffects 컴포넌트 사용
-                    HitEffects hitEffects = GetComponent<HitEffects>();
-                    if (hitEffects != null)
-                        hitEffect = hitEffects.hitEffect;
+                    PostMessage(damage, collision.transform.position);
+                    
+                    GameObject hitEffect = hitEffectPrefab;
+                    if (hitEffect == null)
+                    {
+                        HitEffects hitEffects = GetComponent<HitEffects>();
+                        if (hitEffects != null)
+                            hitEffect = hitEffects.hitEffect;
+                    }
+
+                    enemyTarget.TakeDamage(
+                        damage,
+                        knockback,
+                        knockbackSpeedFactor,
+                        collision.ClosestPoint(attackPosition),
+                        hitEffect
+                    );
+
+                    if (!string.IsNullOrEmpty(weaponName))
+                    {
+                        DamageTracker.instance.RecordDamage(weaponName, damage);
+                    }
+
+                    hitEnemiesThisAttack.Add(collision);
                 }
-
-                enemy.TakeDamage(
-                    damage,
-                    knockback,
-                    knockbackSpeedFactor,
-                    collision.ClosestPoint(transform.position),
-                    hitEffect
-                );
-
-                // ✨ 데미지 기록 (Enemy에게의 공격에만)
-                if (!string.IsNullOrEmpty(weaponName))
+            }
+            else if (collision.CompareTag("Props"))
+            {
+                Idamageable prop = collision.GetComponent<Idamageable>();
+                if (prop != null)
                 {
-                    DamageTracker.instance.RecordDamage(weaponName, damage);
-                }
+                    GameObject hitEffect = hitEffectPrefab;
+                    if (hitEffect == null)
+                    {
+                        HitEffects hitEffects = GetComponent<HitEffects>();
+                        if (hitEffects != null)
+                            hitEffect = hitEffects.hitEffect;
+                    }
 
-                // 타격한 적 기록
-                hitEnemiesThisAttack.Add(collision);
+                    prop.TakeDamage(
+                        damage,
+                        knockback,
+                        knockbackSpeedFactor,
+                        collision.ClosestPoint(attackPosition),
+                        hitEffect
+                    );
+
+                    hitEnemiesThisAttack.Add(collision);
+                }
             }
         }
-        // Props나 다른 타겟도 처리하려면 여기에 추가
-        else if (collision.CompareTag("Props"))
-        {
-            Idamageable prop = collision.GetComponent<Idamageable>();
-            if (prop != null)
-            {
-                GameObject hitEffect = hitEffectPrefab;
-                if (hitEffect == null)
-                {
-                    HitEffects hitEffects = GetComponent<HitEffects>();
-                    if (hitEffects != null)
-                        hitEffect = hitEffects.hitEffect;
-                }
 
-                prop.TakeDamage(
-                    damage,
-                    knockback,
-                    knockbackSpeedFactor,
-                    collision.ClosestPoint(transform.position),
-                    hitEffect
-                );
-
-                // Props는 데미지 추적하지 않음
-                hitEnemiesThisAttack.Add(collision);
-            }
-        }
+        // ⭐ 디버그용: 공격 범위 시각화 (선택사항)
+        #if UNITY_EDITOR
+        Debug.DrawRay(attackPosition, Vector2.up * attackRadius, Color.red, 0.5f);
+        Debug.DrawRay(attackPosition, Vector2.down * attackRadius, Color.red, 0.5f);
+        Debug.DrawRay(attackPosition, Vector2.left * attackRadius, Color.red, 0.5f);
+        Debug.DrawRay(attackPosition, Vector2.right * attackRadius, Color.red, 0.5f);
+        #endif
     }
 
     IEnumerator AttackCo(float firstAttackDirection)
     {
         yield return new WaitForSeconds(.1f);
 
-        // ⭐ 두 번째 공격도 새로운 damage/knockback 계산
         GetAttackParameters();
-        
-        // 두 번째 공격은 새로운 타격 리스트 사용
         hitEnemiesThisAttack.Clear();
 
-        // 반대 방향 애니메이션
-        if (firstAttackDirection < 0)
+        StartAttack();
+
+        if (!isSynergyWeaponActivated)
         {
-            anim.SetTrigger("PunchR");
+            anim.SetTrigger("Attack");
         }
         else
         {
-            anim.SetTrigger("PunchL");
+            anim.SetTrigger("SAttack");
         }
-
-        SoundManager.instance.Play(punch);
+        
         multiStrikeDone = true;
     }
 
     protected override void FlipWeaponTools()
     {
-        // Whip은 Player의 Flip에 따라 자동으로 회전하므로 별도 처리 불필요
+        if (!isAttacking && weaponContainerAnim != null)
+        {
+            float yRotation = weaponContainerAnim.FacingRight ? 0f : 180f;
+            transform.eulerAngles = new Vector3(0, yRotation, 0);
+        }
+    }
+
+    protected override void LockFlip()
+    {
+        if (!isAttacking)
+        {
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        }
     }
 
     #region Animation Events
-    void BoxColOn()
+    // AttackAtHitPoint 사용
+    
+    void ResetHitList()
     {
-        if (boxCol != null)
-            boxCol.enabled = true;
+        hitEnemiesThisAttack.Clear();
     }
 
-    void BoxColOff()
+    void PlayHitSound()
     {
-        if (boxCol != null)
-            boxCol.enabled = false;
+        if (hitSound != null)
+            SoundManager.instance.Play(hitSound);
+    }
+    
+    void PlayShootSound()
+    {
+        if (shootSound != null)
+            SoundManager.instance.Play(shootSound);
     }
 
     void MultiAttack(float firstAttackDirection)
@@ -188,9 +266,15 @@ public class WhipWeapon : WeaponBase
     }
     #endregion
 
-    public override void ActivateSynergyWeapon()
+    // ⭐ 디버그용: Scene 뷰에서 공격 범위 표시
+    #if UNITY_EDITOR
+    void OnDrawGizmosSelected()
     {
-        base.ActivateSynergyWeapon();
-        Logger.LogError($"[WhipWeapon] 시너지 활성화");
+        if (hitPoint != null && weaponStats != null)
+        {
+            Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
+            Gizmos.DrawWireSphere(hitPoint.position, weaponStats.sizeOfArea);
+        }
     }
+    #endif
 }

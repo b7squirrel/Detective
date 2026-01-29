@@ -212,7 +212,8 @@ public class Enemy : EnemyBase
         // ⭐ 이 함수는 이제 EnemyBase의 OnCollisionStay에서만 호출됨
         // 원거리 쿨다운 공격은 EnemyRangedAttack 컴포넌트가 처리
         if (enemyProjectile == null) return;
-        GameObject cannonBall = Instantiate(enemyProjectile, transform.position, Quaternion.identity);
+        GameObject cannonBall = GameManager.instance.poolManager.GetMisc(enemyProjectile);
+        cannonBall.transform.position = transform.position;
         cannonBall.GetComponentInChildren<IEnemyProjectile>().InitProjectileDamage(Stats.rangedDamage);
         anim.SetBool("Attack", true);
     }
