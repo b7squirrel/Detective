@@ -10,6 +10,25 @@ public class WeaponDataGenerator : EditorWindow
     private string synergyDispName = "";
     private string savePath = "Assets/Data/Weapons_Items/01_Weapon";
     
+    // 5개 스킬 정보
+    [System.Serializable]
+    public class SkillInfo
+    {
+        public string skillName = "";
+        public string skillDescription = "";
+    }
+    
+    private SkillInfo[] skills = new SkillInfo[5]
+    {
+        new SkillInfo(),
+        new SkillInfo(),
+        new SkillInfo(),
+        new SkillInfo(),
+        new SkillInfo()
+    };
+    
+    private Vector2 scrollPosition;
+    
     [MenuItem("Tools/Weapon Data Generator")]
     public static void ShowWindow()
     {
@@ -18,6 +37,8 @@ public class WeaponDataGenerator : EditorWindow
     
     void OnGUI()
     {
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+        
         GUILayout.Label("Weapon Data Auto Generator", EditorStyles.boldLabel);
         
         weaponBaseName = EditorGUILayout.TextField("Weapon Base Name:", weaponBaseName);
@@ -26,14 +47,30 @@ public class WeaponDataGenerator : EditorWindow
         
         EditorGUILayout.Space();
         
+        // 5개 스킬 입력
+        GUILayout.Label("Skills (5개)", EditorStyles.boldLabel);
+        for (int i = 0; i < 5; i++)
+        {
+            EditorGUILayout.BeginVertical("box");
+            GUILayout.Label($"Skill {i + 1}", EditorStyles.boldLabel);
+            skills[i].skillName = EditorGUILayout.TextField("Skill Name:", skills[i].skillName);
+            skills[i].skillDescription = EditorGUILayout.TextField("Description:", skills[i].skillDescription);
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space();
+        }
+        
+        EditorGUILayout.Space();
+        
         savePath = EditorGUILayout.TextField("Save Path:", savePath);
         
         EditorGUILayout.Space();
         
-        if (GUILayout.Button("Generate All Weapon Data (Grade 0-4)"))
+        if (GUILayout.Button("Generate All Weapon Data (Grade 0-4)", GUILayout.Height(40)))
         {
             GenerateAllWeaponData();
         }
+        
+        EditorGUILayout.EndScrollView();
     }
     
     void GenerateAllWeaponData()
@@ -88,11 +125,17 @@ public class WeaponDataGenerator : EditorWindow
         EditorUtility.SetDirty(acquireData);
         
         // 3. Skill UpgradeData 5개 생성 및 upgrades 리스트에 추가
-        for (int i = 1; i <= 5; i++)
+        for (int i = 0; i < 5; i++)
         {
-            UpgradeData skillData = CreateAsset<UpgradeData>($"{gradeName} Skill_{i:D2}.asset", folderPath);
+            // 스킬 이름이 비어있으면 기본 형식 사용
+            string skillFileName = string.IsNullOrEmpty(skills[i].skillName) 
+                ? $"Skill_{(i + 1):D2}" 
+                : skills[i].skillName;
+            
+            UpgradeData skillData = CreateAsset<UpgradeData>($"{gradeName} {skillFileName}.asset", folderPath);
             skillData.upgradeType = UpgradeType.WeaponUpgrade;
             skillData.weaponData = weaponData;
+            skillData.description = skills[i].skillDescription;
             EditorUtility.SetDirty(skillData);
             
             // upgrades 리스트에 추가
