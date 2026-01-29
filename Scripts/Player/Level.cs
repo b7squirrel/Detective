@@ -310,4 +310,11 @@ public class Level : MonoBehaviour
 
         this.upgrades.AddRange(upgradesToAdd);
     }
+
+    #region 디버그
+    public void LevelupDebug()
+    {
+        LevelUp();
+    }
+    #endregion
 }

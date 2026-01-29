@@ -84,15 +84,16 @@ public class BowlingProjectile : ProjectileBase
         // ✨ ProjectileBase의 HandleReflection 사용
         HandleReflection(normalVector, rb);
         TriggerHitEffects(reflectSound);
-        
+
         // 반사 횟수 체크
         currentReflections++;
         if (currentReflections >= maxReflections)
         {
-            DeactivateBall();
+
+            DieProjectile();
         }
     }
-    
+
     // 🔍 벽의 가장 가까운 지점으로부터 법선 벡터 계산
     private Vector2 GetWallNormal(Collider2D wall)
     {
@@ -117,15 +118,14 @@ public class BowlingProjectile : ProjectileBase
             SoundManager.instance.PlaySoundWith(sound, 1f, false, 0.034f);
         }
     }
-    
-    private void DeactivateBall()
+    protected override void DieProjectile()
     {
+        SoundManager.instance.Play(bowlingStrikeSouind);
         currentReflections = 0;
-        TimeToLive = 3f;
-        transform.localScale = new Vector3(1, 1, 1);
-        gameObject.SetActive(false);
+
+        base.DieProjectile();
     }
-    
+
     protected override void CastDamage()
     {
         // 트리거로만 처리하므로 비움
