@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Bow 2
+  m_EditorClassIdentifier: 
+  grade: 2
+  Name: Bow
+  DisplayName: "\uC591\uAD81 \uC624\uB9AC"
+  SynergyDispName: "\uD654\uC0B4\uBE44 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 227580c8b7dd3464fb5db3fb8264ec16, type: 3}
+  SynergyWeapon: Bow Synergy
+  SynergyItem: {fileID: 11400000, guid: 345063fe01eca2345bfaa975c540b87d, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 10
+    timeToAttack: 4
+    numberOfAttacks: 10
+    sizeOfArea: 0.5
+    projectileSpeed: 10
+    knockBackChance: 0
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 6721110726654377231, guid: 9d2df88dedbda4a8fa847d4e7052ecaa, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 5747c168ccf974c17b4fdda8299d0a3a, type: 2}
+  - {fileID: 11400000, guid: dcbc69bc00bc24688a0b780c68447655, type: 2}
+  - {fileID: 11400000, guid: 4e76e49787d2a44ad85175a3c6415796, type: 2}
+  - {fileID: 11400000, guid: 0430bdd2c72574b3498b4df987d915fc, type: 2}
+  - {fileID: 11400000, guid: 0a8f65d9fc73d4e7d9c2ae5e59e04546, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 11f38d476c32b49528e204c4496e1b33, type: 2}
+  equipmentType: 3

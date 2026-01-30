@@ -182,6 +182,7 @@ public class UpgradeButton : MonoBehaviour
     void SetLevelStarAlpha(int level, int baseNumbers)
     {
         cardLevel = level;
+
         // 별을 모두 비활성화 한 후
         for (int i = 0; i < stars.Length; i++)
         {
