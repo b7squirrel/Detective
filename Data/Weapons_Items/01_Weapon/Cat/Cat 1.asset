@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Cat 1
+  m_EditorClassIdentifier: 
+  grade: 1
+  Name: Cat
+  DisplayName: "\uACE0\uC591\uC774 \uC624\uB9AC"
+  SynergyDispName: "\uACE0\uC591\uC774 \uAD70\uB2E8 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 168235e7e09f822428ef367d85165661, type: 3}
+  SynergyWeapon: Cat Synergy
+  SynergyItem: {fileID: 11400000, guid: 20155fcb50cd1dc4fb5339ff2364c93a, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 10
+    timeToAttack: 5
+    numberOfAttacks: 5
+    sizeOfArea: 3
+    projectileSpeed: 0
+    knockBackChance: 0
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 9187765448789498397, guid: 86f22e718448641c9ac60cc592c740ee, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 04882207d5f5d41c983c7de1b4087b1a, type: 2}
+  - {fileID: 11400000, guid: f823d6251e93d43c6b93b92d05d03050, type: 2}
+  - {fileID: 11400000, guid: 79ea58fc93d7441eb92fecab12eb859d, type: 2}
+  - {fileID: 11400000, guid: cebafebb497d14f14916c5ecb660bb6a, type: 2}
+  - {fileID: 11400000, guid: c5b49373723bd4ee182d6e2171cfefa7, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: de44ca9e818d049c2bca2e6a65e96528, type: 2}
+  equipmentType: 0

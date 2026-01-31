@@ -101,7 +101,7 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
 
         duration = stageEvents[eventIndexer].time;
 
-        Debug.Log(stageEvents[eventIndexer].eventType.ToString() + "Force Spawn = " + forceSpawn);
+        // Logger.Log(stageEvents[eventIndexer].eventType.ToString() + "Force Spawn = " + forceSpawn);
 
         StartCoroutine(TriggerEvent(duration, forceSpawn));
     }

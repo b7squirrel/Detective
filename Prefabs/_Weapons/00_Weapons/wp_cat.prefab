@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9187765448789498397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3234272287157175626}
+  - component: {fileID: 3057442692918162636}
+  m_Layer: 0
+  m_Name: wp_cat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3234272287157175626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9187765448789498397}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.94, y: -2.4792817, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3057442692918162636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9187765448789498397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 430ca5911f3454452b9d67f24390aace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponData: {fileID: 0}
+  weaponStats:
+    damage: 0
+    timeToAttack: 0
+    numberOfAttacks: 0
+    sizeOfArea: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    currentLevel: 0
+  weaponName: 
+  knockbackSpeedFactor: 0
+  anim: {fileID: 0}
+  animExtra: {fileID: 0}
+  ShootPoint: {fileID: 0}
+  EffectPoint: {fileID: 0}
+  weaponTools: {fileID: 0}
+  weaponToolsExtra: {fileID: 0}
+  ShootPointExtra: {fileID: 0}
+  EffectPointExtra: {fileID: 0}
+  <NeedParent>k__BackingField: 0
+  enemy:
+    serializedVersion: 2
+    m_Bits: 81984
+  laserPointerPrefab: {fileID: 4390443796721731674, guid: 2a4947d7286454f6d9f58738fcbed5bc, type: 3}
+  synergyLaserPointerPrefab: {fileID: 4390443796721731674, guid: 2a4947d7286454f6d9f58738fcbed5bc, type: 3}
+  catProjectilePrefab: {fileID: 4588670902965274065, guid: d73b71604b46c484893930c25674cf9c, type: 3}
+  laserShoot: {fileID: 0}
+  catMeow: {fileID: 0}
+  targetNearEnemyChance: 0.5
+  enemyTargetRadius: 3
+  catSpawnDelay: 0.1
+  catTrajectoryTime: 0.6
+  offScreenDistance: 3

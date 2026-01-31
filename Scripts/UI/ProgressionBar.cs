@@ -66,7 +66,7 @@ public class ProgressionBar : MonoBehaviour
 
     public void UpdateProgressBar(bool _isSubBoss)
     {
-        Debug.Log($"eventUnits Length = {eventUnits.Length}, event Unit Index = {eventUnitsIndex}");
+        // Logger.Log($"eventUnits Length = {eventUnits.Length}, event Unit Index = {eventUnitsIndex}");
         progressBar.value += normalizedLengthUnit * eventUnits[eventUnitsIndex];
         if (_isSubBoss)
         {

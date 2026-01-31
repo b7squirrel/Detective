@@ -15,14 +15,14 @@ public class PauseManager : MonoBehaviour
     public void SetNormalTimeScale(float timeScale)
     {
         normalTimeScale = timeScale;
-        Debug.Log($"[PauseManager] Normal timeScale set to {normalTimeScale}");
+        // Logger.Log($"[PauseManager] Normal timeScale set to {normalTimeScale}");
     }
 
     public void PauseGame()
     {
         Time.timeScale = 0;
         GameManager.instance.SetPauseState(true);
-        Debug.Log($"시간 정지. 타임스케일 = {Time.timeScale}");
+        // Logger.Log($"시간 정지. 타임스케일 = {Time.timeScale}");
         //Player.instance.IsPauseing = true;
     }
 
@@ -30,7 +30,7 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale = normalTimeScale;
         GameManager.instance.SetPauseState(false);
-        Debug.Log($"시간 다시. 타임스케일 = {normalTimeScale}");
+        // Logger.Log($"시간 다시. 타임스케일 = {normalTimeScale}");
         //Player.instance.IsPauseing = false;
     }
     public void SetTimeScale(float timeScale, float waitingTime)

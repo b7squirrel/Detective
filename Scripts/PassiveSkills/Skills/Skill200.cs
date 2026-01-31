@@ -56,7 +56,7 @@ public class Skill200 : SkillBase
                 // 스킬 지속
                 if (!isActivated)
                 {
-                    Debug.Log($"[Skill200] ⚡ 스킬 발동! (Duration: {realDuration}초)");
+                    // Logger.Log($"[Skill200] ⚡ 스킬 발동! (Duration: {realDuration}초)");
                     isActivated = true;
                     skillUi.BadgeUpAnim();
                     skillUi.PlayBadgeAnim("Duration");
@@ -110,7 +110,7 @@ public class Skill200 : SkillBase
             releasedCount++;
         }
         
-        Debug.Log($"[Skill200] 💨 {releasedCount}명 느림 해제");
+        // Logger.Log($"[Skill200] 💨 {releasedCount}명 느림 해제");
     }
 
     void DebugValues()

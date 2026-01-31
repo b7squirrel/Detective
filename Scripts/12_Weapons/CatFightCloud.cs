@@ -1,0 +1,161 @@
+using UnityEngine;
+using System.Collections;
+
+public class CatFightCloud : MonoBehaviour
+{
+    // 데이터
+    public int Damage { get; set; }
+    public float KnockBackChance { get; set; }
+    public float KnockBackSpeedFactor { get; set; }
+    public bool IsCriticalDamageProj { get; set; }
+    public string WeaponName { get; set; }
+    public float SizeOfArea { get; set; }
+    public float Duration { get; set; }
+
+    [Header("Damage Settings")]
+    [SerializeField] float damageInterval = 0.3f; // 데미지 간격
+    
+    [Header("Target")]
+    [SerializeField] LayerMask target;
+    
+    [Header("Effects (Optional)")]
+    [SerializeField] GameObject hitEffect; // 옵션 - null이어도 괜찮음
+    [SerializeField] AudioClip hitSFX; // 옵션
+    
+    Coroutine damageCo;
+    Animator anim;
+
+    void Awake()
+    {
+        anim = GetComponent<Animator>();
+    }
+
+    void OnEnable()
+    {
+        // 애니메이션 시작
+        if (anim != null)
+        {
+            anim.SetTrigger("Start");
+        }
+    }
+
+    public void Initialize(int damage, float knockBackChance, float knockBackSpeedFactor, bool isCriticalDamage, string weaponName, float sizeOfArea, float duration)
+    {
+        this.Damage = damage;
+        this.KnockBackChance = knockBackChance;
+        this.KnockBackSpeedFactor = knockBackSpeedFactor;
+        this.IsCriticalDamageProj = isCriticalDamage;
+        this.WeaponName = weaponName;
+        this.SizeOfArea = sizeOfArea;
+        this.Duration = duration;
+        
+        Debug.Log($"CatFightCloud: Initialized at {transform.position}, duration: {duration}s");
+        
+        // 데미지 코루틴 시작
+        if (damageCo != null)
+            StopCoroutine(damageCo);
+        damageCo = StartCoroutine(DamageCo());
+    }
+
+    IEnumerator DamageCo()
+    {
+        float elapsedTime = 0f;
+        
+        // 지속 시간 동안 반복
+        while (elapsedTime < Duration)
+        {
+            // 범위 내 적들에게 데미지
+            CastDamage();
+            
+            // 다음 데미지까지 대기
+            yield return new WaitForSeconds(damageInterval);
+            elapsedTime += damageInterval;
+        }
+        
+        Debug.Log("CatFightCloud: Duration ended, deactivating");
+        
+        // 비활성화
+        Deactivate();
+    }
+
+    void CastDamage()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, SizeOfArea, target);
+        
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Transform enemy = hits[i].transform;
+            
+            if (enemy.GetComponent<Idamageable>() != null)
+            {
+                // 데미지 메시지 표시
+                if (enemy.GetComponent<DestructableObject>() == null)
+                    PostMessage(Damage, enemy.transform.position);
+                
+                // 히트 이펙트 찾기 (optional)
+                GameObject hitEffectObj = null;
+                
+                // 1. HitEffects 컴포넌트에서 찾기
+                HitEffects hitEffects = GetComponent<HitEffects>();
+                if (hitEffects != null)
+                {
+                    hitEffectObj = hitEffects.hitEffect;
+                }
+                
+                // 2. 직접 할당된 hitEffect 사용
+                if (hitEffectObj == null && hitEffect != null)
+                {
+                    hitEffectObj = hitEffect;
+                }
+                
+                // 데미지 적용 (hitEffectObj는 null이어도 괜찮음)
+                enemy.GetComponent<Idamageable>().TakeDamage(
+                    Damage,
+                    KnockBackChance,
+                    KnockBackSpeedFactor,
+                    transform.position,
+                    hitEffectObj
+                );
+                
+                // 데미지 트래커 기록
+                if (!string.IsNullOrEmpty(WeaponName))
+                {
+                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
+                }
+            }
+        }
+        
+        // 히트 사운드 재생 (적이 있을 때만)
+        if (hits.Length > 0 && hitSFX != null)
+        {
+            SoundManager.instance.Play(hitSFX);
+        }
+    }
+
+    void PostMessage(int damage, Vector3 targetPosition)
+    {
+        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, IsCriticalDamageProj);
+    }
+
+    void Deactivate()
+    {
+        gameObject.SetActive(false);
+    }
+
+    void OnDisable()
+    {
+        // 코루틴 정리
+        if (damageCo != null)
+        {
+            StopCoroutine(damageCo);
+            damageCo = null;
+        }
+    }
+
+    // Gizmos로 범위 확인
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, SizeOfArea);
+    }
+}

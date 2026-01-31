@@ -233,7 +233,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             int waveNumber = infiniteStageManager.GetCurrentWave();
             currentStageNumber = Mathf.Min(Mathf.RoundToInt(Mathf.Pow(waveNumber, 1.2f)), 30);
 
-            Logger.Log($"[Enemy] Infinite mode - Wave {waveNumber} → Stage {currentStageNumber}");
+            // Logger.Log($"[Enemy] Infinite mode - Wave {waveNumber} → Stage {currentStageNumber}");
         }
         else
         {
@@ -242,7 +242,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             {
                 currentStageNumber = PlayerDataManager.Instance.GetCurrentStageNumber();
             }
-            Logger.Log($"[Enemy] Regular mode - Stage {currentStageNumber}");
+            // Logger.Log($"[Enemy] Regular mode - Stage {currentStageNumber}");
         }
 
         if (calculator == null)
@@ -251,7 +251,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (calculator != null)
         {
             this.Stats = calculator.GetStatsForStage(currentStageNumber, _enemyToSpawn);
-            Logger.Log($"[Enemy] Stats - Speed: {Stats.speed}, HP: {Stats.hp}, Damage: {Stats.damage}");
+            // Logger.Log($"[Enemy] Stats - Speed: {Stats.speed}, HP: {Stats.hp}, Damage: {Stats.damage}");
         }
         else
         {
@@ -263,7 +263,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 rangedDamage = 10,
                 experience_reward = 50
             };
-            Debug.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다.");
+            // Logger.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다.");
         }
 
         // 속도 설정

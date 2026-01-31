@@ -75,11 +75,11 @@ public class EnemyLaserAbility : MonoBehaviour
     #region Initialization
     public void InitLaser(EnemyData data)
     {
-        Debug.Log($"[InitLaser] 호출됨 - specialAbility: {data.specialAbility}");
+        // Logger.Log($"[InitLaser] 호출됨 - specialAbility: {data.specialAbility}");
 
         if (data.specialAbility != SpecialAbility.Laser)
         {
-            Debug.Log($"[InitLaser] Laser 능력이 아니므로 비활성화");
+            // Logger.Log($"[InitLaser] Laser 능력이 아니므로 비활성화");
             isInitialized = false;
             return;
         }
@@ -94,7 +94,7 @@ public class EnemyLaserAbility : MonoBehaviour
         // 스폰 후 쿨다운 시간 대기
         nextLaserTime = Time.time + laserCooldown;
 
-        Debug.Log($"[InitLaser] 초기화 완료 - 첫 레이저는 {laserCooldown}초 후");
+        // Logger.Log($"[InitLaser] 초기화 완료 - 첫 레이저는 {laserCooldown}초 후");
 
         isInitialized = true;
 
@@ -107,14 +107,14 @@ public class EnemyLaserAbility : MonoBehaviour
 
         if (!finishedSpawn)
         {
-            Debug.Log("[AutoFinishSpawn] 자동으로 스폰 완료 처리");
+            // Logger.Log("[AutoFinishSpawn] 자동으로 스폰 완료 처리");
             finishedSpawn = true;
         }
     }
 
     public void SetFinishedSpawn(bool finished)
     {
-        Debug.Log($"[SetFinishedSpawn] 호출됨 - finished: {finished}");
+        // Logger.Log($"[SetFinishedSpawn] 호출됨 - finished: {finished}");
         finishedSpawn = finished;
     }
     #endregion
@@ -122,7 +122,7 @@ public class EnemyLaserAbility : MonoBehaviour
     #region LineRenderer Setup
     void CreateLineRenderers()
     {
-        Debug.Log("[CreateLineRenderers] LineRenderer 생성 시작");
+        // Logger.Log("[CreateLineRenderers] LineRenderer 생성 시작");
 
         // 예고선 생성
         GameObject anticipationObj = new GameObject("AnticipationLine");
@@ -133,7 +133,7 @@ public class EnemyLaserAbility : MonoBehaviour
         SetupLineRenderer(anticipationLine, new Color(1f, 0f, 0f, 0.7f), 0.05f);
         anticipationLine.enabled = false;
 
-        Debug.Log($"[CreateLineRenderers] anticipationLine 생성 완료: {anticipationLine != null}");
+        // Logger.Log($"[CreateLineRenderers] anticipationLine 생성 완료: {anticipationLine != null}");
 
         // 레이저 생성
         GameObject fireObj = new GameObject("FireLine");
@@ -162,7 +162,7 @@ public class EnemyLaserAbility : MonoBehaviour
 
         line.useWorldSpace = true;
 
-        Debug.Log($"[SetupLineRenderer] 생성됨 - Color: {color}, Width: {width}");
+        // Logger.Log($"[SetupLineRenderer] 생성됨 - Color: {color}, Width: {width}");
     }
     #endregion
 
@@ -180,34 +180,34 @@ public class EnemyLaserAbility : MonoBehaviour
                 break;
 
             case LaserState.Anticipation:
-                Debug.Log("[UpdateLineRenderers] Anticipation - 예고선 표시");
+                // Logger.Log("[UpdateLineRenderers] Anticipation - 예고선 표시");
                 if (anticipationLine != null)
                 {
                     anticipationLine.enabled = true;
                     UpdateLinePosition(anticipationLine);
-                    Debug.Log($"[UpdateLineRenderers] anticipationLine enabled: {anticipationLine.enabled}");
+                    // Logger.Log($"[UpdateLineRenderers] anticipationLine enabled: {anticipationLine.enabled}");
                 }
                 else
                 {
-                    Debug.LogError("[UpdateLineRenderers] anticipationLine이 null!");
+                    // Logger.LogError("[UpdateLineRenderers] anticipationLine이 null!");
                 }
                 if (fireLine != null)
                     fireLine.enabled = false;
                 break;
 
             case LaserState.Fire:
-                Debug.Log("[UpdateLineRenderers] Fire - 레이저 표시");
+                // Logger.Log("[UpdateLineRenderers] Fire - 레이저 표시");
                 if (anticipationLine != null)
                     anticipationLine.enabled = false;
                 if (fireLine != null)
                 {
                     fireLine.enabled = true;
                     UpdateLinePosition(fireLine);
-                    Debug.Log($"[UpdateLineRenderers] fireLine enabled: {fireLine.enabled}");
+                    // Logger.Log($"[UpdateLineRenderers] fireLine enabled: {fireLine.enabled}");
                 }
                 else
                 {
-                    Debug.LogError("[UpdateLineRenderers] fireLine이 null!");
+                    // Logger.LogError("[UpdateLineRenderers] fireLine이 null!");
                 }
                 break;
         }
@@ -217,7 +217,7 @@ public class EnemyLaserAbility : MonoBehaviour
     {
         if (line == null)
         {
-            Debug.LogError("[UpdateLinePosition] line이 null!");
+            // Logger.LogError("[UpdateLinePosition] line이 null!");
             return;
         }
 
@@ -227,7 +227,7 @@ public class EnemyLaserAbility : MonoBehaviour
         line.SetPosition(0, startPos);
         line.SetPosition(1, endPos);
 
-        Debug.Log($"[UpdateLinePosition] Start: {startPos}, End: {endPos}, Range: {laserRange}");
+        // Logger.Log($"[UpdateLinePosition] Start: {startPos}, End: {endPos}, Range: {laserRange}");
     }
     #endregion
 
@@ -261,7 +261,7 @@ public class EnemyLaserAbility : MonoBehaviour
     {
         if (Time.time >= nextLaserTime)
         {
-            Debug.Log($"[Laser] Idle → Anticipation");
+            // Logger.Log($"[Laser] Idle → Anticipation");
             StartAnticipation();
         }
     }
@@ -270,7 +270,7 @@ public class EnemyLaserAbility : MonoBehaviour
     {
         if (Time.time >= stateEndTime)
         {
-            Debug.Log($"[Laser] Anticipation → Fire");
+            // Logger.Log($"[Laser] Anticipation → Fire");
             StartFire();
         }
     }
@@ -279,14 +279,14 @@ public class EnemyLaserAbility : MonoBehaviour
     {
         if (Time.time >= stateEndTime)
         {
-            Debug.Log($"[Laser] Fire → Settle");
+            // Logger.Log($"[Laser] Fire → Settle");
             StartSettle();
         }
     }
 
     void UpdateSettleState()
     {
-        Debug.Log($"[Laser] Settle → Idle");
+        // Logger.Log($"[Laser] Settle → Idle");
         currentState = LaserState.Idle;
         nextLaserTime = Time.time + laserCooldown;
     }
@@ -303,11 +303,11 @@ public class EnemyLaserAbility : MonoBehaviour
             Transform playerTransform = enemyBase.Target.transform;
             laserDirection = (playerTransform.position - transform.position).normalized;
 
-            Debug.Log($"[StartAnticipation] 방향 고정: {laserDirection}");
+            // Logger.Log($"[StartAnticipation] 방향 고정: {laserDirection}");
         }
         else
         {
-            Debug.LogWarning("[StartAnticipation] player가 null입니다!");
+            // Logger.LogWarning("[StartAnticipation] player가 null입니다!");
             laserDirection = Vector2.right;
         }
 
@@ -322,7 +322,7 @@ public class EnemyLaserAbility : MonoBehaviour
         currentState = LaserState.Fire;
         stateEndTime = Time.time + laserFireDuration;
 
-        Debug.Log($"[StartFire] 레이저 발사! 방향: {laserDirection}");
+        // Logger.Log($"[StartFire] 레이저 발사! 방향: {laserDirection}");
 
         // TODO: Step 4에서 데미지 판정 추가
 
@@ -337,7 +337,7 @@ public class EnemyLaserAbility : MonoBehaviour
     {
         currentState = LaserState.Settle;
 
-        Debug.Log($"[StartSettle] 레이저 종료");
+        // Logger.Log($"[StartSettle] 레이저 종료");
 
         if (anim != null)
         {

@@ -109,7 +109,7 @@ public class WeaponContainerAnim : MonoBehaviour
                 {
                     sr[i + 1].gameObject.SetActive(false);
                     equipSprites[i] = null;
-                    Debug.Log($"{_wd.Name}의 {i}스프라이트가 없습니다.");
+                    // Logger.Log($"{_wd.Name}의 {i}스프라이트가 없습니다.");
                 }
             }
         }

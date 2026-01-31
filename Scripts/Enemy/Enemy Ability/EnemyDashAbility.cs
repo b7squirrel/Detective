@@ -64,11 +64,11 @@ public class EnemyDashAbility : MonoBehaviour
     #region Initialization
     public void InitDash(EnemyData data)
     {
-        Debug.Log($"[InitDash] 호출됨 - specialAbility: {data.specialAbility}");
+        // Logger.Log($"[InitDash] 호출됨 - specialAbility: {data.specialAbility}");
 
         if (data.specialAbility != SpecialAbility.Dash)
         {
-            Debug.Log($"[InitDash] Dash 능력이 아니므로 비활성화");
+            // Logger.Log($"[InitDash] Dash 능력이 아니므로 비활성화");
             isInitialized = false;
             return;
         }
@@ -80,7 +80,7 @@ public class EnemyDashAbility : MonoBehaviour
         // 스폰 후 쿨다운 시간 대기
         nextDashTime = Time.time + dashCooldown;
 
-        Debug.Log($"[InitDash] 초기화 완료 - 첫 대시는 {dashCooldown}초 후");
+        // Logger.Log($"[InitDash] 초기화 완료 - 첫 대시는 {dashCooldown}초 후");
 
         isInitialized = true;
 
@@ -93,14 +93,14 @@ public class EnemyDashAbility : MonoBehaviour
 
         if (!finishedSpawn)
         {
-            Debug.Log("[AutoFinishSpawn] 자동으로 스폰 완료 처리");
+            // Logger.Log("[AutoFinishSpawn] 자동으로 스폰 완료 처리");
             finishedSpawn = true;
         }
     }
 
     public void SetFinishedSpawn(bool finished)
     {
-        Debug.Log($"[SetFinishedSpawn] 호출됨 - finished: {finished}");
+        // Logger.Log($"[SetFinishedSpawn] 호출됨 - finished: {finished}");
         finishedSpawn = finished;
     }
     #endregion
@@ -116,7 +116,7 @@ public class EnemyDashAbility : MonoBehaviour
 
         if (Time.time >= nextDashTime)
         {
-            Debug.Log($"[DashCoolDown] 대시 시간 도달 - Time: {Time.time}");
+            // Logger.Log($"[DashCoolDown] 대시 시간 도달 - Time: {Time.time}");
             StartDash();
             nextDashTime = Time.time + dashCooldown;
         }
@@ -126,7 +126,7 @@ public class EnemyDashAbility : MonoBehaviour
     {
         if (enemyBase.Target == null)
         {
-            Debug.LogWarning("[StartDash] player가 null입니다!");
+            // Logger.LogWarning("[StartDash] player가 null입니다!");
             return;
         }
 

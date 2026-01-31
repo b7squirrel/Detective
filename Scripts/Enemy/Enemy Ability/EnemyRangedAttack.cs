@@ -51,11 +51,11 @@ public class EnemyRangedAttack : MonoBehaviour
     #region Initialization
     public void InitRangedAttack(EnemyData data)
     {
-        Debug.Log($"[InitRangedAttack] 호출됨 - enemyType: {data.enemyType}");
+        // Logger.Log($"[InitRangedAttack] 호출됨 - enemyType: {data.enemyType}");
 
         if (data.enemyType != EnemyType.Ranged)
         {
-            Debug.Log($"[InitRangedAttack] Ranged 타입이 아니므로 비활성화");
+            // Logger.Log($"[InitRangedAttack] Ranged 타입이 아니므로 비활성화");
             isInitialized = false;
             return;
         }
@@ -67,7 +67,7 @@ public class EnemyRangedAttack : MonoBehaviour
         // 스폰 후 쿨다운 시간 대기
         nextAttackTime = Time.time + attackInterval;
 
-        Debug.Log($"[InitRangedAttack] 초기화 완료 - 첫 공격은 {attackInterval}초 후");
+        // Logger.Log($"[InitRangedAttack] 초기화 완료 - 첫 공격은 {attackInterval}초 후");
 
         isInitialized = true;
 
@@ -100,26 +100,26 @@ public class EnemyRangedAttack : MonoBehaviour
 
         if (Time.time >= nextAttackTime)
         {
-            DebugLog($"[RangedAttackCoolDown] 공격 시간 도달 - Time: {Time.time}");
+            // DebugLog($"[RangedAttackCoolDown] 공격 시간 도달 - Time: {Time.time}");
             
             if (DetectingPlayer())
             {
-                DebugLog("[RangedAttackCoolDown] 플레이어 감지됨");
+                // DebugLog("[RangedAttackCoolDown] 플레이어 감지됨");
                 
                 float randomValue = Random.Range(0f, 1f);
                 if (randomValue <= shootRate)
                 {
-                    DebugLog($"[RangedAttackCoolDown] 공격 실행! (확률: {randomValue})");
+                    // DebugLog($"[RangedAttackCoolDown] 공격 실행! (확률: {randomValue})");
                     FireProjectile();
                 }
                 else
                 {
-                    DebugLog($"[RangedAttackCoolDown] 확률 실패 (확률: {randomValue})");
+                    // DebugLog($"[RangedAttackCoolDown] 확률 실패 (확률: {randomValue})");
                 }
             }
             else
             {
-                DebugLog("[RangedAttackCoolDown] 플레이어가 범위 밖");
+                // DebugLog("[RangedAttackCoolDown] 플레이어가 범위 밖");
             }
             
             nextAttackTime = Time.time + attackInterval;
@@ -130,7 +130,7 @@ public class EnemyRangedAttack : MonoBehaviour
     {
         if (enemyBase.Target == null)
         {
-            DebugLogWarninig("[DetectingPlayer] player가 null입니다!");
+            // DebugLogWarninig("[DetectingPlayer] player가 null입니다!");
             return false;
         }
 
@@ -144,8 +144,8 @@ public class EnemyRangedAttack : MonoBehaviour
         
         string rangeStatus = inRange ? "범위 안" : "범위 밖";
         
-        DebugLog($"[DetectingPlayer] 적:{enemyPos} 플레이어:{playerPos}");
-        DebugLog($"[DetectingPlayer] 거리: {actualDistance:F2} / {distanceToPlayer} | {rangeStatus}");
+        // DebugLog($"[DetectingPlayer] 적:{enemyPos} 플레이어:{playerPos}");
+        // DebugLog($"[DetectingPlayer] 거리: {actualDistance:F2} / {distanceToPlayer} | {rangeStatus}");
         
         return inRange;
     }
@@ -154,17 +154,17 @@ public class EnemyRangedAttack : MonoBehaviour
     {
         if (projectilePrefab == null)
         {
-            DebugLogError("[FireProjectile] projectilePrefab이 null입니다!");
+            // DebugLogError("[FireProjectile] projectilePrefab이 null입니다!");
             return;
         }
 
-        Logger.Log($"[FireProjectile] 투사체 생성: {projectilePrefab.name}");
+        // Logger.Log($"[FireProjectile] 투사체 생성: {projectilePrefab.name}");
         GameObject cannonBall = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
         
         var projectile = cannonBall.GetComponentInChildren<IEnemyProjectile>();
         if (projectile == null)
         {
-            DebugLogError("[FireProjectile] IEnemyProjectile 컴포넌트를 찾을 수 없습니다!");
+            // DebugLogError("[FireProjectile] IEnemyProjectile 컴포넌트를 찾을 수 없습니다!");
             Destroy(cannonBall);
             return;
         }
@@ -176,7 +176,7 @@ public class EnemyRangedAttack : MonoBehaviour
             anim.SetBool("Attack", true);
         }
         
-        DebugLog("[FireProjectile] 투사체 생성 완료!");
+        // DebugLog("[FireProjectile] 투사체 생성 완료!");
     }
     #endregion
 
