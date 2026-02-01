@@ -82,7 +82,7 @@ public class Enemy : EnemyBase
         {
             flyingTimeCounter -= Time.deltaTime;
         }
-        else if(flyingTimeCounter < 0 && IsFlying)
+        else if (flyingTimeCounter < 0 && IsFlying)
         {
             SetWalking();
         }
@@ -96,9 +96,9 @@ public class Enemy : EnemyBase
     public override void InitEnemy(EnemyData _data)
     {
         base.InitEnemy(_data);
-        
+
         anim.runtimeAnimatorController = _data.animController;
-        
+
         ExperienceReward = this.Stats.experience_reward;
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
@@ -182,11 +182,15 @@ public class Enemy : EnemyBase
             return;
         }
 
-        // ⭐ 점프 중이면 저장된 수평 속도로만 이동 (플레이어 추적 안 함)
+        // 점프 중이면 저장된 수평 속도로만 이동 (플레이어 추적 안 함)
         if (canJump && shadowHeightEnemy != null && !shadowHeightEnemy.IsGrounded())
         {
-            rb.MovePosition((Vector2)rb.transform.position + shadowHeightEnemy.GetJumpHorizontalVelocity());
-            rb.velocity = Vector2.zero;
+            // 시간 정지 중이 아닐 때만 수평 이동
+            if (!isTimeStopped())
+            {
+                rb.MovePosition((Vector2)rb.transform.position + shadowHeightEnemy.GetJumpHorizontalVelocity());
+                rb.velocity = Vector2.zero;
+            }
             return;
         }
 

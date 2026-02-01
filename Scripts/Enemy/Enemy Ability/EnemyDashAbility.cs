@@ -50,6 +50,17 @@ public class EnemyDashAbility : MonoBehaviour
         if (enemyBase == null)
             return;
 
+        // 시간 정지 체크 추가
+        if (enemyBase.isTimeStopped())
+        {
+            // 대시 중이었다면 중단
+            if (isDashing)
+            {
+                EndDash();
+            }
+            return; // 시간 정지 중에는 대시 로직 실행 안 함
+        }
+
         if (isDashing)
         {
             ApplyDashMovement();

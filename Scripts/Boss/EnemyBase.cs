@@ -105,6 +105,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected GameObject shockwave;
 
     EnemyFinder enemyFinder;
+    FieldItemEffect fieldItemEffect;
     #endregion
 
     // 시각적 효과 (느림보 최면술)
@@ -183,6 +184,21 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (Stats != null)
         {
 
+        }
+
+        // 시간 정지 상태 체크. 시간 정지 이후 생성되는 적들에게도 시간 정지 적용
+        CheckStopwatchStatus();
+    }
+    /// <summary>
+    /// 적 생성 시 시간 정지 상태 확인하여 즉시 정지
+    /// </summary>
+    void CheckStopwatchStatus()
+    {
+        if (fieldItemEffect == null) fieldItemEffect = FindObjectOfType<FieldItemEffect>();
+        if (fieldItemEffect != null && fieldItemEffect.IsStopedWithStopwatch())
+        {
+            PauseEnemy();
+            // Logger.Log($"[EnemyBase] {gameObject.name} - 생성 시 즉시 정지됨 (스톱워치 활성화 중)");
         }
     }
     protected void InitHpBar()

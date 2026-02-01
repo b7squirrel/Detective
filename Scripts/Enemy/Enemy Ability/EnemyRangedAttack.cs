@@ -40,8 +40,12 @@ public class EnemyRangedAttack : MonoBehaviour
     {
         if (!isInitialized)
             return;
-            
+
         if (enemyBase == null)
+            return;
+
+        // ⭐ 시간 정지 중에는 원거리 공격 안 함
+        if (enemyBase.isTimeStopped())
             return;
 
         RangedAttackCoolDown();

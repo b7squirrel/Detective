@@ -8,14 +8,14 @@ public class ShadowHeightProjectile : MonoBehaviour
     [SerializeField] int bounceCounter;
     [SerializeField] string onLandingMask;
     public bool IsDone { get; private set; }
-    public UnityEvent onGroundHitEvent; // 지면에 닿았을 때
-    public UnityEvent onDone; // 움직임이 완전히 끝났을 때
+    public UnityEvent onGroundHitEvent;
+    public UnityEvent onDone;
 
-    [SerializeField] Transform trnsObject; // 부모 물체
-    [SerializeField] Transform trnsBody; // 공중에 뜨는 스프라이트 오브젝트
-    [SerializeField] Transform trnsShadow; // 그림자 스프라이트 오브젝트
-    [SerializeField] SpriteRenderer bodySprite; // 공중에 뜨는 스프라이트
-    [SerializeField] SpriteRenderer shadowSprite; // 그림자 스프라이트
+    [SerializeField] Transform trnsObject;
+    [SerializeField] Transform trnsBody;
+    [SerializeField] Transform trnsShadow;
+    [SerializeField] SpriteRenderer bodySprite;
+    [SerializeField] SpriteRenderer shadowSprite;
 
     Rigidbody2D rb;
     float gravity = -100f;
@@ -24,31 +24,85 @@ public class ShadowHeightProjectile : MonoBehaviour
     bool isInitialized;
     Animator anim;
 
-    // 감속 변수
-    [SerializeField] float forceMultiplier = 1f; // 속도에 곱해줄 힘 계수
-    [SerializeField] float deceleration = 0.98f; // 0.95~0.99 권장
+    [SerializeField] float forceMultiplier = 1f;
+    [SerializeField] float deceleration = 0.98f;
     [SerializeField] float minVelocityToStop = 0.05f;
-    [SerializeField] float checkInterval = 0.02f; // 감속 체크 주기 (FixedUpdate 비슷하게)
+    [SerializeField] float checkInterval = 0.02f;
+
+    // ⭐ 시간 정지 관련 변수 추가
+    FieldItemEffect fieldItemEffect;
+    Vector2 savedVelocity; // 정지 전 속도 저장
+    float savedAngularVelocity; // 정지 전 회전 속도 저장
+
+    void Awake()
+    {
+        fieldItemEffect = FindObjectOfType<FieldItemEffect>();
+    }
 
     void FixedUpdate()
     {
+        // ⭐ 시간 정지 체크
+        if (fieldItemEffect != null && fieldItemEffect.IsStopedWithStopwatch())
+        {
+            PauseProjectile();
+            return;
+        }
+        else
+        {
+            ResumeProjectile();
+        }
+
         UpdateVerticalMovement();
         CheckGroundHit();
     }
+
     void Update()
     {
+        // ⭐ 시간 정지 중에는 레이어 업데이트 안 함
+        if (fieldItemEffect != null && fieldItemEffect.IsStopedWithStopwatch())
+            return;
+
         UpdateLayer();
+    }
+
+    // ⭐ 투사체 일시정지
+    void PauseProjectile()
+    {
+        if (rb != null && rb.velocity != Vector2.zero)
+        {
+            // 현재 속도 저장
+            savedVelocity = rb.velocity;
+            savedAngularVelocity = rb.angularVelocity;
+
+            // 완전히 정지
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
+    }
+
+    // ⭐ 투사체 재개
+    void ResumeProjectile()
+    {
+        if (savedVelocity != Vector2.zero && rb != null)
+        {
+            // 저장된 속도 복구
+            rb.velocity = savedVelocity;
+            rb.angularVelocity = savedAngularVelocity;
+
+            // 복구 후 초기화
+            savedVelocity = Vector2.zero;
+            savedAngularVelocity = 0f;
+        }
     }
 
     public void Initialize(Vector2 groundVelocity, float verticalVelocity)
     {
         IsDone = false;
         isGrounded = false;
-        bounceCounter = 0; // ← 추가! 바운스 카운터 리셋
+        bounceCounter = 0;
         trnsBody.position = Vector2.zero;
         this.verticalVelocity = verticalVelocity;
 
-        // rb와 anim은 한 번만 초기화
         if (rb == null)
         {
             rb = GetComponent<Rigidbody2D>();
@@ -58,25 +112,24 @@ public class ShadowHeightProjectile : MonoBehaviour
             anim = GetComponent<Animator>();
         }
 
-        // ★ Body와 Shadow 위치 초기화 (추가!)
         if (trnsBody != null && trnsShadow != null)
         {
-            // Body를 Shadow와 같은 높이로 리셋
             trnsBody.localPosition = new Vector3(0, 0, 0);
-            trnsShadow.localPosition = new Vector3(0, -0.3f, 0); // Inspector에서 설정한 값과 동일하게
+            trnsShadow.localPosition = new Vector3(0, -0.3f, 0);
         }
 
-        // 매번 초기화되어야 하는 것들
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
         rb.mass = 1f;
         rb.bodyType = RigidbodyType2D.Dynamic;
         gameObject.layer = LayerMask.NameToLayer("InAir");
 
-        // 힘을 적용
         rb.AddForce(groundVelocity * forceMultiplier, ForceMode2D.Impulse);
 
-        // 기존 코루틴 정리 후 시작
+        // ⭐ 저장된 속도 초기화
+        savedVelocity = Vector2.zero;
+        savedAngularVelocity = 0f;
+
         StopAllCoroutines();
         StartCoroutine(SlowDownCoroutine());
 
@@ -94,18 +147,20 @@ public class ShadowHeightProjectile : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("InAir");
         }
     }
+
     IEnumerator SlowDownCoroutine()
     {
         while (rb.velocity.magnitude > minVelocityToStop)
         {
-            rb.velocity *= deceleration;
+            // ⭐ 시간 정지 중에는 감속 안 함
+            if (fieldItemEffect == null || !fieldItemEffect.IsStopedWithStopwatch())
+            {
+                rb.velocity *= deceleration;
+            }
 
-            // 부드러운 감속을 위해 짧은 간격으로 반복
-            // yield return new WaitForSeconds(checkInterval);
             yield return new WaitForFixedUpdate();
         }
 
-        // 완전히 멈춤
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
     }
@@ -119,20 +174,17 @@ public class ShadowHeightProjectile : MonoBehaviour
             trnsBody.position = newPosition;
         }
     }
+
     void CheckGroundHit()
     {
-        // Debug.Log($"Body yPos = {trnsBody.position.y}, Shadow yPos = {trnsShadow.position.y}");
         if (trnsBody.position.y <= trnsShadow.position.y && !isGrounded)
         {
-            // Debug.Log("Is grounds Check");
-            // 몸체를 그림자 위치로 정확히 맞춤
             trnsBody.position = new Vector3(trnsBody.position.x, trnsShadow.position.y, trnsBody.position.z);
             isGrounded = true;
             GroundHit();
         }
     }
 
-    //외부에서 바운싱이 완전히 끝나서 지면에 멈춰있는 상태인지 확인할 때
     public bool GetIsDone()
     {
         return IsDone;
@@ -149,7 +201,6 @@ public class ShadowHeightProjectile : MonoBehaviour
         onDone?.Invoke();
     }
 
-    // 애니메이션 이벤트들
     public void Bounce(float divisionFactor)
     {
         if (bounceCounter > bouncingNumbers)
@@ -165,16 +216,12 @@ public class ShadowHeightProjectile : MonoBehaviour
             return;
         }
 
-        // 바운스 시 수직 속도를 양수로 만들어야 함
         verticalVelocity = Mathf.Abs(verticalVelocity) / divisionFactor;
 
         bounceCounter++;
         isGrounded = false;
-
-        // Debug.Log($"Bouncing! New verticalVelocity: {verticalVelocity}, Remaining bounces: {bounceCounter}");
     }
 
-    // 완전히 착지했을 때 레이어를 변경하는 메서드
     void SetLandingLayer()
     {
         if (!string.IsNullOrEmpty(onLandingMask))
