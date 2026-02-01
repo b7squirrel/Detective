@@ -180,18 +180,18 @@ public class LaserPointer : MonoBehaviour
     void OnAllCatsArrived()
     {
         Debug.Log("LaserPointer: All cats arrived! Creating fight cloud...");
-        
+
         // 레이저 선 비활성화
         if (laserLine != null)
         {
             laserLine.enabled = false;
         }
-        
+
         // 싸움 구름 생성
         CreateFightCloud();
-        
-        // 레이저 포인터 비활성화
-        Invoke(nameof(Deactivate), 0.2f);
+
+        // 레이저 포인터 즉시 비활성화 (0.2초 딜레이 제거)
+        gameObject.SetActive(false);
     }
 
     void CreateFightCloud()

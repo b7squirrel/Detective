@@ -5,10 +5,11 @@ public class CatProjectile : MonoBehaviour
     ShadowHeight shadowHeight;
     LaserPointer targetPointer;
     bool hasArrived = false;
+    bool isFlying = false;  // NEW: 비행 중 플래그
     
     // 회전을 위한 변수
     Vector3 previousBodyPosition;
-    Transform bodyTransform; // ShadowHeight의 trnsBody
+    Transform bodyTransform;
     SpriteRenderer spriteRenderer;
 
     void Awake()
@@ -26,13 +27,11 @@ public class CatProjectile : MonoBehaviour
             Debug.LogError("CatProjectile: SpriteRenderer not found!");
         }
         
-        // SpriteRenderer의 Transform을 bodyTransform으로 사용
         if (spriteRenderer != null)
         {
             bodyTransform = spriteRenderer.transform;
         }
         
-        // UnityEvent 리스너 등록
         if (shadowHeight != null && shadowHeight.onGroundHitEvent != null)
         {
             shadowHeight.onGroundHitEvent.AddListener(OnArrived);
@@ -42,8 +41,9 @@ public class CatProjectile : MonoBehaviour
     void OnEnable()
     {
         hasArrived = false;
+        isFlying = false;  // 아직 비행 시작 안 함
         
-        // CRITICAL: 스프라이트 숨김 (Initialize에서 보이게 함)
+        // 스프라이트 숨김
         if (spriteRenderer != null)
         {
             spriteRenderer.enabled = false;
@@ -57,29 +57,46 @@ public class CatProjectile : MonoBehaviour
 
     public void Initialize(Vector2 targetPosition, LaserPointer pointer, float trajectoryTime)
     {
-        this.targetPointer = pointer;
+        // CRITICAL: 이미 비행 중이면 무시!
+        if (isFlying)
+        {
+            Debug.LogWarning($"CatProjectile {gameObject.name}: Already flying! Ignoring Initialize call.");
+            return;
+        }
         
-        // CRITICAL: 스프라이트 표시
+        this.targetPointer = pointer;
+        isFlying = true;  // 비행 시작
+        
+        Debug.Log($"CatProjectile {gameObject.name}: Initialize START - target={targetPosition}, time={trajectoryTime}");
+        
+        // 스프라이트 표시
         if (spriteRenderer != null)
         {
             spriteRenderer.enabled = true;
+            Debug.Log($"CatProjectile {gameObject.name}: Sprite enabled");
+        }
+        else
+        {
+            Debug.LogError($"CatProjectile {gameObject.name}: SpriteRenderer is NULL!");
         }
         
         if (shadowHeight != null)
         {
-            // ShadowHeight의 InitializeToTarget 사용 (목표 위치와 비행 시간)
+            Debug.Log($"CatProjectile {gameObject.name}: About to call ShadowHeight.InitializeToTarget");
             shadowHeight.InitializeToTarget(targetPosition, trajectoryTime);
+            Debug.Log($"CatProjectile {gameObject.name}: ShadowHeight.InitializeToTarget called, IsDone={shadowHeight.IsDone}");
         }
         else
         {
-            Debug.LogError("CatProjectile: ShadowHeight is null!");
+            Debug.LogError($"CatProjectile {gameObject.name}: ShadowHeight is null!");
         }
+        
+        Debug.Log($"CatProjectile {gameObject.name}: Initialize COMPLETE");
     }
 
     void FixedUpdate()
     {
-        // 착지 전에만 회전
-        if (!hasArrived)
+        if (!hasArrived && isFlying)
         {
             RotateCat();
         }
@@ -89,52 +106,49 @@ public class CatProjectile : MonoBehaviour
     {
         if (bodyTransform == null) return;
 
-        // 현재 body 위치
         Vector3 currentBodyPosition = bodyTransform.position;
-        
-        // 이동 방향 계산 (velocity)
         Vector2 velocity = (currentBodyPosition - previousBodyPosition) / Time.fixedDeltaTime;
         
-        // velocity가 충분히 크면 회전
         if (velocity.magnitude > 0.5f)
         {
-            // 각도 계산 (고양이가 이동 방향을 향하도록)
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-            
-            // 로컬 rotation 사용
             bodyTransform.localRotation = Quaternion.Euler(0, 0, angle);
         }
         
-        // 이전 위치 업데이트
         previousBodyPosition = currentBodyPosition;
     }
 
     void OnArrived()
     {
-        if (hasArrived) return; // 중복 호출 방지
+        if (hasArrived) 
+        {
+            Debug.LogWarning($"CatProjectile {gameObject.name}: OnArrived called but already arrived!");
+            return;
+        }
         
         hasArrived = true;
+        isFlying = false;  // 비행 종료
         
-        // 레이저 포인터에 도착 알림
+        Debug.Log($"CatProjectile {gameObject.name}: OnArrived - notifying LaserPointer");
+        
         if (targetPointer != null)
         {
             targetPointer.OnCatArrived();
         }
         else
         {
-            Debug.LogWarning("CatProjectile: targetPointer is null!");
+            Debug.LogWarning($"CatProjectile {gameObject.name}: targetPointer is null!");
         }
         
-        // 비활성화
         gameObject.SetActive(false);
     }
 
     void OnDisable()
     {
         hasArrived = false;
+        isFlying = false;  // 리셋
         targetPointer = null;
         
-        // 스프라이트 숨김
         if (spriteRenderer != null)
         {
             spriteRenderer.enabled = false;
@@ -143,7 +157,6 @@ public class CatProjectile : MonoBehaviour
     
     void OnDestroy()
     {
-        // 리스너 제거
         if (shadowHeight != null && shadowHeight.onGroundHitEvent != null)
         {
             shadowHeight.onGroundHitEvent.RemoveListener(OnArrived);

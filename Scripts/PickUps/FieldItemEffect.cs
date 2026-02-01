@@ -17,7 +17,7 @@ public class FieldItemEffect : MonoBehaviour
     [SerializeField] float indicatorDisplayTime = 0.5f; // 인디케이터 표시 시간
     [SerializeField] GameObject itemDieEffect; // 상자, 보석 등이 사라질 때의 이펙트
     ISpawnController spawnController;
-    
+
     Coroutine coStopWatch, coInvincible;
     bool isStoppedWithStopwatch = false; // 스톱워치로 시간을 멈추었을 때
 
@@ -25,12 +25,12 @@ public class FieldItemEffect : MonoBehaviour
     {
         // 어떤 스폰 컨트롤러든 찾기
         spawnController = FindObjectOfType<StageEvenetManager>() as ISpawnController;
-        
+
         if (spawnController == null)
         {
             spawnController = FindObjectOfType<InfiniteStageManager>() as ISpawnController;
         }
-        
+
         if (spawnController == null)
         {
             Logger.LogWarning("[FieldItemEffect] No spawn controller found!");
@@ -69,7 +69,6 @@ public class FieldItemEffect : MonoBehaviour
             if (_allEnemies[i] != null)
             {
                 _allEnemies[i].PauseEnemy();
-                //_allEnemies[i].SpeedUpEnemy();
             }
         }
 
@@ -84,12 +83,13 @@ public class FieldItemEffect : MonoBehaviour
             Logger.Log("[FieldItemEffect] Spawn resumed");
         }
 
-        // 적들 재개
-        for (int i = 0; i < _allEnemies.Length; i++)
+        // ⭐ 수정: 시간 정지 종료 시점에 모든 적을 다시 찾아서 Resume
+        EnemyBase[] allCurrentEnemies = FindObjectsOfType<EnemyBase>();
+        for (int i = 0; i < allCurrentEnemies.Length; i++)
         {
-            if (_allEnemies[i] != null && _allEnemies[i].gameObject.activeSelf)
+            if (allCurrentEnemies[i] != null && allCurrentEnemies[i].gameObject.activeSelf)
             {
-                _allEnemies[i].ResumeEnemy();
+                allCurrentEnemies[i].ResumeEnemy();
             }
         }
 
@@ -149,7 +149,7 @@ public class FieldItemEffect : MonoBehaviour
 
         // 범위 내의 적만 찾기
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(_pos, bombRadius, enemyLayer);
-        
+
         if (enemiesInRange.Length == 0)
         {
             Logger.Log("[FieldItemEffect] 폭탄 범위 내에 적이 없습니다.");
@@ -183,7 +183,7 @@ public class FieldItemEffect : MonoBehaviour
         // 인디케이터 생성
         GameObject indicator = GameManager.instance.poolManager.GetMisc(damageIndicatorPrefab);
         DamageIndicator damageIndicator = indicator.GetComponent<DamageIndicator>();
-        
+
         if (damageIndicator != null)
         {
             damageIndicator.Init(bombRadius, _pos);
