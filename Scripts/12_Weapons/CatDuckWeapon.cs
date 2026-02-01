@@ -8,34 +8,33 @@ public class CatDuckWeapon : WeaponBase
     [SerializeField] GameObject synergyLaserPointerPrefab;
     [SerializeField] GameObject catProjectilePrefab; // 고양이 프리펩
     [SerializeField] AudioClip laserShoot;
-    [SerializeField] AudioClip catMeow; // 고양이 소리 (옵션)
-    
+    [SerializeField] AudioClip[] catMeows; // 고양이 소리 (옵션)
+
     [Header("Laser Pointer Settings")]
-    [SerializeField] float targetNearEnemyChance = 0.5f; // 적 근처를 타겟팅할 확률 (50%)
     [SerializeField] float enemyTargetRadius = 3f; // 적 근처 반경
-    
+    [SerializeField] float marginPercentage = 0.2f; // 화면 가장자리에서 20% 안쪽
+
     [Header("Cat Spawn Settings")]
-    [SerializeField] float catSpawnDelay = 0.1f; // 고양이 간 스폰 간격
+    [SerializeField] float catSpawnDelay = 0.01f; // 고양이 간 스폰 간격
     [SerializeField] float catTrajectoryTime = 0.6f; // 고양이 비행 시간
     [SerializeField] float offScreenDistance = 3f; // 화면 밖 거리
-    
-    [Header("Screen Bounds")]
-    float halfHeight;
-    float halfWidth;
 
     protected override void Awake()
     {
         base.Awake();
-        
-        // 화면 크기 계산
-        halfHeight = Camera.main.orthographicSize;
-        halfWidth = Camera.main.aspect * halfHeight;
     }
 
     protected override void Attack()
     {
         base.Attack();
-        
+
+        // 가장 가까운 적 확인
+        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(1);
+        if (closestEnemyPosition == null || closestEnemyPosition.Count == 0)
+            return;
+        if (closestEnemyPosition[0] == Vector2.zero)
+            return;
+
         // 레이저 포인터 발사
         ShootLaserPointer();
     }
@@ -44,15 +43,22 @@ public class CatDuckWeapon : WeaponBase
     {
         // 타겟 위치 계산
         Vector2 targetPosition = GetTargetPosition();
-        
+
+        // 타겟 위치가 유효하지 않으면 취소
+        if (targetPosition == Vector2.zero)
+        {
+            Debug.Log("CatDuckWeapon: No valid target position, canceling attack");
+            return;
+        }
+
         // 레이저 포인터 생성
         GameObject laserPointerPrefab = isSynergyWeaponActivated ? synergyLaserPointerPrefab : this.laserPointerPrefab;
         GameObject laserObj = GameManager.instance.poolManager.GetMisc(laserPointerPrefab);
-        
+
         if (laserObj != null)
         {
             laserObj.transform.position = targetPosition;
-            
+
             // 레이저 포인터 설정
             LaserPointer laserPointer = laserObj.GetComponent<LaserPointer>();
             if (laserPointer != null)
@@ -64,11 +70,11 @@ public class CatDuckWeapon : WeaponBase
             {
                 Debug.LogError("CatDuckWeapon: LaserPointer component not found!");
             }
-            
+
             // 사운드 재생
             SoundManager.instance.Play(laserShoot);
         }
-        
+
         Debug.Log($"CatDuckWeapon: Laser pointer shot at {targetPosition}");
     }
 
@@ -83,30 +89,31 @@ public class CatDuckWeapon : WeaponBase
         {
             // 화면 밖 랜덤 위치에서 스폰
             Vector2 spawnPosition = GetOffScreenPosition(targetPosition);
-            
+
             // 고양이 생성
             GameObject catObj = GameManager.instance.poolManager.GetMisc(catProjectilePrefab);
-            
+
             if (catObj != null)
             {
                 catObj.transform.position = spawnPosition;
-                
-                // 고양이 초기화
+
+                // 고양이 초기화 - 모두 레이저 포인터로 날아감
                 CatProjectile catProjectile = catObj.GetComponent<CatProjectile>();
                 if (catProjectile != null)
                 {
                     catProjectile.Initialize(targetPosition, pointer, catTrajectoryTime);
                 }
-                
-                // 고양이 소리 (옵션)
-                if (catMeow != null)
+
+                // 고양이 소리 (처음 4마리만, 배열에서 랜덤 선택)
+                if (catMeows != null && catMeows.Length > 0 && i < 4)
                 {
-                    SoundManager.instance.Play(catMeow);
+                    int index = UnityEngine.Random.Range(0, catMeows.Length);
+                    SoundManager.instance.Play(catMeows[index]);
                 }
-                
+
                 Debug.Log($"CatDuckWeapon: Cat {i + 1}/{numberOfCats} spawned at {spawnPosition}");
             }
-            
+
             // 다음 고양이까지 딜레이
             yield return new WaitForSeconds(catSpawnDelay);
         }
@@ -116,9 +123,9 @@ public class CatDuckWeapon : WeaponBase
     {
         // 4방향 중 랜덤 선택 (상, 하, 좌, 우)
         int direction = Random.Range(0, 4);
-        
+
         Vector2 spawnPos = Vector2.zero;
-        
+
         switch (direction)
         {
             case 0: // 위
@@ -127,21 +134,21 @@ public class CatDuckWeapon : WeaponBase
                     halfHeight + offScreenDistance
                 );
                 break;
-                
+
             case 1: // 아래
                 spawnPos = new Vector2(
                     Random.Range(-halfWidth, halfWidth),
                     -halfHeight - offScreenDistance
                 );
                 break;
-                
+
             case 2: // 왼쪽
                 spawnPos = new Vector2(
                     -halfWidth - offScreenDistance,
                     Random.Range(-halfHeight, halfHeight)
                 );
                 break;
-                
+
             case 3: // 오른쪽
                 spawnPos = new Vector2(
                     halfWidth + offScreenDistance,
@@ -149,53 +156,44 @@ public class CatDuckWeapon : WeaponBase
                 );
                 break;
         }
-        
+
         return spawnPos;
     }
 
     Vector2 GetTargetPosition()
     {
-        // 적 근처를 타겟팅할지 결정
-        bool targetNearEnemy = Random.value < targetNearEnemyChance;
-        
-        if (targetNearEnemy)
-        {
-            // 가장 가까운 적 찾기
-            List<Vector2> closestEnemies = EnemyFinder.instance.GetEnemies(1);
-            
-            if (closestEnemies != null && closestEnemies.Count > 0 && closestEnemies[0] != Vector2.zero)
-            {
-                // 적 근처 랜덤 위치
-                Vector2 enemyPos = closestEnemies[0];
-                Vector2 offset = Random.insideUnitCircle * enemyTargetRadius;
-                Vector2 targetPos = enemyPos + offset;
-                
-                // 화면 밖으로 나가지 않도록 클램프
-                targetPos = ClampToScreen(targetPos);
-                return targetPos;
-            }
-        }
-        
-        // 완전 랜덤 위치 (화면 내)
-        return GetRandomScreenPosition();
-    }
+        // 가장 가까운 적 찾기
+        List<Vector2> closestEnemies = EnemyFinder.instance.GetEnemies(1);
 
-    Vector2 GetRandomScreenPosition()
-    {
-        // 화면 안쪽 80% 영역에서 랜덤 (가장자리 제외)
-        float margin = 2f;
-        float x = Random.Range(-halfWidth + margin, halfWidth - margin);
-        float y = Random.Range(-halfHeight + margin, halfHeight - margin);
+        // 적이 없으면 공격하지 않음
+        if (closestEnemies == null || closestEnemies.Count == 0 || closestEnemies[0] == Vector2.zero)
+        {
+            Debug.Log("CatDuckWeapon: No enemies found, skipping attack");
+            return Vector2.zero;
+        }
+
+        // 적 위치
+        Vector2 enemyPos = closestEnemies[0];
         
-        return new Vector2(x, y);
+        // 적 근처 랜덤 오프셋
+        Vector2 offset = Random.insideUnitCircle * enemyTargetRadius;
+        Vector2 targetPos = enemyPos + offset;
+
+        // 화면 안으로 클램프
+        targetPos = ClampToScreen(targetPos);
+        
+        return targetPos;
     }
 
     Vector2 ClampToScreen(Vector2 position)
     {
-        float margin = 2f;
-        float clampedX = Mathf.Clamp(position.x, -halfWidth + margin, halfWidth - margin);
-        float clampedY = Mathf.Clamp(position.y, -halfHeight + margin, halfHeight - margin);
+        // 화면 크기에 따른 안전한 margin 계산
+        float safeMarginX = halfWidth * marginPercentage;
+        float safeMarginY = halfHeight * marginPercentage;
         
+        float clampedX = Mathf.Clamp(position.x, -halfWidth + safeMarginX, halfWidth - safeMarginX);
+        float clampedY = Mathf.Clamp(position.y, -halfHeight + safeMarginY, halfHeight - safeMarginY);
+
         return new Vector2(clampedX, clampedY);
     }
 

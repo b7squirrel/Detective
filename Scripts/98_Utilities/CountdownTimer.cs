@@ -203,11 +203,11 @@ public class CountdownTimer : MonoBehaviour
     }
 
     void OnDisable()
-    {
-        // 안전장치
-        if (tickingLoopClip != null)
-            SoundManager.instance.StopLoop(tickingLoopClip);
+{
+    // 안전장치
+    if (tickingLoopClip != null && SoundManager.instance != null)
+        SoundManager.instance.StopLoop(tickingLoopClip);
 
-        isRunning = false;
-    }
+    isRunning = false;
+}
 }

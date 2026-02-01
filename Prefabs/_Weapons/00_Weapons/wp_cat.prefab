@@ -71,9 +71,14 @@ MonoBehaviour:
   synergyLaserPointerPrefab: {fileID: 4390443796721731674, guid: 2a4947d7286454f6d9f58738fcbed5bc, type: 3}
   catProjectilePrefab: {fileID: 4588670902965274065, guid: d73b71604b46c484893930c25674cf9c, type: 3}
   laserShoot: {fileID: 0}
-  catMeow: {fileID: 0}
-  targetNearEnemyChance: 0.5
+  catMeows:
+  - {fileID: 8300000, guid: 126a724bae3794508a5a88ce99a4543c, type: 3}
+  - {fileID: 8300000, guid: 59f9ab5fc73404bdb8ae37d4303ae17e, type: 3}
+  - {fileID: 8300000, guid: 1e2fd12c17e7640e4a24a57106f9a2c8, type: 3}
+  - {fileID: 8300000, guid: 860900b6cd0e444d68df3f7c9ee3be85, type: 3}
+  - {fileID: 8300000, guid: a3eb9e5397555442c816607c73866149, type: 3}
   enemyTargetRadius: 3
-  catSpawnDelay: 0.1
+  marginPercentage: 0.2
+  catSpawnDelay: 0.01
   catTrajectoryTime: 0.6
   offScreenDistance: 3

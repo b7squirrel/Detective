@@ -119,9 +119,13 @@ public class LaserPointer : MonoBehaviour
         this.weaponName = weaponName;
         this.sizeOfArea = sizeOfArea;
         this.numberOfCats = numberOfCats;
-        
+
+        // CRITICAL: 카운터 명시적 리셋
+        arrivedCats = 0;
+        allCatsArrived = false;
+
         Debug.Log($"LaserPointer: Initialized, waiting for {numberOfCats} cats");
-        
+
         // 고양이 스폰 (약간의 딜레이 후)
         Invoke(nameof(SpawnCats), spawnDelay);
     }
