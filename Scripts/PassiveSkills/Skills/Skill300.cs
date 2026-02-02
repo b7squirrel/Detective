@@ -22,8 +22,17 @@ public class Skill300 : SkillBase
     public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
         base.Init(skillManager, cardData, data);
-        
+
         realDamage = new Equation().GetSkillDamage(rate, Grade, EvoStage, defaultDamage);
+
+        // ⭐ 디버그 로그
+        int totalHits = 1 + (durationUpgradeLevel * additionalHitsPerLevel);
+        Logger.LogError($"[Skill300-넓은 공격] 초기화 완료\n" +
+                        $"  EvoStage: {EvoStage}\n" +
+                        $"  Grade: {Grade}\n" +
+                        $"  쿨다운: {realCoolDownTime}초\n" +
+                        $"  데미지: {realDamage}\n" +
+                        $"  공격 횟수: {totalHits}회 (업그레이드 레벨: {durationUpgradeLevel})");
     }
 
     // ⭐ 지속시간 업그레이드 오버라이드
@@ -32,7 +41,7 @@ public class Skill300 : SkillBase
         base.ApplyDurationUpgrade(level);
         
         int totalHits = 1 + (durationUpgradeLevel * additionalHitsPerLevel);
-        Debug.Log($"[Skill300] 💥 다회 공격 업그레이드 LV{level} - 공격 횟수: {totalHits}회");
+        Logger.LogError($"[Skill300] 💥 다회 공격 업그레이드 LV{level} - 공격 횟수: {totalHits}회");
     }
 
     public override void UseSkill()
@@ -72,11 +81,11 @@ public class Skill300 : SkillBase
                 
                 if (hit == 0)
                 {
-                    Debug.Log($"[Skill300] ⚡ 첫 번째 공격!");
+                    Logger.LogError($"[Skill300] ⚡ 첫 번째 공격!");
                 }
                 else
                 {
-                    Debug.Log($"[Skill300] 💥 추가 공격 {hit}번째!");
+                    Logger.LogError($"[Skill300] 💥 추가 공격 {hit}번째!");
                 }
             }
             

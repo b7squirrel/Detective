@@ -12,7 +12,7 @@ public class Skill500 : SkillBase
     float durationTimer;
     
     [Header("Boost Settings")]
-    [SerializeField] float damageMultiplier = 1.5f; // 데미지 150% (50% 증가)
+    float damageMultiplier; 
     
     [Header("Duration Upgrade")]
     [SerializeField] float durationIncreasePerLevel = 2f; // 레벨당 증가 시간 (초)
@@ -32,14 +32,19 @@ public class Skill500 : SkillBase
     public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
         base.Init(skillManager, cardData, data);
-        
-        // 기본 지속시간 저장
+
         baseDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, data.baseDuration);
-        
-        // 업그레이드 적용된 지속시간 계산
         CalculateRealDuration();
-        
-        Debug.Log($"[Skill500] 초기화 완료 - Cooldown: {realCoolDownTime}초, Duration: {realDuration}초, 데미지 배수: {damageMultiplier}x");
+
+        // ⭐ 이 부분 추가
+        damageMultiplier = 1.5f + (Grade * 0.1f) + (EvoStage * 0.15f);
+
+        Logger.LogError($"[Skill500-파티 타임] 초기화 완료\n" +
+                        $"  EvoStage: {EvoStage}\n" +
+                        $"  Grade: {Grade}\n" +
+                        $"  쿨다운: {realCoolDownTime}초\n" +
+                        $"  지속시간: {realDuration}초\n" +
+                        $"  데미지 배수: {damageMultiplier:F2}x (동료 공격력 {((damageMultiplier - 1) * 100):F0}% 증가)");
     }
 
     // 지속시간 업그레이드 오버라이드
@@ -48,7 +53,7 @@ public class Skill500 : SkillBase
         base.ApplyDurationUpgrade(level);
         CalculateRealDuration();
         
-        Debug.Log($"[Skill500] 🔥 동료 강화 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+        Logger.LogError($"[Skill500] 🔥 동료 강화 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
     }
 
     // 실제 지속시간 계산
@@ -74,7 +79,7 @@ public class Skill500 : SkillBase
                 ReleaseBoost();
                 skillUi.PlayBadgeAnim("Done");
                 
-                Debug.Log($"[Skill500] ✨ 동료 강화 종료");
+                Logger.LogError($"[Skill500] ✨ 동료 강화 종료");
                 return;
             }
             else
@@ -89,7 +94,7 @@ public class Skill500 : SkillBase
                     
                     ApplyBoost();
                     
-                    Debug.Log($"[Skill500] 🔥 동료 강화 시작! (지속시간: {realDuration}초, 배수: {damageMultiplier}x)");
+                    Logger.LogError($"[Skill500] 🔥 동료 강화 시작! (지속시간: {realDuration}초, 배수: {damageMultiplier}x)");
                 }
                 
                 durationTimer += Time.deltaTime;
@@ -123,7 +128,7 @@ public class Skill500 : SkillBase
         }
         
         _boostedAllyCount = boostedCount;
-        Debug.Log($"[Skill500] 💪 {boostedCount}명의 동료 강화 적용!");
+        Logger.LogError($"[Skill500] 💪 {boostedCount}명의 동료 강화 적용!");
     }
 
     void ReleaseBoost()
@@ -149,7 +154,7 @@ public class Skill500 : SkillBase
             }
         }
         
-        Debug.Log($"[Skill500] 💨 {releasedCount}명의 동료 강화 해제");
+        Logger.LogError($"[Skill500] 💨 {releasedCount}명의 동료 강화 해제");
     }
 
     void UpdateDebugValues()

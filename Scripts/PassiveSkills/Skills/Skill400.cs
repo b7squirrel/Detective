@@ -24,14 +24,19 @@ public class Skill400 : SkillBase
     public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
         base.Init(skillManager, cardData, data);
-        
+
         // ⭐ 기본 지속시간 저장
         baseDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, data.baseDuration);
-        
+
         // 업그레이드 적용된 지속시간 계산
         CalculateRealDuration();
-        
-        Debug.Log($"[Skill400] 초기화 완료 - Cooldown: {realCoolDownTime}초, Duration: {realDuration}초");
+
+        // ⭐ 디버그 로그
+        Logger.LogError($"[Skill400-천하 무적] 초기화 완료\n" +
+                        $"  EvoStage: {EvoStage}\n" +
+                        $"  Grade: {Grade}\n" +
+                        $"  쿨다운: {realCoolDownTime}초\n" +
+                        $"  무적 지속시간: {realDuration}초");
     }
 
     // ⭐ 지속시간 업그레이드 오버라이드
@@ -40,7 +45,7 @@ public class Skill400 : SkillBase
         base.ApplyDurationUpgrade(level);
         CalculateRealDuration();
         
-        Debug.Log($"[Skill400] 🛡️ 무적 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+        Logger.LogError($"[Skill400] 🛡️ 무적 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
     }
 
     // ⭐ 실제 지속시간 계산

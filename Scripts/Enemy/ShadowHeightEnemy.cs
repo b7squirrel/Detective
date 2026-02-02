@@ -248,25 +248,37 @@ public class ShadowHeightEnemy : MonoBehaviour
 
         isSlowed = true;
 
+        // ⭐ 개선: gravityFactor가 음수가 되지 않도록 안전하게 계산
+        // slownessFactor가 0.9여도 gravityFactor는 0.1로 유지
+        float gravityReduction = Mathf.Clamp(slownessFactor * 0.8f, 0f, 0.8f); // 최대 80%만 감소
+        float gravityFactor = 1f - gravityReduction; // 최소 0.2 보장
+
         // 중력 감소 (느린 느낌)
-        float gravityFactor = (1f - slownessFactor * 1.2f);
         slowedGravity = originalGravity * gravityFactor;
 
-        // 수직 속도는 제곱근보다 더 많이 감소 (낮은 점프)
-        // 0.7을 곱해서 원래 높이의 약 70% 정도로 낮춤
-        slowedVerticalVelocity = originalVerticalVelocity * Mathf.Sqrt(gravityFactor) * 0.7f;
+        // ⭐ 안전한 제곱근 계산 (항상 양수)
+        float velocityFactor = Mathf.Sqrt(gravityFactor); // 항상 양수이므로 안전
+        slowedVerticalVelocity = originalVerticalVelocity * velocityFactor * 0.8f;
 
         // 현재 진행 중인 점프에도 즉시 적용
         if (!isGrounded)
         {
-            float currentRatio = currentVerticalVel / verticalVelocity;
-            currentVerticalVel = slowedVerticalVelocity * currentRatio;
+            // ⭐ division by zero 방지
+            if (Mathf.Abs(verticalVelocity) > 0.01f)
+            {
+                float currentRatio = currentVerticalVel / verticalVelocity;
+                currentVerticalVel = slowedVerticalVelocity * currentRatio;
+            }
+            else
+            {
+                currentVerticalVel = slowedVerticalVelocity;
+            }
         }
 
         verticalVelocity = slowedVerticalVelocity;
         gravity = slowedGravity;
 
-        Debug.Log($"[ShadowHeight] 💤 느리고 낮은 점프 - 수직속도: {originalVerticalVelocity:F1} → {slowedVerticalVelocity:F1}, 중력: {originalGravity:F1} → {slowedGravity:F1}");
+        Logger.Log($"[ShadowHeight] 느리고 낮은 점프 - 수직속도: {originalVerticalVelocity:F1} → {slowedVerticalVelocity:F1}, 중력: {originalGravity:F1} → {slowedGravity:F1}");
     }
 
     /// <summary>
@@ -278,18 +290,27 @@ public class ShadowHeightEnemy : MonoBehaviour
 
         isSlowed = false;
 
+        // 현재 진행 중인 점프에도 즉시 적용
+        if (!isGrounded)
+        {
+            // ⭐ division by zero 방지 및 안전한 비율 계산
+            if (Mathf.Abs(slowedVerticalVelocity) > 0.01f)
+            {
+                float currentRatio = currentVerticalVel / slowedVerticalVelocity;
+                currentVerticalVel = originalVerticalVelocity * currentRatio;
+            }
+            else
+            {
+                // 느려진 속도가 거의 0이면 원래 속도로 직접 설정
+                currentVerticalVel = originalVerticalVelocity;
+            }
+        }
+
         // 원래 값으로 복구
         verticalVelocity = originalVerticalVelocity;
         gravity = originalGravity;
 
-        // 현재 진행 중인 점프에도 즉시 적용
-        if (!isGrounded)
-        {
-            float currentRatio = currentVerticalVel / slowedVerticalVelocity;
-            currentVerticalVel = originalVerticalVelocity * currentRatio;
-        }
-
-        Debug.Log($"[ShadowHeight] 점프 느림 해제 - 수직속도: {slowedVerticalVelocity} → {originalVerticalVelocity}, 중력: {slowedGravity} → {originalGravity}");
+        Logger.Log($"[ShadowHeight] 점프 느림 해제 - 수직속도: {slowedVerticalVelocity:F1} → {originalVerticalVelocity:F1}, 중력: {slowedGravity:F1} → {originalGravity:F1}");
     }
     #endregion
 }

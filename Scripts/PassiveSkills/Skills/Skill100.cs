@@ -36,17 +36,23 @@ public class Skill100 : SkillBase
     public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
         base.Init(skillManager, cardData, data);
-        
+
         // 기본 지속시간 저장
         baseDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, data.baseDuration);
-        
+
         // 업그레이드 적용된 지속시간 계산
         CalculateRealDuration();
-        
+
         // Character 참조
         character = GameManager.instance.character;
-        
-        Debug.Log($"[Skill100] 초기화 완료 - Cooldown: {realCoolDownTime}초, Duration: {realDuration}초, 회복: {healAmountPerTick}씩 {healInterval}초마다");
+
+        // ⭐ 디버그 로그
+        Logger.LogError($"[Skill100-회복] 초기화 완료\n" +
+                        $"  EvoStage: {EvoStage}\n" +
+                        $"  Grade: {Grade}\n" +
+                        $"  쿨다운: {realCoolDownTime}초\n" +
+                        $"  지속시간: {realDuration}초\n" +
+                        $"  회복량: 초당 {healAmountPerTick / healInterval}HP (틱당 {healAmountPerTick}HP)");
     }
 
     // 지속시간 업그레이드 오버라이드
@@ -55,7 +61,7 @@ public class Skill100 : SkillBase
         base.ApplyDurationUpgrade(level);
         CalculateRealDuration();
         
-        Debug.Log($"[Skill100] 💚 회복 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+        Logger.LogError($"[Skill100] 💚 회복 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
     }
 
     // 실제 지속시간 계산
@@ -81,7 +87,7 @@ public class Skill100 : SkillBase
                 
                 skillUi.PlayBadgeAnim("Done");
                 
-                Debug.Log($"[Skill100] ✨ 회복 종료 - 총 회복량: {_totalHealedAmount}");
+                Logger.LogError($"[Skill100] ✨ 회복 종료 - 총 회복량: {_totalHealedAmount}");
                 _totalHealedAmount = 0;
                 return;
             }
@@ -97,7 +103,7 @@ public class Skill100 : SkillBase
                     skillUi.BadgeUpAnim();
                     skillUi.PlayBadgeAnim("Duration");
                     
-                    Debug.Log($"[Skill100] 💚 회복 시작! (지속시간: {realDuration}초)");
+                    Logger.LogError($"[Skill100] 💚 회복 시작! (지속시간: {realDuration}초)");
                 }
                 
                 // 회복 처리

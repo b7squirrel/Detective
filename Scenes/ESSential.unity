@@ -7734,6 +7734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2257d9f48eab649bfda9a99d5e19ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  durationIncreasePerLevel: 2
   slowColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
   _cooldownCounter: 0
   _realCoolDownTime: 0
@@ -7741,6 +7742,7 @@ MonoBehaviour:
   _durationTimer: 0
   _slownessFactor: 0
   _affectedEnemyCount: 0
+  _durationUpgradeLevel: 0
 --- !u!114 &476222716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15229,10 +15231,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dbc6027e11b6c44da3aed71b0783484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healInterval: 0.2
+  healAmountPerTick: 2
+  durationIncreasePerLevel: 2
+  healColor: {r: 0.2, g: 1, b: 0.2, a: 0.5}
   _cooldownCounter: 0
   _realCoolDownTime: 0
   _realDuration: 0
   _durationTimer: 0
+  _healTimer: 0
+  _totalHealedAmount: 0
+  _durationUpgradeLevel: 0
 --- !u!114 &907458529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20612,7 +20621,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46959d99d8f262541bde1299b02f282f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultDamage: 10
+  defaultDamage: 100
+  additionalHitsPerLevel: 1
+  hitInterval: 0.3
+  _durationUpgradeLevel: 0
+  _totalHits: 0
 --- !u!114 &1254871726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23193,6 +23206,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 957b67c215055c24fa580716bd4b73e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  durationIncreasePerLevel: 1
+  _cooldownCounter: 0
+  _realCoolDownTime: 0
+  _realDuration: 0
+  _durationTimer: 0
+  _durationUpgradeLevel: 0
 --- !u!114 &1324124391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35397,13 +35416,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859ebafc18970ae4aa49e55fccf8b633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultDamageBonus: 0
-  _realDamageBonus: 0
+  durationIncreasePerLevel: 2
+  boostColor: {r: 1, g: 0.5, b: 0, a: 0.5}
   _cooldownCounter: 0
   _realCoolDownTime: 0
   _realDuration: 0
   _durationTimer: 0
-  _characterDamageBonus: 0
+  _damageMultiplier: 0
+  _boostedAllyCount: 0
+  _durationUpgradeLevel: 0
 --- !u!4 &1751664327
 Transform:
   m_ObjectHideFlags: 0

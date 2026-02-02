@@ -1,22 +1,23 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-/// <summary>
-/// 느림보 최면술 - Sluggish Slumber
-/// </summary>
 public class Skill200 : SkillBase
 {
     public override SkillType SkillType => SkillType.SluggishSlumber;
     
-    float baseDuration; // ⭐ 기본 지속시간 저장
+    float baseDuration;
     float realDuration;
     float durationTimer;
     float slownessFactor;
     
     [Header("Duration Upgrade")]
-    [SerializeField] float durationIncreasePerLevel = 2f; // 레벨당 증가 시간 (초)
+    [SerializeField] float durationIncreasePerLevel = 2f;
     
     [Header("Visual Effects")]
     [SerializeField] Color slowColor = new Color(0.5f, 0.5f, 1f, 1f);
+    
+    // ⭐ 느려진 적들을 관리하는 리스트
+    private List<EnemyBase> slowedEnemies = new List<EnemyBase>();
     
     [Header("Debug")]
     [SerializeField] float _cooldownCounter;
@@ -31,18 +32,18 @@ public class Skill200 : SkillBase
     {
         base.Init(skillManager, cardData, data);
         
-        // ⭐ 기본 지속시간 저장
         baseDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, data.baseDuration);
-        
-        // 업그레이드 적용된 지속시간 계산
         CalculateRealDuration();
-        
         slownessFactor = new Equation().GetSlowSpeedFactor(Grade, EvoStage);
         
-        Debug.Log($"[Skill200] 초기화 완료 - Cooldown: {realCoolDownTime}초, Duration: {realDuration}초, Slow: {slownessFactor * 100}%");
+        Logger.LogError($"[Skill200-느림보 최면술] 초기화 완료\n" +
+                        $"  EvoStage: {EvoStage}\n" +
+                        $"  Grade: {Grade}\n" +
+                        $"  쿨다운: {realCoolDownTime}초\n" +
+                        $"  지속시간: {realDuration}초\n" +
+                        $"  느림 효과: {slownessFactor * 100}% 속도 감소");
     }
 
-    // ⭐ 지속시간 업그레이드 오버라이드
     public override void ApplyDurationUpgrade(int level)
     {
         base.ApplyDurationUpgrade(level);
@@ -51,7 +52,6 @@ public class Skill200 : SkillBase
         Debug.Log($"[Skill200] 💫 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
     }
 
-    // ⭐ 실제 지속시간 계산
     void CalculateRealDuration()
     {
         realDuration = baseDuration + (durationUpgradeLevel * durationIncreasePerLevel);
@@ -81,51 +81,122 @@ public class Skill200 : SkillBase
                     isActivated = true;
                     skillUi.BadgeUpAnim();
                     skillUi.PlayBadgeAnim("Duration");
+                    
+                    // ⭐ 스킬 시작 시 한 번만 적용
+                    ApplySlowEffect();
                 }
                 
-                ApplySlowEffect();
+                // ⭐ 스킬 지속 중에는 새로 생성된 적만 체크
+                CheckAndApplyToNewEnemies();
+                
                 durationTimer += Time.deltaTime;
                 return;
             }
         }
     }
 
+    // ⭐ 스킬 시작 시 한 번만 실행
     void ApplySlowEffect()
     {
         Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
         if (allEnemies == null || allEnemies.Length == 0) return;
         
-        int slowedCount = 0;
+        slowedEnemies.Clear(); // 리스트 초기화
+        
         for (int i = 0; i < allEnemies.Length; i++)
+        {
+            EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
+            if (enemy == null) continue;
+            
+            ApplySlowToEnemy(enemy);
+        }
+        
+        _affectedEnemyCount = slowedEnemies.Count;
+    }
+
+    // ⭐ 스킬 지속 중 새로 생성된 적만 체크 (가벼운 체크)
+    void CheckAndApplyToNewEnemies()
+    {
+        // 프레임당 최대 5마리만 체크 (성능 최적화)
+        Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
+        if (allEnemies == null || allEnemies.Length == 0) return;
+        
+        int checkCount = 0;
+        int maxChecksPerFrame = 5; // 프레임당 최대 5마리만
+        
+        for (int i = 0; i < allEnemies.Length && checkCount < maxChecksPerFrame; i++)
         {
             EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
             if (enemy == null || enemy.IsSlowed) continue;
             
-            enemy.IsSlowed = true;
-            enemy.CastSlownessToEnemy(slownessFactor);
-            enemy.SetTintColor(slowColor);
-            slowedCount++;
+            // 새로운 적 발견
+            ApplySlowToEnemy(enemy);
+            checkCount++;
         }
+    }
+
+    // ⭐ 개별 적에게 느림 적용 + 리스트에 추가
+    void ApplySlowToEnemy(EnemyBase enemy)
+    {
+        if (enemy.IsSlowed) return; // 이미 느린 적은 스킵
         
-        _affectedEnemyCount = slowedCount;
+        enemy.IsSlowed = true;
+        enemy.CastSlownessToEnemy(slownessFactor);
+        enemy.SetTintColor(slowColor);
+        
+        slowedEnemies.Add(enemy);
+        
+        // ⭐ 적이 착지할 때마다 재적용되도록 콜백 등록
+        RegisterEnemyCallback(enemy);
+    }
+
+    // ⭐ 적의 착지 이벤트에 콜백 등록
+    void RegisterEnemyCallback(EnemyBase enemy)
+    {
+        ShadowHeightEnemy shadowHeight = enemy.GetComponent<ShadowHeightEnemy>();
+        if (shadowHeight != null)
+        {
+            // Unity Event에 등록 (착지할 때마다 실행)
+            shadowHeight.onGroundHitEvent.RemoveListener(() => ReapplySlowOnLanding(enemy));
+            shadowHeight.onGroundHitEvent.AddListener(() => ReapplySlowOnLanding(enemy));
+        }
+    }
+
+    // ⭐ 착지 시 재적용 (이벤트 콜백)
+    void ReapplySlowOnLanding(EnemyBase enemy)
+    {
+        if (!isActivated) return; // 스킬이 꺼져있으면 무시
+        if (enemy == null || !enemy.gameObject.activeInHierarchy) return;
+        
+        // 착지 직후 느림 재적용
+        enemy.CastSlownessToEnemy(slownessFactor);
     }
 
     void ReleaseSlowEffect()
     {
-        Collider2D[] allSlowEnemies = EnemyFinder.instance.GetAllEnemies();
-        if (allSlowEnemies == null || allSlowEnemies.Length == 0) return;
-        
-        int releasedCount = 0;
-        for (int i = 0; i < allSlowEnemies.Length; i++)
+        // ⭐ 리스트에 있는 적들만 해제 (훨씬 빠름)
+        for (int i = slowedEnemies.Count - 1; i >= 0; i--)
         {
-            EnemyBase enemy = allSlowEnemies[i].GetComponent<EnemyBase>();
-            if (enemy == null || !enemy.IsSlowed) continue;
+            EnemyBase enemy = slowedEnemies[i];
+            if (enemy == null || !enemy.gameObject.activeInHierarchy)
+            {
+                slowedEnemies.RemoveAt(i);
+                continue;
+            }
             
             enemy.IsSlowed = false;
             enemy.ResetCurrentSpeedToDefault();
             enemy.ResetTintColor();
-            releasedCount++;
+            
+            // ⭐ 콜백 해제
+            ShadowHeightEnemy shadowHeight = enemy.GetComponent<ShadowHeightEnemy>();
+            if (shadowHeight != null)
+            {
+                shadowHeight.onGroundHitEvent.RemoveListener(() => ReapplySlowOnLanding(enemy));
+            }
         }
+        
+        slowedEnemies.Clear();
     }
 
     void DebugValues()

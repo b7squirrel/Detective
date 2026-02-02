@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
+  m_Name: Damage
+  m_EditorClassIdentifier: 
+  Name: Damage
+  DisplayName: "\uAC15\uCCA0 \uC7A5\uAC11"
+  grade: 0
+  charImage: {fileID: 21300000, guid: 9cd156a21f831433b8fb67e69c786c66, type: 3}
+  equippedImage: {fileID: 0}
+  spriteRow:
+    sprites: []
+  needToOffset: 0
+  posHead: {x: 0, y: 0}
+  worldPosHead: {x: 0, y: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
+    PauseCardAnim: {fileID: 0}
+  SynergyWeapons:
+  - Tennis King
+  - PowerSpike
+  stats:
+    armor: 0
+    magnetSize: 0
+    moveSpeed: 0
+    maxHp: 0
+    damage: 5
+    projectileAmount: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    criticalDamageChance: 0
+    coolTimeDown: 0
+    hpRegenRate: 0
+    hp: 0
+    coins: 0
+    currentLevel: 0
+  upgrades:
+  - {fileID: 11400000, guid: d4325ad44d20bab4fbcab329775f7e71, type: 2}
+  - {fileID: 11400000, guid: 00e3acabf3041b4459b4e32b9a2251c3, type: 2}
+  dropChance: 0
+  itemIndex: 0

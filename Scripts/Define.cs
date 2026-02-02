@@ -310,17 +310,30 @@ public class Equation
 
     public float GetCoolDownTime(float _rate, int _grade, int _evoStage, float _defaultCoolDownTime)
     {
-        return _defaultCoolDownTime - (_rate * ((_grade + 4) + _evoStage));
+        // 등급과 진화 단계에 따른 감소율 (%)
+        float reductionPercent = (_grade * 8f) + (_evoStage * 12f); // Grade당 8%, Evo당 12%
+        float reduction = _defaultCoolDownTime * (reductionPercent / 100f);
+        float result = _defaultCoolDownTime - reduction;
+
+        // 최소 쿨다운 1초 보장
+        return Mathf.Max(result, 1f);
     }
 
     public int GetSkillDamage(float _rate, int _grade, int _evoStage, float _defaultDamageBonus)
     {
-        return (int)(_defaultDamageBonus * (int)(_rate * ((_grade + 4) + _evoStage)));
+        // 등급과 진화 단계에 따른 배수
+        float multiplier = 1f + (_grade * 0.3f) + (_evoStage * 0.4f); // Grade당 30%, Evo당 40%
+
+        return (int)(_defaultDamageBonus * multiplier);
     }
 
     public float GetSkillDuration(float _rate, int _grade, int _evoStage, float _defaultDuration)
     {
-        return _defaultDuration + (_rate * ((_grade + 4) + _evoStage));
+        // 등급과 진화 단계에 따른 증가율 (%)
+        float increasePercent = (_grade * 10f) + (_evoStage * 15f); // Grade당 10%, Evo당 15%
+        float increase = _defaultDuration * (increasePercent / 100f);
+
+        return _defaultDuration + increase;
     }
 
     public int GetSkillDamageBonus(float _rate, int _grade, int _evoStage, float _defaultDamageBonus)
@@ -330,12 +343,11 @@ public class Equation
 
     public float GetSlowSpeedFactor(int _grade, int _evoStage)
     {
-        // 기본 50% 느림 + 등급/진화에 따라 최대 80%까지
-        float baseSlow = 0.5f; // 50% 기본 감소
-        float bonusSlow = (_evoStage * (3f + _grade)) * 0.02f;
-        float totalSlow = Mathf.Clamp(baseSlow + bonusSlow, 0.5f, 0.8f);
+        // 기본 50% + 등급/진화에 따라 증가
+        float baseSlow = 0.5f;
+        float bonusSlow = (_grade * 0.05f) + (_evoStage * 0.08f); // Grade당 5%, Evo당 8%
+        float totalSlow = Mathf.Clamp(baseSlow + bonusSlow, 0.5f, 0.9f); // 최대 90%
 
-        Logger.Log($"[SlowFactor] Grade: {_grade}, Evo: {_evoStage} → {totalSlow * 100}% 감소");
         return totalSlow;
     }
 

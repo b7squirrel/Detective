@@ -11,19 +11,19 @@ public class SkillManager : MonoBehaviour
     [Header("Skill Settings")]
     [SerializeField] SkillDataContainer skillDataContainer;
     [SerializeField] GameObject[] skillObjects;
-    
+
     private Dictionary<SkillType, ISkill> skillDictionary = new Dictionary<SkillType, ISkill>();
     private ISkill currentSkill;
-    
+
     public event Action onSkill;
 
     void Start()
     {
         InitializeSkillDictionary();
-        
+
         SkillType skillType = GetSkillTypeFromStartingData();
         CardData playerCardData = GameManager.instance.startingDataContainer.GetPlayerCardData();
-        
+
         InitSkill(skillType, playerCardData);
     }
 
@@ -39,7 +39,7 @@ public class SkillManager : MonoBehaviour
     void InitializeSkillDictionary()
     {
         skillDictionary.Clear();
-        
+
         foreach (GameObject skillObj in skillObjects)
         {
             ISkill skill = skillObj.GetComponent<ISkill>();
@@ -47,17 +47,17 @@ public class SkillManager : MonoBehaviour
             {
                 // Awake에서 설정된 SkillType을 가져오기 위해 임시로 활성화
                 skillObj.SetActive(true);
-                
+
                 if (!skillDictionary.ContainsKey(skill.SkillType))
                 {
                     skillDictionary.Add(skill.SkillType, skill);
                 }
-                
+
                 // 다시 비활성화 (Init에서 활성화됨)
                 skillObj.SetActive(false);
             }
         }
-        
+
         Debug.Log($"스킬 Dictionary 초기화 완료: {skillDictionary.Count}개 스킬 등록됨");
     }
 
@@ -67,15 +67,15 @@ public class SkillManager : MonoBehaviour
     SkillType GetSkillTypeFromStartingData()
     {
         int skillName = GameManager.instance.startingDataContainer.GetSkillName();
-        
+
         // 기존 숫자 시스템을 SkillType으로 변환
         // 100 -> SteelBody, 200 -> SluggishSlumber, etc.
         int skillNumber = (skillName / 100) % 10;
-        
+
         SkillType skillType = (SkillType)(skillNumber * 100);
-        
+
         Debug.Log($"받은 스킬 번호: {skillNumber}, 변환된 SkillType: {skillType}");
-        
+
         return skillType;
     }
 
@@ -89,24 +89,24 @@ public class SkillManager : MonoBehaviour
             Debug.LogError("SkillDataContainer가 할당되지 않았습니다!");
             return;
         }
-        
+
         if (skillDictionary.TryGetValue(skillType, out ISkill skill))
         {
             SkillData skillData = skillDataContainer.GetSkillData(skillType);
-            
+
             if (skillData == null)
             {
                 Debug.LogError($"스킬 데이터를 찾을 수 없습니다: {skillType}");
                 return;
             }
-            
+
             // 스킬 오브젝트 활성화
             ((MonoBehaviour)skill).gameObject.SetActive(true);
-            
+
             // 스킬 초기화
             skill.Init(this, playerCardData, skillData);
             currentSkill = skill;
-            
+
             Debug.Log($"스킬 초기화 완료: {skillType} ({skillData.skillName})");
         }
         else
@@ -121,5 +121,29 @@ public class SkillManager : MonoBehaviour
     public ISkill GetCurrentSkill()
     {
         return currentSkill;
+    }
+
+    /// <summary>
+    /// 카드 Merge 시 스킬 업그레이드 적용
+    /// </summary>
+    public void ApplySkillUpgrade(int newEvoStage)
+    {
+        if (currentSkill == null)
+        {
+            Debug.LogWarning("[SkillManager] 활성화된 스킬이 없습니다.");
+            return;
+        }
+
+        // SkillBase로 캐스팅해서 ApplyDurationUpgrade 호출
+        SkillBase skillBase = currentSkill as SkillBase;
+        if (skillBase != null)
+        {
+            skillBase.ApplyDurationUpgrade(newEvoStage);
+            Debug.Log($"[SkillManager] 스킬 업그레이드 적용: EvoStage {newEvoStage}");
+        }
+        else
+        {
+            Debug.LogError("[SkillManager] SkillBase로 캐스팅 실패!");
+        }
     }
 }
