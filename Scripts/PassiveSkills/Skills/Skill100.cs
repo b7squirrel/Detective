@@ -1,59 +1,140 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 모든 오리들의 방어 콜라이더 100% (아직 구현 안했음)
-/// 지금은 skill500을 복제해 놓았음
-/// Steel Body
+/// 생명의 기운 - Life Recovery
 /// </summary>
 public class Skill100 : SkillBase
 {
     public override SkillType SkillType => SkillType.SteelBody;
-    float realDuration;
+    
+    float baseDuration; // 기본 지속시간
+    float realDuration; // 업그레이드 적용된 지속시간
     float durationTimer;
-    float slownessFactor;
+    
+    [Header("Healing Settings")]
+    [SerializeField] float healInterval = 0.2f; // 0.2초마다 회복
+    [SerializeField] int healAmountPerTick = 2; // 틱당 회복량 (초당 10)
+    float healTimer;
+    
+    [Header("Duration Upgrade")]
+    [SerializeField] float durationIncreasePerLevel = 2f; // 레벨당 증가 시간 (초)
+    
+    [Header("Visual Effects")]
+    [SerializeField] Color healColor = new Color(0.2f, 1f, 0.2f, 0.5f); // 초록색 틴트 (선택사항)
     
     [Header("Debug")]
     [SerializeField] float _cooldownCounter;
     [SerializeField] float _realCoolDownTime;
     [SerializeField] float _realDuration;
     [SerializeField] float _durationTimer;
+    [SerializeField] float _healTimer;
+    [SerializeField] int _totalHealedAmount;
+    [SerializeField] int _durationUpgradeLevel;
+
+    Character character;
 
     public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
         base.Init(skillManager, cardData, data);
+        
+        // 기본 지속시간 저장
+        baseDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, data.baseDuration);
+        
+        // 업그레이드 적용된 지속시간 계산
+        CalculateRealDuration();
+        
+        // Character 참조
+        character = GameManager.instance.character;
+        
+        Debug.Log($"[Skill100] 초기화 완료 - Cooldown: {realCoolDownTime}초, Duration: {realDuration}초, 회복: {healAmountPerTick}씩 {healInterval}초마다");
+    }
 
-        realDuration = new Equation().GetSkillDuration(
-            rate, Grade, EvoStage, data.baseDuration);
+    // 지속시간 업그레이드 오버라이드
+    public override void ApplyDurationUpgrade(int level)
+    {
+        base.ApplyDurationUpgrade(level);
+        CalculateRealDuration();
+        
+        Debug.Log($"[Skill100] 💚 회복 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+    }
 
-        slownessFactor = new Equation().GetSlowSpeedFactor(Grade, EvoStage);
+    // 실제 지속시간 계산
+    void CalculateRealDuration()
+    {
+        realDuration = baseDuration + (durationUpgradeLevel * durationIncreasePerLevel);
     }
 
     public override void UseSkill()
     {
         base.UseSkill();
-
+        UpdateDebugValues();
+        
         if (skillCounter > realCoolDownTime)
         {
             if (durationTimer > realDuration)
             {
+                // 스킬 종료
                 skillCounter = 0;
                 durationTimer = 0;
-                // 초기화
+                healTimer = 0;
+                isActivated = false;
+                
+                skillUi.PlayBadgeAnim("Done");
+                
+                Debug.Log($"[Skill100] ✨ 회복 종료 - 총 회복량: {_totalHealedAmount}");
+                _totalHealedAmount = 0;
+                return;
             }
             else
             {
-                // duration 쿨타임이 끝나지 않았다면 콜라이더 유지
+                // 스킬 지속
+                if (!isActivated)
+                {
+                    isActivated = true;
+                    healTimer = 0;
+                    _totalHealedAmount = 0;
+                    
+                    skillUi.BadgeUpAnim();
+                    skillUi.PlayBadgeAnim("Duration");
+                    
+                    Debug.Log($"[Skill100] 💚 회복 시작! (지속시간: {realDuration}초)");
+                }
+                
+                // 회복 처리
+                ApplyHealing();
+                
                 durationTimer += Time.deltaTime;
                 return;
             }
         }
     }
 
-    void DebugValues()
+    void ApplyHealing()
+    {
+        if (character == null) return;
+        if (character.GetCurrentHP() >= character.MaxHealth) return; // 이미 최대 체력이면 회복 안 함
+        
+        healTimer += Time.deltaTime;
+        
+        if (healTimer >= healInterval)
+        {
+            // 회복 실행 (아이템 회복이 아니므로 false)
+            character.Heal(healAmountPerTick, false);
+            
+            _totalHealedAmount += healAmountPerTick;
+            
+            // 타이머 리셋
+            healTimer -= healInterval;
+        }
+    }
+
+    void UpdateDebugValues()
     {
         _cooldownCounter = skillCounter;
         _realCoolDownTime = realCoolDownTime;
         _realDuration = realDuration;
         _durationTimer = durationTimer;
+        _healTimer = healTimer;
+        _durationUpgradeLevel = durationUpgradeLevel;
     }
 }

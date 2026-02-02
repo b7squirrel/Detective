@@ -8,6 +8,9 @@ public class WeaponBase : MonoBehaviour
 
     public WeaponStats weaponStats;
 
+    // ⭐ 동료 데미지 증가용 배수
+    protected float allyDamageMultiplier = 1f;
+
     // ✨ 데미지 트래커용 무기 이름
     [Header("데미지 트래커")]
     [SerializeField] protected string weaponName;
@@ -34,8 +37,8 @@ public class WeaponBase : MonoBehaviour
     protected float angleExtra;
 
     #region Flip
-    public bool InitialWeapon{get; set;} // weapon manager에서 설정
-    [field : SerializeField] public bool NeedParent { get; private set; } // weapon container에서 무기가 생성될 때 어떤 부위에도 parent 시키지 않음 
+    public bool InitialWeapon { get; set; } // weapon manager에서 설정
+    [field: SerializeField] public bool NeedParent { get; private set; } // weapon container에서 무기가 생성될 때 어떤 부위에도 parent 시키지 않음 
     protected float halfHeight, halfWidth;
     protected Vector2 size;
     [SerializeField] protected LayerMask enemy;
@@ -45,7 +48,7 @@ public class WeaponBase : MonoBehaviour
     protected Vector2 dirExtra;
     protected Vector2 direction;
     protected bool flip;
-    public bool IsDirectional {get; set;}
+    public bool IsDirectional { get; set; }
 
     #endregion
 
@@ -119,11 +122,11 @@ public class WeaponBase : MonoBehaviour
     {
         this.weaponData = wd;
         weaponStats =
-            new WeaponStats(wd.stats.damage, 
-                            wd.stats.timeToAttack, 
-                            wd.stats.numberOfAttacks, 
-                            wd.stats.sizeOfArea, 
-                            wd.stats.projectileSpeed, 
+            new WeaponStats(wd.stats.damage,
+                            wd.stats.timeToAttack,
+                            wd.stats.numberOfAttacks,
+                            wd.stats.sizeOfArea,
+                            wd.stats.projectileSpeed,
                             wd.stats.knockBackChance);
     }
 
@@ -157,8 +160,14 @@ public class WeaponBase : MonoBehaviour
     /// </summary>
     public int GetDamage()
     {
-        // int damage = (int)(weaponData.stats.damage * wielder.DamageBonus);
         int damage = (int)new Equation().GetDamage(weaponStats.damage, Wielder.DamageBonus);
+
+        // ⭐ 동료 데미지 배수 적용 (Skill500용)
+        if (!InitialWeapon) // 동료들만
+        {
+            damage = (int)(damage * allyDamageMultiplier);
+        }
+
         float chance = UnityEngine.Random.Range(0, 100);
 
         if (chance < Wielder.CriticalDamageChance)
@@ -171,6 +180,18 @@ public class WeaponBase : MonoBehaviour
             isCriticalDamage = false;
         }
         return damage;
+    }
+
+    // ⭐ 동료 데미지 배수 설정 메서드 (Skill500에서 호출)
+    public void SetAllyDamageMultiplier(float multiplier)
+    {
+        allyDamageMultiplier = multiplier;
+    }
+
+    // ⭐ 동료 데미지 배수 초기화
+    public void ResetAllyDamageMultiplier()
+    {
+        allyDamageMultiplier = 1f;
     }
 
     public float GetKnockBackChance()
@@ -308,7 +329,7 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void LockFlip()
     {
-        if(NeedParent == false) // 무기를 페어런트 시켜서 움직이지 않는다면 Flip을 막는다
+        if (NeedParent == false) // 무기를 페어런트 시켜서 움직이지 않는다면 Flip을 막는다
         {
             transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z);
         }
@@ -330,7 +351,7 @@ public class WeaponBase : MonoBehaviour
     {
         if (weaponData != null)
             return weaponData.DisplayName;
-        
+
         return gameObject.name; // fallback
     }
 }

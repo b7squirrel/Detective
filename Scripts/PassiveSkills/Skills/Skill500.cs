@@ -1,87 +1,164 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 파티 타임 - Party Time (Spicy Booster) 오리들의 공격력 증가
+/// 동료 강화 - Ally Power Boost
 /// </summary>
 public class Skill500 : SkillBase
 {
     public override SkillType SkillType => SkillType.PartyTime;
-    int defaultDamageBonus;
-    int realDamageBonus;
-    float realDuration;
+    
+    float baseDuration; // 기본 지속시간
+    float realDuration; // 업그레이드 적용된 지속시간
     float durationTimer;
-    bool isHitAnimPlaying;
-    bool isDurationAnimPlaying;
+    
+    [Header("Boost Settings")]
+    [SerializeField] float damageMultiplier = 1.5f; // 데미지 150% (50% 증가)
+    
+    [Header("Duration Upgrade")]
+    [SerializeField] float durationIncreasePerLevel = 2f; // 레벨당 증가 시간 (초)
+    
+    [Header("Visual Effects")]
+    [SerializeField] Color boostColor = new Color(1f, 0.5f, 0f, 0.5f); // 주황색 (선택사항)
     
     [Header("Debug")]
-    [SerializeField] int _defaultDamageBonus;
-    [SerializeField] int _realDamageBonus;
     [SerializeField] float _cooldownCounter;
     [SerializeField] float _realCoolDownTime;
     [SerializeField] float _realDuration;
     [SerializeField] float _durationTimer;
-    [SerializeField] float _characterDamageBonus;
+    [SerializeField] float _damageMultiplier;
+    [SerializeField] int _boostedAllyCount;
+    [SerializeField] int _durationUpgradeLevel;
 
     public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
         base.Init(skillManager, cardData, data);
         
-        defaultDamageBonus = GameManager.instance.character.DamageBonus;
+        // 기본 지속시간 저장
+        baseDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, data.baseDuration);
         
-        realDuration = new Equation().GetSkillDuration(
-            rate, Grade, EvoStage, data.baseDuration);
+        // 업그레이드 적용된 지속시간 계산
+        CalculateRealDuration();
         
-        realDamageBonus = new Equation().GetSkillDamageBonus(
-            rate, Grade, EvoStage, defaultDamageBonus);
+        Debug.Log($"[Skill500] 초기화 완료 - Cooldown: {realCoolDownTime}초, Duration: {realDuration}초, 데미지 배수: {damageMultiplier}x");
+    }
+
+    // 지속시간 업그레이드 오버라이드
+    public override void ApplyDurationUpgrade(int level)
+    {
+        base.ApplyDurationUpgrade(level);
+        CalculateRealDuration();
+        
+        Debug.Log($"[Skill500] 🔥 동료 강화 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+    }
+
+    // 실제 지속시간 계산
+    void CalculateRealDuration()
+    {
+        realDuration = baseDuration + (durationUpgradeLevel * durationIncreasePerLevel);
     }
 
     public override void UseSkill()
     {
         base.UseSkill();
-
+        UpdateDebugValues();
+        
         if (skillCounter > realCoolDownTime)
         {
-            if (isHitAnimPlaying == false)
-            {
-                skillUi.BadgeUpAnim();
-                isHitAnimPlaying = true;
-            }
-            
-            // 스킬 발동 시간 끝나면 초기화
             if (durationTimer > realDuration)
             {
+                // 스킬 종료
                 skillCounter = 0;
                 durationTimer = 0;
-                GameManager.instance.character.DamageBonus = defaultDamageBonus;
+                isActivated = false;
+                
+                ReleaseBoost();
                 skillUi.PlayBadgeAnim("Done");
-                isDurationAnimPlaying = false;
-                isHitAnimPlaying = false;
+                
+                Debug.Log($"[Skill500] ✨ 동료 강화 종료");
                 return;
             }
             else
             {
-                // 스킬 계속 유지
-                durationTimer += Time.deltaTime;
-                GameManager.instance.character.DamageBonus = realDamageBonus;
-                
-                if (isDurationAnimPlaying == false)
+                // 스킬 지속
+                if (!isActivated)
                 {
+                    isActivated = true;
+                    
+                    skillUi.BadgeUpAnim();
                     skillUi.PlayBadgeAnim("Duration");
-                    isDurationAnimPlaying = true;
+                    
+                    ApplyBoost();
+                    
+                    Debug.Log($"[Skill500] 🔥 동료 강화 시작! (지속시간: {realDuration}초, 배수: {damageMultiplier}x)");
                 }
+                
+                durationTimer += Time.deltaTime;
                 return;
             }
         }
     }
 
-    void DebugValues()
+    void ApplyBoost()
     {
-        _defaultDamageBonus = defaultDamageBonus;
-        _realDamageBonus = realDamageBonus;
+        WeaponBase[] allWeapons = FindObjectsOfType<WeaponBase>();
+        if (allWeapons == null || allWeapons.Length == 0) return;
+        
+        int boostedCount = 0;
+        
+        for (int i = 0; i < allWeapons.Length; i++)
+        {
+            // 동료들만 강화 (InitialWeapon == false)
+            if (!allWeapons[i].InitialWeapon)
+            {
+                allWeapons[i].SetAllyDamageMultiplier(damageMultiplier);
+                boostedCount++;
+                
+                // ⭐ 선택사항: 시각적 효과 추가
+                // WeaponContainerAnim containerAnim = allWeapons[i].GetComponentInParent<WeaponContainerAnim>();
+                // if (containerAnim != null)
+                // {
+                //     containerAnim.Scale(1.2f); // 크기 증가 효과
+                // }
+            }
+        }
+        
+        _boostedAllyCount = boostedCount;
+        Debug.Log($"[Skill500] 💪 {boostedCount}명의 동료 강화 적용!");
+    }
+
+    void ReleaseBoost()
+    {
+        WeaponBase[] allWeapons = FindObjectsOfType<WeaponBase>();
+        if (allWeapons == null || allWeapons.Length == 0) return;
+        
+        int releasedCount = 0;
+        
+        for (int i = 0; i < allWeapons.Length; i++)
+        {
+            if (!allWeapons[i].InitialWeapon)
+            {
+                allWeapons[i].ResetAllyDamageMultiplier();
+                releasedCount++;
+                
+                // ⭐ 선택사항: 크기 원래대로
+                // WeaponContainerAnim containerAnim = allWeapons[i].GetComponentInParent<WeaponContainerAnim>();
+                // if (containerAnim != null)
+                // {
+                //     containerAnim.Scale(0.8f); // 원래 크기
+                // }
+            }
+        }
+        
+        Debug.Log($"[Skill500] 💨 {releasedCount}명의 동료 강화 해제");
+    }
+
+    void UpdateDebugValues()
+    {
         _cooldownCounter = skillCounter;
         _realCoolDownTime = realCoolDownTime;
         _realDuration = realDuration;
         _durationTimer = durationTimer;
-        _characterDamageBonus = GameManager.instance.character.DamageBonus;
+        _damageMultiplier = damageMultiplier;
+        _durationUpgradeLevel = durationUpgradeLevel;
     }
 }

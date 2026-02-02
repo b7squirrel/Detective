@@ -7,12 +7,16 @@ public class Skill200 : SkillBase
 {
     public override SkillType SkillType => SkillType.SluggishSlumber;
     
+    float baseDuration; // ⭐ 기본 지속시간 저장
     float realDuration;
     float durationTimer;
     float slownessFactor;
     
+    [Header("Duration Upgrade")]
+    [SerializeField] float durationIncreasePerLevel = 2f; // 레벨당 증가 시간 (초)
+    
     [Header("Visual Effects")]
-    [SerializeField] Color slowColor = new Color(0.5f, 0.5f, 1f, 1f); // 파란색 틴트
+    [SerializeField] Color slowColor = new Color(0.5f, 0.5f, 1f, 1f);
     
     [Header("Debug")]
     [SerializeField] float _cooldownCounter;
@@ -21,24 +25,43 @@ public class Skill200 : SkillBase
     [SerializeField] float _durationTimer;
     [SerializeField] float _slownessFactor;
     [SerializeField] int _affectedEnemyCount;
+    [SerializeField] int _durationUpgradeLevel;
 
     public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
         base.Init(skillManager, cardData, data);
         
-        realDuration = new Equation().GetSkillDuration(
-            rate, Grade, EvoStage, data.baseDuration);
+        // ⭐ 기본 지속시간 저장
+        baseDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, data.baseDuration);
+        
+        // 업그레이드 적용된 지속시간 계산
+        CalculateRealDuration();
         
         slownessFactor = new Equation().GetSlowSpeedFactor(Grade, EvoStage);
         
         Debug.Log($"[Skill200] 초기화 완료 - Cooldown: {realCoolDownTime}초, Duration: {realDuration}초, Slow: {slownessFactor * 100}%");
     }
 
+    // ⭐ 지속시간 업그레이드 오버라이드
+    public override void ApplyDurationUpgrade(int level)
+    {
+        base.ApplyDurationUpgrade(level);
+        CalculateRealDuration();
+        
+        Debug.Log($"[Skill200] 💫 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+    }
+
+    // ⭐ 실제 지속시간 계산
+    void CalculateRealDuration()
+    {
+        realDuration = baseDuration + (durationUpgradeLevel * durationIncreasePerLevel);
+    }
+
     public override void UseSkill()
     {
         base.UseSkill();
         DebugValues();
-
+        
         if (skillCounter > realCoolDownTime)
         {
             if (durationTimer > realDuration)
@@ -47,7 +70,6 @@ public class Skill200 : SkillBase
                 skillCounter = 0;
                 durationTimer = 0;
                 isActivated = false;
-                
                 ReleaseSlowEffect();
                 skillUi.PlayBadgeAnim("Done");
             }
@@ -56,7 +78,6 @@ public class Skill200 : SkillBase
                 // 스킬 지속
                 if (!isActivated)
                 {
-                    // Logger.Log($"[Skill200] ⚡ 스킬 발동! (Duration: {realDuration}초)");
                     isActivated = true;
                     skillUi.BadgeUpAnim();
                     skillUi.PlayBadgeAnim("Duration");
@@ -80,11 +101,9 @@ public class Skill200 : SkillBase
             EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
             if (enemy == null || enemy.IsSlowed) continue;
             
-            // 느림 효과 적용
             enemy.IsSlowed = true;
             enemy.CastSlownessToEnemy(slownessFactor);
-            enemy.SetTintColor(slowColor); // 👈 간단하게 호출!
-            
+            enemy.SetTintColor(slowColor);
             slowedCount++;
         }
         
@@ -102,15 +121,11 @@ public class Skill200 : SkillBase
             EnemyBase enemy = allSlowEnemies[i].GetComponent<EnemyBase>();
             if (enemy == null || !enemy.IsSlowed) continue;
             
-            // 느림 해제
             enemy.IsSlowed = false;
             enemy.ResetCurrentSpeedToDefault();
-            enemy.ResetTintColor(); // 👈 간단하게 호출!
-            
+            enemy.ResetTintColor();
             releasedCount++;
         }
-        
-        // Logger.Log($"[Skill200] 💨 {releasedCount}명 느림 해제");
     }
 
     void DebugValues()
@@ -120,5 +135,6 @@ public class Skill200 : SkillBase
         _realDuration = realDuration;
         _durationTimer = durationTimer;
         _slownessFactor = slownessFactor;
+        _durationUpgradeLevel = durationUpgradeLevel;
     }
 }
