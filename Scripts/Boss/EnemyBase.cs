@@ -83,6 +83,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     Coroutine whiteFlashCoroutine;
     Color enemyColor; // die effect의 색깔을 정하기 위해서.
 
+    // 공격 프레임 간격 (모드별로 다르게 설정)
+    protected int attackFrameInterval = 3; // 기본값 3프레임
+
     [Header("특수 능력")]
     protected EnemyDashAbility dashAbility;
     protected EnemyRangedAttack rangedAttack;
@@ -241,6 +244,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // 상태 초기화
         ResetTintColor(); // ⭐ 색상 초기화 추가
         IsSlowed = false; // 느림 상태도 초기화
+
+        // ⭐ 공격 프레임 간격 설정 (모드별 분기)
+        if (isInfiniteMode && infiniteStageManager != null)
+        {
+            attackFrameInterval = 5; // 무한 모드: 5프레임에 한 번
+        }
+        else
+        {
+            attackFrameInterval = 3; // 일반 모드: 3프레임에 한 번
+        }
 
         // ⭐ 무한 모드와 레귤러 모드 분기
         if (isInfiniteMode && infiniteStageManager != null)
@@ -538,7 +551,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (collision.gameObject == Target.gameObject)
         {
-            if (enemyType == EnemyType.Melee && Time.frameCount % 3 == 0) // Melee는 3프레임에 한 번 공격
+            if (enemyType == EnemyType.Melee && Time.frameCount % attackFrameInterval == 0) // Melee는 attackFrameInterval 프레임에 한 번 공격
             {
                 Attack(EnemyType.Melee);
             }
