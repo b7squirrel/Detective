@@ -115,6 +115,10 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.nextTarget;
             case UITextKey.UnequipBeforeMerging:
                 return LocalizationManager.Game.unequipBeforeMerging;
+            case UITextKey.Gear:
+                return LocalizationManager.Game.Gear;
+            case UITextKey.Homework:
+                return LocalizationManager.Game.Homework;
             default:
                 return key.ToString();
         }
@@ -170,5 +174,7 @@ public enum UITextKey
     BestWave,
     NextTarget,
     Warning,
-    UnequipBeforeMerging
+    UnequipBeforeMerging,
+    Gear,
+    Homework
 }

@@ -66,7 +66,8 @@ public class BossDeadBody : MonoBehaviour, Idamageable
             int num = dropNums + UnityEngine.Random.Range(0, 5);
             for (int i = 0; i < num; i++)
             {
-                Instantiate(dropPrefab, transform.position, Quaternion.identity);
+                GameObject go = GameManager.instance.poolManager.GetMisc(dropPrefab);
+                go.transform.position = transform.position;
             }
         }
     }

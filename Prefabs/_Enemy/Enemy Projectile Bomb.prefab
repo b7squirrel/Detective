@@ -428,6 +428,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDone:
+    m_PersistentCalls:
+      m_Calls: []
   trnsObject: {fileID: 7556718899494934083}
   trnsBody: {fileID: 5236585214380657414}
   trnsShadow: {fileID: 6886725154618127942}
@@ -450,7 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad10bd374ff11e34faf5438b72bd3a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Key>k__BackingField: enemyProjBomb
+  <Key>k__BackingField: enemyProjBombB
   maxNum: 0
 --- !u!58 &3016080708920201808
 CircleCollider2D:
@@ -537,10 +540,14 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
-  damageIndicator: {fileID: 514224988371795539}
   projBody: {fileID: 0}
   shadowHeightProj: {fileID: 0}
   anim: {fileID: 0}
+  explosionEffectPrefab: {fileID: 0}
+  shockWavePrefab: {fileID: 0}
+  damageIndicatorPrefab: {fileID: 0}
+  initSound: {fileID: 0}
+  explosionSound: {fileID: 0}
   isDubugMode: 1
   debugCircleForCheckingRadius: {fileID: 2101900553215353305, guid: e14baa2d3babb4038a7965027a8d1154, type: 3}
 --- !u!1 &8637036478336808872

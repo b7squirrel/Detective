@@ -94,11 +94,9 @@ public class MainMenuManager : MonoBehaviour
             Vector3 BtnTargetPos = BtnRect[i].anchoredPosition3D;
             BtnTargetPos.y = -40f;
             Vector3 BtnTargetScale = Vector3.one;
-            //bool textActive = true;
 
             tabAnims[i].SetBool("Up", false);
             tabAnims[i].SetBool("Idle", true);
-
 
             if (i == targetIndex)
             {
@@ -106,15 +104,18 @@ public class MainMenuManager : MonoBehaviour
                 BtnTargetScale = new Vector3(1.7f, 1.7f, 1);
                 tabAnims[i].SetBool("Up", true);
                 tabAnims[i].SetBool("Idle", false);
-                //textActive = false;
+                BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(true); // 선택된 탭만 텍스트 보이기
+            }
+            else
+            {
+                BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(false); // 다른 탭은 텍스트 숨기기
             }
 
             BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, 1f);
             BtnImageRect[i].localScale = Vector3.Lerp(BtnImageRect[i].localScale, BtnTargetScale, .5f);
-            BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(false); // setActive의 인자로 textActive를 넘기지만 임시로 모두 숨김
             tabPanels[i].SetActive(i == targetIndex);
 
-            tabIndex = i == targetIndex ? i : tabIndex; // 어떤 탭에 들어와 있는지 저장
+            tabIndex = i == targetIndex ? i : tabIndex;
         }
     }
 
@@ -122,7 +123,7 @@ public class MainMenuManager : MonoBehaviour
     {
         tabSlider.value = pos[pressBtnID];
         targetIndex = pressBtnID;
-        
+
         if (pressBtnID == 0)
         {
             tabSliderAnim.SetTrigger("Left");
@@ -141,9 +142,9 @@ public class MainMenuManager : MonoBehaviour
         // 합성 성공 후 탭을 해서 합성 패널을 초기화 시키지 않고 나올 경우를 대비해서 
         if (pressBtnID != 3)
         {
-            if(mergeFinished)
+            if (mergeFinished)
             {
-                
+
             }
         }
     }
@@ -191,7 +192,7 @@ public class MainMenuManager : MonoBehaviour
         PlayerDataManager.Instance.SetGameMode(GameMode.Regular);
         loadingSceneManager.LoadScenes(GameMode.Regular);
     }
-    
+
     IEnumerator LoadInfiniteMode()
     {
         yield return new WaitForSecondsRealtime(1.23f);
@@ -261,7 +262,7 @@ public class MainMenuManager : MonoBehaviour
     }
     public CardData GetLeadCardData()
     {
-        if(lead == null) 
+        if (lead == null)
         {
             Logger.Log("리드 오리가 아직 저장되지 않았습니다. 확인해 주세요.");
             return null;

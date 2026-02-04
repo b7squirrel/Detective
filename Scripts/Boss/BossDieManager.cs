@@ -53,7 +53,10 @@ public class BossDieManager : MonoBehaviour
         if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();
 
         yield return new WaitForSeconds(4f);
-        FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
+        if(playerData.GetGameMode() == GameMode.Regular) //일반 모드일 때만 스테이지 클리어 관련 연산
+        {
+            FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
+        }
     }
     
     public void BossCameraOff()

@@ -72,6 +72,10 @@ public class GameTexts : ScriptableObject
     public string Cancel = "취소";
     public string Warning = "경고";
 
+    [Header("기타 패널 제목")]
+    public string Gear = "장비";
+    public string Homework = "숙제";
+
     [Header("Achievements Panel")]
     public string achievementsTitle = "숙제";
     public string dailyQuestsTitle = "일일 퀘스트";

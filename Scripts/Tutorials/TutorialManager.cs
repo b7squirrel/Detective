@@ -27,6 +27,7 @@ public class TutorialManager : MonoBehaviour
 		LoadTutorialState();
 		StartCoroutine(PauseeWithDelay());
 	}
+
 	IEnumerator PauseeWithDelay()
 	{
 		yield return null;
