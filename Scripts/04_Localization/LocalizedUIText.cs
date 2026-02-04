@@ -119,6 +119,14 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.Gear;
             case UITextKey.Homework:
                 return LocalizationManager.Game.Homework;
+            case UITextKey.StartButton:
+                return LocalizationManager.Game.startButton;
+            case UITextKey.Shop:
+                return LocalizationManager.Game.Shop;
+                case UITextKey.DailyMission:
+                return LocalizationManager.Game.dailyQuestsTitle;
+                case UITextKey.Achievement:
+                return LocalizationManager.Game.achievementsTitle;
             default:
                 return key.ToString();
         }
@@ -176,5 +184,9 @@ public enum UITextKey
     Warning,
     UnequipBeforeMerging,
     Gear,
-    Homework
+    Homework,
+    StartButton,
+    //업적
+    DailyMission,
+    Achievement
 }

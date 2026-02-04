@@ -77,8 +77,8 @@ public class GameTexts : ScriptableObject
     public string Homework = "숙제";
 
     [Header("Achievements Panel")]
-    public string achievementsTitle = "숙제";
-    public string dailyQuestsTitle = "일일 퀘스트";
+    public string achievementsTitle = "일일 미션";
+    public string dailyQuestsTitle = "업적";
 
     [Header("Daily Reward Panel")]
     public string daily = "일일 보상";
