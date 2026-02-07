@@ -19,9 +19,29 @@ public class CatDuckWeapon : WeaponBase
     [SerializeField] float catTrajectoryTime = 0.6f; // 고양이 비행 시간
     [SerializeField] float offScreenDistance = 3f; // 화면 밖 거리
 
+    
+
     protected override void Awake()
     {
         base.Awake();
+        // ✅ 카메라 크기 계산
+        CalculateScreenBounds();
+    }
+    // ✅ 새 메서드 추가
+    void CalculateScreenBounds()
+    {
+        Camera cam = Camera.main;
+        if (cam != null)
+        {
+            halfHeight = cam.orthographicSize;
+            halfWidth = halfHeight * cam.aspect;
+
+            Debug.Log($"CatDuckWeapon: Screen bounds calculated - halfWidth={halfWidth}, halfHeight={halfHeight}");
+        }
+        else
+        {
+            Debug.LogError("CatDuckWeapon: Main camera not found!");
+        }
     }
 
     protected override void Attack()
@@ -197,45 +217,49 @@ public class CatDuckWeapon : WeaponBase
     }
 
     Vector2 GetOffScreenPosition(Vector2 targetPosition)
+{
+    // ✅ 카메라 위치 가져오기
+    Camera cam = Camera.main;
+    Vector2 camPos = cam.transform.position;
+    
+    // 4방향 중 랜덤 선택 (상, 하, 좌, 우)
+    int direction = Random.Range(0, 4);
+
+    Vector2 spawnPos = Vector2.zero;
+
+    switch (direction)
     {
-        // 4방향 중 랜덤 선택 (상, 하, 좌, 우)
-        int direction = Random.Range(0, 4);
+        case 0: // 위
+            spawnPos = new Vector2(
+                camPos.x + Random.Range(-halfWidth, halfWidth),  // ✅ 카메라 X 추가
+                camPos.y + halfHeight + offScreenDistance         // ✅ 카메라 Y 추가
+            );
+            break;
 
-        Vector2 spawnPos = Vector2.zero;
+        case 1: // 아래
+            spawnPos = new Vector2(
+                camPos.x + Random.Range(-halfWidth, halfWidth),  // ✅ 카메라 X 추가
+                camPos.y - halfHeight - offScreenDistance         // ✅ 카메라 Y 추가
+            );
+            break;
 
-        switch (direction)
-        {
-            case 0: // 위
-                spawnPos = new Vector2(
-                    Random.Range(-halfWidth, halfWidth),
-                    halfHeight + offScreenDistance
-                );
-                break;
+        case 2: // 왼쪽
+            spawnPos = new Vector2(
+                camPos.x - halfWidth - offScreenDistance,         // ✅ 카메라 X 추가
+                camPos.y + Random.Range(-halfHeight, halfHeight)  // ✅ 카메라 Y 추가
+            );
+            break;
 
-            case 1: // 아래
-                spawnPos = new Vector2(
-                    Random.Range(-halfWidth, halfWidth),
-                    -halfHeight - offScreenDistance
-                );
-                break;
-
-            case 2: // 왼쪽
-                spawnPos = new Vector2(
-                    -halfWidth - offScreenDistance,
-                    Random.Range(-halfHeight, halfHeight)
-                );
-                break;
-
-            case 3: // 오른쪽
-                spawnPos = new Vector2(
-                    halfWidth + offScreenDistance,
-                    Random.Range(-halfHeight, halfHeight)
-                );
-                break;
-        }
-
-        return spawnPos;
+        case 3: // 오른쪽
+            spawnPos = new Vector2(
+                camPos.x + halfWidth + offScreenDistance,         // ✅ 카메라 X 추가
+                camPos.y + Random.Range(-halfHeight, halfHeight)  // ✅ 카메라 Y 추가
+            );
+            break;
     }
+
+    return spawnPos;
+}
 
     Vector2 GetTargetPosition()
     {

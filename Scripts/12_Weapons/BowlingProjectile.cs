@@ -6,6 +6,8 @@ public class BowlingProjectile : ProjectileBase
     [SerializeField] private AudioClip hitSound; //뽑뽑뽑 하는 느낌으로 적들 위로 지나가기
     [SerializeField] private AudioClip reflectSound; // 쾅 하는 느낌으로 벽에 반사
     [SerializeField] private AudioClip bowlingStrikeSouind; // 볼링공이 사라질 때
+    [SerializeField] private float rotationSpeed = -360f; // 시계방향 회전 속도 (초당 각도)
+    [SerializeField] private Transform spriteTransform; // 회전시킬 자식 스프라이트
     
     private Rigidbody2D rb;
     private Animator anim;
@@ -18,12 +20,12 @@ public class BowlingProjectile : ProjectileBase
         anim = GetComponent<Animator>();
         trailRenderer = GetComponent<TrailRenderer>();
     }
-    
+
     private void OnEnable()
     {
         currentReflections = 0;
     }
-    
+
     private void OnDisable()
     {
         if (trailRenderer != null)
@@ -31,7 +33,18 @@ public class BowlingProjectile : ProjectileBase
             trailRenderer.Clear();
         }
     }
-    
+    protected override void Update()
+    {
+        // 부모의 Update 로직 실행 (이동, 데미지, 타이머)
+        base.Update();
+
+        // 스프라이트 회전 추가
+        if (spriteTransform != null)
+        {
+            spriteTransform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;

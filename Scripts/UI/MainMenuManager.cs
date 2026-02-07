@@ -38,14 +38,70 @@ public class MainMenuManager : MonoBehaviour
     bool mergeFinished;
     UpgradePanelManager upPanelManager;
 
+    [Header("튜토리얼")]
+    [SerializeField] RuntimeAnimatorController[] defaultTabControllers;
+    [SerializeField] RuntimeAnimatorController[] tutorialTabControllers;
+    [SerializeField] Image Tab_Base;
+    [SerializeField] Sprite[] Tab_BaseSprites;
+    [SerializeField] RuntimeAnimatorController defaultTabSlideHandleCon;
+    [SerializeField] RuntimeAnimatorController darkTabSlideHandleCon;
+    [SerializeField] Animator tabSliderHandleAnim;
+    [SerializeField] GameObject bgTutorial;
+
     bool slotSwapFinished;
 
     // 리드오리 카드 데이터
     CardData lead;
 
+    /// <summary>
+    /// 어느 탭을 밝게 해서 터치가 가능하게 할지 정함
+    /// </summary>
+    public void SetTutorialMode(bool tutorialMode, int indexToActivate = 0)
+    {
+        if (tutorialMode)
+        {
+            Tab_Base.sprite = Tab_BaseSprites[1];
+            tabSliderHandleAnim.runtimeAnimatorController = darkTabSlideHandleCon;
+
+            for (int i = 0; i < BtnImageRect.Length; i++)
+            {
+                BtnRect[i].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+
+                if (i == indexToActivate)
+                {
+                    BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = defaultTabControllers[i];
+                    BtnRect[i].GetComponent<Button>().interactable = true;
+
+                    continue;
+                }
+                BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = tutorialTabControllers[i];
+                BtnRect[i].GetComponent<Button>().interactable = false;
+                // BtnImageRect[i].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().color = new Color(.3f, .3f, .3f, 1);
+            }
+            bool isSRHand = indexToActivate == 4 ? false : true;
+            GetComponent<TutorialMainMenuUI>().GenerateHand(BtnImageRect[indexToActivate], isSRHand);
+            bgTutorial.SetActive(true);
+        }
+        else
+        {
+            Tab_Base.sprite = Tab_BaseSprites[0];
+            tabSliderHandleAnim.runtimeAnimatorController = defaultTabSlideHandleCon;
+            bgTutorial.SetActive(false);
+
+            for (int i = 0; i < BtnImageRect.Length; i++)
+            {
+                BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = defaultTabControllers[i];
+                // BtnImageRect[i].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().color = new Color(1f, 1f, 1f, 1);
+                BtnRect[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            }
+        }
+    }
+
+
     void Start()
     {
         // InitBlackTransition();
+        SetTutorialMode(false);
 
         for (int i = 0; i < SIZE; i++)
         {

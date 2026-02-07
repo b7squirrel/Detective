@@ -43,6 +43,7 @@ public class GameTexts : ScriptableObject
 
     [Header("Shop Panel")]
     public string Shop = "상점";
+    public string ShopTab = "상점"; // 샵 패널의 대문자와 구분. 탭의 글자는 앞글자만 대문자
     public string beginnerPack = "초보자 지원 세트";
     public string ExpertPack = "전문가 지원 세트";
     public string luckyBox = "행운 상자";

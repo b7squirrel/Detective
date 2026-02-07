@@ -22,7 +22,20 @@ public class CatFightCloud : MonoBehaviour
     [SerializeField] GameObject hitEffect; // 옵션 - null이어도 괜찮음
     [SerializeField] AudioClip hitSFX; // 옵션
     
+    [Header("Smoke Sprites")]
+    [SerializeField] CatFightCloudSprite[] smokeSprites; // 5개의 연기 스프라이트
+    [SerializeField] float maxSmokeStartOffset = 0.3f; // 최대 시작 딜레이
+    
+    [Header("Claw Slashes")]
+    [SerializeField] CatClawSlash[] clawSlashes; // 5개의 발톱 스프라이트
+    [SerializeField] float maxClawStartOffset = 0.3f; // 최대 시작 딜레이
+    
+    [Header("Cat Sounds")]
+    [SerializeField] AudioClip[] catMeows; // ✅ 고양이 소리 배열
+    [SerializeField] float meowInterval = 0.5f; // ✅ 재생 간격
+    
     Coroutine damageCo;
+    Coroutine soundCo; // ✅ 사운드 코루틴
     Animator anim;
 
     void Awake()
@@ -51,10 +64,67 @@ public class CatFightCloud : MonoBehaviour
         
         Debug.Log($"CatFightCloud: Initialized at {transform.position}, duration: {duration}s");
         
+        // 연기 스프라이트 시작 (각각 랜덤 offset)
+        StartSmokeSprites();
+        
+        // 발톱 스프라이트 시작 (각각 랜덤 offset)
+        StartClawSlashes();
+        
         // 데미지 코루틴 시작
         if (damageCo != null)
             StopCoroutine(damageCo);
         damageCo = StartCoroutine(DamageCo());
+        
+        // ✅ 사운드 코루틴 시작
+        if (soundCo != null)
+            StopCoroutine(soundCo);
+        soundCo = StartCoroutine(SoundCo());
+    }
+
+    void StartSmokeSprites()
+    {
+        if (smokeSprites == null || smokeSprites.Length == 0)
+        {
+            Debug.LogWarning("CatFightCloud: No smoke sprites assigned!");
+            return;
+        }
+
+        for (int i = 0; i < smokeSprites.Length; i++)
+        {
+            if (smokeSprites[i] != null)
+            {
+                // 랜덤 offset (0 ~ maxSmokeStartOffset)
+                float randomDelay = Random.Range(0f, maxSmokeStartOffset);
+                
+                // 연기 시작 (delay, radius)
+                smokeSprites[i].StartSmoke(randomDelay, SizeOfArea);
+                
+                Debug.Log($"CatFightCloud: Smoke {i} started with delay {randomDelay:F2}s, radius {SizeOfArea}");
+            }
+        }
+    }
+
+    void StartClawSlashes()
+    {
+        if (clawSlashes == null || clawSlashes.Length == 0)
+        {
+            Debug.LogWarning("CatFightCloud: No claw slashes assigned!");
+            return;
+        }
+
+        for (int i = 0; i < clawSlashes.Length; i++)
+        {
+            if (clawSlashes[i] != null)
+            {
+                // 랜덤 offset (0 ~ maxClawStartOffset)
+                float randomDelay = Random.Range(0f, maxClawStartOffset);
+                
+                // 발톱 시작 (delay, radius)
+                clawSlashes[i].StartSlash(randomDelay, SizeOfArea);
+                
+                Debug.Log($"CatFightCloud: Claw {i} started with delay {randomDelay:F2}s, radius {SizeOfArea}");
+            }
+        }
     }
 
     IEnumerator DamageCo()
@@ -76,6 +146,38 @@ public class CatFightCloud : MonoBehaviour
         
         // 비활성화
         Deactivate();
+    }
+
+    // ✅ 새 코루틴: 고양이 소리 재생
+    IEnumerator SoundCo()
+    {
+        // 배열이 비어있으면 실행하지 않음
+        if (catMeows == null || catMeows.Length == 0)
+        {
+            Debug.LogWarning("CatFightCloud: No cat meow sounds assigned!");
+            yield break;
+        }
+
+        float elapsedTime = 0f;
+        
+        // 지속 시간 동안 반복
+        while (elapsedTime < Duration)
+        {
+            // 배열에서 랜덤하게 하나 선택
+            int randomIndex = Random.Range(0, catMeows.Length);
+            AudioClip selectedMeow = catMeows[randomIndex];
+            
+            // 사운드 재생
+            if (selectedMeow != null)
+            {
+                SoundManager.instance.Play(selectedMeow);
+                Debug.Log($"CatFightCloud: Playing meow {randomIndex}");
+            }
+            
+            // 다음 재생까지 대기
+            yield return new WaitForSeconds(meowInterval);
+            elapsedTime += meowInterval;
+        }
     }
 
     void CastDamage()
@@ -139,7 +241,39 @@ public class CatFightCloud : MonoBehaviour
 
     void Deactivate()
     {
+        // 모든 연기 스프라이트 정지
+        StopSmokeSprites();
+        
+        // 모든 발톱 스프라이트 정지
+        StopClawSlashes();
+        
         gameObject.SetActive(false);
+    }
+
+    void StopSmokeSprites()
+    {
+        if (smokeSprites == null) return;
+
+        for (int i = 0; i < smokeSprites.Length; i++)
+        {
+            if (smokeSprites[i] != null)
+            {
+                smokeSprites[i].StopSmoke();
+            }
+        }
+    }
+
+    void StopClawSlashes()
+    {
+        if (clawSlashes == null) return;
+
+        for (int i = 0; i < clawSlashes.Length; i++)
+        {
+            if (clawSlashes[i] != null)
+            {
+                clawSlashes[i].StopSlash();
+            }
+        }
     }
 
     void OnDisable()
@@ -150,6 +284,19 @@ public class CatFightCloud : MonoBehaviour
             StopCoroutine(damageCo);
             damageCo = null;
         }
+        
+        // ✅ 사운드 코루틴 정리
+        if (soundCo != null)
+        {
+            StopCoroutine(soundCo);
+            soundCo = null;
+        }
+        
+        // 연기 스프라이트 정리
+        StopSmokeSprites();
+        
+        // 발톱 스프라이트 정리
+        StopClawSlashes();
     }
 
     // Gizmos로 범위 확인

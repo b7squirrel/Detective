@@ -169,6 +169,13 @@ public class LaserPointer : MonoBehaviour
         arrivedCats++;
         Debug.Log($"LaserPointer: Cat arrived! ({arrivedCats}/{numberOfCats})");
         
+        // ✅ 첫 번째 고양이 도착 시 싸움 구름 생성
+        if (arrivedCats == 1)
+        {
+            Debug.Log("LaserPointer: First cat arrived! Creating fight cloud...");
+            CreateFightCloud();
+        }
+        
         // 모든 고양이가 도착했는지 체크
         if (arrivedCats >= numberOfCats && !allCatsArrived)
         {
@@ -177,9 +184,10 @@ public class LaserPointer : MonoBehaviour
         }
     }
 
+    // ✅ 수정: 싸움 구름 생성은 제거, 레이저 포인터만 비활성화
     void OnAllCatsArrived()
     {
-        Debug.Log("LaserPointer: All cats arrived! Creating fight cloud...");
+        Debug.Log("LaserPointer: All cats arrived! Deactivating laser pointer...");
 
         // 레이저 선 비활성화
         if (laserLine != null)
@@ -187,10 +195,7 @@ public class LaserPointer : MonoBehaviour
             laserLine.enabled = false;
         }
 
-        // 싸움 구름 생성
-        CreateFightCloud();
-
-        // 레이저 포인터 즉시 비활성화 (0.2초 딜레이 제거)
+        // 레이저 포인터 비활성화
         gameObject.SetActive(false);
     }
 

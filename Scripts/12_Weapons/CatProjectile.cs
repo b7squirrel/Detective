@@ -13,30 +13,30 @@ public class CatProjectile : MonoBehaviour
     SpriteRenderer spriteRenderer;
 
     void Awake()
+{
+    shadowHeight = GetComponent<ShadowHeight>();
+    spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+    
+    if (shadowHeight == null)
     {
-        shadowHeight = GetComponent<ShadowHeight>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        
-        if (shadowHeight == null)
-        {
-            Debug.LogError("CatProjectile: ShadowHeight component not found!");
-        }
-        
-        if (spriteRenderer == null)
-        {
-            Debug.LogError("CatProjectile: SpriteRenderer not found!");
-        }
-        
-        if (spriteRenderer != null)
-        {
-            bodyTransform = spriteRenderer.transform;
-        }
-        
-        if (shadowHeight != null && shadowHeight.onGroundHitEvent != null)
-        {
-            shadowHeight.onGroundHitEvent.AddListener(OnArrived);
-        }
+        Debug.LogError("CatProjectile: ShadowHeight component not found!");
     }
+    
+    if (spriteRenderer == null)
+    {
+        Debug.LogError("CatProjectile: SpriteRenderer not found!");
+    }
+    
+    if (spriteRenderer != null)
+    {
+        bodyTransform = spriteRenderer.transform;
+    }
+    
+    if (shadowHeight != null && shadowHeight.onGroundHitEvent != null)
+    {
+        shadowHeight.onGroundHitEvent.AddListener(OnArrived);
+    }
+}
 
     void OnEnable()
     {
@@ -139,22 +139,17 @@ public class CatProjectile : MonoBehaviour
         {
             Debug.LogWarning($"CatProjectile {gameObject.name}: targetPointer is null!");
         }
-        
+
         gameObject.SetActive(false);
     }
 
     void OnDisable()
-    {
-        hasArrived = false;
-        isFlying = false;  // 리셋
-        targetPointer = null;
-        
-        if (spriteRenderer != null)
-        {
-            spriteRenderer.enabled = false;
-        }
-    }
-    
+{
+    hasArrived = false;
+    isFlying = false;
+    targetPointer = null;
+}
+
     void OnDestroy()
     {
         if (shadowHeight != null && shadowHeight.onGroundHitEvent != null)

@@ -12,11 +12,14 @@ public class BowProjectile : MonoBehaviour
     public float SizeOfArea { get; set; }
 
     [Header("Ground Settings")]
-    [SerializeField] float groundDuration = 2f; // 지면에 남아있는 시간
+    [SerializeField] float groundDuration = .3f; // 지면에 남아있는 시간
     [SerializeField] float damageInterval = 0.5f; // 데미지 간격
     
     [Header("Target")]
     [SerializeField] LayerMask target;
+
+    [Header("Shadow")]
+    [SerializeField] GameObject shadowObject;
     
     ShadowHeight shadowHeight;
     SpriteRenderer spriteRenderer;
@@ -58,6 +61,9 @@ public class BowProjectile : MonoBehaviour
         {
             previousBodyPosition = bodyTransform.position;
         }
+        // bodyTransform.localRotation = Quaternion.Euler(0, 0, 0);
+
+        ActivateGroundShadow(false);
     }
 
     void FixedUpdate()
@@ -195,5 +201,16 @@ public class BowProjectile : MonoBehaviour
         }
         
         isGrounded = false;
+    }
+
+    public void RandomRotation()
+    {
+        float angle = UnityEngine.Random.Range(-30f, 30f);
+        bodyTransform.localRotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    public void ActivateGroundShadow(bool activate)
+    {
+        shadowObject.SetActive(activate);
     }
 }

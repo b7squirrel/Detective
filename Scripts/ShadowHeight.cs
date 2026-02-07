@@ -52,7 +52,7 @@ public class ShadowHeight : MonoBehaviour
     public void Initialize(Vector2 groundVelocity, float verticalVelocity)
     {
         InitializeCommon();
-        
+
         this.groundVelocity = groundVelocity;
         this.verticalVelocity = verticalVelocity;
         lastInitaialVerticalVelocity = verticalVelocity;
@@ -63,7 +63,7 @@ public class ShadowHeight : MonoBehaviour
     public void InitializeToTarget(Vector2 targetPosition, float trajectoryTime)
     {
         InitializeCommon();
-        
+
         this.startPosition = trnsObject.position;
         this.targetPosition = targetPosition;
         this.trajectoryTime = trajectoryTime;
@@ -78,7 +78,7 @@ public class ShadowHeight : MonoBehaviour
     public void InitializeWithHeight(Vector2 targetPosition, float maxHeight)
     {
         InitializeCommon();
-        
+
         this.startPosition = trnsObject.position;
         this.targetPosition = targetPosition;
         useTargetBasedTrajectory = true;
@@ -100,7 +100,7 @@ public class ShadowHeight : MonoBehaviour
             // trnsObject, trnsBody, trnsShadow 초기화
             trnsObject = transform;
             sprRndBody = GetComponentInChildren<SpriteRenderer>();
-            
+
             trnsBody = sprRndBody.transform;
 
             if (noHeightShadow == false)
@@ -118,7 +118,7 @@ public class ShadowHeight : MonoBehaviour
             }
             isInitialized = true;
         }
-        
+
         IsDone = false;
         isGrounded = false;
         anim = GetComponent<Animator>();
@@ -140,23 +140,29 @@ public class ShadowHeight : MonoBehaviour
     {
         if (!isGrounded && currentTime < trajectoryTime)
         {
-            currentTime += Time.deltaTime;
-            
-            // 포물선 공식을 사용한 위치 계산
+            currentTime += Time.fixedDeltaTime;
+
             float t = currentTime;
-            
+
             // 수평 이동 (등속 운동)
             Vector2 horizontalPos = startPosition + (targetPosition - startPosition) * (t / trajectoryTime);
-            
+
             // 수직 이동 (포물선 운동)
             float verticalPos = startPosition.y + (lastInitaialVerticalVelocity * t) + (0.5f * gravity * t * t);
-            
-            // 실제 위치 적용
-            trnsObject.position = new Vector2(horizontalPos.x, startPosition.y);
-            trnsBody.position = new Vector2(horizontalPos.x, verticalPos);
-            
-            // 목표 지점에 도달했거나 시간이 지났으면 착지
-            if (currentTime >= trajectoryTime || verticalPos <= targetPosition.y)
+
+            // 그림자 위치 업데이트
+            trnsObject.position = new Vector2(horizontalPos.x, horizontalPos.y);
+
+            // 스프라이트가 그림자 아래로 내려가지 않도록 제한
+            float clampedVerticalPos = Mathf.Max(verticalPos, horizontalPos.y);
+            trnsBody.position = new Vector2(horizontalPos.x, clampedVerticalPos);
+
+            // ✅ 새로운 도착 판정: 여러 조건 중 하나라도 만족하면 도착
+            bool arrivedByTime = currentTime >= trajectoryTime * 0.95f; // 시간의 95% 도달
+            bool arrivedByHeight = verticalPos <= targetPosition.y; // 수직 위치 도달
+            bool arrivedByDistance = Vector2.Distance(trnsObject.position, targetPosition) < 2.0f; // 거리 2유닛 이내
+
+            if (arrivedByTime || (arrivedByHeight && arrivedByDistance))
             {
                 trnsObject.position = targetPosition;
                 trnsBody.position = targetPosition;
@@ -166,8 +172,7 @@ public class ShadowHeight : MonoBehaviour
         }
         else if (!IsDone && isGrounded)
         {
-            // 착지 후에는 기존 groundVelocity로 이동 (바운스 등을 위해)
-            trnsObject.position += (Vector3)groundVelocity * Time.deltaTime;
+            trnsObject.position += (Vector3)groundVelocity * Time.fixedDeltaTime;
         }
     }
 
@@ -256,7 +261,7 @@ public class ShadowHeight : MonoBehaviour
             IsDone = true;
             return;
         }
-        
+
         // 바운스 시에는 기존 방식 사용
         useTargetBasedTrajectory = false;
         Initialize(groundVelocity, lastInitaialVerticalVelocity / divisionFactor);
