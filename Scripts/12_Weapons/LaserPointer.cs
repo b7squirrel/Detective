@@ -1,260 +1,251 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class LaserPointer : MonoBehaviour
 {
-    // 데이터
-    CatDuckWeapon weapon;
-    int damage;
-    float knockBackChance;
-    float knockBackSpeedFactor;
-    bool isCriticalDamage;
-    string weaponName;
-    float sizeOfArea;
-    int numberOfCats; // 도착할 고양이 수
-    
-    [Header("Visual Settings")]
-    [SerializeField] SpriteRenderer pointerSprite;
-    [SerializeField] float blinkSpeed = 2f; // 깜빡임 속도
-    
-    [Header("Laser Line Settings")]
-    [SerializeField] LineRenderer laserLine;
-    [SerializeField] Color laserColor = new Color(1f, 0f, 0f, 0.3f); // 빨간색 반투명
-    [SerializeField] float laserWidth = 0.05f; // 레이저 두께
-    
-    [Header("Cat Spawn Settings")]
-    [SerializeField] float spawnDelay = 0.3f; // 레이저 포인터 생성 후 고양이 스폰까지 딜레이
-    
-    [Header("Fight Cloud Settings")]
-    [SerializeField] GameObject fightCloudPrefab; // 싸움 구름 프리펩
-    [SerializeField] float fightCloudDuration = 3f; // 싸움 구름 지속 시간
-    
-    int arrivedCats = 0; // 도착한 고양이 수
-    bool allCatsArrived = false;
-    Transform player;
+    [Header("References")]
+    private CatDuckWeapon parentWeapon;
+
+    [Header("Line Renderer Reference")]
+    [SerializeField] private LineRenderer lineRenderer;
+
+    [Header("Prefab References")]
+    [SerializeField] private GameObject fightCloudPrefab;
+
+    [Header("Laser Visual Effects")]
+    [SerializeField] private AudioClip[] laserSounds;
+
+    [Header("Width Settings")]
+    [SerializeField] private float baseWidth = 0.18f;
+    [SerializeField] private float fireAccentMultiplier = 2.0f;
+    [SerializeField] private float accentDuration = 0.12f;
+
+    [Header("Alpha Settings")]
+    [Range(0.1f, 1.0f)]
+    [SerializeField] private float minAlpha = 0.7f;
+    [Range(0.1f, 1.0f)]
+    [SerializeField] private float maxAlpha = 1.0f;
+
+    [Header("Cat Settings")]
+    private int numberOfCats;
+    private int arrivedCats;
+    private float damage;
+    private float knockback;
+    private float knockbackSpeedFactor;
+    private bool isCriticalDamage;
+    private string weaponDisplayName;
+    private float radius;
+    private int attackCount;
+
+    private bool isActive = false;
+    private Transform laserStartTransform;
+
+    // VFX
+    private Coroutine laserVFXCoroutine;
+    private float fireAccentTimer = 0f;
 
     void Awake()
     {
-        if (pointerSprite == null)
-        {
-            pointerSprite = GetComponentInChildren<SpriteRenderer>();
-        }
-        
-        // LineRenderer 설정
-        if (laserLine == null)
-        {
-            laserLine = GetComponent<LineRenderer>();
-        }
-        
-        if (laserLine != null)
-        {
-            // LineRenderer 초기 설정
-            laserLine.startWidth = laserWidth;
-            laserLine.endWidth = laserWidth;
-            laserLine.startColor = laserColor;
-            laserLine.endColor = laserColor;
-            laserLine.positionCount = 2; // 시작점과 끝점
-            laserLine.useWorldSpace = true; // 월드 좌표 사용
-            
-            // Material 설정 (기본 Sprites/Default 사용)
-            if (laserLine.material == null)
-            {
-                laserLine.material = new Material(Shader.Find("Sprites/Default"));
-            }
-        }
-        
-        // 플레이어 찾기
-        player = Player.instance?.transform;
+        if (lineRenderer == null)
+            lineRenderer = GetComponent<LineRenderer>();
     }
 
-    void OnEnable()
+    public void Initialize(
+        CatDuckWeapon weapon,
+        float dmg,
+        float kb,
+        float kbSpeed,
+        bool isCrit,
+        string displayName,
+        float rad,
+        int catCount)
     {
+        parentWeapon = weapon;
+        laserStartTransform = weapon.transform;
+
+        damage = dmg;
+        knockback = kb;
+        knockbackSpeedFactor = kbSpeed;
+        isCriticalDamage = isCrit;
+        weaponDisplayName = displayName;
+        radius = rad;
+
+        numberOfCats = catCount;
+        attackCount = catCount;
         arrivedCats = 0;
-        allCatsArrived = false;
-        
-        // 플레이어 재확인
-        if (player == null)
-        {
-            player = Player.instance?.transform;
-        }
-        
-        // 레이저 선 활성화
-        if (laserLine != null)
-        {
-            laserLine.enabled = true;
-        }
-        
-        // 깜빡임 시작
-        if (pointerSprite != null)
-        {
-            StartCoroutine(BlinkCo());
-        }
+
+        isActive = true;
+
+        // LineRenderer 초기화
+        lineRenderer.enabled = true;
+        lineRenderer.startWidth = baseWidth;
+        lineRenderer.endWidth = baseWidth;
+
+        // 시작 / 끝 위치
+        lineRenderer.SetPosition(0, laserStartTransform.position);
+        lineRenderer.SetPosition(1, transform.position);
+
+        // 발사 강조
+        fireAccentTimer = accentDuration;
+
+        // VFX 코루틴
+        if (laserVFXCoroutine != null)
+            StopCoroutine(laserVFXCoroutine);
+
+        laserVFXCoroutine = StartCoroutine(LaserVFXLoop());
+
+        PlayLaserSounds();
+        SpawnCats();
     }
 
-    void Update()
+    void LateUpdate()
     {
-        // 레이저 선 업데이트 (고양이들이 모두 도착하기 전까지)
-        if (!allCatsArrived && laserLine != null && player != null)
+        if (!isActive || laserStartTransform == null)
+            return;
+
+        lineRenderer.SetPosition(0, laserStartTransform.position);
+        lineRenderer.SetPosition(1, transform.position);
+    }
+
+    public void OnLaserFire()
+    {
+        fireAccentTimer = accentDuration;
+    }
+
+    IEnumerator LaserVFXLoop()
+    {
+        float time = 0f;
+
+        while (isActive)
         {
-            UpdateLaserLine();
-        }
-    }
+            time += Time.deltaTime;
 
-    void UpdateLaserLine()
-    {
-        // 시작점: 플레이어 위치
-        laserLine.SetPosition(0, player.position);
-        
-        // 끝점: 레이저 포인터 위치
-        laserLine.SetPosition(1, transform.position);
-    }
+            /* ---------- WIDTH ---------- */
+            float pulse =
+                Mathf.Sin(time * 8f) * 0.5f + 0.5f;
 
-    public void Initialize(CatDuckWeapon weapon, int damage, float knockBackChance, float knockBackSpeedFactor, bool isCriticalDamage, string weaponName, float sizeOfArea, int numberOfCats)
-    {
-        this.weapon = weapon;
-        this.damage = damage;
-        this.knockBackChance = knockBackChance;
-        this.knockBackSpeedFactor = knockBackSpeedFactor;
-        this.isCriticalDamage = isCriticalDamage;
-        this.weaponName = weaponName;
-        this.sizeOfArea = sizeOfArea;
-        this.numberOfCats = numberOfCats;
+            float jitter =
+                1f + Random.Range(-0.07f, 0.07f);
 
-        // CRITICAL: 카운터 명시적 리셋
-        arrivedCats = 0;
-        allCatsArrived = false;
+            float width =
+                baseWidth *
+                Mathf.Lerp(0.85f, 1.25f, pulse) *
+                jitter;
 
-        Debug.Log($"LaserPointer: Initialized, waiting for {numberOfCats} cats");
-
-        // 고양이 스폰 (약간의 딜레이 후)
-        Invoke(nameof(SpawnCats), spawnDelay);
-    }
-
-    void SpawnCats()
-    {
-        if (weapon != null)
-        {
-            weapon.SpawnCats(transform.position, this, numberOfCats);
-        }
-    }
-
-    IEnumerator BlinkCo()
-    {
-        while (!allCatsArrived)
-        {
-            // 알파값을 0.3 ~ 1.0 사이로 조절
-            float alpha = Mathf.PingPong(Time.time * blinkSpeed, 0.7f) + 0.3f;
-            
-            if (pointerSprite != null)
+            // 발사 강조
+            if (fireAccentTimer > 0f)
             {
-                Color color = pointerSprite.color;
-                color.a = alpha;
-                pointerSprite.color = color;
+                float t = fireAccentTimer / accentDuration;
+                width *= Mathf.Lerp(fireAccentMultiplier, 1f, 1f - t);
+                fireAccentTimer -= Time.deltaTime;
             }
-            
+
+            lineRenderer.startWidth = width;
+            lineRenderer.endWidth = width;
+
+            /* ---------- ALPHA ---------- */
+            float alphaWave =
+                Mathf.Sin(time * 12f) * 0.5f + 0.5f;
+
+            float noise =
+                Random.Range(-0.15f, 0.15f);
+
+            float alpha =
+                Mathf.Clamp(
+                    Mathf.Lerp(minAlpha, maxAlpha, alphaWave) + noise,
+                    0f,
+                    1f
+                );
+
+            Color c = lineRenderer.startColor;
+            c.a = alpha;
+            lineRenderer.startColor = c;
+            lineRenderer.endColor = c;
+
             yield return null;
         }
-        
-        // 깜빡임 종료 - 완전히 보이게
-        if (pointerSprite != null)
+
+        // 종료 시 리셋
+        lineRenderer.startWidth = baseWidth;
+        lineRenderer.endWidth = baseWidth;
+
+        Color reset = lineRenderer.startColor;
+        reset.a = 1f;
+        lineRenderer.startColor = reset;
+        lineRenderer.endColor = reset;
+    }
+
+    private void PlayLaserSounds()
+    {
+        if (laserSounds == null || laserSounds.Length == 0)
+            return;
+
+        foreach (AudioClip clip in laserSounds)
         {
-            Color color = pointerSprite.color;
-            color.a = 1f;
-            pointerSprite.color = color;
+            if (clip != null)
+                SoundManager.instance.Play(clip);
+        }
+    }
+
+    private void SpawnCats()
+    {
+        if (parentWeapon != null)
+        {
+            parentWeapon.SpawnCats(transform.position, this, numberOfCats);
         }
     }
 
     public void OnCatArrived()
     {
         arrivedCats++;
-        Debug.Log($"LaserPointer: Cat arrived! ({arrivedCats}/{numberOfCats})");
-        
-        // ✅ 첫 번째 고양이 도착 시 싸움 구름 생성
+
         if (arrivedCats == 1)
-        {
-            Debug.Log("LaserPointer: First cat arrived! Creating fight cloud...");
             CreateFightCloud();
-        }
-        
-        // 모든 고양이가 도착했는지 체크
-        if (arrivedCats >= numberOfCats && !allCatsArrived)
-        {
-            allCatsArrived = true;
+
+        if (arrivedCats >= numberOfCats)
             OnAllCatsArrived();
-        }
     }
 
-    // ✅ 수정: 싸움 구름 생성은 제거, 레이저 포인터만 비활성화
-    void OnAllCatsArrived()
+    private void OnAllCatsArrived()
     {
-        Debug.Log("LaserPointer: All cats arrived! Deactivating laser pointer...");
-
-        // 레이저 선 비활성화
-        if (laserLine != null)
-        {
-            laserLine.enabled = false;
-        }
-
-        // 레이저 포인터 비활성화
+        isActive = false;
         gameObject.SetActive(false);
     }
 
-    void CreateFightCloud()
+    private void CreateFightCloud()
     {
-        if (fightCloudPrefab == null)
-        {
-            Debug.LogError("LaserPointer: Fight cloud prefab not assigned!");
+        GameObject cloudObj =
+            GameManager.instance.poolManager.GetMisc(fightCloudPrefab);
+
+        if (cloudObj == null)
             return;
-        }
-        
-        // 싸움 구름 생성
-        GameObject cloudObj = GameManager.instance.poolManager.GetMisc(fightCloudPrefab);
-        
-        if (cloudObj != null)
-        {
-            cloudObj.transform.position = transform.position;
-            
-            // 싸움 구름 초기화
-            CatFightCloud fightCloud = cloudObj.GetComponent<CatFightCloud>();
-            if (fightCloud != null)
-            {
-                fightCloud.Initialize(damage, knockBackChance, knockBackSpeedFactor, isCriticalDamage, weaponName, sizeOfArea, fightCloudDuration);
-            }
-            else
-            {
-                Debug.LogError("LaserPointer: CatFightCloud component not found!");
-            }
-        }
-    }
 
-    void Deactivate()
-    {
-        gameObject.SetActive(false);
+        cloudObj.transform.position = transform.position;
+
+        CatFightCloud cloud = cloudObj.GetComponent<CatFightCloud>();
+        if (cloud != null)
+        {
+            cloud.Initialize(
+                attackCount,
+                damage,
+                radius,
+                false,
+                "Enemy",
+                3f,
+                3f
+            );
+        }
     }
 
     void OnDisable()
     {
-        // Invoke 정리
-        CancelInvoke();
-        
-        // 코루틴 정리
-        StopAllCoroutines();
-        
-        // 레이저 선 비활성화
-        if (laserLine != null)
-        {
-            laserLine.enabled = false;
-        }
-        
-        // 상태 리셋
+        isActive = false;
         arrivedCats = 0;
-        allCatsArrived = false;
-    }
 
-    // Gizmos로 범위 확인
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, sizeOfArea);
+        if (laserVFXCoroutine != null)
+        {
+            StopCoroutine(laserVFXCoroutine);
+            laserVFXCoroutine = null;
+        }
     }
 }
