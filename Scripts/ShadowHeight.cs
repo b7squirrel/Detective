@@ -290,6 +290,14 @@ public class ShadowHeight : MonoBehaviour
             sprRndshadow.color = new Color(0, 0, 0, 0f);
         }
     }
+    public void ShowHeightShadow()
+    {
+        if (noHeightShadow) return;
+        if (sprRndshadow != null)
+        {
+            sprRndshadow.color = new Color(0, 0, 0, 0.25f); // 원래 알파값으로 복구
+        }
+    }
 
     public void SetToKinematic()
     {

@@ -1,6 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// 화살은 처음 지면에 닿을 때 큰 데미지를 줌.
+/// 지면에 남아 있는 동안 데미지를 주기는 하지만 크게 의미가 없도록 빨리 사라지도록 함
+/// party 오리와 차별. 파티 오리는 지면에 있을 때 데미지가 의미가 있고 데미지가 작음.
+/// </summary>
 public class BowProjectile : MonoBehaviour
 {
     // 데이터
@@ -14,38 +19,28 @@ public class BowProjectile : MonoBehaviour
     [Header("Ground Settings")]
     [SerializeField] float groundDuration = .3f; // 지면에 남아있는 시간
     [SerializeField] float damageInterval = 0.5f; // 데미지 간격
-    
+
     [Header("Target")]
     [SerializeField] LayerMask target;
 
     [Header("Shadow")]
     [SerializeField] GameObject shadowObject;
-    
+
     ShadowHeight shadowHeight;
     SpriteRenderer spriteRenderer;
     bool isGrounded = false;
-    
+
     // 회전을 위한 변수
     Vector3 previousBodyPosition;
     Transform bodyTransform; // ShadowHeight의 trnsBody
-    
+
     Coroutine groundDamageCo;
 
     void Awake()
     {
         shadowHeight = GetComponent<ShadowHeight>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        
-        if (shadowHeight == null)
-        {
-            Debug.LogError("BowProjectile: ShadowHeight component not found!");
-        }
-        
-        if (spriteRenderer == null)
-        {
-            Debug.LogError("BowProjectile: SpriteRenderer not found!");
-        }
-        
+
         // SpriteRenderer의 Transform을 bodyTransform으로 사용
         if (spriteRenderer != null)
         {
@@ -56,13 +51,16 @@ public class BowProjectile : MonoBehaviour
     void OnEnable()
     {
         isGrounded = false;
-        
+
         if (bodyTransform != null)
         {
             previousBodyPosition = bodyTransform.position;
         }
-        // bodyTransform.localRotation = Quaternion.Euler(0, 0, 0);
 
+        // 공중 그림자 다시 보이기
+        shadowHeight?.ShowHeightShadow();
+
+        // 지면 그림자 비활성화
         ActivateGroundShadow(false);
     }
 
@@ -74,7 +72,7 @@ public class BowProjectile : MonoBehaviour
         if (!isGrounded)
         {
             RotateArrow();
-            
+
             // 착지 체크
             if (shadowHeight.IsDone)
             {
@@ -98,20 +96,20 @@ public class BowProjectile : MonoBehaviour
 
         // 현재 body 위치
         Vector3 currentBodyPosition = bodyTransform.position;
-        
+
         // 이동 방향 계산 (velocity)
         Vector2 velocity = (currentBodyPosition - previousBodyPosition) / Time.fixedDeltaTime;
-        
+
         // velocity가 충분히 크면 회전
         if (velocity.magnitude > 0.5f)
         {
             // 각도 계산 (화살촉이 이동 방향을 향하도록)
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-            
+
             // 로컬 rotation 사용
             bodyTransform.localRotation = Quaternion.Euler(0, 0, angle);
         }
-        
+
         // 이전 위치 업데이트
         previousBodyPosition = currentBodyPosition;
     }
@@ -119,9 +117,10 @@ public class BowProjectile : MonoBehaviour
     void OnGrounded()
     {
         isGrounded = true;
-        
-        Debug.Log("BowProjectile: Arrow landed, starting ground damage");
-        
+
+        // 지면 그림자 활성화
+        ActivateGroundShadow(true);
+
         // 지면 데미지 코루틴 시작
         if (groundDamageCo != null)
             StopCoroutine(groundDamageCo);
@@ -131,18 +130,18 @@ public class BowProjectile : MonoBehaviour
     IEnumerator GroundDamageCo()
     {
         float elapsedTime = 0f;
-        
+
         // 지속 시간 동안 반복
         while (elapsedTime < groundDuration)
         {
             // 주변 적들에게 데미지
             CastGroundDamage();
-            
+
             // 다음 데미지까지 대기
             yield return new WaitForSeconds(damageInterval);
             elapsedTime += damageInterval;
         }
-        
+
         // 비활성화
         Deactivate();
     }
@@ -150,16 +149,16 @@ public class BowProjectile : MonoBehaviour
     void CastGroundDamage()
     {
         Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, SizeOfArea, target);
-        
+
         for (int i = 0; i < hit.Length; i++)
         {
             Transform enemy = hit[i].GetComponent<Transform>();
-            
+
             if (enemy.GetComponent<Idamageable>() != null)
             {
                 if (enemy.GetComponent<DestructableObject>() == null)
                     PostMessage(Damage, enemy.transform.position);
-                
+
                 GameObject hitEffectObj = GetComponent<HitEffects>()?.hitEffect;
                 enemy.GetComponent<Idamageable>().TakeDamage(
                     Damage,
@@ -168,7 +167,7 @@ public class BowProjectile : MonoBehaviour
                     transform.position,
                     hitEffectObj
                 );
-                
+
                 // 데미지 기록
                 if (!string.IsNullOrEmpty(WeaponName))
                 {
@@ -192,14 +191,14 @@ public class BowProjectile : MonoBehaviour
     {
         // Invoke 정리
         CancelInvoke(nameof(Deactivate));
-        
+
         // 코루틴 정리
         if (groundDamageCo != null)
         {
             StopCoroutine(groundDamageCo);
             groundDamageCo = null;
         }
-        
+
         isGrounded = false;
     }
 
