@@ -1,5 +1,4 @@
 using UnityEngine;
-
 /// <summary>
 /// 일정 회수만큼 공격을 받으면 파괴된다.
 /// 파괴 전까지 맞을 때마다 특정 아이템을 드롭
@@ -10,85 +9,74 @@ public class DestructableObject : MonoBehaviour, Idamageable
     [SerializeField] int hp;
     [SerializeField] GameObject hitEffect;
     [SerializeField] GameObject destructableDieEffect;
-    int currentHp;
-    Animator anim;
-
-    WallManager wallManager;
-
-    void OnEnable()
+int currentHp;
+Animator anim;
+WallManager wallManager;
+void OnEnable()
     {
-        currentHp = hp;
-        if (anim == null)
+currentHp = hp;
+if (anim == null)
         {
-            anim = GetComponent<Animator>();
+anim = GetComponent<Animator>();
         }
     }
-
-    private void Update()
+private void Update()
     {
-        if (IsOutOfRange())
+if (IsOutOfRange())
         {
-            DestroyObjectWithoutDrop();
+DestroyObjectWithoutDrop();
         }
     }
-
-    public void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
+public void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
     {
-        // knockBackChance값을 받아오지만 쓰지는 않는다
-        currentHp--;
-
-        GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
-        if (effect != null)
+// knockBackChance값을 받아오지만 쓰지는 않는다
+currentHp--;
+GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
+if (effect != null)
         {
-            effect.transform.position = transform.position;
-            effect.transform.localScale = Vector2.one * 1.3f;
+effect.transform.position = transform.position;
+effect.transform.localScale = Vector2.one * 1.3f;
         }
-
-        if (currentHp <= 0)
+if (currentHp <= 0)
         {
-            DestroyObject();
-            return;
+DestroyObject();
+return;
         }
-        if(anim != null)
+if(anim != null)
         {
-            anim.SetTrigger("Hit");
+anim.SetTrigger("Hit");
         }
-        // DropItem();
+// DropItem();
     }
-
-    void DropItem()
+void DropItem()
     {
-        DropOnDestroy dropOnDestroy = GetComponent<DropOnDestroy>();
-        
-        GetComponent<DropOnDestroy>().CheckDrop();
+DropOnDestroy dropOnDestroy = GetComponent<DropOnDestroy>();
+GetComponent<DropOnDestroy>().CheckDrop();
     }
-
-    void DestroyObject()
+void DestroyObject()
     {
-        GameObject dieEffect = GameManager.instance.poolManager.GetMisc(destructableDieEffect);
-        if (dieEffect == null) return; // 갯수 제한에 걸려서 더 이상 풀에서 꺼낼 수 없으면 이펙트 표시 안함
-        dieEffect.transform.position = transform.position;
-        //GetComponent<DropOnDestroy>().DropMultipleObjects();
-        DropItem();
-        gameObject.SetActive(false);
+GameObject dieEffect = GameManager.instance.poolManager.GetMisc(destructableDieEffect);
+if (dieEffect == null) return; // 갯수 제한에 걸려서 더 이상 풀에서 꺼낼 수 없으면 이펙트 표시 안함
+dieEffect.transform.position = transform.position;
+//GetComponent<DropOnDestroy>().DropMultipleObjects();
+DropItem();
+gameObject.SetActive(false);
     }
-    void DestroyObjectWithoutDrop()
+void DestroyObjectWithoutDrop()
     {
-        gameObject.SetActive(false);
+gameObject.SetActive(false);
     }
-
-    void OnTriggerEnter2D(Collider2D collision)
+void OnTriggerEnter2D(Collider2D collision)
 {
-    if (collision.gameObject.CompareTag("Player"))
+if (collision.gameObject.CompareTag("Player"))
     {
-        DestroyObject();
+DestroyObject();
     }
 }
-    bool IsOutOfRange()
+bool IsOutOfRange()
     {
-        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnConst = wallManager.GetSpawnAreaConstant();
-
-        return new Equation().IsOutOfRange(transform.position, spawnConst);
+if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
+float spawnConst = wallManager.GetSpawnAreaConstant();
+return new Equation().IsOutOfRange(transform.position, spawnConst);
     }
 }

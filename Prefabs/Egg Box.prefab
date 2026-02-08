@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 76857048987349969}
   - component: {fileID: 76857048987349975}
   - component: {fileID: 5414075903067003892}
-  - component: {fileID: 4056005053656988688}
   - component: {fileID: 2451556510503288373}
   - component: {fileID: 6653244738968789576}
   - component: {fileID: 5996623520424493420}
@@ -51,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4498907a34de1624496d744fb1dc7ba4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1
+  hp: 0
   hitEffect: {fileID: 2366964317618179334, guid: ecf40b35957bf3548abf0863a7f354d5, type: 3}
   destructableDieEffect: {fileID: 8774143540521336711, guid: da27312d14056244ca3be2c1ff5c707f, type: 3}
 --- !u!114 &5414075903067003892
@@ -68,33 +67,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Key>k__BackingField: Chest_Egg
   maxNum: 0
---- !u!50 &4056005053656988688
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76857048987349971}
-  m_BodyType: 2
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!58 &2451556510503288373
 CircleCollider2D:
   m_ObjectHideFlags: 0
