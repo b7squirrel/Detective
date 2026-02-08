@@ -26,20 +26,23 @@ public class BowProjectile : MonoBehaviour
     [Header("Shadow")]
     [SerializeField] GameObject shadowObject;
 
+    [Header("Arrow Sprite")]
+    [SerializeField] SpriteRenderer spriteRenderer;
+
     ShadowHeight shadowHeight;
-    SpriteRenderer spriteRenderer;
     bool isGrounded = false;
 
     // 회전을 위한 변수
     Vector3 previousBodyPosition;
     Transform bodyTransform; // ShadowHeight의 trnsBody
+    Quaternion landingRotation; // ✅ 착지 각도 저장용
+    Quaternion previousRotation; // ✅ 직전 프레임의 각도 저장
 
     Coroutine groundDamageCo;
 
     void Awake()
     {
         shadowHeight = GetComponent<ShadowHeight>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         // SpriteRenderer의 Transform을 bodyTransform으로 사용
         if (spriteRenderer != null)
@@ -68,17 +71,23 @@ public class BowProjectile : MonoBehaviour
     {
         if (shadowHeight == null) return;
 
-        // 착지 전에만 회전
-        if (!isGrounded)
+    // 착지 전에만 회전
+    if (!isGrounded)
+    {
+        // ✅ 회전하기 전에 현재 각도를 저장
+        if (bodyTransform != null)
         {
-            RotateArrow();
-
-            // 착지 체크
-            if (shadowHeight.IsDone)
-            {
-                OnGrounded();
-            }
+            previousRotation = bodyTransform.localRotation;
         }
+        
+        RotateArrow();
+
+        // 착지 체크
+        if (shadowHeight.IsDone)
+        {
+            OnGrounded();
+        }
+    }
     }
 
     void LateUpdate()
@@ -86,7 +95,7 @@ public class BowProjectile : MonoBehaviour
         // 착지 후에는 수직으로 고정
         if (isGrounded && bodyTransform != null)
         {
-            bodyTransform.localRotation = Quaternion.Euler(0, 0, -90f); // 아래 방향
+            bodyTransform.localRotation = landingRotation;
         }
     }
 
@@ -118,13 +127,20 @@ public class BowProjectile : MonoBehaviour
     {
         isGrounded = true;
 
-        // 지면 그림자 활성화
-        ActivateGroundShadow(true);
+    // ✅ 직전 프레임의 회전 각도 사용 (착지 순간의 급격한 변화 방지)
+    if (bodyTransform != null)
+    {
+        landingRotation = previousRotation;
+        bodyTransform.localRotation = landingRotation; // 즉시 적용
+    }
 
-        // 지면 데미지 코루틴 시작
-        if (groundDamageCo != null)
-            StopCoroutine(groundDamageCo);
-        groundDamageCo = StartCoroutine(GroundDamageCo());
+    // 지면 그림자 활성화
+    ActivateGroundShadow(true);
+
+    // 지면 데미지 코루틴 시작
+    if (groundDamageCo != null)
+        StopCoroutine(groundDamageCo);
+    groundDamageCo = StartCoroutine(GroundDamageCo());
     }
 
     IEnumerator GroundDamageCo()
