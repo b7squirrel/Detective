@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Zap 0
+  m_EditorClassIdentifier: 
+  grade: 0
+  Name: Zap
+  DisplayName: "\uD0D0\uC0C9\uBE54 \uC624\uB9AC"
+  SynergyDispName: "\uD0D0\uC0C9\uD0D0\uC0C9\uBE54 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 3c7324c4ad55bb644b812f44cd736748, type: 3}
+  SynergyWeapon: Zap Synergy
+  SynergyItem: {fileID: 11400000, guid: 20155fcb50cd1dc4fb5339ff2364c93a, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 6822868710250514242, guid: f71c0c1781d42624eae696cc65fa84fd, type: 3}
+  stats:
+    damage: 4
+    timeToAttack: 2
+    numberOfAttacks: 1
+    sizeOfArea: 1
+    projectileSpeed: 16
+    knockBackChance: 2
+    currentLevel: 5
+  weaponBasePrefab: {fileID: 1303675601332995048, guid: b84a083a7d41048e4a22df4d306bbeea, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 0b15a387928784658abc09b1d3a194ee, type: 2}
+  - {fileID: 11400000, guid: cc9d090f504e74feda75b9d9fef8d42a, type: 2}
+  - {fileID: 11400000, guid: 236ff1f4912244627b3a044b1e45ed47, type: 2}
+  - {fileID: 11400000, guid: d5e87debca67847f4b401b8d7bb4892b, type: 2}
+  - {fileID: 11400000, guid: 70a88fe714ef748f98d0c3e983df5578, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 4609e0cbf03d84544acdc1690e9995ce, type: 2}
+  equipmentType: 2

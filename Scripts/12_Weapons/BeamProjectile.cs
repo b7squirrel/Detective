@@ -121,7 +121,7 @@ public class BeamProjectile : ProjectileBase
         // 에디터에서는 씬 뷰에서 보이면 보이는 것으로 간주하므로 테스트가 불편함
         if (_object.transform.GetComponentInChildren<SpriteRenderer>().isVisible == false)
         {
-            Debug.Log("out of the camera");
+            Logger.Log("out of the camera");
             return;
         }
 

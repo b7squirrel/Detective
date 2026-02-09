@@ -35,12 +35,10 @@ public class CatDuckWeapon : WeaponBase
         {
             halfHeight = cam.orthographicSize;
             halfWidth = halfHeight * cam.aspect;
-
-            Debug.Log($"CatDuckWeapon: Screen bounds calculated - halfWidth={halfWidth}, halfHeight={halfHeight}");
         }
         else
         {
-            Debug.LogError("CatDuckWeapon: Main camera not found!");
+            Logger.LogError("CatDuckWeapon: Main camera not found!");
         }
     }
 
@@ -67,15 +65,12 @@ public class CatDuckWeapon : WeaponBase
         // 타겟 위치가 유효하지 않으면 취소
         if (targetPosition == Vector2.zero)
         {
-            Debug.Log("CatDuckWeapon: No valid target position, canceling attack");
             return;
         }
 
         // 레이저 포인터 생성
         GameObject laserPointerPrefab = isSynergyWeaponActivated ? synergyLaserPointerPrefab : this.laserPointerPrefab;
         GameObject laserObj = GameManager.instance.poolManager.GetMisc(laserPointerPrefab);
-
-        Debug.Log($"ShootLaserPointer: laserObj = {(laserObj != null ? laserObj.name : "NULL")}");
 
         if (laserObj != null)
         {
@@ -84,17 +79,14 @@ public class CatDuckWeapon : WeaponBase
             // 레이저 포인터 설정
             LaserPointer laserPointer = laserObj.GetComponent<LaserPointer>();
 
-            Debug.Log($"ShootLaserPointer: laserPointer component = {(laserPointer != null ? "FOUND" : "NULL")}");
-
             if (laserPointer != null)
             {
                 GetAttackParameters();
-                Debug.Log($"ShootLaserPointer: About to call Initialize with {weaponStats.numberOfAttacks} cats");
                 laserPointer.Initialize(this, damage, knockback, knockbackSpeedFactor, isCriticalDamage, weaponData.DisplayName, weaponStats.sizeOfArea, weaponStats.numberOfAttacks);
             }
             else
             {
-                Debug.LogError("CatDuckWeapon: LaserPointer component not found!");
+                Logger.LogError("CatDuckWeapon: LaserPointer component not found!");
             }
 
             // 사운드 재생
@@ -102,25 +94,21 @@ public class CatDuckWeapon : WeaponBase
         }
         else
         {
-            Debug.LogError("CatDuckWeapon: Failed to get LaserPointer from pool!");
+            Logger.LogError("CatDuckWeapon: Failed to get LaserPointer from pool!");
         }
-
-        Debug.Log($"CatDuckWeapon: Laser pointer shot at {targetPosition}");
     }
 
     public void SpawnCats(Vector2 targetPosition, LaserPointer pointer, int numberOfCats)
     {
-        Debug.Log($"SpawnCats called: numberOfCats={numberOfCats}, catSpawnDelay={catSpawnDelay}");
+        Logger.Log($"SpawnCats called: numberOfCats={numberOfCats}, catSpawnDelay={catSpawnDelay}");
 
         if (catSpawnDelay > 0f)
         {
-            Debug.Log("Using coroutine spawn (delayed)");
             // 딜레이가 있으면 코루틴 사용
             StartCoroutine(SpawnCatsCo(targetPosition, pointer, numberOfCats));
         }
         else
         {
-            Debug.Log("Using immediate spawn (all at once)");
             // 딜레이가 0이면 즉시 모두 스폰
             SpawnCatsImmediately(targetPosition, pointer, numberOfCats);
         }
@@ -128,39 +116,30 @@ public class CatDuckWeapon : WeaponBase
 
     void SpawnCatsImmediately(Vector2 targetPosition, LaserPointer pointer, int numberOfCats)
     {
-        Debug.Log($"SpawnCatsImmediately START: spawning {numberOfCats} cats");
-
         for (int i = 0; i < numberOfCats; i++)
         {
             // 화면 밖 랜덤 위치에서 스폰
             Vector2 spawnPosition = GetOffScreenPosition(targetPosition);
 
-            Debug.Log($"Cat {i + 1}: Requesting from pool...");
-
             // 고양이 생성
             GameObject catObj = GameManager.instance.poolManager.GetMisc(catProjectilePrefab);
 
-            Debug.Log($"Cat {i + 1}: Got {(catObj != null ? catObj.name : "NULL")} from pool");
 
             if (catObj != null)
             {
                 catObj.transform.position = spawnPosition;
-                Debug.Log($"Cat {i + 1}: Position set to {spawnPosition}");
 
                 // 고양이 초기화 - 모두 레이저 포인터로 날아감
                 CatProjectile catProjectile = catObj.GetComponent<CatProjectile>();
 
-                Debug.Log($"Cat {i + 1}: GetComponent returned {(catProjectile != null ? "FOUND" : "NULL")}");
 
                 if (catProjectile != null)
                 {
-                    Debug.Log($"Cat {i + 1}: About to call Initialize");
                     catProjectile.Initialize(targetPosition, pointer, catTrajectoryTime);
-                    Debug.Log($"Cat {i + 1}: Initialize returned");
                 }
                 else
                 {
-                    Debug.LogError($"Cat {i + 1}: CatProjectile component not found!");
+                    Logger.LogError($"Cat {i + 1}: CatProjectile component not found!");
                 }
 
                 // 고양이 소리 (처음 4마리만, 배열에서 랜덤 선택)
@@ -170,15 +149,12 @@ public class CatDuckWeapon : WeaponBase
                     SoundManager.instance.Play(catMeows[index]);
                 }
 
-                Debug.Log($"CatDuckWeapon: Cat {i + 1}/{numberOfCats} spawned IMMEDIATELY at {spawnPosition}");
             }
             else
             {
-                Debug.LogError($"Failed to spawn cat {i + 1}!");
+                Logger.LogError($"Failed to spawn cat {i + 1}!");
             }
         }
-
-        Debug.Log($"SpawnCatsImmediately END: all {numberOfCats} cats spawned");
     }
     IEnumerator SpawnCatsCo(Vector2 targetPosition, LaserPointer pointer, int numberOfCats)
     {
@@ -207,8 +183,6 @@ public class CatDuckWeapon : WeaponBase
                     int index = UnityEngine.Random.Range(0, catMeows.Length);
                     SoundManager.instance.Play(catMeows[index]);
                 }
-
-                Debug.Log($"CatDuckWeapon: Cat {i + 1}/{numberOfCats} spawned at {spawnPosition}");
             }
 
             // 다음 고양이까지 딜레이

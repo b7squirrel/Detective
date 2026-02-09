@@ -39,6 +39,7 @@ public class LaserPointer : MonoBehaviour
 
     private bool isActive = false;
     private Transform laserStartTransform;
+    private string weaponName;
 
     // VFX
     private Coroutine laserVFXCoroutine;
@@ -62,6 +63,7 @@ public class LaserPointer : MonoBehaviour
     {
         parentWeapon = weapon;
         laserStartTransform = weapon.transform;
+        weaponName = weapon.weaponData.DisplayName;
 
         damage = dmg;
         knockback = kb;
@@ -230,7 +232,7 @@ public class LaserPointer : MonoBehaviour
                 damage,
                 radius,
                 false,
-                "Enemy",
+                weaponName,
                 3f,
                 3f
             );

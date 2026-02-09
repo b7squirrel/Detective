@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1303675601332995048
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8382649147617918524}
+  - component: {fileID: 6036268215193887027}
+  m_Layer: 0
+  m_Name: wp_zap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8382649147617918524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303675601332995048}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6036268215193887027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303675601332995048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca5cd543b638643558667e403e87cdab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponData: {fileID: 0}
+  weaponStats:
+    damage: 0
+    timeToAttack: 0
+    numberOfAttacks: 0
+    sizeOfArea: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    currentLevel: 0
+  weaponName: 
+  knockbackSpeedFactor: 0
+  anim: {fileID: 0}
+  animExtra: {fileID: 0}
+  ShootPoint: {fileID: 0}
+  EffectPoint: {fileID: 0}
+  weaponTools: {fileID: 0}
+  weaponToolsExtra: {fileID: 0}
+  ShootPointExtra: {fileID: 0}
+  EffectPointExtra: {fileID: 0}
+  <NeedParent>k__BackingField: 0
+  enemy:
+    serializedVersion: 2
+    m_Bits: 16576
+  zapProjectile: {fileID: 1776915766963154427, guid: 5e425b5c9716142ac8c74b6e14a95620, type: 3}
+  projectiles: []
+  duration: 0
+  normalDuration: 2
+  synergyDuration: 3
+  muzzleFlash: {fileID: 8768899528330849031, guid: 00c2630806bdb9d479d8408f23e2d02d, type: 3}
+  zapShoot: {fileID: 8300000, guid: 4b303bd6d007ef3409bc02fd45f4e741, type: 3}
