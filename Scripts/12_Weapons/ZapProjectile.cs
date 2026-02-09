@@ -16,6 +16,8 @@ public class ZapProjectile : ProjectileBase
     [SerializeField] float baseWidth = 0.1f; // 기본 굵기
     [SerializeField] float maxWidth = 0.5f; //최대 굵기
     [SerializeField] float baseDamage = 4f; //기준 데미지
+    [SerializeField] Color lightColor = new Color(0.5f, 0.8f, 1f); //추가
+    [SerializeField] Color darkColor = new Color(0f, 0f, 1f); // 추가
 
     [Header("Layers")]
     [SerializeField] LayerMask destructables;
@@ -179,12 +181,16 @@ public class ZapProjectile : ProjectileBase
         laserLine.SetPosition(0, startPos);
         laserLine.SetPosition(1, endPos);
 
-        // ✅ 데미지에 비례하여 굵기 조절
+        // 데미지에 비례하여 굵기 조절
         float damageRatio = Mathf.Clamp(Damage / baseDamage, 1f, maxWidth / baseWidth);
         laserLine.widthMultiplier = baseWidth * damageRatio;
 
-        // ✨ 옵션: 데미지에 따라 색상 변화 (노랑 → 빨강)
-        Color laserColor = Color.Lerp(Color.yellow, Color.red, (damageRatio - 1f) / 4f);
+        // Inspector에서 설정한 색상 사용
+        float colorT = Mathf.Clamp01((damageRatio - 1f) / 4f);
+        Color laserColor = Color.Lerp(lightColor, darkColor, colorT);
+
+        laserLine.startColor = new Color(laserColor.r, laserColor.g, laserColor.b, 1);
+        laserLine.endColor = new Color(laserColor.r, laserColor.g, laserColor.b, 1);
 
         // 레이저 보이기
         laserLine.startColor = new Color(laserLine.startColor.r, laserLine.startColor.g, laserLine.startColor.b, 1);
