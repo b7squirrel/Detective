@@ -13,7 +13,8 @@ public class ZapWeapon : WeaponBase
     [SerializeField] float synergyDuration = 3f;
 
     [SerializeField] GameObject muzzleFlash;
-    GameObject muzzle;
+    GameObject muzzle; // muzzleFlash를 생성해서 담아두는 곳
+    GameObject muzzle2; // muzzleFlash를 생성해서 담아두는 곳
     [SerializeField] AudioClip zapShoot;
     public AudioClip ZapShootSound => zapShoot; // ← 추가: ZapProjectile이 접근할 수 있도록
 
@@ -113,16 +114,21 @@ public class ZapWeapon : WeaponBase
         if (muzzle == null)
         {
             muzzle = GameManager.instance.poolManager.GetMisc(muzzleFlash);
+            muzzle2 = GameManager.instance.poolManager.GetMisc(muzzleFlash);
+
             if (muzzle != null)
             {
-                muzzle.transform.parent = ShootPoint;
-                muzzle.transform.position = ShootPoint.position;
+                muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+                muzzle.transform.position = ShootPoint.position - new Vector3(.2f, 0, 0);
+            }
+            if (muzzle2 != null)
+            {
+                muzzle2.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+                muzzle2.transform.position = ShootPoint.position - new Vector3(-.2f, 0, 0);
             }
         }
-        if (muzzle != null)
-        {
-            muzzle.gameObject.SetActive(true);
-        }
+        muzzle.gameObject.SetActive(true);
+        muzzle2.gameObject.SetActive(true);
 
         isProjectileActive = true;
         duration = isSynergyWeaponActivated ? synergyDuration : normalDuration;
@@ -143,9 +149,14 @@ public class ZapWeapon : WeaponBase
         isProjectileActive = false;
         timer = weaponStats.timeToAttack;
 
+        // 두 개의 muzzle을 모두 비활성화
         if (muzzle != null)
         {
             muzzle.gameObject.SetActive(false);
+        }
+        if (muzzle2 != null)  // ← 추가
+        {
+            muzzle2.gameObject.SetActive(false);  // ← 추가
         }
     }
 
