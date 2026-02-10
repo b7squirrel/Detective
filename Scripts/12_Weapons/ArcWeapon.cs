@@ -170,7 +170,7 @@ public class ArcWeapon : WeaponBase
         // sound
         if (arcShoot != null)
         {
-            SoundManager.instance.Play(arcShoot);
+            SoundManager.instance.PlaySoundWith(arcShoot, .7f, true, 0f);
         }
     }
 

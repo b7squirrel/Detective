@@ -232,23 +232,23 @@ MonoBehaviour:
   <TimeToLive>k__BackingField: 3
   switchTargetTime: 0.3
   damageInterval: 0.2
-  maxTargetDistance: 15
+  maxTargetDistance: 50
   switchTargetTimeSynergy: 0.3
   damageIntervalSynergy: 0.1
   laserLineOuter: {fileID: 4841000527666627922}
   laserLineInner: {fileID: 4100468338058277459}
   hitEffect: {fileID: 1626888839800411657}
-  baseWidth: 0.1
+  baseWidth: 0.15
   maxWidth: 0.5
-  baseDamage: 4
+  baseDamage: 3
   lightColor: {r: 1, g: 1, b: 1, a: 1}
-  darkColor: {r: 0.33490568, g: 0.33490568, b: 1, a: 0.36078432}
+  darkColor: {r: 0.088113785, g: 0, b: 1, a: 0.36078432}
   widthOscillationSpeed: 20
   widthOscillationAmount: 0.6
   innerWidthRatio: 0.3
   destructables:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   targetSwitchSound: {fileID: 8300000, guid: 1066028608d64d04c9c42a20185378ba, type: 3}
 --- !u!1 &2398110454093122156
 GameObject:

@@ -48,14 +48,11 @@ public class ArcProjectile : ProjectileBase
 {
     LineRenderer[] lineRenderers = GetComponentsInChildren<LineRenderer>();
     
-    Logger.Log($"[ArcProjectile] Awake - Found {lineRenderers.Length} LineRenderers");
-    
     if (lineRenderers.Length >= 2)
     {
         outerLine = lineRenderers[0];
         innerLine = lineRenderers[1];
         
-        Logger.Log($"[ArcProjectile] Outer: {outerLine != null}, Inner: {innerLine != null}");
     }
     else
     {

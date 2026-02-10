@@ -9,12 +9,15 @@ public class BowWeapon : WeaponBase
     [SerializeField] AudioClip shoot;
     
     [Header("Offset Settings")]
-    [SerializeField] float positionOffsetRange = 2.0f; // 타겟 위치 주변 반경
-    [SerializeField] float directionOffsetAngle = 15f; // 방향 각도 offset (±도)
+    [SerializeField] float positionOffsetRange = 0.5f; // 타겟 위치 주변 반경 (줄임)
+    [SerializeField] float directionOffsetAngle = 5f; // 방향 각도 offset (줄임)
     [SerializeField] float shotDelay = 0.1f; // 화살 간 발사 간격
     
     [Header("Projectile Settings")]
     [SerializeField] float verticalVelocity = 15f; // 초기 수직 속도 (높을수록 높이 올라감)
+    
+    [Header("No Target Settings")]
+    [SerializeField] float randomShotRadius = 5f; // 적이 없을 때 발사 반경
     
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
@@ -22,17 +25,10 @@ public class BowWeapon : WeaponBase
     protected override void Attack()
     {
         base.Attack();
-        
-        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(1);
-        if (closestEnemyPosition == null || closestEnemyPosition.Count == 0) 
-            return;
-        if (closestEnemyPosition[0] == Vector2.zero)
-            return;
-        
-        StartCoroutine(AttackCo(closestEnemyPosition[0]));
+        StartCoroutine(AttackCo());
     }
 
-    IEnumerator AttackCo(Vector2 targetPosition)
+    IEnumerator AttackCo()
     {
         GameObject projectilePrefab = isSynergyWeaponActivated ? synergyProjectilePrefab : arrowProjectilePrefab;
         
@@ -41,6 +37,9 @@ public class BowWeapon : WeaponBase
             AnimShoot();
             GetAttackParameters();
             SoundManager.instance.Play(shoot);
+            
+            // 🔥 각 화살마다 새로운 타겟 선택
+            Vector2 targetPosition = SelectRandomTarget();
             
             // 랜덤 offset 적용된 타겟 위치 계산
             Vector2 randomOffset = Random.insideUnitCircle * positionOffsetRange;
@@ -69,7 +68,7 @@ public class BowWeapon : WeaponBase
 
                 // 수평 속도 = offset된 방향 * weaponStats.projectileSpeed 사용
                 float offsetSpeedFactor = weaponStats.projectileSpeed * .2f;
-                float speed = weaponStats.projectileSpeed + UnityEngine.Random.Range(-offsetSpeedFactor,offsetSpeedFactor);
+                float speed = weaponStats.projectileSpeed + UnityEngine.Random.Range(-offsetSpeedFactor, offsetSpeedFactor);
                 Vector2 groundVelocity = offsetDirection * speed;
 
                 // BowProjectile 설정
@@ -98,6 +97,46 @@ public class BowWeapon : WeaponBase
             
             yield return new WaitForSeconds(shotDelay);
         }
+    }
+
+    // 🔥 타겟 선택 로직을 별도 메서드로 분리
+    Vector2 SelectRandomTarget()
+    {
+        // 가장 가까운 적 5개 가져오기
+        List<Vector2> closestEnemies = EnemyFinder.instance.GetEnemies(5);
+        
+        // 유효한 적들만 필터링 (Vector2.zero가 아닌 것들)
+        List<Vector2> validEnemies = new List<Vector2>();
+        if (closestEnemies != null)
+        {
+            for (int i = 0; i < closestEnemies.Count; i++)
+            {
+                if (closestEnemies[i] != Vector2.zero)
+                {
+                    validEnemies.Add(closestEnemies[i]);
+                }
+            }
+        }
+        
+        Vector2 targetPosition;
+        
+        // 유효한 적이 있으면 랜덤 선택
+        if (validEnemies.Count > 0)
+        {
+            int randomIndex = Random.Range(0, validEnemies.Count);
+            targetPosition = validEnemies[randomIndex];
+            Logger.Log($"[bowWeapon] 적 선택: {targetPosition}");
+        }
+        else
+        {
+            // 적이 없으면 weaponContainer 주변 반경 안에 랜덤 위치
+            Vector2 randomDirection = Random.insideUnitCircle.normalized;
+            float randomDistance = Random.Range(0f, randomShotRadius);
+            targetPosition = (Vector2)transform.position + randomDirection * randomDistance;
+            Logger.Log($"[bowWeapon] 랜덤 위치 선택: {targetPosition}");
+        }
+        
+        return targetPosition;
     }
 
     public override void ActivateSynergyWeapon()
