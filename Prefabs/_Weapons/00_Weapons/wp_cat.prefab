@@ -67,6 +67,11 @@ MonoBehaviour:
   enemy:
     serializedVersion: 2
     m_Bits: 81984
+  catProjectilePrefabs:
+  - {fileID: 4588670902965274065, guid: d73b71604b46c484893930c25674cf9c, type: 3}
+  - {fileID: 4550780641618512991, guid: a73ce42911c0d4811ad2049aaf74ae8d, type: 3}
+  - {fileID: 1658109514592720191, guid: 4a1fb927f92e240e49b034c007dd2382, type: 3}
+  - {fileID: 6651800469568315096, guid: b6694c60ed0254203b1973d17d7b3d85, type: 3}
   laserPointerPrefab: {fileID: 4390443796721731674, guid: 2a4947d7286454f6d9f58738fcbed5bc, type: 3}
   synergyLaserPointerPrefab: {fileID: 4390443796721731674, guid: 2a4947d7286454f6d9f58738fcbed5bc, type: 3}
   catProjectilePrefab: {fileID: 4588670902965274065, guid: d73b71604b46c484893930c25674cf9c, type: 3}
@@ -77,5 +82,5 @@ MonoBehaviour:
   enemyTargetRadius: 3
   marginPercentage: 0.2
   catSpawnDelay: 0.1
-  catTrajectoryTime: 0.6
+  catTrajectoryTime: 1
   offScreenDistance: 3

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CatDuckWeapon : WeaponBase
 {
+    [SerializeField] GameObject[] catProjectilePrefabs; // 다양한 색상의 고양이들
     [SerializeField] GameObject laserPointerPrefab;
     [SerializeField] GameObject synergyLaserPointerPrefab;
     [SerializeField] GameObject catProjectilePrefab; // 고양이 프리펩
@@ -121,9 +122,9 @@ public class CatDuckWeapon : WeaponBase
             // 화면 밖 랜덤 위치에서 스폰
             Vector2 spawnPosition = GetOffScreenPosition(targetPosition);
 
-            // 고양이 생성
-            GameObject catObj = GameManager.instance.poolManager.GetMisc(catProjectilePrefab);
-
+            // 랜덤하게 고양이 프리펩 선택
+            GameObject selectedPrefab = catProjectilePrefabs[Random.Range(0, catProjectilePrefabs.Length)];
+            GameObject catObj = GameManager.instance.poolManager.GetMisc(selectedPrefab);
 
             if (catObj != null)
             {
@@ -163,8 +164,9 @@ public class CatDuckWeapon : WeaponBase
             // 화면 밖 랜덤 위치에서 스폰
             Vector2 spawnPosition = GetOffScreenPosition(targetPosition);
 
-            // 고양이 생성
-            GameObject catObj = GameManager.instance.poolManager.GetMisc(catProjectilePrefab);
+            // 랜덤하게 고양이 프리펩 선택
+            GameObject selectedPrefab = catProjectilePrefabs[Random.Range(0, catProjectilePrefabs.Length)];
+            GameObject catObj = GameManager.instance.poolManager.GetMisc(selectedPrefab);
 
             if (catObj != null)
             {
