@@ -35,6 +35,9 @@ public class ShadowHeight : MonoBehaviour
 
     void FixedUpdate()
     {
+        // ✅ 초기화되지 않았으면 실행하지 않음
+        if (!isInitialized) return;
+
         if (useTargetBasedTrajectory)
         {
             UpdateTargetBasedPosition();
@@ -178,6 +181,8 @@ public class ShadowHeight : MonoBehaviour
 
     void UpdatePosition()
     {
+        if (trnsBody == null) return; // 안전장치
+
         if (!isGrounded)
         {
             verticalVelocity += gravity * Time.deltaTime;

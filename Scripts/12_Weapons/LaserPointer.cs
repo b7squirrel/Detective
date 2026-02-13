@@ -228,13 +228,13 @@ public class LaserPointer : MonoBehaviour
         if (cloud != null)
         {
             cloud.Initialize(
-                attackCount,
-                damage,
-                radius,
-                false,
-                weaponName,
-                3f,
-                3f
+                (int)damage,              // ✅ 실제 데미지 (10)
+                knockback,                // ✅ knockBackChance
+                knockbackSpeedFactor,     // ✅ knockBackSpeedFactor
+                isCriticalDamage,         // ✅ isCriticalDamage
+                weaponName,               // ✅ weaponName
+                radius,                   // ✅ sizeOfArea (범위)
+                3f                        // ✅ duration (지속시간)
             );
         }
     }

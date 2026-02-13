@@ -73,7 +73,6 @@ public class CatClawSlash : MonoBehaviour
         if (clipInfo.Length > 0)
         {
             animationLength = clipInfo[0].clip.length;
-            Debug.Log($"CatClawSlash: Animation length detected = {animationLength}s");
         }
         else
         {
@@ -93,8 +92,6 @@ public class CatClawSlash : MonoBehaviour
         // ✅ 랜덤 회전 (0~360도)
         float randomRotation = Random.Range(0f, 360f);
         transform.localRotation = Quaternion.Euler(0, 0, randomRotation);
-        
-        Debug.Log($"CatClawSlash: Moved to {randomOffset}, rotated to {randomRotation}°");
     }
 
     // 부모(CatFightCloud)가 호출

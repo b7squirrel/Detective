@@ -62,8 +62,6 @@ public class CatFightCloud : MonoBehaviour
         this.SizeOfArea = sizeOfArea;
         this.Duration = duration;
         
-        Debug.Log($"CatFightCloud: Initialized at {transform.position}, duration: {duration}s");
-        
         // 연기 스프라이트 시작 (각각 랜덤 offset)
         StartSmokeSprites();
         
@@ -98,8 +96,6 @@ public class CatFightCloud : MonoBehaviour
                 
                 // 연기 시작 (delay, radius)
                 smokeSprites[i].StartSmoke(randomDelay, SizeOfArea);
-                
-                Debug.Log($"CatFightCloud: Smoke {i} started with delay {randomDelay:F2}s, radius {SizeOfArea}");
             }
         }
     }
@@ -121,8 +117,6 @@ public class CatFightCloud : MonoBehaviour
                 
                 // 발톱 시작 (delay, radius)
                 clawSlashes[i].StartSlash(randomDelay, SizeOfArea);
-                
-                Debug.Log($"CatFightCloud: Claw {i} started with delay {randomDelay:F2}s, radius {SizeOfArea}");
             }
         }
     }
@@ -141,9 +135,6 @@ public class CatFightCloud : MonoBehaviour
             yield return new WaitForSeconds(damageInterval);
             elapsedTime += damageInterval;
         }
-        
-        Debug.Log("CatFightCloud: Duration ended, deactivating");
-        
         // 비활성화
         Deactivate();
     }
@@ -171,7 +162,6 @@ public class CatFightCloud : MonoBehaviour
             if (selectedMeow != null)
             {
                 SoundManager.instance.Play(selectedMeow);
-                Debug.Log($"CatFightCloud: Playing meow {randomIndex}");
             }
             
             // 다음 재생까지 대기

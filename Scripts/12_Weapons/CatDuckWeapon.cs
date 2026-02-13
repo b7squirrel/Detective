@@ -19,6 +19,8 @@ public class CatDuckWeapon : WeaponBase
     [SerializeField] float catSpawnDelay = 0.01f; // 고양이 간 스폰 간격
     [SerializeField] float catTrajectoryTime = 0.6f; // 고양이 비행 시간
     [SerializeField] float offScreenDistance = 3f; // 화면 밖 거리
+    // ✅ 시간 대신 최대 높이 사용
+    [SerializeField] float catMaxHeight = 3f; // 고양이가 날아갈 최대 높이
 
     
 
@@ -119,41 +121,26 @@ public class CatDuckWeapon : WeaponBase
     {
         for (int i = 0; i < numberOfCats; i++)
         {
-            // 화면 밖 랜덤 위치에서 스폰
             Vector2 spawnPosition = GetOffScreenPosition(targetPosition);
-
-            // 랜덤하게 고양이 프리펩 선택
             GameObject selectedPrefab = catProjectilePrefabs[Random.Range(0, catProjectilePrefabs.Length)];
             GameObject catObj = GameManager.instance.poolManager.GetMisc(selectedPrefab);
 
             if (catObj != null)
             {
                 catObj.transform.position = spawnPosition;
-
-                // 고양이 초기화 - 모두 레이저 포인터로 날아감
                 CatProjectile catProjectile = catObj.GetComponent<CatProjectile>();
-
-
+                
                 if (catProjectile != null)
                 {
-                    catProjectile.Initialize(targetPosition, pointer, catTrajectoryTime);
-                }
-                else
-                {
-                    Logger.LogError($"Cat {i + 1}: CatProjectile component not found!");
+                    // ✅ 높이 기반 초기화 사용
+                    catProjectile.InitializeWithHeight(targetPosition, pointer, catMaxHeight);
                 }
 
-                // 고양이 소리 (처음 4마리만, 배열에서 랜덤 선택)
                 if (catMeows != null && catMeows.Length > 0 && i < 4)
                 {
-                    int index = UnityEngine.Random.Range(0, catMeows.Length);
+                    int index = Random.Range(0, catMeows.Length);
                     SoundManager.instance.Play(catMeows[index]);
                 }
-
-            }
-            else
-            {
-                Logger.LogError($"Failed to spawn cat {i + 1}!");
             }
         }
     }
@@ -161,33 +148,28 @@ public class CatDuckWeapon : WeaponBase
     {
         for (int i = 0; i < numberOfCats; i++)
         {
-            // 화면 밖 랜덤 위치에서 스폰
             Vector2 spawnPosition = GetOffScreenPosition(targetPosition);
-
-            // 랜덤하게 고양이 프리펩 선택
             GameObject selectedPrefab = catProjectilePrefabs[Random.Range(0, catProjectilePrefabs.Length)];
             GameObject catObj = GameManager.instance.poolManager.GetMisc(selectedPrefab);
 
             if (catObj != null)
             {
                 catObj.transform.position = spawnPosition;
-
-                // 고양이 초기화 - 모두 레이저 포인터로 날아감
                 CatProjectile catProjectile = catObj.GetComponent<CatProjectile>();
+                
                 if (catProjectile != null)
                 {
-                    catProjectile.Initialize(targetPosition, pointer, catTrajectoryTime);
+                    // ✅ 높이 기반 초기화 사용
+                    catProjectile.InitializeWithHeight(targetPosition, pointer, catMaxHeight);
                 }
 
-                // 고양이 소리 (처음 4마리만, 배열에서 랜덤 선택)
                 if (catMeows != null && catMeows.Length > 0 && i < 4)
                 {
-                    int index = UnityEngine.Random.Range(0, catMeows.Length);
+                    int index = Random.Range(0, catMeows.Length);
                     SoundManager.instance.Play(catMeows[index]);
                 }
             }
 
-            // 다음 고양이까지 딜레이
             yield return new WaitForSeconds(catSpawnDelay);
         }
     }
