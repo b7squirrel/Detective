@@ -458,6 +458,8 @@ GameObject:
   - component: {fileID: 7255073503352527799}
   - component: {fileID: 4172382219901582434}
   - component: {fileID: 3531870220605947261}
+  - component: {fileID: 5716658279803799106}
+  - component: {fileID: 3897129823971296315}
   m_Layer: 6
   m_Name: EnemySubBoss
   m_TagString: Enemy
@@ -495,7 +497,7 @@ Animator:
   m_GameObject: {fileID: 8170831695603223110}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: b2f1e9d0a8138b744900a2e5ad277722, type: 2}
+  m_Controller: {fileID: 22100000, guid: aa75087b35f52ad4baa116522f56759a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -703,12 +705,36 @@ MonoBehaviour:
     isMultipleDropable: 1
     hasSpecialItem: 0
     numMultiple: 100
-  - Item: {fileID: 895778108224746509, guid: 3de9df3b958abb044a0aa98bf347807c, type: 3}
-    SpecialDrop: {fileID: 0}
-    isMultipleDropable: 1
-    hasSpecialItem: 0
-    numMultiple: 50
   multiDropRate: 100
   specialDropRate: 0
   dropAllItemList: 0
   exp: 0
+--- !u!114 &5716658279803799106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170831695603223110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e90174c9e4f27427baedfd1b4d42544f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackInterval: 3
+  distanceToPlayer: 10
+  projectilePrefab: {fileID: 2430061364096046730, guid: 01f8bc472c75b445f9bd74dda9b8e328, type: 3}
+  shootRate: 0.943
+  showDebugLog: 0
+--- !u!114 &3897129823971296315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170831695603223110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0eb229f0a5b476f81b9c13757b2e8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

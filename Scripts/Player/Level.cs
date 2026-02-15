@@ -28,6 +28,10 @@ public class Level : MonoBehaviour
 
     CoinManager coinManager;
 
+    [Header("연속 레벨업 제한")]
+    [SerializeField] int maxConsecutivePanels = 5; // 최대 몇 번까지 패널을 띄울지
+    int consecutiveLevelUpCount = 0; // 현재 연속 레벨업 횟수
+
     [Header("Debug")]
     [SerializeField] float Exp;
     [SerializeField] float ExpToLevelUp;
@@ -36,7 +40,7 @@ public class Level : MonoBehaviour
     {
         get
         {
-            float baseValue = Mathf.Pow(level / 2.5f, 2.5f);
+            float baseValue = Mathf.Pow(level / 2.0f, 3.0f); // 2.5f -> 2.0f, 2.5f -> 3.0f로 변경
             return (int)baseValue * 1000 + 200 * level;
         }
     }
@@ -78,6 +82,10 @@ public class Level : MonoBehaviour
             Logger.LogError($"[Level] 보스가 죽어서 경험치 증가를 막습니다.");
             return;
         }
+        if(GameManager.instance.IsPlayerDead)
+        {
+            Logger.LogWarning($"[Level] 플레이어가 죽어서 경험치 증가를 막습니다.");
+        }
         experience += expAmount;
         Exp = experience;
         ExpToLevelUp = To_Level_Up;
@@ -109,6 +117,11 @@ public class Level : MonoBehaviour
 
     void LevelUp()
     {
+        if(GameManager.instance.IsPlayerDead)
+        {
+            Logger.LogWarning($"[Level] 플레이어가 죽어서 레벨업을 막습니다.");
+        }
+
         if (selectedUpgrads == null)
         {
             selectedUpgrads = new List<UpgradeData>();

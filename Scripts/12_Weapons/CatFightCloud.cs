@@ -25,6 +25,7 @@ public class CatFightCloud : MonoBehaviour
     [Header("Smoke Sprites")]
     [SerializeField] CatFightCloudSprite[] smokeSprites; // 5개의 연기 스프라이트
     [SerializeField] float maxSmokeStartOffset = 0.3f; // 최대 시작 딜레이
+    [SerializeField] Transform smokeTrns; // 전체 크기를 만드는 연기. size of area로 조절
     
     [Header("Claw Slashes")]
     [SerializeField] CatClawSlash[] clawSlashes; // 5개의 발톱 스프라이트
@@ -98,6 +99,8 @@ public class CatFightCloud : MonoBehaviour
                 smokeSprites[i].StartSmoke(randomDelay, SizeOfArea);
             }
         }
+
+        smokeTrns.localScale = (SizeOfArea * 2f) * Vector2.one;
     }
 
     void StartClawSlashes()

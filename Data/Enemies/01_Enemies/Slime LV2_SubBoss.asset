@@ -14,29 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: "\uD798\uC3C0\uC774 \uC655\uC790"
   animController: {fileID: 22100000, guid: aa75087b35f52ad4baa116522f56759a, type: 2}
-  stats:
-    hp: 2500
-    speed: 8
-    damage: 90
-    rangedDamage: 700
-    experience_reward: 700
   enemyType: 1
   enemyRole: 3
   bossType: 1
+  specialAbility: 0
   hpScalingMultiplier: 2.67
-  speedScalingMultiplier: 2
+  speedScalingMultiplier: 1
   damageScalingMultiplier: 1.33
-  canDash: 0
   dashCooldown: 3
   dashSpeed: 15
-  hasJumpAttack: 1
+  dashDuration: 0.5
+  laserCooldown: 5
+  laserAnticipationTime: 1
+  laserFireDuration: 0.3
+  laserDamage: 20
+  laserRange: 100
+  laserWidth: 0.2
   projectilePrefab: {fileID: 2430061364096046730, guid: 01f8bc472c75b445f9bd74dda9b8e328, type: 3}
   splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 0.6509804, g: 0.70980394, b: 0.015686275, a: 1}
   enemyColorHighlight: {r: 0, g: 0, b: 0, a: 0}
   distanceToPlayer: 15
-  attackInterval: 4
-  isJumper: 1
+  attackInterval: 0.5
+  isJumper: 0
   jumpInterval: 6
   dialogs: []
   split: {fileID: 0}

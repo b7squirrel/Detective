@@ -696,7 +696,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         // WhiteFlash(whiteFlashDuration);
-        if (isBoss || isSubBoss) SpriteFlash(whiteFlashDuration);
+        // if (isBoss || isSubBoss) SpriteFlash(whiteFlashDuration);
         KnockBack(target, _knockBackDelay, knockBackSpeedFactor);
     }
     public virtual void Die()
@@ -717,7 +717,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         finishedSpawn = false;
         DestroyHPbar();
 
-        if (IsBoss)
+        // 일반 모드 보스일 떄만
+        if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
         {
             FindObjectOfType<BossDieManager>().DieEvent(.1f, 2f);
         }

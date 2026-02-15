@@ -24,10 +24,12 @@ MonoBehaviour:
   dashCooldown: 3
   dashSpeed: 15
   dashDuration: 0.5
-  laserRange: 8
   laserCooldown: 4
-  laserDuration: 1.5
-  laserPrefab: {fileID: 0}
+  laserAnticipationTime: 1
+  laserFireDuration: 0.3
+  laserDamage: 20
+  laserRange: 8
+  laserWidth: 0.2
   projectilePrefab: {fileID: 2430061364096046730, guid: 01f8bc472c75b445f9bd74dda9b8e328, type: 3}
   splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 0.6509804, g: 0.70980394, b: 0.015686275, a: 1}
