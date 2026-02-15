@@ -261,7 +261,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // ⭐ 공격 프레임 간격 설정 (모드별 분기)
         if (isInfiniteMode && infiniteStageManager != null)
         {
-            attackFrameInterval = 5; // 무한 모드: 5프레임에 한 번
+            attackFrameInterval = 4; // 무한 모드: 4프레임에 한 번
         }
         else
         {
@@ -654,6 +654,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public virtual void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
     {
+        //일정 비율로 플레이어의 공격을 피하기
+        float rate = UnityEngine.Random.Range(0, 1);
+        if(rate > .7f) return;
+
         // 화면 밖에 있으면 데미지 입지 않기
         CheckOffScreen();
         if (isOffScreen)
