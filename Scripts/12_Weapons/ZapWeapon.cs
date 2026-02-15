@@ -80,8 +80,7 @@ public class ZapWeapon : WeaponBase
         // 생성
         for (int i = 0; i < numberOfProjectilesToGen; i++)
         {
-            Transform zapObject = Instantiate(zapProjectile, transform.position, Quaternion.identity).transform;
-            zapObject.parent = transform;
+            Transform zapObject = Instantiate(zapProjectile, transform.position, Quaternion.identity, transform).transform;
             projectiles.Add(zapObject);
         }
 

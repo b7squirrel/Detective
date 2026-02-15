@@ -21,8 +21,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected bool isSubBoss;
     [SerializeField] protected bool isBoss;
     [SerializeField] int numberOfSubBossDrops;
-    [SerializeField]
-    int numberOfBossDrops;
+    [SerializeField] int numberOfBossDrops;
+    protected BossType bossType;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir { get; set; } // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
@@ -118,12 +118,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 유니티 콜백
     protected virtual void OnEnable()
     {
-        // 최초 1회만 체크 (게임 시작 시)
-        if (!hasCheckedMode)
+        // ⭐ 수정: hasCheckedMode 제거하고 매번 null 체크
+        if (infiniteStageManager == null)
         {
             infiniteStageManager = FindObjectOfType<InfiniteStageManager>();
             isInfiniteMode = (infiniteStageManager != null);
-            hasCheckedMode = true;
 
             if (isInfiniteMode)
             {
@@ -239,6 +238,20 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 초기화
     public virtual void InitEnemy(EnemyData _enemyToSpawn)
     {
+        bossType = _enemyToSpawn.bossType;
+        isSubBoss = false;
+        isBoss = false;
+        if (bossType == BossType.StageBoss || bossType == BossType.QueenBoss)
+        {
+            isSubBoss = false;
+            isBoss = true;
+        }
+        else if (bossType == BossType.SubBoss)
+        {
+            isSubBoss = true;
+            isBoss = false;
+        }
+
         enemyColor = _enemyToSpawn.enemyColor;
 
         // 상태 초기화
@@ -293,6 +306,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 experience_reward = 50
             };
             // Logger.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다.");
+        }
+
+        if(bossType == BossType.StageBoss || bossType == BossType.QueenBoss)
+        {
+            Logger.LogError($"[enemyBase] 보스 체력 : {this.Stats.hp}");
         }
 
         // 속도 설정

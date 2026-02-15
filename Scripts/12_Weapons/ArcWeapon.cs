@@ -105,11 +105,10 @@ public class ArcWeapon : WeaponBase
         // 생성
         for (int i = 0; i < numberOfProjectilesToGen; i++)
         {
-            Transform arcObject = Instantiate(arcProjectile, transform.position, Quaternion.identity).transform;
-            arcObject.parent = transform;
+            Transform arcObject = Instantiate(arcProjectile, transform.position, Quaternion.identity, transform).transform;
             projectiles.Add(arcObject);
 
-            Logger.Log($"[ArcWeapon] ✅ Created projectile #{i + 1}");
+            // Logger.Log($"[ArcWeapon] ✅ Created projectile #{i + 1}");
         }
 
         // 시너지 설정

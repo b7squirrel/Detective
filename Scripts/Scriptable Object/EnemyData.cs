@@ -21,7 +21,7 @@ public class EnemyData : ScriptableObject
 
     [Header("Scaling Multipliers")]
     [Tooltip("이 적 타입의 HP 스케일링 배율 (1.0 = 기본)")]
-    [Range(0.5f, 15f)]
+    [Range(0.5f, 30f)]
     public float hpScalingMultiplier = 1.0f;
     
     [Tooltip("이 적 타입의 속도 스케일링 배율 (1.0 = 기본)")]

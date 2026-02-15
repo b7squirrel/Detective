@@ -40,8 +40,7 @@ public class Level : MonoBehaviour
     {
         get
         {
-            float baseValue = Mathf.Pow(level / 2.0f, 3.0f); // 2.5f -> 2.0f, 2.5f -> 3.0f로 변경
-            return (int)baseValue * 1000 + 200 * level;
+            return (int)(50 * Mathf.Pow(level, 2.5f)) + 150;
         }
     }
 
