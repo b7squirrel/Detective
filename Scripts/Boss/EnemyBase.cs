@@ -671,7 +671,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // Hurt 애니메이션이 재생중이면 또 재생하지 않기
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
         if (!stateInfo.IsName("SlimeLV1Hurt"))
+        {
             anim.SetTrigger("Hit");
+            // ⭐ 느림 상태라면 Hypnotized도 유지
+            if (IsSlowed)
+            {
+                anim.SetBool("Hypnotized", true);
+            }
+        }
+
 
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
         if (effect != null) effect.transform.position = hitEffectPoint.position;
@@ -992,33 +1000,33 @@ public class EnemyBase : MonoBehaviour, Idamageable
     /// </summary>
     public void SetTintColor(Color tintColor)
     {
-        // 첫 색상 변경 시 원래 색상 저장
-        if (!isColorChanged)
-        {
-            if (sr != null)
-            {
-                originalColor = sr.color;
-            }
-            isColorChanged = true;
-        }
+        // // 첫 색상 변경 시 원래 색상 저장
+        // if (!isColorChanged)
+        // {
+        //     if (sr != null)
+        //     {
+        //         originalColor = sr.color;
+        //     }
+        //     isColorChanged = true;
+        // }
 
-        // 메인 스프라이트
-        if (sr != null)
-        {
-            sr.color = tintColor;
-        }
+        // // 메인 스프라이트
+        // if (sr != null)
+        // {
+        //     sr.color = tintColor;
+        // }
 
-        // 서브보스/보스의 경우 여러 스프라이트
-        if (srFlash != null && srFlash.Length > 0)
-        {
-            foreach (var sprite in srFlash)
-            {
-                if (sprite != null)
-                {
-                    sprite.color = tintColor;
-                }
-            }
-        }
+        // // 서브보스/보스의 경우 여러 스프라이트
+        // if (srFlash != null && srFlash.Length > 0)
+        // {
+        //     foreach (var sprite in srFlash)
+        //     {
+        //         if (sprite != null)
+        //         {
+        //             sprite.color = tintColor;
+        //         }
+        //     }
+        // }
     }
 
     /// <summary>
@@ -1026,27 +1034,27 @@ public class EnemyBase : MonoBehaviour, Idamageable
     /// </summary>
     public void ResetTintColor()
     {
-        // 색상 상태 초기화
-        isColorChanged = false;
-        originalColor = Color.white;
+        // // 색상 상태 초기화
+        // isColorChanged = false;
+        // originalColor = Color.white;
 
-        // 메인 스프라이트
-        if (sr != null)
-        {
-            sr.color = Color.white;
-        }
+        // // 메인 스프라이트
+        // if (sr != null)
+        // {
+        //     sr.color = Color.white;
+        // }
 
-        // 서브보스/보스의 경우 여러 스프라이트
-        if (srFlash != null && srFlash.Length > 0)
-        {
-            foreach (var sprite in srFlash)
-            {
-                if (sprite != null)
-                {
-                    sprite.color = Color.white;
-                }
-            }
-        }
+        // // 서브보스/보스의 경우 여러 스프라이트
+        // if (srFlash != null && srFlash.Length > 0)
+        // {
+        //     foreach (var sprite in srFlash)
+        //     {
+        //         if (sprite != null)
+        //         {
+        //             sprite.color = Color.white;
+        //         }
+        //     }
+        // }
     }
     #endregion
 }
