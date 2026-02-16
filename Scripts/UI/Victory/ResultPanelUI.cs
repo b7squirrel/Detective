@@ -18,7 +18,8 @@ public class ResultPanelUI : MonoBehaviour
         AssignDataToSlots(allSlotData);
 
         SetTrigger(animTrigger);
-        SetSlotVisibility(allSlotData.Count);
+        SetSlotVisibility(allSlotData.Count, animTrigger);
+        RotateWeapons(animTrigger);
     }
 
     void SetTrigger(string animTrigger)
@@ -29,17 +30,28 @@ public class ResultPanelUI : MonoBehaviour
         }
     }
 
-    void SetSlotVisibility(int slotSum)
+    void SetSlotVisibility(int slotSum, string animTrigger)
     {
         for (int i = 0; i < cardSlots.Length; i++)
         {
-            if(i >= slotSum)
+            if(i >= slotSum || animTrigger == "Hit" && i != 0)
             {
                 cardSlots[i].SetActive(false);
             }
             else
             {
                 cardSlots[i].SetActive(true);
+            }
+        }
+    }
+
+    void RotateWeapons(string animTrigger)
+    {
+        if (animTrigger == "Hit")
+        {
+            for (int i = 0; i < cardSlots.Length; i++)
+            {
+                cardSlots[i].transform.localRotation = Quaternion.Euler(0f, 0f, 30f);
             }
         }
     }
