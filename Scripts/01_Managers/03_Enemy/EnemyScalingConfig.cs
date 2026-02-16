@@ -9,41 +9,62 @@ public class EnemyScalingConfig : ScriptableObject
     public int baseMeleeDamage = 9;
     public int baseRangedDamage = 100;
     public int baseExperience = 130;
-    
+
     [Header("Scaling Formulas")]
     public float hpGrowth = 0.2f;
     public float hpExponent = 1.15f;
-    
+
     [Range(0f, 0.2f)]
     public float speedGrowth = 0.08f;
     public float speedCap = 15f;
-    
+
     public float damageGrowth = 0.22f;
     public float damageExponent = 1.1f;
-    
     public float experienceGrowth = 0.3f;
-    
+
+    // ⭐ 회피 확률 관련 추가
+    [Header("Dodge Chance Scaling")]
+    [Tooltip("스테이지 1에서의 기본 회피 확률 (0.0 ~ 1.0)")]
+    [Range(0f, 0.5f)]
+    public float baseDodgeChance = 0.05f; // 5%로 시작
+
+    [Tooltip("스테이지당 증가하는 회피 확률")]
+    [Range(0f, 0.05f)]
+    public float dodgeGrowthPerStage = 0.015f; // 스테이지당 1.5% 증가
+
+    [Tooltip("일반 모드 회피 확률 상한선")]
+    [Range(0f, 1f)]
+    public float dodgeCapRegular = 0.45f; // 최대 45%
+
+    [Tooltip("무한 모드 회피 확률 상한선")]
+    [Range(0f, 1f)]
+    public float dodgeCapInfinite = 0.55f; // 최대 55%
+
+    [Tooltip("보스의 회피 확률 배율 (일반 적 대비)")]
+    [Range(0f, 2f)]
+    public float bossDodgeMultiplier = 1.3f; // 보스는 1.3배
+
     [Header("Enemy Type Specific")]
     public float tankHPBonus = 0.3f;
     public float attackerDamageBonus = 0.2f;
-    
+
     [Header("Boss Multipliers")]
     [Tooltip("중간 보스 배율 (기존 데이터 기준: 15~25배)")]
     public float subBossMultiplier = 20.0f; // 평균 20배
-    
+
     [Tooltip("스테이지 보스 배율 (서브보스의 추가 배율)")]
     public float stageBossMultiplier = 2.5f; // 서브보스의 2.5배 (총 50배)
-    
+
     [Tooltip("여왕 슬라임 배율")]
     public float queenBossMultiplier = 80.0f;
-    
+
     [Tooltip("보스의 속도 증가 배율")]
     public float bossSpeedBonus = 1.5f; // 보스는 1.5배 빠름
-    
+
     [Tooltip("6스테이지마다 반복될 때 증가하는 배율")]
     [Range(0.1f, 1.0f)]
     public float cycleGrowth = 0.3f;
-    
+
     [Header("Manual Overrides Per Stage")]
     public StageStatModifier[] stageModifiers;
 }
@@ -57,16 +78,21 @@ public class StageStatModifier
 {
     [Tooltip("조정할 스테이지 번호")]
     public int stageNumber;
-    
+
     [Tooltip("HP 수동 설정 (0이면 공식 사용)")]
     public int hpOverride;
-    
+
     [Tooltip("속도 수동 설정 (0이면 공식 사용)")]
     public float speedOverride;
-    
+
     [Tooltip("데미지 수동 설정 (0이면 공식 사용)")]
     public int damageOverride;
-    
+
     [Tooltip("경험치 수동 설정 (0이면 공식 사용)")]
     public int experienceOverride;
+
+    // ⭐ 회피 확률 수동 설정 추가
+    [Tooltip("회피 확률 수동 설정 (-1이면 공식 사용)")]
+    [Range(-1f, 1f)]
+    public float dodgeChanceOverride = -1f;
 }

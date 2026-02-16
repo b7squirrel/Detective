@@ -4,6 +4,10 @@ public class EnemyStatCalculator : MonoBehaviour
 {
     [SerializeField] EnemyScalingConfig scalingConfig;
 
+    // ⭐ 무한 모드 체크를 위해 추가
+    static InfiniteStageManager infiniteStageManager;
+    static bool isInfiniteMode = false;
+
     public EnemyStats GetStatsForStage(int stage, EnemyData baseData)
     {
         if (scalingConfig == null)
@@ -11,6 +15,14 @@ public class EnemyStatCalculator : MonoBehaviour
             Debug.LogError("EnemyScalingConfig가 할당되지 않았습니다!");
             return CreateDefaultStats(); // 기본 스탯 생성
         }
+
+        // 무한 모드 체크
+        if (infiniteStageManager == null)
+        {
+            infiniteStageManager = FindObjectOfType<InfiniteStageManager>();
+            isInfiniteMode = (infiniteStageManager != null);
+        }
+
 
         // ⭐ 새로 생성 (복사 안 함)
         EnemyStats stats = new EnemyStats();
@@ -25,6 +37,9 @@ public class EnemyStatCalculator : MonoBehaviour
         stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier);
         stats.experience_reward = CalculateExperience(stage, baseData, bossMultiplier);
 
+        // ⭐ 회피 확률 계산 추가
+        stats.dodgeChance = CalculateDodgeChance(stage, baseData);
+
         ApplyManualOverrides(stage, ref stats);
 
         return stats;
@@ -37,8 +52,33 @@ public class EnemyStatCalculator : MonoBehaviour
             speed = 5,
             damage = 10,
             rangedDamage = 10,
-            experience_reward = 50
+            experience_reward = 50,
+            dodgeChance = 0.05f
+            
         };
+    }
+
+    // ⭐ 회피 확률 계산 함수 추가
+    float CalculateDodgeChance(int stage, EnemyData baseData)
+    {
+        // 기본 회피 확률 + 스테이지당 증가량
+        float dodgeChance = scalingConfig.baseDodgeChance + 
+                           (scalingConfig.dodgeGrowthPerStage * stage);
+        
+        // 보스 배율 적용
+        if (baseData.bossType != BossType.Normal)
+        {
+            dodgeChance *= scalingConfig.bossDodgeMultiplier;
+        }
+        
+        // 모드별 상한선 적용
+        float cap = isInfiniteMode ? 
+            scalingConfig.dodgeCapInfinite : 
+            scalingConfig.dodgeCapRegular;
+        
+        dodgeChance = Mathf.Min(dodgeChance, cap);
+        
+        return dodgeChance;
     }
 
     /// <summary>

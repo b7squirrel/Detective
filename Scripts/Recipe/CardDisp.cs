@@ -277,8 +277,8 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         Title.text = "";
         if (isMergedCard) ribbon.gameObject.SetActive(false);
 
-        cardBaseContainer.gameObject.SetActive(false);
-        charImage.gameObject.SetActive(false);
+        if (cardBaseContainer != null) cardBaseContainer.gameObject.SetActive(false);
+        if (charImage != null) charImage.gameObject.SetActive(false);
 
         for (int i = 0; i < 4; i++)
         {

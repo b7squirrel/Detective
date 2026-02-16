@@ -9,6 +9,7 @@ public class EnemyStats
     public int damage = 1;
     public int rangedDamage = 1;
     public int experience_reward = 0;
+    public float dodgeChance = 0f; // ⭐ 추가: 회피 확률 (0.0 ~ 1.0)
 
     // public EnemyStats(EnemyStats stats)
     // {

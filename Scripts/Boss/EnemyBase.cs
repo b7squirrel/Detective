@@ -654,9 +654,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public virtual void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
     {
-        //일정 비율로 플레이어의 공격을 피하기
-        float rate = UnityEngine.Random.Range(0, 1);
-        if(rate > .7f) return;
+        // ⭐ 스테이지/웨이브 기반 회피 확률 적용
+        float dodgeRoll = UnityEngine.Random.Range(0f, 1f);
+        if (dodgeRoll < Stats.dodgeChance)
+        {
+            // 회피 성공 - 선택적으로 회피 이펙트나 사운드 추가 가능
+            // Logger.Log($"[Enemy] Dodged attack! (chance: {Stats.dodgeChance:P0})");
+            return;
+        }
 
         // 화면 밖에 있으면 데미지 입지 않기
         CheckOffScreen();

@@ -131,4 +131,10 @@ public class PassiveItems : MonoBehaviour
 
         GameManager.instance.GetComponent<PausePanel>().UpdateItemLevel(itemToUpgrade);
     }
+
+    public List<Item> GetAllItems()
+    {
+        if (items == null) return new List<Item>();
+        return new List<Item>(items);
+    }
 }

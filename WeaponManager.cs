@@ -149,4 +149,10 @@ public class WeaponManager : MonoBehaviour
         bool isSynergy = upgradeData.upgradeType == UpgradeType.SynergyUpgrade ? true : false;
         GameManager.instance.GetComponent<PausePanel>().UpdateWeaponLevel(weaponName, level, isSynergy);
     }
+
+    public List<WeaponBase> GetAllWeapons()
+    {
+        if (weapons == null) return new List<WeaponBase>();
+        return weapons;
+    }
 }

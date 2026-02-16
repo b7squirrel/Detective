@@ -16,6 +16,7 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI killText;
     [SerializeField] TMPro.TextMeshProUGUI coinText;
     [SerializeField] TMPro.TextMeshProUGUI stampText;
+    ResultPanelUI resultPanelUI;
 
     [Header("일반 모드 요소")]
     [SerializeField] RectTransform stageNumRec;
@@ -81,30 +82,7 @@ public class ResultPanel : MonoBehaviour
             GameManager.instance.darkBG.SetActive(false);
         }
     }
-    IEnumerator InitAwardsCo(int killNum, int coinNum, int stageNum, bool isWinningStage)
-    {
-        if (isWinningStage) bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
-
-
-        yield return new WaitForSecondsRealtime(.5f);
-
-        SetEquipSpriteRow();
-
-        AudioClip resultSound = resultSoundSuccess;
-        if (isWinningStage == false)
-        {
-            charAnim.SetTrigger("Hit"); // 패배 화면이라면 오리도 패배 모션으로
-            resultSound = resultSoundFail;
-        }
-        SoundManager.instance.Play(resultSound);
-
-        killText.text = killNum.ToString();
-        coinText.text = coinNum.ToString();
-        stageNumberText.text = stageNum.ToString();
-
-
-        GameManager.instance.ActivateConfirmationButton(2.7f);
-    }
+    
     #region 레귤러 애니메이션
     void PlayRegularAwardsSequence(int killNum, int coinNum, int stageNum, bool isWinningStage)
     {
@@ -116,6 +94,7 @@ public class ResultPanel : MonoBehaviour
         {
             bouncerManager.JumpSad(30); // 50마리 슬픈 폭죽
         }
+        
 
         ResetRecs();
         string title = isWinningStage ? "축하해요!" : "실패...";
@@ -140,10 +119,8 @@ public class ResultPanel : MonoBehaviour
         seq.Append(panelRec.DOScale(.8f, .2f).SetEase(Ease.OutBack));
 
         // ori
-        string trigger = isWinningStage ? "Idle" : "Hit";
-        float angle = isWinningStage ? 0f : 45f;
-        charAnim.SetTrigger(trigger);
-        oriRec.localRotation = Quaternion.Euler(0f, 0f, angle);
+        string animTrigger = isWinningStage ? "Idle" : "Hit";
+        GenWeaponCards(animTrigger);
 
         seq.AppendInterval(.01f);
         seq.AppendCallback(() => PlayUISound(popupSound));
@@ -240,8 +217,10 @@ public class ResultPanel : MonoBehaviour
         seq.Append(panelRec.DOScale(.8f, .2f).SetEase(Ease.OutBack));
 
         // ori
-        charAnim.SetTrigger("Idle");
-        oriRec.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        // charAnim.SetTrigger("Idle");
+        // oriRec.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        GenWeaponCards("Idle");
+
         seq.AppendInterval(.01f);
         seq.AppendCallback(() => PlayUISound(popupSound));
         seq.Append(oriRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
@@ -442,5 +421,9 @@ public class ResultPanel : MonoBehaviour
     void PlayUISound(AudioClip audioClip)
     {
         SoundManager.instance.Play(audioClip);
+    }
+    void GenWeaponCards(string animTrigger)
+    {
+        GetComponent<ResultPanelUI>().ShowResults(animTrigger);
     }
 }
