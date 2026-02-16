@@ -57,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 3039073768026264144}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.1556887, w: 0.9878062}
-  m_LocalPosition: {x: 0.148, y: 0.012, z: 0}
+  m_LocalPosition: {x: 0.043, y: 0.012, z: 0}
   m_LocalScale: {x: 0.50439006, y: 0.9375, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 3432800799974579587}
   - component: {fileID: 3748984901685450657}
   - component: {fileID: 661317859804964651}
+  - component: {fileID: 5632753072183592482}
   m_Layer: 9
   m_Name: Arrow Projectile
   m_TagString: Untagged
@@ -244,6 +245,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 5632753072183592482}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 3
+          m_StringArgument: Ground
+          m_BoolArgument: 0
+        m_CallState: 2
   isGrounded: 0
 --- !u!114 &661317859804964651
 MonoBehaviour:
@@ -264,6 +277,28 @@ MonoBehaviour:
     m_Bits: 81984
   shadowObject: {fileID: 3039073768026264144}
   spriteRenderer: {fileID: 4619296877377831083}
+  hitGroundSound: {fileID: 8300000, guid: 3611d6d2f46f304489c9a01a766a3ded, type: 3}
+--- !u!95 &5632753072183592482
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7182817323891353783}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7bd411da38e3f4ff3ae383374e6d4512, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7384342592551266121
 GameObject:
   m_ObjectHideFlags: 0

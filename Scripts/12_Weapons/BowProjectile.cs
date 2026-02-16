@@ -29,6 +29,9 @@ public class BowProjectile : MonoBehaviour
     [Header("Arrow Sprite")]
     [SerializeField] SpriteRenderer spriteRenderer;
 
+    [Header("Sound")]
+    [SerializeField] AudioClip hitGroundSound;
+
     ShadowHeight shadowHeight;
     bool isGrounded = false;
 
@@ -71,23 +74,23 @@ public class BowProjectile : MonoBehaviour
     {
         if (shadowHeight == null) return;
 
-    // 착지 전에만 회전
-    if (!isGrounded)
-    {
-        // ✅ 회전하기 전에 현재 각도를 저장
-        if (bodyTransform != null)
+        // 착지 전에만 회전
+        if (!isGrounded)
         {
-            previousRotation = bodyTransform.localRotation;
-        }
-        
-        RotateArrow();
+            // ✅ 회전하기 전에 현재 각도를 저장
+            if (bodyTransform != null)
+            {
+                previousRotation = bodyTransform.localRotation;
+            }
 
-        // 착지 체크
-        if (shadowHeight.IsDone)
-        {
-            OnGrounded();
+            RotateArrow();
+
+            // 착지 체크
+            if (shadowHeight.IsDone)
+            {
+                OnGrounded();
+            }
         }
-    }
     }
 
     void LateUpdate()
@@ -127,20 +130,23 @@ public class BowProjectile : MonoBehaviour
     {
         isGrounded = true;
 
-    // ✅ 직전 프레임의 회전 각도 사용 (착지 순간의 급격한 변화 방지)
-    if (bodyTransform != null)
-    {
-        landingRotation = previousRotation;
-        bodyTransform.localRotation = landingRotation; // 즉시 적용
-    }
+        // ✅ 직전 프레임의 회전 각도 사용 (착지 순간의 급격한 변화 방지)
+        if (bodyTransform != null)
+        {
+            landingRotation = previousRotation;
+            bodyTransform.localRotation = landingRotation; // 즉시 적용
+        }
 
-    // 지면 그림자 활성화
-    ActivateGroundShadow(true);
+        // 지면 그림자 활성화
+        ActivateGroundShadow(true);
 
-    // 지면 데미지 코루틴 시작
-    if (groundDamageCo != null)
-        StopCoroutine(groundDamageCo);
-    groundDamageCo = StartCoroutine(GroundDamageCo());
+        // 사운드 재생
+        if(hitGroundSound != null) PlayGroundHitSound();
+
+        // 지면 데미지 코루틴 시작
+        if (groundDamageCo != null)
+            StopCoroutine(groundDamageCo);
+        groundDamageCo = StartCoroutine(GroundDamageCo());
     }
 
     IEnumerator GroundDamageCo()
@@ -216,6 +222,11 @@ public class BowProjectile : MonoBehaviour
         }
 
         isGrounded = false;
+    }
+
+    void PlayGroundHitSound()
+    {
+        SoundManager.instance.Play(hitGroundSound);
     }
 
     public void RandomRotation()
