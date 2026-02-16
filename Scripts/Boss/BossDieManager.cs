@@ -19,9 +19,14 @@ public class BossDieManager : MonoBehaviour
     
     public void InitDeadBody(GameObject deadBody, Transform boss, int amountOfCoins)
     {
-        IsBossDead = true;
+        SetIsBossDead(true);
         this.deadBody = Instantiate(deadBody, boss.position, boss.rotation);
         anim = this.deadBody.GetComponent<Animator>();
+    }
+
+    public void SetIsBossDead(bool isDead)
+    {
+        IsBossDead = isDead;
     }
     
     public void DieEvent(float desiredTimeScale, float waitingTime)

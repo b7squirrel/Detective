@@ -747,7 +747,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // 일반 모드 보스일 떄만
         if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
         {
-            FindObjectOfType<BossDieManager>().DieEvent(.1f, 2f);
+            BossDieManager bossDieManager = FindObjectOfType<BossDieManager>();
+            bossDieManager.SetIsBossDead(true);
+            bossDieManager.DieEvent(.1f, 2f);
         }
 
         if (isSubBoss)
