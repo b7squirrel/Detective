@@ -67,6 +67,15 @@ public class Item : ScriptableObject
     public float dropChance; // 아이템 드랍 확률
     public int itemIndex;
 
+    // 프로젝타일 관련
+    [Header("프로젝타일 설정")]
+    [Tooltip("이 아이템을 장착했을 때 발사될 프로젝타일 프리팹")]
+    public GameObject projectilePrefab;
+
+    [Tooltip("프로젝타일 관련 추가 설정값 (필요시 사용)")]
+    public float projectileVerticalVelocity = 10f; // BombProjectile의 verticalVelocity
+
+
     public void Init(string Name)
     {
         this.Name = Name; // 위에서 선언한 Name 

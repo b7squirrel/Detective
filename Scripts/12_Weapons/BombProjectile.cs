@@ -9,6 +9,19 @@ public class BombProjectile : ProjectileBase
     [SerializeField] GameObject starEffect; // 폭발 이펙트 - 별
     [SerializeField] AudioClip hitSFX;
 
+    TrailRenderer trailRenderer;
+
+    void OnEnable()
+    {
+        if(trailRenderer == null) trailRenderer = GetComponentInChildren<TrailRenderer>();
+
+        if (trailRenderer != null)
+        {
+            trailRenderer.Clear();
+            trailRenderer.enabled = false;
+        }
+    }
+
     protected override void Update()
     {
         ApplyMovement();
@@ -23,6 +36,8 @@ public class BombProjectile : ProjectileBase
         GenerateHitEffect();
         SoundManager.instance.Play(hitSFX);
         CastDamage();
+
+        trailRenderer.enabled = false;
 
         GetComponentInChildren<TrailRenderer>().enabled = false;
         gameObject.SetActive(false);
@@ -62,6 +77,11 @@ public class BombProjectile : ProjectileBase
 
         Vector2 dir = (target - (Vector2)transform.position).normalized;
         GroundVelocity = dir * Speed;
+
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = true;
+        }
     }
     void GenerateHitEffect()
     {

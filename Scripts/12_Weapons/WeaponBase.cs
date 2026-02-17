@@ -5,7 +5,6 @@ using UnityEngine;
 public class WeaponBase : MonoBehaviour
 {
     public WeaponData weaponData;
-
     public WeaponStats weaponStats;
 
     // ⭐ 동료 데미지 증가용 배수
@@ -16,14 +15,14 @@ public class WeaponBase : MonoBehaviour
     [SerializeField] protected string weaponName;
 
     protected float timer;
-    protected int damage; // Attack이 시작되면 GetDamage()로 얻어냄
-    protected float knockback; // Attack이 시작되면 GetKnockBackChance()로 얻어냄
-    [SerializeField] protected float knockbackSpeedFactor; // 각 무기의 프리펩에서 직접 입력
+    protected int damage;
+    protected float knockback;
+    [SerializeField] protected float knockbackSpeedFactor;
 
     public Character Wielder { get; private set; }
     protected bool isSynergyWeaponActivated;
-    protected bool isCriticalDamage; // 크리티컬은 GetDamage에서 결정되고 필요하면 projectileBase에 넘겨진다
-    protected bool isLead; // 리드는 공격할 때 크기 변화가 없도록 하기위해
+    protected bool isCriticalDamage;
+    protected bool isLead;
 
     public Animator anim;
     public Animator animExtra;
@@ -37,29 +36,28 @@ public class WeaponBase : MonoBehaviour
     protected float angleExtra;
 
     #region Flip
-    public bool InitialWeapon { get; set; } // weapon manager에서 설정
-    [field: SerializeField] public bool NeedParent { get; private set; } // weapon container에서 무기가 생성될 때 어떤 부위에도 parent 시키지 않음 
+    public bool InitialWeapon { get; set; }
+    [field: SerializeField] public bool NeedParent { get; private set; }
     protected float halfHeight, halfWidth;
     protected Vector2 size;
     [SerializeField] protected LayerMask enemy;
     protected WeaponContainerAnim weaponContainerAnim;
-    Coroutine weaponContainerCo; // 스케일을 할 때는 이전 코루틴을 취소하기 위해
-    protected Vector2 dir; // 가장 가까운 적으로의 방향
+    Coroutine weaponContainerCo;
+    protected Vector2 dir;
     protected Vector2 dirExtra;
     protected Vector2 direction;
     protected bool flip;
     public bool IsDirectional { get; set; }
-
     #endregion
 
     public virtual void Init(WeaponStats stats, bool isLead)
     {
         weaponContainerAnim = GetComponentInParent<WeaponContainerAnim>();
-        timer = stats.timeToAttack; // Init이 실행되는 시점에서 weaponStats이 초기화 되지 않아서 stats를 넘겨받아서 timer초기화
+        timer = stats.timeToAttack;
         isSynergyWeaponActivated = false;
-
         this.isLead = isLead;
     }
+
     protected virtual void Awake()
     {
         halfHeight = Camera.main.orthographicSize;
@@ -90,15 +88,12 @@ public class WeaponBase : MonoBehaviour
     {
         List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(2);
 
-        // null 체크 및 빈 리스트 체크
         if (closestEnemyPosition == null || closestEnemyPosition.Count == 0)
             return;
 
-        // 첫 번째 적 방향 설정
         dir = GetDirection(closestEnemyPosition[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        // 두 번째 적 처리 (안전하게)
         if (closestEnemyPosition.Count > 1)
         {
             if (closestEnemyPosition[1] == Vector2.zero)
@@ -113,7 +108,6 @@ public class WeaponBase : MonoBehaviour
         }
         else
         {
-            // 두 번째 적이 없으면 기본값
             angleExtra = angle + 120f;
         }
     }
@@ -140,12 +134,6 @@ public class WeaponBase : MonoBehaviour
     protected virtual void Attack()
     {
         GetAttackParameters();
-        // if (isLead == false) // 리드가 아닐 때만 공격 할 때 커지도록
-        // {
-        //     if (weaponContainerCo != null) StopCoroutine(weaponContainerCo);
-        //     weaponContainerCo = StartCoroutine(SetOriScale(1f));
-        // }
-        // Do Attack
     }
 
     IEnumerator SetOriScale(float scaleFactor)
@@ -155,15 +143,11 @@ public class WeaponBase : MonoBehaviour
         weaponContainerAnim.transform.localScale = .8f * Vector2.one;
     }
 
-    /// <summary>
-    /// Damage Bonus는 각 무기 damage의 퍼센테이지가 됨
-    /// </summary>
     public int GetDamage()
     {
         int damage = (int)new Equation().GetDamage(weaponStats.damage, Wielder.DamageBonus);
 
-        // ⭐ 동료 데미지 배수 적용 (Skill500용)
-        if (!InitialWeapon) // 동료들만
+        if (!InitialWeapon)
         {
             damage = (int)(damage * allyDamageMultiplier);
         }
@@ -182,13 +166,11 @@ public class WeaponBase : MonoBehaviour
         return damage;
     }
 
-    // ⭐ 동료 데미지 배수 설정 메서드 (Skill500에서 호출)
     public void SetAllyDamageMultiplier(float multiplier)
     {
         allyDamageMultiplier = multiplier;
     }
 
-    // ⭐ 동료 데미지 배수 초기화
     public void ResetAllyDamageMultiplier()
     {
         allyDamageMultiplier = 1f;
@@ -214,13 +196,11 @@ public class WeaponBase : MonoBehaviour
     internal void Upgrade(UpgradeData upgradeData)
     {
         weaponStats.Sum(upgradeData.weaponUpgradeStats);
-        // 스탯 업그레이드 후
         CheckIfMaxLevel();
     }
 
     void CheckIfMaxLevel()
     {
-        // 아이템과는 다르게 알을 먹으면 무기 레벨이 0인 상태로 acquired 되니까 Count와 같음
         if (weaponStats.currentLevel == weaponData.upgrades.Count)
         {
             Item item = Wielder.GetComponent<PassiveItems>().GetSynergyCouple(weaponData.SynergyWeapon);
@@ -230,15 +210,10 @@ public class WeaponBase : MonoBehaviour
                 return;
             }
 
-            // if (item.stats.currentLevel == item.upgrades.Count + 1)
-            if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
+            if (item.stats.currentLevel >= 1)
             {
                 Logger.Log($"[WeaponBase]{weaponData.DisplayName}시너지 웨폰 활성화");
                 Wielder.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(weaponData);
-            }
-            else
-            {
-                // Debug.Log("시너지 커플 아이템이 최고레벨이 아닙니다");
             }
         }
     }
@@ -255,6 +230,7 @@ public class WeaponBase : MonoBehaviour
             anim.SetTrigger("Shoot");
         }
     }
+
     protected void AnimShootExtra()
     {
         if (animExtra != null)
@@ -266,28 +242,22 @@ public class WeaponBase : MonoBehaviour
     #region 방향 관련
     protected Vector2 GetDirection(Vector2 closestEnemy)
     {
-        direction =
-        (closestEnemy - (Vector2)transform.position).normalized;
+        direction = (closestEnemy - (Vector2)transform.position).normalized;
         return direction;
     }
 
     protected virtual void RotateWeapon()
     {
         if (GameManager.instance.IsPaused) return;
-
-        if (weaponTools == null)
-            return;
-
+        if (weaponTools == null) return;
         if (weaponTools.IsDirectional)
             weaponTools.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
+
     protected void RotateExtraWeapon()
     {
         if (GameManager.instance.IsPaused) return;
-
-        if (weaponToolsExtra == null)
-            return;
-
+        if (weaponToolsExtra == null) return;
         if (weaponToolsExtra.IsDirectional)
             weaponToolsExtra.transform.rotation = Quaternion.Euler(0, 0, angleExtra);
     }
@@ -296,14 +266,11 @@ public class WeaponBase : MonoBehaviour
     {
         if (GameManager.instance.IsPaused) return;
         if (weaponTools == null) return;
-        //if (weaponToolsExtra == null) return;
-
         if (weaponTools.IsDirectional == false) return;
 
-        // flip
         if (weaponTools != null)
         {
-            if (dir.x < 0) // 타겟이 왼쪽에 있으면 y축으로 뒤집기
+            if (dir.x < 0)
             {
                 weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = true;
             }
@@ -312,7 +279,6 @@ public class WeaponBase : MonoBehaviour
                 weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = false;
             }
         }
-
 
         if (weaponToolsExtra != null)
         {
@@ -329,7 +295,7 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void LockFlip()
     {
-        if (NeedParent == false) // 무기를 페어런트 시켜서 움직이지 않는다면 Flip을 막는다
+        if (NeedParent == false)
         {
             transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z);
         }
@@ -339,19 +305,88 @@ public class WeaponBase : MonoBehaviour
     public virtual void ActivateSynergyWeapon()
     {
         isSynergyWeaponActivated = true;
-        // 개별 무기들에서 각자 구현
     }
+
     public bool IsSynergyWeaponActivated()
     {
         return isSynergyWeaponActivated;
     }
 
-    // 데미지 트래커
     public string GetWeaponName()
     {
         if (weaponData != null)
             return weaponData.DisplayName;
+        return gameObject.name;
+    }
 
-        return gameObject.name; // fallback
+    // ⭐⭐⭐ 새로 추가: 장착 아이템 조회 메서드 ⭐⭐⭐
+    
+    /// <summary>
+    /// 리드 오리의 장착된 아이템을 가져옵니다.
+    /// </summary>
+    /// <param name="slotType">장비 슬롯 타입 (Head=0, Chest=1, Face=2, Hand=3)</param>
+    /// <returns>장착된 Item, 없으면 null</returns>
+    protected Item GetEquippedItem(EquipmentType slotType)
+    {
+        // 리드 오리가 아니면 null 반환
+        if (!InitialWeapon)
+        {
+            return null;
+        }
+
+        // StartingDataContainer에서 장착 아이템 가져오기
+        StartingDataContainer container = GameManager.instance.startingDataContainer;
+        if (container == null)
+        {
+            Logger.LogWarning("[WeaponBase] StartingDataContainer를 찾을 수 없습니다.");
+            return null;
+        }
+
+        List<Item> equippedItems = container.GetItemDatas();
+        int slotIndex = (int)slotType;
+
+        if (slotIndex < 0 || slotIndex >= equippedItems.Count)
+        {
+            Logger.LogWarning($"[WeaponBase] 잘못된 슬롯 인덱스: {slotIndex}");
+            return null;
+        }
+
+        return equippedItems[slotIndex];
+    }
+
+    /// <summary>
+    /// 필수 장비 슬롯의 아이템을 가져옵니다.
+    /// </summary>
+    /// <returns>필수 장비 Item, 없으면 null</returns>
+    protected Item GetEssentialEquippedItem()
+    {
+        // 리드 오리가 아니면 null 반환
+        if (!InitialWeapon)
+        {
+            return null;
+        }
+
+        StartingDataContainer container = GameManager.instance.startingDataContainer;
+        if (container == null)
+        {
+            Logger.LogWarning("[WeaponBase] StartingDataContainer를 찾을 수 없습니다.");
+            return null;
+        }
+
+        int essentialIndex = container.GetEssectialIndex();
+        if (essentialIndex < 0)
+        {
+            Logger.LogWarning("[WeaponBase] 필수 장비 인덱스를 찾을 수 없습니다.");
+            return null;
+        }
+
+        List<Item> equippedItems = container.GetItemDatas();
+        if (essentialIndex >= equippedItems.Count)
+        {
+            Logger.LogWarning($"[WeaponBase] 필수 장비 인덱스가 범위를 벗어났습니다: {essentialIndex}");
+            return null;
+        }
+
+        return equippedItems[essentialIndex];
     }
 }

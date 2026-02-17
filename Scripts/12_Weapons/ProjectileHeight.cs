@@ -15,6 +15,8 @@ public class ProjectileHeight : MonoBehaviour
     SpriteRenderer sprRndshadow;
     Rigidbody2D rb;
 
+    float originalSize;
+
     float gravity = -100f;
     float verticalVelocity;
     float initVerticalVelocity;
@@ -47,6 +49,9 @@ public class ProjectileHeight : MonoBehaviour
             sprRndshadow.color = new Color(0, 0, 0, .25f);
             sprRndshadow.sortingLayerName = "ShadowOver";
 
+            // 사이즈 저장
+            originalSize = trnsBody.transform.localScale.x;
+
             IsDone = false;
 
             isInitialized = true;
@@ -66,7 +71,7 @@ public class ProjectileHeight : MonoBehaviour
 
             float verticalVelocityRate = Mathf.Abs(verticalVelocity / initVerticalVelocity);
             float sizeFactor = 1f + (1 - (verticalVelocityRate * sizeRateForHeight));
-            trnsBody.localScale = sizeFactor * Vector2.one;
+            trnsBody.localScale = sizeFactor * originalSize * Vector2.one;
         }
     }
     void UpdateShadow()

@@ -33,6 +33,10 @@ public class ShadowHeight : MonoBehaviour
     float currentTime;
     bool useTargetBasedTrajectory;
 
+    [Tooltip("0.01 - 0.05 사이에서 조절")]
+    [SerializeField] float sizeRateForHeight; // 높이당 스케일 증가율
+    Vector3 originalBodyScale; // 초기 스케일 저장
+
     void FixedUpdate()
     {
         // ✅ 초기화되지 않았으면 실행하지 않음
@@ -105,6 +109,8 @@ public class ShadowHeight : MonoBehaviour
             sprRndBody = GetComponentInChildren<SpriteRenderer>();
 
             trnsBody = sprRndBody.transform;
+
+            originalBodyScale = trnsBody.localScale; 
 
             if (noHeightShadow == false)
             {
@@ -196,6 +202,18 @@ public class ShadowHeight : MonoBehaviour
 
     void UpdateShadow()
     {
+        // ✅ 높이 기반 스케일 적용
+        if (!isGrounded && sizeRateForHeight > 0f)
+        {
+            float heightAboveGround = Mathf.Max(0f, trnsBody.position.y - trnsObject.position.y);
+            float sizeFactor = 1f + heightAboveGround * sizeRateForHeight;
+            trnsBody.localScale = originalBodyScale * sizeFactor;
+        }
+        else
+        {
+            trnsBody.localScale = originalBodyScale; // 착지 후 원래 크기로 복원
+        }
+
         if (noHeightShadow == false)
         {
             sprRndshadow.sprite = sprRndBody.sprite;
