@@ -32,7 +32,7 @@ public class PoolManager : MonoBehaviour
         enemyFolder.name = "Enemies";
         enemyFolder.transform.position = Vector3.zero;
         enemyFolder.transform.parent = transform;
-        
+
         itemFolders = new List<GameObject>();
 
         enemyFinder = FindObjectOfType<EnemyFinder>();
@@ -91,7 +91,7 @@ public class PoolManager : MonoBehaviour
     {
         GameObject select = null;
 
-        for (int i = 0;i < enemyPools[index].Count;i++)
+        for (int i = 0; i < enemyPools[index].Count; i++)
         {
             if (!enemyPools[index][i].activeSelf)
             {
@@ -153,7 +153,7 @@ public class PoolManager : MonoBehaviour
 
         // pool안의 오브젝트가 모두 사용중이라면 
         // pooling 태그 이름이 같은 폴더를 찾아서 자식으로 넣어줌
-        if(miscPools[poolingTag].Count < maxNum || maxNum == 0) // maxNum == 0이면 갯수 제한 없음.
+        if (miscPools[poolingTag].Count < maxNum || maxNum == 0) // maxNum == 0이면 갯수 제한 없음.
         {
             for (int i = 0; i < itemFolders.Count; i++)
             {
@@ -173,10 +173,10 @@ public class PoolManager : MonoBehaviour
     #region Get Gems
     public GameObject GetGem(GameObject gem)
     {
-        
+
         // GameObject gemToUI = Instantiate(gem, transform);
         // return gemToUI;
-        
+
         GameObject select = null;
 
         if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
