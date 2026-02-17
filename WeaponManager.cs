@@ -39,7 +39,6 @@ public class WeaponManager : MonoBehaviour
             GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, true);
 
             item = GameManager.instance.startingDataContainer.GetItemDatas();
-
         }
         else
         {
@@ -84,14 +83,48 @@ public class WeaponManager : MonoBehaviour
             Sprite sprite = null;
             int _index = (int)wd.equipmentType;
 
-            if (wd.defaultItems != null &&
-                                    _index < wd.defaultItems.Length &&
-                                    wd.defaultItems[_index] != null &&
-                                    wd.defaultItems[_index].spriteRow != null &&
-                                    wd.defaultItems[_index].spriteRow.sprites != null &&
-                                    wd.defaultItems[_index].spriteRow.sprites.Length > 0)
+            if (isInitialWeapon)
             {
-                sprite = wd.defaultItems[_index].spriteRow.sprites[0];
+                // ⭐ 리드 오리: StartingDataContainer의 장착된 아이템 스프라이트 사용
+                List<Item> equippedItems = GameManager.instance.startingDataContainer.GetItemDatas();
+
+                if (equippedItems != null &&
+                    _index < equippedItems.Count &&
+                    equippedItems[_index] != null &&
+                    equippedItems[_index].spriteRow != null &&
+                    equippedItems[_index].spriteRow.sprites != null &&
+                    equippedItems[_index].spriteRow.sprites.Length > 0)
+                {
+                    sprite = equippedItems[_index].spriteRow.sprites[0];
+                    Logger.Log($"[WeaponManager] 리드 오리 장착 아이템 스프라이트 사용: {equippedItems[_index].Name}");
+                }
+                else
+                {
+                    // 폴백: 장착된 아이템이 없으면 defaultItems 스프라이트 사용
+                    if (wd.defaultItems != null &&
+                        _index < wd.defaultItems.Length &&
+                        wd.defaultItems[_index] != null &&
+                        wd.defaultItems[_index].spriteRow != null &&
+                        wd.defaultItems[_index].spriteRow.sprites != null &&
+                        wd.defaultItems[_index].spriteRow.sprites.Length > 0)
+                    {
+                        sprite = wd.defaultItems[_index].spriteRow.sprites[0];
+                        Logger.LogWarning($"[WeaponManager] 리드 오리 장착 아이템 없음 - 기본 스프라이트 사용");
+                    }
+                }
+            }
+            else
+            {
+                // ⭐ 동료 오리: 기존대로 defaultItems 스프라이트 사용
+                if (wd.defaultItems != null &&
+                                _index < wd.defaultItems.Length &&
+                                wd.defaultItems[_index] != null &&
+                                wd.defaultItems[_index].spriteRow != null &&
+                                wd.defaultItems[_index].spriteRow.sprites != null &&
+                                wd.defaultItems[_index].spriteRow.sprites.Length > 0)
+                {
+                    sprite = wd.defaultItems[_index].spriteRow.sprites[0];
+                }
             }
 
             // 무기에 스프라이트 주입
