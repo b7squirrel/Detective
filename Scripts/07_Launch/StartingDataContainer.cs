@@ -36,24 +36,34 @@ public class StartingDataContainer : MonoBehaviour
         leadWd = cardDic.GetWeaponItemData(lead).weaponData;
 
         // 장비 데이터 넘기기
-        EquipmentCard[] equipCard = cardList.GetEquipmentsCardData(lead);
-        for (int i = 0; i < 4; i++)
-        {
-            if (equipCard[i] == null)
-            {
-                itemDatas.Add(null);
-                itemDatasDebug.Add(null);
-                continue;
-            }
-            itemDatas.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
-            itemDatasDebug.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
+EquipmentCard[] equipCard = cardList.GetEquipmentsCardData(lead);
+for (int i = 0; i < 4; i++)
+{
+    // ⭐ 임시 디버그
+    if (equipCard[i] != null)
+    {
+        Logger.Log($"[StartingDataContainer] 슬롯 {i}: {equipCard[i].CardData.Name} / EssentialEquip: {equipCard[i].CardData.EssentialEquip}");
+    }
+    else
+    {
+        Logger.Log($"[StartingDataContainer] 슬롯 {i}: null");
+    }
 
-            if (equipCard[i].CardData.EssentialEquip == EssentialEquip.Essential.ToString())
-            {
-                essectialEquipmentIndex = i;
-                essectialIndexDebug = i;
-            }
-        }
+    if (equipCard[i] == null)
+    {
+        itemDatas.Add(null);
+        itemDatasDebug.Add(null);
+        continue;
+    }
+    itemDatas.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
+    itemDatasDebug.Add(cardDic.GetWeaponItemData(equipCard[i].CardData).itemData);
+    if (equipCard[i].CardData.EssentialEquip == EssentialEquip.Essential.ToString())
+    {
+        essectialEquipmentIndex = i;
+        essectialIndexDebug = i;
+    }
+}
+Logger.Log($"[StartingDataContainer] 최종 essentialIndex: {essectialEquipmentIndex}");
 
         // 세자리 수로 스킬을 구분
         skillName = lead.PassiveSkill * 100
