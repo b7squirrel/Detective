@@ -13,6 +13,38 @@ public class GarlicWeapon : WeaponBase
         
     }
     
+    public override void Init(WeaponStats stats, bool isLead)
+    {
+        base.Init(stats, isLead);
+
+        if (InitialWeapon)
+        {
+            Item equippedItem = GetEssentialEquippedItem();
+
+            if (equippedItem != null && equippedItem.projectilePrefab != null)
+            {
+                // 기존 기본 파티클 비활성화
+                if (note != null)
+                    note.gameObject.SetActive(false);
+
+                // 장착 아이템의 파티클 프리팹을 자식으로 생성
+                GameObject newNoteObj = Instantiate(equippedItem.projectilePrefab, transform);
+                newNoteObj.transform.localPosition = Vector3.zero;
+                note = newNoteObj.GetComponent<ParticleSystem>();
+
+                Logger.Log($"[GarlicWeapon] 리드 오리 - 장착 파티클 사용: {equippedItem.Name}");
+            }
+            else
+            {
+                Logger.LogWarning("[GarlicWeapon] 리드 오리 - 장착된 파티클이 없어서 기본값 사용");
+            }
+        }
+        else
+        {
+            Logger.Log("[GarlicWeapon] 동료 오리 - 기본 파티클 사용");
+        }
+    }
+    
     protected override void Attack()
     {
         base.Attack();
