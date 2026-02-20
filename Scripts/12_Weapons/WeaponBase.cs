@@ -122,7 +122,13 @@ public class WeaponBase : MonoBehaviour
                             wd.stats.sizeOfArea,
                             wd.stats.projectileSpeed,
                             wd.stats.knockBackChance);
+
+        // ⭐ weaponData 할당 완료 후 호출
+        OnWeaponDataReady();
     }
+
+    // ⭐ 각 무기에서 override해서 프로젝타일 결정
+    protected virtual void OnWeaponDataReady() { }
 
     #region 공격
     protected virtual void GetAttackParameters()
@@ -320,7 +326,7 @@ public class WeaponBase : MonoBehaviour
     }
 
     // ⭐⭐⭐ 새로 추가: 장착 아이템 조회 메서드 ⭐⭐⭐
-    
+
     /// <summary>
     /// 리드 오리의 장착된 아이템을 가져옵니다.
     /// </summary>
@@ -347,7 +353,7 @@ public class WeaponBase : MonoBehaviour
 
         if (slotIndex < 0 || slotIndex >= equippedItems.Count)
         {
-            Logger.LogWarning($"[WeaponBase] 잘못된 슬롯 인덱스: {slotIndex}");
+            // Logger.LogWarning($"[WeaponBase] 잘못된 슬롯 인덱스: {slotIndex}");
             return null;
         }
 
@@ -360,12 +366,6 @@ public class WeaponBase : MonoBehaviour
     /// <returns>필수 장비 Item, 없으면 null</returns>
     protected Item GetEssentialEquippedItem()
     {
-        // 리드 오리가 아니면 null 반환
-        if (!InitialWeapon)
-        {
-            return null;
-        }
-
         StartingDataContainer container = GameManager.instance.startingDataContainer;
         if (container == null)
         {
@@ -373,20 +373,23 @@ public class WeaponBase : MonoBehaviour
             return null;
         }
 
-        int essentialIndex = container.GetEssectialIndex();
-        if (essentialIndex < 0)
+        if (InitialWeapon) // 리드 오리 - 기존 방식 유지
         {
-            Logger.LogWarning("[WeaponBase] 필수 장비 인덱스를 찾을 수 없습니다.");
-            return null;
-        }
+            int essentialIndex = container.GetEssectialIndex();
+            if (essentialIndex < 0) return null;
 
-        List<Item> equippedItems = container.GetItemDatas();
-        if (essentialIndex >= equippedItems.Count)
+            List<Item> equippedItems = container.GetItemDatas();
+            if (essentialIndex >= equippedItems.Count) return null;
+            return equippedItems[essentialIndex];
+        }
+        else // 동료 오리 - weaponData.equipmentType을 인덱스로 사용
         {
-            Logger.LogWarning($"[WeaponBase] 필수 장비 인덱스가 범위를 벗어났습니다: {essentialIndex}");
-            return null;
-        }
+            if (weaponData?.defaultItems == null) return null;
 
-        return equippedItems[essentialIndex];
+            int allyIndex = (int)weaponData.equipmentType;
+            if (allyIndex < 0 || allyIndex >= weaponData.defaultItems.Length) return null;
+
+            return weaponData.defaultItems[allyIndex];
+        }
     }
 }

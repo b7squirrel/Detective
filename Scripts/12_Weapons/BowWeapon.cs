@@ -125,7 +125,7 @@ public class BowWeapon : WeaponBase
         {
             int randomIndex = Random.Range(0, validEnemies.Count);
             targetPosition = validEnemies[randomIndex];
-            Logger.Log($"[bowWeapon] 적 선택: {targetPosition}");
+            // Logger.Log($"[bowWeapon] 적 선택: {targetPosition}");
         }
         else
         {
@@ -133,7 +133,7 @@ public class BowWeapon : WeaponBase
             Vector2 randomDirection = Random.insideUnitCircle.normalized;
             float randomDistance = Random.Range(0f, randomShotRadius);
             targetPosition = (Vector2)transform.position + randomDirection * randomDistance;
-            Logger.Log($"[bowWeapon] 랜덤 위치 선택: {targetPosition}");
+            // Logger.Log($"[bowWeapon] 랜덤 위치 선택: {targetPosition}");
         }
         
         return targetPosition;

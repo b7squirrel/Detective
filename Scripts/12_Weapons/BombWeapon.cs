@@ -23,36 +23,25 @@ public class BombWeapon : WeaponBase
     public override void Init(WeaponStats stats, bool isLead)
     {
         base.Init(stats, isLead);
+    }
 
-        // ⭐ 프로젝타일 결정
-        if (InitialWeapon) // 리드 오리
+    protected override void OnWeaponDataReady()
+    {
+        Item equippedItem = GetEssentialEquippedItem();
+
+        if (equippedItem != null && equippedItem.projectilePrefab != null)
         {
-            Item equippedItem = GetEssentialEquippedItem();
-            
-            if (equippedItem != null && equippedItem.projectilePrefab != null)
-            {
-                // 장착된 아이템의 프로젝타일 사용
-                currentBombPrefab = equippedItem.projectilePrefab;
-                currentVerticalVelocity = equippedItem.projectileVerticalVelocity;
-                
-                Logger.Log($"[BombWeapon] 리드 오리 - 장착 아이템 프로젝타일 사용: {equippedItem.Name}");
-            }
-            else
-            {
-                // 폴백: 인스펙터의 기본 프로젝타일 사용
-                currentBombPrefab = bomb;
-                currentVerticalVelocity = verticalVelocity;
-                
-                Logger.LogWarning("[BombWeapon] 리드 오리 - 장착된 프로젝타일이 없어서 기본값 사용");
-            }
+            // 장착된 아이템의 프로젝타일 사용
+            currentBombPrefab = equippedItem.projectilePrefab;
+            currentVerticalVelocity = equippedItem.projectileVerticalVelocity;
+            Logger.Log($"[BombWeapon] 프로젝타일 사용: {equippedItem.Name} / IsLead: {InitialWeapon}");
         }
-        else // 동료 오리
+        else
         {
-            // 인스펙터의 프로젝타일 사용
+            // 폴백: 인스펙터의 기본 프로젝타일 사용
             currentBombPrefab = bomb;
             currentVerticalVelocity = verticalVelocity;
-            
-            Logger.Log("[BombWeapon] 동료 오리 - 기본 프로젝타일 사용");
+            Logger.LogWarning("[BombWeapon] 기본값 사용");
         }
     }
 

@@ -15,26 +15,20 @@ public class TennisWeapon : WeaponBase
     public override void Init(WeaponStats stats, bool isLead)
     {
         base.Init(stats, isLead);
+    }
 
-        if (InitialWeapon)
+    protected override void OnWeaponDataReady()
+    {
+        Item equippedItem = GetEssentialEquippedItem();
+        if (equippedItem != null && equippedItem.projectilePrefab != null)
         {
-            Item equippedItem = GetEssentialEquippedItem();
-
-            if (equippedItem != null && equippedItem.projectilePrefab != null)
-            {
-                currentTennisBallPrefab = equippedItem.projectilePrefab;
-                Logger.Log($"[TennisWeapon] 리드 오리 - 장착 아이템 프로젝타일 사용: {equippedItem.Name}");
-            }
-            else
-            {
-                currentTennisBallPrefab = weaponTennisBall;
-                Logger.LogWarning("[TennisWeapon] 리드 오리 - 장착된 프로젝타일이 없어서 기본값 사용");
-            }
+            currentTennisBallPrefab = equippedItem.projectilePrefab;
+            // Logger.Log($"[TennisWeapon] 프로젝타일 사용: {equippedItem.Name} / IsLead: {InitialWeapon}");
         }
         else
         {
             currentTennisBallPrefab = weaponTennisBall;
-            Logger.Log("[TennisWeapon] 동료 오리 - 기본 프로젝타일 사용");
+            Logger.LogWarning("[TennisWeapon] 기본값 사용");
         }
     }
 

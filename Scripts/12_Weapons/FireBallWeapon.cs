@@ -13,45 +13,24 @@ public class FireBallWeapon : WeaponBase
     GameObject currentWeaponPrefab;
 
     public override void Init(WeaponStats stats, bool isLead)
-{
-    base.Init(stats, isLead);
+    {
+        base.Init(stats, isLead);
+    }
 
-    // ⭐ 디버그: InitialWeapon 상태 확인
-    Logger.Log($"[FireBallWeapon] Init 시작 - InitialWeapon: {InitialWeapon}");
-
-    if (InitialWeapon)
+    protected override void OnWeaponDataReady()
     {
         Item equippedItem = GetEssentialEquippedItem();
-
-        // ⭐ 디버그: 반환된 아이템 확인
-        Logger.Log($"[FireBallWeapon] GetEssentialEquippedItem 반환값: {(equippedItem == null ? "null" : equippedItem.Name)}");
-
-        if (equippedItem != null)
-        {
-            // ⭐ 디버그: projectilePrefab 확인
-            Logger.Log($"[FireBallWeapon] projectilePrefab: {(equippedItem.projectilePrefab == null ? "null" : equippedItem.projectilePrefab.name)}");
-        }
-
         if (equippedItem != null && equippedItem.projectilePrefab != null)
         {
             currentWeaponPrefab = equippedItem.projectilePrefab;
-            Logger.Log($"[FireBallWeapon] 리드 오리 - 장착 아이템 프로젝타일 사용: {equippedItem.Name}");
+            Logger.Log($"[FireBallWeapon] 프로젝타일 사용: {equippedItem.Name} / IsLead: {InitialWeapon}");
         }
         else
         {
             currentWeaponPrefab = weapon;
-            Logger.LogWarning("[FireBallWeapon] 리드 오리 - 장착된 프로젝타일이 없어서 기본값 사용");
+            Logger.LogWarning("[FireBallWeapon] 기본값 사용");
         }
     }
-    else
-    {
-        currentWeaponPrefab = weapon;
-        Logger.Log("[FireBallWeapon] 동료 오리 - 기본 프로젝타일 사용");
-    }
-
-    // ⭐ 디버그: 최종 결정된 프로젝타일 확인
-    Logger.Log($"[FireBallWeapon] 최종 currentWeaponPrefab: {(currentWeaponPrefab == null ? "null" : currentWeaponPrefab.name)}");
-}
 
     protected override void Attack()
     {
@@ -78,11 +57,11 @@ public class FireBallWeapon : WeaponBase
             // ⭐ currentWeaponPrefab 사용 (리드 오리면 장착 아이템, 동료면 기본값)
             GameObject fireBall = GameManager.instance.poolManager.GetMisc(currentWeaponPrefab);
             float index = 0f;
-            if(i == 0)
+            if (i == 0)
             {
                 index = 0;
             }
-            else if(i == 1)
+            else if (i == 1)
             {
                 index = -15f;
             }
@@ -115,7 +94,7 @@ public class FireBallWeapon : WeaponBase
 
                 // ⭐ 시너지 무기도 currentWeaponPrefab 사용
                 GameObject fireBallEx = GameManager.instance.poolManager.GetMisc(currentWeaponPrefab);
-                if(fireBallEx != null)
+                if (fireBallEx != null)
                 {
                     Vector3 directionExtra = Quaternion.AngleAxis(index, Vector3.forward) * dirExtra;
                     fireBallEx.transform.position = transform.position;

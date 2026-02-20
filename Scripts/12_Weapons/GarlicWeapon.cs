@@ -9,42 +9,31 @@ public class GarlicWeapon : WeaponBase
     protected override void Awake()
     {
         base.Awake();
-        note = GetComponentInChildren<ParticleSystem>();
-        
     }
-    
+
     public override void Init(WeaponStats stats, bool isLead)
     {
         base.Init(stats, isLead);
+    }
 
-        if (InitialWeapon)
+    protected override void OnWeaponDataReady()
+    {
+        Item equippedItem = GetEssentialEquippedItem();
+
+        if (equippedItem != null && equippedItem.projectilePrefab != null)
         {
-            Item equippedItem = GetEssentialEquippedItem();
-
-            if (equippedItem != null && equippedItem.projectilePrefab != null)
-            {
-                // 기존 기본 파티클 비활성화
-                if (note != null)
-                    note.gameObject.SetActive(false);
-
-                // 장착 아이템의 파티클 프리팹을 자식으로 생성
-                GameObject newNoteObj = Instantiate(equippedItem.projectilePrefab, transform);
-                newNoteObj.transform.localPosition = Vector3.zero;
-                note = newNoteObj.GetComponent<ParticleSystem>();
-
-                Logger.Log($"[GarlicWeapon] 리드 오리 - 장착 파티클 사용: {equippedItem.Name}");
-            }
-            else
-            {
-                Logger.LogWarning("[GarlicWeapon] 리드 오리 - 장착된 파티클이 없어서 기본값 사용");
-            }
+            if (note != null) note.gameObject.SetActive(false);
+            GameObject newNoteObj = Instantiate(equippedItem.projectilePrefab, transform);
+            newNoteObj.transform.localPosition = Vector3.zero;
+            note = newNoteObj.GetComponent<ParticleSystem>();
         }
         else
         {
-            Logger.Log("[GarlicWeapon] 동료 오리 - 기본 파티클 사용");
+            // ⭐ 어느 쪽이 null인지 구분
+            Logger.LogWarning($"[GarlicWeapon] 기본값 사용 - equippedItem: {(equippedItem == null ? "null" : "있음")}, projectilePrefab: {(equippedItem?.projectilePrefab == null ? "null" : "있음")}");
         }
     }
-    
+
     protected override void Attack()
     {
         base.Attack();
