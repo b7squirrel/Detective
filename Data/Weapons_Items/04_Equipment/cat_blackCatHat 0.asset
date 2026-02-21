@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
+  m_Name: cat_blackCatHat 0
+  m_EditorClassIdentifier: 
+  Name: cat_blackCatHat
+  DisplayName: "\uAC80\uC740 \uACE0\uC591\uC774 \uBAA8\uC790"
+  grade: 0
+  charImage: {fileID: 21300000, guid: 3c6dd9f1071564cf4bd6a600e0a53efd, type: 3}
+  equippedImage: {fileID: 21300000, guid: cef7c553bc20948ca902589306f0162c, type: 3}
+  spriteRow:
+    sprites:
+    - {fileID: 21300000, guid: 3c6dd9f1071564cf4bd6a600e0a53efd, type: 3}
+  needToOffset: 0
+  posHead: {x: 0, y: 0}
+  worldPosHead: {x: 0, y: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
+    PauseCardAnim: {fileID: 0}
+  SynergyWeapons: []
+  stats:
+    armor: 0
+    magnetSize: 0
+    moveSpeed: 0
+    maxHp: 0
+    damage: 0
+    projectileAmount: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    criticalDamageChance: 0
+    coolTimeDown: 0
+    hpRegenRate: 0
+    hp: 0
+    coins: 0
+    currentLevel: 0
+  upgrades: []
+  dropChance: 0
+  itemIndex: 175
+  projectilePrefab: {fileID: 1658109514592720191, guid: 4a1fb927f92e240e49b034c007dd2382, type: 3}
+  projectileVerticalVelocity: 10
