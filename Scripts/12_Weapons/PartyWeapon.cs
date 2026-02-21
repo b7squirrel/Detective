@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PartyWeapon : WeaponBase
 {
-    [SerializeField] GameObject partyProjectilePrefab;
-    [SerializeField] GameObject synergyProjectilePrefab;
+    [SerializeField] GameObject partyProjectilePrefab; // ⭐ 폴백용
     [SerializeField] AudioClip shoot;
     
     [Header("Offset Settings")]
@@ -19,6 +18,30 @@ public class PartyWeapon : WeaponBase
     
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
+
+    // ⭐ 런타임에 결정되는 프로젝타일
+    GameObject currentPartyProjectilePrefab;
+
+    public override void Init(WeaponStats stats, bool isLead)
+    {
+        base.Init(stats, isLead);
+    }
+
+    protected override void OnWeaponDataReady()
+    {
+        Item equippedItem = GetEssentialEquippedItem();
+
+        if (equippedItem != null && equippedItem.projectilePrefab != null)
+        {
+            currentPartyProjectilePrefab = equippedItem.projectilePrefab;
+            Logger.Log($"[PartyWeapon] 프로젝타일 사용: {equippedItem.Name} / IsLead: {InitialWeapon}");
+        }
+        else
+        {
+            currentPartyProjectilePrefab = partyProjectilePrefab;
+            Logger.LogWarning("[PartyWeapon] 기본값 사용");
+        }
+    }
 
     protected override void Attack()
     {
@@ -35,8 +58,12 @@ public class PartyWeapon : WeaponBase
 
     IEnumerator AttackCo(Vector2 targetPosition)
     {
-        GameObject projectilePrefab = isSynergyWeaponActivated ? synergyProjectilePrefab : partyProjectilePrefab;
-        
+        if (currentPartyProjectilePrefab == null)
+        {
+            Logger.LogError("[PartyWeapon] currentPartyProjectilePrefab이 null입니다!");
+            yield break;
+        }
+
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
             AnimShoot();
@@ -47,7 +74,8 @@ public class PartyWeapon : WeaponBase
             Vector2 randomOffset = Random.insideUnitCircle * positionOffsetRange;
             Vector2 offsetTargetPosition = targetPosition + randomOffset;
             
-            GameObject projectileObj = GameManager.instance.poolManager.GetMisc(projectilePrefab);
+            // ⭐ currentPartyProjectilePrefab 사용
+            GameObject projectileObj = GameManager.instance.poolManager.GetMisc(currentPartyProjectilePrefab);
             
             if (projectileObj != null)
             {
@@ -60,14 +88,6 @@ public class PartyWeapon : WeaponBase
                 {
                     sprite.transform.localPosition = Vector3.zero;
                 }
-                
-                // TrailRenderer 리셋
-                // TrailRenderer trail = projectileObj.GetComponentInChildren<TrailRenderer>();
-                // if (trail != null)
-                // {
-                //     trail.enabled = true;
-                //     trail.Clear();
-                // }
 
                 // 타겟 방향 계산
                 Vector2 direction = (offsetTargetPosition - (Vector2)transform.position).normalized;
