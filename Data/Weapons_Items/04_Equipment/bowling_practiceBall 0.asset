@@ -15,10 +15,11 @@ MonoBehaviour:
   Name: bowling_practiceBall
   DisplayName: "\uC5F0\uC2B5\uC6A9 \uBCFC\uB9C1\uACF5"
   grade: 0
-  charImage: {fileID: 0}
-  equippedImage: {fileID: 0}
+  charImage: {fileID: 21300000, guid: 0bdd89771c9a842359ee01466d76908c, type: 3}
+  equippedImage: {fileID: 21300000, guid: 7ad543bf04dc94f86be611b7e4c3fdee, type: 3}
   spriteRow:
-    sprites: []
+    sprites:
+    - {fileID: 21300000, guid: 0bdd89771c9a842359ee01466d76908c, type: 3}
   needToOffset: 0
   posHead: {x: 0, y: 0}
   worldPosHead: {x: 0, y: 0}
@@ -44,6 +45,6 @@ MonoBehaviour:
     currentLevel: 0
   upgrades: []
   dropChance: 0
-  itemIndex: 0
+  itemIndex: 215
   projectilePrefab: {fileID: 1106328710821645262, guid: a150425cc9d9849c3ae52c82955f7ce9, type: 3}
   projectileVerticalVelocity: 10
