@@ -320,7 +320,7 @@ public class GachaSystem : MonoBehaviour
         CardData defaultEquip;
         if (wd.defaultItems[index] == null)
         {
-            Logger.LogError("필수 장비가 인스펙터에 없습니다");
+            Logger.LogError("필수 장비가 인스펙터에 없습니다. weaponData의 default Items에 할당해 주세요");
             return;
         }
 
