@@ -29,6 +29,12 @@ public class WeaponContainerAnim : MonoBehaviour
     bool _facingRight = true;
     int essentialIndex;
 
+    [Header("Muzzle Flash Point")]
+    [SerializeField] Transform CenterMuzzlePoint;
+    [SerializeField] Transform SLMuzzlePoint;
+    [SerializeField] Transform SRMuzzlePoint;
+
+
     [Header("Invincible Effects")]
     Coroutine invincibleSpriteChange;
 
@@ -322,6 +328,21 @@ public class WeaponContainerAnim : MonoBehaviour
             sr[i].color = defaultColor;
         }
         if (face != null) face.color = defaultColor;
+    }
+    #endregion
+
+    #region Muzzle Point
+    public Transform GetCenterMuzzlePoint()
+    {
+        return CenterMuzzlePoint;
+    }
+    public Transform GetSLMuzzlePoint()
+    {
+        return SLMuzzlePoint;
+    }
+    public Transform GetSRMuzzlePoint()
+    {
+        return SRMuzzlePoint;
     }
     #endregion
 }

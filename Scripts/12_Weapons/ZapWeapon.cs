@@ -117,13 +117,31 @@ public class ZapWeapon : WeaponBase
 
             if (muzzle != null)
             {
-                muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
-                muzzle.transform.position = ShootPoint.position - new Vector3(.2f, 0, 0);
+                Transform SLMuzzlePoint = GetComponentInParent<WeaponContainerAnim>().GetSLMuzzlePoint();
+                if (SLMuzzlePoint != null)
+                {
+                    muzzle.transform.parent = SLMuzzlePoint;
+                    muzzle.transform.position = SLMuzzlePoint.position;
+                }
+                else
+                {
+                    muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+                    muzzle.transform.position = ShootPoint.position - new Vector3(.2f, 0, 0);
+                }
             }
             if (muzzle2 != null)
             {
-                muzzle2.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
-                muzzle2.transform.position = ShootPoint.position - new Vector3(-.2f, 0, 0);
+                Transform SRMuzzlePoint = GetComponentInParent<WeaponContainerAnim>().GetSRMuzzlePoint();
+                if (SRMuzzlePoint != null)
+                {
+                    muzzle2.transform.parent = SRMuzzlePoint;
+                    muzzle2.transform.position = SRMuzzlePoint.position;
+                }
+                else
+                {
+                    muzzle2.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+                    muzzle2.transform.position = ShootPoint.position - new Vector3(-.2f, 0, 0);
+                }
             }
         }
         muzzle.gameObject.SetActive(true);

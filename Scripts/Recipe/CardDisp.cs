@@ -189,7 +189,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         Level.text = LocalizationManager.Game.level + " " + cardData.Level;
 
         // 임시로 타이틀을 없애보자. 작은 카드 안에 정보가 너무 많음.
-        Title.text = "";
+        // Title.text = "";
 
         if (displayEquippedText) SetEquppiedTextActive(onEquipment);
 

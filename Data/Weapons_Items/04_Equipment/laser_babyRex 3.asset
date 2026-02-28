@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
+  m_Name: laser_babyRex 3
+  m_EditorClassIdentifier: 
+  Name: laser_babyRex
+  DisplayName: "\uBE59\uAE00 \uC544\uAE30 \uAD34\uC218\uC637"
+  grade: 3
+  charImage: {fileID: 21300000, guid: 47c5dfd5eeeaa784c8592c809f594ee2, type: 3}
+  equippedImage: {fileID: 735485920, guid: 41bfa5202858a02409bb5315c13a1851, type: 3}
+  spriteRow:
+    sprites:
+    - {fileID: 21300000, guid: 6777e77904b8f4db19e8e0b1bf7316c1, type: 3}
+    - {fileID: 21300000, guid: 9f1f62d8efae44e3a85d65b160382ac7, type: 3}
+    - {fileID: 21300000, guid: e3a628fac0ca542e1aaf3eed26f3dcf2, type: 3}
+    - {fileID: 21300000, guid: d2119441b0fea4c19b9a0a1cf53ed2c4, type: 3}
+    - {fileID: 21300000, guid: 0ae054602e6654149a2f32aa90aa0d0e, type: 3}
+    - {fileID: 21300000, guid: 88fd12945b20c42a99b07facdef1bf39, type: 3}
+    - {fileID: 21300000, guid: 1cf8b9e39bdc84c6bb8fd102ccb10783, type: 3}
+    - {fileID: 21300000, guid: 26742585572ce4e60bbb362714871d0a, type: 3}
+    - {fileID: 21300000, guid: fbac45d35cce44d94b24ed5c4765c390, type: 3}
+  needToOffset: 1
+  posHead: {x: -10, y: 40}
+  worldPosHead: {x: 0, y: 0.15}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 9100000, guid: 6d0585d0f6c0f6b4ea70673564dab8f8, type: 2}
+    InGamePlayerAnim: {fileID: 0}
+    PauseCardAnim: {fileID: 0}
+  SynergyWeapons: []
+  stats:
+    armor: 1
+    magnetSize: 0
+    moveSpeed: 0
+    maxHp: 0
+    damage: 0
+    projectileAmount: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    criticalDamageChance: 0
+    coolTimeDown: 0
+    hpRegenRate: 0
+    hp: 300
+    coins: 0
+    currentLevel: 0
+  upgrades: []
+  dropChance: 0
+  itemIndex: 63
+  projectilePrefab: {fileID: 0}
+  projectileVerticalVelocity: 10
