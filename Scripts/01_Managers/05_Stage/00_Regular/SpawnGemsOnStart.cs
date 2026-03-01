@@ -6,27 +6,31 @@ public class SpawnGemsOnStart : MonoBehaviour
 {
     [SerializeField] int numbersOfGemToSpawn;
     [SerializeField] GameObject gemToSpawn;
-    [SerializeField] float innerRadius;
-    [SerializeField] float outerRadius;
+    [SerializeField] float innerRadius = 11.9f;
+    [SerializeField] float outerRadius = 12f;
     GameManager manager;
 
     [Header("Chest")]
     [SerializeField] GameObject chestPrefab;
-    [SerializeField] float innerRadiusForChest;
-    [SerializeField] float outerRadiusForChest;
+    [SerializeField] float innerRadiusForChest = 11f;
+    [SerializeField] float outerRadiusForChest = 18f;
 
     public void InitGemData(GameObject _gemToSpawn, int _gemNums, float _innerR, float _outerR)
     {
         gemToSpawn = _gemToSpawn;
         numbersOfGemToSpawn = _gemNums;
-        innerRadius = _innerR;
-        outerRadius = _outerR;
+        // innerRadius = _innerR;
+        // outerRadius = _outerR;
+        innerRadius = 11.9f;
+        outerRadius = 12f;
     }
     public void InitChestData(GameObject _chestPrefab, float _innerR, float _outerR)
     {
         chestPrefab = _chestPrefab;
-        innerRadiusForChest = _innerR;
-        outerRadiusForChest = _outerR;
+        // innerRadiusForChest = _innerR;
+        // outerRadiusForChest = _outerR;
+        innerRadiusForChest = 11f;
+        outerRadiusForChest = 13f;
     }
 
     public void GenGemsAndChest()
