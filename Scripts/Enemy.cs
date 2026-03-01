@@ -254,4 +254,15 @@ public class Enemy : EnemyBase
         return nextVec;
     }
     #endregion
+
+    #region 점프 공격 데미지
+    public void AttackOnLanding(float radius)
+    {
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, radius, playerLayer);
+        if (hit != null && hit.TryGetComponent(out Character player))
+        {
+            player.TakeDamage(Stats.damage * 10, EnemyType.Melee);
+        }
+    }
+    #endregion
 }

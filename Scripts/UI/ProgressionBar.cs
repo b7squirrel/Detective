@@ -70,8 +70,9 @@ public class ProgressionBar : MonoBehaviour
         progressBar.value += normalizedLengthUnit * eventUnits[eventUnitsIndex];
         if (_isSubBoss)
         {
-            //milestoneAnims[eventUnitsIndex].SetTrigger("Cleared");
             eventUnitsIndex++;
+            // 서브보스 처치 시 정확한 마일스톤 위치로 스냅
+            progressBar.value = normalizedLengthUnit * eventUnitsIndex;
         }
     }
 }

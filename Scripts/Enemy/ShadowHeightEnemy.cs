@@ -26,6 +26,11 @@ public class ShadowHeightEnemy : MonoBehaviour
                        // ⭐ 추가: 점프 시 수평 이동 속도 저장
     Vector2 jumpHorizontalVelocity;
 
+    [Header("점프 착지 데미지 범위")]
+    [SerializeField] float landingDamageRadius;
+    [Header("착지 범위 인디케이터")]
+    [SerializeField] SpriteRenderer landingRangeIndicator;
+
     [Header("Slow Effect")]
     bool isSlowed; // 현재 느림 상태인지
     float originalVerticalVelocity; // 원래 점프 속도
@@ -42,6 +47,11 @@ public class ShadowHeightEnemy : MonoBehaviour
 
     EnemyBase enemyBase;
 
+    void OnEnable()
+    {
+        if (landingRangeIndicator != null)
+            landingRangeIndicator.gameObject.SetActive(false);
+    }
     #region Update
     void Update()
     {
@@ -75,6 +85,21 @@ public class ShadowHeightEnemy : MonoBehaviour
 
         // ⭐ 점프 시작 시 현재 이동 방향과 속도 저장
         jumpHorizontalVelocity = enemy.GetNextVec();
+
+        // ⭐ 착지 범위 표시
+        if (landingRangeIndicator != null)
+        {
+            if (landingDamageRadius > 0f)
+            {
+                landingRangeIndicator.gameObject.SetActive(true);
+                float diameter = landingDamageRadius * 2.5f;
+                landingRangeIndicator.transform.localScale = new Vector3(diameter, diameter, 1f);
+            }
+            else
+            {
+                landingRangeIndicator.gameObject.SetActive(false);
+            }
+        }
     }
 
     public void SetIsJumper(bool isJumper, float jumpInterval)
@@ -131,6 +156,12 @@ public class ShadowHeightEnemy : MonoBehaviour
         {
             currentVerticalVel += gravity * Time.deltaTime;
             trnsBody.position += new Vector3(0, currentVerticalVel, 0) * Time.deltaTime;
+
+            // ⭐ 인디케이터는 항상 그림자(지면) 위치에 고정
+            if (landingRangeIndicator != null)
+                landingRangeIndicator.transform.position = transform.position;
+            // ⭐ 부모 플립에 영향받지 않도록 월드 회전 고정
+            landingRangeIndicator.transform.rotation = Quaternion.identity;
         }
     }
     void UpdateLayers()
@@ -164,14 +195,24 @@ public class ShadowHeightEnemy : MonoBehaviour
     {
         if (IsDone) return;
 
+        // ⭐ 인디케이터 숨기기
+        if (landingRangeIndicator != null)
+            landingRangeIndicator.gameObject.SetActive(false);
+
+        // ⭐ trnsBody를 지면에 강제 고정
+        trnsBody.position = transform.position;
+
         if (landingSound != null) SoundManager.instance.Play(landingSound);
+
         if (landingEffectPrefab != null)
         {
             GameObject landingEffect = GameManager.instance.poolManager.GetMisc(landingEffectPrefab);
             landingEffect.transform.position = landingEffectTrans.position;
-            landingEffect.transform.localScale = 10f * Vector2.one;
+            float diameter = landingDamageRadius * 2.8f;
+            landingEffect.transform.localScale = new Vector3(diameter, diameter, 1f);
         }
 
+        enemy.AttackOnLanding(landingDamageRadius);
         onGroundHitEvent?.Invoke();
     }
     #endregion

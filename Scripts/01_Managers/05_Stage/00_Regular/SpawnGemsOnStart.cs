@@ -36,7 +36,7 @@ public class SpawnGemsOnStart : MonoBehaviour
 
     IEnumerator SpawnGemsAndChestCo()
     {
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.8f);
         
         manager = FindObjectOfType<GameManager>();
         for (int i = 0; i < numbersOfGemToSpawn; i++)
@@ -51,5 +51,7 @@ public class SpawnGemsOnStart : MonoBehaviour
             new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadiusForChest, innerRadiusForChest);
 
         GameManager.instance.fieldItemSpawner.SpawnEggBox(posChest);
+
+        CameraShake.instance.Shake();
     }
 }
