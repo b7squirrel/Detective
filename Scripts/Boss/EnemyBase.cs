@@ -682,7 +682,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
 
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
-        if (effect != null) effect.transform.position = hitEffectPoint.position;
+        if (effect != null) effect.transform.position = target;
 
         // 넉백
         enemyKnockBackSpeedFactor = knockBackSpeedFactor;
@@ -1055,6 +1055,19 @@ public class EnemyBase : MonoBehaviour, Idamageable
         //         }
         //     }
         // }
+    }
+
+    // 보스들의 경우 너무 한 점에만 공격이 그래픽적으로 집중되지 않도록. Hit effect가 한 곳에만 생기지 않도록. 
+    public Vector2 GetRandomBodyPoint()
+    {
+        if ((isSubBoss || isBoss) && colEnemy != null)
+        {
+            Bounds bounds = colEnemy.bounds;
+            float x = UnityEngine.Random.Range(bounds.min.x, bounds.max.x);
+            float y = UnityEngine.Random.Range(bounds.min.y, bounds.max.y);
+            return new Vector2(x, y);
+        }
+        return transform.position;
     }
     #endregion
 }

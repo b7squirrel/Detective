@@ -30,6 +30,7 @@ public class ZapProjectile : ProjectileBase
     [SerializeField] AudioClip targetSwitchSound;
 
     Transform currentTarget; // 현재 타겟
+    Vector2 cachedTargetPoint; // ← 추가: 타겟의 랜덤 히트 포인트 캐싱
     float switchTimer; // 타겟 전환 타이머
     float damageTimer; // ✅ 데미지 타이머
     bool isSynergyActivated;
@@ -162,6 +163,14 @@ public class ZapProjectile : ProjectileBase
 
                 currentTarget = hits[i].transform;
 
+                currentTarget = hits[i].transform;
+
+                // ← 추가: SubBoss/StageBoss면 랜덤 바디 포인트, 일반 적은 position
+                EnemyBase enemyBase = hits[i].GetComponent<EnemyBase>();
+                cachedTargetPoint = enemyBase != null
+                    ? enemyBase.GetRandomBodyPoint()
+                    : (Vector2)currentTarget.position;
+
                 // 새 타겟을 찾았을 때 사운드 재생
                 if (targetSwitchSound != null)
                 {
@@ -185,7 +194,7 @@ public class ZapProjectile : ProjectileBase
             return;
 
         Vector2 startPos = cachedWeapon.ShootPoint.position; // ✅ 캐싱된 것 사용
-        Vector2 endPos = currentTarget.position;
+        Vector2 endPos = cachedTargetPoint;
 
         // 데미지에 비례하여 기본 굵기 조절
         float damageRatio = Mathf.Clamp(Damage / baseDamage, 1f, maxWidth / baseWidth);
@@ -269,17 +278,17 @@ public class ZapProjectile : ProjectileBase
             return;
 
         // 데미지 처리
-        PostMessage(Damage, currentTarget.position);
+        PostMessage(Damage, cachedTargetPoint); 
         GameObject hitEffectObj = GetComponent<HitEffects>()?.hitEffect;
         if (hitEffectObj != null)
         {
-            hitEffectObj.transform.position = currentTarget.position;
+            hitEffectObj.transform.position = cachedTargetPoint; 
         }
 
         damageable.TakeDamage(Damage,
                              KnockBackChance,
                              KnockBackSpeedFactor,
-                             currentTarget.position,
+                             cachedTargetPoint,
                              hitEffectObj);
 
         // 데미지 트래커 기록

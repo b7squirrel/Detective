@@ -31,6 +31,13 @@ public class SpawnGemsOnStart : MonoBehaviour
 
     public void GenGemsAndChest()
     {
+        StartCoroutine(SpawnGemsAndChestCo());
+    }
+
+    IEnumerator SpawnGemsAndChestCo()
+    {
+        yield return new WaitForSeconds(.1f);
+        
         manager = FindObjectOfType<GameManager>();
         for (int i = 0; i < numbersOfGemToSpawn; i++)
         {
@@ -40,13 +47,6 @@ public class SpawnGemsOnStart : MonoBehaviour
             gem.transform.position = posGem;
         }
 
-        StartCoroutine(SpawnEggBox());
-    }
-
-    IEnumerator SpawnEggBox()
-    {
-        yield return new WaitForSeconds(.1f);
-        
         Vector2 posChest =
             new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadiusForChest, innerRadiusForChest);
 

@@ -18,6 +18,10 @@ public class ZapWeapon : WeaponBase
     [SerializeField] AudioClip zapShoot;
     public AudioClip ZapShootSound => zapShoot; // ← 추가: ZapProjectile이 접근할 수 있도록
 
+    // 랜덤 데미지 포인트
+    Transform currentTarget;
+    Vector2 cachedTargetPoint; // ← 추가: 타겟의 랜덤 히트 포인트 캐싱
+
     protected override void Attack()
     {
         base.Attack();
