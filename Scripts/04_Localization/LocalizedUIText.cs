@@ -123,12 +123,14 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.startButton;
             case UITextKey.Shop:
                 return LocalizationManager.Game.Shop;
-                case UITextKey.DailyMission:
+            case UITextKey.DailyMission:
                 return LocalizationManager.Game.dailyQuestsTitle;
-                case UITextKey.Achievement:
+            case UITextKey.Achievement:
                 return LocalizationManager.Game.achievementsTitle;
-                case UITextKey.ShopTab:
+            case UITextKey.ShopTab:
                 return LocalizationManager.Game.ShopTab;
+            case UITextKey.Stage:
+                return LocalizationManager.Game.stage;
             default:
                 return key.ToString();
         }
@@ -191,5 +193,7 @@ public enum UITextKey
     //업적
     DailyMission,
     Achievement,
-    ShopTab
+    ShopTab,
+    //스테이지
+    Stage
 }

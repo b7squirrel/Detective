@@ -100,6 +100,7 @@ public class GameTexts : ScriptableObject
     public string survivalTime = "생존 시간";
     public string bestWave = "최고 기록";
     public string nextTarget = "다음 목표";
+    public string stage = "스테이지";
 
     [Header("Options")]
     public string language = "언어";

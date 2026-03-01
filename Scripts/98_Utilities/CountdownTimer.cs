@@ -27,6 +27,7 @@ public class CountdownTimer : MonoBehaviour
     bool isFinalSecond;
 
     [Header("Sound Clips")]
+    [SerializeField] AudioClip startTimeStopSound;   // 시간 정지 시작 사운드
     [SerializeField] AudioClip tickingLoopClip;   // 지속 틱틱
     [SerializeField] AudioClip secondTickClip;    // 초 변경 띵
     [SerializeField] AudioClip endClip;           // (선택) 종료음
@@ -96,6 +97,11 @@ public class CountdownTimer : MonoBehaviour
             if (tickingLoopClip != null)
             {
                 SoundManager.instance.StopLoop(tickingLoopClip);
+            }
+
+            if (startTimeStopSound != null)
+            {
+                SoundManager.instance.Play(startTimeStopSound);
             }
         }
         // 일시정지 해제

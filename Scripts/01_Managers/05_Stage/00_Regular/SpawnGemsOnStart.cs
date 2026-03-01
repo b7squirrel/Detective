@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+
 
 public class SpawnGemsOnStart : MonoBehaviour
 {
@@ -38,6 +40,13 @@ public class SpawnGemsOnStart : MonoBehaviour
             gem.transform.position = posGem;
         }
 
+        StartCoroutine(SpawnEggBox());
+    }
+
+    IEnumerator SpawnEggBox()
+    {
+        yield return new WaitForSeconds(.1f);
+        
         Vector2 posChest =
             new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadiusForChest, innerRadiusForChest);
 

@@ -122,7 +122,7 @@ public class ShadowHeight : MonoBehaviour
 
                 // 그림자 만들기
                 sprRndshadow = trnsShadow.gameObject.AddComponent<SpriteRenderer>();
-                sprRndshadow.color = new Color(0, 0, 0, .25f);
+                sprRndshadow.color = new Color(0, 0, 0, .15f);
                 sprRndshadow.sortingLayerName = "ShadowOver";
             }
             isInitialized = true;
