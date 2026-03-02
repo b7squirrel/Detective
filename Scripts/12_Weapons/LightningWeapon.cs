@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DigitalRuby.LightningBolt;
 
 public class LightningWeapon : WeaponBase
 {
-    [SerializeField] GameObject lightning;
-    [SerializeField] GameObject lightningSynergy;
-    [SerializeField] float duration = .4f;
-    List<Vector2> targets; //번개를 내릴 지점들
+    [SerializeField] GameObject lightning;          // LightningBolt 프리팹 (PoolingKey 부착)
+    [SerializeField] GameObject lightningSynergy;   // 시너지용 프리팹
+    [SerializeField] float duration = 0.4f;
+
+    List<Vector2> targets;
     [SerializeField] bool isClean;
 
     [Header("Sound")]
@@ -19,8 +19,7 @@ public class LightningWeapon : WeaponBase
 
     Vector2 startPosition, endPosition;
 
-    [SerializeField] GameObject testCircle;
-
+    // ─────────────────────────────────────────
     protected override void Attack()
     {
         base.Attack();
@@ -34,27 +33,34 @@ public class LightningWeapon : WeaponBase
         }
 
         Transform effect = Instantiate(strikeEffect, ShootPoint.position, Quaternion.identity);
-        effect.transform.SetParent(ShootPoint);
-
+        effect.SetParent(ShootPoint);
 
         for (int i = 0; i < targets.Count; i++)
         {
             endPosition = targets[i];
+
+            // 데미지 적용
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
+            ApplyDamage(colliders);
+            SoundManager.instance.Play(strike);
+
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
             if (bolt != null)
             {
-                LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
-                StartCoroutine(GenerateBolt(boltScript, ShootPoint, Vector2.zero, endPosition, false));
+                LightningBolt boltScript = bolt.GetComponent<LightningBolt>();
+                if (boltScript != null)
+                {
+                    boltScript.SetDamage(damage);
+                    boltScript.Activate(ShootPoint, endPosition, duration);
+                }
             }
         }
 
-        List<Vector2> secondShootPoint = new List<Vector2>();
-        secondShootPoint.AddRange(targets);
+        List<Vector2> secondShootPoint = new List<Vector2>(targets);
         targets.Clear();
 
-        // 시너지 무기
-        if (isSynergyWeaponActivated == false)
-            return;
+        // 시너지
+        if (!isSynergyWeaponActivated) return;
 
         if (isClean)
         {
@@ -64,49 +70,39 @@ public class LightningWeapon : WeaponBase
 
         StartCoroutine(SecondaryAttack(secondShootPoint));
     }
+
     IEnumerator SecondaryAttack(List<Vector2> _secondShootPoint)
     {
         yield return null;
 
-        FindLandingPositions(); // target 리스트 모으기
+        FindLandingPositions();
 
         for (int i = 0; i < _secondShootPoint.Count; i++)
         {
-            int targetIndex = Random.Range(0, targets.Count);
-            Debug.Log("target count = " + targets.Count + " targetIndex = " + targetIndex);
             if (targets.Count == 0) continue;
+
+            int targetIndex = Random.Range(0, targets.Count);
             endPosition = targets[targetIndex];
+
+            // 데미지 적용
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
+            ApplyDamage(colliders);
+            SoundManager.instance.PlaySoundWith(strike, 1f, true, 0);
+
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightningSynergy);
             if (bolt != null)
             {
-                LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
-
-                StartCoroutine(GenerateBolt(boltScript, null, _secondShootPoint[i], endPosition, true));
+                LightningBolt boltScript = bolt.GetComponent<LightningBolt>();
+                if (boltScript != null)
+                {
+                    boltScript.SetDamage(damage);
+                    boltScript.Activate(_secondShootPoint[i], endPosition, duration);
+                }
             }
         }
     }
-    IEnumerator GenerateBolt(LightningBoltScript _boltScript, Transform _startPoint, Vector2 _secondaryStart, Vector2 _endPoint, bool _isSecondary)
-    {
-        if (_isSecondary)
-        {
-            _boltScript.StartObject.transform.position = _secondaryStart;
-        }
-        else
-        {
-            _boltScript.StartObject.transform.parent = _startPoint;
-            _boltScript.StartObject.transform.position = _startPoint.position;
-        }
 
-        _boltScript.EndObject.transform.position = _endPoint;
-
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(_endPoint, weaponStats.sizeOfArea);
-        ApplyDamage(colliders);
-
-        SoundManager.instance.Play(strike);
-        yield return new WaitForSeconds(duration);
-        _boltScript.gameObject.SetActive(false);
-    }
-
+    // ─────────────────────────────────────────
     void ApplyDamage(Collider2D[] colliders)
     {
         for (int i = 0; i < colliders.Length; i++)
@@ -125,8 +121,6 @@ public class LightningWeapon : WeaponBase
                                  Player.instance.transform.position,
                                  hitEffect);
 
-                // ✨ 데미지 기록 추가
-                // ✨ weaponData.DisplayName 사용
                 DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
             }
         }
@@ -140,8 +134,10 @@ public class LightningWeapon : WeaponBase
         Vector2 center = GameManager.instance.player.transform.position;
 
         Collider2D[] enemies =
-                Physics2D.OverlapAreaAll(center - new Vector2(halfWidth * .8f, halfHeight * .8f),
-                                            center + new Vector2(halfWidth * .8f, halfHeight * .8f), enemy);
+            Physics2D.OverlapAreaAll(
+                center - new Vector2(halfWidth * 0.8f, halfHeight * 0.8f),
+                center + new Vector2(halfWidth * 0.8f, halfHeight * 0.8f),
+                enemy);
 
         if (enemies.Length == 0)
         {
@@ -153,7 +149,6 @@ public class LightningWeapon : WeaponBase
 
         for (int i = 0; i < enemies.Length; i++)
         {
-            // ← 변경: SubBoss/StageBoss면 랜덤 바디 포인트 사용
             EnemyBase enemyBase = enemies[i].GetComponent<EnemyBase>();
             Vector2 targetPoint = enemyBase != null
                 ? enemyBase.GetRandomBodyPoint()
@@ -162,16 +157,14 @@ public class LightningWeapon : WeaponBase
             candidates.Add(targetPoint);
         }
 
-        // 이하 동일
-        List<Vector2> recurringPool = new List<Vector2>();
-        recurringPool.AddRange(candidates);
+        List<Vector2> recurringPool = new List<Vector2>(candidates);
+
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
             if (candidates.Count == 0)
             {
                 int recurringPoolIndex = Random.Range(0, recurringPool.Count);
-                Vector2 recurringPick = recurringPool[recurringPoolIndex];
-                targets.Add(recurringPick);
+                targets.Add(recurringPool[recurringPoolIndex]);
             }
             else
             {
@@ -181,10 +174,5 @@ public class LightningWeapon : WeaponBase
                 candidates.Remove(pick);
             }
         }
-    }
-
-    void SplashAttack()
-    {
-
     }
 }

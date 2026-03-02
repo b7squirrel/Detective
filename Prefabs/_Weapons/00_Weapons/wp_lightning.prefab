@@ -54,6 +54,7 @@ MonoBehaviour:
     projectileSpeed: 0
     knockBackChance: 0
     currentLevel: 0
+  weaponName: 
   knockbackSpeedFactor: 0
   anim: {fileID: 0}
   animExtra: {fileID: 0}
@@ -67,14 +68,13 @@ MonoBehaviour:
   enemy:
     serializedVersion: 2
     m_Bits: 81984
-  lightning: {fileID: 843579147421286601, guid: fa2b385939909e040bdfd7b177f6a5e9, type: 3}
-  lightningSynergy: {fileID: 843579147421286601, guid: 67550479cd13e7048854000fac79defa, type: 3}
+  lightning: {fileID: 8737976848389990568, guid: 4f4edd6cceed746679b6c0d53f344288, type: 3}
+  lightningSynergy: {fileID: 8737976848389990568, guid: 4f4edd6cceed746679b6c0d53f344288, type: 3}
   duration: 0.4
   isClean: 0
   shoot: {fileID: 8300000, guid: 6d05140a6f8da5e4ba6a603fc69ab4eb, type: 3}
   strike: {fileID: 8300000, guid: 6d05140a6f8da5e4ba6a603fc69ab4eb, type: 3}
   strikeEffect: {fileID: 4120160017915606603, guid: da6ff8846a63c214e8432c95439d6aff, type: 3}
-  testCircle: {fileID: 4895177110313708539, guid: a2134dff28ef1cf44925209b7488e38d, type: 3}
 --- !u!114 &6940505165124324680
 MonoBehaviour:
   m_ObjectHideFlags: 0
