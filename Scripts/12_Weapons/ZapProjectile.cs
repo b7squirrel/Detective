@@ -206,7 +206,7 @@ public class ZapProjectile : ProjectileBase
         // 색상 계산
         float colorT = Mathf.Clamp01((damageRatio - 1f) / 4f);
         Color outerColor = Color.Lerp(lightColor, darkColor, colorT);
-        Color innerColor = Color.Lerp(Color.white, outerColor, 0.3f);
+        Color innerColor = Color.Lerp(Color.white, outerColor, 0.1f); // 흰색 90%와 outer color 10% 혼합
 
         // 외곽 레이저
         if (laserLineOuter != null)

@@ -41,7 +41,7 @@ public class LightningWeapon : WeaponBase
         {
             endPosition = targets[i];
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
-            if( bolt != null)
+            if (bolt != null)
             {
                 LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
                 StartCoroutine(GenerateBolt(boltScript, ShootPoint, Vector2.zero, endPosition, false));
@@ -53,7 +53,7 @@ public class LightningWeapon : WeaponBase
         targets.Clear();
 
         // 시너지 무기
-        if(isSynergyWeaponActivated == false)
+        if (isSynergyWeaponActivated == false)
             return;
 
         if (isClean)
@@ -77,7 +77,7 @@ public class LightningWeapon : WeaponBase
             if (targets.Count == 0) continue;
             endPosition = targets[targetIndex];
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightningSynergy);
-            if(bolt != null)
+            if (bolt != null)
             {
                 LightningBoltScript boltScript = bolt.GetComponent<LightningBoltScript>();
 
@@ -85,9 +85,9 @@ public class LightningWeapon : WeaponBase
             }
         }
     }
-    IEnumerator GenerateBolt(LightningBoltScript _boltScript, Transform _startPoint, Vector2 _secondaryStart,Vector2 _endPoint, bool _isSecondary)
+    IEnumerator GenerateBolt(LightningBoltScript _boltScript, Transform _startPoint, Vector2 _secondaryStart, Vector2 _endPoint, bool _isSecondary)
     {
-        if(_isSecondary)
+        if (_isSecondary)
         {
             _boltScript.StartObject.transform.position = _secondaryStart;
         }
@@ -96,7 +96,7 @@ public class LightningWeapon : WeaponBase
             _boltScript.StartObject.transform.parent = _startPoint;
             _boltScript.StartObject.transform.position = _startPoint.position;
         }
-        
+
         _boltScript.EndObject.transform.position = _endPoint;
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(_endPoint, weaponStats.sizeOfArea);
@@ -119,8 +119,8 @@ public class LightningWeapon : WeaponBase
                 PostMessage(damage, colliders[i].transform.position);
 
                 GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enemy.TakeDamage(damage, 
-                                 knockback, 
+                enemy.TakeDamage(damage,
+                                 knockback,
                                  knockbackSpeedFactor,
                                  Player.instance.transform.position,
                                  hitEffect);
@@ -153,10 +153,16 @@ public class LightningWeapon : WeaponBase
 
         for (int i = 0; i < enemies.Length; i++)
         {
-            candidates.Add((Vector2)enemies[i].transform.position);
+            // ← 변경: SubBoss/StageBoss면 랜덤 바디 포인트 사용
+            EnemyBase enemyBase = enemies[i].GetComponent<EnemyBase>();
+            Vector2 targetPoint = enemyBase != null
+                ? enemyBase.GetRandomBodyPoint()
+                : (Vector2)enemies[i].transform.position;
+
+            candidates.Add(targetPoint);
         }
 
-        // 중복을 피하지만 화면에 적의 갯수가 부족하면 중복 허용
+        // 이하 동일
         List<Vector2> recurringPool = new List<Vector2>();
         recurringPool.AddRange(candidates);
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)

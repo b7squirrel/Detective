@@ -1060,14 +1060,17 @@ public class EnemyBase : MonoBehaviour, Idamageable
     // 보스들의 경우 너무 한 점에만 공격이 그래픽적으로 집중되지 않도록. Hit effect가 한 곳에만 생기지 않도록. 
     public Vector2 GetRandomBodyPoint()
     {
-        if ((isSubBoss || isBoss) && colEnemy != null)
+        if (isSubBoss || isBoss)
         {
-            Bounds bounds = colEnemy.bounds;
-            float x = UnityEngine.Random.Range(bounds.min.x, bounds.max.x);
-            float y = UnityEngine.Random.Range(bounds.min.y, bounds.max.y);
-            return new Vector2(x, y);
+            return (Vector2)transform.position + new Vector2(
+                UnityEngine.Random.Range(-0.8f, 0.8f),
+                UnityEngine.Random.Range(1f, 2f));
         }
-        return transform.position;
+
+        // 일반 적도 작은 오프셋 적용
+        return (Vector2)transform.position + new Vector2(
+            UnityEngine.Random.Range(-0.2f, 0.2f),
+            UnityEngine.Random.Range(.3f, .8f));
     }
     #endregion
 }
