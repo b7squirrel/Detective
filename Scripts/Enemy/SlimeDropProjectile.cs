@@ -9,10 +9,13 @@ public class SlimeDropProjectile : MonoBehaviour
 {
     [SerializeField] Transform jumpSprite;
     [SerializeField] GameObject slimeDropPrefab; // 투사체가 목표물에 도착하면 드롭될 점액프리펩
+    SlimeDropManager slimeDropManager;
     public UnityEvent onDoneEvent; // 투사체 죽음 이벤트
 
-    public void InitProjectile(Vector2 startPoint, Vector2 endPoint, float duration)
+    // 투사체 초기화 시 매니저 참조도 함께 받기
+    public void InitProjectile(Vector2 startPoint, Vector2 endPoint, float duration, SlimeDropManager manager)
     {
+        slimeDropManager = manager; // 추가
         StartCoroutine(MoveObjectCo(startPoint, endPoint, duration));
     }
 
@@ -50,6 +53,12 @@ public class SlimeDropProjectile : MonoBehaviour
     // 유니티 이벤트에 붙일 함수들
     public void Event_DropNormalSlimeDrop()
     {
-        Instantiate(slimeDropPrefab, transform.position, Quaternion.identity);
+        if (slimeDropManager == null)
+        {
+            Debug.LogError("SlimeDropManager 참조 없음!");
+            return;
+        }
+        // Instantiate 직접 하지 않고 매니저를 통해 드롭
+        slimeDropManager.DropObjectOnLanding(transform.position);
     }
 }

@@ -59,7 +59,6 @@ public class LightningWeapon : WeaponBase
         }
 
         List<Vector2> secondShootPoint = new List<Vector2>(targets);
-        targets.Clear();
 
         // 시너지
         if (!isSynergyWeaponActivated) return;
@@ -141,6 +140,8 @@ public class LightningWeapon : WeaponBase
         if (targets == null)
             targets = new List<Vector2>();
 
+            targets.Clear(); // ✅ 항상 초기화
+
         Vector2 center = GameManager.instance.player.transform.position;
 
         Collider2D[] enemies =
@@ -155,44 +156,45 @@ public class LightningWeapon : WeaponBase
             return;
         }
 
-        List<Vector2> candidates = new List<Vector2>();
+        // ✅ Vector2 대신 Collider2D로 저장
+        List<Collider2D> candidates = new List<Collider2D>();
 
         for (int i = 0; i < enemies.Length; i++)
         {
-            // ✅ Idamageable 체크 추가 - SlimeDrop 등 피해를 줄 수 없는 오브젝트 필터링
             if (enemies[i].GetComponent<Idamageable>() == null) continue;
-
-            EnemyBase enemyBase = enemies[i].GetComponent<EnemyBase>();
-            Vector2 targetPoint = enemyBase != null
-                ? enemyBase.GetRandomBodyPoint()
-                : (Vector2)enemies[i].transform.position;
-
-            candidates.Add(targetPoint);
+            candidates.Add(enemies[i]);
         }
 
-        // ✅ Idamageable 필터 후 후보가 없으면 isClean 처리
         if (candidates.Count == 0)
         {
             isClean = true;
             return;
         }
 
-        List<Vector2> recurringPool = new List<Vector2>(candidates);
+        // ✅ recurringPool도 Collider2D로
+        List<Collider2D> recurringPool = new List<Collider2D>(candidates);
 
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
+            Collider2D pick;
+
             if (candidates.Count == 0)
             {
-                int recurringPoolIndex = Random.Range(0, recurringPool.Count);
-                targets.Add(recurringPool[recurringPoolIndex]);
+                pick = recurringPool[Random.Range(0, recurringPool.Count)];
             }
             else
             {
-                int index = Random.Range(0, candidates.Count);
-                Vector2 pick = candidates[index];
-                targets.Add(pick);
+                pick = candidates[Random.Range(0, candidates.Count)];
                 candidates.Remove(pick);
             }
+
+            // ✅ 타겟을 꺼낼 때마다 새로 랜덤 포인트 계산 → 분산 효과
+            EnemyBase enemyBase = pick.GetComponent<EnemyBase>();
+            Vector2 targetPoint = enemyBase != null
+                ? enemyBase.GetRandomBodyPoint()
+                : (Vector2)pick.transform.position;
+
+            targets.Add(targetPoint);
         }
     }
 }

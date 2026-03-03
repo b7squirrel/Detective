@@ -250,7 +250,8 @@ public class EnemyBoss : EnemyBase, Idamageable
             int randomNum = UnityEngine.Random.Range(0, projectiles.Length);
             Vector2 offsetPos = Target.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
             GameObject slimeDrop = Instantiate(slimeProjectilePrefab);
-            slimeDrop.GetComponent<SlimeDropProjectile>().InitProjectile(transform.position, offsetPos, slimeProjectileSpeed);
+            SlimeDropManager manager = GetComponent<SlimeDropManager>();
+            slimeDrop.GetComponent<SlimeDropProjectile>().InitProjectile(transform.position, offsetPos, slimeProjectileSpeed, manager);
             SoundManager.instance.Play(projectileSFX[randomNum]);
             yield return new WaitForSeconds(.1f);
         }

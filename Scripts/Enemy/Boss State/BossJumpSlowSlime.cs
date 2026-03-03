@@ -87,7 +87,8 @@ public class BossJumpSlowSlime : MonoBehaviour
             float offsetY = UnityEngine.Random.Range(-1 * projectileOffset, projectileOffset);
 
             Vector2 offsetPos = (Vector2)playerTrns.position + new Vector2(offsetX, offsetY);
-            projectile.GetComponent<SlimeDropProjectile>().InitProjectile(transform.position, offsetPos, projectilSpeed);
+            SlimeDropManager manager = GetComponent<SlimeDropManager>();
+            projectile.GetComponent<SlimeDropProjectile>().InitProjectile(transform.position, offsetPos, projectilSpeed, manager);
             SoundManager.instance.Play(projectileSFX);
             projectileCounter--;
             yield return new WaitForSeconds(.1f);

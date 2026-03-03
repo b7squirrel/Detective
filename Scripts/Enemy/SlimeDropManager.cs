@@ -58,9 +58,11 @@ public class SlimeDropManager : MonoBehaviour
     public void ExitSlime()
     {
         overrapingObjectsCount--;
-        if (overrapingObjectsCount <= 0) overrapingObjectsCount = 0;
+
+        if (overrapingObjectsCount <= 0)
         {
-            isTriggered = false;
+            overrapingObjectsCount = 0;
+            isTriggered = false;          // ← 실제로 슬라임 밖으로 나갔을 때만 false
 
             if (isSlowDownActivated == true)
             {
