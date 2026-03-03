@@ -61,7 +61,7 @@ public class Skill100 : SkillBase
         base.ApplyDurationUpgrade(level);
         CalculateRealDuration();
         
-        Logger.LogError($"[Skill100] 💚 회복 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+        // Logger.LogError($"[Skill100] 💚 회복 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
     }
 
     // 실제 지속시간 계산
@@ -87,7 +87,7 @@ public class Skill100 : SkillBase
                 
                 skillUi.PlayBadgeAnim("Done");
                 
-                Logger.LogError($"[Skill100] ✨ 회복 종료 - 총 회복량: {_totalHealedAmount}");
+                // Logger.LogError($"[Skill100] ✨ 회복 종료 - 총 회복량: {_totalHealedAmount}");
                 _totalHealedAmount = 0;
                 return;
             }
@@ -103,7 +103,7 @@ public class Skill100 : SkillBase
                     skillUi.BadgeUpAnim();
                     skillUi.PlayBadgeAnim("Duration");
                     
-                    Logger.LogError($"[Skill100] 💚 회복 시작! (지속시간: {realDuration}초)");
+                    // Logger.LogError($"[Skill100] 💚 회복 시작! (지속시간: {realDuration}초)");
                 }
                 
                 // 회복 처리

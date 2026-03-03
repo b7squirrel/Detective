@@ -12,9 +12,10 @@ public class LightningBolt : MonoBehaviour
     [SerializeField] LineRenderer lineRenderer;
 
     [Header("Lightning Shape")]
-    [SerializeField] int segments = 12;             // 번개 꺾임 횟수 (많을수록 복잡)
-    [SerializeField] float displacement = 0.6f;     // 꺾임 최대 폭
-    [SerializeField] float regenerateInterval = 0.05f; // 번개 모양 재생성 주기 (초)
+    [SerializeField] int segments = 20;               // 번개 꺾임 횟수 (많을수록 복잡)
+    [SerializeField] float displacement = 0.5f;       // 큰 꺾임 폭 (메인 구불거림)
+    [SerializeField] float smallDisplacement = 0.15f; // 작은 꺾임 폭 (자글자글한 느낌)
+    [SerializeField] float regenerateInterval = 0.04f; // 번개 모양 재생성 주기 (빠를수록 자글거림)
 
     [Header("Visual")]
     [SerializeField] float lineWidth = 0.15f;       // 기본 굵기 (baseDamage 기준)
@@ -85,31 +86,33 @@ public class LightningBolt : MonoBehaviour
     // ─────────────────────────────────────────
 
     /// <summary>
-    /// 시작점 → 끝점 사이에 지그재그 번개 포인트 생성
+    /// 2레이어 displacement로 자글자글한 번개 생성
+    /// - 1레이어: 큰 구불거림 (displacement)
+    /// - 2레이어: 작은 자글거림 (smallDisplacement), 이웃 포인트끼리 방향이 반전되어 더 날카로워 보임
     /// </summary>
     void GenerateLightningPoints()
     {
-        Vector2 start = StartPosition;
-        Vector2 end = EndPosition;
-
-        Vector2 dir = (end - start).normalized;
-        Vector2 perpendicular = new Vector2(-dir.y, dir.x); // 수직 방향
-        float totalLength = Vector2.Distance(start, end);
-        float segmentLength = totalLength / segments;
+        Vector2 start         = StartPosition;
+        Vector2 end           = EndPosition;
+        Vector2 dir           = (end - start).normalized;
+        Vector2 perpendicular = new Vector2(-dir.y, dir.x);
 
         lineRenderer.SetPosition(0, start);
 
         for (int i = 1; i < segments; i++)
         {
-            float t = (float)i / segments;
-            Vector2 basePoint = Vector2.Lerp(start, end, t);
+            float t         = (float)i / segments;
+            Vector2 base_   = Vector2.Lerp(start, end, t);
+            float edgeFade  = Mathf.Sin(t * Mathf.PI); // 양 끝 근처는 감쇠
 
-            // 수직 방향으로 랜덤 displacement
-            // 양 끝 근처는 덜 꺾이게 (t가 0이나 1에 가까울수록 감쇠)
-            float edgeFade = Mathf.Sin(t * Mathf.PI);
-            float offset = Random.Range(-displacement, displacement) * edgeFade;
+            // 1레이어: 완만한 큰 구불거림
+            float bigOffset   = Random.Range(-displacement, displacement) * edgeFade;
 
-            Vector2 point = basePoint + perpendicular * offset;
+            // 2레이어: 이웃 포인트와 방향 반전 → 날카로운 자글거림
+            float sign        = (i % 2 == 0) ? 1f : -1f;
+            float smallOffset = sign * Random.Range(smallDisplacement * 0.5f, smallDisplacement) * edgeFade;
+
+            Vector2 point = base_ + perpendicular * (bigOffset + smallOffset);
             lineRenderer.SetPosition(i, point);
         }
 
@@ -131,9 +134,9 @@ public class LightningBolt : MonoBehaviour
     /// </summary>
     public void Activate(Transform startTransform, Vector2 end, float duration)
     {
-        StartTransform = startTransform;
-        cachedStartPosition = startTransform != null ? (Vector2)startTransform.position : Vector2.zero;
-        EndPosition = end;
+        StartTransform       = startTransform;
+        cachedStartPosition  = startTransform != null ? (Vector2)startTransform.position : Vector2.zero;
+        EndPosition          = end;
 
         GenerateLightningPoints();
         StartCoroutine(AutoDisable(duration));
@@ -144,9 +147,9 @@ public class LightningBolt : MonoBehaviour
     /// </summary>
     public void Activate(Vector2 start, Vector2 end, float duration)
     {
-        StartTransform = null;
+        StartTransform      = null;
         cachedStartPosition = start;
-        EndPosition = end;
+        EndPosition         = end;
 
         GenerateLightningPoints();
         StartCoroutine(AutoDisable(duration));

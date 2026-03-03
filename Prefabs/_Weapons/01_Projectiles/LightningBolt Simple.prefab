@@ -160,10 +160,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 0}
-  segments: 12
-  displacement: 0.6
-  regenerateInterval: 0.05
+  segments: 30
+  displacement: 0.5
+  smallDisplacement: 0.3
+  regenerateInterval: 0.01
   lineWidth: 0.3
+  maxLineWidth: 0.6
+  baseDamage: 10
   uvScrollSpeed: 3
   StartTransform: {fileID: 0}
   EndPosition: {x: 0, y: 0}

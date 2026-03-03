@@ -16,6 +16,7 @@ public class LightningWeapon : WeaponBase
 
     [Header("Effects")]
     [SerializeField] Transform strikeEffect;
+    [SerializeField] GameObject sparkEffect; // 스파크 프리팹
 
     Vector2 startPosition, endPosition;
 
@@ -23,7 +24,6 @@ public class LightningWeapon : WeaponBase
     protected override void Attack()
     {
         base.Attack();
-
         FindLandingPositions();
 
         if (isClean)
@@ -34,6 +34,8 @@ public class LightningWeapon : WeaponBase
 
         Transform effect = Instantiate(strikeEffect, ShootPoint.position, Quaternion.identity);
         effect.SetParent(ShootPoint);
+        SoundManager.instance.PlaySoundWith(strike, 1f, true, 0);
+
 
         for (int i = 0; i < targets.Count; i++)
         {
@@ -42,7 +44,7 @@ public class LightningWeapon : WeaponBase
             // 데미지 적용
             Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
             ApplyDamage(colliders);
-            SoundManager.instance.Play(strike);
+
 
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
             if (bolt != null)
@@ -76,6 +78,8 @@ public class LightningWeapon : WeaponBase
         yield return null;
 
         FindLandingPositions();
+        SoundManager.instance.PlaySoundWith(strike, 1f, true, 0);
+
 
         for (int i = 0; i < _secondShootPoint.Count; i++)
         {
@@ -87,7 +91,6 @@ public class LightningWeapon : WeaponBase
             // 데미지 적용
             Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
             ApplyDamage(colliders);
-            SoundManager.instance.PlaySoundWith(strike, 1f, true, 0);
 
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightningSynergy);
             if (bolt != null)
@@ -122,6 +125,13 @@ public class LightningWeapon : WeaponBase
                                  hitEffect);
 
                 DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
+
+                // ⚡ 스파크 이펙트 스폰
+                GameObject spark = GameManager.instance.poolManager.GetMisc(sparkEffect);
+                if (spark != null)
+                {
+                    spark.transform.position = colliders[i].transform.position;
+                }
             }
         }
     }
@@ -149,12 +159,22 @@ public class LightningWeapon : WeaponBase
 
         for (int i = 0; i < enemies.Length; i++)
         {
+            // ✅ Idamageable 체크 추가 - SlimeDrop 등 피해를 줄 수 없는 오브젝트 필터링
+            if (enemies[i].GetComponent<Idamageable>() == null) continue;
+
             EnemyBase enemyBase = enemies[i].GetComponent<EnemyBase>();
             Vector2 targetPoint = enemyBase != null
                 ? enemyBase.GetRandomBodyPoint()
                 : (Vector2)enemies[i].transform.position;
 
             candidates.Add(targetPoint);
+        }
+
+        // ✅ Idamageable 필터 후 후보가 없으면 isClean 처리
+        if (candidates.Count == 0)
+        {
+            isClean = true;
+            return;
         }
 
         List<Vector2> recurringPool = new List<Vector2>(candidates);

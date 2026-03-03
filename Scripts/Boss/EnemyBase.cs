@@ -1064,7 +1064,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             return (Vector2)transform.position + new Vector2(
                 UnityEngine.Random.Range(-0.8f, 0.8f),
-                UnityEngine.Random.Range(1f, 2f));
+                UnityEngine.Random.Range(1f, 3f));
         }
 
         // 일반 적도 작은 오프셋 적용
