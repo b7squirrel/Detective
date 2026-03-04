@@ -76,12 +76,12 @@ public class Level : MonoBehaviour
     {
         bool bossDead = BossDieManager.instance.IsBossDead;
         GameMode gameMode = PlayerDataManager.Instance.GetGameMode();
-        if(bossDead && gameMode == GameMode.Regular)
+        if (bossDead && gameMode == GameMode.Regular)
         {
             Logger.LogError($"[Level] 보스가 죽어서 경험치 증가를 막습니다.");
             return;
         }
-        if(GameManager.instance.IsPlayerDead)
+        if (GameManager.instance.IsPlayerDead)
         {
             Logger.LogWarning($"[Level] 플레이어가 죽어서 경험치 증가를 막습니다.");
         }
@@ -116,7 +116,7 @@ public class Level : MonoBehaviour
 
     void LevelUp()
     {
-        if(GameManager.instance.IsPlayerDead)
+        if (GameManager.instance.IsPlayerDead)
         {
             Logger.LogWarning($"[Level] 플레이어가 죽어서 레벨업을 막습니다.");
         }
@@ -276,13 +276,13 @@ public class Level : MonoBehaviour
         }
 
         // 랜덤풀을 비교? upgradeList를 비교해야 하지 않나?
-        
+
         // 부족한 슬롯만큼 달콤우유나 동전을 추가
         List<UpgradeData> lacks = new List<UpgradeData>();
 
         int numberOfInstantUp = 3 - upgradeList.Count;
         if (numberOfInstantUp > 2) numberOfInstantUp = 2; // 중복으로 하트나 동전이 나오지 않도록
-        
+
         for (int i = 0; i < numberOfInstantUp; i++)
         {
             // lacks.Add(instantUpgrade[Random.Range(0, instantUpgrade.Count)]);
@@ -307,7 +307,7 @@ public class Level : MonoBehaviour
                 weaponUpgrade.Add(acquiredUpgrades[i]);
             }
         }
-        UpgradeData identicalWeapon = 
+        UpgradeData identicalWeapon =
             weaponUpgrade.Find(x => x.weaponData.Name == item.weaponData.Name);
         if (identicalWeapon == null)
             return false;
@@ -323,10 +323,99 @@ public class Level : MonoBehaviour
         this.upgrades.AddRange(upgradesToAdd);
     }
 
+    // =====================================================
+    // Level.cs 의 #region 디버그 안에 아래 코드를 추가하세요
+    // =====================================================
+
     #region 디버그
+
     public void LevelupDebug()
     {
         LevelUp();
     }
+
+    /// <summary>
+    /// 디버그용: 모든 업그레이드를 한 번에 적용합니다.
+    ///
+    /// 시너지 조건:
+    ///   - 무기: 최대 레벨 도달
+    ///   - 아이템: 획득만 하면 됨 (currentLevel >= 1, 업그레이드 불필요)
+    ///
+    /// 순서: WeaponGet → ItemGet → WeaponUpgrade(→시너지 풀 등록) → SynergyUpgrade → ItemUpgrade
+    /// </summary>
+    public void FullAutoUpgrade()
+    {
+        Logger.Log("[FullAutoUpgrade] 전체 자동 업그레이드 시작");
+
+        // 1단계: 새 무기 획득
+        ApplyAllUpgradesByType(UpgradeType.WeaponGet);
+
+        // 2단계: 새 아이템 획득
+        // 아이템은 획득(currentLevel >= 1)만 해도 시너지 조건 충족
+        ApplyAllUpgradesByType(UpgradeType.ItemGet);
+
+        // 3단계: 무기 최대 레벨까지 업그레이드
+        // WeaponBase.CheckIfMaxLevel()이 내부 호출되어 조건 충족 시 시너지 풀에 자동 등록됨
+        ApplyAllUpgradesByType(UpgradeType.WeaponUpgrade);
+
+        // 4단계: 시너지 업그레이드 적용 (3단계에서 풀에 등록된 것 모두)
+        ApplyAllSynergyUpgrades();
+
+        // 5단계: 아이템 업그레이드 (시너지 조건과 무관, 스탯 강화 목적)
+        ApplyAllUpgradesByType(UpgradeType.ItemUpgrade);
+
+        Logger.Log("[FullAutoUpgrade] 전체 자동 업그레이드 완료");
+    }
+
+    /// <summary>
+    /// 특정 타입의 업그레이드를 upgrades 리스트에서 전부 꺼내 적용합니다.
+    /// </summary>
+    void ApplyAllUpgradesByType(UpgradeType type)
+    {
+        // FindAll로 별도 리스트 생성 → 원본을 순회 중에 수정해도 안전
+        List<UpgradeData> targets = upgrades.FindAll(u => u.upgradeType == type);
+
+        foreach (UpgradeData upgradeData in targets)
+        {
+            if (selectedUpgrads == null)
+                selectedUpgrads = new List<UpgradeData>();
+
+            selectedUpgrads.Clear();
+            selectedUpgrads.Add(upgradeData);
+            Upgrade(0);
+
+            ApplyUpdatedLevel();
+
+            Logger.Log($"[FullAutoUpgrade] 적용됨: [{type}] {upgradeData.name}");
+        }
+    }
+
+    /// <summary>
+    /// SynergyManager 풀에 있는 시너지 업그레이드를 모두 적용합니다.
+    /// </summary>
+    void ApplyAllSynergyUpgrades()
+    {
+        int safetyLimit = 20; // 무한루프 방지
+        int count = 0;
+
+        while (count < safetyLimit)
+        {
+            UpgradeData synergy = synergyManager.GetSynergyUpgrade();
+            if (synergy == null) break;
+
+            if (selectedUpgrads == null)
+                selectedUpgrads = new List<UpgradeData>();
+
+            selectedUpgrads.Clear();
+            selectedUpgrads.Add(synergy);
+            Upgrade(0);
+
+            ApplyUpdatedLevel();
+
+            Logger.Log($"[FullAutoUpgrade] 시너지 적용됨: {synergy.name}");
+            count++;
+        }
+    }
+
     #endregion
 }

@@ -99,7 +99,7 @@ public class LightningWeapon : WeaponBase
                 if (boltScript != null)
                 {
                     boltScript.SetDamage(damage);
-                    boltScript.Activate(_secondShootPoint[i], endPosition, duration);
+                    boltScript.Activate(_secondShootPoint[i], endPosition, duration-synergyInterval); // 모든 전기가 동시에 사라지도록
                 }
             }
         }
