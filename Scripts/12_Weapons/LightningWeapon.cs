@@ -11,6 +11,9 @@ public class LightningWeapon : WeaponBase
     List<Vector2> targets;
     [SerializeField] bool isClean;
 
+    [Header("Synergy")]
+    [SerializeField] float synergyInterval = 0.1f; // 번개 사이 시간차
+
     [Header("Sound")]
     [SerializeField] AudioClip shoot, strike;
 
@@ -74,11 +77,10 @@ public class LightningWeapon : WeaponBase
 
     IEnumerator SecondaryAttack(List<Vector2> _secondShootPoint)
     {
-        yield return null;
+        yield return new WaitForSeconds(synergyInterval);
 
         FindLandingPositions();
         SoundManager.instance.PlaySoundWith(strike, 1f, true, 0);
-
 
         for (int i = 0; i < _secondShootPoint.Count; i++)
         {
@@ -87,7 +89,6 @@ public class LightningWeapon : WeaponBase
             int targetIndex = Random.Range(0, targets.Count);
             endPosition = targets[targetIndex];
 
-            // 데미지 적용
             Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
             ApplyDamage(colliders);
 
@@ -103,7 +104,6 @@ public class LightningWeapon : WeaponBase
             }
         }
     }
-
     // ─────────────────────────────────────────
     void ApplyDamage(Collider2D[] colliders)
     {
@@ -140,7 +140,7 @@ public class LightningWeapon : WeaponBase
         if (targets == null)
             targets = new List<Vector2>();
 
-            targets.Clear(); // ✅ 항상 초기화
+        targets.Clear(); // ✅ 항상 초기화
 
         Vector2 center = GameManager.instance.player.transform.position;
 

@@ -159,9 +159,11 @@ public class ShadowHeightEnemy : MonoBehaviour
 
             // ⭐ 인디케이터는 항상 그림자(지면) 위치에 고정
             if (landingRangeIndicator != null)
+            {
                 landingRangeIndicator.transform.position = transform.position;
-            // ⭐ 부모 플립에 영향받지 않도록 월드 회전 고정
-            landingRangeIndicator.transform.rotation = Quaternion.identity;
+                // ⭐ 부모 플립에 영향받지 않도록 월드 회전 고정
+                landingRangeIndicator.transform.rotation = Quaternion.identity;
+            }
         }
     }
     void UpdateLayers()

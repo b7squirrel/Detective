@@ -63,6 +63,19 @@ public class BossDieManager : MonoBehaviour
             FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
         }
     }
+
+    public void DieEventInfinite(float desiredTimeScale, float waitingTime)
+    {
+        StartCoroutine(DieEventCo(desiredTimeScale, waitingTime));
+    }
+    IEnumerator DieEventInfiniteCo(float desiredTimeScale, float waitingTime)
+    {
+        yield return new WaitForSecondsRealtime(waitingTime);
+        if (anim != null) anim.SetTrigger("Die");
+
+        yield return new WaitForSeconds(3f);
+        if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();
+    }
     
     public void BossCameraOff()
     {

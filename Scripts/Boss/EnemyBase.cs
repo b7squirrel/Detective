@@ -759,6 +759,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
             bossDieManager.SetIsBossDead(true);
             bossDieManager.DieEvent(.1f, 2f);
         }
+        else if(IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
+        {
+            BossDieManager bossDieManager = FindObjectOfType<BossDieManager>();
+            bossDieManager.DieEvent(.1f, 2f);
+        }
 
         if (isSubBoss)
         {

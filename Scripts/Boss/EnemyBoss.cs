@@ -408,6 +408,18 @@ public class EnemyBoss : EnemyBase, Idamageable
         return new Equation().IsOutOfRange(transform.position, spawnConst);
     }
 
+    public Vector2 ClampTargetPos(Vector2 rawTarget)
+    {
+        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
+        float spawnConst = wallManager.GetSpawnAreaConstant();
+        float margin = 3f; // 벽 두께/보스 크기 고려한 여유값
+
+        return new Vector2(
+            Mathf.Clamp(rawTarget.x, -spawnConst + margin, spawnConst - margin),
+            Mathf.Clamp(rawTarget.y, -spawnConst + margin, spawnConst - margin)
+        );
+    }
+
     public void RePosition()
     {
         if (IsOutOfRange())

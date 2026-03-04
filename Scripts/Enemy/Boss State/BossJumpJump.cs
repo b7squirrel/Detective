@@ -47,7 +47,8 @@ public class BossJumpJump : MonoBehaviour
 
         // 시작지점, 도착지점
         startPos = transform.position;
-        targetPos = playerTrns.position;
+        // targetPos = playerTrns.position;
+        targetPos = enemyBoss.ClampTargetPos(playerTrns.position);
 
         // 착지 지점 인디케이터
         enemyBoss.ActivateLandingIndicator(true);
@@ -137,12 +138,12 @@ public class BossJumpJump : MonoBehaviour
             rb.velocity = Vector2.zero;
 
             // 벽에 부딪치면 그냥 멈춰 있도록 했음. 그렇지 않으면 벽에서 빠져나오지 못해서 계속 점프만 계속하게 됨
-            // // 벽에 충돌했을 때도 Settle 트리거
-            // if (!hasTriggeredSettle)
-            // {
-            //     hasTriggeredSettle = true;
-            //     co = StartCoroutine(SettleCo());
-            // }
+            // 벽에 충돌했을 때도 Settle 트리거
+            if (!hasTriggeredSettle)
+            {
+                hasTriggeredSettle = true;
+                co = StartCoroutine(SettleCo());
+            }
         }
     }
 }
