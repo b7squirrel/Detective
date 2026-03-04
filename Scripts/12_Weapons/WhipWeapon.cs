@@ -22,6 +22,9 @@ public class WhipWeapon : WeaponBase
     //  ⚡ 전기 볼트 설정
     // ─────────────────────────────────────────────────────────
     [Header("전기 볼트")]
+    [Tooltip("HammerBolt 설정 에셋 (Project 창에서 생성 후 연결)")]
+    [SerializeField] private HammerBoltConfig hammerBoltConfig;
+
     [Tooltip("기본 사거리 배수 (실제 거리 = baseRange × sizeOfArea)")]
     [SerializeField] private float boltBaseRange = 4f;
 
@@ -246,9 +249,38 @@ public class WhipWeapon : WeaponBase
     /// <summary>
     /// LightningBolt 오브젝트를 생성하고 SpawnBolt를 호출합니다.
     /// </summary>
+    // WhipWeapon.cs - SpawnSingleBolt() 수정
     private void SpawnSingleBolt(Vector3 start, Vector3 end)
     {
-        HammerBolt.Create(start, end, boltDuration, damage); // damage는 WeaponBase의 protected 필드
+        if (hammerBoltConfig == null)
+        {
+            Debug.LogWarning("[WhipWeapon] HammerBoltConfig가 연결되지 않았습니다!");
+            return;
+        }
+
+        float adjustedDuration = isSynergyWeaponActivated
+            ? boltDuration * 1.3f
+            : boltDuration;
+
+        GameObject hitEffect = hitEffectPrefab;
+        if (hitEffect == null)
+        {
+            HitEffects hitEffects = GetComponent<HitEffects>();
+            if (hitEffects != null)
+                hitEffect = hitEffects.hitEffect;
+        }
+
+        HammerBolt.Create(
+            hammerBoltConfig,
+            start,
+            end,
+            adjustedDuration,
+            damage,
+            knockback,
+            knockbackSpeedFactor,
+            hitEffect,
+            enemy
+        );
     }
 
     // ─────────────────────────────────────────────────────────────

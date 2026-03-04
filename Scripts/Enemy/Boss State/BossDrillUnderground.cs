@@ -54,6 +54,11 @@ public class BossDrillUnderground : MonoBehaviour
     }
     #endregion
 
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     void InitState3Enter()
     {
         Debug.Log("State3 Enter");

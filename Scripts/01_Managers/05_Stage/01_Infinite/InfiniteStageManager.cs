@@ -79,6 +79,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
     void Start()
     {
+        GameManager.instance.progressionBar.DeactivateProgressBar(); // 무한모드는 진행바 없애기
         StartCoroutine(WaitAndInitialize());
     }
 

@@ -53,6 +53,11 @@ public class ProgressionBar : MonoBehaviour
         slider.SetActive(true);
     }
 
+    public void DeactivateProgressBar()
+    {
+        slider.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -2000f);
+    }
+
     void StartProgressionBar()
     {
         StartCoroutine(InitBarAnim());
