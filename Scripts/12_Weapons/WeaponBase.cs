@@ -199,7 +199,7 @@ public class WeaponBase : MonoBehaviour
     }
     #endregion
 
-    internal void Upgrade(UpgradeData upgradeData)
+    internal virtual void Upgrade(UpgradeData upgradeData)
     {
         weaponStats.Sum(upgradeData.weaponUpgradeStats);
         CheckIfMaxLevel();

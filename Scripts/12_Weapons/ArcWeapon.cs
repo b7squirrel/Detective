@@ -16,6 +16,7 @@ public class ArcWeapon : WeaponBase
     [SerializeField] float normalDuration = 0.5f;
     [SerializeField] float synergyDuration = 1f;
     [SerializeField] float angleSpread = 15f; // 레이저 사이각
+    int accumulatedReflections = 0; // 업그레이드로 누적된 반사 횟수
 
     [SerializeField] GameObject muzzleFlash;
     GameObject muzzle;
@@ -109,6 +110,14 @@ public class ArcWeapon : WeaponBase
             projectiles.Add(arcObject);
 
             // Logger.Log($"[ArcWeapon] ✅ Created projectile #{i + 1}");
+
+            // ✅ 새 프로젝타일에 누적된 반사 횟수 적용
+            if (accumulatedReflections > 0)
+            {
+                ArcProjectile arcProj = arcObject.GetComponent<ArcProjectile>();
+                if (arcProj != null)
+                    arcProj.AddMaxReflections(accumulatedReflections);
+            }
         }
 
         // 시너지 설정
@@ -216,5 +225,29 @@ public class ArcWeapon : WeaponBase
     {
         base.ActivateSynergyWeapon();
         duration = synergyDuration;
+    }
+
+    // Upgrade() - 누적값 저장
+    internal override void Upgrade(UpgradeData upgradeData)
+    {
+        float prevSizeOfArea = weaponStats.sizeOfArea;
+        base.Upgrade(upgradeData);
+        int added = (int)(weaponStats.sizeOfArea - prevSizeOfArea);
+
+        if (added > 0)
+        {
+            accumulatedReflections += added; // ✅ 누적값 저장
+
+            if (projectiles != null)
+            {
+                foreach (Transform proj in projectiles)
+                {
+                    if (proj == null) continue;
+                    ArcProjectile arcProj = proj.GetComponent<ArcProjectile>();
+                    if (arcProj != null)
+                        arcProj.AddMaxReflections(added);
+                }
+            }
+        }
     }
 }

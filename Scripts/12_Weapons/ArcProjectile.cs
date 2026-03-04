@@ -5,6 +5,8 @@ public class ArcProjectile : ProjectileBase
 {
     [Header("Arc Settings")]
     [SerializeField] float maxDistance = 100f;
+
+    [Tooltip("upgradeData의 sizeOfArea로 결정")]
     [SerializeField] int maxReflections = 1;
     [SerializeField] float damageDecayPerReflection = 0.15f;
     [SerializeField] float synergyDamageDecay = 0.1f;
@@ -12,11 +14,11 @@ public class ArcProjectile : ProjectileBase
     [Header("Visual - Dual LineRenderer")]
     LineRenderer outerLine;
     LineRenderer innerLine;
-    
+
     [Header("Hit Effects")]
     [SerializeField] GameObject reflectionHitEffect; // ✨ 반사 지점용
     [SerializeField] GameObject endHitEffect; // ✨ 끝점용
-    
+
     [Header("Inner Line (Core)")]
     [SerializeField] float innerBaseWidth = 0.2f;
     [SerializeField] Color innerColor = new Color(1f, 1f, 0.8f);
@@ -24,7 +26,7 @@ public class ArcProjectile : ProjectileBase
     [Header("Outer Line (Glow)")]
     [SerializeField] float outerBaseWidth = 0.5f;
     [SerializeField] Color outerColor = new Color(1f, 0.5f, 0f);
-    
+
     [Header("Common Settings")]
     [SerializeField] float baseDamage = 4f;
     [SerializeField] float alphaDecayPerReflection = 0.05f;
@@ -45,29 +47,31 @@ public class ArcProjectile : ProjectileBase
     GameObject activeEndEffect; // 끝점 effect
 
     void Awake()
-{
-    LineRenderer[] lineRenderers = GetComponentsInChildren<LineRenderer>();
-    
-    if (lineRenderers.Length >= 2)
     {
-        outerLine = lineRenderers[0];
-        innerLine = lineRenderers[1];
-        
+        LineRenderer[] lineRenderers = GetComponentsInChildren<LineRenderer>();
+
+        if (lineRenderers.Length >= 2)
+        {
+            outerLine = lineRenderers[0];
+            innerLine = lineRenderers[1];
+
+        }
+        else
+        {
+            Logger.LogWarning($"[ArcProjectile] Need 2 LineRenderers! Found: {lineRenderers.Length}");
+        }
     }
-    else
-    {
-        Logger.LogWarning($"[ArcProjectile] Need 2 LineRenderers! Found: {lineRenderers.Length}");
-    }
-}
 
     void OnEnable()
     {
         if (cachedWeapon == null)
-        {
             cachedWeapon = GetComponentInParent<WeaponBase>();
-        }
 
         damagedThisFrame.Clear();
+
+        // ✅ null 요소 제거 후 재시도할 수 있도록 정리
+        activeReflectionEffects.RemoveAll(e => e == null);
+        activeEndEffect = null; // ✅ 매번 새로 가져오도록 초기화
     }
 
     void OnDisable()
@@ -89,128 +93,129 @@ public class ArcProjectile : ProjectileBase
     }
 
     void DrawAndCastLaser()
-{
-    // ✨ 디버그 로그
-    if ((innerLine == null && outerLine == null))
     {
-        Logger.LogWarning($"[ArcProjectile] No LineRenderer!");
-        return;
-    }
-    
-    if (cachedWeapon == null)
-    {
-        Logger.LogWarning($"[ArcProjectile] No cachedWeapon!");
-        return;
-    }
-    
-    if (cachedWeapon.ShootPoint == null)
-    {
-        Logger.LogWarning($"[ArcProjectile] No ShootPoint!");
-        return;
-    }
-
-    Vector2 startPos = cachedWeapon.ShootPoint.position;
-    Vector2 direction = transform.up;
-
-    // ✨ 디버그 로그
-    if (Time.frameCount % 60 == 0)
-    {
-        Logger.Log($"[ArcProjectile] DrawAndCastLaser - startPos: {startPos}, direction: {direction}");
-    }
-
-    List<Vector2> laserPath = new List<Vector2>();
-    laserPath.Add(startPos);
-
-    List<Vector2> reflectionPoints = new List<Vector2>();
-
-    Vector2 currentPos = startPos;
-    Vector2 currentDir = direction;
-    int reflectionsUsed = 0;
-    float currentDamageMultiplier = 1f;
-
-    int maxIterations = maxReflections + 1;
-    int iterations = 0;
-
-    while (iterations < maxIterations)
-    {
-        iterations++;
-
-        LayerMask allLayers = destructables | walls | screenEdges;
-        RaycastHit2D[] hits = Physics2D.RaycastAll(
-            currentPos,
-            currentDir,
-            maxDistance,
-            allLayers
-        );
-
-        RaycastHit2D closestWallHit = new RaycastHit2D();
-        float closestWallDistance = float.MaxValue;
-        bool foundWall = false;
-
-        foreach (var hit in hits)
+        if ((innerLine == null && outerLine == null))
         {
-            int hitLayer = hit.collider.gameObject.layer;
-            bool isWall = ((1 << hitLayer) & walls) != 0;
-            bool isScreenEdge = ((1 << hitLayer) & screenEdges) != 0;
+            Logger.LogWarning($"[ArcProjectile] No LineRenderer!");
+            return;
+        }
 
-            if (isWall || isScreenEdge)
+        if (cachedWeapon == null)
+        {
+            Logger.LogWarning($"[ArcProjectile] No cachedWeapon!");
+            return;
+        }
+
+        if (cachedWeapon.ShootPoint == null)
+        {
+            Logger.LogWarning($"[ArcProjectile] No ShootPoint!");
+            return;
+        }
+
+        Vector2 startPos = cachedWeapon.ShootPoint.position;
+        Vector2 direction = transform.up;
+
+        if (Time.frameCount % 60 == 0)
+        {
+            Logger.Log($"[ArcProjectile] DrawAndCastLaser - startPos: {startPos}, direction: {direction}");
+        }
+
+        List<Vector2> laserPath = new List<Vector2>();
+        laserPath.Add(startPos);
+
+        List<Vector2> reflectionPoints = new List<Vector2>();
+
+        Vector2 currentPos = startPos;
+        Vector2 currentDir = direction;
+        int reflectionsUsed = 0;
+        float currentDamageMultiplier = 1f;
+
+        // ✅ 시너지 보너스를 런타임으로 계산
+        int effectiveMaxReflections = maxReflections + (isSynergyActivated ? 1 : 0);
+
+        int maxIterations = effectiveMaxReflections + 1;
+        int iterations = 0;
+
+        while (iterations < maxIterations)
+        {
+            iterations++;
+
+            LayerMask allLayers = destructables | walls | screenEdges;
+            RaycastHit2D[] hits = Physics2D.RaycastAll(
+                currentPos,
+                currentDir,
+                maxDistance,
+                allLayers
+            );
+
+            RaycastHit2D closestWallHit = new RaycastHit2D();
+            float closestWallDistance = float.MaxValue;
+            bool foundWall = false;
+
+            foreach (var hit in hits)
             {
-                float distance = Vector2.Distance(currentPos, hit.point);
-                if (distance < closestWallDistance && distance > 0.001f)
+                int hitLayer = hit.collider.gameObject.layer;
+                bool isWall = ((1 << hitLayer) & walls) != 0;
+                bool isScreenEdge = ((1 << hitLayer) & screenEdges) != 0;
+
+                if (isWall || isScreenEdge)
                 {
-                    closestWallDistance = distance;
-                    closestWallHit = hit;
-                    foundWall = true;
+                    float distance = Vector2.Distance(currentPos, hit.point);
+                    if (distance < closestWallDistance && distance > 0.001f)
+                    {
+                        closestWallDistance = distance;
+                        closestWallHit = hit;
+                        foundWall = true;
+                    }
                 }
+            }
+
+            Vector2 endPos;
+            if (foundWall)
+            {
+                endPos = closestWallHit.point;
+            }
+            else
+            {
+                endPos = currentPos + currentDir * maxDistance;
+                laserPath.Add(endPos);
+                break;
+            }
+
+            laserPath.Add(endPos);
+
+            if (Time.frameCount % frameCount == 0)
+            {
+                DealDamageToEnemiesInPath(currentPos, endPos, currentDamageMultiplier, hits);
+            }
+
+            // ✅ effectiveMaxReflections 사용
+            if (foundWall && reflectionsUsed < effectiveMaxReflections)
+            {
+                reflectionPoints.Add(closestWallHit.point);
+
+                currentDir = Vector2.Reflect(currentDir, closestWallHit.normal);
+                currentPos = closestWallHit.point + closestWallHit.normal * 0.01f;
+
+                reflectionsUsed++;
+
+                float decayRate = isSynergyActivated ? synergyDamageDecay : damageDecayPerReflection;
+                currentDamageMultiplier *= (1f - decayRate);
+            }
+            else
+            {
+                break;
             }
         }
 
-        Vector2 endPos;
-        if (foundWall)
+        if (Time.frameCount % 60 == 0)
         {
-            endPos = closestWallHit.point;
-        }
-        else
-        {
-            endPos = currentPos + currentDir * maxDistance;
-            laserPath.Add(endPos);
-            break;
+            Logger.Log($"[ArcProjectile] Path count: {laserPath.Count}, Reflection points: {reflectionPoints.Count}");
         }
 
-        laserPath.Add(endPos);
-
-        if (Time.frameCount % frameCount == 0)
-        {
-            DealDamageToEnemiesInPath(currentPos, endPos, currentDamageMultiplier, hits);
-        }
-
-        if (foundWall && reflectionsUsed < maxReflections)
-        {
-            reflectionPoints.Add(closestWallHit.point);
-
-            currentDir = Vector2.Reflect(currentDir, closestWallHit.normal);
-            currentPos = closestWallHit.point + closestWallHit.normal * 0.01f;
-
-            reflectionsUsed++;
-
-            float decayRate = isSynergyActivated ? synergyDamageDecay : damageDecayPerReflection;
-            currentDamageMultiplier *= (1f - decayRate);
-        }
-        else
-        {
-            break;
-        }
+        DrawLaserPath(laserPath, reflectionsUsed);
+        UpdateHitEffects(reflectionPoints, laserPath[laserPath.Count - 1]);
     }
-
-    // ✨ 디버그 로그
-    if (Time.frameCount % 60 == 0)
-    {
-        Logger.Log($"[ArcProjectile] Path count: {laserPath.Count}, Reflection points: {reflectionPoints.Count}");
-    }
-
-    DrawLaserPath(laserPath, reflectionsUsed);
-    UpdateHitEffects(reflectionPoints, laserPath[laserPath.Count - 1]);
-}
 
     void DealDamageToEnemiesInPath(Vector2 start, Vector2 end, float damageMultiplier, RaycastHit2D[] allHits)
     {
@@ -281,9 +286,9 @@ public class ArcProjectile : ProjectileBase
             outerLine.endWidth = outerBaseWidth;
 
             Color currentOuterColor = new Color(
-                outerColor.r, 
-                outerColor.g, 
-                outerColor.b, 
+                outerColor.r,
+                outerColor.g,
+                outerColor.b,
                 alpha * 0.8f
             );
             outerLine.startColor = currentOuterColor;
@@ -303,9 +308,9 @@ public class ArcProjectile : ProjectileBase
             innerLine.endWidth = innerBaseWidth;
 
             Color currentInnerColor = new Color(
-                innerColor.r, 
-                innerColor.g, 
-                innerColor.b, 
+                innerColor.r,
+                innerColor.g,
+                innerColor.b,
                 1f
             );
             innerLine.startColor = currentInnerColor;
@@ -314,61 +319,50 @@ public class ArcProjectile : ProjectileBase
     }
 
     // ✨ HitEffect 업데이트 (Optional)
-void UpdateHitEffects(List<Vector2> reflectionPoints, Vector2 endPoint)
-{
-    // 1. 반사 지점 Effects (있으면 표시)
-    if (reflectionHitEffect != null)
+    void UpdateHitEffects(List<Vector2> reflectionPoints, Vector2 endPoint)
     {
-        // 필요한 개수만큼 effect 확보
-        while (activeReflectionEffects.Count < reflectionPoints.Count)
+        // 1. 반사 지점 Effects
+        if (reflectionHitEffect != null)
         {
-            GameObject effect = GameManager.instance.poolManager.GetMisc(reflectionHitEffect);
-            if (effect != null)
+            while (activeReflectionEffects.Count < reflectionPoints.Count)
             {
-                activeReflectionEffects.Add(effect);
+                GameObject effect = GameManager.instance.poolManager.GetMisc(reflectionHitEffect);
+                if (effect != null)
+                    activeReflectionEffects.Add(effect);
+                else
+                    break;
             }
-            else
+
+            for (int i = 0; i < reflectionPoints.Count; i++)
             {
-                // Pool에서 못 가져오면 중단
-                break;
+                if (i < activeReflectionEffects.Count && activeReflectionEffects[i] != null)
+                {
+                    activeReflectionEffects[i].transform.position = reflectionPoints[i];
+                    activeReflectionEffects[i].SetActive(true);
+                }
+            }
+
+            for (int i = reflectionPoints.Count; i < activeReflectionEffects.Count; i++)
+            {
+                if (activeReflectionEffects[i] != null)
+                    activeReflectionEffects[i].SetActive(false);
             }
         }
 
-        // 사용 중인 effect 위치 업데이트
-        for (int i = 0; i < reflectionPoints.Count; i++)
+        // 2. 끝점 Effect
+        if (endHitEffect != null)
         {
-            if (i < activeReflectionEffects.Count && activeReflectionEffects[i] != null)
-            {
-                activeReflectionEffects[i].transform.position = reflectionPoints[i];
-                activeReflectionEffects[i].SetActive(true);
-            }
-        }
+            // ✅ null이면 매번 재시도
+            if (activeEndEffect == null)
+                activeEndEffect = GameManager.instance.poolManager.GetMisc(endHitEffect);
 
-        // 남은 effect 비활성화
-        for (int i = reflectionPoints.Count; i < activeReflectionEffects.Count; i++)
-        {
-            if (activeReflectionEffects[i] != null)
+            if (activeEndEffect != null)
             {
-                activeReflectionEffects[i].SetActive(false);
+                activeEndEffect.transform.position = endPoint;
+                activeEndEffect.SetActive(true);
             }
         }
     }
-
-    // 2. 끝점 Effect (있으면 표시)
-    if (endHitEffect != null)
-    {
-        if (activeEndEffect == null)
-        {
-            activeEndEffect = GameManager.instance.poolManager.GetMisc(endHitEffect);
-        }
-
-        if (activeEndEffect != null)
-        {
-            activeEndEffect.transform.position = endPoint;
-            activeEndEffect.SetActive(true);
-        }
-    }
-}
 
     void HideLaser()
     {
@@ -397,9 +391,17 @@ void UpdateHitEffects(List<Vector2> reflectionPoints, Vector2 endPoint)
         }
     }
 
+    // SetAnimToSynergy() - maxReflections 직접 수정 제거
     public void SetAnimToSynergy()
     {
+        if (isSynergyActivated) return;
         isSynergyActivated = true;
+        // maxReflections++ 제거
+    }
+
+    public void AddMaxReflections(int amount)
+    {
+        maxReflections += amount;
     }
 
     protected override void DieProjectile()

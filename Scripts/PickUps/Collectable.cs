@@ -103,8 +103,11 @@ public class Collectable : MonoBehaviour
     IEnumerator Antic(Vector2 dir)
     {
         IsHit = true;
-        GameObject effect = GameManager.instance.poolManager.GetMisc(pickupEffect);
-        if (effect != null) effect.transform.position = transform.position;
+        if (pickupEffect != null)
+        {
+            GameObject effect = GameManager.instance.poolManager.GetMisc(pickupEffect);
+            if (effect != null) effect.transform.position = transform.position;
+        }
 
         float anticTime = .3f;
         float currentSpeed = 15;
