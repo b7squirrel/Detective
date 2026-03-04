@@ -142,7 +142,7 @@ Transform:
   m_GameObject: {fileID: 6735526244932109898}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.1, z: 0}
+  m_LocalPosition: {x: 0.4, y: 0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -223,6 +223,9 @@ MonoBehaviour:
   shootSound: {fileID: 8300000, guid: ad2a2542d256d654ebe1dd7b4a96b732, type: 3}
   hitSound: {fileID: 8300000, guid: f17375b6ee34528499b3864da9964eb1, type: 3}
   hitEffectPrefab: {fileID: 0}
+  boltBaseRange: 4
+  boltDuration: 0.5
+  synergyBoltCount: 2
 --- !u!114 &-1136866504128029665
 MonoBehaviour:
   m_ObjectHideFlags: 0

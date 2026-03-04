@@ -6,7 +6,8 @@ public class WhipWeapon : WeaponBase
 {
     [SerializeField] GameObject weapon;
     [SerializeField] Transform hitPoint; // ⭐ 공격 중심점
-    
+    private bool boltAlternateToggle = false; // 시너지 두 번째 공격이 반대 방향으로 나가도록
+
     bool canMultiStrike;
     bool multiStrikeDone;
 
@@ -17,6 +18,19 @@ public class WhipWeapon : WeaponBase
     [Header("Hit Effects")]
     [SerializeField] GameObject hitEffectPrefab;
 
+    // ─────────────────────────────────────────────────────────
+    //  ⚡ 전기 볼트 설정
+    // ─────────────────────────────────────────────────────────
+    [Header("전기 볼트")]
+    [Tooltip("기본 사거리 배수 (실제 거리 = baseRange × sizeOfArea)")]
+    [SerializeField] private float boltBaseRange = 4f;
+
+    [Tooltip("볼트 유지 시간(초)")]
+    [SerializeField] private float boltDuration = 0.5f;
+
+    [Tooltip("시너지 활성화 시 볼트 개수 (앞뒤 + 양옆 등 확장 가능)")]
+    [SerializeField] private int synergyBoltCount = 2; // 앞 + 뒤
+
     private HashSet<Collider2D> hitEnemiesThisAttack = new HashSet<Collider2D>();
 
     // 공격 방향 고정용
@@ -26,9 +40,9 @@ public class WhipWeapon : WeaponBase
     protected override void Awake()
     {
         base.Awake();
-        
+
         anim = GetComponentInChildren<Animator>();
-        
+
         if (weapon != null)
             weapon.SetActive(true);
     }
@@ -48,7 +62,7 @@ public class WhipWeapon : WeaponBase
     protected override void Update()
     {
         base.Update();
-        
+
         if (isAttacking)
         {
             LockAttackDirection();
@@ -58,10 +72,11 @@ public class WhipWeapon : WeaponBase
     protected override void Attack()
     {
         base.Attack();
-        
+
         hitEnemiesThisAttack.Clear();
         multiStrikeDone = false;
         canMultiStrike = weaponStats.numberOfAttacks >= 2;
+        boltAlternateToggle = false; // ← 사이클 시작 시 리셋
 
         StartAttack();
 
@@ -78,7 +93,7 @@ public class WhipWeapon : WeaponBase
     void StartAttack()
     {
         isAttacking = true;
-        
+
         if (weaponContainerAnim != null)
         {
             attackFacingRight = weaponContainerAnim.FacingRight;
@@ -112,21 +127,23 @@ public class WhipWeapon : WeaponBase
             return;
         }
 
+        // ─────────────────────────────────────────────────────
+        //  ⚡ 전기 볼트 발사
+        // ─────────────────────────────────────────────────────
+        FireLightningBolts();
+
         // ⭐ hitPoint 위치에서 원형 범위 공격
         Vector2 attackPosition = hitPoint.position;
         float attackRadius = weaponStats.sizeOfArea;
 
-        // 범위 내 모든 콜라이더 찾기
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
-            attackPosition, 
-            attackRadius, 
-            enemy // WeaponBase의 enemy LayerMask 사용
+            attackPosition,
+            attackRadius,
+            enemy
         );
 
-        // 각 적에게 데미지
         foreach (Collider2D collision in hitColliders)
         {
-            // 이미 타격한 적은 건너뛰기
             if (hitEnemiesThisAttack.Contains(collision))
                 continue;
 
@@ -136,7 +153,7 @@ public class WhipWeapon : WeaponBase
                 if (enemyTarget != null)
                 {
                     PostMessage(damage, collision.transform.position);
-                    
+
                     GameObject hitEffect = hitEffectPrefab;
                     if (hitEffect == null)
                     {
@@ -187,14 +204,54 @@ public class WhipWeapon : WeaponBase
             }
         }
 
-        // ⭐ 디버그용: 공격 범위 시각화 (선택사항)
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         Debug.DrawRay(attackPosition, Vector2.up * attackRadius, Color.red, 0.5f);
         Debug.DrawRay(attackPosition, Vector2.down * attackRadius, Color.red, 0.5f);
         Debug.DrawRay(attackPosition, Vector2.left * attackRadius, Color.red, 0.5f);
         Debug.DrawRay(attackPosition, Vector2.right * attackRadius, Color.red, 0.5f);
-        #endif
+#endif
     }
+
+    // ─────────────────────────────────────────────────────────────
+    //  ⚡ 전기 볼트 발사 로직
+    // ─────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// 공격 방향으로 전기 볼트를 발사합니다.
+    /// 시너지 비활성화: 공격 방향 1개
+    /// 시너지 활성화:   공격 방향 + 반대 방향 (앞뒤 2개)
+    /// </summary>
+    private void FireLightningBolts()
+    {
+        if (hitPoint == null) return;
+
+        Vector3 origin = hitPoint.position;
+        float boltRange = boltBaseRange * weaponStats.sizeOfArea;
+        Vector3 forwardDir = attackFacingRight ? Vector3.right : Vector3.left;
+
+        if (!isSynergyWeaponActivated)
+        {
+            // 일반 공격: 항상 앞으로 1개
+            SpawnSingleBolt(origin, origin + forwardDir * boltRange);
+        }
+        else
+        {
+            // 시너지 공격: 호출될 때마다 앞/뒤 번갈아 1개씩
+            Vector3 boltDir = boltAlternateToggle ? -forwardDir : forwardDir;
+            SpawnSingleBolt(origin, origin + boltDir * boltRange);
+            boltAlternateToggle = !boltAlternateToggle; // 다음 호출을 위해 토글
+        }
+    }
+
+    /// <summary>
+    /// LightningBolt 오브젝트를 생성하고 SpawnBolt를 호출합니다.
+    /// </summary>
+    private void SpawnSingleBolt(Vector3 start, Vector3 end)
+    {
+        HammerBolt.Create(start, end, boltDuration, damage); // damage는 WeaponBase의 protected 필드
+    }
+
+    // ─────────────────────────────────────────────────────────────
 
     IEnumerator AttackCo(float firstAttackDirection)
     {
@@ -213,7 +270,7 @@ public class WhipWeapon : WeaponBase
         {
             anim.SetTrigger("SAttack");
         }
-        
+
         multiStrikeDone = true;
     }
 
@@ -235,8 +292,7 @@ public class WhipWeapon : WeaponBase
     }
 
     #region Animation Events
-    // AttackAtHitPoint 사용
-    
+
     void ResetHitList()
     {
         hitEnemiesThisAttack.Clear();
@@ -247,7 +303,7 @@ public class WhipWeapon : WeaponBase
         if (hitSound != null)
             SoundManager.instance.Play(hitSound);
     }
-    
+
     void PlayShootSound()
     {
         if (shootSound != null)
@@ -266,15 +322,20 @@ public class WhipWeapon : WeaponBase
     }
     #endregion
 
-    // ⭐ 디버그용: Scene 뷰에서 공격 범위 표시
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
         if (hitPoint != null && weaponStats != null)
         {
             Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
             Gizmos.DrawWireSphere(hitPoint.position, weaponStats.sizeOfArea);
+
+            // ⚡ 볼트 사거리 미리보기
+            float boltRange = boltBaseRange * weaponStats.sizeOfArea;
+            Gizmos.color = new Color(0.3f, 0.7f, 1f, 0.5f);
+            Gizmos.DrawLine(hitPoint.position, hitPoint.position + Vector3.right * boltRange);
+            Gizmos.DrawLine(hitPoint.position, hitPoint.position + Vector3.left * boltRange);
         }
     }
-    #endif
+#endif
 }
