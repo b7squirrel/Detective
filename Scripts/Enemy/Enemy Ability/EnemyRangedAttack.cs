@@ -10,11 +10,11 @@ public class EnemyRangedAttack : MonoBehaviour
     [SerializeField] GameObject projectilePrefab;
     [Range(0.1f, 1f)]
     [SerializeField] float shootRate;
-    
+
     float nextAttackTime;
     bool finishedSpawn;
     bool isInitialized;
-    
+
     // References
     EnemyBase enemyBase;
     Animator anim;
@@ -105,11 +105,11 @@ public class EnemyRangedAttack : MonoBehaviour
         if (Time.time >= nextAttackTime)
         {
             // DebugLog($"[RangedAttackCoolDown] 공격 시간 도달 - Time: {Time.time}");
-            
+
             if (DetectingPlayer())
             {
                 // DebugLog("[RangedAttackCoolDown] 플레이어 감지됨");
-                
+
                 float randomValue = Random.Range(0f, 1f);
                 if (randomValue <= shootRate)
                 {
@@ -125,7 +125,7 @@ public class EnemyRangedAttack : MonoBehaviour
             {
                 // DebugLog("[RangedAttackCoolDown] 플레이어가 범위 밖");
             }
-            
+
             nextAttackTime = Time.time + attackInterval;
         }
     }
@@ -141,62 +141,57 @@ public class EnemyRangedAttack : MonoBehaviour
         Transform playerTransform = enemyBase.Target.transform;
         Vector2 enemyPos = transform.position;
         Vector2 playerPos = playerTransform.position;
-        
+
         float sqrDist = (playerPos - enemyPos).sqrMagnitude;
         float actualDistance = Mathf.Sqrt(sqrDist);
         bool inRange = sqrDist < Mathf.Pow(distanceToPlayer, 2f);
-        
+
         string rangeStatus = inRange ? "범위 안" : "범위 밖";
-        
+
         // DebugLog($"[DetectingPlayer] 적:{enemyPos} 플레이어:{playerPos}");
         // DebugLog($"[DetectingPlayer] 거리: {actualDistance:F2} / {distanceToPlayer} | {rangeStatus}");
-        
+
         return inRange;
     }
 
     void FireProjectile()
     {
-        if (projectilePrefab == null)
-        {
-            // DebugLogError("[FireProjectile] projectilePrefab이 null입니다!");
-            return;
-        }
 
-        // Logger.Log($"[FireProjectile] 투사체 생성: {projectilePrefab.name}");
-        GameObject cannonBall = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-        
+        if (projectilePrefab == null) return;
+
+        GameObject cannonBall = GameManager.instance.poolManager.GetMisc(projectilePrefab);
+        cannonBall.transform.position = transform.position;
+
+        cannonBall.GetComponentInChildren<TriggerEnemyProjHeightShadow>()?.Init();
+
         var projectile = cannonBall.GetComponentInChildren<IEnemyProjectile>();
         if (projectile == null)
         {
-            // DebugLogError("[FireProjectile] IEnemyProjectile 컴포넌트를 찾을 수 없습니다!");
             Destroy(cannonBall);
             return;
         }
-        
+
         projectile.InitProjectileDamage(enemyBase.Stats.rangedDamage);
-        
-        if (anim != null)
-        {
-            anim.SetBool("Attack", true);
-        }
-        
-        // DebugLog("[FireProjectile] 투사체 생성 완료!");
+
+        // ⭐ InitBomb() 호출 제거 - OnDone 이벤트에서 착지 후 자동 호출됨
+
+        if (anim != null) anim.SetBool("Attack", true);
     }
     #endregion
 
     void DebugLog(string _log)
     {
-        if(showDebugLog) Logger.Log(_log);
+        if (showDebugLog) Logger.Log(_log);
     }
     void DebugLogWarninig(string _log)
     {
-        if(showDebugLog) Logger.LogWarning(_log);
+        if (showDebugLog) Logger.LogWarning(_log);
     }
     void DebugLogError(string _log)
     {
-        if(showDebugLog) Logger.LogError(_log);
+        if (showDebugLog) Logger.LogError(_log);
     }
-    
+
 
     #region Gizmos
     // ⭐ 에디터에서 공격 범위 시각화
@@ -209,32 +204,32 @@ public class EnemyRangedAttack : MonoBehaviour
         // 공격 범위 원 그리기
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f); // 주황색 반투명
         Gizmos.DrawSphere(transform.position, distanceToPlayer);
-        
+
         // 테두리 (더 진하게)
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.8f); // 주황색
         DrawWireCircle(transform.position, distanceToPlayer);
-        
+
         // 플레이어가 범위 안에 있는지 표시
         if (Application.isPlaying && enemyBase != null && enemyBase.Target != null)
         {
             Transform playerTransform = enemyBase.Target.transform;
             Vector2 enemyPos = transform.position;
             Vector2 playerPos = playerTransform.position;
-            
+
             float distance = Vector2.Distance(enemyPos, playerPos);
             bool inRange = distance < distanceToPlayer;
-            
+
             // 플레이어까지 선 그리기
             Gizmos.color = inRange ? Color.green : Color.red;
             Gizmos.DrawLine(transform.position, playerTransform.position);
-            
+
             // 거리 표시 (Scene 뷰에서만)
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             UnityEditor.Handles.Label(
-                transform.position + Vector3.up * 2f, 
+                transform.position + Vector3.up * 2f,
                 $"거리: {distance:F1} / {distanceToPlayer}\n{(inRange ? "범위 안" : "범위 밖")}"
             );
-            #endif
+#endif
         }
     }
 
@@ -243,7 +238,7 @@ public class EnemyRangedAttack : MonoBehaviour
     {
         float angleStep = 360f / segments;
         Vector3 prevPoint = center + new Vector3(radius, 0, 0);
-        
+
         for (int i = 1; i <= segments; i++)
         {
             float angle = i * angleStep * Mathf.Deg2Rad;
@@ -252,7 +247,7 @@ public class EnemyRangedAttack : MonoBehaviour
                 Mathf.Sin(angle) * radius,
                 0
             );
-            
+
             Gizmos.DrawLine(prevPoint, newPoint);
             prevPoint = newPoint;
         }

@@ -64,9 +64,9 @@ public class StageStartEvents : MonoBehaviour
         GetComponent<Animator>().SetTrigger("Init");
         // SoundManager.instance.Play(stageTextSwipeInSound);
 
-        SoundManager.instance.Play(stageStartSound);
 
         yield return new WaitForSecondsRealtime(1.5f);
+        SoundManager.instance.Play(stageStartSound);
 
         GameManager.instance.pauseManager.UnPauseGame();
     }

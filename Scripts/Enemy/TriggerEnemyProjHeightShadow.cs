@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TriggerEnemyProjHeightShadow : MonoBehaviour
 {
-    void OnEnable()
+    public void Init()
     {
         ShadowHeightProjectile shadowHeightProj = GetComponent<ShadowHeightProjectile>();
 

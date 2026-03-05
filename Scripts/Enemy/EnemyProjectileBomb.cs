@@ -11,6 +11,8 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     [SerializeField] ShadowHeightProjectile shadowHeightProj;
     Coroutine co;
     [SerializeField] Animator anim;
+    [SerializeField] GameObject rootObject; // 풀링을 위해 비활성화 부모를 비활성화
+    Vector3 originalScale;
     
     [Header("이펙트")]
     [SerializeField] GameObject explosionEffectPrefab;
@@ -40,7 +42,16 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
     {
         if (initSound != null) SoundManager.instance.Play(initSound);
     }
-    
+    void OnDisable()
+    {
+        // 코루틴이 중단되거나 재사용될 때 indicator 정리
+        if (indicator != null)
+        {
+            indicator.DeactivateIndicator();
+            indicator = null;
+        }
+    }
+
     // Update 추가: 애니메이터 정지/재개 처리
     void Update()
     {
@@ -67,18 +78,25 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
 
     public void InitBomb()
     {
-        if (co != null) co = null;
-        
-        indicator = null;
+        if (co != null)
+        {
+            StopCoroutine(co);
+            co = null;
+        }
+
+        if (indicator != null)
+        {
+            indicator.DeactivateIndicator();
+            indicator = null;
+        }
+
         GameObject damageIndicator = GameManager.instance.poolManager.GetMisc(damageIndicatorPrefab);
         indicator = damageIndicator.GetComponent<DamageIndicator>();
         indicator.Init(radius, transform.position);
-        
-        // ⭐ 카운트다운 초기화
+
         remainingTime = waitingTime + UnityEngine.Random.Range(-.5f, .5f);
         isCountingDown = true;
-        
-        StartCoroutine(ExplodeCo());
+        co = StartCoroutine(ExplodeCo());
     }
 
     // ⭐ 시간 정지를 고려한 카운트다운
@@ -113,8 +131,9 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
                 character.TakeDamage(projectileDamage, EnemyType.Melee);
             }
         }
-        
-        gameObject.SetActive(false);
+
+        // ⭐ 루트(Enemy Projectile Bomb Re) 비활성화
+        rootObject.SetActive(false);
     }
 
     void GenEffects()
@@ -132,7 +151,7 @@ public class EnemyProjectileBomb : MonoBehaviour, IEnemyProjectile
 
     void DeactivateIndicator()
     {
-        indicator.gameObject.SetActive(false);
+        indicator.DeactivateIndicator();
     }
 
     void OnDrawGizmos()
