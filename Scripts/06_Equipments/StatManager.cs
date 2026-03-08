@@ -82,24 +82,18 @@ public class StatManager : MonoBehaviour
         CharCard lead = cardList.FindCharCard(oriCard);
         EquipmentCard[] equipments = lead.equipmentCards;
 
-        int oriAtk = oriCard.Atk;
-        int oriHp = oriCard.Hp;
-        OriAttribute leadAttr = new OriAttribute(oriAtk, oriHp);
-        Logger.Log("Ori Atk = " + oriAtk + " Ori HP = " +  oriHp);
+        int totalAtk = oriCard.Atk;
+        int totalHp = oriCard.Hp;
 
-        if(lead != null)
+        for (int i = 0; i < equipments.Length; i++)
         {
-            for (int i = 0; i < equipments.Length; i++)
-            {
-                if (equipments[i] == null)
-                    continue;
+            if (equipments[i] == null) continue;
 
-                int equipmentAtk = equipments[i].CardData.Atk;
-                int equipmentHp = equipments[i].CardData.Hp;
-                leadAttr = new OriAttribute(oriAtk + equipmentAtk, oriHp + equipmentHp);
-            }
+            // ✅ 누적 합산
+            totalAtk += equipments[i].CardData.Atk;
+            totalHp += equipments[i].CardData.Hp;
         }
-        Logger.Log(lead.CardData.Name + "의 HP = " + leadAttr.Hp + " Attk = " + leadAttr.Atk);
-        return leadAttr;
+
+        return new OriAttribute(totalAtk, totalHp);
     }
 }

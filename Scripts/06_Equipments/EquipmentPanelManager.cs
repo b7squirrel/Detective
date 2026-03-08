@@ -368,7 +368,12 @@ public class EquipmentPanelManager : MonoBehaviour
         // 장착되어 있는 장비를 레벨업 하는 경우라면 바로바로 currentAttr을 업데이트
         if (isEquipped)
         {
-            equipmentSlotsManager.InitEquipSlots(CardOnDisplay);
+            // ⭐ UpdateCurrentAttribute 후 SetAtkHpStats 명시적 호출
+            equipmentSlotsManager.UpdateCurrentAttribute(CardOnDisplay);
+            equipDisplayUI.SetAtkHpStats(
+                equipmentSlotsManager.GetCurrentAttribute().Atk,
+                equipmentSlotsManager.GetCurrentAttribute().Hp
+            );
         }
 
         UpdateUpgradeCost(cardToEquip, upgradeCost);
