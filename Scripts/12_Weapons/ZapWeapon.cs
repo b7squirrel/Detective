@@ -78,9 +78,6 @@ public class ZapWeapon : WeaponBase
 
         int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
 
-        // 🔍 디버그 로그 추가
-        Logger.Log($"[ZapWeapon] numberOfAttacks: {weaponStats.numberOfAttacks}, Current Count: {projectiles.Count}, To Generate: {numberOfProjectilesToGen}");
-
         // 생성
         for (int i = 0; i < numberOfProjectilesToGen; i++)
         {
@@ -98,6 +95,10 @@ public class ZapWeapon : WeaponBase
         }
 
         // 활성화 및 stat 설정
+        WeaponContainerAnim containerAnim = GetComponentInParent<WeaponContainerAnim>();
+        Transform slPoint = containerAnim?.GetSLMuzzlePoint();
+        Transform srPoint = containerAnim?.GetSRMuzzlePoint();
+
         for (int i = 0; i < projectiles.Count; i++)
         {
             projectiles[i].gameObject.SetActive(true);
@@ -108,6 +109,14 @@ public class ZapWeapon : WeaponBase
             projectile.KnockBackSpeedFactor = knockbackSpeedFactor;
             projectile.IsCriticalDamageProj = isCriticalDamage;
             projectile.WeaponName = weaponData.DisplayName;
+
+            // ✅ 추가: 짝수 인덱스 → SL, 홀수 인덱스 → SR
+            ZapProjectile zap = projectiles[i].GetComponent<ZapProjectile>();
+            if (zap != null)
+            {
+                Transform muzzle = (i % 2 == 0) ? slPoint : srPoint;
+                zap.SetMuzzlePoint(muzzle);
+            }
         }
 
         // 눈 반짝

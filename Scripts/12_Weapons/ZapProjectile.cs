@@ -9,6 +9,7 @@ public class ZapProjectile : ProjectileBase
     [SerializeField] float maxTargetDistance = 15f; // 최대 타겟 거리
     [SerializeField] float switchTargetTimeSynergy = 0.3f; // 타겟 전환 주기
     [SerializeField] float damageIntervalSynergy = 0.5f; // 데미지 주기 (초 단위)
+    Transform assignedMuzzlePoint;
 
     [Header("Visual")]
     [SerializeField] LineRenderer laserLineOuter; // ✅ 외곽 레이저 (굵고 어두움)
@@ -193,7 +194,11 @@ public class ZapProjectile : ProjectileBase
         if (cachedWeapon == null || cachedWeapon.ShootPoint == null)
             return;
 
-        Vector2 startPos = cachedWeapon.ShootPoint.position; // ✅ 캐싱된 것 사용
+        // ✅ assignedMuzzlePoint가 있으면 그걸 사용, 없으면 ShootPoint 폴백
+        Transform originPoint = (assignedMuzzlePoint != null) ? assignedMuzzlePoint : cachedWeapon.ShootPoint;
+        if (originPoint == null) return;
+
+        Vector2 startPos = originPoint.position;
         Vector2 endPos = cachedTargetPoint;
 
         // 데미지에 비례하여 기본 굵기 조절
@@ -304,6 +309,11 @@ public class ZapProjectile : ProjectileBase
         switchTargetTime = switchTargetTimeSynergy;
         damageInterval = damageIntervalSynergy; // ✅ 시너지: 더 빠른 데미지
         isSynergyActivated = true;
+    }
+
+    public void SetMuzzlePoint(Transform muzzlePoint)
+    {
+        assignedMuzzlePoint = muzzlePoint;
     }
 
     protected override void DieProjectile()

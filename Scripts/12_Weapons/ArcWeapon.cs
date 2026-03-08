@@ -109,8 +109,6 @@ public class ArcWeapon : WeaponBase
             Transform arcObject = Instantiate(arcProjectile, transform.position, Quaternion.identity, transform).transform;
             projectiles.Add(arcObject);
 
-            // Logger.Log($"[ArcWeapon] ✅ Created projectile #{i + 1}");
-
             // ✅ 새 프로젝타일에 누적된 반사 횟수 적용
             if (accumulatedReflections > 0)
             {
@@ -128,6 +126,10 @@ public class ArcWeapon : WeaponBase
                 projectiles[i].GetComponent<ArcProjectile>().SetAnimToSynergy();
             }
         }
+
+        // ✅ 추가: CenterMuzzlePoint 가져오기
+        WeaponContainerAnim containerAnim = GetComponentInParent<WeaponContainerAnim>();
+        Transform centerPoint = containerAnim?.GetCenterMuzzlePoint();
 
         // 배치 및 stat 설정
         for (int i = 0; i < projectiles.Count; i++)
@@ -147,10 +149,15 @@ public class ArcWeapon : WeaponBase
             projectile.KnockBackSpeedFactor = knockbackSpeedFactor;
             projectile.IsCriticalDamageProj = isCriticalDamage;
             projectile.WeaponName = weaponData.DisplayName;
+
+            // ✅ 추가: CenterMuzzlePoint 주입 (null이면 ShootPoint로 폴백)
+            ArcProjectile arcProj = projectiles[i].GetComponent<ArcProjectile>();
+            if (arcProj != null)
+                arcProj.SetMuzzlePoint(centerPoint);
         }
 
-        // muzzle flash 등...
-        AnimShoot();
+        // // 눈 반짝
+        // AnimShoot();
 
         // muzzle flash
         if (muzzle == null)
@@ -168,7 +175,7 @@ public class ArcWeapon : WeaponBase
                 }
                 else
                 {
-                    muzzle.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+                    muzzle.transform.parent = ShootPoint;
                     muzzle.transform.position = ShootPoint.position - new Vector3(.2f, 0, 0);
                 }
             }
@@ -182,7 +189,7 @@ public class ArcWeapon : WeaponBase
                 }
                 else
                 {
-                    muzzle2.transform.parent = ShootPoint; // 편의상 적당히 child를 따라다닐 오브젝트에 페어런트
+                    muzzle2.transform.parent = ShootPoint;
                     muzzle2.transform.position = ShootPoint.position - new Vector3(-.2f, 0, 0);
                 }
             }

@@ -38,6 +38,7 @@ public class ArcProjectile : ProjectileBase
 
     bool isSynergyActivated;
     WeaponBase cachedWeapon;
+    Transform assignedMuzzlePoint; // ✅ 추가: CenterMuzzlePoint 저장
 
     HashSet<Collider2D> damagedThisFrame = new HashSet<Collider2D>();
     int frameCount = 7;
@@ -45,6 +46,12 @@ public class ArcProjectile : ProjectileBase
     // ✨ 반사 지점 HitEffect들을 저장
     List<GameObject> activeReflectionEffects = new List<GameObject>();
     GameObject activeEndEffect; // 끝점 effect
+
+    // ✅ 추가: 외부에서 머즐 포인트 주입
+    public void SetMuzzlePoint(Transform muzzlePoint)
+    {
+        assignedMuzzlePoint = muzzlePoint;
+    }
 
     void Awake()
     {
@@ -54,7 +61,6 @@ public class ArcProjectile : ProjectileBase
         {
             outerLine = lineRenderers[0];
             innerLine = lineRenderers[1];
-
         }
         else
         {
@@ -106,13 +112,16 @@ public class ArcProjectile : ProjectileBase
             return;
         }
 
-        if (cachedWeapon.ShootPoint == null)
+        // ✅ 수정: assignedMuzzlePoint가 있으면 사용, 없으면 ShootPoint 폴백
+        Transform originPoint = (assignedMuzzlePoint != null) ? assignedMuzzlePoint : cachedWeapon.ShootPoint;
+
+        if (originPoint == null)
         {
-            Logger.LogWarning($"[ArcProjectile] No ShootPoint!");
+            Logger.LogWarning($"[ArcProjectile] No origin point (MuzzlePoint or ShootPoint)!");
             return;
         }
 
-        Vector2 startPos = cachedWeapon.ShootPoint.position;
+        Vector2 startPos = originPoint.position;
         Vector2 direction = transform.up;
 
         if (Time.frameCount % 60 == 0)
@@ -318,7 +327,7 @@ public class ArcProjectile : ProjectileBase
         }
     }
 
-    // ✨ HitEffect 업데이트 (Optional)
+    // ✨ HitEffect 업데이트
     void UpdateHitEffects(List<Vector2> reflectionPoints, Vector2 endPoint)
     {
         // 1. 반사 지점 Effects
@@ -396,7 +405,6 @@ public class ArcProjectile : ProjectileBase
     {
         if (isSynergyActivated) return;
         isSynergyActivated = true;
-        // maxReflections++ 제거
     }
 
     public void AddMaxReflections(int amount)
