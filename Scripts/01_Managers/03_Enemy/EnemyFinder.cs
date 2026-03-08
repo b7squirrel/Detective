@@ -6,6 +6,7 @@ public class EnemyFinder : MonoBehaviour
     public static EnemyFinder instance;
 
     [SerializeField] LayerMask enemy;
+    [SerializeField] LayerMask props; 
     [SerializeField] float updateInterval = 0.1f;
 
     // 화면 크기
@@ -49,7 +50,7 @@ public class EnemyFinder : MonoBehaviour
             playerPosition,
             searchRadius,
             hitBuffer,
-            enemy
+            enemy | props  // enemy + props 합치기
         );
 
         // 버퍼 클리어
@@ -196,7 +197,7 @@ public class EnemyFinder : MonoBehaviour
         Collider2D[] enemies = Physics2D.OverlapCircleAll(
             center,
             allEnemiesRadius,
-            enemy
+            enemy | props
         );
         return enemies;
     }

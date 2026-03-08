@@ -8,7 +8,8 @@ using UnityEngine;
 public class StageStartEvents : MonoBehaviour
 {
     [SerializeField] AudioClip stageStartSound;
-    [SerializeField] AudioClip stageTextSwipeInSound;
+    [SerializeField] AudioClip stageStartUISwooshSound;
+    [SerializeField] AudioClip stageStartVoice;
     [SerializeField] AudioClip stageTextSwipeOutSound;
     [SerializeField] AudioClip getReadySound;
     [SerializeField] AudioClip goSound;
@@ -74,15 +75,28 @@ public class StageStartEvents : MonoBehaviour
     // 애니메이션 이벤트로 재생
     public void PlayTextOutSound()
     {
+        if(stageTextSwipeOutSound != null)
         SoundManager.instance.Play(stageTextSwipeOutSound);
     }
     public void PlayGetReadySound()
     {
+        if(getReadySound != null)
         SoundManager.instance.Play(getReadySound);
     }
     public void PlayGoSound()
     {
+        if(goSound != null)
         SoundManager.instance.Play(goSound);
+    }
+    public void PlayStageStartVoice()
+    {
+        if(stageStartVoice != null)
+        SoundManager.instance.Play(stageStartVoice);
+    }
+    public void PlayStageStartUISwooshSound()
+    {
+        if(stageStartUISwooshSound != null)
+        SoundManager.instance.Play(stageStartUISwooshSound);
     }
     public void SetWobbleImageActive(int active)
     {
