@@ -32,23 +32,16 @@ public class StatManager : MonoBehaviour
         int newHp = _cardData.Hp;
         int newAtk = _cardData.Atk;
 
-        // Debug.LogError($"ATK = {_cardData.Atk}");
-        // Debug.LogError($"Level = {_cardData.Level}");
-
         if (_cardData.EquipmentType == "Ori") // 오리라면
         {
             newAtk += level; // Temp
             newHp += level; // Temp
-
-            
         }
-        else if (_cardData.EssentialEquip == EssentialEquip.Essential.ToString()) // 무기 카드라면
+        else // 장비라면
         {
-            newAtk += level; // Temp
-        }
-        else // 방어구 카드라면
-        {
-            newHp += level; // Temp
+            // ⭐ Atk, Hp 모두 증가 (0이면 변화 없음)
+            if (_cardData.Atk > 0) newAtk += level;
+            if (_cardData.Hp > 0) newHp += level;
         }
 
         level++;
@@ -85,15 +78,19 @@ public class StatManager : MonoBehaviour
         int totalAtk = oriCard.Atk;
         int totalHp = oriCard.Hp;
 
-        for (int i = 0; i < equipments.Length; i++)
+        if (lead != null)
         {
-            if (equipments[i] == null) continue;
+            for (int i = 0; i < equipments.Length; i++)
+            {
+                if (equipments[i] == null) continue;
 
-            // ✅ 누적 합산
-            totalAtk += equipments[i].CardData.Atk;
-            totalHp += equipments[i].CardData.Hp;
+                // ⭐ Essential/방어구 구분 없이 Atk, Hp 모두 누적 합산
+                totalAtk += equipments[i].CardData.Atk;
+                totalHp += equipments[i].CardData.Hp;
+            }
         }
 
+        Logger.Log(lead.CardData.Name + "의 HP = " + totalHp + " Atk = " + totalAtk);
         return new OriAttribute(totalAtk, totalHp);
     }
 }

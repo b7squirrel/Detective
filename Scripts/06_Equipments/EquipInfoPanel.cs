@@ -8,6 +8,10 @@ public class EquipInfoPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI Name;
     [SerializeField] TextMeshProUGUI Level;
     [SerializeField] TextMeshProUGUI attribute;
+    [SerializeField] GameObject attributeATK;
+    [SerializeField] GameObject attributeHP;
+    [SerializeField] TextMeshProUGUI attributeATKText;
+    [SerializeField] TextMeshProUGUI attributeHPText;
     [SerializeField] TextMeshProUGUI skillName;
     [SerializeField] TextMeshProUGUI skillDescription;
     [SerializeField] TextMeshProUGUI skillEvoLevel;
@@ -17,8 +21,6 @@ public class EquipInfoPanel : MonoBehaviour
     [SerializeField] UnityEngine.UI.Image itemImage;
     [SerializeField] UnityEngine.UI.Image skillLabel;
     [SerializeField] Animator anim;
-    [SerializeField] UnityEngine.UI.Image attributeImage;
-    [SerializeField] Sprite atkIcon, hpIcon;
     [SerializeField] GameObject equipButton, unEquipButton;
     [SerializeField] GameObject[] itemCardBase;
 
@@ -107,23 +109,17 @@ public class EquipInfoPanel : MonoBehaviour
         grade.color = Color.white;
         Name.color = Color.white;
 
-        // grade.color = Color.black;
-        // Name.color = Color.black;
-        // if (cardData.Grade == 4)
-        // {
-        //     grade.color = Color.white;
-        //     Name.color = Color.white;
-        // }
-
+        attributeATK.SetActive(false);
+        attributeHP.SetActive(false);
         if (cardData.Atk != 0)
         {
-            attributeImage.sprite = atkIcon;
-            attribute.text = "+ " + cardData.Atk.ToString();
+            attributeATK.SetActive(true);
+            attributeATKText.text = "+ " + cardData.Atk.ToString();
         }
-        else if (cardData.Hp != 0)
+        if (cardData.Hp != 0)
         {
-            attributeImage.sprite = hpIcon;
-            attribute.text = "+ " + cardData.Hp.ToString();
+            attributeHP.SetActive(true);
+            attributeHPText.text = "+ " + cardData.Hp.ToString();
         }
 
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);

@@ -55,25 +55,20 @@ public class EquipmentSlotsManager : MonoBehaviour
 
     /// <summary>
     /// 장비가 장착될 때, 해제될 때 각각 스탯을 업데이트, UI도 업데이트
+    /// 필수 무기, 방어구 모두 ATK, HP 두 수치 모두 가질 수 있음
     /// </summary>
     void UpdateAttributeOnEquipment(CardData _equipCardData, int addingFactor)
     {
-        // 장비 카드의 attribute
         int Hp = _equipCardData.Hp;
         int Atk = _equipCardData.Atk;
 
-        // 해당 장비의 attribute 더해줌. 필수 무기들은 모두 공격력. 나머지는 모두 방어력
-        if (_equipCardData.EssentialEquip == EssentialEquip.Essential.ToString())
-        {
-            currentAttribute = new OriAttribute(addingFactor * Atk + currentAttribute.Atk, currentAttribute.Hp);
-        }
-        else
-        {
-            currentAttribute = new OriAttribute(currentAttribute.Atk, addingFactor * Hp + currentAttribute.Hp);
-        }
+        // ⭐ Essential/방어구 구분 없이 Atk, Hp 모두 반영
+        currentAttribute = new OriAttribute(
+            addingFactor * Atk + currentAttribute.Atk,
+            addingFactor * Hp + currentAttribute.Hp
+        );
 
-        equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute, cardDictionary.GetDisplayName(instantCharCard)); // attr ui 업데이트
-        Logger.Log($"Equipment Slot Manager. charATK 장비 모두 장착 후 = {currentAttribute.Atk}"); // 여기까지 좋음
+        equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute, cardDictionary.GetDisplayName(instantCharCard));
     }
 
     public OriAttribute GetCurrentAttribute() => currentAttribute;
