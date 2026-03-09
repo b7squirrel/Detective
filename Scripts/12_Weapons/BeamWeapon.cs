@@ -96,6 +96,10 @@ public class BeamWeapon : WeaponBase
             }
         }
 
+        // ✅ 추가: CenterMuzzlePoint 가져오기
+        WeaponContainerAnim containerAnim = GetComponentInParent<WeaponContainerAnim>();
+        Transform centerPoint = containerAnim?.GetCenterMuzzlePoint();
+
         //배치, stat 리셋
         for (int i = 0; i < projectiles.Count; i++)
         {

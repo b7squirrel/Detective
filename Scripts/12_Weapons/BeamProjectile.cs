@@ -8,6 +8,7 @@ public class BeamProjectile : ProjectileBase
     [SerializeField] LayerMask walls;
     [SerializeField] LayerMask screenEdges;
     [SerializeField] Transform hitWallEffect;
+    Transform assignedMuzzlePoint;
 
     Transform startPoint; // 오리의 눈 부위에 있는 로케이터
     Animator anim;
@@ -60,7 +61,9 @@ public class BeamProjectile : ProjectileBase
     void DrawLaser(Vector2 _endPos)
     {
         //if (laserLine == null) GetComponent<LineRenderer>();
-        Vector2 startPos = new Vector2(transform.position.x, transform.position.y + .5f);
+        Vector2 startPos = assignedMuzzlePoint != null
+    ? (Vector2)assignedMuzzlePoint.position
+    : new Vector2(transform.position.x, transform.position.y + .5f);
         laserLine.SetPosition(0, startPos);
         laserLine.SetPosition(1, _endPos);
         hitWallEffect.position = _endPos;
@@ -72,7 +75,9 @@ public class BeamProjectile : ProjectileBase
     {
         if (Time.timeScale == 0) return;
 
-        Vector2 startPos = new Vector2(transform.position.x, transform.position.y + .5f);
+        Vector2 startPos = assignedMuzzlePoint != null
+    ? (Vector2)assignedMuzzlePoint.position
+    : new Vector2(transform.position.x, transform.position.y + .5f);
 
         // 모든 레이어를 검사하여 가장 가까운 충돌점 찾기
         LayerMask allLayers = destructables | walls | screenEdges;
@@ -134,11 +139,16 @@ public class BeamProjectile : ProjectileBase
                                                      KnockBackSpeedFactor,
                                                      _object.transform.position,
                                                      hitEffect);
-        
+
         // ✨ 무기 이름과 함께 데미지 기록
         if (!string.IsNullOrEmpty(WeaponName))
         {
             DamageTracker.instance.RecordDamage(WeaponName, Damage);
         }
+    }
+
+    public void SetMuzzlePoint(Transform muzzlePoint)
+    {
+        assignedMuzzlePoint = muzzlePoint;
     }
 }
