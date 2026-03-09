@@ -119,8 +119,8 @@ public class ZapWeapon : WeaponBase
             }
         }
 
-        // 눈 반짝
-        AnimShoot();
+        // // 눈 반짝
+        // AnimShoot();
 
         // muzzle flash
         if (muzzle == null)

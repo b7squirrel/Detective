@@ -277,7 +277,7 @@ public class WeaponContainerAnim : MonoBehaviour
     public void SetWeaponToolSpriteRenderer(SpriteRenderer _sp, Sprite _sprite)
     {
         sprite = _sprite;
-        _sp.sprite = sprite;
+        if(_sp != null && sprite != null) _sp.sprite = sprite;
     }
     // 두 번째 무기부터는 첫 번째 무기의 스프라이트를 받아와서 주입한다.
     public void SetExtraWeaponToolSpriteRenderer(SpriteRenderer _sp)
