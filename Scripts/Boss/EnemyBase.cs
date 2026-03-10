@@ -752,17 +752,16 @@ public class EnemyBase : MonoBehaviour, Idamageable
         finishedSpawn = false;
         DestroyHPbar();
 
-        // 일반 모드 보스일 떄만
         if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
         {
             BossDieManager bossDieManager = FindObjectOfType<BossDieManager>();
             bossDieManager.SetIsBossDead(true);
             bossDieManager.DieEvent(.1f, 2f);
         }
-        else if(IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
+        else if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
         {
             BossDieManager bossDieManager = FindObjectOfType<BossDieManager>();
-            bossDieManager.DieEvent(.1f, 2f);
+            bossDieManager.DieEventInfinite(.1f, 2f); // deadBody 연출만, IsBossDead 없음
         }
 
         if (isSubBoss)

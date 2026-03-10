@@ -288,15 +288,19 @@ public class EnemyBoss : EnemyBase, Idamageable
     }
     public override void Die()
     {
-        Debug.Log("Enemy Boss");
         base.Die();
-
-        //GetComponent<DropOnDestroy>().CheckDrop();
-
         SoundManager.instance.Play(dieSFX);
         anim.SetTrigger("Die");
 
-        BossDieManager.instance.InitDeadBody(deadBody, transform, 25);
+        if (PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
+        {
+            BossDieManager.instance.InitDeadBody(deadBody, transform, 25); // IsBossDead = true 포함
+        }
+        else if (PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
+        {
+            BossDieManager.instance.InitDeadBodyInfinite(deadBody, transform); // IsBossDead 세팅 안 함
+        }
+
         gameObject.SetActive(false);
     }
     #endregion
