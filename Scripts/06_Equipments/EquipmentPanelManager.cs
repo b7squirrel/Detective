@@ -221,6 +221,9 @@ public class EquipmentPanelManager : MonoBehaviour
         Item itemData = cardDictionary.GetWeaponItemData(cardToEquip).itemData;
         equipmentSlotsManager.SetEquipSlot(index, itemData, cardToEquip);
 
+        // ⭐ false: SettrigerAnim 스킵, 아래 SetAllFieldTypeOf에서 1번만 호출
+        DeActivateEquipInfoPanel(false);
+
         SetAllFieldTypeOf("Item");
         setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
 
@@ -292,9 +295,10 @@ public class EquipmentPanelManager : MonoBehaviour
         UpdateButtonState(upgradeButton, false);
     }
 
-    public void DeActivateEquipInfoPanel()
+    public void DeActivateEquipInfoPanel(bool triggerAnim = true)
     {
         equipInfoPanel.gameObject.SetActive(false);
+        if (triggerAnim)
         cardSlotManager.SettrigerAnim("EquipI"); // 필드 끄기, 인포는 무조건 아이템이니까 아이템으로 돌아감
 
         this.cardDisp = null;
