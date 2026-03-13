@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: tennis_capWing 1
   m_EditorClassIdentifier: 
   Name: tennis_capWing
-  DisplayName: "\uD14C\uB2C8\uC2A4 \uB0A0\uAC1C \uBAA8\uC790"
+  DisplayName: "\uADF8\uB79C\uB4DC \uC2AC\uB7A8 \uBAA8\uC790"
   grade: 1
-  charImage: {fileID: 21300000, guid: b3c7c1f6ac3fd8d4781d8521980df056, type: 3}
-  equippedImage: {fileID: -726992558, guid: 302dcf9506e1f77418b2cb742135d63f, type: 3}
+  charImage: {fileID: 21300000, guid: a2287cc49b125f048a18e849957b205a, type: 3}
+  equippedImage: {fileID: 21300000, guid: a2287cc49b125f048a18e849957b205a, type: 3}
   spriteRow:
     sprites:
-    - {fileID: 21300000, guid: 2120c3f7197846d4b9092657654cdabe, type: 3}
+    - {fileID: 21300000, guid: a2287cc49b125f048a18e849957b205a, type: 3}
   needToOffset: 0
   posHead: {x: 0, y: 0}
   worldPosHead: {x: 0, y: 0}
@@ -45,4 +45,6 @@ MonoBehaviour:
     currentLevel: 0
   upgrades: []
   dropChance: 0
-  itemIndex: 0
+  itemIndex: 76
+  projectilePrefab: {fileID: 0}
+  projectileVerticalVelocity: 10

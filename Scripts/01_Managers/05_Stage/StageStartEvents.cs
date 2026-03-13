@@ -8,6 +8,7 @@ using UnityEngine;
 public class StageStartEvents : MonoBehaviour
 {
     [SerializeField] AudioClip stageStartSound;
+    [SerializeField] AudioClip notificationSound;
     [SerializeField] AudioClip stageStartUISwooshSound;
     [SerializeField] AudioClip stageStartVoice;
     [SerializeField] AudioClip stageTextSwipeOutSound;
@@ -105,6 +106,11 @@ public class StageStartEvents : MonoBehaviour
         {
             item.SetActive(isActive);
         }
+    }
+    public void PlayNotificationSound()
+    {
+        if(notificationSound != null)
+        SoundManager.instance.Play(notificationSound);
     }
     public void SetSwipeImageActive(int active)
     {

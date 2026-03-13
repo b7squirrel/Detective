@@ -113,7 +113,6 @@ public class CardsDictionary : MonoBehaviour
     CardData FindCardData(Item item)
     {
         if (itemCardData == null) itemCardData = new List<CardData>();
-
         for (int i = 0; i < ItemPool.Count; i++)
         {
             if (ItemPool[i].Name == item.Name && ItemPool[i].Grade == item.grade)
