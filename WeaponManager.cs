@@ -30,7 +30,7 @@ public class WeaponManager : MonoBehaviour
     {
         WeaponData wd = null;
         List<Item> item = new();
-        if(isInitialWeapon)
+        if (isInitialWeapon)
         {
             wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
             container = weaponContainer.CreateContainer(wd, isInitialWeapon);
@@ -156,15 +156,17 @@ public class WeaponManager : MonoBehaviour
             Transform weaponTool = Instantiate(weaponData.weaponPrefab, weaponBase.GetComponentInParent<WeaponContainerAnim>().transform);
             weaponTool.position = weaponBase.transform.position;
 
-            //값을 weaponFire등에서 가져갈 수 있도록 weaponBase로 옮겨놓음
             weaponBase.weaponToolsExtra = weaponTool.GetComponent<Weapon>();
             weaponBase.ShootPointExtra = weaponBase.weaponToolsExtra.shootPoint;
             weaponBase.EffectPointExtra = weaponBase.weaponToolsExtra.effectPoint;
             weaponBase.animExtra = weaponTool.GetComponent<Animator>();
 
-            WeaponContainerAnim wa = container.GetComponent<WeaponContainerAnim>();
+            // ✅ container 대신 weaponBase 기준으로 올바른 WeaponContainerAnim을 가져옴
+            WeaponContainerAnim wa = weaponBase.GetComponentInParent<WeaponContainerAnim>();
+
             wa.ParentWeaponObjectTo((int)weaponData.equipmentType, weaponTool.transform, weaponBase.NeedParent, 3);
             wa.SetExtraWeaponToolSpriteRenderer(weaponTool.GetComponentInChildren<SpriteRenderer>());
+            // wa.sprite에는 이미 첫 번째 무기에서 올바른 스프라이트가 캐싱되어 있으므로 그대로 사용 ✅
         }
     }
 
