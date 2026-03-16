@@ -21,6 +21,9 @@ public class ResultPanel : MonoBehaviour
     [Header("일반 모드 요소")]
     [SerializeField] RectTransform stageNumRec;
     [SerializeField] TMPro.TextMeshProUGUI stageNumberText;
+    [SerializeField] GameObject tearEmitters;
+    [SerializeField] Image faceExpressetion; // 눈물을 흘릴 때 우는 표정으로 교체하기 위해
+    [SerializeField] Sprite cryingFaceSprite;
 
     [Header("무한 모드 요소")]
     [SerializeField] RectTransform survivalTimeRec;
@@ -121,10 +124,17 @@ public class ResultPanel : MonoBehaviour
         // ori
         string animTrigger = isWinningStage ? "Idle" : "Hit";
         GenWeaponCards(animTrigger);
+        if(isWinningStage == false) faceExpressetion.sprite = cryingFaceSprite;
 
         seq.AppendInterval(.01f);
         seq.AppendCallback(() => PlayUISound(popupSound));
         seq.Append(oriRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
+
+        seq.AppendCallback(() =>
+        {
+            if (!isWinningStage)
+            tearEmitters.SetActive(true);
+        });
 
         // title
         seq.AppendInterval(.05f);
