@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5385171059256303267}
   - component: {fileID: 7202351314627450973}
   m_Layer: 5
-  m_Name: Char Test
+  m_Name: Chest Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.65882355}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -288,11 +288,11 @@ RectTransform:
   m_LocalScale: {x: 0.7535637, y: 0.7535637, z: 0.7535637}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7033894173524267095}
   - {fileID: 6701930089868799331}
   - {fileID: 723706163195998227}
   - {fileID: 4837448648700805540}
   - {fileID: 4715795770016649155}
-  - {fileID: 7033894173524267095}
   m_Father: {fileID: 3793444676860172660}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -348,7 +348,7 @@ Animator:
   m_GameObject: {fileID: 1000505775764498781}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 6443f33f2e05d420ea82eae9177c1914, type: 2}
+  m_Controller: {fileID: 22100000, guid: daca75eb32abf46c1b44703391278f54, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -898,7 +898,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9fe2fdfd8aacf0145b111fa5bc456989, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ea9db734e73a446fbb84a4fedf99c882, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1767,7 +1767,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 544381975be32be48b7ecbd925ca988e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9fe2fdfd8aacf0145b111fa5bc456989, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
