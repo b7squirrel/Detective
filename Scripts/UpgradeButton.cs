@@ -37,6 +37,7 @@ public class UpgradeButton : MonoBehaviour
     public bool IsClicked { get; private set; } // 여러개의 버튼이 눌러지지 않도록
 
     Animator anim;
+    Animator oriIconAnim;
     int cardLevel;
 
     void OnEnable()
@@ -47,7 +48,6 @@ public class UpgradeButton : MonoBehaviour
         levelBar.SetActive(false);
         unSelectionPanel.SetActive(false);
         upgradePanelWeaponIcon.gameObject.SetActive(false);
-
     }
 
     public void Set(UpgradeData upgradeData)
@@ -64,9 +64,14 @@ public class UpgradeButton : MonoBehaviour
         {
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
 
-
             upgradePanelWeaponIcon.gameObject.SetActive(true);
             upgradePanelWeaponIcon.InitWeaponIcon(upgradeData.weaponData); // 오리 아이콘 셋업
+
+            if(oriIconAnim == null) oriIconAnim = upgradePanelWeaponIcon.GetComponentInChildren<Animator>();
+
+            // 애니메이션 속도 조절
+            float animationSpeed = PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite ? 1.7f : 1f;
+            oriIconAnim.speed = animationSpeed;
 
             // 시너지 업그레이드일 때는 시너지 이름 표시
             if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade)

@@ -57,11 +57,6 @@ public class UpgradePanelManager : MonoBehaviour
         {
             upgradeButtons[i].gameObject.SetActive(true);
             upgradeButtons[i].Set(upgradeData[i]);
-
-            // 애니메이션 속도 조절
-            Animator cardAnim = upgradeButtons[i].GetComponentInChildren<Animator>();
-            float animationSpeed = PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite ? 1.5f : 1f;
-            cardAnim.speed = animationSpeed;
         }
 
         StartCoroutine(PopUpPanel());
