@@ -36,7 +36,6 @@ public class MainMenuManager : MonoBehaviour
     [Header("합성 성공 플래그")]
     // 합성 성공한 상태인 것을 저장. 성공한 상태에서 탭해서 나가지 않고, 아래쪽 탭으로 다른 화면으로 넘어갈 경우를 대비
     bool mergeFinished;
-    UpgradePanelManager upPanelManager;
 
     [Header("튜토리얼")]
     [SerializeField] RuntimeAnimatorController[] defaultTabControllers;
