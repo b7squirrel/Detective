@@ -162,7 +162,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         SetLeadTagActive(false);
 
         // ★ 다국어 적용
-        // Title.text = LocalizationManager.Item.GetItemDisplayName(itemData.Name);
+        Title.text = LocalizationManager.Item.GetItemDisplayName(itemData.Name);
 
         charImage.gameObject.SetActive(true);
         charImage.sprite = itemData.charImage;
