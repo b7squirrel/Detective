@@ -3,10 +3,44 @@ using UnityEngine;
 
 public class BowlingWeapon : WeaponBase
 {
-    [SerializeField] private GameObject bowlingBall; // 볼링공 프리팹
+    [SerializeField] private GameObject bowlingBall; // 볼링공 프리팹 (폴백)
     [SerializeField] private AudioClip shootSound;
-    
+
+    // ⭐ 런타임에 결정되는 프로젝타일
+    GameObject currentBowlingBallPrefab;
+
     private List<GameObject> activeBowlingBalls = new List<GameObject>(); // 활성화된 모든 볼링공 추적
+
+    public override void Init(WeaponStats stats, bool isLead)
+    {
+        base.Init(stats, isLead);
+    }
+
+    protected override void OnWeaponDataReady()
+{
+    Item equippedItem = GetEssentialEquippedItem();
+
+    // ⭐ 어느 조건에서 기본값을 사용하는지 확인
+    if (equippedItem == null)
+    {
+        Logger.LogWarning("[BowlingWeapon] equippedItem이 null입니다!");
+    }
+    else if (equippedItem.projectilePrefab == null)
+    {
+        Logger.LogWarning($"[BowlingWeapon] {equippedItem.Name}의 projectilePrefab이 null입니다! Item SO에서 연결을 확인하세요.");
+    }
+
+    if (equippedItem != null && equippedItem.projectilePrefab != null)
+    {
+        currentBowlingBallPrefab = equippedItem.projectilePrefab;
+        Logger.Log($"[BowlingWeapon] 아이템: {equippedItem.Name} / 프리팹: {currentBowlingBallPrefab.name} / IsLead: {InitialWeapon}");
+    }
+    else
+    {
+        currentBowlingBallPrefab = bowlingBall;
+        Logger.LogWarning("[BowlingWeapon] 기본값 사용");
+    }
+}
 
     protected override void Update()
     {
@@ -15,13 +49,11 @@ public class BowlingWeapon : WeaponBase
         SetAngle();
         RotateWeapon();
         RotateExtraWeapon();
-
         FlipWeaponTools();
         LockFlip();
 
         // 활성화된 볼링공이 있는지 체크
         CleanupInactiveBalls(); // 비활성화된 볼링공 제거
-        
         if (activeBowlingBalls.Count > 0)
         {
             return; // 볼링공이 하나라도 활성화되어 있으면 타이머 스킵
@@ -55,7 +87,7 @@ public class BowlingWeapon : WeaponBase
     private void ThrowBowlingBall()
     {
         // 애니메이션 및 사운드
-        AnimShoot();
+        // AnimShoot();
         SoundManager.instance.Play(shootSound);
 
         // 기본 볼링공 발사
@@ -70,8 +102,14 @@ public class BowlingWeapon : WeaponBase
 
     private void ShootBall(Vector2 direction)
     {
-        // 볼링공 생성
-        GameObject ball = GameManager.instance.poolManager.GetMisc(bowlingBall);
+        if (currentBowlingBallPrefab == null)
+        {
+            Logger.LogError("[BowlingWeapon] currentBowlingBallPrefab이 null입니다!");
+            return;
+        }
+
+        // ⭐ currentBowlingBallPrefab 사용
+        GameObject ball = GameManager.instance.poolManager.GetMisc(currentBowlingBallPrefab);
         if (ball == null)
         {
             Debug.LogWarning("볼링공을 풀에서 가져올 수 없습니다!");
@@ -80,8 +118,8 @@ public class BowlingWeapon : WeaponBase
 
         // 활성화된 볼링공 리스트에 추가
         activeBowlingBalls.Add(ball);
-
         ball.transform.position = transform.position;
+        ball.transform.localScale = Vector3.one * weaponStats.sizeOfArea;
 
         // 발사체 설정
         ProjectileBase projectile = ball.GetComponent<ProjectileBase>();

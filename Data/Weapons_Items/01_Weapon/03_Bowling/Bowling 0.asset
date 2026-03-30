@@ -29,9 +29,9 @@ MonoBehaviour:
   DefaultFace: {fileID: 0}
   DefaultHands: {fileID: 0}
   defaultItems:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 8169acdbc9c5447789f20dcffba7c660, type: 2}
   - {fileID: 11400000, guid: 14c6d0108b9eb4b9b8d97706d57a33b3, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 81bbab52c0b7d406cbec38f1bcaaebaf, type: 2}
   - {fileID: 11400000, guid: b6d386323485344ef924df78cffe932f, type: 2}
   charEffectImage: {fileID: 0}
   weaponPrefab: {fileID: 5076648040088663088, guid: 208022e37ecc4421594b23006dbbec2d, type: 3}
@@ -39,7 +39,7 @@ MonoBehaviour:
     damage: 100
     timeToAttack: 5
     numberOfAttacks: 1
-    sizeOfArea: 2
+    sizeOfArea: 0.6
     projectileSpeed: 12
     knockBackChance: 30
     currentLevel: 0

@@ -80,7 +80,7 @@ public class PartyWeapon : WeaponBase
             if (projectileObj != null)
             {
                 // 위치 리셋
-                projectileObj.transform.position = transform.position;
+                projectileObj.transform.position = ShootPoint.position;
                 
                 // 자식 오브젝트 리셋
                 SpriteRenderer sprite = projectileObj.GetComponentInChildren<SpriteRenderer>();

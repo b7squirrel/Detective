@@ -376,9 +376,16 @@ public class WeaponBase : MonoBehaviour
         if (InitialWeapon) // 리드 오리 - 기존 방식 유지
         {
             int essentialIndex = container.GetEssectialIndex();
-            if (essentialIndex < 0) return null;
-
             List<Item> equippedItems = container.GetItemDatas();
+
+            // ⭐ 리드 오리 상태 확인
+            Logger.Log($"[WeaponBase] 리드 오리 - essentialIndex: {essentialIndex}, equippedItems.Count: {equippedItems.Count}");
+            for (int i = 0; i < equippedItems.Count; i++)
+            {
+                Logger.Log($"[WeaponBase] equippedItems[{i}]: {(equippedItems[i] == null ? "null" : equippedItems[i].Name)}");
+            }
+
+            if (essentialIndex < 0) return null;
             if (essentialIndex >= equippedItems.Count) return null;
             return equippedItems[essentialIndex];
         }

@@ -11,9 +11,13 @@ public class WhipWeapon : WeaponBase
     bool canMultiStrike;
     bool multiStrikeDone;
 
+    [Header("Effect")]
+    [SerializeField] GameObject elecHitEffect;
+
     [Header("Sounds")]
     [SerializeField] AudioClip shootSound;
     [SerializeField] AudioClip hitSound;
+    [SerializeField] AudioClip electricitySound;
 
     [Header("Hit Effects")]
     [SerializeField] GameObject hitEffectPrefab;
@@ -257,7 +261,6 @@ public class WhipWeapon : WeaponBase
             Debug.LogWarning("[WhipWeapon] HammerBoltConfig가 연결되지 않았습니다!");
             return;
         }
-
         float adjustedDuration = isSynergyWeaponActivated
             ? boltDuration * 1.3f
             : boltDuration;
@@ -341,6 +344,11 @@ public class WhipWeapon : WeaponBase
         if (shootSound != null)
             SoundManager.instance.Play(shootSound);
     }
+    void PlayElectricitySound()
+    {
+        if (electricitySound != null)
+            SoundManager.instance.PlaySoundWith(electricitySound, 0.5f, true, .1f);
+    }
 
     void MultiAttack(float firstAttackDirection)
     {
@@ -351,6 +359,31 @@ public class WhipWeapon : WeaponBase
         {
             StartCoroutine(AttackCo(firstAttackDirection));
         }
+    }
+
+    void GenElecHitEffect()
+    {
+        if (elecHitEffect == null)
+        {
+            Logger.LogWarning("[WhipWeapon] elecHitEffect 프리팹이 없습니다!");
+            return;
+        }
+
+        GameObject effect = GameManager.instance.poolManager.GetMisc(elecHitEffect);
+
+        if (effect == null)
+        {
+            Logger.LogWarning("[WhipWeapon] GetMisc가 null을 반환했습니다!");
+            return;
+        }
+
+        effect.transform.position = hitPoint.position;
+
+        // ⭐ 데미지 영역(반지름 = sizeOfArea)과 동일한 크기로 스케일 설정
+        float diameter = weaponStats.sizeOfArea * 2f;
+        effect.transform.localScale = new Vector3(diameter, diameter, 1f);
+
+        Logger.Log($"[WhipWeapon] 이펙트 위치: {hitPoint.position}, 스케일: {diameter}");
     }
     #endregion
 

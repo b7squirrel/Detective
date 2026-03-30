@@ -2,11 +2,45 @@ using UnityEngine;
 
 public class PitcherWeapon : WeaponBase
 {
-    [SerializeField] GameObject weaponBall;  // 야구공 프리팹
+    [SerializeField] GameObject weaponBall;  // 야구공 프리팹 (폴백)
     [SerializeField] AudioClip shoot;
-    
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
+
+    // ⭐ 런타임에 결정되는 프로젝타일
+    GameObject currentBallPrefab;
+
+    public override void Init(WeaponStats stats, bool isLead)
+    {
+        base.Init(stats, isLead);
+    }
+
+    protected override void OnWeaponDataReady()
+    {
+        Item equippedItem = GetEssentialEquippedItem();
+        if (equippedItem != null && equippedItem.projectilePrefab != null)
+        {
+            currentBallPrefab = equippedItem.projectilePrefab;
+        }
+        else
+        {
+            currentBallPrefab = weaponBall;
+        }
+
+        // ⭐ weaponTools를 통해 Bridge를 찾아서 자신을 등록
+        if (weaponTools != null)
+        {
+            VolleyballAnimEventBridge bridge = weaponTools.GetComponentInChildren<VolleyballAnimEventBridge>();
+            if (bridge != null)
+            {
+                bridge.SetPitcherWeapon(this);
+            }
+            else
+            {
+                Debug.LogWarning("[PitcherWeapon] Bridge를 찾을 수 없습니다!");
+            }
+        }
+    }
 
     protected override void Attack()
     {
@@ -17,15 +51,22 @@ public class PitcherWeapon : WeaponBase
             Debug.Log("투구 대상 없음");
             return;
         }
+        // ⭐ 데미지/넉백 파라미터를 미리 계산해둠
+        GetAttackParameters();
 
-        Debug.Log($"투구! 방향 = {dir}");
-        ThrowBall();
+        // ⭐ 애니메이션만 재생. ThrowBall()은 Animation Event가 호출
+        AnimShoot();
     }
 
-    void ThrowBall()
+    public void ThrowBall()
     {
+        if (currentBallPrefab == null)
+        {
+            Logger.LogError("[PitcherWeapon] currentBallPrefab이 null입니다!");
+            return;
+        }
+
         // 애니메이션 및 사운드
-        AnimShoot();
         SoundManager.instance.Play(shoot);
 
         // 머즐 이펙트
@@ -33,13 +74,14 @@ public class PitcherWeapon : WeaponBase
         muzzleEffect.transform.position = ShootPoint.position;
 
         // 공 생성 (단 하나만!)
-        GameObject ball = GameManager.instance.poolManager.GetMisc(weaponBall);
-        if (ball == null) 
+        // ⭐ currentBallPrefab 사용
+        GameObject ball = GameManager.instance.poolManager.GetMisc(currentBallPrefab);
+        if (ball == null)
         {
             Debug.LogWarning("공을 풀에서 가져올 수 없습니다!");
             return;
         }
-        
+
         ball.transform.position = ShootPoint.position;
 
         // 발사체 설정

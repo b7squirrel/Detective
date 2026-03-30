@@ -123,7 +123,7 @@ public class BaseballProjectile : ProjectileBase
     {
         // do nothing
     }
-    
+
     void GenDeadProjectile(Vector2 groundVel, float verticalVelocity, Sprite sprite)
     {
         GameObject deadPr = GameManager.instance.poolManager.GetMisc(deadProjectile);
