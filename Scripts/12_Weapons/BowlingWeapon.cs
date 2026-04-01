@@ -5,6 +5,7 @@ public class BowlingWeapon : WeaponBase
 {
     [SerializeField] private GameObject bowlingBall; // 볼링공 프리팹 (폴백)
     [SerializeField] private AudioClip shootSound;
+    Vector2 lastValidDir = Vector2.right; // 마지막으로 유효했던 방향 기억
 
     // ⭐ 런타임에 결정되는 프로젝타일
     GameObject currentBowlingBallPrefab;
@@ -17,30 +18,40 @@ public class BowlingWeapon : WeaponBase
     }
 
     protected override void OnWeaponDataReady()
-{
-    Item equippedItem = GetEssentialEquippedItem();
+    {
+        Item equippedItem = GetEssentialEquippedItem();
 
-    // ⭐ 어느 조건에서 기본값을 사용하는지 확인
-    if (equippedItem == null)
-    {
-        Logger.LogWarning("[BowlingWeapon] equippedItem이 null입니다!");
-    }
-    else if (equippedItem.projectilePrefab == null)
-    {
-        Logger.LogWarning($"[BowlingWeapon] {equippedItem.Name}의 projectilePrefab이 null입니다! Item SO에서 연결을 확인하세요.");
-    }
+        // ⭐ 어느 조건에서 기본값을 사용하는지 확인
+        if (equippedItem == null)
+        {
+            Logger.LogWarning("[BowlingWeapon] equippedItem이 null입니다!");
+        }
+        else if (equippedItem.projectilePrefab == null)
+        {
+            Logger.LogWarning($"[BowlingWeapon] {equippedItem.Name}의 projectilePrefab이 null입니다! Item SO에서 연결을 확인하세요.");
+        }
 
-    if (equippedItem != null && equippedItem.projectilePrefab != null)
-    {
-        currentBowlingBallPrefab = equippedItem.projectilePrefab;
-        Logger.Log($"[BowlingWeapon] 아이템: {equippedItem.Name} / 프리팹: {currentBowlingBallPrefab.name} / IsLead: {InitialWeapon}");
+        if (equippedItem != null && equippedItem.projectilePrefab != null)
+        {
+            currentBowlingBallPrefab = equippedItem.projectilePrefab;
+            Logger.Log($"[BowlingWeapon] 아이템: {equippedItem.Name} / 프리팹: {currentBowlingBallPrefab.name} / IsLead: {InitialWeapon}");
+        }
+        else
+        {
+            currentBowlingBallPrefab = bowlingBall;
+            Logger.LogWarning("[BowlingWeapon] 기본값 사용");
+        }
+
+        // ⭐ 브릿지 등록
+        if (weaponTools != null)
+        {
+            WeaponAnimEventBridge bridge = weaponTools.GetComponentInChildren<WeaponAnimEventBridge>();
+            if (bridge != null)
+                bridge.SetWeapon(this);
+            else
+                Debug.LogWarning("[BowlingWeapon] Bridge를 찾을 수 없습니다!");
+        }
     }
-    else
-    {
-        currentBowlingBallPrefab = bowlingBall;
-        Logger.LogWarning("[BowlingWeapon] 기본값 사용");
-    }
-}
 
     protected override void Update()
     {
@@ -76,18 +87,23 @@ public class BowlingWeapon : WeaponBase
 
     protected override void Attack()
     {
-        if (dir == Vector2.zero)
-        {
-            Debug.Log("볼링공 투구 대상 없음");
-            return;
-        }
+        if(dir != Vector2.zero) lastValidDir = dir; // 방향 저장
+        
+        dir = lastValidDir; // 항상 유효한 방향 보장 
+        
+        GetAttackParameters(); // ⭐ 캐싱
+        AnimShoot();           // ⭐ 애니메이션만 재생
+    }
+
+    // ⭐ Animation Event → Bridge → 여기 호출
+    public override void OnAnimEvent()
+    {
         ThrowBowlingBall();
     }
 
     private void ThrowBowlingBall()
     {
-        // 애니메이션 및 사운드
-        // AnimShoot();
+        // 사운드
         SoundManager.instance.Play(shootSound);
 
         // 기본 볼링공 발사
@@ -125,9 +141,9 @@ public class BowlingWeapon : WeaponBase
         ProjectileBase projectile = ball.GetComponent<ProjectileBase>();
         projectile.Speed = weaponStats.projectileSpeed;
         projectile.Direction = direction; // 파라미터로 받은 방향 사용
-        projectile.Damage = GetDamage();
+        projectile.Damage = damage;                    // ⭐ 캐싱된 값
         projectile.IsCriticalDamageProj = isCriticalDamage;
-        projectile.KnockBackChance = GetKnockBackChance();
+        projectile.KnockBackChance = knockback;        // ⭐ 캐싱된 값
         projectile.TimeToLive = 5f; // 볼링공은 더 오래 지속
         projectile.WeaponName = weaponData.DisplayName;
     }

@@ -142,6 +142,6 @@ public class BowWeapon : WeaponBase
     public override void ActivateSynergyWeapon()
     {
         base.ActivateSynergyWeapon();
-        Player.instance.GetComponent<WeaponManager>().AddExtraWeaponTool(weaponData, this, 1);
+        // Player.instance.GetComponent<WeaponManager>().AddExtraWeaponTool(weaponData, this, 1);
     }
 }

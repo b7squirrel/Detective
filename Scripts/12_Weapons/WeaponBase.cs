@@ -50,6 +50,10 @@ public class WeaponBase : MonoBehaviour
     public bool IsDirectional { get; set; }
     #endregion
 
+    #region Weapon Anim Bridge
+    public virtual void OnAnimEvent() { }
+    #endregion
+
     public virtual void Init(WeaponStats stats, bool isLead)
     {
         weaponContainerAnim = GetComponentInParent<WeaponContainerAnim>();
