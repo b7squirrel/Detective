@@ -65,6 +65,11 @@ public class DamageTrackerUI : MonoBehaviour
         weaponCards[weaponName].UpdateCard(totalDamage, dps1, dps5);
     }
 
+    void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     #region 디버그
     // 누적 데미지 초기화 메서드
     public void ResetAllDamageData()

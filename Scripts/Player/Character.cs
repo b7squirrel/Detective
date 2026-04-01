@@ -121,6 +121,7 @@ public class Character : MonoBehaviour
         Logger.Log("In Character, Damage Bonus = " + DamageBonus);
     }
 
+    #region TakeDamage
     public void TakeDamage(int damage, EnemyType enemyType, SlimeAttackType attackType = SlimeAttackType.Slime)
     {
         if (GameManager.instance.IsPlayerDead)
@@ -154,7 +155,15 @@ public class Character : MonoBehaviour
         {
             anim.SetTrigger("FireHurt");
         }
+
+        // 피드백
         PlayHurtSound(hurtSound);
+        HapticManager.PlayDamage();
+
+        // 임시 테스트용 기본 진동
+#if UNITY_ANDROID && !UNITY_EDITOR
+Handheld.Vibrate();
+#endif
 
         MessageSystem.instance.PostMessagePlayer(damage.ToString());
 
@@ -172,6 +181,8 @@ public class Character : MonoBehaviour
 
         if (debugCharacter == null) debugCharacter = FindObjectOfType<DebugCharacter>();
     }
+    #endregion
+
     void PlayHurtSound(AudioClip _hurtSound)
     {
         if (isTearEffectActivated) return;
@@ -240,8 +251,10 @@ public class Character : MonoBehaviour
         GetComponentInChildren<Magnetic>().MagneticField(MagnetSize + 14f);
     }
 
+    #region Die
     void Die()
     {
+        HapticManager.PlayDeath();
         hpBar.gameObject.SetActive(false);
         OnDie?.Invoke();
 
@@ -253,6 +266,7 @@ public class Character : MonoBehaviour
 
         GetComponent<CharacterGameOver>().GameOver();
     }
+    #endregion
 
     #region 디버그
     public void MaxPlayerHealth()
