@@ -7,6 +7,9 @@ public class StageContents
     [Header("Stage Number")]
     public string Name;
 
+    [Header("Stage Ground")]
+    public StageGroundType stageGroundType;
+
     [Header("Stage Events")]
     public int enemyNumForNextEvent;
     public StageMusicType stageMusicType;

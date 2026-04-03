@@ -94,6 +94,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [Header("Sounds")]
     [SerializeField] protected AudioClip[] hits;
     [SerializeField] protected AudioClip[] dies;
+    [SerializeField] protected AudioClip subBossAlarm;
     protected AudioClip hitSound;
     protected AudioClip dieSound;
 
@@ -308,10 +309,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
             // Logger.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다.");
         }
 
-        if(bossType == BossType.StageBoss || bossType == BossType.QueenBoss)
-        {
-            Logger.LogError($"[enemyBase] 보스 체력 : {this.Stats.hp}");
-        }
+        // if(bossType == BossType.StageBoss || bossType == BossType.QueenBoss)
+        // {
+        //     Logger.LogError($"[enemyBase] 보스 체력 : {this.Stats.hp}");
+        // }
 
         // 속도 설정
         DefaultSpeed = Stats.speed;
@@ -338,7 +339,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (_enemyToSpawn.hitSound != null) hitSound = _enemyToSpawn.hitSound;
         if (_enemyToSpawn.dieSound != null) dieSound = _enemyToSpawn.dieSound;
 
+        // 서브 보스 설정
         // 화이트 플래시를 한 후 원래 재질로 되돌리기 위한 initial mat 초기화
+        // 서브 보스 알람
         if (isSubBoss)
         {
             if (srFlash == null) return;
@@ -347,6 +350,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
             {
                 initialMat[i] = srFlash[i].material;
             }
+
+            if(subBossAlarm != null) SoundManager.instance.Play(subBossAlarm);
         }
     }
 

@@ -11,6 +11,7 @@ public class StageManager : MonoBehaviour
     PoolManager poolManager;
     FieldItemSpawner fieldItemSpawner;
     WallManager wallManager;
+    StageGroundManager stageGroundManager;
     PlayerDataManager playerDataManager;
     TimeWaveUI timeWaveUI;
     StageTime stageTime;
@@ -23,6 +24,7 @@ public class StageManager : MonoBehaviour
         poolManager = FindObjectOfType<PoolManager>();
         fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
         wallManager = FindObjectOfType<WallManager>();
+        stageGroundManager = GetComponent<StageGroundManager>();
     }
 
     void Start()
@@ -50,6 +52,8 @@ public class StageManager : MonoBehaviour
         spawnGemsOnStart.GenGemsAndChest();
 
         stageAssetManager.Init(contents.enemies, contents.bossPrefab, contents.effects, contents.bossEffects);
+
+        stageGroundManager.InitGround(contents.stageGroundType);
 
         // poolManager가 stageAssetManager를 참조하니까 먼저 초기화하면 안 됨
         poolManager.InitEnemyPools();
