@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public enum StageGroundType {Green, Grey, GreyDark, Orange, Brown}
+public enum StageGroundType {GreenForest, OrangeDesert, GreyStone, BlueIce, GreyLava}
 public class StageGroundManager : MonoBehaviour
 {
-    [Tooltip("Green, Grey, GreyDark, Orange, Brown, ")]
+    [Tooltip("GreenForest, OrangeDesert, GreyStone, BlueIce, GreyLava, ")]
     [SerializeField] GameObject[] groundPrefabs;
 
     private GameObject currentGround; // 현재 생성된 ground를 추적 (선택)
