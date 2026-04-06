@@ -6,6 +6,7 @@ public class GoldRewardManager : SingletonBehaviour<GoldRewardManager>
 
     protected override void Init()
     {
+        m_IsDestroyOnLoad = true; // ⭐ 추가: Essential 씬 전용, 씬 전환 시 제거
         base.Init();
         killGoldAccumulated = 0;
         Logger.Log("[GoldRewardManager] 초기화 완료");
