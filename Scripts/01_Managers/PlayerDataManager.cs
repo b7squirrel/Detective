@@ -257,14 +257,31 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         int currentWave = infiniteManager.GetCurrentWave();
         float currentTime = infiniteManager.GetSurvivalTime();
 
-        // 최고 기록과 현재 기록 비교. 최고 기록 갱신
+        // 최고 기록 갱신 체크
+        bool isNewRecord = currentTime > playerData.bestSurvivalTime;
         if (currentWave > playerData.bestWave) SetBestWave(currentWave);
         if (currentTime > playerData.bestSurvivalTime) SetSurvivalTime(currentTime);
 
-        SaveCoinsAndCristals();
+        // CoinManager 값 + 무한모드 골드 합산
+        CoinManager coinManager = FindObjectOfType<CoinManager>();
+        if (coinManager != null)
+        {
+            int coinNum = coinManager.GetCurrentCoins();
+            int killGold = GoldRewardManager.Instance.GetKillGold();
+            int infiniteGold = GoldRewardManager.Instance.CalculateInfiniteGold(currentWave, isNewRecord) + killGold;
+            SetCoinNumberAs(coinNum + infiniteGold);
+        }
+
+        CristalManager cristalManager = FindObjectOfType<CristalManager>();
+        if (cristalManager != null)
+        {
+            int cristalNum = cristalManager.GetCurrentCristals();
+            SetCristalNumberAs(cristalNum);
+        }
+
         PauseGame();
     }
-    
+
     void SaveCoinsAndCristals()
     {
         CoinManager coinManager = FindObjectOfType<CoinManager>();

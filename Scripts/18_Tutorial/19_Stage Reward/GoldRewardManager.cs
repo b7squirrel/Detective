@@ -46,6 +46,26 @@ public class GoldRewardManager : SingletonBehaviour<GoldRewardManager>
         Logger.Log($"[GoldRewardManager] 처치 골드 {killGold} + 클리어 보너스 {clearBonus} = 총 {total}골드 저장");
     }
 
+    // 무한모드 골드 계산
+    public int CalculateInfiniteGold(int wave, bool isNewRecord)
+    {
+        int goldPerWave = 50;
+        int totalGold = wave * goldPerWave;
+
+        // 최고 기록 갱신 시 50% 보너스
+        if (isNewRecord)
+        {
+            totalGold = Mathf.RoundToInt(totalGold * 1.5f);
+            Logger.Log($"[GoldRewardManager] 무한모드 신기록 보너스 적용: {wave}웨이브 × {goldPerWave} × 1.5 = {totalGold}골드");
+        }
+        else
+        {
+            Logger.Log($"[GoldRewardManager] 무한모드 골드: {wave}웨이브 × {goldPerWave} = {totalGold}골드");
+        }
+
+        return totalGold;
+    }
+
     // 스테이지 시작 시 초기화
     public void ResetKillGold()
     {

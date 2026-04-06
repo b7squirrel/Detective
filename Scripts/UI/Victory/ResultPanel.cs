@@ -68,11 +68,11 @@ public class ResultPanel : MonoBehaviour
         SetBG();
         PlayRegularAwardsSequence(killNum, killGold, stageNum, isWinningStage);
     }
-    public void InitInfiniteAwards(int killNum, int coinNum, int currentWave, string survivalTime, string bestRecord, bool isBestRecord)
+    public void InitInfiniteAwards(int killNum, int coinNum, int currentWave, string survivalTime, string bestRecord, bool isBestRecord, int infiniteGold)
     {
         SetBG();
         isNewRecord = isBestRecord;
-        PlayInfiniteAwardsSequence(killNum, coinNum, currentWave, survivalTime, bestRecord);
+        PlayInfiniteAwardsSequence(killNum, infiniteGold, currentWave, survivalTime, bestRecord);
     }
 
     void SetBG()
@@ -192,14 +192,14 @@ public class ResultPanel : MonoBehaviour
     #endregion
 
     #region 무한 스테이지 애니메이션
-    void PlayInfiniteAwardsSequence(int killNum, int coinNum, int wave, string survivalTime, string bestRecord)
+    void PlayInfiniteAwardsSequence(int killNum, int infiniteGold, int wave, string survivalTime, string bestRecord)
     {
         bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
 
         ResetRecs();
         titleText.text = "도전 결과";
         killText.text = killNum.ToString();
-        coinText.text = coinNum.ToString();
+        coinText.text = infiniteGold.ToString(); // ← coinNum → infiniteGold
         survivalTimeText.text = survivalTime;
         bestRecordText.text = bestRecord;
 

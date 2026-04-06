@@ -74,7 +74,11 @@ public class CharacterGameOver : MonoBehaviour
             // 기록 갱신 체크
             bool isBreakingRecords = currentTime > bestTime ? true : false;
 
-            infiniteGameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted, isBreakingRecords);
+            // 무한모드 골드 계산
+            int killGold = GoldRewardManager.Instance.GetKillGold();
+            int infiniteGold = GoldRewardManager.Instance.CalculateInfiniteGold(currentWave, isBreakingRecords) + killGold;
+            
+            infiniteGameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted, isBreakingRecords, infiniteGold);
         }
     }
 }
