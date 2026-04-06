@@ -135,12 +135,12 @@ public class GachaSystem : MonoBehaviour
     // ⭐ ShopManager에서 호출할 새로운 메서드
     public void OpenBox(string gachaTableId, int drawCount, int guaranteedCount, string guaranteedRarity)
     {
-         // ⭐ 디버깅 로그 추가
-    Logger.Log($"[GachaSystem] OpenBox 시작");
-    Logger.Log($"  - gachaTableId: {gachaTableId}");
-    Logger.Log($"  - drawCount: {drawCount}");
-    Logger.Log($"  - guaranteedCount: {guaranteedCount}");
-    Logger.Log($"  - guaranteedRarity: {guaranteedRarity}");
+        // ⭐ 디버깅 로그 추가
+        Logger.Log($"[GachaSystem] OpenBox 시작");
+        Logger.Log($"  - gachaTableId: {gachaTableId}");
+        Logger.Log($"  - drawCount: {drawCount}");
+        Logger.Log($"  - guaranteedCount: {guaranteedCount}");
+        Logger.Log($"  - guaranteedRarity: {guaranteedRarity}");
         if (raritySystem == null)
         {
             Logger.LogError("[GachaSystem] GachaRaritySystem이 없습니다.");
@@ -166,7 +166,7 @@ public class GachaSystem : MonoBehaviour
             // 일반 슬롯 뽑기
             for (int i = 0; i < normalSlots; i++)
             {
-                Logger.Log($"[GachaSystem] 일반 슬롯 뽑기 시작 #{i+1}");
+                Logger.Log($"[GachaSystem] 일반 슬롯 뽑기 시작 #{i + 1}");
                 int rarity = raritySystem.GetRandomRarity(gachaTableId, false);
                 DrawWithRarity(cardType, rarity);
                 Logger.Log($"[GachaSystem] 일반 슬롯 #{i + 1}/{normalSlots}: Grade {rarity}");
@@ -176,7 +176,7 @@ public class GachaSystem : MonoBehaviour
             Logger.Log($"[GachaSystem] 확정 슬롯 루프 시작 (count: {guaranteedCount})");
             for (int i = 0; i < guaranteedCount; i++)
             {
-                Logger.Log($"[GachaSystem] 확정 슬롯 뽑기 시작 #{i+1}");
+                Logger.Log($"[GachaSystem] 확정 슬롯 뽑기 시작 #{i + 1}");
                 int rarity = raritySystem.GetRandomRarity(gachaTableId, true);
                 DrawWithRarity(cardType, rarity);
                 Logger.Log($"[GachaSystem] 확정 슬롯 #{i + 1}/{guaranteedCount}: Grade {rarity}");

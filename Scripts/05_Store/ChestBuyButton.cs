@@ -66,7 +66,7 @@ public class ChestBuyButton : MonoBehaviour
             }
             else
             {
-                costText.text = productData.PurchaseCost.ToString();
+                costText.text = $"{productData.PurchaseCost:N0}";
                 Logger.Log($"[ChestBuyButton] 일반 가격 설정: {productData.PurchaseCost}");
             }
         }

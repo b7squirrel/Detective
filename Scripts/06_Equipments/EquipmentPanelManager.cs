@@ -399,7 +399,7 @@ public class EquipmentPanelManager : MonoBehaviour
     /// </summary>
     int GetAmountToUpgrade(CardData cardData)
     {
-        return equation.GetUpgradeCost(cardData.Level, cardData.Grade);
+        return equation.GetUpgradeCost(cardData.Level, cardData.Grade, cardData.EvoStage);
     }
     #endregion
 

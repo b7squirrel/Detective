@@ -254,7 +254,7 @@ public class Colors
 public class Equation
 {
     // 카드 업그레이드 비용
-    public int GetUpgradeCost(int level, int gradeIndex)
+    public int GetUpgradeCost(int level, int gradeIndex, int evoStage = 0)
     {
         int baseCost;
         int perLevelCost;
@@ -263,35 +263,40 @@ public class Equation
         {
             case 0: // 일반
                 baseCost = 100;
-                perLevelCost = 50;
+                perLevelCost = 15;
                 break;
-
             case 1: // 희귀
                 baseCost = 300;
-                perLevelCost = 150;
+                perLevelCost = 45;
                 break;
-
             case 2: // 고급
-                baseCost = 1000;
-                perLevelCost = 500;
+                baseCost = 800;
+                perLevelCost = 120;
                 break;
-
             case 3: // 전설
-                baseCost = 5000;
-                perLevelCost = 2500;
+                baseCost = 2000;
+                perLevelCost = 300;
                 break;
-
             case 4: // 신화
-                baseCost = 20000;
-                perLevelCost = 10000;
+                baseCost = 5000;
+                perLevelCost = 750;
                 break;
-
             default:
                 Debug.LogError($"Invalid gradeIndex: {gradeIndex}");
                 return 0;
         }
 
-        return baseCost + (level * perLevelCost);
+        int baseCostTotal = baseCost + (level * perLevelCost);
+
+        // Evo 배율 적용
+        float evoMultiplier = evoStage switch
+        {
+            1 => 1.3f,
+            2 => 1.6f,
+            _ => 1.0f  // evoStage 0
+        };
+
+        return Mathf.RoundToInt(baseCostTotal * evoMultiplier);
     }
 
     public int GetDamage(int _originalDamage, int _damageBonus)

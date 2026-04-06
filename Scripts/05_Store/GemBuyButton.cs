@@ -62,7 +62,7 @@ public class GemBuyButton : MonoBehaviour
         // 보상 텍스트 (크리스탈 개수)
         if (rewardText != null)
         {
-            rewardText.text = productData.RewardCristal.ToString();
+            rewardText.text = $"{productData.RewardCristal:N0}";
             Logger.Log($"[GemBuyButton] 보상 텍스트 설정: {productData.RewardCristal}");
         }
         

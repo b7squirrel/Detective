@@ -76,6 +76,7 @@ public class StageInfoUI : MonoBehaviour
             Quaternion.identity,
             stageBossImageTrns); // 부모 설정 추가
 
-        stageBG.sprite = stageInfo.GetStageInfo(currentStageIndex).stageBG;
+        // stageBG.sprite = stageInfo.GetStageInfo(currentStageIndex).stageBG;
+        stageBG.sprite = stageInfo.GetStageBGSrpite(currentStageIndex);
     }
 }

@@ -31,7 +31,7 @@ public class PackBuyButton : MonoBehaviour
             }
             else
             {
-                priceText.text = data.PurchaseCost.ToString();
+                priceText.text = $"{data.PurchaseCost:N0}";
             }
         }
             

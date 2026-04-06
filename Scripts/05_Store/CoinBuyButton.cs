@@ -48,13 +48,13 @@ public class CoinBuyButton : MonoBehaviour
         // 보상 텍스트
         if (rewardText != null)
         {
-            rewardText.text = productData.RewardGold.ToString();
+            rewardText.text = $"{productData.RewardGold:N0}";
         }
         
         // 비용 텍스트
         if (costText != null)
         {
-            costText.text = productData.PurchaseCost.ToString();
+            costText.text = $"{productData.PurchaseCost:N0}";
         }
     }
     
