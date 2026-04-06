@@ -255,6 +255,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     {
         InfiniteStageManager infiniteManager = FindObjectOfType<InfiniteStageManager>();
         int currentWave = infiniteManager.GetCurrentWave();
+        int clearedWaves = infiniteManager.GetClearedWaves(); 
         float currentTime = infiniteManager.GetSurvivalTime();
 
         // 최고 기록 갱신 체크
@@ -268,7 +269,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         {
             int coinNum = coinManager.GetCurrentCoins();
             int killGold = GoldRewardManager.Instance.GetKillGold();
-            int infiniteGold = GoldRewardManager.Instance.CalculateInfiniteGold(currentWave, isNewRecord) + killGold;
+            int infiniteGold = GoldRewardManager.Instance.CalculateInfiniteGold(clearedWaves, isNewRecord) + killGold;
             SetCoinNumberAs(coinNum + infiniteGold);
         }
 

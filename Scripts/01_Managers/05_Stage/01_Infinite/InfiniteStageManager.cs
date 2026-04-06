@@ -56,6 +56,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     int currentWaveEnemiesSpawned = 0;
     int currentWaveEnemiesKilled = 0;
     int currentWavePlannedEnemies = 0;
+    public int GetClearedWaves() => Mathf.Max(0, currentWave - 1);
 
     // 성과
     float survivalTime = 0f;

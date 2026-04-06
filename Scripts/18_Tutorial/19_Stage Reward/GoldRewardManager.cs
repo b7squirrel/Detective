@@ -47,20 +47,19 @@ public class GoldRewardManager : SingletonBehaviour<GoldRewardManager>
     }
 
     // 무한모드 골드 계산
-    public int CalculateInfiniteGold(int wave, bool isNewRecord)
+    public int CalculateInfiniteGold(int clearedWaves, bool isNewRecord)
     {
         int goldPerWave = 50;
-        int totalGold = wave * goldPerWave;
+        int totalGold = clearedWaves * goldPerWave;
 
-        // 최고 기록 갱신 시 50% 보너스
-        if (isNewRecord)
+        if (isNewRecord && clearedWaves > 0)
         {
             totalGold = Mathf.RoundToInt(totalGold * 1.5f);
-            Logger.Log($"[GoldRewardManager] 무한모드 신기록 보너스 적용: {wave}웨이브 × {goldPerWave} × 1.5 = {totalGold}골드");
+            Logger.Log($"[GoldRewardManager] 무한모드 신기록 보너스: {clearedWaves}웨이브 × {goldPerWave} × 1.5 = {totalGold}골드");
         }
         else
         {
-            Logger.Log($"[GoldRewardManager] 무한모드 골드: {wave}웨이브 × {goldPerWave} = {totalGold}골드");
+            Logger.Log($"[GoldRewardManager] 무한모드 골드: {clearedWaves}웨이브 × {goldPerWave} = {totalGold}골드");
         }
 
         return totalGold;

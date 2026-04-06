@@ -63,6 +63,7 @@ public class CharacterGameOver : MonoBehaviour
 
             // 현재 기록
             int currentWave = infiniteManager.GetCurrentWave();
+            int clearedWaves = infiniteManager.GetClearedWaves();
             float currentTime = infiniteManager.GetSurvivalTime();
             string timeFormatted = new GeneralFuctions().FormatTime(currentTime);
 
@@ -76,7 +77,7 @@ public class CharacterGameOver : MonoBehaviour
 
             // 무한모드 골드 계산
             int killGold = GoldRewardManager.Instance.GetKillGold();
-            int infiniteGold = GoldRewardManager.Instance.CalculateInfiniteGold(currentWave, isBreakingRecords) + killGold;
+            int infiniteGold = GoldRewardManager.Instance.CalculateInfiniteGold(clearedWaves, isBreakingRecords) + killGold;
             
             infiniteGameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted, isBreakingRecords, infiniteGold);
         }
