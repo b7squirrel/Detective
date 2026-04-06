@@ -62,8 +62,8 @@ public class ResultPanel : MonoBehaviour
 
     public void InitAwards(int killNum, int coinNum, int stageNum, bool isWinningStage, int killGold, int clearBonus)
     {
-        // PlayerDataManager에 골드 반영
-        GoldRewardManager.Instance.ApplyGoldToPlayer(killGold, clearBonus);
+        // // PlayerDataManager에 골드 반영
+        // GoldRewardManager.Instance.ApplyGoldToPlayer(killGold, clearBonus);
 
         SetBG();
         PlayRegularAwardsSequence(killNum, killGold, stageNum, isWinningStage);
@@ -152,10 +152,10 @@ public class ResultPanel : MonoBehaviour
         seq.AppendCallback(() => PlayUISound(TitleSound));
         seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
 
-        // Kill
-        seq.AppendInterval(0.01f);
-        seq.AppendCallback(() => PlayUISound(TitleSound));
-        seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
+        // // Kill은 일단 표시하지 않기
+        // seq.AppendInterval(0.01f);
+        // seq.AppendCallback(() => PlayUISound(TitleSound));
+        // seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
 
         // Stamp
         seq.AppendInterval(0.1f);

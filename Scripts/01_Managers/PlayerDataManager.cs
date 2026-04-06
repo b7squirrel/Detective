@@ -239,8 +239,11 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             }
         }
 
+        // CoinManager 값 + GoldRewardManager 보상 합산
         int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
-        SetCoinNumberAs(coinNum);
+        int killGold = GoldRewardManager.Instance.GetKillGold();
+        int clearBonus = isStageCleared == false ? GoldRewardManager.Instance.GetClearBonus(currentStage - 1) : 0;
+        SetCoinNumberAs(coinNum + killGold + clearBonus);
 
         int cristalNum = FindObjectOfType<CristalManager>().GetCurrentCristals();
         SetCristalNumberAs(cristalNum);
