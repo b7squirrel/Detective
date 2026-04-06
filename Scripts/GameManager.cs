@@ -96,6 +96,14 @@ public class GameManager : MonoBehaviour
         OpenLoadingSwipe();
 
         IsBossStage = false;
+
+    }
+    void Start()
+    {
+        if (GoldRewardManager.Instance != null)
+            GoldRewardManager.Instance.ResetKillGold();
+        else
+            Logger.LogWarning("[GameManager] GoldRewardManager 인스턴스가 없습니다.");
     }
 
     #endregion

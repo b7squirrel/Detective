@@ -86,6 +86,10 @@ public class EnemyData : ScriptableObject
     [Header("사운드")]
     public AudioClip hitSound;
     public AudioClip dieSound;
+
+    [Header("골드 보상")]
+    [Tooltip("처치 시 지급할 골드. LV1:1, LV2:1, LV3:2, LV4:2, LV5:3 / 서브보스:20, 보스:80")]
+    public int goldReward = 1;
 }
 
 // 적을 스폰할 때 어떤 타입의 적을 스폰할지 정하기 위해

@@ -47,6 +47,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     bool isGrouned; // 점프 중이라면 플립을 하지 않도록 하기 위해
 
+    int goldReward; // 처치 시 지급할 골드
+
     // static (모든 적이 공유)
     static InfiniteStageManager infiniteStageManager;
     static bool isInfiniteMode = false;
@@ -240,6 +242,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public virtual void InitEnemy(EnemyData _enemyToSpawn)
     {
         bossType = _enemyToSpawn.bossType;
+        goldReward = _enemyToSpawn.goldReward;
         isSubBoss = false;
         isBoss = false;
         if (bossType == BossType.StageBoss || bossType == BossType.QueenBoss)
@@ -749,6 +752,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         ResetFlip();
 
         GameManager.instance.KillManager.UpdateCurrentKills(enemyType, isSubBoss, isBoss);
+        GoldRewardManager.Instance.AddKillGold(goldReward);
 
         Spawner.instance.SubtractEnemyNumber();
         if (enemyFinder == null) enemyFinder = FindObjectOfType<EnemyFinder>();

@@ -10,15 +10,14 @@ public class WinStage : MonoBehaviour
     {
         winStage.SetActive(true);
 
-        // 스테이지에서 획득한 코인만 표시.
         int killNum = GetComponent<KillManager>().GetCurrentKills();
         int coinNum = GetComponent<CoinManager>().GetCoinNumPickedup();
-
-        // 보스가 죽는 순간 이미 스테이지가 올라갔으니까 1을 빼준 수를 넘겨준다.
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber() - 1;
 
-        winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, true);
+        int killGold = GoldRewardManager.Instance.GetKillGold();
+        int clearBonus = GoldRewardManager.Instance.GetClearBonus(stageNum);
 
+        winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, true, killGold, clearBonus);
         GetComponent<PauseManager>().PauseGame();
         Logger.Log("윈 스테이지");
     }

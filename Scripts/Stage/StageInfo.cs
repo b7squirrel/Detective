@@ -28,7 +28,7 @@ public class StageInfo : MonoBehaviour
     }
     public Sprite GetStageBGSrpite(int stageIndex)
     {
-        Logger.LogError($"stageIndex = {stageIndex}");
+        // Logger.LogError($"stageIndex = {stageIndex}");
         StageGroundType groundType = GetStageInfo(stageIndex).stageGroundType;
         int index = (int)groundType;
         return LobbyStageBGs[index]; //stageIndex는 실제 스테이지 숫자임

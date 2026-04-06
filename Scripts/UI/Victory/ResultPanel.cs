@@ -60,10 +60,13 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] AudioClip[] newRecordSound;
 
 
-    public void InitAwards(int killNum, int coinNum, int stageNum, bool isWinningStage)
+    public void InitAwards(int killNum, int coinNum, int stageNum, bool isWinningStage, int killGold, int clearBonus)
     {
+        // PlayerDataManager에 골드 반영
+        GoldRewardManager.Instance.ApplyGoldToPlayer(killGold, clearBonus);
+
         SetBG();
-        PlayRegularAwardsSequence(killNum, coinNum, stageNum, isWinningStage);
+        PlayRegularAwardsSequence(killNum, killGold, stageNum, isWinningStage);
     }
     public void InitInfiniteAwards(int killNum, int coinNum, int currentWave, string survivalTime, string bestRecord, bool isBestRecord)
     {
@@ -87,7 +90,7 @@ public class ResultPanel : MonoBehaviour
     }
     
     #region 레귤러 애니메이션
-    void PlayRegularAwardsSequence(int killNum, int coinNum, int stageNum, bool isWinningStage)
+    void PlayRegularAwardsSequence(int killNum, int killGold, int stageNum, bool isWinningStage)
     {
         if (isWinningStage)
         {
@@ -104,7 +107,7 @@ public class ResultPanel : MonoBehaviour
         string stamp = isWinningStage ? "참\n잘했어요!" : "아쉬워요..";
         titleText.text = title;
         killText.text = killNum.ToString();
-        coinText.text = coinNum.ToString();
+        coinText.text = killGold.ToString();
         stageNumberText.text = stageNum.ToString();
         stampText.text = stamp;
 
