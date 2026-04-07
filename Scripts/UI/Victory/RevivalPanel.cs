@@ -25,7 +25,7 @@ public class RevivalPanel : MonoBehaviour
     void Start()
     {
         panel.SetActive(false);
-        cristalCostText.text = $"💎 {cristalCost}";
+        cristalCostText.text = $"{cristalCost}개로 부활";
 
         adButton.onClick.AddListener(OnAdButtonClicked);
         cristalButton.onClick.AddListener(OnCristalButtonClicked);
@@ -53,7 +53,22 @@ public class RevivalPanel : MonoBehaviour
         int remaining = countdownSeconds;
         while (remaining > 0)
         {
-            countdownText.text = remaining.ToString();
+            countdownText.text = $"{remaining}초";
+
+            // 남은 시간에 따라 색상 변경
+            if (remaining > 5)
+            {
+                countdownText.color = Color.yellow;
+            }
+            else if (remaining > 2)
+            {
+                countdownText.color = new Color(1f, 0.5f, 0f); // 주황
+            }
+            else
+            {
+                countdownText.color = Color.red;
+            }
+
             yield return new WaitForSecondsRealtime(1f);
             remaining--;
         }
@@ -121,6 +136,7 @@ public class RevivalPanel : MonoBehaviour
 
     void Hide()
     {
+        countdownText.color = Color.yellow; // 색상 초기화
         panel.SetActive(false);
     }
 }
