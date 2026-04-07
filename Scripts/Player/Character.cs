@@ -39,6 +39,10 @@ public class Character : MonoBehaviour
 
     bool isHurtSoundPlaying; // hurt sound가 재생 중이면 재생하지 않기 위한 플래그
 
+    [Header("부활")]
+    [SerializeField] GameObject shockwavePrefab;
+    [SerializeField] AudioClip shockWaveSound;
+
     // public event Action OnDie;
     public UnityEvent OnDie;
     Animator anim;
@@ -258,13 +262,87 @@ Handheld.Vibrate();
         hpBar.gameObject.SetActive(false);
         OnDie?.Invoke();
 
-        // 스테이지와 동전 저장
+        // 부활 패널 표시 시도
+        RevivalPanel revivalPanel = FindObjectOfType<RevivalPanel>();
+        if (revivalPanel != null)
+        {
+            revivalPanel.Show(this);
+        }
+        else
+        {
+            // 부활 패널이 없으면 바로 게임오버
+            Logger.LogWarning("[Character] RevivalPanel을 찾을 수 없습니다. 바로 게임오버.");
+            ProcessDeath();
+        }
+    }
+    // RevivalPanel에서 포기/타임아웃 시 호출
+    public void ProcessDeath()
+    {
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
         playerData.SaveResourcesBeforeQuitting();
-
         Logger.Log("In Die, Time Scale = " + Time.timeScale);
-
         GetComponent<CharacterGameOver>().GameOver();
+    }
+
+    // RevivalPanel에서 부활 선택 시 호출
+    public void Revive()
+    {
+        // IsPlayerDead 초기화
+        GameManager.instance.IsPlayerDead = false;
+
+        // Player.Die()에서 변경된 mass 복구
+        GetComponent<Rigidbody2D>().mass = 100000f;
+
+        currentHealth = MaxHealth;
+        hpBar.gameObject.SetActive(true);
+        hpBar.SetStatus(currentHealth, MaxHealth);
+        GameManager.instance.pauseManager.UnPauseGame();
+
+        // ⭐ 부활 쇼크웨이브 - 데미지 0, 범위 10, 적 레이어만 타겟
+        GameObject wave = GameManager.instance.poolManager.GetMisc(shockwavePrefab);
+        if (wave != null)
+        {
+            wave.GetComponent<Shockwave>().Init(0, 10f, LayerMask.GetMask("Enemy"), transform.position);
+            SoundManager.instance.Play(shockWaveSound);
+        }
+
+        StartCoroutine(InvincibleCo());
+        Logger.Log("[Character] 부활 완료. 풀체력 + 무적 3초");
+    }
+    IEnumerator ReviveCo()
+    {
+        GameManager.instance.pauseManager.PauseGame();
+        yield return new WaitForSeconds(1f);
+
+        // IsPlayerDead 초기화
+        GameManager.instance.IsPlayerDead = false;
+
+        // Player.Die()에서 변경된 mass 복구
+        GetComponent<Rigidbody2D>().mass = 100000f;
+
+        currentHealth = MaxHealth;
+        hpBar.gameObject.SetActive(true);
+        hpBar.SetStatus(currentHealth, MaxHealth);
+        GameManager.instance.pauseManager.UnPauseGame();
+
+        // ⭐ 부활 쇼크웨이브 - 데미지 0, 범위 10, 적 레이어만 타겟
+        GameObject wave = GameManager.instance.poolManager.GetMisc(shockwavePrefab);
+        if (wave != null)
+        {
+            wave.GetComponent<Shockwave>().Init(0, 10f, LayerMask.GetMask("Enemy"), transform.position);
+            SoundManager.instance.Play(shockWaveSound);
+        }
+
+        StartCoroutine(InvincibleCo());
+        Logger.Log("[Character] 부활 완료. 풀체력 + 무적 3초");
+    }
+
+    IEnumerator InvincibleCo()
+    {
+        GameManager.instance.IsPlayerInvincible = true;
+        yield return new WaitForSecondsRealtime(3f);
+        GameManager.instance.IsPlayerInvincible = false;
+        Logger.Log("[Character] 무적 종료");
     }
     #endregion
 
