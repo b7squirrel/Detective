@@ -114,6 +114,14 @@ public class RevivalPanel : MonoBehaviour
     void OnGiveUpButtonClicked()
     {
         Logger.Log("[RevivalPanel] 포기 선택 → 게임오버");
+
+        // 카운트다운 코루틴 중지
+        if (countdownCoroutine != null)
+        {
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
+        }
+
         Hide();
         character.ProcessDeath();
     }

@@ -77,9 +77,14 @@ public class CharacterGameOver : MonoBehaviour
 
             // 무한모드 골드 계산
             int killGold = GoldRewardManager.Instance.GetKillGold();
-            int infiniteGold = GoldRewardManager.Instance.CalculateInfiniteGold(clearedWaves, isBreakingRecords) + killGold;
-            
-            infiniteGameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(killNum, coinNum, currentWave, timeFormatted, bestRecordFormatted, isBreakingRecords, infiniteGold);
+            int waveBonus = GoldRewardManager.Instance.CalculateInfiniteGold(clearedWaves, isBreakingRecords); // killGold 빼기
+            int infiniteGold = waveBonus + killGold; // 기존 합산은 유지 (저장용)
+
+            infiniteGameOverPanel.GetComponent<ResultPanel>().InitInfiniteAwards(
+                killNum, coinNum, currentWave, timeFormatted,
+                bestRecordFormatted, isBreakingRecords,
+                infiniteGold, killGold, waveBonus // ★ 추가
+            );
         }
     }
 }

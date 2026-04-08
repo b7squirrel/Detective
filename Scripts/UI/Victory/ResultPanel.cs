@@ -16,6 +16,9 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI killText;
     [SerializeField] TMPro.TextMeshProUGUI coinText;
     [SerializeField] TMPro.TextMeshProUGUI stampText;
+    [SerializeField] ResultRewardCard killRewardCard;
+    [SerializeField] ResultRewardCard clearRewardCard;
+    [SerializeField] Sprite goldSprite;
     ResultPanelUI resultPanelUI;
 
     [Header("일반 모드 요소")]
@@ -62,17 +65,16 @@ public class ResultPanel : MonoBehaviour
 
     public void InitAwards(int killNum, int coinNum, int stageNum, bool isWinningStage, int killGold, int clearBonus)
     {
-        // // PlayerDataManager에 골드 반영
-        // GoldRewardManager.Instance.ApplyGoldToPlayer(killGold, clearBonus);
-
         SetBG();
-        PlayRegularAwardsSequence(killNum, killGold, stageNum, isWinningStage);
+        PlayRegularAwardsSequence(killNum, killGold, stageNum, isWinningStage, clearBonus); // clearBonus 추가
     }
-    public void InitInfiniteAwards(int killNum, int coinNum, int currentWave, string survivalTime, string bestRecord, bool isBestRecord, int infiniteGold)
+    public void InitInfiniteAwards(int killNum, int coinNum, int currentWave,
+    string survivalTime, string bestRecord, bool isBestRecord,
+    int infiniteGold, int killGold, int waveBonus) // ★ killGold, waveBonus 추가
     {
         SetBG();
         isNewRecord = isBestRecord;
-        PlayInfiniteAwardsSequence(killNum, infiniteGold, currentWave, survivalTime, bestRecord);
+        PlayInfiniteAwardsSequence(killNum, infiniteGold, killGold, waveBonus, currentWave, survivalTime, bestRecord);
     }
 
     void SetBG()
@@ -88,21 +90,17 @@ public class ResultPanel : MonoBehaviour
             GameManager.instance.darkBG.SetActive(false);
         }
     }
-    
+
     #region 레귤러 애니메이션
-    void PlayRegularAwardsSequence(int killNum, int killGold, int stageNum, bool isWinningStage)
+    void PlayRegularAwardsSequence(int killNum, int killGold, int stageNum, bool isWinningStage, int clearBonus) // clearBonus 추가
     {
         if (isWinningStage)
-        {
-            bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
-        }
+            bouncerManager.JumpHappy(confettiNums);
         else
-        {
-            bouncerManager.JumpSad(30); // 50마리 슬픈 폭죽
-        }
-        
+            bouncerManager.JumpSad(30);
 
-        ResetRecs();
+        ResetRecs(); // ← 여기서 카드 Hide도 같이 처리됨
+
         string title = isWinningStage ? "축하해요!" : "실패...";
         string stamp = isWinningStage ? "참\n잘했어요!" : "아쉬워요..";
         titleText.text = title;
@@ -112,87 +110,73 @@ public class ResultPanel : MonoBehaviour
         stampText.text = stamp;
 
         Sequence seq = DOTween.Sequence();
-        // UI는 타임스케일 무시
         seq.SetUpdate(true);
 
         // panel
         seq.AppendInterval(1f);
-        seq.AppendCallback(() =>
-        {
-            PlayUISound(panelSound);
-            PlayUISound(panelSound);
-        });
+        seq.AppendCallback(() => { PlayUISound(panelSound); PlayUISound(panelSound); });
         seq.Append(panelRec.DOScale(.8f, .2f).SetEase(Ease.OutBack));
 
         // ori
         string animTrigger = isWinningStage ? "Idle" : "Hit";
         GenWeaponCards(animTrigger);
-        if(isWinningStage == false) faceExpressetion.sprite = cryingFaceSprite;
+        if (!isWinningStage) faceExpressetion.sprite = cryingFaceSprite;
 
         seq.AppendInterval(.01f);
         seq.AppendCallback(() => PlayUISound(popupSound));
         seq.Append(oriRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f));
-
-        seq.AppendCallback(() =>
-        {
-            if (!isWinningStage)
-            tearEmitters.SetActive(true);
-        });
+        seq.AppendCallback(() => { if (!isWinningStage) tearEmitters.SetActive(true); });
 
         // title
         seq.AppendInterval(.05f);
         titleRec.localScale = Vector2.one;
-        seq.AppendCallback(() =>
-        {
-            PlayUISound(popupSound);
-        });
+        seq.AppendCallback(() => PlayUISound(popupSound));
 
         // Coin
-        seq.AppendInterval(0.5f);
-        seq.AppendCallback(() => PlayUISound(TitleSound));
-        seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
-
-        // // Kill은 일단 표시하지 않기
-        // seq.AppendInterval(0.01f);
+        // seq.AppendInterval(0.5f);
         // seq.AppendCallback(() => PlayUISound(TitleSound));
-        // seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
+        // seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
+
+        // ★ 보상 카드
+        seq.AppendInterval(0.3f);
+        seq.AppendCallback(() =>
+        {
+            Logger.Log($"[RewardCard] killGold={killGold}, clearBonus={clearBonus}, isWinning={isWinningStage}");
+
+            // if (killGold > 0)
+                killRewardCard.Initialize("적 처치 보상", goldSprite, killGold, delay: 0f);
+
+            // if (isWinningStage)
+                clearRewardCard.Initialize("스테이지 보상", goldSprite, clearBonus, delay: 0.2f);
+        });
 
         // Stamp
-        seq.AppendInterval(0.1f);
+        // 카드 애니메이션 완료 대기 (0.1f → 1.2f)
+        seq.AppendInterval(.6f);
         seq.AppendCallback(() =>
         {
             PlayUISound(stampSound);
             stampRec.localScale = Vector2.one;
-
             panelRec.DOShakePosition(.5f, strength: 20f, vibrato: 30, randomness: 30)
-            .SetUpdate(true);
+                .SetUpdate(true);
         });
 
         // Result Sound
         seq.AppendInterval(0.2f);
         seq.AppendCallback(() =>
         {
-            if (isWinningStage)
-            {
-                PlayUISound(resultSoundSuccess);
-            }
-            else
-            {
-                PlayUISound(resultSoundFail);
-            }
+            PlayUISound(isWinningStage ? resultSoundSuccess : resultSoundFail);
         });
 
         // 탭해서 계속하기
         seq.AppendInterval(0.5f);
-        seq.AppendCallback(() =>
-        {
-            GameManager.instance.ActivateConfirmationButtonWithoutDelay();
-        });
+        seq.AppendCallback(() => GameManager.instance.ActivateConfirmationButtonWithoutDelay());
     }
     #endregion
 
     #region 무한 스테이지 애니메이션
-    void PlayInfiniteAwardsSequence(int killNum, int infiniteGold, int wave, string survivalTime, string bestRecord)
+    void PlayInfiniteAwardsSequence(int killNum, int infiniteGold, int killGold, int waveBonus,
+    int wave, string survivalTime, string bestRecord)
     {
         bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
 
@@ -361,8 +345,20 @@ public class ResultPanel : MonoBehaviour
         seq.AppendCallback(() => PlayUISound(TitleSound));
         seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
 
+        // ★ 보상 카드
+        seq.AppendInterval(0.3f);
+        seq.AppendCallback(() =>
+        {
+            if (killGold > 0)
+                killRewardCard.Initialize("적 처치 보상", goldSprite, killGold, delay: 0f);
+
+            if (waveBonus > 0)
+                clearRewardCard.Initialize("웨이브 보상", goldSprite, waveBonus, delay: 0.4f);
+        });
+
         // Stamp
-        seq.AppendInterval(0.1f);
+        // 카드 애니메이션 완료 대기 (0.1f → 1.2f)
+        seq.AppendInterval(1.2f);
         seq.AppendCallback(() =>
         {
             PlayUISound(stampSound);
@@ -408,6 +404,10 @@ public class ResultPanel : MonoBehaviour
         bestRecordRec.localScale = Vector2.zero;
         oriRec.localScale = Vector2.zero;
         stampRec.localScale = Vector2.zero;
+
+        // ★ 카드 초기화
+        killRewardCard.Hide();
+        clearRewardCard.Hide();
     }
 
     void SetEquipSpriteRow()
