@@ -14,6 +14,7 @@ public class MainMenu : MonoBehaviour
     PauseManager pauseManager;
     bool isPaused;
     bool isLoadingScene = false; // 중복 로딩 방지
+    Animator pausePanelAnim; // pause panel animator
     
     void Awake()
     {
@@ -53,6 +54,7 @@ public class MainMenu : MonoBehaviour
         }
     }
     
+    
     public void UnPause()
     {
         try
@@ -71,6 +73,34 @@ public class MainMenu : MonoBehaviour
         {
             Debug.LogError($"UnPause 오류: {e.Message}");
         }
+    }
+    public void PausePanelUp()
+    {
+        if (isLoadingScene) return; // 씬 로딩 중이면 무시
+
+        isPaused = true;
+        OnPauseButtonPressed?.Invoke(isPaused);
+
+        if (pauseManager != null)
+        {
+            pauseManager.PauseGame();
+        }
+
+        panelPause.SetActive(true);
+        if(pausePanelAnim == null) pausePanelAnim = panelPause.GetComponent<Animator>();
+        pausePanelAnim.SetTrigger("Init");
+    }
+
+    public void Resume()
+    {
+        pauseManager.UnPauseGame();
+        isPaused = false;
+    }
+
+    IEnumerator ResumeCo()
+    {
+        yield return new WaitForSeconds(.15f);
+        
     }
     
     void SetUIActive(bool active)

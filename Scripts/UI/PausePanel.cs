@@ -7,7 +7,7 @@ public class PausePanel : MonoBehaviour
     [SerializeField] GameObject itemSlot;
     [SerializeField] Transform weaponContents;
     [SerializeField] Transform itemContents;
-    [SerializeField] GameObject BG;
+    // [SerializeField] GameObject BG;
 
     List<CardDisp> weaponCards;
     List<PauseCardDisp> itemCards;
@@ -65,7 +65,7 @@ public class PausePanel : MonoBehaviour
         }
     }
 
-    public void EnableBG(bool enable) => BG.SetActive(enable);
+    // public void EnableBG(bool enable) => BG.SetActive(enable);
 
     // weapon data의 시너지를 이루는 아이템이 있는지 검색
     RectTransform GetSynergyItemPos(WeaponData wd)
