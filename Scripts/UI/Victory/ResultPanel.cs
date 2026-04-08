@@ -336,29 +336,29 @@ public class ResultPanel : MonoBehaviour
         });
 
         // Coin
-        seq.AppendInterval(0.5f);
-        seq.AppendCallback(() => PlayUISound(TitleSound));
-        seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
+        // seq.AppendInterval(0.5f);
+        // seq.AppendCallback(() => PlayUISound(TitleSound));
+        // seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
 
         // Kill
-        seq.AppendInterval(0.01f);
-        seq.AppendCallback(() => PlayUISound(TitleSound));
-        seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
+        // seq.AppendInterval(0.01f);
+        // seq.AppendCallback(() => PlayUISound(TitleSound));
+        // seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
 
         // ★ 보상 카드
         seq.AppendInterval(0.3f);
         seq.AppendCallback(() =>
         {
-            if (killGold > 0)
+            // if (killGold > 0)
                 killRewardCard.Initialize("적 처치 보상", goldSprite, killGold, delay: 0f);
 
-            if (waveBonus > 0)
+            // if (waveBonus > 0)
                 clearRewardCard.Initialize("웨이브 보상", goldSprite, waveBonus, delay: 0.4f);
         });
 
         // Stamp
         // 카드 애니메이션 완료 대기 (0.1f → 1.2f)
-        seq.AppendInterval(1.2f);
+        seq.AppendInterval(.6f);
         seq.AppendCallback(() =>
         {
             PlayUISound(stampSound);
