@@ -16,9 +16,13 @@ public class RuntimeAchievement
         original = so;
 
         // 저장 키 결정 (일일 퀘스트 vs 영구 업적)
-        progress = PlayerPrefs.GetInt(GetProgressKey(), 0);
-        isCompleted = PlayerPrefs.GetInt(GetCompleteKey(), 0) == 1;
-        isRewarded = PlayerPrefs.GetInt(GetRewardKey(), 0) == 1;
+        string progressKey = GetProgressKey();
+        string completeKey = GetCompleteKey();
+        string rewardKey = GetRewardKey();
+
+        progress = PlayerPrefs.GetInt(progressKey, 0);
+        isCompleted = PlayerPrefs.GetInt(completeKey, 0) == 1;
+        isRewarded = PlayerPrefs.GetInt(rewardKey, 0) == 1;
     }
 
     public void AddProgress(int amount)

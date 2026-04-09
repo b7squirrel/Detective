@@ -65,22 +65,21 @@ public class AchievementPanel : MonoBehaviour
     private void Start()
     {
         if (AchievementManager.Instance == null) return;
-        
+
         // ⭐ 탭 버튼 이벤트 연결
         if (tabPermanentButton != null)
             tabPermanentButton.onClick.AddListener(() => SwitchTab(TabType.Permanent));
-        
+
         if (tabDailyButton != null)
             tabDailyButton.onClick.AddListener(() => SwitchTab(TabType.Daily));
-        
+
         // 모든 업적 생성 (표시는 RefreshUI에서 제어)
         foreach (var ra in AchievementManager.Instance.GetAll())
         {
-            if (ra.isRewarded) continue;
+            if (ra.isRewarded) continue; // 영구 업적, 일일 퀘스트 모두 동일하게 처리
 
             var go = Instantiate(achievementItemPrefab, content);
             var ui = go.GetComponent<AchievementItemUI>();
-
             ui.Bind(ra);
             itemDict.Add(ra.original.id, ui);
         }

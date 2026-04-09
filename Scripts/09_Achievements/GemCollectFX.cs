@@ -31,6 +31,12 @@ public class GemCollectFX : MonoBehaviour
 
     public void PlayGemCollectFX(RectTransform pos, int gemAmount, bool isGem)
     {
+        if (uiCamera == null)
+        {
+            Logger.LogError("[GemCollectFX] uiCamera가 null입니다! 인스펙터에서 연결해주세요.");
+            return;
+        }
+
         hasPlayedCollectSound = false;
         SoundManager.instance.Play(isGem ? clipGemSpread : clipCoinSpread);
 

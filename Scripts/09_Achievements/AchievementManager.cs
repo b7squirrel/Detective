@@ -68,6 +68,9 @@ public class AchievementManager : MonoBehaviour
             runtimeDict.Add(so.id, ra);
         }
 
+        // ⭐ 추가: 오늘 이미 리셋했는지 확인, 안 했으면 일일 퀘스트 초기화
+        ValidateDailyQuestState();
+
         if (gemCollectFX == null)
             gemCollectFX = FindObjectOfType<GemCollectFX>();
 
@@ -82,6 +85,33 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
+    void ValidateDailyQuestState()
+    {
+        string today = DailyResetManager.GetTodayString();
+        string lastResetDate = PlayerPrefs.GetString("DAILY_QUEST_LAST_RESET", "");
+
+        if (lastResetDate != today)
+        {
+            // 오늘 아직 리셋 안 됐으면 강제 초기화
+            foreach (var ra in runtimeDict.Values)
+            {
+                if (!ra.original.isDailyQuest) continue;
+
+                ra.progress = 0;
+                ra.isCompleted = false;
+                ra.isRewarded = false;
+
+                PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+                PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
+                PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
+            }
+
+            PlayerPrefs.SetString("DAILY_QUEST_LAST_RESET", today);
+            PlayerPrefs.Save();
+
+            Logger.Log("[AchievementManager] 일일 퀘스트 상태 초기화 완료");
+        }
+    }
 
     // ★ Resources 폴더에서 AchievementSO 자동 로딩
     private void LoadAllSO()
@@ -123,30 +153,41 @@ public class AchievementManager : MonoBehaviour
         if (!runtimeDict.TryGetValue(id, out var ra)) return;
         if (ra.isRewarded) return;
 
-        ra.Reward(); // 보상을 수령했음을 기록
-        SaveAchievement(ra);
+        // ⭐ 추가: pos null 체크
+        if (pos == null)
+        {
+            Logger.LogError("[AchievementManager] effectStartPos가 null입니다!");
+            return;
+        }
 
+        ra.Reward();
+        SaveAchievement(ra);
         OnAnyRewarded?.Invoke(ra);
 
-        // 먼저 실제 데이터에 보석 혹은 코인을 모두 추가 (UI 업데이트 없이)
-        RewardType rType = rewardType;
-        if (playerDataManager == null) playerDataManager = FindObjectOfType<PlayerDataManager>();
+        if (playerDataManager == null)
+            playerDataManager = FindObjectOfType<PlayerDataManager>();
 
-        if (rType == RewardType.GEM)
+        // ⭐ 매번 재탐색으로 변경
+        if (gemCollectFX == null)
+            gemCollectFX = FindObjectOfType<GemCollectFX>();
+
+        if (gemCollectFX == null)
+        {
+            Logger.LogError("[AchievementManager] GemCollectFX를 찾을 수 없습니다!");
+            return;
+        }
+
+        if (rewardType == RewardType.GEM)
         {
             int currentValue = playerDataManager.GetCurrentCristalNumber();
             playerDataManager.SetCristalNumberAsSilent(currentValue + ra.original.rewardNum);
-
-            if (gemCollectFX != null)
-                gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardNum, true);
+            gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardNum, true);
         }
         else
         {
             int currentValue = playerDataManager.GetCurrentCoinNumber();
             playerDataManager.SetCoinNumberAsSilent(currentValue + ra.original.rewardNum);
-
-            if (gemCollectFX != null)
-                gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardNum, false);
+            gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardNum, false);
         }
     }
 
@@ -191,7 +232,7 @@ public class AchievementManager : MonoBehaviour
     public void ResetDailyQuests()
     {
         Logger.Log("[AchievementManager] 일일 퀘스트 리셋 시작");
-        
+
         foreach (var ra in runtimeDict.Values)
         {
             // 일일 퀘스트만 리셋
@@ -211,6 +252,7 @@ public class AchievementManager : MonoBehaviour
             }
         }
 
+        PlayerPrefs.SetString("DAILY_QUEST_LAST_RESET", DailyResetManager.GetTodayString());
         PlayerPrefs.Save();
         Logger.Log("[AchievementManager] 일일 퀘스트 리셋 완료");
     }
