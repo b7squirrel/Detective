@@ -30,7 +30,7 @@ public class WeeklyResetManager : SingletonBehaviour<WeeklyResetManager>
         Logger.Log("[WeeklyResetManager] 초기화 완료");
     }
 
-    public void CheckWeeklyReset()
+    public bool CheckWeeklyReset()
     {
         string currentWeek = GetCurrentWeekString();
         string lastWeek = PlayerPrefs.GetString("WEEKLY_LAST_RESET", "");
@@ -41,45 +41,30 @@ public class WeeklyResetManager : SingletonBehaviour<WeeklyResetManager>
 
         if (string.IsNullOrEmpty(lastWeek))
         {
-            Logger.Log("[WeeklyResetManager] 첫 실행 - 리셋 없음");
             PlayerPrefs.SetString("WEEKLY_LAST_RESET", currentWeek);
             PlayerPrefs.Save();
-            return;
+            return false; // 팝업 없음
         }
 
         if (currentWeek != lastWeek)
         {
-            Logger.Log("[WeeklyResetManager] 주 변경 감지!");
-
             var unclaimed = AchievementManager.Instance?.GetUnclaimedCompletedWeeklyQuests();
-            Logger.Log($"[WeeklyResetManager] 미수령 완료 업적 수: {unclaimed?.Count ?? -1}");
 
             if (unclaimed != null && unclaimed.Count > 0)
             {
-                foreach (var ra in unclaimed)
-                {
-                    Logger.Log($"[WeeklyResetManager] 미수령 업적: {ra.original.id}, 완료: {ra.isCompleted}, 수령: {ra.isRewarded}");
-                }
-                Logger.Log("[WeeklyResetManager] OnWeeklyResetWithUnclaimed 이벤트 발동!");
                 OnWeeklyResetWithUnclaimed?.Invoke();
-
-                // ⭐ 추가: 비활성화된 팝업도 직접 찾아서 호출
                 var popup = FindObjectOfType<WeeklyRewardPopup>(true);
-                if (popup != null)
-                    popup.Show();
-                else
-                    Logger.LogError("[WeeklyResetManager] WeeklyRewardPopup을 찾을 수 없습니다!");
+                if (popup != null) popup.Show();
+                return true; // ⭐ 팝업 있음
             }
             else
             {
-                Logger.Log("[WeeklyResetManager] 미수령 없음 - 바로 리셋");
                 PerformWeeklyReset();
+                return false; // ⭐ 팝업 없음
             }
         }
-        else
-        {
-            Logger.Log("[WeeklyResetManager] 같은 주 - 리셋 없음");
-        }
+
+        return false; // ⭐ 팝업 없음
     }
 
     public void PerformWeeklyReset()

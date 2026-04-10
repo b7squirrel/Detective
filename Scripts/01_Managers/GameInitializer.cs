@@ -129,19 +129,27 @@ public class GameInitializer : MonoBehaviour
         OnGameInitialized?.Invoke();
 
         // ⭐ 추가: 모든 초기화 완료 후 주간 리셋 체크
-        // AchievementManager가 완전히 로드된 후 실행되어야 함
+        // ⭐ 1. 주간 팝업 먼저
         yield return new WaitForSeconds(0.1f);
-        WeeklyResetManager.Instance.CheckWeeklyReset();
+        bool weeklyPopupShown = WeeklyResetManager.Instance.CheckWeeklyReset();
 
-        // 초기화 완료 후 일일 보상 체크
-        yield return new WaitForSeconds(0.5f); // UI 안정화 대기
-        if (hasShownDailyRewardThisSession == false)
+        // ⭐ 2. 주간 팝업이 떴으면 닫힐 때까지 대기
+        if (weeklyPopupShown)
+        {
+            yield return new WaitUntil(() =>
+            {
+                var popup = FindObjectOfType<WeeklyRewardPopup>(true);
+                return popup == null || !popup.gameObject.activeSelf;
+            });
+            yield return new WaitForSeconds(0.3f); // 팝업 닫힌 후 잠시 대기
+        }
+
+        // ⭐ 3. 일일 보상 팝업
+        if (!hasShownDailyRewardThisSession)
         {
             CheckAndShowDailyReward();
             hasShownDailyRewardThisSession = true;
         }
-
-        Log("=== 게임 초기화 완료 ===");
     }
 
     void CheckAndShowDailyReward()
