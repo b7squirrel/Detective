@@ -24,8 +24,11 @@ public class GameInitializer : MonoBehaviour
     [SerializeField] PlayerDataManager playerDataManager;
 
     [Tooltip("일일 퀘스트 진행 데이터 관리")]
-    [SerializeField] DailyResetManager dailyResetManager; 
-    
+    [SerializeField] DailyResetManager dailyResetManager;
+
+    [Tooltip("주간 퀘스트 리셋 관리")]
+    [SerializeField] WeeklyResetManager weeklyResetManager;
+
     [Tooltip("플레이어 카드 데이터 관리")]
     [SerializeField] CardDataManager cardDataManager;
     
@@ -95,19 +98,25 @@ public class GameInitializer : MonoBehaviour
         Log("v DailyResetManager 로드 완료");
         InitializationProgress = 0.57f;
 
-        // 5단계: CardDataManager 초기화 대기 (Start에서 실행됨)
+        // 5단계: WeeklyResetManager 추가
+        Log("5/8: WeeklyResetManager 초기화 대기...");
+        yield return new WaitUntil(() => WeeklyResetManager.IsInitialized);
+        Log("v WeeklyResetManager 로드 완료");
+        InitializationProgress = 0.63f;
+
+        // 6단계: CardDataManager 초기화 대기 (Start에서 실행됨)
         Log("5/7: CardDataManager 초기화 대기...");
         yield return new WaitUntil(() => CardDataManager.IsDataLoaded);
         Log("v CardDataManager 로드 완료");
         InitializationProgress = 0.66f;
         
-        // 6단계: EquipmentDataManager 초기화 대기 (Start에서 실행됨)
+        // 7단계: EquipmentDataManager 초기화 대기 (Start에서 실행됨)
         Log("6/7: EquipmentDataManager 초기화 대기...");
         yield return new WaitUntil(() => EquipmentDataManager.IsDataLoaded);
         Log("v EquipmentDataManager 로드 완료");
         InitializationProgress = 0.83f;
         
-        // 7단계: CardList 초기화 확인 (EquipmentDataManager.Start에서 실행됨)
+        // 8단계: CardList 초기화 확인 (EquipmentDataManager.Start에서 실행됨)
         Log("7/7: CardList 초기화 확인...");
         // CardList는 EquipmentDataManager.Start()에서 InitCardList()가 호출되므로
         // 추가 대기 없이 다음 프레임만 기다림
@@ -118,6 +127,11 @@ public class GameInitializer : MonoBehaviour
         // 모든 초기화 완료
         IsInitialized = true;
         OnGameInitialized?.Invoke();
+
+        // ⭐ 추가: 모든 초기화 완료 후 주간 리셋 체크
+        // AchievementManager가 완전히 로드된 후 실행되어야 함
+        yield return new WaitForSeconds(0.1f);
+        WeeklyResetManager.Instance.CheckWeeklyReset();
 
         // 초기화 완료 후 일일 보상 체크
         yield return new WaitForSeconds(0.5f); // UI 안정화 대기

@@ -26,7 +26,10 @@ public class AchievementSO : ScriptableObject
     // 일일 퀘스트 구분
     [Tooltip("true면 일일 퀘스트 (매일 리셋), false면 영구 업적")]
     public bool isDailyQuest = false;
-    
+
+    [Tooltip("true면 주간 퀘스트 (매주 월요일 리셋)")]
+    public bool isWeeklyQuest = false;
+
     // 레거시 필드 (더 이상 사용 안 함, 하지만 기존 데이터 보존용으로 남겨둠)
     [HideInInspector] public string title;              
     [HideInInspector] public string description;

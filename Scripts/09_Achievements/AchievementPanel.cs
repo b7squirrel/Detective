@@ -14,13 +14,14 @@ public class AchievementPanel : MonoBehaviour
     [Header("⭐ 탭 시스템")]
     [SerializeField] private Button tabPermanentButton;  // 영구 업적 탭
     [SerializeField] private Button tabDailyButton;      // 일일 퀘스트 탭
+    [SerializeField] private Button tabWeeklyButton;  // 주간 퀘스트 탭
     [SerializeField] private TextMeshProUGUI titleText;  // 패널 제목
 
     [Header("탭 색상 설정")]
     [SerializeField] private Color activeTabColor = Color.white;
     [SerializeField] private Color inactiveTabColor = Color.gray;
 
-    private enum TabType { Permanent, Daily }
+    private enum TabType { Permanent, Daily, Weekly }
     private TabType currentTab = TabType.Daily;  // 기본: 일일 퀘스트
 
     Dictionary<string, AchievementItemUI> itemDict = new();
@@ -73,6 +74,9 @@ public class AchievementPanel : MonoBehaviour
         if (tabDailyButton != null)
             tabDailyButton.onClick.AddListener(() => SwitchTab(TabType.Daily));
 
+        if (tabWeeklyButton != null)
+            tabWeeklyButton.onClick.AddListener(() => SwitchTab(TabType.Weekly));
+
         // 모든 업적 생성 (표시는 RefreshUI에서 제어)
         foreach (var ra in AchievementManager.Instance.GetAll())
         {
@@ -118,6 +122,13 @@ public class AchievementPanel : MonoBehaviour
             if (img != null)
                 img.color = currentTab == TabType.Daily ? activeTabColor : inactiveTabColor;
         }
+
+        if (tabWeeklyButton != null)
+        {
+            var img = tabWeeklyButton.GetComponent<Image>();
+            if (img != null)
+                img.color = currentTab == TabType.Weekly ? activeTabColor : inactiveTabColor;
+        }
     }
 
     // ⭐ 패널 제목 업데이트
@@ -127,6 +138,8 @@ public class AchievementPanel : MonoBehaviour
 
         if (currentTab == TabType.Daily)
             titleText.text = LocalizationManager.Game.dailyQuestsTitle;
+        else if (currentTab == TabType.Weekly)
+            titleText.text = LocalizationManager.Game.weeklyQuestsTitle;
         else
             titleText.text = LocalizationManager.Game.achievementsTitle;
     }
@@ -199,19 +212,24 @@ public class AchievementPanel : MonoBehaviour
 
         // ⭐ 현재 탭에 맞는 항목만 필터링
         List<AchievementItemUI> filteredItems;
-        
+
         if (currentTab == TabType.Daily)
         {
-            // 일일 퀘스트만
             filteredItems = items
                 .Where(i => i.ra.original.isDailyQuest)
                 .ToList();
         }
+        else if (currentTab == TabType.Weekly)
+        {
+            filteredItems = items
+                .Where(i => i.ra.original.isWeeklyQuest)
+                .ToList();
+        }
         else
         {
-            // 영구 업적만
             filteredItems = items
-                .Where(i => !i.ra.original.isDailyQuest)
+                .Where(i => !i.ra.original.isDailyQuest
+                         && !i.ra.original.isWeeklyQuest)
                 .ToList();
         }
 

@@ -49,26 +49,32 @@ public class RuntimeAchievement
     {
         if (original.isDailyQuest)
             return "DAILY_QUEST_" + original.id + "_PROGRESS";
+        else if (original.isWeeklyQuest)
+            return "WEEKLY_QUEST_" + original.id + "_PROGRESS";
         else
             return "ACH_PROGRESS_" + original.id;
     }
-    
+
     public string GetCompleteKey()
     {
         if (original.isDailyQuest)
             return "DAILY_QUEST_" + original.id + "_COMPLETED";
+        else if (original.isWeeklyQuest)
+            return "WEEKLY_QUEST_" + original.id + "_COMPLETED";
         else
             return "ACH_" + original.id;
     }
-    
+
     public string GetRewardKey()
     {
         if (original.isDailyQuest)
             return "DAILY_QUEST_" + original.id + "_REWARDED";
+        else if (original.isWeeklyQuest)
+            return "WEEKLY_QUEST_" + original.id + "_REWARDED";
         else
             return "ACH_REWARD_" + original.id;
     }
-    
+
     // 다국어 제목/설명 가져오기
     public string GetTitle() => original.GetLocalizedTitle();
     public string GetDescription() => original.GetLocalizedDescription();

@@ -38,12 +38,14 @@ public class AchievementManager : MonoBehaviour
     {
         // ⭐ 일일 리셋 이벤트 구독
         DailyResetManager.OnDailyReset += ResetDailyQuests;
+        WeeklyResetManager.OnWeeklyReset += ResetWeeklyQuests;
     }
 
     private void OnDisable()
     {
         // ⭐ 이벤트 구독 해제
         DailyResetManager.OnDailyReset -= ResetDailyQuests;
+        WeeklyResetManager.OnWeeklyReset -= ResetWeeklyQuests;
     }
 
     private void Initialize()
@@ -68,8 +70,9 @@ public class AchievementManager : MonoBehaviour
             runtimeDict.Add(so.id, ra);
         }
 
-        // ⭐ 추가: 오늘 이미 리셋했는지 확인, 안 했으면 일일 퀘스트 초기화
+        // ⭐ 추가: 오늘 이미 리셋했는지 확인, 안 했으면 일일 퀘스트 초기화, 주간 퀘스트 초기화
         ValidateDailyQuestState();
+        ValidateWeeklyQuestState();
 
         if (gemCollectFX == null)
             gemCollectFX = FindObjectOfType<GemCollectFX>();
@@ -255,6 +258,84 @@ public class AchievementManager : MonoBehaviour
         PlayerPrefs.SetString("DAILY_QUEST_LAST_RESET", DailyResetManager.GetTodayString());
         PlayerPrefs.Save();
         Logger.Log("[AchievementManager] 일일 퀘스트 리셋 완료");
+    }
+
+    // ⭐ 주간 퀘스트만 가져오기
+    public List<RuntimeAchievement> GetWeeklyQuests()
+    {
+        List<RuntimeAchievement> list = new();
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.isWeeklyQuest)
+                list.Add(ra);
+        }
+        return list;
+    }
+
+    // ⭐ 미수령 완료 주간 퀘스트만 가져오기
+    public List<RuntimeAchievement> GetUnclaimedCompletedWeeklyQuests()
+    {
+        List<RuntimeAchievement> list = new();
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.isWeeklyQuest && ra.isCompleted && !ra.isRewarded)
+                list.Add(ra);
+        }
+        return list;
+    }
+
+    // ⭐ 주간 퀘스트 리셋
+    public void ResetWeeklyQuests()
+    {
+        Logger.Log("[AchievementManager] 주간 퀘스트 리셋 시작");
+
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (!ra.original.isWeeklyQuest) continue;
+
+            ra.progress = 0;
+            ra.isCompleted = false;
+            ra.isRewarded = false;
+
+            PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
+            PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+            PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
+
+            OnAnyProgressChanged?.Invoke(ra);
+        }
+
+        PlayerPrefs.SetString("WEEKLY_QUEST_LAST_RESET", WeeklyResetManager.GetCurrentWeekString());
+        PlayerPrefs.Save();
+
+        Logger.Log("[AchievementManager] 주간 퀘스트 리셋 완료");
+    }
+
+    // ⭐ 주간 퀘스트 상태 검증
+    private void ValidateWeeklyQuestState()
+    {
+        string currentWeek = WeeklyResetManager.GetCurrentWeekString();
+        string lastResetWeek = PlayerPrefs.GetString("WEEKLY_QUEST_LAST_RESET", "");
+
+        if (lastResetWeek != currentWeek)
+        {
+            foreach (var ra in runtimeDict.Values)
+            {
+                if (!ra.original.isWeeklyQuest) continue;
+
+                ra.progress = 0;
+                ra.isCompleted = false;
+                ra.isRewarded = false;
+
+                PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+                PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
+                PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
+            }
+
+            PlayerPrefs.SetString("WEEKLY_QUEST_LAST_RESET", currentWeek);
+            PlayerPrefs.Save();
+
+            Logger.Log("[AchievementManager] 주간 퀘스트 상태 초기화 완료");
+        }
     }
 
     // ⭐ 모든 업적 리셋 (디버그용)
