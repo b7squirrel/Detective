@@ -14,6 +14,7 @@ public class GemCollectFX : MonoBehaviour
     public RectTransform coinTargetIcon;
     public GameObject gemPrefab;
     public GameObject coinPrefab;
+    public GameObject fgBlocker;
 
     [Header("설정값")]
     public float spreadRadius = 200f;
@@ -28,14 +29,11 @@ public class GemCollectFX : MonoBehaviour
     [SerializeField] AudioClip clipCoinHit;
 
     bool hasPlayedCollectSound = false;
+    int activeGemCount = 0; // ← 추가: 날아다니는 gem 추적
 
     public void PlayGemCollectFX(RectTransform pos, int gemAmount, bool isGem)
     {
-        if (uiCamera == null)
-        {
-            Logger.LogError("[GemCollectFX] uiCamera가 null입니다! 인스펙터에서 연결해주세요.");
-            return;
-        }
+        if (uiCamera == null) { /* ... */ return; }
 
         hasPlayedCollectSound = false;
         SoundManager.instance.Play(isGem ? clipGemSpread : clipCoinSpread);
@@ -43,6 +41,9 @@ public class GemCollectFX : MonoBehaviour
         Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(uiCamera, pos.position);
 
         if (gemAmount > 30) gemAmount = 30;
+
+        activeGemCount += gemAmount; // ← 추가
+        if (fgBlocker != null) fgBlocker.SetActive(true); // ← 추가
 
         for (int i = 0; i < gemAmount; i++)
             SpawnOneGem(screenPos, isGem);
@@ -92,6 +93,14 @@ public class GemCollectFX : MonoBehaviour
                 {
                     hasPlayedCollectSound = true;
                     SoundManager.instance.Play(isGem ? clipGemHit : clipCoinHit);
+                }
+
+                // ← 추가: gem 하나 완료될 때마다 카운트 감소
+                activeGemCount--;
+                if (activeGemCount <= 0)
+                {
+                    activeGemCount = 0;
+                    if (fgBlocker != null) fgBlocker.SetActive(false);
                 }
             });
     }
