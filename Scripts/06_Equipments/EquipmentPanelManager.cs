@@ -269,7 +269,7 @@ public class EquipmentPanelManager : MonoBehaviour
     // equip slot action 에서 호출
     public void ActivateEquipInfoPanel(CardData itemCardData, CardDisp cardDisp, bool isEquipButton, EquipmentType equipType)
     {
-        GearBGToExitInfo.SetActive(true); // x 버튼, bg to exit info버튼으로 비활성화
+        // GearBGToExitInfo.SetActive(true); // x 버튼, bg to exit info버튼으로 비활성화
         index = new Convert().EquipmentTypeToInt(itemCardData.EquipmentType);
         isEquipped = !isEquipButton; // equip button을 띄운다는 것은 field에 있는 장비 카드라는 뜻이므로
 
