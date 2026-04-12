@@ -321,7 +321,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (variantHandler != null)
         {
-            EnemyVariantType variant = EnemyVariantHandler.GetVariantForStage(currentStageNumber);
+            int variantNumber = currentStageNumber;
+
+            // 무한 모드에서는 변환된 스테이지 번호가 아닌 실제 웨이브 번호 사용
+            if (isInfiniteMode && infiniteStageManager != null)
+            {
+                variantNumber = infiniteStageManager.GetCurrentWave();
+            }
+
+            EnemyVariantType variant = EnemyVariantHandler.GetVariantForStage(variantNumber);
             variantHandler.ApplyVariant(variant);
             ApplyVariantEffects(variant);
         }
