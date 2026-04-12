@@ -114,6 +114,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     EnemyFinder enemyFinder;
     FieldItemEffect fieldItemEffect;
+    static BossDieManager bossDieManager;
+
     #endregion
 
     // 시각적 효과 (느림보 최면술)
@@ -808,7 +810,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
         {
-            BossDieManager bossDieManager = FindObjectOfType<BossDieManager>();
+            if (bossDieManager == null) bossDieManager = FindObjectOfType<BossDieManager>();
             bossDieManager.SetIsBossDead(true);
             bossDieManager.DieEvent(.1f, 2f);
         }
