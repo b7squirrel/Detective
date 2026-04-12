@@ -10,16 +10,7 @@ public class EnemyStats
     public int rangedDamage = 1;
     public int experience_reward = 0;
     public float dodgeChance = 0f; // ⭐ 추가: 회피 확률 (0.0 ~ 1.0)
-
-    // public EnemyStats(EnemyStats stats)
-    // {
-    //     this.hp = stats.hp;
-    //     this.speed = stats.speed;
-    //     this.damage = stats.damage;
-    //     this.rangedDamage = stats.rangedDamage;
-    //     this.speed = stats.speed;
-    //     this.experience_reward = stats.experience_reward;
-    // }
+    public float damageReduction = 0f; // ⭐ 추가: 헬멧 방어율 (0.0 ~ 1.0)
 }
 
 public class Enemy : EnemyBase
@@ -104,11 +95,6 @@ public class Enemy : EnemyBase
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
 
-        // ⭐ 원거리 공격 초기화 제거 (컴포넌트로 이동)
-        // attackInterval = _data.attackInterval;
-        // attackInterval += UnityEngine.Random.Range(0, 6f);
-        // distanceToPlayer = _data.distanceToPlayer;
-
         InitHpBar();
 
         enemyType = _data.enemyType;
@@ -123,6 +109,12 @@ public class Enemy : EnemyBase
 
         // 모든 특수 능력 컴포넌트 초기화
         InitSpecialAbilities(_data);
+
+        // ⭐ 추가: Explosive variant면 enemyType 강제 변경
+        if (variantHandler != null && variantHandler.CurrentVariant == EnemyVariantType.Explosive)
+        {
+            enemyType = EnemyType.Explode;
+        }
     }
 
     // 새로 추가: 특수 능력 컴포넌트 관리
@@ -225,7 +217,25 @@ public class Enemy : EnemyBase
 
     protected override void AttackExplode(int _damage)
     {
-        AttackMelee(_damage);
+        EnemyScalingConfig config = GameManager.instance.enemyStatCalculator.GetScalingConfig();
+
+        // 폭발 데미지 (배율 적용)
+        int explosiveDamage = Mathf.RoundToInt(_damage * config.explosiveDamageMultiplier);
+
+        // 범위 안의 플레이어에게 데미지
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, config.explosiveRadius, playerLayer);
+        if (hit != null && hit.TryGetComponent(out Character player))
+        {
+            player.TakeDamage(explosiveDamage, EnemyType.Explode);
+        }
+
+        // 폭발 이펙트 (shockwave 재사용)
+        if (shockwave != null)
+        {
+            GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
+            wave.GetComponent<Shockwave>().Init(0, config.explosiveRadius, LayerMask.GetMask("Enemy"), transform.position);
+        }
+
         Die();
     }
 

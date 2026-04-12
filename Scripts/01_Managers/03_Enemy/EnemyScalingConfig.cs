@@ -22,6 +22,26 @@ public class EnemyScalingConfig : ScriptableObject
     public float damageExponent = 1.1f;
     public float experienceGrowth = 0.3f;
 
+    [Header("Variant Effects")]
+    [Tooltip("광기 variant의 애니메이션 속도 배율")]
+    [Range(1f, 3f)]
+    public float madnessAnimSpeed = 1.5f;
+
+    [Tooltip("광기 variant의 공격 프레임 간격 (낮을수록 빠름)")]
+    [Range(1, 5)]
+    public int madnessAttackFrameInterval = 1;
+
+    [Tooltip("헬멧 variant의 데미지 감소율 (0.4 = 40% 감소)")]
+    [Range(0f, 0.8f)]
+    public float helmetDamageReduction = 0.4f;
+
+    [Tooltip("폭발 variant의 데미지 배율")]
+    [Range(1f, 10f)]
+    public float explosiveDamageMultiplier = 5f;
+
+    [Tooltip("폭발 범위 반경")]
+    public float explosiveRadius = 2f;
+
     // ⭐ 회피 확률 관련 추가
     [Header("Dodge Chance Scaling")]
     [Tooltip("스테이지 1에서의 기본 회피 확률 (0.0 ~ 1.0)")]

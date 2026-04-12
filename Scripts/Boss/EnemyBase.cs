@@ -26,6 +26,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir { get; set; } // spawn 할 떄 spawn 포인트 값과 player위치로 결정
 
+    protected EnemyVariantHandler variantHandler; // 광기, 헬멧, 광기헬멧, 폭탄의 다양화 핸들러
+
     protected EnemyType enemyType; // Melee, Explode 공격만 EnemyBase에서 정의하고 Ranged는 Enemy에서 정의
     protected bool isSplitable; // 처치하면 쪼개지는 적인지
     protected EnemyData splitableEnemyData; // 쪼개질 때의 적 데이터
@@ -278,8 +280,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             // 무한 모드: 웨이브를 스테이지로 사용 (최대 30)
             int waveNumber = infiniteStageManager.GetCurrentWave();
             currentStageNumber = Mathf.Min(Mathf.RoundToInt(Mathf.Pow(waveNumber, 1.2f)), 30);
-
-            // Logger.Log($"[Enemy] Infinite mode - Wave {waveNumber} → Stage {currentStageNumber}");
         }
         else
         {
@@ -288,7 +288,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             {
                 currentStageNumber = PlayerDataManager.Instance.GetCurrentStageNumber();
             }
-            // Logger.Log($"[Enemy] Regular mode - Stage {currentStageNumber}");
         }
 
         if (calculator == null)
@@ -297,7 +296,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (calculator != null)
         {
             this.Stats = calculator.GetStatsForStage(currentStageNumber, _enemyToSpawn);
-            // Logger.Log($"[Enemy] Stats - Speed: {Stats.speed}, HP: {Stats.hp}, Damage: {Stats.damage}");
         }
         else
         {
@@ -309,17 +307,22 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 rangedDamage = 10,
                 experience_reward = 50
             };
-            // Logger.LogWarning($"{_enemyToSpawn.Name}: EnemyStatCalculator를 찾을 수 없습니다.");
         }
-
-        // if(bossType == BossType.StageBoss || bossType == BossType.QueenBoss)
-        // {
-        //     Logger.LogError($"[enemyBase] 보스 체력 : {this.Stats.hp}");
-        // }
 
         // 속도 설정
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
+
+        // ⭐ Variant 적용
+        if (variantHandler == null)
+            variantHandler = GetComponent<EnemyVariantHandler>();
+
+        if (variantHandler != null)
+        {
+            EnemyVariantType variant = EnemyVariantHandler.GetVariantForStage(currentStageNumber);
+            variantHandler.ApplyVariant(variant);
+            ApplyVariantEffects(variant);
+        }
 
         // 쪼개지는 적 관련 초기화
         if (_enemyToSpawn.split == null)
@@ -357,6 +360,39 @@ public class EnemyBase : MonoBehaviour, Idamageable
             if(subBossAlarm != null) SoundManager.instance.Play(subBossAlarm);
         }
     }
+    #region Variant 효과
+    protected void ApplyVariantEffects(EnemyVariantType variant)
+    {
+        // 초기화
+        Stats.damageReduction = 0f;
+        anim.speed = 1f;
+
+        // config 참조
+        EnemyScalingConfig config = GameManager.instance.enemyStatCalculator
+            .GetScalingConfig();
+
+        switch (variant)
+        {
+            case EnemyVariantType.Madness:
+                attackFrameInterval = config.madnessAttackFrameInterval;
+                anim.speed = config.madnessAnimSpeed;
+                break;
+
+            case EnemyVariantType.Helmet:
+                Stats.damageReduction = config.helmetDamageReduction;
+                break;
+
+            case EnemyVariantType.MadnessHelmet:
+                attackFrameInterval = config.madnessAttackFrameInterval;
+                anim.speed = config.madnessAnimSpeed;
+                Stats.damageReduction = config.helmetDamageReduction;
+                break;
+
+            case EnemyVariantType.Explosive:
+                break;
+        }
+    }
+    #endregion
 
     public void SetIsSplited(bool splited)
     {
@@ -688,7 +724,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             }
         }
 
-
         GameObject effect = GameManager.instance.poolManager.GetMisc(hitEffect);
         if (effect != null) effect.transform.position = target;
 
@@ -701,7 +736,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
             _knockBackDelay = this.knockBackDelay;
 
         // 체력이 0 이하이면 죽음
-        Stats.hp -= damage;
+        // Stats.hp -= damage;
+        int finalDamage = Mathf.RoundToInt(damage * (1f - Stats.damageReduction));
+        finalDamage = Mathf.Max(1, finalDamage); // 최소 1 데미지
+        Stats.hp -= finalDamage;
+
         if (Stats.hp < 1)
         {
             if (dieSound != null)

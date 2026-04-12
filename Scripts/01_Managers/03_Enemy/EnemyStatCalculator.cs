@@ -204,10 +204,14 @@ public class EnemyStatCalculator : MonoBehaviour
             difficultyMultiplier *
             bossMultiplier
         );
-        
+
         return exp;
     }
-    
+    public EnemyScalingConfig GetScalingConfig()
+    {
+        return scalingConfig;
+    }
+
     void ApplyManualOverrides(int stage, ref EnemyStats stats)
     {
         if (scalingConfig.stageModifiers == null) return;
