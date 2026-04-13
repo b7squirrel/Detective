@@ -216,20 +216,21 @@ public class AchievementPanel : MonoBehaviour
         if (currentTab == TabType.Daily)
         {
             filteredItems = items
-                .Where(i => i.ra.original.isDailyQuest)
+                .Where(i => i.ra.original.isDailyQuest && !i.ra.original.isInfiniteMode)
                 .ToList();
         }
         else if (currentTab == TabType.Weekly)
         {
             filteredItems = items
-                .Where(i => i.ra.original.isWeeklyQuest)
+                .Where(i => i.ra.original.isWeeklyQuest && !i.ra.original.isInfiniteMode)
                 .ToList();
         }
         else
         {
             filteredItems = items
                 .Where(i => !i.ra.original.isDailyQuest
-                         && !i.ra.original.isWeeklyQuest)
+                        && !i.ra.original.isWeeklyQuest
+                        && !i.ra.original.isInfiniteMode)
                 .ToList();
         }
 

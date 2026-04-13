@@ -7,7 +7,8 @@ public enum AchievementType
     WEAPON,
     SHOP,
     PLAY,
-    ETC
+    ETC,
+    WAVE
 }
 
 public enum RewardType
@@ -30,10 +31,13 @@ public class AchievementSO : ScriptableObject
     [Tooltip("true면 주간 퀘스트 (매주 월요일 리셋)")]
     public bool isWeeklyQuest = false;
 
+    [Tooltip("true면 무한모드 전용 임무 (업적 탭에서 숨김)")]
+    public bool isInfiniteMode = false;
+
     // 레거시 필드 (더 이상 사용 안 함, 하지만 기존 데이터 보존용으로 남겨둠)
-    [HideInInspector] public string title;              
+    [HideInInspector] public string title;
     [HideInInspector] public string description;
-    
+
     public string icon;               // UI 아이콘
 
     [Header("보상 정보")]
