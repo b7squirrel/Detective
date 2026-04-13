@@ -41,6 +41,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     Spawner spawner;
     WallManager wallManager;
     FieldItemSpawner fieldItemSpawner;
+    StageInfo stageInfo;
 
     [Header("UI")]
     TimeWaveUI timeWaveUI;
@@ -76,6 +77,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         spawner = FindObjectOfType<Spawner>();
         wallManager = FindObjectOfType<WallManager>();
         fieldItemSpawner = FindObjectOfType<FieldItemSpawner>();
+        stageInfo = FindObjectOfType<StageInfo>();
     }
 
     void Start()
@@ -385,7 +387,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         while (true)
         {
             currentWave++;
-            
+
             currentWaveEnemiesSpawned = 0;
             currentWaveEnemiesKilled = 0;
 
@@ -395,39 +397,39 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
             // ⭐ 6의 배수면 보스 웨이브
             bool isBossWave = (currentWave % 6 == 0);
-            
+
             if (isBossWave)
             {
                 Logger.Log($"[InfiniteStage] ========== BOSS Wave {currentWave} Start ==========");
-                
+
                 // 보스 1마리만
                 currentWavePlannedEnemies = 1;
-                
+
                 if (enemyCountUI != null)
                 {
                     enemyCountUI.UpdateWaveProgress("0", "1");
                 }
-                
+
                 yield return StartCoroutine(SpawnBossWave());
             }
             else
             {
                 Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Start ==========");
-                
+
                 // 일반 적 수 계산
                 float rawCount = baseEnemiesPerWave * Mathf.Pow(enemyGrowthRate, currentWave - 1);
                 int normalEnemies = Mathf.Min(Mathf.RoundToInt(rawCount), maxEnemiesPerWave);
-                
+
                 // 일반 적 + SubBoss 1마리
                 currentWavePlannedEnemies = normalEnemies + 1;
-                
+
                 if (enemyCountUI != null)
                 {
                     enemyCountUI.UpdateWaveProgress("0", currentWavePlannedEnemies.ToString());
                 }
-                
+
                 Logger.Log($"[InfiniteStage] Target: {normalEnemies} enemies + 1 sub-boss");
-                
+
                 yield return StartCoroutine(SpawnNormalWave(normalEnemies));
             }
 
@@ -493,7 +495,11 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             yield return new WaitForSeconds(spawnDelay);
         }
 
-        // 2. SubBoss 순서대로 스폰
+        // ⭐ 경고 팝업 후 서브보스 스폰
+        string subBossName = GetSubBossName(); // 이름만 먼저 가져옴
+        GameManager.instance.bossWarningPanel.Init(subBossName);
+        yield return new WaitForSecondsRealtime(2f); // 팝업 보여주는 동안 대기
+
         SpawnSubBossInOrder();
         currentWaveEnemiesSpawned++;
 
@@ -503,13 +509,79 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     // ⭐ 보스 웨이브 스폰 (보스만)
     IEnumerator SpawnBossWave()
     {
+        string bossName = GetBossName(currentWave);
+        GameManager.instance.bossWarningPanel.Init(bossName);
+        yield return new WaitForSeconds(2f); // 팝업 보여주고 스폰
+
         SpawnBossInOrder(currentWave);
         currentWaveEnemiesSpawned++;
-
-        Logger.Log($"[InfiniteStage] Spawned boss for wave {currentWave}");
-
         yield return null;
     }
+
+    #region 보스 이름 얻기
+    string GetSubBossName()
+    {
+        int waveInCycle = currentWave % 6;
+        if (waveInCycle == 0) waveInCycle = 6;
+        int subBossOrder = waveInCycle - 1; // 0~4
+
+        // ⭐ StageInfo에서 이름 가져오기
+        // subBossOrder 0 = 스테이지 1, 1 = 스테이지 2... 이므로
+        // subBossOrder + 1 로 해당 스테이지 번호 계산
+        if (stageInfo != null)
+        {
+            int stageIndex = subBossOrder + 1;
+            return stageInfo.GetStageInfo(stageIndex).Title;
+        }
+
+        // StageInfo가 없으면 EnemyData.Name으로 폴백
+        for (int i = 0; i < enemyConfigs.Length; i++)
+        {
+            if (enemyConfigs[i].IsSubBoss() &&
+                enemyConfigs[i].orderIndex == subBossOrder)
+            {
+                return enemyConfigs[i].data.Name;
+            }
+        }
+        return "";
+    }
+
+    string GetBossName(int wave)
+    {
+        int bossNumber = (wave / 6) - 1;
+        int bossCount = 0;
+
+        for (int i = 0; i < enemyConfigs.Length; i++)
+        {
+            if (enemyConfigs[i].IsStageBoss())
+                bossCount++;
+        }
+
+        if (bossCount == 0) return "";
+        int bossOrder = bossNumber % bossCount; // 0부터 시작
+
+        // ⭐ StageInfo에서 이름 가져오기
+        // bossOrder 0 = 스테이지 6, 1 = 스테이지 12... 이므로
+        // (bossOrder + 1) * 6 으로 해당 스테이지 번호 계산
+        StageInfo stageInfo = FindObjectOfType<StageInfo>();
+        if (stageInfo != null)
+        {
+            int stageIndex = (bossOrder + 1) * 6;
+            return stageInfo.GetStageInfo(stageIndex).Title;
+        }
+
+        // StageInfo가 없으면 EnemyData.Name으로 폴백
+        for (int i = 0; i < enemyConfigs.Length; i++)
+        {
+            if (enemyConfigs[i].IsStageBoss() &&
+                enemyConfigs[i].orderIndex == bossOrder)
+            {
+                return enemyConfigs[i].data.Name;
+            }
+        }
+        return "";
+    }
+    #endregion
 
     // ⭐ 일반 적만 랜덤 스폰
     void SpawnRandomNormalEnemy()
@@ -523,11 +595,11 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     }
 
     // ⭐ SubBoss 순서대로 스폰 (Wave 1-5, 7-11, 13-17...)
-    void SpawnSubBossInOrder()
+    string SpawnSubBossInOrder()
     {
         int waveInCycle = currentWave % 6;
         if (waveInCycle == 0) waveInCycle = 6;
-        int subBossOrder = waveInCycle - 1;  // 0~4
+        int subBossOrder = waveInCycle - 1;
 
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
@@ -536,19 +608,20 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             {
                 spawner.SpawnForInfiniteMode(enemyConfigs[i].data, i);
                 Logger.Log($"[InfiniteStage] SubBoss[{subBossOrder}] spawned: {enemyConfigs[i].data.Name}");
-                return;
+                return enemyConfigs[i].data.Name; // ⭐ 이름 반환
             }
         }
 
         Logger.LogWarning($"[InfiniteStage] No SubBoss found for order {subBossOrder}!");
+        return "";
     }
 
     // ⭐ Boss 순서대로 스폰 (Wave 6, 12, 18...)
-    void SpawnBossInOrder(int wave)
+    string SpawnBossInOrder(int wave)
     {
         int bossNumber = (wave / 6) - 1;
-
         int bossCount = 0;
+
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
             if (enemyConfigs[i].IsStageBoss())
@@ -558,7 +631,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         if (bossCount == 0)
         {
             Logger.LogError("[InfiniteStage] No boss configured!");
-            return;
+            return "";
         }
 
         int bossOrder = bossNumber % bossCount;
@@ -568,15 +641,14 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             if (enemyConfigs[i].IsStageBoss() &&
                 enemyConfigs[i].orderIndex == bossOrder)
             {
-                // ⭐ isBoss = true 전달
                 spawner.SpawnForInfiniteMode(enemyConfigs[i].data, i, isBoss: true);
-
-                Logger.Log($"[InfiniteStage] Boss[{bossOrder}] spawned: {enemyConfigs[i].data.Name} (Wave {wave})");
-                return;
+                Logger.Log($"[InfiniteStage] Boss[{bossOrder}] spawned: {enemyConfigs[i].data.Name}");
+                return enemyConfigs[i].data.Name; // ⭐ 이름 반환
             }
         }
 
         Logger.LogWarning($"[InfiniteStage] No Boss found for order {bossOrder}!");
+        return "";
     }
 
     // ⭐ 일반 적만 가중치 랜덤 (보스 제외)
