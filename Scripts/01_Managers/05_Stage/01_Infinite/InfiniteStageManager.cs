@@ -388,7 +388,11 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             
             currentWaveEnemiesSpawned = 0;
             currentWaveEnemiesKilled = 0;
-            
+
+            // 웨이브 번호 팝업
+            if (timeWaveUI != null)
+                timeWaveUI.PunchWaveText();
+
             // ⭐ 6의 배수면 보스 웨이브
             bool isBossWave = (currentWave % 6 == 0);
             
