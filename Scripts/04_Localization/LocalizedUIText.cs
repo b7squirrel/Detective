@@ -131,6 +131,10 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.ShopTab;
             case UITextKey.Stage:
                 return LocalizationManager.Game.stage;
+            case UITextKey.Pause:
+                return LocalizationManager.Game.pause;
+            case UITextKey.Continue:
+                return LocalizationManager.Game.Continue;
             default:
                 return key.ToString();
         }
@@ -195,5 +199,7 @@ public enum UITextKey
     Achievement,
     ShopTab,
     //스테이지
-    Stage
+    Stage,
+    Pause,
+    Continue
 }
