@@ -47,7 +47,8 @@ public class AchievementItemUI : MonoBehaviour
         if (ra != null && ra.isCompleted)
         {
             if (anim == null) anim = GetComponent<Animator>();
-            anim.Play("AchievementItem Completed", 0, 0f);
+            if (anim != null) // ← null 체크 추가
+                anim.Play("AchievementItem Completed", 0, 0f);
         }
     }
 
@@ -60,7 +61,7 @@ public class AchievementItemUI : MonoBehaviour
 
         progressSlider.maxValue = runtime.original.targetValue;
 
-        rewardText.text = runtime.original.rewardNum.ToString();
+        if (rewardText != null) rewardText.text = runtime.original.rewardNum.ToString();
 
         // 보상 타입에 따라 아이콘 설정
         if (rewardIcon != null)
@@ -107,33 +108,29 @@ public class AchievementItemUI : MonoBehaviour
             descriptionText.text = ra.original.description;
             return;
         }
-        
+
         // 다국어 텍스트 적용
-        if (titleText != null)
-            titleText.text = ra.GetTitle();
-        descriptionText.text = ra.GetDescription();
+        if (titleText != null) titleText.text = ra.GetTitle();
+        if (descriptionText != null) descriptionText.text = ra.GetDescription();
     }
 
     public void Refresh()
     {
         progressSlider.value = ra.progress;
-        progressText.text = $"{ra.progress} / {ra.original.targetValue}";
+        if(progressText != null) progressText.text = $"{ra.progress} / {ra.original.targetValue}";
 
         rewardButton.interactable = ra.isCompleted && !ra.isRewarded;
     }
 
     void SetCompleted(bool isActive)
     {
-        CompletedPanel.SetActive(isActive);
-        checkImage.SetActive(isActive);
+        if (CompletedPanel != null) CompletedPanel.SetActive(isActive);
+        if (checkImage != null) checkImage.SetActive(isActive);
         rewardButton.enabled = isActive;
-        // progressSlider.gameObject.SetActive(!isActive); // 완료 시 슬라이더 숨김
 
         if (anim == null) anim = GetComponent<Animator>();
-        if (isActive)
-        {
+        if (anim != null && isActive) // ← null 체크 추가
             anim.Play("AchievementItem Completed", 0, 0f);
-        }
     }
 
     // 디버그 용도
