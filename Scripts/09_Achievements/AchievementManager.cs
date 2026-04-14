@@ -139,15 +139,31 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
+    // 기존 메서드 - 무한모드 임무는 제외
     public void AddProgress(AchievementType type, int amount = 1)
     {
         foreach (var ra in runtimeDict.Values)
         {
-            if (ra.original.type == type && !ra.isCompleted)
-            {
-                ra.AddProgress(amount);
-                SaveAchievement(ra);
-            }
+            if (ra.original.type != type) continue;
+            if (ra.original.isInfiniteMode) continue; // ← 추가
+            if (ra.isCompleted) continue;
+
+            ra.AddProgress(amount);
+            SaveAchievement(ra);
+        }
+    }
+
+    // 무한모드 전용 - 새로 추가
+    public void AddProgressInfinite(AchievementType type, int amount = 1)
+    {
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.type != type) continue;
+            if (!ra.original.isInfiniteMode) continue; // ← 무한모드만
+            if (ra.isCompleted) continue;
+
+            ra.AddProgress(amount);
+            SaveAchievement(ra);
         }
     }
 
@@ -356,6 +372,7 @@ public class AchievementManager : MonoBehaviour
     }
 
     // ⭐ 모든 업적 리셋 (디버그용)
+    [ContextMenu("Debug: Reset All Achievements")]  // ← 추가
     public void ResetAllAchievements()
     {
         foreach (var ra in runtimeDict.Values)

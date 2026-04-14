@@ -34,9 +34,26 @@ public class InfiniteAchievementPanel : MonoBehaviour
         AchievementManager.Instance.OnAnyProgressChanged += UpdateItem;
         AchievementManager.Instance.OnAnyCompleted += UpdateItem;
         AchievementManager.Instance.OnAnyRewarded += RemoveItem;
-        LocalizationManager.OnLanguageChanged += RefreshAllText;
 
-        // 패널 열릴 때마다 pending 처리
+        // ⭐ 기존 아이템 전부 제거 후 새로 생성
+        foreach (var ui in itemDict.Values)
+        {
+            if (ui != null) Destroy(ui.gameObject);
+        }
+        itemDict.Clear();
+
+        foreach (var ra in AchievementManager.Instance.GetAll())
+        {
+            if (!ra.original.isInfiniteMode) continue;
+            if (ra.isRewarded) continue;
+
+            // ⭐ 탭 방식이면 content 하나만 사용
+            var go = Instantiate(achievementItemPrefab, content);
+            var ui = go.GetComponent<AchievementItemUI>();
+            ui.Bind(ra);
+            itemDict.Add(ra.original.id, ui);
+        }
+
         foreach (var ra in pendingRemoveList.ToList())
             FinishRemove(ra);
 
@@ -54,6 +71,7 @@ public class InfiniteAchievementPanel : MonoBehaviour
         LocalizationManager.OnLanguageChanged -= RefreshAllText;
     }
 
+    // Start()에서 아이템 생성 코드 제거
     private void Start()
     {
         if (AchievementManager.Instance == null) return;
@@ -62,20 +80,6 @@ public class InfiniteAchievementPanel : MonoBehaviour
             tabDailyButton.onClick.AddListener(() => SwitchTab(TabType.Daily));
         if (tabWeeklyButton != null)
             tabWeeklyButton.onClick.AddListener(() => SwitchTab(TabType.Weekly));
-
-        // 무한모드 전용 아이템만 생성
-        foreach (var ra in AchievementManager.Instance.GetAll())
-        {
-            if (!ra.original.isInfiniteMode) continue;
-            if (ra.isRewarded) continue;
-
-            var go = Instantiate(achievementItemPrefab, content);
-            var ui = go.GetComponent<AchievementItemUI>();
-            ui.Bind(ra);
-            itemDict.Add(ra.original.id, ui);
-        }
-
-        RefreshUI();
     }
 
     private void SwitchTab(TabType tabType)

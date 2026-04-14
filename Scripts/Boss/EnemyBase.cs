@@ -803,10 +803,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
         GameManager.instance.KillManager.UpdateCurrentKills(enemyType, isSubBoss, isBoss);
         GoldRewardManager.Instance.AddKillGold(goldReward);
 
-        // ⭐ 추가: 쪼개진 적(슬라임 조각 등)은 카운트 제외
+        // ⭐ 추가: 쪼개진 적(슬라임 조각 등)은 카운트 제외, 무한 모드, 일반 모드 분리
         if (!isSplited && AchievementManager.Instance != null)
         {
-            AchievementManager.Instance.AddProgress(AchievementType.KILL, 1);
+            if (PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
+                AchievementManager.Instance.AddProgressInfinite(AchievementType.KILL, 1);
+            else
+                AchievementManager.Instance.AddProgress(AchievementType.KILL, 1);
         }
 
         Spawner.instance.SubtractEnemyNumber();

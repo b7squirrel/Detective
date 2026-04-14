@@ -56,12 +56,14 @@ public class AchievementItemUI : MonoBehaviour
     {
         ra = runtime;
 
-        // 다국어 적용
         UpdateText();
 
         progressSlider.maxValue = runtime.original.targetValue;
+        rewardText.text = runtime.original.rewardNum.ToString();
 
-        if (rewardText != null) rewardText.text = runtime.original.rewardNum.ToString();
+        // ⭐ KILL 타입일 때만 progressText 표시
+        if (progressText != null)
+            progressText.gameObject.SetActive(runtime.original.type == AchievementType.KILL);
 
         // 보상 타입에 따라 아이콘 설정
         if (rewardIcon != null)
@@ -81,7 +83,7 @@ public class AchievementItemUI : MonoBehaviour
             }
         }
 
-        rewardButton.onClick.RemoveAllListeners(); // 중복 방지
+        rewardButton.onClick.RemoveAllListeners();
         rewardButton.onClick.AddListener(() =>
         {
             SoundManager.instance.Play(clipRewardButton);
@@ -89,7 +91,6 @@ public class AchievementItemUI : MonoBehaviour
         });
 
         SetCompleted(runtime.isCompleted);
-
         Refresh();
     }
 
@@ -97,7 +98,7 @@ public class AchievementItemUI : MonoBehaviour
     void UpdateText()
     {
         if (ra == null) return;
-        
+
         // LocalizationManager 초기화 확인
         if (!LocalizationManager.IsInitialized || LocalizationManager.Achievement == null)
         {
@@ -117,7 +118,7 @@ public class AchievementItemUI : MonoBehaviour
     public void Refresh()
     {
         progressSlider.value = ra.progress;
-        if(progressText != null) progressText.text = $"{ra.progress} / {ra.original.targetValue}";
+        if (progressText != null) progressText.text = $"({ra.progress} / {ra.original.targetValue})";
 
         rewardButton.interactable = ra.isCompleted && !ra.isRewarded;
     }
