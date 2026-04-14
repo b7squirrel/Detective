@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardSlotManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class CardSlotManager : MonoBehaviour
 
     [Header("필드 제어")]
     [SerializeField] Animator fieldAnim;
+    [SerializeField] ScrollRect scrollRect;
 
     #region 슬롯 생성 관련 변수
     Dictionary<int, CardSlot> mySlots = new Dictionary<int, CardSlot>();
@@ -199,6 +201,7 @@ public class CardSlotManager : MonoBehaviour
     {
         fieldAnim.SetTrigger(trigger);
         SortByGrade();
+        scrollRect.verticalNormalizedPosition = 1f;
     }
 
     public CardSlot GetSlotByID(int cardID)
