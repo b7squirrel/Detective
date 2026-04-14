@@ -16,7 +16,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     [SerializeField] GameObject lackOfCristalWarningPanelPrefab;
     // [SerializeField] GameObject lackOfGoldWarningPanelPrefab;
 
-    GameObject lackOfCristalWarningPanel;
+    [SerializeField] GameObject lackOfCristalWarningPanel;
     // GameObject lackOfGoldWarningPanel;
 
     GachaSystem gachaSystem;
@@ -52,6 +52,11 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         if (lackOfCristalWarningPanelPrefab != null && lackOfCristalWarningPanel == null)
         {
             lackOfCristalWarningPanel = Instantiate(lackOfCristalWarningPanelPrefab, canvas.transform);
+            lackOfCristalWarningPanel.SetActive(false);
+            DontDestroyOnLoad(lackOfCristalWarningPanel); // ⭐ 씬 전환 시에도 유지
+        }
+        if (lackOfCristalWarningPanel != null)
+        {
             lackOfCristalWarningPanel.SetActive(false);
             DontDestroyOnLoad(lackOfCristalWarningPanel); // ⭐ 씬 전환 시에도 유지
         }
@@ -510,8 +515,8 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         // TODO: 부족 알림 팝업 표시
         bool isCristal = currencyType == "Cristal" ? true : false;
 
-        // ⭐ 경고 패널 생성
-        if(lackOfCristalWarningPanel == null) CreateWarningPanels();
+        // // ⭐ 경고 패널 생성
+        // if(lackOfCristalWarningPanel == null) CreateWarningPanels();
 
         if (isCristal)
         {
@@ -546,8 +551,8 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     {
         base.OnDestroy();
 
-        if (lackOfCristalWarningPanel != null)
-            Destroy(lackOfCristalWarningPanel);
+        // if (lackOfCristalWarningPanel != null)
+        //     Destroy(lackOfCristalWarningPanel);
 
         // if (lackOfGoldWarningPanel != null)
         //     Destroy(lackOfGoldWarningPanel);

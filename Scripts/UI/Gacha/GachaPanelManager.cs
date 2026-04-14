@@ -4,6 +4,7 @@ using UnityEngine;
 public class GachaPanelManager : MonoBehaviour
 {
     [SerializeField] GachaField gachaField;
+    [SerializeField] GameObject FG;
     MainMenuManager mainMenuManager;
 
     public void InitGachaPanel(List<CardData> cards)
@@ -19,5 +20,6 @@ public class GachaPanelManager : MonoBehaviour
     public void ActivateButtonTapToCon(bool activate)
     {
         gameObject.SetActive(activate);
+        FG.SetActive(false);
     }
 }

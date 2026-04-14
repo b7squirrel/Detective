@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 /// <summary>
 /// 상자 구매 버튼 (Inspector에서 Button.onClick에 연결하는 방식)
@@ -12,11 +13,21 @@ public class ChestBuyButton : MonoBehaviour
     [SerializeField] TextMeshProUGUI rewardText;
     [SerializeField] TextMeshProUGUI costText;
     [SerializeField] Sprite productSprite;
-    
+
     [Header("FX 위치")]
     [SerializeField] RectTransform gemPoint;
 
+    [Header("화면 전환")]
+    [SerializeField] GameObject fg;  // 인스펙터에서 연결
+
     private ProductData productData;
+    private Animator animator;
+    private bool isProcessing = false;  // 중복 클릭 방지
+
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     /// <summary>
     /// 상품 정보 설정 (ShopUI에서 호출)
@@ -42,24 +53,15 @@ public class ChestBuyButton : MonoBehaviour
         Logger.Log($"[ChestBuyButton] - PurchaseType: {productData.PurchaseType}");
         Logger.Log($"[ChestBuyButton] - PurchaseCost: {productData.PurchaseCost}");
 
-        // 이미지
         if (productImage != null && productSprite != null)
         {
             productImage.sprite = productSprite;
         }
 
-        // 보상 텍스트 (필요시 활성화)
-        // if (rewardText != null)
-        // {
-        //     rewardText.text = productData.RewardCristal.ToString();
-        // }
-
-        // 비용 텍스트
         if (costText != null)
         {
             if (productData.PurchaseType == PurchaseType.IAP)
             {
-                // ⭐ 센트 단위를 달러로 변환 (99 → $0.99)
                 float dollars = productData.PurchaseCost / 100f;
                 costText.text = $"${dollars:F2}";
                 Logger.Log($"[ChestBuyButton] IAP 가격 설정: {productData.PurchaseCost} 센트 → ${dollars:F2}");
@@ -77,6 +79,8 @@ public class ChestBuyButton : MonoBehaviour
     /// </summary>
     public void OnPurchaseButtonClicked()
     {
+        if (isProcessing) return;  // 이미 처리 중이면 무시
+
         if (productData == null)
         {
             Logger.LogError("[ChestBuyButton] ProductData가 설정되지 않았습니다.");
@@ -89,9 +93,28 @@ public class ChestBuyButton : MonoBehaviour
             return;
         }
 
+        StartCoroutine(PurchaseSequence());
+    }
+
+    private IEnumerator PurchaseSequence()
+    {
+        isProcessing = true;
+
+        // 1. 버튼 눌림 애니메이션
+        if (animator != null)
+            animator.SetTrigger("Pressed");
+
+        // 2. FG 즉시 활성화 (다른 버튼 입력 차단)
+        if (fg != null)
+            fg.SetActive(true);
+
+        // 3. 애니메이션이 끝날 때까지 대기 (0.1초)
+        yield return new WaitForSeconds(0.1f);
+
+        // 4. 화면 전환 요청
         Logger.Log($"[ChestBuyButton] 구매 버튼 클릭: {productData.ProductId}");
-        
-        // ⭐ ShopManager에게 구매 요청 + FX 위치 전달
         ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint);
+
+        isProcessing = false;
     }
 }

@@ -18,6 +18,7 @@ public class CoinBuyButton : MonoBehaviour
     [SerializeField] RectTransform coinPoint;
     
     private ProductData productData;
+    Animator anim;
     
     /// <summary>
     /// 상품 정보 설정 (ShopUI에서 호출)
@@ -75,11 +76,14 @@ public class CoinBuyButton : MonoBehaviour
             Logger.LogError("[CoinBuyButton] ShopManager를 찾을 수 없습니다.");
             return;
         }
-        
+
+        if (anim == null) anim = GetComponent<Animator>();
+        anim.SetTrigger("Pressed");
+
         // ⭐ ShopManager에게 구매 요청 + FX 위치 전달
         shopManager.PurchaseProduct(productData.ProductId, coinPoint);
     }
-    
+
     /// <summary>
     /// FX 재생 위치 반환
     /// </summary>

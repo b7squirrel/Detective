@@ -16,16 +16,19 @@ public class GemBuyButton : MonoBehaviour
     
     [Header("FX 위치")]
     [SerializeField] RectTransform gemPoint;
-    
+
     private ProductData productData;
-    
+    Animator anim;
+
     void Awake()
     {
         if (buyButton == null)
             buyButton = GetComponent<Button>();
-        
+
         if (buyButton != null)
             buyButton.onClick.AddListener(OnPurchaseButtonClicked);
+
+        anim = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -107,6 +110,9 @@ public class GemBuyButton : MonoBehaviour
         
         // ⭐ ShopManager에게 구매 요청 + FX 위치 전달
         shopManager.PurchaseProduct(productData.ProductId, gemPoint);
+
+        // 버튼 애니메이션
+        if(anim != null) anim.SetTrigger("Pressed");
     }
     
     /// <summary>
