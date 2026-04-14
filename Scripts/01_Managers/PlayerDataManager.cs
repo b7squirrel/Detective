@@ -281,6 +281,9 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         }
 
         PauseGame();
+
+        InfiniteMissionTracker tracker = FindObjectOfType<InfiniteMissionTracker>();
+        tracker?.OnGameEnd();
     }
 
     void SaveCoinsAndCristals()

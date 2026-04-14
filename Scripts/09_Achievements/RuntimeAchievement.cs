@@ -28,17 +28,17 @@ public class RuntimeAchievement
     public void AddProgress(int amount)
     {
         if (isCompleted) return;
-        
+
         progress += amount;
         OnProgressChanged?.Invoke(this);
-        
+
         if (progress >= original.targetValue)
         {
             isCompleted = true;
             OnCompleted?.Invoke(this);
         }
     }
-    
+
     public void Reward()
     {
         isRewarded = true;
@@ -73,6 +73,22 @@ public class RuntimeAchievement
             return "WEEKLY_QUEST_" + original.id + "_REWARDED";
         else
             return "ACH_REWARD_" + original.id;
+    }
+
+    public void SetProgressIfGreater(int value)
+    {
+        if (isCompleted) return;
+        if (value <= progress) return;
+
+        progress = value;
+        OnProgressChanged?.Invoke(this);
+
+        if (progress >= original.targetValue)
+        {
+            progress = original.targetValue;
+            isCompleted = true;
+            OnCompleted?.Invoke(this);
+        }
     }
 
     // 다국어 제목/설명 가져오기

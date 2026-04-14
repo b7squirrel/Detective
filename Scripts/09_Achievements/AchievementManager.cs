@@ -338,6 +338,23 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
+    // WAVE, SURVIVE 타입용 - 현재값보다 클 때만 업데이트
+    public void SetProgressIfGreater(AchievementType type, int value)
+    {
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.type != type) continue;
+            if (!ra.original.isInfiniteMode) continue;
+            if (ra.isCompleted) continue;
+
+            if (value > ra.progress)
+            {
+                ra.SetProgressIfGreater(value); // ← RuntimeAchievement 내부에서 이벤트 호출
+                SaveAchievement(ra);
+            }
+        }
+    }
+
     // ⭐ 모든 업적 리셋 (디버그용)
     public void ResetAllAchievements()
     {
