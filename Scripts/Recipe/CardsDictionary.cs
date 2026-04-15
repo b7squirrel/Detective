@@ -22,27 +22,92 @@ public class CardsDictionary : MonoBehaviour
     List<CardData> CardPool;
     List<CardData> ItemPool;
     [SerializeField] List<WeaponData> weaponData;
-    [SerializeField] List<Item> itemData;
-    List<CardData> itemCardData;
-    public static bool IsDataLoaded {get; private set;} = false;
+    List<Item> itemData = new List<Item>();
+    List<CardData> itemCardData = new List<CardData>();
+    public static bool IsDataLoaded { get; private set; } = false;
+    Dictionary<(string Name, int Grade), CardData> itemCardDataMap
+    = new Dictionary<(string, int), CardData>(); // 카드 검색
+    [Header("자동 로드 설정")]
+    [SerializeField] string itemSOFolderPath = "03_Equipment"; // Resources/ 이후 경로
 
     void Awake()
     {
-        if(ItemPool == null)
+        // ★ 1. SO 자동 로드
+        LoadItemScriptableObjects();
+
+        // 2. CSV 로드
+        if (ItemPool == null)
         {
             Logger.Log("모든 아이템 종류를 로드합니다");
-            ItemPool = new();
             ItemPool = new ReadCardData().GetCardsList(itemPoolDataBase);
         }
 
+        // 3. 인덱스 설정
         SetIndex();
 
+        // ★ 4. 개발 중 자동 검증
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        ValidateItemConsistency();
+#endif
+
         IsDataLoaded = true;
-        Logger.Log($"Cards Dictionary 데이터 로드 완료");
+        Logger.Log($"Cards Dictionary 데이터 로드 완료 (아이템 SO: {itemData.Count}개)");
+    }
+
+    /// <summary>
+    /// ★ Resources 폴더에서 Item SO를 자동으로 읽어옴
+    /// </summary>
+    void LoadItemScriptableObjects()
+    {
+        itemData.Clear();
+
+        Item[] loaded = Resources.LoadAll<Item>(itemSOFolderPath);
+
+        if (loaded == null || loaded.Length == 0)
+        {
+            Logger.LogError($"[CardsDictionary] '{itemSOFolderPath}' 에서 Item SO를 찾을 수 없습니다. 경로를 확인하세요.");
+            return;
+        }
+
+        // Name + grade 기준으로 정렬 (일관성 유지)
+        System.Array.Sort(loaded, (a, b) =>
+        {
+            int nameCompare = string.Compare(a.Name, b.Name, System.StringComparison.Ordinal);
+            if (nameCompare != 0) return nameCompare;
+            return a.grade.CompareTo(b.grade);
+        });
+
+        itemData.AddRange(loaded);
+        Logger.Log($"[CardsDictionary] Item SO 자동 로드 완료: {itemData.Count}개 ({itemSOFolderPath})");
+    }
+    void ValidateItemConsistency()
+    {
+        int errorCount = 0;
+
+        foreach (var csvCard in ItemPool)
+        {
+            if (csvCard.Type != CardType.Item.ToString()) continue;
+
+            bool found = itemData.Exists(so =>
+                so != null &&
+                so.Name == csvCard.Name &&
+                (int)so.grade == csvCard.Grade);
+
+            if (!found)
+            {
+                Logger.LogError($"[검증] CSV 항목이 SO에 없음 → Name: '{csvCard.Name}', Grade: {csvCard.Grade}");
+                errorCount++;
+            }
+        }
+
+        if (errorCount == 0)
+            Logger.Log("✅ [검증] 모든 아이템 데이터가 일치합니다.");
+        else
+            Logger.LogError($"[검증] SO 누락 {errorCount}개 발견. 위 로그를 확인하세요.");
     }
     void OnApplicationQuit()
     {
-        IsDataLoaded = false;       
+        IsDataLoaded = false;
     }
     public List<CardData> GetCardPool()
     {
@@ -90,24 +155,25 @@ public class CardsDictionary : MonoBehaviour
     {
         for (int i = 0; i < itemData.Count; i++)
         {
-            itemData[i].itemIndex = i;
+            // ★ itemData[i].itemIndex = i;  ← 제거
+
             CardData data = FindCardData(itemData[i]);
-            if(data == null) 
+            if (data == null)
             {
                 Logger.LogError($"{itemData[i]}에 해당하는 카드 데이터가 없습니다");
                 return;
             }
             itemCardData.Add(data);
+
+            // ★ Dictionary에 등록
+            var key = (itemData[i].Name, (int)itemData[i].grade);
+            itemCardDataMap[key] = data;
         }
 
-        if(itemData.Count == itemCardData.Count)
-        {
+        if (itemData.Count == itemCardData.Count)
             Logger.Log("아이템 데이터와 아이템 카드 데이터가 동일하게 작성되었습니다.");
-        }
         else
-        {
             Logger.Log($"아이템 데이터 갯수 = {itemData.Count}, 아이템 카드 데이터 갯수 = {itemCardData.Count}");
-        }
     }
 
     CardData FindCardData(Item item)
@@ -125,8 +191,17 @@ public class CardsDictionary : MonoBehaviour
     {
         return itemData[index];
     }
-    public CardData GetItemCardData(int index)
+    // public CardData GetItemCardData(int index)
+    // {
+    //     return itemCardData[index];
+    // }
+    public CardData GetItemCardData(string name, int grade)
     {
-        return itemCardData[index];
+        var key = (name, grade);
+        if (itemCardDataMap.TryGetValue(key, out CardData result))
+            return result;
+
+        Logger.LogError($"[CardsDictionary] CardData를 찾을 수 없음: Name '{name}', Grade {grade}");
+        return null;
     }
 }

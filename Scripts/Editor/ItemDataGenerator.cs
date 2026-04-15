@@ -8,7 +8,7 @@ public class ItemDataGenerator : EditorWindow
     private string itemBaseName = "00cowboy_rifle";
     private string itemName = "CowboyRifle";
     private string displayName = "카우보이 라이플";
-    private string savePath = "Assets/Data/Weapons_Items/04_Equipment";
+    private string savePath = "Assets/Resources/03_Equipment";
 
     private Vector2 scrollPosition;
 

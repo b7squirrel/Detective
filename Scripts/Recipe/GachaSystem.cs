@@ -311,37 +311,55 @@ public class GachaSystem : MonoBehaviour
         }
 
         if (cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
+
         WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
         WeaponData wd = weaponItemData.weaponData;
 
-        string part = _oriCardData.EssentialEquip;
-        int index = defaultEquipIndex[part];
-
-        CardData defaultEquip;
-        if (wd.defaultItems[index] == null)
+        if (wd == null)
         {
-            Logger.LogError("필수 장비가 인스펙터에 없습니다. weaponData의 default Items에 할당해 주세요");
+            Logger.LogError($"[GachaSystem] WeaponData를 찾을 수 없습니다: {_oriCardData.Name}");
             return;
         }
 
-        int i = wd.defaultItems[index].itemIndex;
-        CardData itemCardData = cardDictionary.GetItemCardData(i);
-        if (itemCardData != null)
+        string part = _oriCardData.EssentialEquip;
+        if (!defaultEquipIndex.TryGetValue(part, out int index))
         {
-            defaultEquip = CloneCardData(itemCardData);
-            if (defaultEquip != null)
-            {
-                try
-                {
-                    cardDataManager.AddNewCardToMyCardsList(defaultEquip);
-                    cardList.Equip(_oriCardData, defaultEquip);
-                    Logger.Log($"{defaultEquip.Name}을 장착합니다");
-                }
-                catch (Exception e)
-                {
-                    Logger.LogError($"Error adding default equipment: {e.Message}");
-                }
-            }
+            Logger.LogError($"[GachaSystem] 알 수 없는 장비 부위: {part}");
+            return;
+        }
+
+        Item defaultItem = wd.defaultItems[index];
+        if (defaultItem == null)
+        {
+            Logger.LogError($"[GachaSystem] 필수 장비가 인스펙터에 없습니다. weaponData: {wd.Name}, index: {index}");
+            return;
+        }
+
+        // ★ itemIndex 대신 Name + Grade로 검색
+        CardData itemCardData = cardDictionary.GetItemCardData(defaultItem.Name, (int)defaultItem.grade);
+
+        if (itemCardData == null)
+        {
+            Logger.LogError($"[GachaSystem] 필수 장비의 CardData를 찾을 수 없습니다: {defaultItem.Name}, Grade: {defaultItem.grade}");
+            return;
+        }
+
+        CardData defaultEquip = CloneCardData(itemCardData);
+        if (defaultEquip == null)
+        {
+            Logger.LogError($"[GachaSystem] CardData 복제 실패: {itemCardData.Name}");
+            return;
+        }
+
+        try
+        {
+            cardDataManager.AddNewCardToMyCardsList(defaultEquip);
+            cardList.Equip(_oriCardData, defaultEquip);
+            Logger.Log($"[GachaSystem] {defaultEquip.Name}을 장착합니다");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 필수 장비 장착 오류: {e.Message}");
         }
     }
 

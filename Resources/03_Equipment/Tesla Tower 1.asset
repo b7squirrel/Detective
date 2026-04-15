@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
+  m_Name: Tesla Tower 1
+  m_EditorClassIdentifier: 
+  Name: Tesla Tower
+  DisplayName: "\uD14C\uC2AC\uB77C \uC804\uAE30\uD0D1"
+  grade: 1
+  charImage: {fileID: 21300000, guid: bfefcf39482522343957e641f9583891, type: 3}
+  equippedImage: {fileID: -1850109828, guid: 05525a3e6a7b5f948a2c3a48acc4f518, type: 3}
+  spriteRow:
+    sprites:
+    - {fileID: 21300000, guid: 401e154867c6d4ffa8c4c0f1167e32a6, type: 3}
+    - {fileID: 21300000, guid: 4584d16d6160e425c8d7691e0b5cf14d, type: 3}
+    - {fileID: 21300000, guid: acfbe3341eeb543bbb5c4a87ec29f50f, type: 3}
+    - {fileID: 21300000, guid: 491e57a4c8ae5443eb9fa3df04b5588e, type: 3}
+    - {fileID: 21300000, guid: 0e6e0480e5de1406b809416887c2cefb, type: 3}
+    - {fileID: 21300000, guid: d5fd318cb9e1e4986a9c23673bfc3e85, type: 3}
+    - {fileID: 21300000, guid: dbb2eb1666abc4cadbf0a7d3eaa081a7, type: 3}
+    - {fileID: 21300000, guid: af160728db1e643ba97ad994e4464a98, type: 3}
+    - {fileID: 21300000, guid: 16ae2d3404731466baf35b314cd9bc1c, type: 3}
+  needToOffset: 0
+  posHead: {x: 0, y: 0}
+  worldPosHead: {x: 0, y: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 9100000, guid: 0ab77a4a5c2c60d4d9faa3f7f535048e, type: 2}
+    InGamePlayerAnim: {fileID: 0}
+    PauseCardAnim: {fileID: 0}
+  SynergyWeapons: []
+  stats:
+    armor: 1
+    magnetSize: 0
+    moveSpeed: 0
+    maxHp: 0
+    damage: 0
+    projectileAmount: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    criticalDamageChance: 0
+    coolTimeDown: 0
+    hpRegenRate: 0
+    hp: 300
+    coins: 0
+    currentLevel: 0
+  upgrades: []
+  dropChance: 0
+  itemIndex: 221
+  projectilePrefab: {fileID: 0}
+  projectileVerticalVelocity: 10
