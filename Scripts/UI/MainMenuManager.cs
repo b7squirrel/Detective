@@ -45,61 +45,16 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] RuntimeAnimatorController defaultTabSlideHandleCon;
     [SerializeField] RuntimeAnimatorController darkTabSlideHandleCon;
     [SerializeField] Animator tabSliderHandleAnim;
-    [SerializeField] GameObject bgTutorial;
 
     bool slotSwapFinished;
 
     // 리드오리 카드 데이터
     CardData lead;
 
-    /// <summary>
-    /// 어느 탭을 밝게 해서 터치가 가능하게 할지 정함
-    /// </summary>
-    public void SetTutorialMode(bool tutorialMode, int indexToActivate = 0)
-    {
-        if (tutorialMode)
-        {
-            Tab_Base.sprite = Tab_BaseSprites[1];
-            tabSliderHandleAnim.runtimeAnimatorController = darkTabSlideHandleCon;
-
-            for (int i = 0; i < BtnImageRect.Length; i++)
-            {
-                BtnRect[i].GetComponent<Image>().color = new Color(1, 1, 1, 0);
-
-                if (i == indexToActivate)
-                {
-                    BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = defaultTabControllers[i];
-                    BtnRect[i].GetComponent<Button>().interactable = true;
-
-                    continue;
-                }
-                BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = tutorialTabControllers[i];
-                BtnRect[i].GetComponent<Button>().interactable = false;
-                // BtnImageRect[i].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().color = new Color(.3f, .3f, .3f, 1);
-            }
-            bool isSRHand = indexToActivate == 4 ? false : true;
-            GetComponent<TutorialMainMenuUI>().GenerateHand(BtnImageRect[indexToActivate], isSRHand);
-            bgTutorial.SetActive(true);
-        }
-        else
-        {
-            Tab_Base.sprite = Tab_BaseSprites[0];
-            tabSliderHandleAnim.runtimeAnimatorController = defaultTabSlideHandleCon;
-            bgTutorial.SetActive(false);
-
-            for (int i = 0; i < BtnImageRect.Length; i++)
-            {
-                BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = defaultTabControllers[i];
-                // BtnImageRect[i].transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().color = new Color(1f, 1f, 1f, 1);
-                BtnRect[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
-            }
-        }
-    }
 
 
     void Start()
     {
-        // InitBlackTransition();
         SetTutorialMode(false);
 
         for (int i = 0; i < SIZE; i++)
@@ -122,11 +77,19 @@ public class MainMenuManager : MonoBehaviour
 
         PlayBGM(); // awake에서 Music Manager가 준비가 안되어 있을 수 있으므로 코루틴으로 약간 기다린 후 재생
 
-        // 저장된 정보를 불러와서 탭 설정하기
-        // SetButtonActive(0, false);
-        // SetButtonActive(1, false);
-        // SetButtonActive(3, false);
-        // SetButtonActive(4, false);
+        // ✅ 추가: 튜토리얼 단계에 따라 초기 탭 상태 설정
+        InitTabsByTutorialStep();
+    }
+    void OnEnable()
+    {
+        // ✅ 추가: 단계 변경 이벤트 구독
+        TutorialManager.OnStepChanged += OnTutorialStepChanged;
+    }
+
+    void OnDisable()
+    {
+        // ✅ 추가: 구독 해제
+        TutorialManager.OnStepChanged -= OnTutorialStepChanged;
     }
 
     void Update()
@@ -324,4 +287,129 @@ public class MainMenuManager : MonoBehaviour
         }
         return lead;
     }
+
+    #region 튜토리얼
+    /// <summary>
+    /// 어느 탭을 밝게 해서 터치가 가능하게 할지 정함
+    /// </summary>
+    public void SetTutorialMode(bool tutorialMode, int indexToActivate = 0)
+    {
+        if (tutorialMode)
+        {
+            Tab_Base.sprite = Tab_BaseSprites[1];
+            tabSliderHandleAnim.runtimeAnimatorController = darkTabSlideHandleCon;
+
+            for (int i = 0; i < BtnImageRect.Length; i++)
+            {
+                BtnRect[i].GetComponent<Image>().color = new Color(1, 1, 1, 0);
+
+                if (i == indexToActivate)
+                {
+                    BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = defaultTabControllers[i];
+                    BtnRect[i].GetComponent<Button>().interactable = true;
+                    continue;
+                }
+                BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = tutorialTabControllers[i];
+                BtnRect[i].GetComponent<Button>().interactable = false;
+            }
+            bool isSRHand = indexToActivate == 4 ? false : true;
+            GetComponent<TutorialMainMenuUI>().GenerateHand(BtnImageRect[indexToActivate], isSRHand);
+            // ✅ bgTutorial.SetActive(true); 제거
+        }
+        else
+        {
+            Tab_Base.sprite = Tab_BaseSprites[0];
+            tabSliderHandleAnim.runtimeAnimatorController = defaultTabSlideHandleCon;
+            // ✅ bgTutorial.SetActive(false); 제거
+
+            for (int i = 0; i < BtnImageRect.Length; i++)
+            {
+                BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = defaultTabControllers[i];
+                BtnRect[i].GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            }
+        }
+    }
+
+    // ✅ 추가: TutorialManager 단계 → 탭 인덱스 변환
+    private void InitTabsByTutorialStep()
+    {
+        if (TutorialManager.instance == null) return;
+        OnTutorialStepChanged(TutorialManager.instance.CurrentStep);
+    }
+
+    // ✅ 추가: 단계가 바뀔 때마다 자동 호출
+    private void OnTutorialStepChanged(TutorialStep step)
+    {
+        if (step == TutorialStep.Completed)
+        {
+            SetTutorialMode(false); // 기존 메서드로 전체 초기화
+            return;
+        }
+
+        SetTabsByStep(step); // ← 수정된 메서드 호출
+    }
+    // ✅ 추가: 현재 단계에서 몇 번 탭까지 활성화할지 결정
+    private int GetUnlockedTabCount(TutorialStep step)
+    {
+        switch (step)
+        {
+            case TutorialStep.Step0_OnlyBattle: return 1; // Battle만
+            case TutorialStep.Step1_ShopUnlocked: return 2; // Battle + Shop
+            case TutorialStep.Step2_GearUnlocked: return 3; // + Gear
+            case TutorialStep.Step3_MergeUnlocked: return 4; // + Merge
+            case TutorialStep.Step4_AchievementUnlocked: return 5; // 전체
+            default: return 5;
+        }
+    }
+
+    // ✅ 추가: 기존 SetTutorialMode를 단계 기반으로 확장
+    private void SetTabsByStep(TutorialStep step)
+    {
+        bool[] unlocked = GetUnlockedTabs(step);
+
+        for (int i = 0; i < BtnRect.Length; i++)
+        {
+            bool isUnlocked = unlocked[i];
+
+            // ✅ 버튼 클릭 가능 여부만 제어
+            BtnRect[i].GetComponent<Button>().interactable = isUnlocked;
+
+            // ✅ 애니메이터 컨트롤러 전환 (시각적 표현은 애니메이터에 위임)
+            BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = isUnlocked
+                ? defaultTabControllers[i]
+                : tutorialTabControllers[i];
+        }
+
+        // 탭바 배경 및 슬라이더 핸들 처리
+        bool isTutorialMode = step != TutorialStep.Completed;
+        Tab_Base.sprite = Tab_BaseSprites[isTutorialMode ? 1 : 0];
+        tabSliderHandleAnim.runtimeAnimatorController = isTutorialMode
+            ? darkTabSlideHandleCon
+            : defaultTabSlideHandleCon;
+    }
+    // 단계별 활성 탭 명시적으로 정의
+    // 0=Shop, 1=Gear, 2=Battle, 3=Merge, 4=Achievement
+    private bool[] GetUnlockedTabs(TutorialStep step)
+    {
+        switch (step)
+        {
+            case TutorialStep.Step0_OnlyBattle:
+                return new bool[] { false, false, true, false, false };
+
+            case TutorialStep.Step1_ShopUnlocked:
+                return new bool[] { true, false, true, false, false };
+
+            case TutorialStep.Step2_GearUnlocked:
+                return new bool[] { true, true, true, false, false };
+
+            case TutorialStep.Step3_MergeUnlocked:
+                return new bool[] { true, true, true, true, false };
+
+            case TutorialStep.Step4_AchievementUnlocked:
+            case TutorialStep.Completed:
+            default:
+                return new bool[] { true, true, true, true, true };
+        }
+    }
+    #endregion
 }
