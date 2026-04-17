@@ -125,26 +125,31 @@ public class TutorialManager : MonoBehaviour
         Debug.Log($"[Tutorial] Loaded Step: {CurrentStep}");
     }
 
-    // ─────────────────────────────────────────
-    // 디버깅
-    // ─────────────────────────────────────────
-    public void ResetTutorialState()
-    {
-        string[] allTutorialKeys = { "Move", "Attack", "Jump", "Inventory", "Shop" };
-        foreach (string key in allTutorialKeys)
-        {
-            if (PlayerPrefs.HasKey(key))
-            {
-                PlayerPrefs.SetInt(key, 0);
-            }
-        }
+	// ─────────────────────────────────────────
+	// 디버깅
+	// ─────────────────────────────────────────
+	[ContextMenu("튜토리얼 리셋")]
+	public void ResetTutorialState()
+	{
+		foreach (var t in tutorials)
+		{
+			t.hasShown = false;
+			PlayerPrefs.SetInt(t.Name, 0);
+		}
 
-        // ✅ 신규: 단계도 리셋
-        PlayerPrefs.SetInt(STEP_KEY, 0);
-        CurrentStep = TutorialStep.Step0_OnlyBattle;
-        PlayerPrefs.Save();
+		// ✅ 단계도 함께 리셋
+		PlayerPrefs.SetInt(STEP_KEY, 0);
+		CurrentStep = TutorialStep.Step0_OnlyBattle;
+		PlayerPrefs.Save();
 
-        OnStepChanged?.Invoke(CurrentStep);
-        Debug.Log("[Tutorial] Reset Complete");
-    }
+		OnStepChanged?.Invoke(CurrentStep);
+		Debug.Log("[Tutorial] Reset Complete → Step0_OnlyBattle");
+	}
+	public void SetStep(TutorialStep step)
+	{
+		CurrentStep = step;
+		SaveTutorialState();
+		OnStepChanged?.Invoke(CurrentStep);
+		Debug.Log($"[Tutorial] 강제 설정 → {CurrentStep}");
+	}
 }

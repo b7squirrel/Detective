@@ -304,10 +304,10 @@ public class MainMenu : MonoBehaviour
         {
             yield return new WaitForSecondsRealtime(timeToWait);
         }
-        
+
         GoToMainMenu();
     }
-    
+
     // 강제로 메인메뉴로 이동 (디버그용)
     public void ForceGoToMainMenu()
     {

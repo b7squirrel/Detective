@@ -232,6 +232,13 @@ public class EquipmentPanelManager : MonoBehaviour
 
         cardList.DelayedSaveEquipments();
         DeActivateEquipInfoPanel();
+
+        // ✅ 추가: Step2일 때만 진행
+        if (TutorialManager.instance != null &&
+            TutorialManager.instance.CurrentStep == TutorialStep.Step2_GearUnlocked)
+        {
+            TutorialManager.instance.AdvanceStep(); // → Step3_MergeUnlocked
+        }
     }
 
     // info panel의 UnEquip 버튼

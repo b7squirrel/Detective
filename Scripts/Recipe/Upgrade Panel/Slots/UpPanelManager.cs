@@ -517,6 +517,13 @@ public class UpPanelManager : MonoBehaviour
         // 다시 터치가 가능하도록
         blockTouchPanel.SetActive(false);
 
+        // ✅ 추가: Step3일 때만 진행 (합성 성공 연출이 끝난 후)
+        if (TutorialManager.instance != null &&
+            TutorialManager.instance.CurrentStep == TutorialStep.Step3_MergeUnlocked)
+        {
+            TutorialManager.instance.AdvanceStep(); // → Step4_AchievementUnlocked
+        }
+
         // 합성 성공 패널이 활성화 된 후에 실행되어야 슬롯이 empty된 상태로 끝나지 않게 된다
         setCardDataOnSlot.PutCardDataIntoSlot(upgradedCardData, upSuccessSlot);
     }

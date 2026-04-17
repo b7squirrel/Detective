@@ -20,5 +20,12 @@ public class WinStage : MonoBehaviour
         winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, stageNum, true, killGold, clearBonus);
         GetComponent<PauseManager>().PauseGame();
         Logger.Log("윈 스테이지");
+
+        // ✅ 추가: 스테이지 클리어 시에만 Step 진행
+        if (TutorialManager.instance != null &&
+            TutorialManager.instance.CurrentStep == TutorialStep.Step0_OnlyBattle)
+        {
+            TutorialManager.instance.AdvanceStep(); // → Step1_ShopUnlocked
+        }
     }
 }

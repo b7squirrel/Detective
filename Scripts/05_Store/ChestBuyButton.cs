@@ -115,6 +115,13 @@ public class ChestBuyButton : MonoBehaviour
         Logger.Log($"[ChestBuyButton] 구매 버튼 클릭: {productData.ProductId}");
         ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint);
 
+        // ✅ 추가: Step1일 때만 진행
+        if (TutorialManager.instance != null &&
+            TutorialManager.instance.CurrentStep == TutorialStep.Step1_ShopUnlocked)
+        {
+            TutorialManager.instance.AdvanceStep(); // → Step2_GearUnlocked
+        }
+
         isProcessing = false;
     }
 }
