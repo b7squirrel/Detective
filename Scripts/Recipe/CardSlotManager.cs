@@ -199,8 +199,13 @@ public class CardSlotManager : MonoBehaviour
 
     public void SettrigerAnim(string trigger)
     {
+        // 오름차순, 내림차순 토글
+        // fieldAnim.SetTrigger(trigger);
+        // SortByGrade();
+        // scrollRect.verticalNormalizedPosition = 1f;
+
         fieldAnim.SetTrigger(trigger);
-        SortByGrade();
+        SortSlots(currentSortType, ascending); // 현재 상태 유지하며 재정렬
         scrollRect.verticalNormalizedPosition = 1f;
     }
 
@@ -248,8 +253,12 @@ public class CardSlotManager : MonoBehaviour
 
     public void InitialSortingByGrade()
     {
-        SortSlots(SortType.Grade, false);
+        // SortSlots(SortType.Grade, false);
+        // ascending = false;
+
+        currentSortType = SortType.Grade; // ✅ 동기화
         ascending = false;
+        SortSlots(SortType.Grade, false);
     }
 
     void SortBy(SortType sortType)
