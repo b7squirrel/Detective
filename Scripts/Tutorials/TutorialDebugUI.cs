@@ -7,12 +7,10 @@ public class TutorialDebugUI : MonoBehaviour
 {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
     [Header("디버그 UI")]
-    [SerializeField] GameObject debugPanel;
     [SerializeField] TextMeshProUGUI currentStepText;
 
     void Start()
     {
-        debugPanel.SetActive(true);
         UpdateStepText();
         TutorialManager.OnStepChanged += OnStepChanged;
     }

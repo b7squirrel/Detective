@@ -340,12 +340,7 @@ public class MainMenuManager : MonoBehaviour
     // ✅ 추가: 단계가 바뀔 때마다 자동 호출
     private void OnTutorialStepChanged(TutorialStep step)
     {
-        if (step == TutorialStep.Completed)
-        {
-            SetTutorialMode(false); // 기존 메서드로 전체 초기화
-            return;
-        }
-
+        // ✅ Completed도 SetTabsByStep으로 처리 (button.interactable 복구 포함)
         SetTabsByStep(step); // ← 수정된 메서드 호출
     }
     // ✅ 추가: 현재 단계에서 몇 번 탭까지 활성화할지 결정

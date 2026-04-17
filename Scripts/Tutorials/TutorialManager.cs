@@ -130,21 +130,46 @@ public class TutorialManager : MonoBehaviour
 	// ─────────────────────────────────────────
 	[ContextMenu("튜토리얼 리셋")]
 	public void ResetTutorialState()
+{
+    foreach (var t in tutorials)
+    {
+        t.hasShown = false;
+        PlayerPrefs.SetInt(t.Name, 0);
+    }
+
+    PlayerPrefs.SetInt(STEP_KEY, 0);
+    CurrentStep = TutorialStep.Step0_OnlyBattle;
+    PlayerPrefs.Save();
+
+    OnStepChanged?.Invoke(CurrentStep);
+    Debug.Log("[Tutorial] Reset Complete → Step0_OnlyBattle");
+}
+
+[ContextMenu("다음 단계로 강제 진행")]
+	public void DebugAdvanceStep()
 	{
-		foreach (var t in tutorials)
-		{
-			t.hasShown = false;
-			PlayerPrefs.SetInt(t.Name, 0);
-		}
-
-		// ✅ 단계도 함께 리셋
-		PlayerPrefs.SetInt(STEP_KEY, 0);
-		CurrentStep = TutorialStep.Step0_OnlyBattle;
-		PlayerPrefs.Save();
-
-		OnStepChanged?.Invoke(CurrentStep);
-		Debug.Log("[Tutorial] Reset Complete → Step0_OnlyBattle");
+		AdvanceStep();
+		Debug.Log($"[Tutorial] 강제 진행 → {CurrentStep}");
 	}
+
+	[ContextMenu("Step0 - OnlyBattle")]
+	public void DebugSetStep0() => SetStep(TutorialStep.Step0_OnlyBattle);
+
+	[ContextMenu("Step1 - ShopUnlocked")]
+	public void DebugSetStep1() => SetStep(TutorialStep.Step1_ShopUnlocked);
+
+	[ContextMenu("Step2 - GearUnlocked")]
+	public void DebugSetStep2() => SetStep(TutorialStep.Step2_GearUnlocked);
+
+	[ContextMenu("Step3 - MergeUnlocked")]
+	public void DebugSetStep3() => SetStep(TutorialStep.Step3_MergeUnlocked);
+
+	[ContextMenu("Step4 - AchievementUnlocked")]
+	public void DebugSetStep4() => SetStep(TutorialStep.Step4_AchievementUnlocked);
+
+	[ContextMenu("Step5 - Completed")]
+	public void DebugSetStepCompleted() => SetStep(TutorialStep.Completed);
+
 	public void SetStep(TutorialStep step)
 	{
 		CurrentStep = step;
