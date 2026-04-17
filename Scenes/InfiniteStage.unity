@@ -299,6 +299,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1203505525}
   - component: {fileID: 1203505526}
+  - component: {fileID: 1203505527}
   m_Layer: 0
   m_Name: ---WORLD---
   m_TagString: Untagged
@@ -424,6 +425,18 @@ MonoBehaviour:
   chestInnerRadius: 10
   chestOuterRadius: 18
   gameSpeedMultiplier: 1.5
+--- !u!114 &1203505527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203505524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac6db3f4375e449a8ac57f2803ffdb48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1834807250
 PrefabInstance:
   m_ObjectHideFlags: 0
