@@ -125,27 +125,30 @@ public class TutorialManager : MonoBehaviour
         Debug.Log($"[Tutorial] Loaded Step: {CurrentStep}");
     }
 
-	// ─────────────────────────────────────────
-	// 디버깅
-	// ─────────────────────────────────────────
-	[ContextMenu("튜토리얼 리셋")]
-	public void ResetTutorialState()
-{
-    foreach (var t in tutorials)
+    // ─────────────────────────────────────────
+    // 디버깅
+    // ─────────────────────────────────────────
+    [ContextMenu("튜토리얼 리셋")]
+    public void ResetTutorialState()
     {
-        t.hasShown = false;
-        PlayerPrefs.SetInt(t.Name, 0);
+        foreach (var t in tutorials)
+        {
+            t.hasShown = false;
+            PlayerPrefs.SetInt(t.Name, 0);
+        }
+
+        PlayerPrefs.SetInt(STEP_KEY, 0);
+        // ✅ 보석 지급 플래그도 리셋
+        PlayerPrefs.DeleteKey("TutorialCrystalGiven");
+        PlayerPrefs.DeleteKey("TutorialShopPhase");
+        CurrentStep = TutorialStep.Step0_OnlyBattle;
+        PlayerPrefs.Save();
+
+        OnStepChanged?.Invoke(CurrentStep);
+        Debug.Log("[Tutorial] Reset Complete → Step0_OnlyBattle");
     }
 
-    PlayerPrefs.SetInt(STEP_KEY, 0);
-    CurrentStep = TutorialStep.Step0_OnlyBattle;
-    PlayerPrefs.Save();
-
-    OnStepChanged?.Invoke(CurrentStep);
-    Debug.Log("[Tutorial] Reset Complete → Step0_OnlyBattle");
-}
-
-[ContextMenu("다음 단계로 강제 진행")]
+    [ContextMenu("다음 단계로 강제 진행")]
 	public void DebugAdvanceStep()
 	{
 		AdvanceStep();

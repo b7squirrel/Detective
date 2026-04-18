@@ -19,6 +19,13 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] GameObject content;
     [SerializeField] GameObject darkBG;
 
+    [Header("튜토리얼 카드 풀")]
+    [SerializeField] TextAsset tutorialDuckPoolDatabase;
+    [SerializeField] TextAsset tutorialItemPoolDatabase;
+
+    List<CardData> tutorialDuckPool;
+    List<CardData> tutorialItemPool;
+
     MainMenuManager mainMenuManager;
 
     // ⭐ 가챠 확률 시스템 추가
@@ -59,6 +66,12 @@ public class GachaSystem : MonoBehaviour
         // 이제 안전하게 초기화
         weaponPools = new ReadCardData().GetCardsList(weaponPoolDatabase);
         itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
+
+        // ✅ 튜토리얼 풀 초기화
+        if (tutorialDuckPoolDatabase != null)
+            tutorialDuckPool = new ReadCardData().GetCardsList(tutorialDuckPoolDatabase);
+        if (tutorialItemPoolDatabase != null)
+            tutorialItemPool = new ReadCardData().GetCardsList(tutorialItemPoolDatabase);
 
         Logger.Log("[GachaSystem] 초기화 완료");
     }
@@ -135,6 +148,14 @@ public class GachaSystem : MonoBehaviour
     // ⭐ ShopManager에서 호출할 새로운 메서드
     public void OpenBox(string gachaTableId, int drawCount, int guaranteedCount, string guaranteedRarity)
     {
+        // ✅ 튜토리얼 단계일 때 고정 카드 지급
+        if (TutorialManager.instance != null &&
+            TutorialManager.instance.CurrentStep == TutorialStep.Step1_ShopUnlocked)
+        {
+            OpenBoxForTutorial(gachaTableId);
+            return;
+        }
+
         // ⭐ 디버깅 로그 추가
         Logger.Log($"[GachaSystem] OpenBox 시작");
         Logger.Log($"  - gachaTableId: {gachaTableId}");
@@ -196,6 +217,76 @@ public class GachaSystem : MonoBehaviour
         }
 
         // UI 업데이트
+        gachaPanelManager.gameObject.SetActive(true);
+        gachaPanelManager.InitGachaPanel(cardsPicked);
+
+        if (cardSlotManager == null)
+            cardSlotManager = FindObjectOfType<CardSlotManager>();
+
+        for (int i = 0; i < cardsPicked.Count; i++)
+        {
+            cardSlotManager.AddItemSlotOf(cardsPicked[i]);
+        }
+
+        content.SetActive(false);
+        darkBG.SetActive(true);
+    }
+
+    // ✅ 신규: 튜토리얼 전용 뽑기
+    private void OpenBoxForTutorial(string gachaTableId)
+    {
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
+
+        cardDataManager.BeginBatchOperation();
+        cardsPicked.Clear();
+
+        try
+        {
+            string cardType = GetCardTypeFromTableId(gachaTableId);
+
+            if (cardType == "Weapon" && tutorialDuckPool != null && tutorialDuckPool.Count > 0)
+            {
+                // 튜토리얼 오리 카드 고정 지급
+                CardData tutorialCard = CloneCardData(tutorialDuckPool[0]);
+                cardDataManager.AddNewCardToMyCardsList(tutorialCard);
+                AddEssentialEquip(tutorialCard);
+                cardsPicked.Add(tutorialCard);
+                AddCardSlot(tutorialCard);
+
+                Logger.Log($"[GachaSystem] 튜토리얼 오리 카드 지급: {tutorialCard.Name}");
+            }
+            else if (cardType == "Item" && tutorialItemPool != null && tutorialItemPool.Count > 0)
+            {
+                // 튜토리얼 아이템 카드 고정 지급
+                CardData tutorialCard = CloneCardData(tutorialItemPool[0]);
+                cardDataManager.AddNewCardToMyCardsList(tutorialCard);
+                cardsPicked.Add(tutorialCard);
+                AddCardSlot(tutorialCard);
+
+                Logger.Log($"[GachaSystem] 튜토리얼 아이템 카드 지급: {tutorialCard.Name}");
+            }
+            else
+            {
+                Logger.LogWarning("[GachaSystem] 튜토리얼 카드 풀이 없어 일반 뽑기로 대체합니다.");
+                // 풀이 없으면 랜덤 1개
+                int rarity = raritySystem.GetRandomRarity(gachaTableId, false);
+                string cardType2 = GetCardTypeFromTableId(gachaTableId);
+                DrawWithRarity(cardType2, rarity);
+            }
+
+            cardDataManager.EndBatchOperation();
+            cardDataManager.RefreshCardList();
+            ImmediateSaveEquipmentData();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 튜토리얼 뽑기 오류: {e.Message}");
+            cardDataManager.EndBatchOperation();
+            throw;
+        }
+
+        // UI 업데이트 (기존과 동일)
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
 
