@@ -15,6 +15,7 @@ public class CardSlotManager : MonoBehaviour
 
     [Header("필드 제어")]
     [SerializeField] Animator fieldAnim;
+    [SerializeField] Animator slotButton; // 다른 탭으로 이동할 때 펼쳐져 있는 버튼들을 모으기
     [SerializeField] ScrollRect scrollRect;
 
     #region 슬롯 생성 관련 변수
@@ -145,6 +146,8 @@ public class CardSlotManager : MonoBehaviour
         {
             item.Value.gameObject.SetActive(false);
         }
+
+        slotButton.SetTrigger("CloseIdle"); // Close를 거치지 않고 바로 Close Idle로 가도록
     }
 
     public void UpdateAllCardSlotDisplay()
