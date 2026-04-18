@@ -13,7 +13,6 @@ public class TutorialHighlight : MonoBehaviour
     [SerializeField] private RectTransform fingerPointer;
     
     [Header("Settings")]
-    [SerializeField] private Vector2 pointerOffset = new Vector2(0, -50); // 손가락 위치 조정
     [SerializeField] private Canvas canvas;
 
     void Awake()
@@ -115,14 +114,16 @@ private void SetupPanels(Vector2 normalizedMin, Vector2 normalizedMax)
     rightPanel.anchorMax = new Vector2(1, normalizedMax.y);
     rightPanel.offsetMin = Vector2.zero;
     rightPanel.offsetMax = Vector2.zero;
-}
-    
+    }
+
     // 손가락 포인터 위치 설정
     private void SetupPointer(RectTransform targetUI)
     {
-        fingerPointer.position = targetUI.position + (Vector3)pointerOffset;
+        // Hand 오브젝트를 타겟 위치로 이동
+        // 이미지가 offset되어 있으므로 Hand 자체는 타겟 중앙에 위치
+        fingerPointer.position = targetUI.position;
     }
-    
+
     // 튜토리얼 닫기
     public void Hide()
     {

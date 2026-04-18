@@ -142,6 +142,14 @@ public class MainMenuManager : MonoBehaviour
         tabSlider.value = pos[pressBtnID];
         targetIndex = pressBtnID;
 
+        // ✅ 추가: Shop 탭(0번) 진입 시 튜토리얼 알림
+        if (pressBtnID == 0 &&
+            TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked &&
+            ShopTutorialController.instance != null)
+        {
+            ShopTutorialController.instance.OnShopTabEntered();
+        }
+
         if (pressBtnID == 0)
         {
             tabSliderAnim.SetTrigger("Left");

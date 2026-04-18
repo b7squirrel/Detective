@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 
+// ✅ 추가: 어떤 종류의 뽑기 버튼인지 구분
+public enum ChestType { Duck, Item, Other }
+
 /// <summary>
 /// 상자 구매 버튼 (Inspector에서 Button.onClick에 연결하는 방식)
 /// </summary>
@@ -19,6 +22,9 @@ public class ChestBuyButton : MonoBehaviour
 
     [Header("화면 전환")]
     [SerializeField] GameObject fg;  // 인스펙터에서 연결
+
+    [Header("튜토리얼")]
+    [SerializeField] ChestType chestType = ChestType.Other; // 인스펙터에서 설정
 
     private ProductData productData;
     private Animator animator;
@@ -115,11 +121,14 @@ public class ChestBuyButton : MonoBehaviour
         Logger.Log($"[ChestBuyButton] 구매 버튼 클릭: {productData.ProductId}");
         ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint);
 
-        // ✅ 추가: Step1일 때만 진행
-        if (TutorialManager.instance != null &&
-            TutorialManager.instance.CurrentStep == TutorialStep.Step1_ShopUnlocked)
+        // ✅ 기존 AdvanceStep 제거, ShopTutorialController로 위임
+        if (TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked
+            && ShopTutorialController.instance != null)
         {
-            TutorialManager.instance.AdvanceStep(); // → Step2_GearUnlocked
+            if (chestType == ChestType.Duck)
+                ShopTutorialController.instance.OnDuckCardPurchased();
+            else if (chestType == ChestType.Item)
+                ShopTutorialController.instance.OnItemCardPurchased();
         }
 
         isProcessing = false;
