@@ -69,6 +69,10 @@ public class UpPanelManager : MonoBehaviour
         GetIntoAllField("Weapon");
         cardSlotManager.SettrigerAnim("MergeW");
         cardSlotManager.InitialSortingByGrade();
+
+        // ✅ 추가: Merge 튜토리얼 훅
+        if (TutorialManager.instance?.CurrentStep == TutorialStep.Step3_MergeUnlocked)
+            MergeTutorialController.instance?.OnMergePanelEntered();
     }
     #endregion
 
@@ -80,7 +84,12 @@ public class UpPanelManager : MonoBehaviour
         allField.gameObject.SetActive(false);
         matField.gameObject.SetActive(true);
         StartCoroutine(GenMatCardListCo());
+
+        // ✅ 추가: 업그레이드 카드 선택 완료 → 재료 카드 하이라이트
+        if (TutorialManager.instance?.CurrentStep == TutorialStep.Step3_MergeUnlocked)
+            MergeTutorialController.instance?.OnUpCardSelected();
     }
+
     IEnumerator GenMatCardListCo()
     {
         yield return new WaitForSeconds(.15f);
@@ -174,7 +183,11 @@ public class UpPanelManager : MonoBehaviour
 
         cardSlotManager.SettrigerAnim("Off");
 
-        upPanelUI.UpgradeConfirmationUI(); // 합성 확인 창 UI
+        upPanelUI.UpgradeConfirmationUI();
+
+        // ✅ 추가: 재료 카드 선택 완료 → 합성 확인 버튼 하이라이트
+        if (TutorialManager.instance?.CurrentStep == TutorialStep.Step3_MergeUnlocked)
+            MergeTutorialController.instance?.OnMatCardSelected();
     }
 
     public void BackToMatField()
@@ -324,7 +337,7 @@ public class UpPanelManager : MonoBehaviour
             return;
         }
 
-        
+
     }
     void AcquireCard(CardData cardData)
     {
@@ -348,7 +361,7 @@ public class UpPanelManager : MonoBehaviour
     {
         askUnequipPopup.SetActive(true);
         PanelTween tween = askUnequipPopup.GetComponentInChildren<PanelTween>();
-        if(tween != null)
+        if (tween != null)
         {
             tween.ShowWithBounce();
         }
