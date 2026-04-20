@@ -19,6 +19,9 @@ public enum EquipmentType { Head, Chest, Face, Hand, Ori }
 public enum EssentialEquip { Head, Chest, Face, Hand, Essential }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
 public enum DefaultItem { Default }
+
+// AchievementTutorialController에서 탭 전환 접근용 public 래퍼
+public enum TabTypePublic { Permanent, Daily, Weekly }
 #endregion
 
 #region 스킬 관련 Enum

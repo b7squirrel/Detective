@@ -142,12 +142,20 @@ public class MainMenuManager : MonoBehaviour
         tabSlider.value = pos[pressBtnID];
         targetIndex = pressBtnID;
 
-        // ✅ 추가: Shop 탭(0번) 진입 시 튜토리얼 알림
+        // ✅ Shop 탭(0번) 진입 시 튜토리얼 알림
         if (pressBtnID == 0 &&
             TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked &&
             ShopTutorialController.instance != null)
         {
             ShopTutorialController.instance.OnShopTabEntered();
+        }
+
+        // ✅ Achievement 탭(4번) 진입 시 튜토리얼 알림 — return 전에 위치해야 함
+        if (pressBtnID == 4 &&
+            TutorialManager.instance?.CurrentStep == TutorialStep.Step4_AchievementUnlocked &&
+            AchievementTutorialController.instance != null)
+        {
+            AchievementTutorialController.instance.OnAchievementPanelEntered();
         }
 
         if (pressBtnID == 0)
@@ -165,7 +173,6 @@ public class MainMenuManager : MonoBehaviour
             tabSliderAnim.SetTrigger("Center");
         }
 
-        // 합성 성공 후 탭을 해서 합성 패널을 초기화 시키지 않고 나올 경우를 대비해서 
         if (pressBtnID != 3)
         {
             if (mergeFinished)

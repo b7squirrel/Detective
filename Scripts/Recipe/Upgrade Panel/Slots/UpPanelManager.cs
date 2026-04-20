@@ -461,6 +461,10 @@ public class UpPanelManager : MonoBehaviour
         // 합성 연출 후 강화 성공 패널로
         matField.gameObject.SetActive(false);
 
+        // ✅ 수정: 연출 전, 합성 완료 직후 업적 추가
+        if (TutorialManager.instance?.CurrentStep == TutorialStep.Step3_MergeUnlocked)
+            AchievementManager.Instance?.AddProgressByID("tutorial_merge", 1);
+
         StartCoroutine(UpgradeUICo(CardToUpgrade, isGradeUp));
     }
 
@@ -500,26 +504,17 @@ public class UpPanelManager : MonoBehaviour
         // 합성 연출 동안 터치가 안되도록 하기
         blockTouchPanel.SetActive(true);
 
-        // // 아래 탭들을 밑으로 내리기. 중간에 다른 탭으로 이동할 수 없도록. tab to continue 버튼으로 다시 활성화
-        // mainMenuManager.SetActiveBottomTabs(false);
-
-        // // 위쪽의 재화 탭을 숨기기. tab to continue 버튼으로 다시 활성화
-        // currencyTab.SetActive(false);
-
         // 강화 연출 UI
         upPanelUI.MergingCardsUI();
         upPanelUI.OffUpgradeConfirmationUI();
 
         yield return new WaitForSeconds(.05f); // 카드가 움직이고 나서 잠시 후에 카메라 쉐이크가 일어나도록
-        // 카메라 쉐이크
+                                               // 카메라 쉐이크
         FindObjectOfType<UICameraShake>().Shake(1.85f, 12f); // 1.65초 동안 12의 크기로 흔들기
 
         SoundManager.instance.Play(mergeBuildUpSound); // 고조시키는 사운드
 
         yield return new WaitForSeconds(.15f);  // 1.5초 동안 두 카드가 가운데로 모인 후
-
-        // 카메라 쉐이크 (1초 가량)
-        // 합성 이펙트
 
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
@@ -530,7 +525,7 @@ public class UpPanelManager : MonoBehaviour
         // 다시 터치가 가능하도록
         blockTouchPanel.SetActive(false);
 
-        // ✅ 추가: Step3일 때만 진행 (합성 성공 연출이 끝난 후)
+        // ✅ Step3일 때만 진행 (합성 성공 연출이 끝난 후)
         if (TutorialManager.instance != null &&
             TutorialManager.instance.CurrentStep == TutorialStep.Step3_MergeUnlocked)
         {

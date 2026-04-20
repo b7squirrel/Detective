@@ -134,6 +134,12 @@ public class AchievementItemUI : MonoBehaviour
             anim.Play("AchievementItem Completed", 0, 0f);
     }
 
+    // ✅ 추가: 튜토리얼에서 보상 버튼 하이라이트용
+    public RectTransform GetRewardButtonRect()
+    {
+        return rewardButton.GetComponent<RectTransform>();
+    }
+
     // 디버그 용도
     public void ForceComplete()
     {

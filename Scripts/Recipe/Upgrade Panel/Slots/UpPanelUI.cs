@@ -291,6 +291,10 @@ public class UpPanelUI : MonoBehaviour
         upSlot.gameObject.SetActive(true);
         matSlot.gameObject.SetActive(true);
         fieldSlotPanel.SetActive(true);
+
+        // ✅ 추가: 합성 성공 화면이 닫힐 때 업적 튜토리얼에 알림
+        if (TutorialManager.instance?.CurrentStep == TutorialStep.Step4_AchievementUnlocked)
+            AchievementTutorialController.instance?.OnMergeSuccessClosed();
     }
     public void ResetScrollContent() // 스크롤뷰를 원래 위치로 되돌려 준다
     {

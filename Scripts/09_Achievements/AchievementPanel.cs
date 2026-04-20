@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
+
 public class AchievementPanel : MonoBehaviour
 {
     [SerializeField] private Transform content;
@@ -36,7 +38,7 @@ public class AchievementPanel : MonoBehaviour
         AchievementManager.Instance.OnAnyProgressChanged += UpdateItem;
         AchievementManager.Instance.OnAnyCompleted += UpdateItem;
         AchievementManager.Instance.OnAnyRewarded += RemoveItem;
-        
+
         LocalizationManager.OnLanguageChanged += RefreshAllText;
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
@@ -59,7 +61,7 @@ public class AchievementPanel : MonoBehaviour
             AchievementManager.Instance.OnAnyCompleted -= UpdateItem;
             AchievementManager.Instance.OnAnyRewarded -= RemoveItem;
         }
-        
+
         LocalizationManager.OnLanguageChanged -= RefreshAllText;
     }
 
@@ -95,13 +97,13 @@ public class AchievementPanel : MonoBehaviour
     private void SwitchTab(TabType tabType)
     {
         currentTab = tabType;
-        
+
         // 탭 버튼 색상 업데이트
         UpdateTabButtonColors();
-        
+
         // 제목 업데이트
         UpdateTitle();
-        
+
         // UI 갱신
         RefreshUI();
     }
@@ -157,7 +159,7 @@ public class AchievementPanel : MonoBehaviour
     private void RefreshAllText()
     {
         UpdateTitle();
-        
+
         foreach (var kvp in itemDict)
         {
             AchievementItemUI ui = kvp.Value;
@@ -271,5 +273,25 @@ public class AchievementPanel : MonoBehaviour
         }
 
         RefreshUI();
+    }
+
+    public void SwitchTabPublic(TabTypePublic tab)
+    {
+        switch (tab)
+        {
+            case TabTypePublic.Permanent: SwitchTab(TabType.Permanent); break;
+            case TabTypePublic.Daily: SwitchTab(TabType.Daily); break;
+            case TabTypePublic.Weekly: SwitchTab(TabType.Weekly); break;
+        }
+    }
+
+    // ✅ 추가: 특정 업적의 보상 버튼 RectTransform 반환
+    public RectTransform GetRewardButtonRect(string achievementId)
+    {
+        if (itemDict.TryGetValue(achievementId, out var ui))
+            return ui.GetRewardButtonRect();
+
+        Debug.LogWarning($"[AchievementPanel] ID '{achievementId}' 업적을 찾을 수 없습니다.");
+        return null;
     }
 }
