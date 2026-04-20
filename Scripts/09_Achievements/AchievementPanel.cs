@@ -30,6 +30,8 @@ public class AchievementPanel : MonoBehaviour
     CardSlotManager cardSlotManager;
 
     private List<RuntimeAchievement> pendingRemoveList = new();
+    // ✅ 추가: 레이아웃 강제 재계산용
+    public RectTransform GetContentRect() => content as RectTransform;
 
     private void OnEnable()
     {
@@ -49,8 +51,11 @@ public class AchievementPanel : MonoBehaviour
             FinishRemove(ra);
         }
 
-        // ⭐ 기본 탭으로 설정 (일일 퀘스트)
-        SwitchTab(TabType.Daily);
+        // ✅ 수정: 튜토리얼 Step4일 때는 영구 업적 탭으로 시작
+        if (TutorialManager.instance?.CurrentStep == TutorialStep.Step4_AchievementUnlocked)
+            SwitchTab(TabType.Permanent);
+        else
+            SwitchTab(TabType.Daily);
     }
 
     private void OnDisable()
@@ -293,5 +298,36 @@ public class AchievementPanel : MonoBehaviour
 
         Debug.LogWarning($"[AchievementPanel] ID '{achievementId}' 업적을 찾을 수 없습니다.");
         return null;
+    }
+
+    // ✅ 디버그 리셋 후 UI 완전 재초기화
+    // 보상 수령으로 파괴된 GameObject를 포함해 전체 재생성
+    public void ReinitializeAll()
+    {
+        // ✅ null 체크
+        if (AchievementManager.Instance == null)
+        {
+            Debug.LogWarning("[AchievementPanel] AchievementManager.Instance가 null입니다.");
+            return;
+        }
+
+        foreach (var ui in itemDict.Values)
+        {
+            if (ui != null) Destroy(ui.gameObject);
+        }
+        itemDict.Clear();
+        pendingRemoveList.Clear();
+
+        // isRewarded 포함 전체 재생성 (리셋 후이므로 모두 표시)
+        foreach (var ra in AchievementManager.Instance.GetAll())
+        {
+            var go = Instantiate(achievementItemPrefab, content);
+            var ui = go.GetComponent<AchievementItemUI>();
+            ui.Bind(ra);
+            itemDict.Add(ra.original.id, ui);
+        }
+
+        Debug.Log($"[AchievementPanel] ReinitializeAll 완료 - {itemDict.Count}개 항목");
+        RefreshUI();
     }
 }

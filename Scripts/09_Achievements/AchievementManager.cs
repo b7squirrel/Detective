@@ -372,22 +372,40 @@ public class AchievementManager : MonoBehaviour
     }
 
     // ⭐ 모든 업적 리셋 (디버그용)
-    [ContextMenu("Debug: Reset All Achievements")]  // ← 추가
+    [ContextMenu("Debug 플레이모드 : Reset All Achievements")]
     public void ResetAllAchievements()
     {
-        foreach (var ra in runtimeDict.Values)
+        // ✅ 플레이 모드 아닐 때 호출 방지
+        if (!Application.isPlaying)
+        {
+            Logger.LogWarning("[Reset] 플레이 모드에서만 실행 가능합니다.");
+            return;
+        }
+
+        // ✅ 항상 실제 싱글톤 Instance를 사용
+        AchievementManager target = Instance != null ? Instance : this;
+
+        Logger.Log($"[Reset] 사용 인스턴스: {(target == this ? "this (씬)" : "Instance (DontDestroy)")}");
+        Logger.Log($"[Reset] runtimeDict 총 {target.runtimeDict.Count}개");
+
+        foreach (var ra in target.runtimeDict.Values)
         {
             ra.progress = 0;
             ra.isCompleted = false;
             ra.isRewarded = false;
 
-            PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
             PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+            PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
             PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
 
-            OnAnyProgressChanged?.Invoke(ra);
+            target.OnAnyProgressChanged?.Invoke(ra);
         }
-
         PlayerPrefs.Save();
+
+        Logger.Log($"[Reset] tutorial_merge 존재: {target.runtimeDict.ContainsKey("tutorial_merge")}");
+
+        AchievementPanel panel = FindObjectOfType<AchievementPanel>(true);
+        Logger.Log($"[Reset] AchievementPanel 찾음: {panel != null}");
+        if (panel != null) panel.ReinitializeAll();
     }
 }

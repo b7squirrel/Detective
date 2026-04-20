@@ -15,6 +15,8 @@ public class GemCollectFX : MonoBehaviour
     public GameObject gemPrefab;
     public GameObject coinPrefab;
     public GameObject fgBlocker;
+    // ✅ 추가: 모든 보석 수집 완료 시 이벤트
+    public static event System.Action OnAllGemsCollected;
 
     [Header("설정값")]
     public float spreadRadius = 200f;
@@ -101,6 +103,9 @@ public class GemCollectFX : MonoBehaviour
                 {
                     activeGemCount = 0;
                     if (fgBlocker != null) fgBlocker.SetActive(false);
+
+                    // ✅ 추가: 모든 보석 수집 완료 알림
+                    OnAllGemsCollected?.Invoke();
                 }
             });
     }

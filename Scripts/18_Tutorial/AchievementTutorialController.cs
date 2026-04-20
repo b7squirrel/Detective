@@ -25,6 +25,8 @@ public class AchievementTutorialController : MonoBehaviour
 
     [Header("팝업")]
     [SerializeField] GameObject achievementOpenPopup;
+    [Header("튜토리얼 완료 팝업")]
+    [SerializeField] GameObject tutorialCompletePopup;
 
     // ─────────────────────────────────────────
     // 내부 상태
@@ -58,6 +60,9 @@ public class AchievementTutorialController : MonoBehaviour
 
         if (AchievementManager.Instance != null)
             AchievementManager.Instance.OnAnyRewarded -= OnAnyRewarded;
+
+        // ✅ 추가
+        GemCollectFX.OnAllGemsCollected -= OnGemsCollectedThenComplete;
     }
 
     void OnStepChanged(TutorialStep step)
@@ -141,18 +146,23 @@ public class AchievementTutorialController : MonoBehaviour
     IEnumerator SwitchTabThenHighlightReward()
     {
         // 영구 업적 탭으로 전환 (tutorial_merge는 영구 업적)
-        achievementPanel.SwitchTabPublic(TabTypePublic.Permanent);
+        // achievementPanel.SwitchTabPublic(TabTypePublic.Permanent);
 
         // 탭 전환 + UI 갱신 대기
         yield return new WaitForSeconds(0.3f);
-        yield return null; // 1프레임 추가 대기
+
+        // ✅ 레이아웃 강제 재계산 (ContentSizeFitter 업데이트)
+        UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(
+            achievementPanel.GetContentRect());
+
+        // ✅ 재계산 후 2프레임 대기 (렌더링 반영 완료 보장)
+        yield return null;
+        yield return null;
 
         RectTransform rewardBtn = achievementPanel.GetRewardButtonRect(tutorialAchievementId);
-        Debug.Log($"[AchievementTutorial] rewardBtn: {(rewardBtn == null ? "NULL" : rewardBtn.name)}");
-        
         if (rewardBtn == null)
         {
-            Debug.LogWarning("[AchievementTutorial] 보상 버튼을 찾을 수 없습니다.");
+            Logger.LogWarning("[AchievementTutorial] 보상 버튼을 찾을 수 없습니다.");
             if (fg != null) fg.SetActive(false);
             yield break;
         }
@@ -160,6 +170,7 @@ public class AchievementTutorialController : MonoBehaviour
         phase = AchievementTutorialPhase.HighlightRewardButton;
         if (fg != null) fg.SetActive(false);
         tutorialHighlight.HighlightUI(rewardBtn);
+        Logger.Log("[AchievementTutorial] 보상 버튼 하이라이트 완료");
     }
 
     // [3단계] 보상 버튼 클릭 → AdvanceStep()
@@ -170,6 +181,18 @@ public class AchievementTutorialController : MonoBehaviour
         if (ra.original.id != tutorialAchievementId) return;
 
         HideAll();
+
+        // ✅ 보석 수집 완료 후 팝업 표시
+        GemCollectFX.OnAllGemsCollected += OnGemsCollectedThenComplete;
+    }
+
+    // ✅ 추가: 보석 수집 완료 → 팝업 → AdvanceStep
+    void OnGemsCollectedThenComplete()
+    {
+        // 한 번만 실행되도록 즉시 구독 해제
+        GemCollectFX.OnAllGemsCollected -= OnGemsCollectedThenComplete;
+
+        ShowPopup(tutorialCompletePopup);
         TutorialManager.instance?.AdvanceStep(); // → Completed
     }
 
