@@ -111,6 +111,8 @@ public class EquipmentPanelManager : MonoBehaviour
         }
 
         cardSlotManager.InitialSortingByGrade();
+
+        GearTutorialController.instance?.OnGearPanelEntered();
     }
 
     // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출
@@ -133,7 +135,9 @@ public class EquipmentPanelManager : MonoBehaviour
         setCardDataOnSlot.PutCardDataIntoSlot(oriCardDataToDisplay, oriSlot);
 
         isEquipped = false;
-        Debug.Log("Card on Display = " + CardOnDisplay.Name);
+        Logger.Log("Card on Display = " + CardOnDisplay.Name);
+
+        GearTutorialController.instance?.OnDuckSelected();
     }
 
     public void SetAllFieldTypeOf(string cardType)
@@ -300,6 +304,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         UpdateButtonState(charUpgradeButton, true);
         UpdateButtonState(upgradeButton, false);
+
+        GearTutorialController.instance?.OnItemSelected();
     }
 
     public void DeActivateEquipInfoPanel(bool triggerAnim = true)

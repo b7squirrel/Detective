@@ -116,12 +116,20 @@ public class TutorialManager : MonoBehaviour
     {
         // 기존 hasShown 불러오기
         foreach (var t in tutorials)
-        {
             t.hasShown = PlayerPrefs.GetInt(t.Name, 0) == 1;
+
+        CurrentStep = (TutorialStep)PlayerPrefs.GetInt(STEP_KEY, 0);
+
+        // ✅ Step1인데 ShopPhase가 Done(4)이면 → 브로드캐스트 전에 미리 Step2로 교정
+        if (CurrentStep == TutorialStep.Step1_ShopUnlocked &&
+            PlayerPrefs.GetInt("TutorialShopPhase", 0) >= 4)
+        {
+            CurrentStep = TutorialStep.Step2_GearUnlocked;
+            PlayerPrefs.SetInt(STEP_KEY, (int)CurrentStep);
+            PlayerPrefs.Save();
+            Debug.Log("[Tutorial] 불일치 교정: Step1+Done → Step2");
         }
 
-        // ✅ 신규: 저장된 단계 불러오기 (없으면 0 = Step0)
-        CurrentStep = (TutorialStep)PlayerPrefs.GetInt(STEP_KEY, 0);
         Debug.Log($"[Tutorial] Loaded Step: {CurrentStep}");
     }
 
