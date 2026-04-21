@@ -114,13 +114,12 @@ public class TutorialManager : MonoBehaviour
 
     void LoadTutorialState()
     {
-        // 기존 hasShown 불러오기
         foreach (var t in tutorials)
             t.hasShown = PlayerPrefs.GetInt(t.Name, 0) == 1;
 
         CurrentStep = (TutorialStep)PlayerPrefs.GetInt(STEP_KEY, 0);
 
-        // ✅ Step1인데 ShopPhase가 Done(4)이면 → 브로드캐스트 전에 미리 Step2로 교정
+        // 기존: Step1인데 ShopPhase가 Done이면 → Step2로 교정
         if (CurrentStep == TutorialStep.Step1_ShopUnlocked &&
             PlayerPrefs.GetInt("TutorialShopPhase", 0) >= 4)
         {
@@ -128,6 +127,28 @@ public class TutorialManager : MonoBehaviour
             PlayerPrefs.SetInt(STEP_KEY, (int)CurrentStep);
             PlayerPrefs.Save();
             Debug.Log("[Tutorial] 불일치 교정: Step1+Done → Step2");
+        }
+
+        // ✅ 추가: Step3인데 합성 완료 업적이 이미 완료됐으면 → Step4로 교정
+        // "ACH_tutorial_merge" = RuntimeAchievement.GetCompleteKey() for permanent achievement
+        if (CurrentStep == TutorialStep.Step3_MergeUnlocked &&
+            PlayerPrefs.GetInt("ACH_tutorial_merge", 0) == 1)
+        {
+            CurrentStep = TutorialStep.Step4_AchievementUnlocked;
+            PlayerPrefs.SetInt(STEP_KEY, (int)CurrentStep);
+            PlayerPrefs.Save();
+            Debug.Log("[Tutorial] 불일치 교정: Step3+MergeCompleted → Step4");
+        }
+
+        // ✅ 추가: Step4인데 합성 완료 업적 보상을 이미 수령했으면 → Completed로 교정
+        // "ACH_REWARD_tutorial_merge" = RuntimeAchievement.GetRewardKey() for permanent achievement
+        if (CurrentStep == TutorialStep.Step4_AchievementUnlocked &&
+            PlayerPrefs.GetInt("ACH_REWARD_tutorial_merge", 0) == 1)
+        {
+            CurrentStep = TutorialStep.Completed;
+            PlayerPrefs.SetInt(STEP_KEY, (int)CurrentStep);
+            PlayerPrefs.Save();
+            Debug.Log("[Tutorial] 불일치 교정: Step4+RewardCollected → Completed");
         }
 
         Debug.Log($"[Tutorial] Loaded Step: {CurrentStep}");

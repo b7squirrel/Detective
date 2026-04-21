@@ -91,6 +91,9 @@ public class MergeTutorialController : MonoBehaviour
     {
         if (phase != MergeTutorialPhase.HighlightMergeTab) return;
 
+        // ✅ 추가: 이전 코루틴 정리 후 시작 (패널 재진입 시 중복 방지)
+        StopAllCoroutines();
+
         tutorialHighlight.Hide();
         if (fg != null) fg.SetActive(true);
         StartCoroutine(HighlightFirstSlotAfterDelay(MergeTutorialPhase.HighlightUpCard, 0.5f));

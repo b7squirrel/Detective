@@ -112,12 +112,23 @@ public class TutorialHighlight : MonoBehaviour
         rightPanel.offsetMax = Vector2.zero;
     }
 
-    // 손가락 포인터 위치 설정
+    // 손가락 포인터 위치 및 방향 설정
     private void SetupPointer(RectTransform targetUI)
     {
-        // Hand 오브젝트를 타겟 위치로 이동
-        // 이미지가 offset되어 있으므로 Hand 자체는 타겟 중앙에 위치
         fingerPointer.position = targetUI.position;
+
+        // ✅ 추가: 타겟이 화면 왼쪽 절반에 있으면 손가락 방향 반전
+        // 캔버스 중앙 기준으로 타겟의 X 위치 판단
+        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        Vector2 canvasCenter = canvasRect.position;
+
+        bool isOnLeftSide = targetUI.position.x < canvasCenter.x;
+
+        fingerPointer.localScale = new Vector3(
+            isOnLeftSide ? -1f : 1f,
+            1f,
+            1f
+        );
     }
 
     // 튜토리얼 닫기

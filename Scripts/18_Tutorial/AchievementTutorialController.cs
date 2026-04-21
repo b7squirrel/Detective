@@ -69,18 +69,11 @@ public class AchievementTutorialController : MonoBehaviour
     {
         if (step == TutorialStep.Step4_AchievementUnlocked)
         {
-            // 합성 성공 패널이 열려있으면 닫힐 때까지 대기
-            // 재시작 시에는 패널이 없으므로 바로 시작
+            // ✅ 수정: upgradeSuccessPanel이 null이거나 비활성이면 바로 시작
             if (upgradeSuccessPanel != null && upgradeSuccessPanel.activeSelf)
-            {
-                // ✅ 탭해서 계속하기 버튼을 기다리는 상태로 전환
                 phase = AchievementTutorialPhase.WaitingForTapToContinue;
-            }
             else
-            {
-                // 재시작 시: 바로 튜토리얼 시작
                 StartAchievementTutorial();
-            }
         }
         else
         {
@@ -118,12 +111,15 @@ public class AchievementTutorialController : MonoBehaviour
         if (fg != null) fg.SetActive(true);
         ShowPopup(achievementOpenPopup);
 
+        // ✅ 수정: 구독 전 기존 구독 해제로 이중 구독 방지
         if (AchievementManager.Instance != null)
+        {
+            AchievementManager.Instance.OnAnyRewarded -= OnAnyRewarded;
             AchievementManager.Instance.OnAnyRewarded += OnAnyRewarded;
+        }
 
         yield return new WaitForSeconds(1.5f);
 
-        // ✅ 추가: 딜레이 동안 이미 패널에 진입했다면 하이라이트 건너뜀
         if (phase != AchievementTutorialPhase.HighlightAchievementTab) yield break;
 
         if (fg != null) fg.SetActive(false);

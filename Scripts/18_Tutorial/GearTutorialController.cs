@@ -24,8 +24,6 @@ public class GearTutorialController : MonoBehaviour
     [Header("런치 화면")]
     [SerializeField] GameObject panelLaunch;
 
-    bool isMainMenuReady = false;
-
     // ─────────────────────────────────────────
     // 내부 상태
     // ─────────────────────────────────────────
@@ -75,10 +73,11 @@ public class GearTutorialController : MonoBehaviour
     {
         StartCoroutine(WaitForMainMenuThenStart());
     }
-    // ✅ 기어 탭 버튼이 실제로 활성화될 때까지 대기
+
+    // Gear 탭 버튼이 실제로 활성화될 때까지 대기
     IEnumerator WaitForMainMenuThenStart()
     {
-        // ✅ 게임 초기화가 완전히 끝날 때까지 대기
+        // 게임 초기화가 완전히 끝날 때까지 대기
         // 이 시점이면 메인 메뉴가 실제로 보이는 상태
         yield return new WaitUntil(() => GameInitializer.IsInitialized);
         yield return new WaitForSeconds(0.5f); // UI 렌더링 여유
@@ -190,11 +189,5 @@ public class GearTutorialController : MonoBehaviour
         popup.SetActive(true);
         PanelTween tween = popup.GetComponent<PanelTween>();
         if (tween != null) tween.ShowWithScale();
-    }
-
-    // MainMenuManager에서 메인 메뉴가 실제로 열릴 때 호출
-    public void OnMainMenuReady()
-    {
-        isMainMenuReady = true;
     }
 }
