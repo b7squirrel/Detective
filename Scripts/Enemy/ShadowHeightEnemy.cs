@@ -30,6 +30,7 @@ public class ShadowHeightEnemy : MonoBehaviour
     [SerializeField] float landingDamageRadius;
     [Header("착지 범위 인디케이터")]
     [SerializeField] SpriteRenderer landingRangeIndicator;
+    [SerializeField] float indicatorBlinkSpeed = 30f; // 깜빡임 속도 (높을수록 빠름)
 
     [Header("Slow Effect")]
     bool isSlowed; // 현재 느림 상태인지
@@ -157,12 +158,16 @@ public class ShadowHeightEnemy : MonoBehaviour
             currentVerticalVel += gravity * Time.deltaTime;
             trnsBody.position += new Vector3(0, currentVerticalVel, 0) * Time.deltaTime;
 
-            // ⭐ 인디케이터는 항상 그림자(지면) 위치에 고정
             if (landingRangeIndicator != null)
             {
                 landingRangeIndicator.transform.position = transform.position;
-                // ⭐ 부모 플립에 영향받지 않도록 월드 회전 고정
                 landingRangeIndicator.transform.rotation = Quaternion.identity;
+
+                // ⭐ 빠른 깜빡임: 사인파로 알파값 0.1 ~ 1 사이를 진동
+                float alpha = (Mathf.Sin(Time.time * indicatorBlinkSpeed) + 1f) * 0.5f; // 0~1
+                alpha = Mathf.Lerp(0f, 0.2f, alpha); // 0과 0.2 사이를 깜빡거림
+                Color c = landingRangeIndicator.color;
+                landingRangeIndicator.color = new Color(c.r, c.g, c.b, alpha);
             }
         }
     }
