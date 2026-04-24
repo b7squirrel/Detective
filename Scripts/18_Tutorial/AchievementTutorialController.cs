@@ -28,6 +28,10 @@ public class AchievementTutorialController : MonoBehaviour
     [Header("튜토리얼 완료 팝업")]
     [SerializeField] GameObject tutorialCompletePopup;
 
+    [Header("튜토리얼 완료 이펙트")]
+    [SerializeField] ParticleSystem confettiEffect;
+    [SerializeField] AudioClip completeSound;
+
     // ─────────────────────────────────────────
     // 내부 상태
     // ─────────────────────────────────────────
@@ -185,8 +189,18 @@ public class AchievementTutorialController : MonoBehaviour
     // ✅ 추가: 보석 수집 완료 → 팝업 → AdvanceStep
     void OnGemsCollectedThenComplete()
     {
-        // 한 번만 실행되도록 즉시 구독 해제
         GemCollectFX.OnAllGemsCollected -= OnGemsCollectedThenComplete;
+
+        // ✅ confetti 파티클 활성화 + 재생
+        if (confettiEffect != null)
+        {
+            confettiEffect.gameObject.SetActive(true);
+            confettiEffect.Play();
+        }
+
+        // ✅ 완료 사운드 재생
+        if (completeSound != null)
+            SoundManager.instance.Play(completeSound);
 
         ShowPopup(tutorialCompletePopup);
         TutorialManager.instance?.AdvanceStep(); // → Completed
