@@ -129,24 +129,28 @@ public class AchievementPanel : MonoBehaviour
     // ⭐ 탭 버튼 색상 업데이트
     private void UpdateTabButtonColors()
     {
-        var tabMap = new (Animator anim, TabType type)[]
+        var tabMap = new (Animator anim, TabType type, Button button)[]
         {
-        (tabPermanentAnimator, TabType.Permanent),
-        (tabDailyAnimator,     TabType.Daily),
-        (tabWeeklyAnimator,    TabType.Weekly),
+        (tabPermanentAnimator, TabType.Permanent, tabPermanentButton),
+        (tabDailyAnimator,     TabType.Daily,     tabDailyButton),
+        (tabWeeklyAnimator,    TabType.Weekly,    tabWeeklyButton),
         };
 
-        foreach (var (anim, type) in tabMap)
+        foreach (var (anim, type, button) in tabMap)
         {
             if (anim == null) continue;
 
             if (type == currentTab)
+            {
                 anim.SetTrigger("On");
-            else if (!isInitialized || type == previousTab) // ⭐ 초기화 전이면 모든 비활성 탭에 Off
+            }
+            else if (!isInitialized || type == previousTab)
+            {
                 anim.SetTrigger("Off");
+            }
         }
 
-        isInitialized = true; // ⭐ 첫 호출 이후 true
+        isInitialized = true;
     }
 
     // ⭐ 패널 제목 업데이트
