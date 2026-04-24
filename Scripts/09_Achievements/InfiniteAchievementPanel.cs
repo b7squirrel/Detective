@@ -14,15 +14,18 @@ public class InfiniteAchievementPanel : MonoBehaviour
     [SerializeField] private Button tabDailyButton;
     [SerializeField] private Button tabWeeklyButton;
 
-    [Header("탭 색상")]
-    [SerializeField] private Color activeTabColor = Color.white;
-    [SerializeField] private Color inactiveTabColor = Color.gray;
+    [Header("탭 애니메이터")]
+    [SerializeField] private Animator tabDailyAnimator;
+    [SerializeField] private Animator tabWeeklyAnimator;
+    [SerializeField] private Animator panelOutlineAnimator;
 
     [Header("제목")]
     [SerializeField] private TextMeshProUGUI titleText;
 
     private enum TabType { Daily, Weekly }
     private TabType currentTab = TabType.Daily;
+    private TabType previousTab = TabType.Daily;
+    private bool isInitialized = false;   
 
     private Dictionary<string, AchievementItemUI> itemDict = new();
     private List<RuntimeAchievement> pendingRemoveList = new();
@@ -69,6 +72,7 @@ public class InfiniteAchievementPanel : MonoBehaviour
             AchievementManager.Instance.OnAnyRewarded -= RemoveItem;
         }
         LocalizationManager.OnLanguageChanged -= RefreshAllText;
+        isInitialized = false;
     }
 
     // Start()에서 아이템 생성 코드 제거
@@ -84,26 +88,40 @@ public class InfiniteAchievementPanel : MonoBehaviour
 
     private void SwitchTab(TabType tabType)
     {
+        previousTab = currentTab;
         currentTab = tabType;
         UpdateTabButtonColors();
         UpdateTitle();
         RefreshUI();
+        // ⭐ 패널 아웃라인 애니메이션
+        if (panelOutlineAnimator != null)
+        {
+            if (currentTab == TabType.Daily)
+                panelOutlineAnimator.SetTrigger("Daily");
+            else if (currentTab == TabType.Weekly)
+                panelOutlineAnimator.SetTrigger("Weekly");
+        }
     }
 
     private void UpdateTabButtonColors()
     {
-        if (tabDailyButton != null)
+        var tabMap = new (Animator anim, TabType type)[]
+    {
+        (tabDailyAnimator,  TabType.Daily),
+        (tabWeeklyAnimator, TabType.Weekly),
+    };
+
+        foreach (var (anim, type) in tabMap)
         {
-            var img = tabDailyButton.GetComponent<Image>();
-            if (img != null)
-                img.color = currentTab == TabType.Daily ? activeTabColor : inactiveTabColor;
+            if (anim == null) continue;
+
+            if (type == currentTab)
+                anim.SetTrigger("On");
+            else if (!isInitialized || type == previousTab)
+                anim.SetTrigger("Off");
         }
-        if (tabWeeklyButton != null)
-        {
-            var img = tabWeeklyButton.GetComponent<Image>();
-            if (img != null)
-                img.color = currentTab == TabType.Weekly ? activeTabColor : inactiveTabColor;
-        }
+
+        isInitialized = true;
     }
 
     private void UpdateTitle()

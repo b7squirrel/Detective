@@ -102,6 +102,8 @@ public class GameTexts : ScriptableObject
     public string bestWave = "최고 기록";
     public string nextTarget = "다음 목표";
     public string stage = "스테이지";
+    public string dailyChallenge = "일일 도전";
+    public string weeklyChallenge = "주간 도전";
 
     [Header("Options")]
     public string language = "언어";

@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
-
 public class AchievementPanel : MonoBehaviour
 {
     [SerializeField] private Transform content;
@@ -27,6 +25,7 @@ public class AchievementPanel : MonoBehaviour
     [SerializeField] private Animator tabPermanentAnimator;
     [SerializeField] private Animator tabDailyAnimator;
     [SerializeField] private Animator tabWeeklyAnimator;
+    [SerializeField] private Animator panelOutlineAnimator; 
 
     private enum TabType { Permanent, Daily, Weekly }
     private TabType currentTab = TabType.Daily;  // 기본: 일일 퀘스트
@@ -124,6 +123,16 @@ public class AchievementPanel : MonoBehaviour
         // ⭐ 스크롤 최상단으로
         if (scrollRect != null)
             scrollRect.verticalNormalizedPosition = 1f;
+
+        if (panelOutlineAnimator != null)
+        {
+            if (currentTab == TabType.Daily)
+                panelOutlineAnimator.SetTrigger("Daily");
+            else if (currentTab == TabType.Weekly)
+                panelOutlineAnimator.SetTrigger("Weekly");
+            else if (currentTab == TabType.Permanent)
+                panelOutlineAnimator.SetTrigger("Permanent");
+        }
     }
 
     // ⭐ 탭 버튼 색상 업데이트
