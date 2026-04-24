@@ -196,6 +196,9 @@ public class AchievementTutorialController : MonoBehaviour
         {
             confettiEffect.gameObject.SetActive(true);
             confettiEffect.Play();
+
+            // ✅ 파티클 재생 시간 후 자동 비활성화
+            StartCoroutine(DeactivateAfterPlay(confettiEffect));
         }
 
         // ✅ 완료 사운드 재생
@@ -204,6 +207,12 @@ public class AchievementTutorialController : MonoBehaviour
 
         ShowPopup(tutorialCompletePopup);
         TutorialManager.instance?.AdvanceStep(); // → Completed
+    }
+
+    IEnumerator DeactivateAfterPlay(ParticleSystem ps)
+    {
+        yield return new WaitForSeconds(ps.main.duration);
+        ps.gameObject.SetActive(false);
     }
 
     // ─────────────────────────────────────────
