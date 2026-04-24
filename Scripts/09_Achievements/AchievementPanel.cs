@@ -17,7 +17,11 @@ public class AchievementPanel : MonoBehaviour
     [SerializeField] private Button tabPermanentButton;  // 영구 업적 탭
     [SerializeField] private Button tabDailyButton;      // 일일 퀘스트 탭
     [SerializeField] private Button tabWeeklyButton;  // 주간 퀘스트 탭
+    [SerializeField] private TextMeshProUGUI tabPermanentText; // ⭐ 추가
+    [SerializeField] private TextMeshProUGUI tabDailyText;     // ⭐ 추가
+    [SerializeField] private TextMeshProUGUI tabWeeklyText;    // ⭐ 추가
     [SerializeField] private TextMeshProUGUI titleText;  // 패널 제목
+    [SerializeField] private ScrollRect scrollRect;
 
     [Header("탭 애니메이터")]
     [SerializeField] private Animator tabPermanentAnimator;
@@ -116,6 +120,10 @@ public class AchievementPanel : MonoBehaviour
 
         // UI 갱신
         RefreshUI();
+
+        // ⭐ 스크롤 최상단으로
+        if (scrollRect != null)
+            scrollRect.verticalNormalizedPosition = 1f;
     }
 
     // ⭐ 탭 버튼 색상 업데이트
@@ -146,12 +154,16 @@ public class AchievementPanel : MonoBehaviour
     {
         if (titleText == null) return;
 
-        if (currentTab == TabType.Daily)
-            titleText.text = LocalizationManager.Game.dailyQuestsTitle;
-        else if (currentTab == TabType.Weekly)
-            titleText.text = LocalizationManager.Game.weeklyQuestsTitle;
-        else
-            titleText.text = LocalizationManager.Game.achievementsTitle;
+        TextMeshProUGUI sourceText = currentTab switch
+        {
+            TabType.Daily => tabDailyText,
+            TabType.Weekly => tabWeeklyText,
+            TabType.Permanent => tabPermanentText,
+            _ => null
+        };
+
+        if (sourceText != null)
+            titleText.text = sourceText.text;
     }
 
     private void UpdateItem(RuntimeAchievement ra)
@@ -166,15 +178,19 @@ public class AchievementPanel : MonoBehaviour
 
     private void RefreshAllText()
     {
+        StartCoroutine(RefreshNextFrame());
+    }
+
+    private IEnumerator RefreshNextFrame()
+    {
+        yield return null; // 한 프레임 대기 (LocalizedUIText 먼저 실행되도록)
         UpdateTitle();
 
         foreach (var kvp in itemDict)
         {
             AchievementItemUI ui = kvp.Value;
             if (ui != null && ui.ra != null)
-            {
                 ui.Refresh();
-            }
         }
     }
 

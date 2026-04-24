@@ -135,6 +135,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.pause;
             case UITextKey.Continue:
                 return LocalizationManager.Game.Continue;
+            case UITextKey.WeeklyMission:
+                return LocalizationManager.Game.weeklyQuestsTitle;
             default:
                 return key.ToString();
         }
@@ -201,5 +203,6 @@ public enum UITextKey
     //스테이지
     Stage,
     Pause,
-    Continue
+    Continue,
+    WeeklyMission
 }
