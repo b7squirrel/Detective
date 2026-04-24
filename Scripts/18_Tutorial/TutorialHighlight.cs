@@ -31,12 +31,10 @@ public class TutorialHighlight : MonoBehaviour
     }
 
     // 특정 UI 요소를 강조하는 메서드
-    public void HighlightUI(RectTransform targetUI)
+    public void HighlightUI(RectTransform targetUI, GameObject fg = null)
     {
         if (targetUI == null) return;
 
-        // ✅ 부모가 비활성 상태에서 먼저 위치 계산
-        // (비활성 오브젝트도 RectTransform 값 수정 가능)
         RectTransform canvasRect = canvas.GetComponent<RectTransform>();
         Vector3[] targetCorners = new Vector3[4];
         targetUI.GetWorldCorners(targetCorners);
@@ -71,17 +69,18 @@ public class TutorialHighlight : MonoBehaviour
             (canvasMax.y + canvasHeight * 0.5f) / canvasHeight
         );
 
-        // ✅ 위치 설정 (아직 비활성 상태)
         SetupPanels(normalizedMin, normalizedMax);
         SetupPointer(targetUI);
 
-        // ✅ 위치가 완전히 설정된 후 한 번에 모두 활성화
+        // ✅ fg 비활성화와 오버레이 활성화를 동시에 처리
+        if (fg != null) fg.SetActive(false);
+
         topPanel.gameObject.SetActive(true);
         bottomPanel.gameObject.SetActive(true);
         leftPanel.gameObject.SetActive(true);
         rightPanel.gameObject.SetActive(true);
         fingerPointer.gameObject.SetActive(true);
-        gameObject.SetActive(true); // ← 부모는 마지막에 활성화
+        gameObject.SetActive(true);
     }
 
     // 4개 패널의 크기와 위치 설정

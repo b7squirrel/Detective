@@ -138,8 +138,8 @@ public class MergeTutorialController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         phase = nextPhase;
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(target);
+        // ✅ 수정
+        tutorialHighlight.HighlightUI(target, fg);
     }
 
     // 지연 후 Present Slot Pool의 첫 번째 활성 슬롯 하이라이트
@@ -147,7 +147,7 @@ public class MergeTutorialController : MonoBehaviour
     IEnumerator HighlightFirstSlotAfterDelay(MergeTutorialPhase nextPhase, float delay)
     {
         yield return new WaitForSeconds(delay);
-        yield return null; // 슬롯 활성화 완료를 위해 1프레임 추가 대기
+        yield return null;
 
         RectTransform firstSlot = GetFirstActiveSlot();
         if (firstSlot == null)
@@ -158,8 +158,8 @@ public class MergeTutorialController : MonoBehaviour
         }
 
         phase = nextPhase;
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(firstSlot);
+        // ✅ 수정
+        tutorialHighlight.HighlightUI(firstSlot, fg);
     }
 
     // Present Slot Pool에서 활성화된 첫 번째 자식의 RectTransform 반환

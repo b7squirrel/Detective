@@ -84,15 +84,15 @@ public class ShopTutorialController : MonoBehaviour
             return;
         }
 
-        // ✅ Done 케이스 제거 - TutorialManager에서 이미 교정됨
+        // Done 케이스 제거 - TutorialManager에서 이미 교정됨
         if (phase == ShopTutorialPhase.None)
         {
             StartShopTutorial();
             return;
         }
 
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(shopTabButton);
+        // ✅ fg 넘겨서 동시 처리
+        tutorialHighlight.HighlightUI(shopTabButton, fg);
     }
 
     // ─────────────────────────────────────────
@@ -109,8 +109,8 @@ public class ShopTutorialController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         SetPhase(ShopTutorialPhase.HighlightShopTab);
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(shopTabButton);
+        // ✅ fg 넘겨서 동시 처리
+        tutorialHighlight.HighlightUI(shopTabButton, fg);
     }
 
     // ─────────────────────────────────────────
@@ -162,17 +162,20 @@ public class ShopTutorialController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         yield return StartCoroutine(ScrollToPosition(scrollToDuckCardPosY));
         SetPhase(ShopTutorialPhase.HighlightDuckCard);
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(duckCardButton);
+
+        // ✅ 하이라이트 표시 후 스크롤 잠금
+        LockScroll();
+        tutorialHighlight.HighlightUI(duckCardButton, fg);
     }
 
     IEnumerator ScrollThenHighlightItem()
     {
         yield return new WaitForSeconds(1.0f);
         yield return StartCoroutine(ScrollToPosition(scrollToDuckCardPosY));
-        // phase는 이미 HighlightItemCard로 저장되어 있음 (OnGachaOpened에서)
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(itemCardButton);
+
+        // ✅ 하이라이트 표시 후 스크롤 잠금
+        LockScroll();
+        tutorialHighlight.HighlightUI(itemCardButton, fg);
     }
 
     IEnumerator ScrollToPosition(float targetPosY)
@@ -202,19 +205,19 @@ public class ShopTutorialController : MonoBehaviour
     {
         tutorialHighlight.Hide();
         if (fg != null) fg.SetActive(true);
+
+        // ✅ 가챠 화면 열릴 때 스크롤 복구
+        UnlockScroll();
+
         pendingChestType = chestType;
 
         // 가챠가 열리는 순간 = 뽑기 완료 → 즉시 다음 phase 저장
         if (chestType == ChestType.Duck && phase == ShopTutorialPhase.HighlightDuckCard)
-        {
             SetPhase(ShopTutorialPhase.HighlightItemCard);
-        }
         else if (chestType == ChestType.Item && phase == ShopTutorialPhase.HighlightItemCard)
-        {
             SetPhase(ShopTutorialPhase.Done);
-        }
 
-        Debug.Log($"[ShopTutorial] OnGachaOpened - chestType: {chestType}, phase: {phase}");
+        Logger.Log($"[ShopTutorial] OnGachaOpened - chestType: {chestType}, phase: {phase}");
     }
 
     // ─────────────────────────────────────────
@@ -225,11 +228,12 @@ public class ShopTutorialController : MonoBehaviour
         if (fg != null) fg.SetActive(true);
         if (TutorialManager.instance?.CurrentStep != TutorialStep.Step1_ShopUnlocked) return;
 
-        Debug.Log($"[ShopTutorial] OnGachaClosed - pendingChestType: {pendingChestType}, phase: {phase}");
+        Logger.Log($"[ShopTutorial] OnGachaClosed - pendingChestType: {pendingChestType}, phase: {phase}");
 
-        // OnGachaOpened에서 이미 phase가 변경됨
         if (pendingChestType == ChestType.Duck && phase == ShopTutorialPhase.HighlightItemCard)
         {
+            // ✅ 추가: 다음 하이라이트 전까지 스크롤 잠금
+            LockScroll();
             StartCoroutine(ScrollThenHighlightItem());
         }
         else if (pendingChestType == ChestType.Item && phase == ShopTutorialPhase.Done)
@@ -239,6 +243,19 @@ public class ShopTutorialController : MonoBehaviour
         }
 
         pendingChestType = ChestType.Other;
+    }
+
+    // ─────────────────────────────────────────
+    // 스크롤 제어
+    // ─────────────────────────────────────────
+    void LockScroll()
+    {
+        if (shopScrollRect != null) shopScrollRect.enabled = false;
+    }
+
+    void UnlockScroll()
+    {
+        if (shopScrollRect != null) shopScrollRect.enabled = true;
     }
 
     // ─────────────────────────────────────────
@@ -278,6 +295,10 @@ public class ShopTutorialController : MonoBehaviour
         StopAllCoroutines();
         tutorialHighlight?.Hide();
         if (fg != null) fg.SetActive(false);
+
+        // ✅ 튜토리얼 종료 시 스크롤 복구
+        UnlockScroll();
+
         phase = ShopTutorialPhase.None;
     }
 }

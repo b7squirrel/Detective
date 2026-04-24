@@ -115,7 +115,6 @@ public class AchievementTutorialController : MonoBehaviour
         if (fg != null) fg.SetActive(true);
         ShowPopup(achievementOpenPopup);
 
-        // ✅ 수정: 구독 전 기존 구독 해제로 이중 구독 방지
         if (AchievementManager.Instance != null)
         {
             AchievementManager.Instance.OnAnyRewarded -= OnAnyRewarded;
@@ -126,8 +125,8 @@ public class AchievementTutorialController : MonoBehaviour
 
         if (phase != AchievementTutorialPhase.HighlightAchievementTab) yield break;
 
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(achievementTabButton);
+        // ✅ 수정
+        tutorialHighlight.HighlightUI(achievementTabButton, fg);
     }
 
     // [2단계] Achievement 탭 클릭 → 영구 업적 탭 전환 후 보상 버튼 하이라이트
@@ -145,17 +144,11 @@ public class AchievementTutorialController : MonoBehaviour
 
     IEnumerator SwitchTabThenHighlightReward()
     {
-        // 영구 업적 탭으로 전환 (tutorial_merge는 영구 업적)
-        // achievementPanel.SwitchTabPublic(TabTypePublic.Permanent);
-
-        // 탭 전환 + UI 갱신 대기
         yield return new WaitForSeconds(0.3f);
 
-        // ✅ 레이아웃 강제 재계산 (ContentSizeFitter 업데이트)
         UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(
             achievementPanel.GetContentRect());
 
-        // ✅ 재계산 후 2프레임 대기 (렌더링 반영 완료 보장)
         yield return null;
         yield return null;
 
@@ -168,10 +161,11 @@ public class AchievementTutorialController : MonoBehaviour
         }
 
         phase = AchievementTutorialPhase.HighlightRewardButton;
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(rewardBtn);
+        // ✅ 수정
+        tutorialHighlight.HighlightUI(rewardBtn, fg);
         Logger.Log("[AchievementTutorial] 보상 버튼 하이라이트 완료");
     }
+
 
     // [3단계] 보상 버튼 클릭 → AdvanceStep()
     // AchievementManager.OnAnyRewarded 이벤트로 감지
@@ -220,14 +214,14 @@ public class AchievementTutorialController : MonoBehaviour
     // ─────────────────────────────────────────
 
     // 지연 후 고정 타겟 하이라이트 (Achievement 탭 버튼 등)
-    IEnumerator HighlightAfterDelay(RectTransform target,
-        AchievementTutorialPhase nextPhase, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        phase = nextPhase;
-        if (fg != null) fg.SetActive(false);
-        tutorialHighlight.HighlightUI(target);
-    }
+    // IEnumerator HighlightAfterDelay(RectTransform target,
+    // AchievementTutorialPhase nextPhase, float delay)
+    // {
+    //     yield return new WaitForSeconds(delay);
+    //     phase = nextPhase;
+    //     // ✅ 수정
+    //     tutorialHighlight.HighlightUI(target, fg);
+    // }
 
     void HideAll()
     {
