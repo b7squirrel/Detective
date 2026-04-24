@@ -19,12 +19,15 @@ public class AchievementPanel : MonoBehaviour
     [SerializeField] private Button tabWeeklyButton;  // 주간 퀘스트 탭
     [SerializeField] private TextMeshProUGUI titleText;  // 패널 제목
 
-    [Header("탭 색상 설정")]
-    [SerializeField] private Color activeTabColor = Color.white;
-    [SerializeField] private Color inactiveTabColor = Color.gray;
+    [Header("탭 애니메이터")]
+    [SerializeField] private Animator tabPermanentAnimator;
+    [SerializeField] private Animator tabDailyAnimator;
+    [SerializeField] private Animator tabWeeklyAnimator;
 
     private enum TabType { Permanent, Daily, Weekly }
     private TabType currentTab = TabType.Daily;  // 기본: 일일 퀘스트
+    private TabType previousTab = TabType.Daily; // 활성화 탭을 기억해 두고 Off 애니메이션
+    private bool isInitialized = false;
 
     Dictionary<string, AchievementItemUI> itemDict = new();
     CardSlotManager cardSlotManager;
@@ -68,6 +71,7 @@ public class AchievementPanel : MonoBehaviour
         }
 
         LocalizationManager.OnLanguageChanged -= RefreshAllText;
+        isInitialized = false; // ⭐ 패널 닫힐 때 리셋
     }
 
     private void Start()
@@ -101,6 +105,7 @@ public class AchievementPanel : MonoBehaviour
     // ⭐ 탭 전환
     private void SwitchTab(TabType tabType)
     {
+        previousTab = currentTab;
         currentTab = tabType;
 
         // 탭 버튼 색상 업데이트
@@ -116,26 +121,24 @@ public class AchievementPanel : MonoBehaviour
     // ⭐ 탭 버튼 색상 업데이트
     private void UpdateTabButtonColors()
     {
-        if (tabPermanentButton != null)
+        var tabMap = new (Animator anim, TabType type)[]
         {
-            var img = tabPermanentButton.GetComponent<Image>();
-            if (img != null)
-                img.color = currentTab == TabType.Permanent ? activeTabColor : inactiveTabColor;
+        (tabPermanentAnimator, TabType.Permanent),
+        (tabDailyAnimator,     TabType.Daily),
+        (tabWeeklyAnimator,    TabType.Weekly),
+        };
+
+        foreach (var (anim, type) in tabMap)
+        {
+            if (anim == null) continue;
+
+            if (type == currentTab)
+                anim.SetTrigger("On");
+            else if (!isInitialized || type == previousTab) // ⭐ 초기화 전이면 모든 비활성 탭에 Off
+                anim.SetTrigger("Off");
         }
 
-        if (tabDailyButton != null)
-        {
-            var img = tabDailyButton.GetComponent<Image>();
-            if (img != null)
-                img.color = currentTab == TabType.Daily ? activeTabColor : inactiveTabColor;
-        }
-
-        if (tabWeeklyButton != null)
-        {
-            var img = tabWeeklyButton.GetComponent<Image>();
-            if (img != null)
-                img.color = currentTab == TabType.Weekly ? activeTabColor : inactiveTabColor;
-        }
+        isInitialized = true; // ⭐ 첫 호출 이후 true
     }
 
     // ⭐ 패널 제목 업데이트

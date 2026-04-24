@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GearTutorialController : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class GearTutorialController : MonoBehaviour
 
     [Header("런치 화면")]
     [SerializeField] GameObject panelLaunch;
+    [Header("상점 스크롤 잠금")]
+    // Gear 튜토리얼 중 상점 스크롤이 되지 않도록
+    [SerializeField] ScrollRect shopScrollRect;
 
     // ─────────────────────────────────────────
     // 내부 상태
@@ -77,10 +81,11 @@ public class GearTutorialController : MonoBehaviour
     // Gear 탭 버튼이 실제로 활성화될 때까지 대기
     IEnumerator WaitForMainMenuThenStart()
     {
-        // 게임 초기화가 완전히 끝날 때까지 대기
-        // 이 시점이면 메인 메뉴가 실제로 보이는 상태
         yield return new WaitUntil(() => GameInitializer.IsInitialized);
-        yield return new WaitForSeconds(0.5f); // UI 렌더링 여유
+        yield return new WaitForSeconds(0.5f);
+
+        // ✅ 추가: Gear 튜토리얼 시작 시 상점 스크롤 잠금
+        if (shopScrollRect != null) shopScrollRect.enabled = false;
 
         if (fg != null) fg.SetActive(true);
         ShowPopup(gearOpenPopup);
@@ -93,10 +98,11 @@ public class GearTutorialController : MonoBehaviour
     {
         if (phase != GearTutorialPhase.HighlightGearTab) return;
 
+        // ✅ 추가: Gear 패널 진입 시 상점 스크롤 복구 (더 이상 상점이 보이지 않으므로)
+        if (shopScrollRect != null) shopScrollRect.enabled = true;
+
         tutorialHighlight.Hide();
         if (fg != null) fg.SetActive(true);
-
-        // 슬롯이 생성될 때까지 잠깐 대기 후 첫 번째 오리 카드 하이라이트
         StartCoroutine(HighlightFirstSlotAfterDelay(GearTutorialPhase.HighlightDuckCard, 0.3f));
     }
 
@@ -180,6 +186,10 @@ public class GearTutorialController : MonoBehaviour
         StopAllCoroutines();
         tutorialHighlight?.Hide();
         if (fg != null) fg.SetActive(false);
+
+        // ✅ 추가: 튜토리얼 종료 시 상점 스크롤 복구
+        if (shopScrollRect != null) shopScrollRect.enabled = true;
+
         phase = GearTutorialPhase.None;
     }
 
