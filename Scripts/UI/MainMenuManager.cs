@@ -45,6 +45,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] RuntimeAnimatorController defaultTabSlideHandleCon;
     [SerializeField] RuntimeAnimatorController darkTabSlideHandleCon;
     [SerializeField] Animator tabSliderHandleAnim;
+    [Header("튜토리얼 - 자물쇠 아이콘")]
+    [SerializeField] GameObject[] lockIcons; // 각 탭 버튼의 자물쇠 오브젝트 (5개)
 
     bool slotSwapFinished;
 
@@ -381,16 +383,17 @@ public class MainMenuManager : MonoBehaviour
         {
             bool isUnlocked = unlocked[i];
 
-            // ✅ 버튼 클릭 가능 여부만 제어
             BtnRect[i].GetComponent<Button>().interactable = isUnlocked;
 
-            // ✅ 애니메이터 컨트롤러 전환 (시각적 표현은 애니메이터에 위임)
             BtnImageRect[i].GetComponent<Animator>().runtimeAnimatorController = isUnlocked
                 ? defaultTabControllers[i]
                 : tutorialTabControllers[i];
+
+            // ✅ 추가: 자물쇠 아이콘 활성/비활성
+            if (lockIcons != null && i < lockIcons.Length && lockIcons[i] != null)
+                lockIcons[i].SetActive(!isUnlocked);
         }
 
-        // 탭바 배경 및 슬라이더 핸들 처리
         bool isTutorialMode = step != TutorialStep.Completed;
         Tab_Base.sprite = Tab_BaseSprites[isTutorialMode ? 1 : 0];
         tabSliderHandleAnim.runtimeAnimatorController = isTutorialMode
