@@ -52,12 +52,14 @@ public class CardList : MonoBehaviour
     EquipmentDataManager equipmentDataManager;
 
     Convert converter;
+    SetBonusChecker setBonusChecker;
 
     void Awake()
     {
         cardDataManager = GetComponent<CardDataManager>();
         equipmentDataManager = GetComponent<EquipmentDataManager>();
         converter = new Convert();
+        setBonusChecker = GetComponent<SetBonusChecker>();
     }
 
     // ⭐ 배치 모드 중 즉시 카드 추가
@@ -115,6 +117,7 @@ public class CardList : MonoBehaviour
 
         EquipStats(charCard, equipData);
         equipmentDataManager.UpdateEquipment(charCard, index);
+        setBonusChecker?.CheckSetBonus(charCard); 
     }
     
     public void UnEquip(CardData charData, EquipmentCard _equipmentCard)
@@ -130,6 +133,7 @@ public class CardList : MonoBehaviour
         UnEquipStats(charCard, _equipmentCard.CardData);
 
         equipmentDataManager.UpdateEquipment(charCard, index);
+        setBonusChecker?.CheckSetBonus(charCard); 
     }
 
     public CharCard FindCharCard(CardData charCardData)

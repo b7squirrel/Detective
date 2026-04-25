@@ -13,10 +13,10 @@ public class Serialization<T>
 [System.Serializable]
 public class CardData
 {
-    public CardData(string _id, string _Type, string _Grade, string _EvoStage, 
-        string _Name, string _level, string _hp, string _atk, string _equipmentType, 
-        string _essectialEquip, string _bindingTo, string _startingMember, 
-        string _defaultItem, string _passiveSkill)
+    public CardData(string _id, string _Type, string _Grade, string _EvoStage,
+    string _Name, string _level, string _hp, string _atk, string _equipmentType,
+    string _essectialEquip, string _bindingTo, string _startingMember,
+    string _defaultItem, string _passiveSkill, string _setName = "")
     {
         // ID 파싱 (안전하게)
         if (int.TryParse(_id?.Trim(), out int intID))
@@ -53,6 +53,7 @@ public class CardData
         Hp = SafeParseInt(_hp, "HP");
         Atk = SafeParseInt(_atk, "ATK");
         PassiveSkill = SafeParseInt(_passiveSkill, "PassiveSkill");
+        SetName = _setName?.Trim() ?? "";
     }
     
     // filedName은 디버깅을 위한 문자열
@@ -70,9 +71,9 @@ public class CardData
         }
     }
 
-    public string Type, Name, 
-            EquipmentType, EssentialEquip, BindingTo,
-            StartingMember, DefaultItem;
+    public string Type, Name,
+        EquipmentType, EssentialEquip, BindingTo,
+        StartingMember, DefaultItem, SetName;
     public int ID, Grade, EvoStage, Level, Hp, Atk, PassiveSkill;
 }
 
@@ -123,13 +124,13 @@ public class ReadCardData
                     {
                         row[j] = row[j].Trim();
                     }
-                    
+
                     CardData newCard = new CardData(
-                        row[0], row[1], row[2], row[3], row[4], 
-                        row[5], row[6], row[7], row[8], row[9], 
-                        row[10], row[11], row[12], row[13]
+                        row[0], row[1], row[2], row[3], row[4],
+                        row[5], row[6], row[7], row[8], row[9],
+                        row[10], row[11], row[12], row[13],
+                        row.Length > 14 ? row[14] : ""
                     );
-                    
                     cardList.Add(newCard);
                 }
                 catch (Exception e)

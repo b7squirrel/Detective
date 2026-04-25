@@ -387,7 +387,8 @@ public class GachaSystem : MonoBehaviour
             original.BindingTo,
             original.StartingMember,
             original.DefaultItem,
-            original.PassiveSkill.ToString()
+            original.PassiveSkill.ToString(),
+            original.SetName 
         );
 
         return clone;
