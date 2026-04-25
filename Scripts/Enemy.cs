@@ -9,8 +9,8 @@ public class EnemyStats
     public int damage = 1;
     public int rangedDamage = 1;
     public int experience_reward = 0;
-    public float dodgeChance = 0f; // ⭐ 추가: 회피 확률 (0.0 ~ 1.0)
-    public float damageReduction = 0f; // ⭐ 추가: 헬멧 방어율 (0.0 ~ 1.0)
+    public float dodgeChance = 0f;    // 회피 확률 (0.0 ~ 1.0)
+    public float damageReduction = 0f; // 헬멧 방어율 (0.0 ~ 1.0)
 }
 
 public class Enemy : EnemyBase
@@ -18,7 +18,7 @@ public class Enemy : EnemyBase
     #region Variables
     public int ExperienceReward { get; private set; }
     bool isLive;
-    Vector2 currentPosition;
+    LayerMask enemyLayer; // AttackExplode의 shockwave에서 매번 GetMask("Enemy") 하지 않도록 캐싱
 
     // 점프
     bool canJump;
@@ -29,7 +29,6 @@ public class Enemy : EnemyBase
     public Vector2 LandingTarget { get; set; }
     float flyingTimeThreshold = 4f;
     float flyingTimeCounter;
-    ShadowHeightEnemy shadowHeightEnemy;
 
     [SerializeField] LayerMask playerLayer;
 
@@ -41,6 +40,8 @@ public class Enemy : EnemyBase
         base.OnEnable();
         isLive = true;
         SetWalking();
+
+        if (enemyLayer == 0) enemyLayer = LayerMask.GetMask("Enemy");
     }
 
     void FixedUpdate()
@@ -71,9 +72,6 @@ public class Enemy : EnemyBase
         {
             SetWalking();
         }
-
-        // ⭐ 원거리 공격 쿨다운 제거 (컴포넌트가 처리)
-        // if (enemyType == EnemyType.Ranged) RangedAttackCoolDown();
     }
     #endregion
 
@@ -96,21 +94,19 @@ public class Enemy : EnemyBase
         Name = _data.Name;
 
         canJump = _data.isJumper;
-        if (shadowHeightEnemy == null)
-            shadowHeightEnemy = GetComponent<ShadowHeightEnemy>();
         shadowHeightEnemy.SetIsJumper(canJump, _data.jumpInterval);
 
         // 모든 특수 능력 컴포넌트 초기화
         InitSpecialAbilities(_data);
 
-        // ⭐ 추가: Explosive variant면 enemyType 강제 변경
+        // Explosive variant면 enemyType 강제 변경
         if (variantHandler != null && variantHandler.CurrentVariant == EnemyVariantType.Explosive)
         {
             enemyType = EnemyType.Explode;
         }
     }
 
-    // 새로 추가: 특수 능력 컴포넌트 관리
+    // 특수 능력 컴포넌트 초기화
     void InitSpecialAbilities(EnemyData _data)
     {
         // 원거리 공격
@@ -122,14 +118,14 @@ public class Enemy : EnemyBase
             rangedAttack.InitRangedAttack(_data);
         }
 
-        // 대시 능력 추가
+        // 대시 능력
         EnemyDashAbility dashAbility = GetComponent<EnemyDashAbility>();
         if (dashAbility != null)
         {
             dashAbility.InitDash(_data);
         }
 
-        // 레이저 능력 추가
+        // 레이저 능력
         EnemyLaserAbility laserAbility = GetComponent<EnemyLaserAbility>();
         if (laserAbility != null)
         {
@@ -191,7 +187,7 @@ public class Enemy : EnemyBase
 
     protected override void AttackRange(int _damage)
     {
-        // ⭐ 이 함수는 이제 EnemyBase의 OnCollisionStay에서만 호출됨
+        // 이 함수는 EnemyBase의 OnCollisionStay에서만 호출됨
         // 원거리 쿨다운 공격은 EnemyRangedAttack 컴포넌트가 처리
         if (enemyProjectile == null) return;
         GameObject cannonBall = GameManager.instance.poolManager.GetMisc(enemyProjectile);
@@ -218,16 +214,12 @@ public class Enemy : EnemyBase
         if (shockwave != null)
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
-            wave.GetComponent<Shockwave>().Init(0, config.explosiveRadius, LayerMask.GetMask("Enemy"), transform.position);
+            wave.GetComponent<Shockwave>().Init(0, config.explosiveRadius, enemyLayer, transform.position);
         }
 
         Die();
     }
-
-    // ⭐ RangedAttackCoolDown 함수 제거 (컴포넌트로 이동)
     #endregion
-
-    // ⭐ DetectingPlayer 함수 제거 (컴포넌트로 이동)
 
     #region 애니메이션 이벤트
     public void SetAttackAnimDone()

@@ -24,7 +24,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] int numberOfBossDrops;
     protected BossType bossType;
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
-    public Vector2 GroupDir { get; set; } // spawn 할 떄 spawn 포인트 값과 player위치로 결정
+    public Vector2 GroupDir { get; set; } // spawn 할 때 spawn 포인트 값과 player위치로 결정
 
     protected EnemyVariantHandler variantHandler; // 광기, 헬멧, 광기헬멧, 폭탄의 다양화 핸들러
 
@@ -33,6 +33,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected EnemyData splitableEnemyData; // 쪼개질 때의 적 데이터
     protected int splitNum; // 몇 개로 쪼개질지
     protected bool isSplited; // 쪼개진 적이라면 킬 카운트 하지 않기
+    DropOnDestroy dropOnDestroy; // Die()에서 매번 GetComponent 하지 않도록 캐싱
 
     protected bool isOffScreen; // 화면 밖에 있을 때 플레이어의 공격을 받지 않기 위한 플래그
     protected float offScreenCoolDown; // 너무 자주 콜라이더가 활성, 비활성 되지 않도록 쿨타임 주기
@@ -48,6 +49,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     Vector2 pastPos; // 벽 바깥으로 나가면 다시 되돌리기 위한 변수
 
     bool isGrouned; // 점프 중이라면 플립을 하지 않도록 하기 위해
+    protected ShadowHeightEnemy shadowHeightEnemy; // CastSlownessToEnemy 등에서 매번 GetComponent 하지 않도록 캐싱
 
     int goldReward; // 처치 시 지급할 골드
 
@@ -79,12 +81,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected float stunnedDuration = .2f;
 
     protected Material[] initialMat;
-    LayerMask wallLayer;
-
+    LayerMask wallLayer;       // IsInsideWall에서 매번 GetMask("Wall") 하지 않도록 캐싱
+    LayerMask shockwaveEnemyLayer; // Die()의 shockwave에서 매번 GetMask("Enemy") 하지 않도록 캐싱
 
     [HideInInspector] public Vector2 targetDir;
     protected float stunnedSpeed = 14f;
-    Color enemyColor; // die effect의 색깔을 정하기 위해서.
 
     // 공격 프레임 간격 (모드별로 다르게 설정)
     protected int attackFrameInterval = 3; // 기본값 3프레임
@@ -111,8 +112,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [Header("Shock Wave")]
     [SerializeField] protected GameObject shockwave;
 
-    EnemyFinder enemyFinder;
-    FieldItemEffect fieldItemEffect;
     static BossDieManager bossDieManager;
 
     #endregion
@@ -120,7 +119,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 유니티 콜백
     protected virtual void OnEnable()
     {
-        // ⭐ 수정: hasCheckedMode 제거하고 매번 null 체크
         if (infiniteStageManager == null)
         {
             infiniteStageManager = FindObjectOfType<InfiniteStageManager>();
@@ -144,6 +142,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
             rangedAttack = GetComponent<EnemyRangedAttack>();
             laserAbility = GetComponent<EnemyLaserAbility>();
 
+            shadowHeightEnemy = GetComponent<ShadowHeightEnemy>();
+            dropOnDestroy = GetComponent<DropOnDestroy>();
+
             pastPos = transform.position;
 
             initDone = true;
@@ -158,7 +159,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             }
         }
 
-        //initialMat = sr.material;
         IsKnockBack = false;
         IsStunned = false;
         isOffScreen = true;
@@ -169,7 +169,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         isGrouned = true;
 
         anim.speed = 1f;
-        //rb.bodyType = RigidbodyType2D.Dynamic;
 
         if (Target.position.x - rb.transform.position.x > 0)
         {
@@ -184,28 +183,25 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         pastFacingDir = currentFacingDir;
 
-        if (Stats != null)
-        {
-
-        }
-
         // 시간 정지 상태 체크. 시간 정지 이후 생성되는 적들에게도 시간 정지 적용
         CheckStopwatchStatus();
 
-        if(wallLayer == 0) wallLayer = LayerMask.GetMask("Wall"); // 한 번만 실행
+        // LayerMask는 한 번만 계산
+        if (wallLayer == 0) wallLayer = LayerMask.GetMask("Wall");
+        if (shockwaveEnemyLayer == 0) shockwaveEnemyLayer = LayerMask.GetMask("Enemy");
     }
+
     /// <summary>
     /// 적 생성 시 시간 정지 상태 확인하여 즉시 정지
     /// </summary>
     void CheckStopwatchStatus()
     {
-        if (fieldItemEffect == null) fieldItemEffect = FindObjectOfType<FieldItemEffect>();
-        if (fieldItemEffect != null && fieldItemEffect.IsStopedWithStopwatch())
+        if (FieldItemEffect.instance != null && FieldItemEffect.instance.IsStopedWithStopwatch())
         {
             PauseEnemy();
-            // Logger.Log($"[EnemyBase] {gameObject.name} - 생성 시 즉시 정지됨 (스톱워치 활성화 중)");
         }
     }
+
     protected void InitHpBar()
     {
         if (HPbarPrefab == null) return;
@@ -216,6 +212,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         maxHealth = Stats.hp;
         hpBar.SetStatus(Stats.hp, maxHealth);
     }
+
     protected void DestroyHPbar()
     {
         Destroy(HPbar);
@@ -256,12 +253,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
             isBoss = false;
         }
 
-        enemyColor = _enemyToSpawn.enemyColor;
-
         // 상태 초기화
-        IsSlowed = false; // 느림 상태도 초기화
+        IsSlowed = false;
 
-        // ⭐ 공격 프레임 간격 설정 (모드별 분기)
+        // 공격 프레임 간격 설정 (모드별 분기)
         if (isInfiniteMode && infiniteStageManager != null)
         {
             attackFrameInterval = 4; // 무한 모드: 4프레임에 한 번
@@ -271,7 +266,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             attackFrameInterval = 3; // 일반 모드: 3프레임에 한 번
         }
 
-        // ⭐ 무한 모드와 레귤러 모드 분기
+        // 무한 모드와 레귤러 모드 분기
         if (isInfiniteMode && infiniteStageManager != null)
         {
             // 무한 모드: 웨이브를 스테이지로 사용 (최대 30)
@@ -310,7 +305,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         DefaultSpeed = Stats.speed;
         currentSpeed = DefaultSpeed;
 
-        // ⭐ Variant 적용
+        // Variant 적용
         if (variantHandler == null)
             variantHandler = GetComponent<EnemyVariantHandler>();
 
@@ -362,9 +357,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 initialMat[i] = srFlash[i].material;
             }
 
-            if(subBossAlarm != null) SoundManager.instance.Play(subBossAlarm);
+            if (subBossAlarm != null) SoundManager.instance.Play(subBossAlarm);
         }
     }
+
     #region Variant 효과
     protected void ApplyVariantEffects(EnemyVariantType variant)
     {
@@ -420,6 +416,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             isFlipping = false; // 플립이 다시 일어날 수 있도록 허용
         }
     }
+
     public virtual void Flip()
     {
         if (gameObject.activeSelf == false) return;
@@ -477,8 +474,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
             yield return null;
         }
 
-        // 모르겠다. 일단 뒤집고 나서는 방향을 플레이어쪽으로 바꿔줘서 
-        // 뒤집히거나 뒤집히다 말거나 하는 현상을 없애자
+        // 뒤집고 나서는 방향을 플레이어쪽으로 강제 정렬하여
+        // 뒤집히다 말거나 반대로 뒤집히는 현상을 방지
         if (Target.position.x - rb.position.x > 0)
         {
             currentFacingDir = 1f;
@@ -507,6 +504,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
         isFlipping = false;
     }
+
     void StopFlipCoroutine()
     {
         if (flipCoroutine != null) StopCoroutine(flipCoroutine);
@@ -558,9 +556,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
     void IsInsideWall()
     {
         RaycastHit2D hit = Physics2D.Linecast(pastPos, transform.position, wallLayer);
-        if (hit.collider != null)
+        if (hit.collider != null) // 벽 안으로 들어갔다면
         {
-            transform.position = pastPos;
+            transform.position = pastPos; // 이전 위치로 되돌림
         }
         pastPos = transform.position;
     }
@@ -569,6 +567,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         isGrouned = _isGrouinded;
     }
+
     public float GetCurrentSpeed()
     {
         return currentSpeed;
@@ -592,7 +591,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             dashAbility.SetFinishedSpawn(true);
         }
 
-        // 레이저 컴포넌트에 알림 추가
+        // 레이저 컴포넌트에 알림
         if (laserAbility != null)
         {
             laserAbility.SetFinishedSpawn(true);
@@ -633,6 +632,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             rb.angularVelocity = 0f;
         }
     }
+
     protected void OnCollisionExit2D(Collision2D collision)
     {
         if (GameManager.instance.player == null)
@@ -640,7 +640,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
             return;
-        //if (enemyType != EnemyType.Melee) return; // 근접 공격 적들만 플레이어에서 벗어났을 때 공격모션을 해제한다
 
         if (collision.gameObject == Target.gameObject)
         {
@@ -662,11 +661,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             case EnemyType.Melee:
                 AttackMelee(Stats.damage);
-
                 break;
             case EnemyType.Ranged:
                 AttackRange(Stats.rangedDamage);
-
                 break;
             case EnemyType.Explode:
                 AttackExplode(Stats.damage);
@@ -688,6 +685,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         // Enemy에서 오버라이드
     }
+
     public StatusBar GetHpBar()
     {
         return hpBar;
@@ -702,12 +700,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public virtual void TakeDamage(int damage, float knockBackChance, float knockBackSpeedFactor, Vector2 target, GameObject hitEffect)
     {
-        // ⭐ 스테이지/웨이브 기반 회피 확률 적용
+        // 스테이지/웨이브 기반 회피 확률 적용
         float dodgeRoll = UnityEngine.Random.Range(0f, 1f);
         if (dodgeRoll < Stats.dodgeChance)
         {
-            // 회피 성공 - 선택적으로 회피 이펙트나 사운드 추가 가능
-            // Logger.Log($"[Enemy] Dodged attack! (chance: {Stats.dodgeChance:P0})");
             return;
         }
 
@@ -721,7 +717,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (!stateInfo.IsName("SlimeLV1Hurt"))
         {
             anim.SetTrigger("Hit");
-            // ⭐ 느림 상태라면 Hypnotized도 유지
+            // 느림 상태라면 Hypnotized도 유지
             if (IsSlowed)
             {
                 anim.SetBool("Hypnotized", true);
@@ -739,10 +735,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (chance < knockBackChance && knockBackChance != 0)
             _knockBackDelay = this.knockBackDelay;
 
-        // 체력이 0 이하이면 죽음
-        // Stats.hp -= damage;
+        // 헬멧 방어율 적용. 최소 1 데미지 보장
         int finalDamage = Mathf.RoundToInt(damage * (1f - Stats.damageReduction));
-        finalDamage = Mathf.Max(1, finalDamage); // 최소 1 데미지
+        finalDamage = Mathf.Max(1, finalDamage);
         Stats.hp -= finalDamage;
 
         if (Stats.hp < 1)
@@ -783,9 +778,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         KnockBack(target, _knockBackDelay, knockBackSpeedFactor);
     }
+
     public virtual void Die()
     {
-        GetComponent<DropOnDestroy>().CheckDrop();
+        dropOnDestroy?.CheckDrop();
 
         StopAllCoroutines();
 
@@ -795,7 +791,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         GameManager.instance.KillManager.UpdateCurrentKills(enemyType, isSubBoss, isBoss);
         GoldRewardManager.Instance.AddKillGold(goldReward);
 
-        // ⭐ 추가: 쪼개진 적(슬라임 조각 등)은 카운트 제외, 무한 모드, 일반 모드 분리
+        // 쪼개진 적(슬라임 조각 등)은 킬 카운트 제외, 무한 모드와 일반 모드 분리
         if (!isSplited && AchievementManager.Instance != null)
         {
             if (PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
@@ -805,7 +801,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         Spawner.instance.SubtractEnemyNumber();
-        if (enemyFinder == null) enemyFinder = FindObjectOfType<EnemyFinder>();
 
         IsSlowed = false;
         finishedSpawn = false;
@@ -813,14 +808,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
         {
-            if (bossDieManager == null) bossDieManager = FindObjectOfType<BossDieManager>();
-            bossDieManager.SetIsBossDead(true);
-            bossDieManager.DieEvent(.1f, 2f);
+            BossDieManager.instance.SetIsBossDead(true);
+            BossDieManager.instance.DieEvent(.1f, 2f);
         }
         else if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
         {
-            BossDieManager bossDieManager = FindObjectOfType<BossDieManager>();
-            bossDieManager.DieEventInfinite(.1f, 2f); // deadBody 연출만, IsBossDead 없음
+            BossDieManager.instance.DieEventInfinite(.1f, 2f); // deadBody 연출만, IsBossDead 없음
         }
 
         if (isSubBoss)
@@ -831,7 +824,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (shockwave != null)
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
-            wave.GetComponent<Shockwave>().Init(0, 10f, LayerMask.GetMask("Enemy"), transform.position);
+            wave.GetComponent<Shockwave>().Init(0, 10f, shockwaveEnemyLayer, transform.position);
 
             BossDieManager.instance.SlowMo(.5f, .5f);
         }
@@ -851,7 +844,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             if (explosionEffect != null) explosionEffect.transform.position = transform.position;
         }
 
-        // ⭐ 무한 모드 카운트, 쪼개진 조그만 적이 아닐 때만 카운트
+        // 무한 모드 킬 카운트. 쪼개진 조각 적은 제외
         if (isInfiniteMode && infiniteStageManager != null && isSplited == false)
         {
             infiniteStageManager.OnEnemyKilled();
@@ -862,9 +855,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         gameObject.SetActive(false);
     }
 
-    // 보스가 등장할 때 적들은 모두 없어지도록 할 때 쓰는 Die
-    // 아무것도 드롭하지 않도록 Drop on Destroy를 포함하지 않음
-    // 플레이어의 kill수에도 포함시키지 않음
+    // 보스가 등장할 때 적들을 모두 제거할 때 사용
+    // 아무것도 드롭하지 않으며 킬 카운트에도 포함되지 않음
     public void DieOnBossEvent()
     {
         if (isBoss || isSubBoss) return; // 보스이거나 서브보스라면 없애지 않음
@@ -875,14 +867,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
         finishedSpawn = false;
         gameObject.SetActive(false);
     }
+
     public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록
     {
-        //sr.material = initialMat;
         IsGrouping = false;
         IsSlowed = false;
 
         gameObject.SetActive(false);
     }
+
     public virtual void DieWithoutDrop()
     {
         IsSlowed = false;
@@ -892,8 +885,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected virtual void KnockBack(Vector2 target, float knockBackDelay, float knockBackSpeedFactor)
     {
         if (anim.speed == 0) return;
-        // knockbackDelay를 0으로 설정해 두었다면 낙백이 일어나지 않음
-        if (knockBackDelay != 0) // 낙백이 일어나지 않게. 낵백이 끝나야 kill이 진행된다
+        // knockbackDelay를 0으로 설정해 두었다면 넉백이 일어나지 않음
+        if (knockBackDelay != 0)
         {
             IsKnockBack = true;
             targetDir = ((Vector2)transform.position - target).normalized;
@@ -904,6 +897,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             StartCoroutine(KnockBackDone(knockBackDelay * knockBackSpeedFactor));
         }
     }
+
     IEnumerator KnockBackDone(float knockBackDelay)
     {
         yield return new WaitForSeconds(knockBackDelay);
@@ -917,6 +911,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         anim.SetTrigger("Hit");
         StartCoroutine(StunnedCo());
     }
+
     IEnumerator StunnedCo()
     {
         yield return new WaitForSeconds(stunnedDuration);
@@ -929,40 +924,38 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
 
-        float previousSpeed = currentSpeed;
         currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
 
         // 최대 속도 제한
         if (currentSpeed >= 15f) currentSpeed = 15f;
 
-        // 최소 속도 제한 추가 (너무 느려지지 않도록)
+        // 최소 속도 제한 (너무 느려지지 않도록)
         if (currentSpeed < 1f) currentSpeed = 1f;
 
         anim.SetBool("Hypnotized", true);
 
-        // ⭐ 애니메이터 속도 감소 (느린 모션 효과)
+        // 애니메이터 속도 감소 (느린 모션 효과)
         anim.speed = 1f - _slownessFactor;
 
-        // ⭐ 점프 느림 효과 추가
-        ShadowHeightEnemy shadowHeight = GetComponent<ShadowHeightEnemy>();
-        if (shadowHeight != null)
+        // 점프 느림 효과
+        if (shadowHeightEnemy != null)
         {
-            shadowHeight.ApplySlowToJump(_slownessFactor);
+            shadowHeightEnemy.ApplySlowToJump(_slownessFactor);
         }
     }
-    // 점프 중 속도를 증가시키기 위해 Shadow Height Enemy에서 호출
+
+    // 점프 중 속도를 조정하기 위해 ShadowHeightEnemy에서 호출
     // 최면 애니메이션을 재생하지 않음
     public void SpeedUpOnJump(float _slownessFactor)
     {
         if (currentSpeed == 0) return; // 스톱워치로 시간을 정지시킨 상태에서 작동하지 않도록
 
-        float previousSpeed = currentSpeed;
         currentSpeed = DefaultSpeed - DefaultSpeed * _slownessFactor;
 
         // 최대 속도 제한
         if (currentSpeed >= 15f) currentSpeed = 15f;
 
-        // 최소 속도 제한 추가 (너무 느려지지 않도록)
+        // 최소 속도 제한
         if (currentSpeed < 1f) currentSpeed = 1f;
     }
 
@@ -973,40 +966,41 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         anim.SetBool("Hypnotized", false);
 
-        // ⭐ 애니메이터 속도 복구
+        // 애니메이터 속도 복구
         anim.speed = 1f;
 
-        // ⭐ 점프 느림 효과 해제
-        ShadowHeightEnemy shadowHeight = GetComponent<ShadowHeightEnemy>();
-        if (shadowHeight != null)
+        // 점프 느림 효과 해제
+        if (shadowHeightEnemy != null)
         {
-            shadowHeight.ReleaseSlowFromJump();
+            shadowHeightEnemy.ReleaseSlowFromJump();
         }
     }
+
     public void SpeedUpEnemy()
     {
         float speed = 2f;
         anim.speed = speed;
         CastSlownessToEnemy(-speed);
     }
+
     public void PauseEnemy()
     {
         anim.speed = 0f;
-        currentSpeed = 0f; // sluggish slumber와 겹치지 않기 위해 CastSlowness 함수를 사용하지 않음.
-        //rb.bodyType = RigidbodyType2D.Static;
+        currentSpeed = 0f; // sluggish slumber와 겹치지 않기 위해 CastSlowness 함수를 사용하지 않음
     }
+
     public void ResumeEnemy()
     {
         anim.speed = 1;
-        currentSpeed = DefaultSpeed; // sluggish slumber와 겹치지 않기 위해 ResetCurrentSpeed 함수를 사용하지 않음.
-        //rb.bodyType = RigidbodyType2D.Dynamic;
-    }
-    public bool isTimeStopped()
-    {
-        return currentSpeed == 0f ? true : false;
+        currentSpeed = DefaultSpeed; // sluggish slumber와 겹치지 않기 위해 ResetCurrentSpeed 함수를 사용하지 않음
     }
 
-    // 보스들의 경우 너무 한 점에만 공격이 그래픽적으로 집중되지 않도록. Hit effect가 한 곳에만 생기지 않도록. 
+    public bool isTimeStopped()
+    {
+        return currentSpeed == 0f;
+    }
+
+    // 보스들의 경우 너무 한 점에만 공격이 그래픽적으로 집중되지 않도록. Hit effect가 한 곳에만 생기지 않도록.
     public Vector2 GetRandomBodyPoint()
     {
         if (isSubBoss || isBoss)

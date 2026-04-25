@@ -18,7 +18,7 @@ public class Spawner : MonoBehaviour
     float timer;
 
     WallManager wallManager;
-    EnemyFinder enemyFinder;
+    Equation equation = new Equation(); // GetAvailablePoints에서 매번 new 하지 않도록 캐싱
     #endregion
 
     #region 유니티 콜백 함수
@@ -35,23 +35,6 @@ public class Spawner : MonoBehaviour
     #endregion
 
     #region 적의 수
-    int GetEnemyNumbers()
-    {
-        List<Enemy> activeEnemies = new List<Enemy>();
-        Enemy[] enemies = Resources.FindObjectsOfTypeAll<Enemy>();
-
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i].gameObject.activeSelf)
-            {
-                activeEnemies.Add(enemies[i]);
-            }
-        }
-
-        if (activeEnemies == null)
-            return 0;
-        return activeEnemies.Count;
-    }
     void AddEnemyNumber()
     {
         currentEnemyNumbers++;
@@ -76,17 +59,15 @@ public class Spawner : MonoBehaviour
                 return;
         }
 
-        // 스폰 가능한 지점 탐색하고 벽 안쪽에서 2 unit 더 안쪽에 스폰
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         Vector2 spawnPoint = GetAvailablePoints();
         enemy.transform.position = new Vector2(spawnPoint.x, spawnPoint.y);
 
-        // 초기화
         enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
 
-        // 적 수 계산
         AddEnemyNumber();
     }
+
     /// <summary>
     /// 무한 모드 전용 스폰 (maxEnemyInScene 제한 무시)
     /// </summary>
@@ -99,44 +80,39 @@ public class Spawner : MonoBehaviour
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemyBase.InitEnemy(enemyToSpawn);
 
-        // ⭐ 보스 플래그 설정
         if (isBoss)
         {
             enemyBase.IsBoss = true;
             Logger.Log($"[Spawner] Boss spawned in infinite mode: {enemyToSpawn.Name}");
-
-            // ⭐ 보스 스테이지 설정 (선택사항 - 무한 모드에서 필요한지 확인)
-            // GameManager.instance.SetBossStage(true);
         }
 
         AddEnemyNumber();
     }
+
     public void SpawnSplit(EnemyData enemyToSpawn, int index, bool forceSpawn, Vector2 spawnPos)
     {
-        // 적들이 몰려옵니다의 경우 강제로 스폰
         if (forceSpawn == false)
         {
             if (currentEnemyNumbers >= maxEnemyInScene)
                 return;
         }
 
-        // 스폰 가능한 지점 탐색하고 벽 안쪽에서 2 unit 더 안쪽에 스폰
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         Vector2 offset = new Vector2(UnityEngine.Random.Range(-3f, 3f), UnityEngine.Random.Range(-3f, 3f));
         enemy.transform.position = spawnPos + offset;
 
-        // 초기화
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemyBase.InitEnemy(enemyToSpawn);
         enemyBase.SetIsSplited(true);
 
-        // 적 수 계산
         AddEnemyNumber();
     }
+
     public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
     {
         if (currentEnemyNumbers >= maxEnemyInScene)
             return;
+
         Vector2 spawnPoint = GetAvailablePoints();
         GameObject groupShape = Instantiate(enemyGroupShape, spawnPoint, Quaternion.identity);
         groupShape.transform.eulerAngles = new Vector3(0, 0, Random.Range(0, 360f));
@@ -145,10 +121,11 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < numberOfEnemies; i++)
         {
             GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
+            Enemy enemyComp = enemy.GetComponent<Enemy>(); // GetComponent 한 번만 호출
             enemy.transform.position = groupShape.GetComponent<EnemyGroupShape>().SpawnPoints[i].position;
-            enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
-            enemy.GetComponent<Enemy>().IsGrouping = true;
-            enemy.GetComponent<Enemy>().GroupDir = groupDir;
+            enemyComp.InitEnemy(enemyToSpawn);
+            enemyComp.IsGrouping = true;
+            enemyComp.GroupDir = groupDir;
 
             AddEnemyNumber();
         }
@@ -187,28 +164,24 @@ public class Spawner : MonoBehaviour
         // 텔레포트 이펙트
         GameManager.instance.GetComponent<TeleportEffect>().GenTeleportEffect(spawnPoint);
 
-        // 보스 스폰
         Destroy(landingDoodle);
         yield return new WaitForSeconds(.26f);
 
-        // 스폰 위치 정하기, 보스 프리펩 얻어오기
+        // 보스 스폰
         GameObject enemy = Instantiate(FindObjectOfType<StageAssetManager>().GetBoss(), GameManager.instance.poolManager.transform);
         enemy.transform.position = spawnPoint;
 
-        // 보스 초기화
         EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
         enemyBase.InitEnemy(enemyToSpawn);
         enemyBase.IsBoss = true;
 
-        // 다른 모든 적들 제거
+        // 보스 등장 시 다른 모든 적, 아이템 제거
         GameManager.instance.fieldItemEffect.RemoveAllEnemy();
         GameManager.instance.fieldItemEffect.RemoveAllGems();
         GameManager.instance.fieldItemEffect.RemoveAllChests();
 
-        // 보스 스테이지 변수를 트리거 해서 더 이상 아이템 상자, 알 상자가 스폰되지 않도록
+        // 보스 스테이지 변수를 트리거해서 더 이상 아이템 상자, 알 상자가 스폰되지 않도록
         GameManager.instance.SetBossStage(true);
-
-        // 줄어드는 벽 활성화
     }
 
     public void SpawnBoss(EnemyData enemyToSpawn)
@@ -223,11 +196,7 @@ public class Spawner : MonoBehaviour
         // 벽 안쪽에서 2 unit 더 안쪽에 스폰
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
         float spawnConst = wallManager.GetSpawnAreaConstant();
-        float offset = 2f;
-
-        Vector2 position = new Equation().GetSpawnablePos(spawnConst, offset);
-
-        return position;
+        return equation.GetSpawnablePos(spawnConst, 2f); // Equation 재사용
     }
     #endregion
 }

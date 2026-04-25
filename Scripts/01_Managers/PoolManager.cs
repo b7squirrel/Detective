@@ -12,9 +12,7 @@ public class PoolManager : MonoBehaviour
     Dictionary<string, List<GameObject>> miscPools;
     GameObject enemyFolder;
     List<GameObject> itemFolders;
-    GameObject temp; // 임시 폴더를 매번 생성하지 않게 하기 위해서
-
-    EnemyFinder enemyFinder;
+    Dictionary<string, GameObject> folderDict; // itemFolders 선형 탐색 대신 O(1) Dictionary 사용
 
     [Header("Gems")]
     [SerializeField] Sprite[] gemSprites;
@@ -34,8 +32,7 @@ public class PoolManager : MonoBehaviour
         enemyFolder.transform.parent = transform;
 
         itemFolders = new List<GameObject>();
-
-        enemyFinder = FindObjectOfType<EnemyFinder>();
+        folderDict = new Dictionary<string, GameObject>();
     }
 
     /// <summary>
@@ -90,34 +87,32 @@ public class PoolManager : MonoBehaviour
     public GameObject GetEnemy(int index)
     {
         GameObject select = null;
+        List<GameObject> pool = enemyPools[index];
 
-        for (int i = 0; i < enemyPools[index].Count; i++)
+        for (int i = 0; i < pool.Count; i++)
         {
-            if (!enemyPools[index][i].activeSelf)
+            if (!pool[i].activeSelf)
             {
-                select = enemyPools[index][i];
+                select = pool[i];
                 select.SetActive(true);
                 break;
             }
         }
 
-        if (!select)
+        if (select == null)
         {
             select = Instantiate(enemies[index], enemyFolder.transform);
-            enemyPools[index].Add(select);
+            pool.Add(select);
         }
 
-        //enemyFinder.AddEnemyToList(select.transform);
         return select;
     }
     #endregion
 
     #region GetMisc
-    // effects, weapons, sounds는 tag를 이용해서 pooling
+    // effects, weapons, sounds는 key를 이용해서 pooling
     public GameObject GetMisc(GameObject prefab)
     {
-        GameObject select = null;
-
         if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
 
         string poolingTag = prefab.GetComponent<PoolingKey>().Key;
@@ -125,107 +120,93 @@ public class PoolManager : MonoBehaviour
 
         if (miscPools.ContainsKey(poolingTag)) // 해당 key의 pool이 있다면
         {
-            foreach (var item in miscPools[poolingTag])
+            List<GameObject> pool = miscPools[poolingTag];
+            for (int i = 0; i < pool.Count; i++) // foreach 대신 for 사용하여 GC 방지
             {
-                if (!item.activeSelf)
+                if (!pool[i].activeSelf)
                 {
-                    select = item;
-                    select.SetActive(true);
-                    return select;
+                    pool[i].SetActive(true);
+                    return pool[i];
                 }
             }
         }
-        else // 해당 key의 pool이 없다면
+        else // 해당 key의 pool이 없다면 새로 생성
         {
-            List<GameObject> go = new List<GameObject>();
-
             GameObject folder = new GameObject();
             folder.transform.position = Vector3.zero;
             folder.transform.parent = transform;
             folder.name = poolingTag;
             itemFolders.Add(folder);
+            folderDict[poolingTag] = folder; // Dictionary에도 등록
 
-            select = Instantiate(prefab, folder.transform);
+            List<GameObject> go = new List<GameObject>();
+            GameObject select = Instantiate(prefab, folder.transform);
             go.Add(select);
             miscPools.Add(poolingTag, go);
             return select;
         }
 
-        // pool안의 오브젝트가 모두 사용중이라면 
-        // pooling 태그 이름이 같은 폴더를 찾아서 자식으로 넣어줌
-        if (miscPools[poolingTag].Count < maxNum || maxNum == 0) // maxNum == 0이면 갯수 제한 없음.
+        // pool 안의 오브젝트가 모두 사용 중이라면 새로 생성
+        if (miscPools[poolingTag].Count < maxNum || maxNum == 0) // maxNum == 0이면 갯수 제한 없음
         {
-            for (int i = 0; i < itemFolders.Count; i++)
+            // Dictionary로 O(1) 탐색
+            if (folderDict.TryGetValue(poolingTag, out GameObject targetFolder))
             {
-                if (itemFolders[i].name == poolingTag)
-                {
-                    temp = itemFolders[i];
-                }
+                GameObject select = Instantiate(prefab, targetFolder.transform);
+                miscPools[poolingTag].Add(select);
+                return select;
             }
-            select = Instantiate(prefab, temp.transform);
-            miscPools[poolingTag].Add(select);
-            return select;
         }
+
         return null;
     }
     #endregion
 
-    #region Get Gems
+    #region GetGem
     public GameObject GetGem(GameObject gem)
     {
-
-        // GameObject gemToUI = Instantiate(gem, transform);
-        // return gemToUI;
-
-        GameObject select = null;
-
         if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
 
         string poolingTag = gem.GetComponent<PoolingKey>().Key;
 
         if (miscPools.ContainsKey(poolingTag)) // 해당 key의 pool이 있다면
         {
-            foreach (var item in miscPools[poolingTag])
+            List<GameObject> pool = miscPools[poolingTag];
+            for (int i = 0; i < pool.Count; i++) // foreach 대신 for 사용하여 GC 방지
             {
-                if (!item.activeSelf)
+                if (!pool[i].activeSelf)
                 {
-                    select = item;
-                    select.SetActive(true);
-                    return select;
+                    pool[i].SetActive(true);
+                    return pool[i];
                 }
             }
         }
-        else // 해당 key의 pool이 없다면
+        else // 해당 key의 pool이 없다면 새로 생성
         {
-            List<GameObject> go = new List<GameObject>();
-
             GameObject folder = new GameObject();
             folder.transform.position = Vector3.zero;
             folder.transform.parent = transform;
             folder.name = poolingTag;
             itemFolders.Add(folder);
+            folderDict[poolingTag] = folder; // Dictionary에도 등록
 
-            select = Instantiate(gem, folder.transform);
+            List<GameObject> go = new List<GameObject>();
+            GameObject select = Instantiate(gem, folder.transform);
             go.Add(select);
             miscPools.Add(poolingTag, go);
-
             return select;
         }
 
-        // pool안의 오브젝트가 모두 사용중이라면 
-        // pooling 태그 이름이 같은 폴더를 찾아서 자식으로 넣어줌
-
-        for (int i = 0; i < itemFolders.Count; i++)
+        // pool 안의 오브젝트가 모두 사용 중이라면 새로 생성
+        // Dictionary로 O(1) 탐색
+        if (folderDict.TryGetValue(poolingTag, out GameObject gemFolder))
         {
-            if (itemFolders[i].name == poolingTag)
-            {
-                temp = itemFolders[i];
-            }
+            GameObject select = Instantiate(gem, gemFolder.transform);
+            miscPools[poolingTag].Add(select);
+            return select;
         }
-        select = Instantiate(gem, temp.transform);
-        miscPools[poolingTag].Add(select);
 
-        return select;
+        return null;
     }
     #endregion
 }

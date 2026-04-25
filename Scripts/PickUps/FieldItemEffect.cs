@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class FieldItemEffect : MonoBehaviour
 {
+    public static FieldItemEffect instance;
     [SerializeField] float stopDuration;
     [SerializeField] float invincibaleDuration;
     [SerializeField] CountdownTimer stopCounterUI;
@@ -21,6 +22,10 @@ public class FieldItemEffect : MonoBehaviour
     Coroutine coStopWatch, coInvincible;
     bool isStoppedWithStopwatch = false; // 스톱워치로 시간을 멈추었을 때
 
+    void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         // 어떤 스폰 컨트롤러든 찾기

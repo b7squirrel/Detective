@@ -43,6 +43,13 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     FieldItemSpawner fieldItemSpawner;
     StageInfo stageInfo;
 
+    // GetWeightedRandomNormalEnemyIndex에서 매번 new List 하지 않도록 캐싱
+    List<int> cachedIndices = new List<int>(16);
+    List<int> cachedWeights = new List<int>(16);
+
+    // UpdateUI, GetRandomPointInRing에서 매번 new 하지 않도록 캐싱
+    GeneralFuctions generalFuctions = new GeneralFuctions();
+
     [Header("UI")]
     TimeWaveUI timeWaveUI;
     EnemyCountUI enemyCountUI;
@@ -95,7 +102,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         UpdateChestSpawn();
     }
 
-    // ⭐ Public Getter 메서드들
+    #region Public Getter 메서드들
     public int GetCurrentWave() => currentWave;
     public float GetSurvivalTime() => survivalTime;
 
@@ -128,13 +135,12 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     }
 
     /// <summary>
-    /// ⭐ 적이 죽었을 때 호출 (외부에서)
+    /// 적이 죽었을 때 EnemyBase.Die()에서 호출
     /// </summary>
     public void OnEnemyKilled()
     {
         currentWaveEnemiesKilled++;
 
-        // UI 업데이트
         if (enemyCountUI != null)
         {
             enemyCountUI.UpdateWaveProgress(
@@ -143,6 +149,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             );
         }
     }
+    #endregion
 
     IEnumerator WaitAndInitialize()
     {
@@ -169,6 +176,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
         Logger.Log($"[InfiniteStage] Essential ready after {waitedFrames} frames");
 
+        // WaitAndInitialize에서 한 번 더 캐싱 (Awake보다 늦게 준비되는 경우 대비)
         poolManager = FindObjectOfType<PoolManager>();
         spawner = FindObjectOfType<Spawner>();
         wallManager = FindObjectOfType<WallManager>();
@@ -206,10 +214,8 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         timeWaveUI = FindObjectOfType<TimeWaveUI>();
         enemyCountUI = FindObjectOfType<EnemyCountUI>();
 
-        // 무한 모드 속도 적용
         ApplyGameSpeed();
 
-        // 음악 초기화
         if (GameManager.instance != null && GameManager.instance.musicCreditManager != null)
         {
             GameManager.instance.musicCreditManager.Init();
@@ -224,13 +230,11 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         Logger.Log("[InfiniteStage] Initialization complete!");
     }
 
-    // ⭐ 새로운 메서드: 게임 속도 적용
     void ApplyGameSpeed()
     {
         Time.timeScale = gameSpeedMultiplier;
         Time.fixedDeltaTime = originalFixedDeltaTime * gameSpeedMultiplier;
 
-        // ⭐ PauseManager에게 알려주기
         PauseManager pauseManager = FindObjectOfType<PauseManager>();
         if (pauseManager != null)
         {
@@ -265,7 +269,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         return true;
     }
 
-    // ⭐ 게임 종료/비활성화 시 원래대로
     void OnDisable()
     {
         ResetGameSpeed();
@@ -281,7 +284,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         Time.timeScale = originalTimeScale;
         Time.fixedDeltaTime = originalFixedDeltaTime;
 
-        // ⭐ PauseManager도 원래대로
         PauseManager pauseManager = FindObjectOfType<PauseManager>();
         if (pauseManager != null)
         {
@@ -369,7 +371,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             if (timeWaveUI != null)
             {
                 float currentTime = GetSurvivalTime();
-                string timeFormatted = new GeneralFuctions().FormatTime(currentTime);
+                string timeFormatted = generalFuctions.FormatTime(currentTime); // 캐싱된 인스턴스 재사용
                 timeWaveUI.InitTimeWaveUI(timeFormatted, currentWave.ToString());
             }
 
@@ -381,7 +383,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         }
     }
 
-    // ⭐⭐⭐ 핵심: 웨이브 루프 (보스 시스템 통합)
+    // 핵심: 웨이브 루프 (보스 시스템 통합)
     IEnumerator WaveLoop()
     {
         while (true)
@@ -391,18 +393,16 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             currentWaveEnemiesSpawned = 0;
             currentWaveEnemiesKilled = 0;
 
-            // 웨이브 번호 팝업
             if (timeWaveUI != null)
                 timeWaveUI.PunchWaveText();
 
-            // ⭐ 6의 배수면 보스 웨이브
+            // 6의 배수면 보스 웨이브
             bool isBossWave = (currentWave % 6 == 0);
 
             if (isBossWave)
             {
                 Logger.Log($"[InfiniteStage] ========== BOSS Wave {currentWave} Start ==========");
 
-                // 보스 1마리만
                 currentWavePlannedEnemies = 1;
 
                 if (enemyCountUI != null)
@@ -416,7 +416,6 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             {
                 Logger.Log($"[InfiniteStage] ========== Wave {currentWave} Start ==========");
 
-                // 일반 적 수 계산
                 float rawCount = baseEnemiesPerWave * Mathf.Pow(enemyGrowthRate, currentWave - 1);
                 int normalEnemies = Mathf.Min(Mathf.RoundToInt(rawCount), maxEnemiesPerWave);
 
@@ -443,7 +442,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             OnWaveComplete?.Invoke(currentWave);
             Logger.Log($"[InfiniteStage] OnWaveComplete event triggered for wave {currentWave}");
 
-            // 휴식
+            // 웨이브 휴식
             float waitedTime = 0f;
             while (waitedTime < waveInterval)
             {
@@ -474,13 +473,13 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         Logger.Log("[InfiniteStage] All enemies cleared!");
     }
 
-    // ⭐ 일반 웨이브 스폰 (일반 적 + SubBoss)
+    // 일반 웨이브 스폰 (일반 적 + SubBoss)
     IEnumerator SpawnNormalWave(int normalEnemyCount)
     {
         float spawnDelay = baseSpawnInterval / currentDifficulty;
         spawnDelay = Mathf.Max(spawnDelay, minSpawnInterval);
 
-        // 1. 일반 적 스폰
+        // 일반 적 스폰
         for (int i = 0; i < normalEnemyCount; i++)
         {
             if (GameManager.instance != null && GameManager.instance.IsPlayerDead)
@@ -495,10 +494,10 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             yield return new WaitForSeconds(spawnDelay);
         }
 
-        // ⭐ 경고 팝업 후 서브보스 스폰
-        string subBossName = GetSubBossName(); // 이름만 먼저 가져옴
+        // 경고 팝업 후 서브보스 스폰
+        string subBossName = GetSubBossName();
         GameManager.instance.bossWarningPanel.Init(subBossName);
-        yield return new WaitForSecondsRealtime(2f); // 팝업 보여주는 동안 대기
+        yield return new WaitForSecondsRealtime(2f);
 
         SpawnSubBossInOrder();
         currentWaveEnemiesSpawned++;
@@ -506,12 +505,12 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         Logger.Log($"[InfiniteStage] Spawned {normalEnemyCount} normal + 1 sub-boss");
     }
 
-    // ⭐ 보스 웨이브 스폰 (보스만)
+    // 보스 웨이브 스폰 (보스만)
     IEnumerator SpawnBossWave()
     {
         string bossName = GetBossName(currentWave);
         GameManager.instance.bossWarningPanel.Init(bossName);
-        yield return new WaitForSeconds(2f); // 팝업 보여주고 스폰
+        yield return new WaitForSeconds(2f);
 
         SpawnBossInOrder(currentWave);
         currentWaveEnemiesSpawned++;
@@ -525,16 +524,13 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         if (waveInCycle == 0) waveInCycle = 6;
         int subBossOrder = waveInCycle - 1; // 0~4
 
-        // ⭐ StageInfo에서 이름 가져오기
-        // subBossOrder 0 = 스테이지 1, 1 = 스테이지 2... 이므로
-        // subBossOrder + 1 로 해당 스테이지 번호 계산
-        if (stageInfo != null)
+        if (stageInfo != null) // 필드 캐싱 사용
         {
             int stageIndex = subBossOrder + 1;
             return stageInfo.GetStageInfo(stageIndex).Title;
         }
 
-        // StageInfo가 없으면 EnemyData.Name으로 폴백
+        // stageInfo가 없으면 EnemyData.Name으로 폴백
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
             if (enemyConfigs[i].IsSubBoss() &&
@@ -558,19 +554,15 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         }
 
         if (bossCount == 0) return "";
-        int bossOrder = bossNumber % bossCount; // 0부터 시작
+        int bossOrder = bossNumber % bossCount;
 
-        // ⭐ StageInfo에서 이름 가져오기
-        // bossOrder 0 = 스테이지 6, 1 = 스테이지 12... 이므로
-        // (bossOrder + 1) * 6 으로 해당 스테이지 번호 계산
-        StageInfo stageInfo = FindObjectOfType<StageInfo>();
-        if (stageInfo != null)
+        if (stageInfo != null) // 필드 캐싱 사용 (기존의 지역변수 FindObjectOfType 제거)
         {
             int stageIndex = (bossOrder + 1) * 6;
             return stageInfo.GetStageInfo(stageIndex).Title;
         }
 
-        // StageInfo가 없으면 EnemyData.Name으로 폴백
+        // stageInfo가 없으면 EnemyData.Name으로 폴백
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
             if (enemyConfigs[i].IsStageBoss() &&
@@ -583,7 +575,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     }
     #endregion
 
-    // ⭐ 일반 적만 랜덤 스폰
+    // 일반 적만 랜덤 스폰
     void SpawnRandomNormalEnemy()
     {
         int enemyIndex = GetWeightedRandomNormalEnemyIndex();
@@ -594,7 +586,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         }
     }
 
-    // ⭐ SubBoss 순서대로 스폰 (Wave 1-5, 7-11, 13-17...)
+    // SubBoss 순서대로 스폰 (Wave 1-5, 7-11, 13-17...)
     string SpawnSubBossInOrder()
     {
         int waveInCycle = currentWave % 6;
@@ -608,7 +600,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             {
                 spawner.SpawnForInfiniteMode(enemyConfigs[i].data, i);
                 Logger.Log($"[InfiniteStage] SubBoss[{subBossOrder}] spawned: {enemyConfigs[i].data.Name}");
-                return enemyConfigs[i].data.Name; // ⭐ 이름 반환
+                return enemyConfigs[i].data.Name;
             }
         }
 
@@ -616,7 +608,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         return "";
     }
 
-    // ⭐ Boss 순서대로 스폰 (Wave 6, 12, 18...)
+    // Boss 순서대로 스폰 (Wave 6, 12, 18...)
     string SpawnBossInOrder(int wave)
     {
         int bossNumber = (wave / 6) - 1;
@@ -643,7 +635,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
             {
                 spawner.SpawnForInfiniteMode(enemyConfigs[i].data, i, isBoss: true);
                 Logger.Log($"[InfiniteStage] Boss[{bossOrder}] spawned: {enemyConfigs[i].data.Name}");
-                return enemyConfigs[i].data.Name; // ⭐ 이름 반환
+                return enemyConfigs[i].data.Name;
             }
         }
 
@@ -651,48 +643,47 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         return "";
     }
 
-    // ⭐ 일반 적만 가중치 랜덤 (보스 제외)
+    // 일반 적만 가중치 랜덤 (보스 제외). List를 캐싱하여 GC 방지
     int GetWeightedRandomNormalEnemyIndex()
     {
-        List<int> availableIndices = new List<int>();
-        List<int> availableWeights = new List<int>();
+        cachedIndices.Clear();
+        cachedWeights.Clear();
 
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
-            // Normal 타입만 필터링
             if (enemyConfigs[i].IsNormalEnemy() &&
                 enemyConfigs[i].IsAvailableAtWave(currentWave))
             {
-                availableIndices.Add(i);
-                availableWeights.Add(enemyConfigs[i].weight);
+                cachedIndices.Add(i);
+                cachedWeights.Add(enemyConfigs[i].weight);
             }
         }
 
-        if (availableIndices.Count == 0)
+        if (cachedIndices.Count == 0)
         {
             Logger.LogError("[InfiniteStage] No normal enemies available!");
             return 0;
         }
 
         int totalWeight = 0;
-        foreach (int w in availableWeights)
+        for (int i = 0; i < cachedWeights.Count; i++)
         {
-            totalWeight += w;
+            totalWeight += cachedWeights[i];
         }
 
         int randomValue = Random.Range(0, totalWeight);
         int currentWeight = 0;
 
-        for (int i = 0; i < availableWeights.Count; i++)
+        for (int i = 0; i < cachedWeights.Count; i++)
         {
-            currentWeight += availableWeights[i];
+            currentWeight += cachedWeights[i];
             if (randomValue < currentWeight)
             {
-                return availableIndices[i];
+                return cachedIndices[i];
             }
         }
 
-        return availableIndices[0];
+        return cachedIndices[0];
     }
 
     void IncreaseDifficulty()
@@ -726,7 +717,7 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
 
     Vector2 GetRandomPointInRing(float innerRadius, float outerRadius)
     {
-        return new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadius, innerRadius);
+        return generalFuctions.GetRandomPointInRing(Vector2.zero, outerRadius, innerRadius); // 캐싱된 인스턴스 재사용
     }
 
     #region Debug
