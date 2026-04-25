@@ -20,11 +20,6 @@ public class Enemy : EnemyBase
     bool isLive;
     Vector2 currentPosition;
 
-    // ⭐ 원거리 공격 관련 변수 제거됨 (컴포넌트로 이동)
-    // float attackInterval;
-    // float nextAttackTime;
-    // float distanceToPlayer;
-
     // 점프
     bool canJump;
 
@@ -38,8 +33,6 @@ public class Enemy : EnemyBase
 
     [SerializeField] LayerMask playerLayer;
 
-    WallManager wallManager;
-    float nextOutOfRangeCheckingTime;
     #endregion
 
     #region 유니티 콜백 함수
@@ -188,14 +181,6 @@ public class Enemy : EnemyBase
         }
 
         base.ApplyMovement();
-    }
-
-    bool IsOutOfRange()
-    {
-        if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnConst = wallManager.GetSpawnAreaConstant();
-
-        return new Equation().IsOutOfRange(transform.position, spawnConst);
     }
 
     #region 공격

@@ -351,7 +351,7 @@ public class CardDataManager : MonoBehaviour
                     var gachaSys = FindObjectOfType<GachaSystem>();
                     if (gachaSys != null)
                     {
-                        gachaSys.AddEssentialEquip(startingCards[0]);
+                        gachaSys.AddDefaultEquip(startingCards[0]);
                         gachaSys.ImmediateSaveEquipmentData();
                     }
                 }

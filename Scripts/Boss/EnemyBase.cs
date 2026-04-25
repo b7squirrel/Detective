@@ -71,7 +71,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected GameObject dieExplosionPrefeab;
     [SerializeField] protected GameObject knockbackEffect;
     [SerializeField] protected Transform hitEffectPoint;
-    [SerializeField] protected float whiteFlashDuration = 0.08f;
     [SerializeField] protected float knockBackSpeed;
     [SerializeField] protected float knockBackDelay;
     [SerializeField] protected SpriteRenderer[] srFlash; // 깜빡이기 위한 스프라이트 렌더러들. 이 부분들의 색깔을 바꿔서 히트를 보여줌
@@ -80,11 +79,11 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected float stunnedDuration = .2f;
 
     protected Material[] initialMat;
-    [SerializeField] protected Material whiteMat;
+    LayerMask wallLayer;
+
 
     [HideInInspector] public Vector2 targetDir;
     protected float stunnedSpeed = 14f;
-    Coroutine whiteFlashCoroutine;
     Color enemyColor; // die effect의 색깔을 정하기 위해서.
 
     // 공격 프레임 간격 (모드별로 다르게 설정)
@@ -117,10 +116,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     static BossDieManager bossDieManager;
 
     #endregion
-
-    // 시각적 효과 (느림보 최면술)
-    Color originalColor = Color.white;
-    bool isColorChanged = false;
 
     #region 유니티 콜백
     protected virtual void OnEnable()
@@ -162,7 +157,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 srFlash[i].material = initialMat[i];
             }
         }
-        whiteFlashCoroutine = null; // 코루틴 참조도 초기화
 
         //initialMat = sr.material;
         IsKnockBack = false;
@@ -197,6 +191,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         // 시간 정지 상태 체크. 시간 정지 이후 생성되는 적들에게도 시간 정지 적용
         CheckStopwatchStatus();
+
+        if(wallLayer == 0) wallLayer = LayerMask.GetMask("Wall"); // 한 번만 실행
     }
     /// <summary>
     /// 적 생성 시 시간 정지 상태 확인하여 즉시 정지
@@ -263,7 +259,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         enemyColor = _enemyToSpawn.enemyColor;
 
         // 상태 초기화
-        ResetTintColor(); // ⭐ 색상 초기화 추가
         IsSlowed = false; // 느림 상태도 초기화
 
         // ⭐ 공격 프레임 간격 설정 (모드별 분기)
@@ -562,9 +557,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     void IsInsideWall()
     {
-        Vector2 dir = (pastPos - (Vector2)transform.position).normalized;
-        RaycastHit2D hit = Physics2D.Linecast(pastPos, transform.position, LayerMask.GetMask("Wall"));
-        if (hit.collider != null) // 벽 안으로 들어갔다면
+        RaycastHit2D hit = Physics2D.Linecast(pastPos, transform.position, wallLayer);
+        if (hit.collider != null)
         {
             transform.position = pastPos;
         }
@@ -787,8 +781,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
             }
         }
 
-        // WhiteFlash(whiteFlashDuration);
-        // if (isBoss || isSubBoss) SpriteFlash(whiteFlashDuration);
         KnockBack(target, _knockBackDelay, knockBackSpeedFactor);
     }
     public virtual void Die()
@@ -893,10 +885,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
     public virtual void DieWithoutDrop()
     {
-        if (whiteFlashCoroutine != null)
-            StopCoroutine(whiteFlashCoroutine);
-
-        //sr.material = initialMat;
         IsSlowed = false;
         gameObject.SetActive(false);
     }
@@ -933,54 +921,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     {
         yield return new WaitForSeconds(stunnedDuration);
         IsStunned = false;
-    }
-
-    public void WhiteFlash(float delayTime)
-    {
-        // if (gameObject.activeSelf)
-        // {
-        //     whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
-        // }
-    }
-    void SpriteFlash(float delayTime)
-    {
-        if (srFlash == null) return;
-        if (gameObject.activeSelf)
-        {
-            if (whiteFlashCoroutine != null) return; // 플래시가 아직 끝나지 않았다면 또 다른 플래시를 실행하지 않음
-            whiteFlashCoroutine = StartCoroutine(WhiteFlashCo(delayTime));
-        }
-    }
-    protected IEnumerator SpriteFlashCo(float delayTime)
-    {
-        // yield return new WaitForSeconds(delayTime);
-        foreach (var item in srFlash)
-        {
-            item.color = new Color(.5f, 0, 0, 1); // 빨강으로 바꾸기
-        }
-
-        yield return new WaitForSeconds(.1f);
-        foreach (var item in srFlash)
-        {
-            item.color = new Color(1, 1, 1, 1); // 다시 하얀색으로 되돌려서 원래 색으로 바꾸기
-        }
-    }
-
-    protected IEnumerator WhiteFlashCo(float delayTime)
-    {
-        // yield return new WaitForSeconds(delayTime);
-        foreach (var item in srFlash)
-        {
-            item.material = whiteMat;
-        }
-        yield return new WaitForSeconds(.07f);
-        for (int i = 0; i < initialMat.Length; i++)
-        {
-            srFlash[i].material = initialMat[i];
-        }
-        yield return new WaitForSeconds(.07f); // 연속 공격을 당할 때 캐릭터가 아예 하얀색으로 보이지 않도록 딜레이를 주기
-
-        whiteFlashCoroutine = null;
     }
     #endregion
 
@@ -1064,68 +1004,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public bool isTimeStopped()
     {
         return currentSpeed == 0f ? true : false;
-    }
-
-    /// <summary>
-    /// 느림 효과 등 상태 이상 색상 적용
-    /// </summary>
-    public void SetTintColor(Color tintColor)
-    {
-        // // 첫 색상 변경 시 원래 색상 저장
-        // if (!isColorChanged)
-        // {
-        //     if (sr != null)
-        //     {
-        //         originalColor = sr.color;
-        //     }
-        //     isColorChanged = true;
-        // }
-
-        // // 메인 스프라이트
-        // if (sr != null)
-        // {
-        //     sr.color = tintColor;
-        // }
-
-        // // 서브보스/보스의 경우 여러 스프라이트
-        // if (srFlash != null && srFlash.Length > 0)
-        // {
-        //     foreach (var sprite in srFlash)
-        //     {
-        //         if (sprite != null)
-        //         {
-        //             sprite.color = tintColor;
-        //         }
-        //     }
-        // }
-    }
-
-    /// <summary>
-    /// 원래 색상으로 복구 (InitEnemy에서도 호출)
-    /// </summary>
-    public void ResetTintColor()
-    {
-        // // 색상 상태 초기화
-        // isColorChanged = false;
-        // originalColor = Color.white;
-
-        // // 메인 스프라이트
-        // if (sr != null)
-        // {
-        //     sr.color = Color.white;
-        // }
-
-        // // 서브보스/보스의 경우 여러 스프라이트
-        // if (srFlash != null && srFlash.Length > 0)
-        // {
-        //     foreach (var sprite in srFlash)
-        //     {
-        //         if (sprite != null)
-        //         {
-        //             sprite.color = Color.white;
-        //         }
-        //     }
-        // }
     }
 
     // 보스들의 경우 너무 한 점에만 공격이 그래픽적으로 집중되지 않도록. Hit effect가 한 곳에만 생기지 않도록. 

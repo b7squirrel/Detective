@@ -142,7 +142,6 @@ public class Skill200 : SkillBase
         
         enemy.IsSlowed = true;
         enemy.CastSlownessToEnemy(slownessFactor);
-        enemy.SetTintColor(slowColor);
         
         slowedEnemies.Add(enemy);
         
@@ -186,7 +185,6 @@ public class Skill200 : SkillBase
             
             enemy.IsSlowed = false;
             enemy.ResetCurrentSpeedToDefault();
-            enemy.ResetTintColor();
             
             // ⭐ 콜백 해제
             ShadowHeightEnemy shadowHeight = enemy.GetComponent<ShadowHeightEnemy>();
