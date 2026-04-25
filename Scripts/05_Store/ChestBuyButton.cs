@@ -139,4 +139,11 @@ public class ChestBuyButton : MonoBehaviour
         // 지금은 여기서 바로 false로 바꾸지 않음
         // isProcessing = false; ← 제거
     }
+
+    // ✅ 추가: 가챠 패널이 닫힐 때 호출 (GachaPanelManager에서 호출)
+    public void ResetState()
+    {
+        isProcessing = false;
+        if (fg != null) fg.SetActive(false);
+    }
 }

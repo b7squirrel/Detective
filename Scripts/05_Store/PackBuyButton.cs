@@ -71,21 +71,23 @@ public class PackBuyButton : MonoBehaviour
     {
         isProcessing = true;
 
-        // 1. 버튼 눌림 애니메이션
-        if (anim != null)
-            anim.SetTrigger("Pressed");
+        if (anim != null) anim.SetTrigger("Pressed");
+        if (fg != null) fg.SetActive(true);
 
-        // 2. FG 즉시 활성화 (다른 버튼 입력 차단)
-        if (fg != null)
-            fg.SetActive(true);
-
-        // 3. 애니메이션이 끝날 때까지 대기 (0.1초)
         yield return new WaitForSeconds(0.1f);
 
-        // 4. 화면 전환 요청
         Logger.Log($"[PackBuyButton] 클릭: {productData.ProductId}");
         ShopManager.Instance.PurchaseProduct(productData.ProductId);
 
+        // ✅ 수정: isProcessing만 리셋 (fg는 ResetState에서 처리)
+        // 가챠 패널이 열리는 경우 ResetState()가 GachaPanelManager에서 호출됨
         isProcessing = false;
+    }
+
+    // ✅ 추가: 가챠 패널이 닫힐 때 호출
+    public void ResetState()
+    {
+        isProcessing = false;
+        if (fg != null) fg.SetActive(false);
     }
 }

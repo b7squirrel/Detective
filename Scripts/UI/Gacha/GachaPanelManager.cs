@@ -21,5 +21,15 @@ public class GachaPanelManager : MonoBehaviour
     {
         gameObject.SetActive(activate);
         FG.SetActive(false);
+
+        // ✅ 수정: ChestBuyButton과 PackBuyButton 모두 리셋
+        if (!activate)
+        {
+            foreach (var btn in FindObjectsOfType<ChestBuyButton>())
+                btn.ResetState();
+
+            foreach (var btn in FindObjectsOfType<PackBuyButton>())
+                btn.ResetState();
+        }
     }
 }
