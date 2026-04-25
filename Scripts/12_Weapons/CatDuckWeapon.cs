@@ -19,8 +19,11 @@ public class CatDuckWeapon : WeaponBase
     [SerializeField] float offScreenDistance = 3f;
     [SerializeField] float catMaxHeight = 3f;
 
-    // ⭐ 런타임에 결정되는 고양이 프리팹
+    // 런타임에 결정되는 고양이 프리팹
     GameObject currentCatPrefab;
+
+    // Attack, GetTargetPosition에서 매번 new List 하지 않도록 필드로 캐싱
+    private List<Vector2> enemyQueryBuffer = new List<Vector2>(1);
 
     protected override void Awake()
     {
@@ -66,10 +69,9 @@ public class CatDuckWeapon : WeaponBase
     {
         base.Attack();
 
-        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(1);
-        if (closestEnemyPosition == null || closestEnemyPosition.Count == 0)
-            return;
-        if (closestEnemyPosition[0] == Vector2.zero)
+        // 버퍼 재사용으로 new List 방지. GetTargetPosition에서도 같은 버퍼 사용
+        EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
+        if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
             return;
 
         ShootLaserPointer();
@@ -77,7 +79,8 @@ public class CatDuckWeapon : WeaponBase
 
     void ShootLaserPointer()
     {
-        Vector2 targetPosition = GetTargetPosition();
+        // Attack에서 이미 버퍼에 적 위치를 채워뒀으므로 재사용
+        Vector2 targetPosition = GetTargetPositionFromBuffer();
 
         if (targetPosition == Vector2.zero)
             return;
@@ -209,14 +212,13 @@ public class CatDuckWeapon : WeaponBase
         return spawnPos;
     }
 
-    Vector2 GetTargetPosition()
+    // Attack에서 채워둔 버퍼를 재사용 (중복 GetEnemies 호출 방지)
+    Vector2 GetTargetPositionFromBuffer()
     {
-        List<Vector2> closestEnemies = EnemyFinder.instance.GetEnemies(1);
-
-        if (closestEnemies == null || closestEnemies.Count == 0 || closestEnemies[0] == Vector2.zero)
+        if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
             return Vector2.zero;
 
-        Vector2 enemyPos = closestEnemies[0];
+        Vector2 enemyPos = enemyQueryBuffer[0];
         Vector2 offset = Random.insideUnitCircle * enemyTargetRadius;
         Vector2 targetPos = enemyPos + offset;
 

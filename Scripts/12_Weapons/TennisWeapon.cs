@@ -3,14 +3,25 @@ using UnityEngine;
 
 public class TennisWeapon : WeaponBase
 {
-    [SerializeField] GameObject weaponTennisBall; // ⭐ 동료 오리 폴백용
+    [SerializeField] GameObject weaponTennisBall; // 동료 오리 폴백용
     [SerializeField] AudioClip shoot;
 
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
 
-    // ⭐ 런타임에 결정되는 프로젝타일
+    // 런타임에 결정되는 프로젝타일
     GameObject currentTennisBallPrefab;
+
+    // Attack에서 매번 new List 하지 않도록 필드로 캐싱
+    private List<Vector2> enemyQueryBuffer = new List<Vector2>(1);
+
+    // if-else 체인 대신 배열로 관리 (인덱스 → 각도)
+    private static readonly float[] angleOffsets =
+    {
+        0f, -15f, 15f, -30f, 30f, -45f, 45f, -60f, 60f,
+        -75f, 75f, -90f, 90f, -105f, 105f, -120f, 120f,
+        -135f, 135f, -150f, 150f
+    };
 
     public override void Init(WeaponStats stats, bool isLead)
     {
@@ -23,7 +34,6 @@ public class TennisWeapon : WeaponBase
         if (equippedItem != null && equippedItem.projectilePrefab != null)
         {
             currentTennisBallPrefab = equippedItem.projectilePrefab;
-            // Logger.Log($"[TennisWeapon] 프로젝타일 사용: {equippedItem.Name} / IsLead: {InitialWeapon}");
         }
         else
         {
@@ -34,9 +44,12 @@ public class TennisWeapon : WeaponBase
 
     protected override void Attack()
     {
-        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(1);
-        if (closestEnemyPosition == null) return;
-        if (closestEnemyPosition[0] == Vector2.zero) return;
+        base.Attack();
+
+        // 버퍼 재사용으로 new List 방지
+        EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
+        if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
+            return;
 
         AttackCo();
     }
@@ -45,43 +58,21 @@ public class TennisWeapon : WeaponBase
     {
         AnimShoot();
         SoundManager.instance.Play(shoot);
-        Transform muzzleEffect =
-            GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
+
+        Transform muzzleEffect = GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
         muzzleEffect.transform.position = ShootPoint.position;
 
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
-            // ⭐ currentTennisBallPrefab 사용
             GameObject tennisBall = GameManager.instance.poolManager.GetMisc(currentTennisBallPrefab);
             if (tennisBall == null) return;
-            
+
             tennisBall.transform.position = ShootPoint.position;
 
-            float index = 0f;
-            if (i == 0) index = 0;
-            else if (i == 1) index = -15f;
-            else if (i == 2) index = 15f;
-            else if (i == 3) index = -30f;
-            else if (i == 4) index = 30f;
-            else if (i == 5) index = -45f;
-            else if (i == 6) index = 45f;
-            else if (i == 7) index = -60f;
-            else if (i == 8) index = 60f;
-            else if (i == 9) index = -75f;
-            else if (i == 10) index = 75f;
-            else if (i == 11) index = -90f;
-            else if (i == 12) index = 90f;
-            else if (i == 13) index = -105f;
-            else if (i == 14) index = 105f;
-            else if (i == 15) index = -120f;
-            else if (i == 16) index = 120f;
-            else if (i == 17) index = -135f;
-            else if (i == 18) index = 135f;
-            else if (i == 19) index = -150f;
-            else if (i == 20) index = 150f;
+            // 배열로 각도 조회 (if-else 체인 제거)
+            float index = i < angleOffsets.Length ? angleOffsets[i] : 0f;
 
             Vector3 direction = Quaternion.AngleAxis(index, Vector3.forward) * dir;
-
             ProjectileBase projectile = tennisBall.GetComponent<ProjectileBase>();
             projectile.Speed = weaponStats.projectileSpeed;
             projectile.Direction = direction;

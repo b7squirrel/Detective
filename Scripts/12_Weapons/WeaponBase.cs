@@ -7,10 +7,10 @@ public class WeaponBase : MonoBehaviour
     public WeaponData weaponData;
     public WeaponStats weaponStats;
 
-    // ⭐ 동료 데미지 증가용 배수
+    // 동료 데미지 증가용 배수
     protected float allyDamageMultiplier = 1f;
 
-    // ✨ 데미지 트래커용 무기 이름
+    // 데미지 트래커용 무기 이름
     [Header("데미지 트래커")]
     [SerializeField] protected string weaponName;
 
@@ -49,6 +49,9 @@ public class WeaponBase : MonoBehaviour
     protected bool flip;
     public bool IsDirectional { get; set; }
     #endregion
+
+    // SetAngle에서 매 프레임 new List 하지 않도록 필드로 캐싱
+    private List<Vector2> angleQueryBuffer = new List<Vector2>(2);
 
     #region Weapon Anim Bridge
     public virtual void OnAnimEvent() { }
@@ -90,23 +93,23 @@ public class WeaponBase : MonoBehaviour
 
     protected virtual void SetAngle()
     {
-        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(2);
+        // 필드 버퍼 재사용으로 매 프레임 new List 방지
+        EnemyFinder.instance.GetEnemies(2, angleQueryBuffer);
 
-        if (closestEnemyPosition == null || closestEnemyPosition.Count == 0)
-            return;
+        if (angleQueryBuffer.Count == 0) return;
 
-        dir = GetDirection(closestEnemyPosition[0]);
+        dir = GetDirection(angleQueryBuffer[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        if (closestEnemyPosition.Count > 1)
+        if (angleQueryBuffer.Count > 1)
         {
-            if (closestEnemyPosition[1] == Vector2.zero)
+            if (angleQueryBuffer[1] == Vector2.zero)
             {
                 angleExtra = angle + 120f;
             }
             else
             {
-                dirExtra = GetDirection(closestEnemyPosition[1]);
+                dirExtra = GetDirection(angleQueryBuffer[1]);
                 angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
             }
         }
@@ -127,11 +130,10 @@ public class WeaponBase : MonoBehaviour
                             wd.stats.projectileSpeed,
                             wd.stats.knockBackChance);
 
-        // ⭐ weaponData 할당 완료 후 호출
+        // weaponData 할당 완료 후 각 무기에서 override해서 프로젝타일 결정
         OnWeaponDataReady();
     }
 
-    // ⭐ 각 무기에서 override해서 프로젝타일 결정
     protected virtual void OnWeaponDataReady() { }
 
     #region 공격
@@ -329,22 +331,14 @@ public class WeaponBase : MonoBehaviour
         return gameObject.name;
     }
 
-    // ⭐⭐⭐ 새로 추가: 장착 아이템 조회 메서드 ⭐⭐⭐
-
+    #region 장착 아이템 조회
     /// <summary>
     /// 리드 오리의 장착된 아이템을 가져옵니다.
     /// </summary>
-    /// <param name="slotType">장비 슬롯 타입 (Head=0, Chest=1, Face=2, Hand=3)</param>
-    /// <returns>장착된 Item, 없으면 null</returns>
     protected Item GetEquippedItem(EquipmentType slotType)
     {
-        // 리드 오리가 아니면 null 반환
-        if (!InitialWeapon)
-        {
-            return null;
-        }
+        if (!InitialWeapon) return null;
 
-        // StartingDataContainer에서 장착 아이템 가져오기
         StartingDataContainer container = GameManager.instance.startingDataContainer;
         if (container == null)
         {
@@ -355,11 +349,7 @@ public class WeaponBase : MonoBehaviour
         List<Item> equippedItems = container.GetItemDatas();
         int slotIndex = (int)slotType;
 
-        if (slotIndex < 0 || slotIndex >= equippedItems.Count)
-        {
-            // Logger.LogWarning($"[WeaponBase] 잘못된 슬롯 인덱스: {slotIndex}");
-            return null;
-        }
+        if (slotIndex < 0 || slotIndex >= equippedItems.Count) return null;
 
         return equippedItems[slotIndex];
     }
@@ -367,7 +357,6 @@ public class WeaponBase : MonoBehaviour
     /// <summary>
     /// 필수 장비 슬롯의 아이템을 가져옵니다.
     /// </summary>
-    /// <returns>필수 장비 Item, 없으면 null</returns>
     protected Item GetEssentialEquippedItem()
     {
         StartingDataContainer container = GameManager.instance.startingDataContainer;
@@ -382,7 +371,6 @@ public class WeaponBase : MonoBehaviour
             int essentialIndex = container.GetEssectialIndex();
             List<Item> equippedItems = container.GetItemDatas();
 
-            // ⭐ 리드 오리 상태 확인
             Logger.Log($"[WeaponBase] 리드 오리 - essentialIndex: {essentialIndex}, equippedItems.Count: {equippedItems.Count}");
             for (int i = 0; i < equippedItems.Count; i++)
             {
@@ -403,4 +391,5 @@ public class WeaponBase : MonoBehaviour
             return weaponData.defaultItems[allyIndex];
         }
     }
+    #endregion
 }

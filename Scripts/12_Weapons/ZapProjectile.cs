@@ -4,25 +4,25 @@ using System.Collections.Generic;
 public class ZapProjectile : ProjectileBase
 {
     [Header("Zap Settings")]
-    [SerializeField] float switchTargetTime = 0.3f; // 타겟 전환 주기
-    [SerializeField] float damageInterval = 0.5f; // 데미지 주기 (초 단위)
-    [SerializeField] float maxTargetDistance = 15f; // 최대 타겟 거리
-    [SerializeField] float switchTargetTimeSynergy = 0.3f; // 타겟 전환 주기
-    [SerializeField] float damageIntervalSynergy = 0.5f; // 데미지 주기 (초 단위)
+    [SerializeField] float switchTargetTime = 0.3f;         // 타겟 전환 주기
+    [SerializeField] float damageInterval = 0.5f;           // 데미지 주기 (초 단위)
+    [SerializeField] float maxTargetDistance = 15f;         // 최대 타겟 거리
+    [SerializeField] float switchTargetTimeSynergy = 0.3f;  // 시너지 타겟 전환 주기
+    [SerializeField] float damageIntervalSynergy = 0.5f;    // 시너지 데미지 주기
     Transform assignedMuzzlePoint;
 
     [Header("Visual")]
-    [SerializeField] LineRenderer laserLineOuter; // ✅ 외곽 레이저 (굵고 어두움)
-    [SerializeField] LineRenderer laserLineInner; // ✅ 중앙 레이저 (가늘고 밝음)
+    [SerializeField] LineRenderer laserLineOuter;           // 외곽 레이저 (굵고 어두움)
+    [SerializeField] LineRenderer laserLineInner;           // 중앙 레이저 (가늘고 밝음)
     [SerializeField] Transform hitEffect;
-    [SerializeField] float baseWidth = 0.1f; // 기본 굵기
-    [SerializeField] float maxWidth = 0.5f; //최대 굵기
-    [SerializeField] float baseDamage = 4f; //기준 데미지
-    [SerializeField] Color lightColor = new Color(0.5f, 0.8f, 1f); //추가
-    [SerializeField] Color darkColor = new Color(0f, 0f, 1f); // 추가
-    [SerializeField] float widthOscillationSpeed = 20f; // ✅ 진동 속도
-    [SerializeField] float widthOscillationAmount = 0.15f; // ✅ 진동 폭 (0~1)
-    [SerializeField] float innerWidthRatio = 0.4f; // ✅ 내부 레이저 굵기 비율
+    [SerializeField] float baseWidth = 0.1f;
+    [SerializeField] float maxWidth = 0.5f;
+    [SerializeField] float baseDamage = 4f;
+    [SerializeField] Color lightColor = new Color(0.5f, 0.8f, 1f);
+    [SerializeField] Color darkColor = new Color(0f, 0f, 1f);
+    [SerializeField] float widthOscillationSpeed = 20f;     // 진동 속도
+    [SerializeField] float widthOscillationAmount = 0.15f;  // 진동 폭 (0~1)
+    [SerializeField] float innerWidthRatio = 0.4f;          // 내부 레이저 굵기 비율
 
     [Header("Layers")]
     [SerializeField] LayerMask destructables;
@@ -30,26 +30,27 @@ public class ZapProjectile : ProjectileBase
     [Header("Audio")]
     [SerializeField] AudioClip targetSwitchSound;
 
-    Transform currentTarget; // 현재 타겟
-    Vector2 cachedTargetPoint; // ← 추가: 타겟의 랜덤 히트 포인트 캐싱
-    float switchTimer; // 타겟 전환 타이머
-    float damageTimer; // ✅ 데미지 타이머
+    Transform currentTarget;
+    Vector2 cachedTargetPoint; // 타겟의 랜덤 히트 포인트 캐싱
+    float switchTimer;
+    float damageTimer;
     bool isSynergyActivated;
-    WeaponBase cachedWeapon; // ✅ 캐싱 추가
+    WeaponBase cachedWeapon; // GetComponentInParent 반복 방지
+
+    // FindNewTarget에서 매번 new List 하지 않도록 필드로 캐싱
+    private List<Vector2> enemyQueryBuffer = new List<Vector2>(5);
+    private Collider2D[] overlapBuffer = new Collider2D[10]; // OverlapCircleAll 대신 NonAlloc 버퍼
 
     void OnEnable()
     {
-        // ✅ WeaponBase 캐싱
         if (cachedWeapon == null)
         {
             cachedWeapon = GetComponentInParent<WeaponBase>();
         }
 
-        // 타이머 초기화
         switchTimer = 0f;
-        damageTimer = 0f; // ✅ 추가
+        damageTimer = 0f;
 
-        // 첫 타겟 검색
         FindNewTarget();
     }
 
@@ -63,7 +64,7 @@ public class ZapProjectile : ProjectileBase
     {
         if (Time.timeScale == 0) return;
 
-        // 타겟 유효성 강화 체크
+        // 타겟 유효성 체크
         if (!IsTargetValid(currentTarget))
         {
             currentTarget = null;
@@ -78,7 +79,6 @@ public class ZapProjectile : ProjectileBase
             FindNewTarget();
         }
 
-        // 타겟이 있으면 레이저 그리기 및 데미지
         if (currentTarget != null)
         {
             DrawLaser();
@@ -86,100 +86,92 @@ public class ZapProjectile : ProjectileBase
         }
         else
         {
-            // 타겟이 없으면 레이저 숨기기
             HideLaser();
         }
     }
 
     bool IsTargetValid(Transform target)
     {
-        if (target == null)
-            return false;
+        if (target == null) return false;
+        if (!target.gameObject.activeInHierarchy) return false;
 
-        if (!target.gameObject.activeInHierarchy)
-            return false;
-
-        // Idamageable 컴포넌트가 있는지 체크
-        Idamageable damageable = target.GetComponent<Idamageable>();
-        if (damageable == null)
-            return false;
+        if (target.GetComponent<Idamageable>() == null) return false;
 
         // 화면 밖이면 무효
         SpriteRenderer spriteRenderer = target.GetComponentInChildren<SpriteRenderer>();
-        if (spriteRenderer != null && !spriteRenderer.isVisible)
-            return false;
+        if (spriteRenderer != null && !spriteRenderer.isVisible) return false;
 
         return true;
     }
 
     void FindNewTarget()
     {
-        // 랜덤하게 가까운 적 중 하나 선택
-        List<Vector2> nearbyEnemies = EnemyFinder.instance.GetEnemies(5);
+        // 버퍼 재사용으로 new List 방지
+        EnemyFinder.instance.GetEnemies(5, enemyQueryBuffer);
 
-        if (nearbyEnemies == null || nearbyEnemies.Count == 0)
+        // 유효한 적(Vector2.zero가 아닌) 중에서 랜덤 선택
+        int validCount = 0;
+        for (int i = 0; i < enemyQueryBuffer.Count; i++)
+        {
+            if (enemyQueryBuffer[i] != Vector2.zero)
+                validCount++;
+        }
+
+        if (validCount == 0)
         {
             currentTarget = null;
             return;
         }
 
-        // Vector2.zero가 아닌 실제 적들만 필터링
-        List<Vector2> validEnemies = new List<Vector2>();
-        for (int i = 0; i < nearbyEnemies.Count; i++)
+        // 유효한 적 중 랜덤 선택
+        int randomValidIndex = Random.Range(0, validCount);
+        Vector2 randomEnemy = Vector2.zero;
+        int counted = 0;
+        for (int i = 0; i < enemyQueryBuffer.Count; i++)
         {
-            if (nearbyEnemies[i] != Vector2.zero)
+            if (enemyQueryBuffer[i] != Vector2.zero)
             {
-                validEnemies.Add(nearbyEnemies[i]);
+                if (counted == randomValidIndex)
+                {
+                    randomEnemy = enemyQueryBuffer[i];
+                    break;
+                }
+                counted++;
             }
         }
-
-        if (validEnemies.Count == 0)
-        {
-            currentTarget = null;
-            return;
-        }
-
-        // 랜덤하게 하나 선택
-        Vector2 randomEnemy = validEnemies[Random.Range(0, validEnemies.Count)];
 
         // 거리 체크
-        float distance = Vector2.Distance(transform.position, randomEnemy);
-        if (distance > maxTargetDistance)
+        if (Vector2.Distance(transform.position, randomEnemy) > maxTargetDistance)
         {
             currentTarget = null;
             return;
         }
 
-        // 해당 위치의 적 찾기
-        Collider2D[] hits = Physics2D.OverlapCircleAll(randomEnemy, 0.5f, destructables);
+        // NonAlloc으로 버퍼 재사용 (OverlapCircleAll 대신)
+        int hitCount = Physics2D.OverlapCircleNonAlloc(randomEnemy, 0.5f, overlapBuffer, destructables);
 
-        for (int i = 0; i < hits.Length; i++)
+        for (int i = 0; i < hitCount; i++)
         {
-            if (hits[i].GetComponent<Idamageable>() != null)
+            if (overlapBuffer[i].GetComponent<Idamageable>() == null) continue;
+
+            // 화면 밖이면 스킵
+            SpriteRenderer sr = overlapBuffer[i].GetComponentInChildren<SpriteRenderer>();
+            if (sr != null && !sr.isVisible) continue;
+
+            currentTarget = overlapBuffer[i].transform;
+
+            // 서브보스/스테이지보스면 랜덤 바디 포인트, 일반 적은 position
+            EnemyBase enemyBase = overlapBuffer[i].GetComponent<EnemyBase>();
+            cachedTargetPoint = enemyBase != null
+                ? enemyBase.GetRandomBodyPoint()
+                : (Vector2)currentTarget.position;
+
+            if (targetSwitchSound != null)
             {
-                // 화면 내에 있는 적만 선택
-                SpriteRenderer sr = hits[i].GetComponentInChildren<SpriteRenderer>();
-                if (sr != null && !sr.isVisible)
-                    continue; // 화면 밖이면 스킵
-
-                currentTarget = hits[i].transform;
-
-                currentTarget = hits[i].transform;
-
-                // ← 추가: SubBoss/StageBoss면 랜덤 바디 포인트, 일반 적은 position
-                EnemyBase enemyBase = hits[i].GetComponent<EnemyBase>();
-                cachedTargetPoint = enemyBase != null
-                    ? enemyBase.GetRandomBodyPoint()
-                    : (Vector2)currentTarget.position;
-
-                // 새 타겟을 찾았을 때 사운드 재생
-                if (targetSwitchSound != null)
-                {
-                    SoundManager.instance.PlaySoundWith(targetSwitchSound, 0.7f, true, 0);
-                }
-
-                return;
+                SoundManager.instance.PlaySoundWith(targetSwitchSound, 0.7f, true, 0);
             }
+
+            return;
         }
 
         currentTarget = null;
@@ -190,11 +182,10 @@ public class ZapProjectile : ProjectileBase
         if ((laserLineOuter == null && laserLineInner == null) || currentTarget == null)
             return;
 
-        // ✅ 캐싱된 weapon 사용
         if (cachedWeapon == null || cachedWeapon.ShootPoint == null)
             return;
 
-        // ✅ assignedMuzzlePoint가 있으면 그걸 사용, 없으면 ShootPoint 폴백
+        // assignedMuzzlePoint가 있으면 그걸 사용, 없으면 ShootPoint 폴백
         Transform originPoint = (assignedMuzzlePoint != null) ? assignedMuzzlePoint : cachedWeapon.ShootPoint;
         if (originPoint == null) return;
 
@@ -213,24 +204,20 @@ public class ZapProjectile : ProjectileBase
         Color outerColor = Color.Lerp(lightColor, darkColor, colorT);
         Color innerColor = Color.Lerp(Color.white, outerColor, 0.1f); // 흰색 90%와 outer color 10% 혼합
 
-        // 외곽 레이저
         if (laserLineOuter != null)
         {
             laserLineOuter.SetPosition(0, startPos);
             laserLineOuter.SetPosition(1, endPos);
             laserLineOuter.widthMultiplier = targetWidth * oscillation;
-
             laserLineOuter.startColor = new Color(outerColor.r, outerColor.g, outerColor.b, 0.6f);
             laserLineOuter.endColor = new Color(outerColor.r, outerColor.g, outerColor.b, 0.6f);
         }
 
-        // 내부 레이저
         if (laserLineInner != null)
         {
             laserLineInner.SetPosition(0, startPos);
             laserLineInner.SetPosition(1, endPos);
             laserLineInner.widthMultiplier = targetWidth * oscillation * innerWidthRatio;
-
             laserLineInner.startColor = new Color(innerColor.r, innerColor.g, innerColor.b, 1f);
             laserLineInner.endColor = new Color(innerColor.r, innerColor.g, innerColor.b, 1f);
         }
@@ -266,37 +253,32 @@ public class ZapProjectile : ProjectileBase
     {
         if (currentTarget == null) return;
 
-        // ✅ 시간 기반 데미지 - 모든 기기에서 동일
+        // 시간 기반 데미지 — 모든 기기에서 동일한 주기
         damageTimer += Time.deltaTime;
-        if (damageTimer < damageInterval)
-            return;
-
-        damageTimer = 0f; // 리셋
+        if (damageTimer < damageInterval) return;
+        damageTimer = 0f;
 
         Idamageable damageable = currentTarget.GetComponent<Idamageable>();
-        if (damageable == null)
-            return;
+        if (damageable == null) return;
 
-        // 카메라 밖이면 데미지 전달 안함
+        // 화면 밖이면 데미지 전달 안 함
         SpriteRenderer spriteRenderer = currentTarget.GetComponentInChildren<SpriteRenderer>();
-        if (spriteRenderer != null && !spriteRenderer.isVisible)
-            return;
+        if (spriteRenderer != null && !spriteRenderer.isVisible) return;
 
-        // 데미지 처리
-        PostMessage(Damage, cachedTargetPoint); 
+        PostMessage(Damage, cachedTargetPoint);
+
         GameObject hitEffectObj = GetComponent<HitEffects>()?.hitEffect;
         if (hitEffectObj != null)
         {
-            hitEffectObj.transform.position = cachedTargetPoint; 
+            hitEffectObj.transform.position = cachedTargetPoint;
         }
 
         damageable.TakeDamage(Damage,
-                             KnockBackChance,
-                             KnockBackSpeedFactor,
-                             cachedTargetPoint,
-                             hitEffectObj);
+                              KnockBackChance,
+                              KnockBackSpeedFactor,
+                              cachedTargetPoint,
+                              hitEffectObj);
 
-        // 데미지 트래커 기록
         if (!string.IsNullOrEmpty(WeaponName))
         {
             DamageTracker.instance.RecordDamage(WeaponName, Damage);
@@ -307,7 +289,7 @@ public class ZapProjectile : ProjectileBase
     {
         // 시너지 모드: 더 빠른 타겟 전환 및 데미지
         switchTargetTime = switchTargetTimeSynergy;
-        damageInterval = damageIntervalSynergy; // ✅ 시너지: 더 빠른 데미지
+        damageInterval = damageIntervalSynergy;
         isSynergyActivated = true;
     }
 

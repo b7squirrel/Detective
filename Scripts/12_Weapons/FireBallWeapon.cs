@@ -9,8 +9,11 @@ public class FireBallWeapon : WeaponBase
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
 
-    // ⭐ 런타임에 결정되는 프로젝타일
+    // 런타임에 결정되는 프로젝타일
     GameObject currentWeaponPrefab;
+
+    // Attack에서 매번 new List 하지 않도록 필드로 캐싱
+    private List<Vector2> enemyQueryBuffer = new List<Vector2>(1);
 
     public override void Init(WeaponStats stats, bool isLead)
     {
@@ -35,12 +38,12 @@ public class FireBallWeapon : WeaponBase
     protected override void Attack()
     {
         base.Attack();
-        List<Vector2> closestEnemyPosition = EnemyFinder.instance.GetEnemies(1);
-        if (closestEnemyPosition == null) return;
-        if (closestEnemyPosition[0] == Vector2.zero)
-        {
+
+        // 버퍼 재사용으로 new List 방지
+        EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
+        if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
             return;
-        }
+
         AttackCo();
     }
 
@@ -49,12 +52,9 @@ public class FireBallWeapon : WeaponBase
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
             AnimShoot();
-            GetAttackParameters(); // 총알마다 크리티컬 확률, 낙백 확률이 다르게 하기 위해
+            GetAttackParameters(); // 총알마다 크리티컬 확률, 넉백 확률이 다르게 하기 위해
             SoundManager.instance.Play(shoot);
-            //GameObject effect = GameManager.instance.poolManager.GetMisc(muzzleFlash);
-            //effect.transform.position = EffectPoint.position;
 
-            // ⭐ currentWeaponPrefab 사용 (리드 오리면 장착 아이템, 동료면 기본값)
             GameObject fireBall = GameManager.instance.poolManager.GetMisc(currentWeaponPrefab);
             float index = 0f;
             if (i == 0)
@@ -81,7 +81,6 @@ public class FireBallWeapon : WeaponBase
                 projectile.Damage = GetDamage();
                 projectile.KnockBackChance = GetKnockBackChance();
                 projectile.IsCriticalDamageProj = isCriticalDamage;
-                // ✨ 투사체에 무기 이름 전달
                 projectile.WeaponName = weaponData.DisplayName;
             }
 
@@ -89,10 +88,7 @@ public class FireBallWeapon : WeaponBase
             {
                 AnimShootExtra();
                 SoundManager.instance.Play(shoot);
-                // GameObject effectEx = GameManager.instance.poolManager.GetMisc(muzzleFlash);
-                // effectEx.transform.position = EffectPointExtra.position;
 
-                // ⭐ 시너지 무기도 currentWeaponPrefab 사용
                 GameObject fireBallEx = GameManager.instance.poolManager.GetMisc(currentWeaponPrefab);
                 if (fireBallEx != null)
                 {
@@ -105,7 +101,6 @@ public class FireBallWeapon : WeaponBase
                     projectileEx.Damage = GetDamage();
                     projectileEx.KnockBackChance = GetKnockBackChance();
                     projectileEx.IsCriticalDamageProj = isCriticalDamage;
-                    // ✨ 시너지 투사체에도 무기 이름 전달
                     projectileEx.WeaponName = weaponData.DisplayName;
                 }
             }

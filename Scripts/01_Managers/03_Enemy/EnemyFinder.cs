@@ -6,7 +6,7 @@ public class EnemyFinder : MonoBehaviour
     public static EnemyFinder instance;
 
     [SerializeField] LayerMask enemy;
-    [SerializeField] LayerMask props; 
+    [SerializeField] LayerMask props;
     [SerializeField] float updateInterval = 0.1f;
 
     // 화면 크기
@@ -15,11 +15,15 @@ public class EnemyFinder : MonoBehaviour
 
     // 버퍼 (재사용으로 GC 제거)
     private Collider2D[] hitBuffer = new Collider2D[250];
+    private Collider2D[] overlapBuffer = new Collider2D[10]; // GetClosestEnemyTransform용 버퍼
     private List<EnemyDistance> enemyDistanceBuffer = new List<EnemyDistance>(250);
 
     // 캐싱된 결과
     private List<Vector2> cachedEnemyPositions = new List<Vector2>();
     private float lastUpdateTime = -1f;
+
+    // 람다 정렬 대신 캐싱된 Comparer 사용하여 GC 방지
+    private static readonly EnemyDistanceComparer distanceComparer = new EnemyDistanceComparer();
 
     void Awake()
     {
@@ -45,18 +49,16 @@ public class EnemyFinder : MonoBehaviour
     {
         Vector2 playerPosition = transform.position;
 
-        // OverlapCircleNonAlloc 사용
+        // OverlapCircleNonAlloc으로 GC 없이 탐색
         int hitCount = Physics2D.OverlapCircleNonAlloc(
             playerPosition,
             searchRadius,
             hitBuffer,
-            enemy | props  // enemy + props 합치기
+            enemy | props
         );
 
-        // 버퍼 클리어
         enemyDistanceBuffer.Clear();
 
-        // Idamageable을 가진 적들만 필터링하고 거리 계산
         for (int i = 0; i < hitCount; i++)
         {
             Idamageable damageable = hitBuffer[i].GetComponent<Idamageable>();
@@ -73,10 +75,9 @@ public class EnemyFinder : MonoBehaviour
             }
         }
 
-        // 거리순 정렬
-        enemyDistanceBuffer.Sort((a, b) => a.sqrDistance.CompareTo(b.sqrDistance));
+        // 캐싱된 Comparer로 정렬 (람다 사용 시 매번 GC 발생)
+        enemyDistanceBuffer.Sort(distanceComparer);
 
-        // 캐시 업데이트
         cachedEnemyPositions.Clear();
         for (int i = 0; i < enemyDistanceBuffer.Count; i++)
         {
@@ -84,36 +85,23 @@ public class EnemyFinder : MonoBehaviour
         }
     }
 
-    public List<Vector2> GetEnemies(int numberOfEnemies)
+    /// <summary>
+    /// 가장 가까운 적 위치를 외부 List에 채워줍니다.
+    /// 호출부에서 List를 필드로 선언해 재사용하면 GC가 발생하지 않습니다.
+    /// </summary>
+    public void GetEnemies(int numberOfEnemies, List<Vector2> result)
     {
-        // 캐시가 비어있으면 Vector2.zero로 채워서 반환
-        if (cachedEnemyPositions.Count == 0)
-        {
-            List<Vector2> emptyResult = new List<Vector2>(numberOfEnemies);
-            for (int i = 0; i < numberOfEnemies; i++)
-            {
-                emptyResult.Add(Vector2.zero);
-            }
-            return emptyResult;
-        }
+        result.Clear();
 
-        // 요청한 개수만큼 반환
-        List<Vector2> result = new List<Vector2>(numberOfEnemies);
         int count = Mathf.Min(numberOfEnemies, cachedEnemyPositions.Count);
-
         for (int i = 0; i < count; i++)
-        {
             result.Add(cachedEnemyPositions[i]);
-        }
 
-        // 부족한 개수만큼 Vector2.zero 추가
+        // 부족한 개수만큼 Vector2.zero로 채움
         while (result.Count < numberOfEnemies)
-        {
             result.Add(Vector2.zero);
-        }
-
-        return result;
     }
+
     /// <summary>
     /// 가장 가까운 적의 위치 반환
     /// </summary>
@@ -134,16 +122,12 @@ public class EnemyFinder : MonoBehaviour
         if (closestPos == Vector2.zero)
             return null;
 
-        // 해당 위치의 적 찾기 (약간의 오차 허용)
-        Collider2D[] hits = Physics2D.OverlapCircleAll(closestPos, 0.5f, enemy);
-
-        // Idamageable이 있는 적만 반환
-        for (int i = 0; i < hits.Length; i++)
+        // NonAlloc으로 배열 재사용
+        int count = Physics2D.OverlapCircleNonAlloc(closestPos, 0.5f, overlapBuffer, enemy);
+        for (int i = 0; i < count; i++)
         {
-            if (hits[i].GetComponent<Idamageable>() != null)
-            {
-                return hits[i].transform;
-            }
+            if (overlapBuffer[i].GetComponent<Idamageable>() != null)
+                return overlapBuffer[i].transform;
         }
 
         return null;
@@ -157,13 +141,11 @@ public class EnemyFinder : MonoBehaviour
         if (cachedEnemyPositions.Count == 0)
             return null;
 
-        // excludeTarget이 없으면 그냥 가장 가까운 적 반환
         if (excludeTarget == null)
             return GetClosestEnemyTransform();
 
         Vector2 excludePos = excludeTarget.position;
 
-        // 제외할 타겟이 아닌 첫 번째 적 찾기
         for (int i = 0; i < cachedEnemyPositions.Count; i++)
         {
             Vector2 enemyPos = cachedEnemyPositions[i];
@@ -172,34 +154,33 @@ public class EnemyFinder : MonoBehaviour
             if (Vector2.Distance(enemyPos, excludePos) < 0.1f)
                 continue;
 
-            // 해당 위치의 적 Transform 찾기
-            Collider2D[] hits = Physics2D.OverlapCircleAll(enemyPos, 0.5f, enemy);
-
-            for (int j = 0; j < hits.Length; j++)
+            // NonAlloc으로 배열 재사용
+            int count = Physics2D.OverlapCircleNonAlloc(enemyPos, 0.5f, overlapBuffer, enemy);
+            for (int j = 0; j < count; j++)
             {
-                if (hits[j].transform != excludeTarget &&
-                    hits[j].GetComponent<Idamageable>() != null)
+                if (overlapBuffer[j].transform != excludeTarget &&
+                    overlapBuffer[j].GetComponent<Idamageable>() != null)
                 {
-                    return hits[j].transform;
+                    return overlapBuffer[j].transform;
                 }
             }
         }
 
-        // 제외하고 나면 적이 없으면 null
         return null;
     }
 
+    /// <summary>
+    /// 화면 범위 내 모든 적 반환. NonAlloc 버퍼를 사용합니다.
+    /// count를 반환하므로 호출부에서 배열 크기를 직접 제어할 수 있습니다.
+    /// </summary>
     public Collider2D[] GetAllEnemies()
     {
         Vector2 center = GameManager.instance.player.transform.position;
         float allEnemiesRadius = Mathf.Sqrt(halfWidth * halfWidth + halfHeight * halfHeight) * 1f;
 
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(
-            center,
-            allEnemiesRadius,
-            enemy | props
-        );
-        return enemies;
+        // hitBuffer 재사용 (최대 250개)
+        Physics2D.OverlapCircleNonAlloc(center, allEnemiesRadius, hitBuffer, enemy | props);
+        return hitBuffer;
     }
 
     public int GetCachedEnemyCount()
@@ -213,15 +194,20 @@ public class EnemyFinder : MonoBehaviour
         public float sqrDistance;
     }
 
+    // 람다 대신 캐싱된 Comparer 사용으로 정렬 시 GC 방지
+    private class EnemyDistanceComparer : IComparer<EnemyDistance>
+    {
+        public int Compare(EnemyDistance a, EnemyDistance b)
+            => a.sqrDistance.CompareTo(b.sqrDistance);
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (!Application.isPlaying) return;
 
-        // 탐색 범위 (원형)
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, searchRadius);
 
-        // 캐시된 적들
         Gizmos.color = Color.red;
         for (int i = 0; i < cachedEnemyPositions.Count && i < 5; i++)
         {
