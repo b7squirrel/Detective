@@ -428,7 +428,7 @@ public class GachaSystem : MonoBehaviour
         }
 
         // ★ itemIndex 대신 Name + Grade로 검색
-        CardData itemCardData = cardDictionary.GetItemCardData(defaultItem.Name, (int)defaultItem.grade);
+        CardData itemCardData = cardDictionary.GetItemCardData(defaultItem.Name, _oriCardData.Grade);
 
         if (itemCardData == null)
         {

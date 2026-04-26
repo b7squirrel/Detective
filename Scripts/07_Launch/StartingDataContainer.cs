@@ -10,6 +10,10 @@ public class StartingDataContainer : MonoBehaviour
 
     int skillName;
     CardData playerCardData;
+    SetBonusDefinition setBonus;
+    int setBonusGrade;
+    public SetBonusDefinition GetSetBonus() => setBonus;
+    public int GetSetBonusGrade() => setBonusGrade;
 
     [Header("Debugging")]
     [SerializeField] int hp = 0;
@@ -71,6 +75,14 @@ public class StartingDataContainer : MonoBehaviour
                     + lead.EvoStage;
 
         playerCardData = lead;
+
+        SetBonusChecker setBonusChecker = FindObjectOfType<SetBonusChecker>();
+        if (setBonusChecker != null)
+        {
+            setBonus = setBonusChecker.GetSetBonus(lead);
+            setBonusGrade = setBonusChecker.GetLowestGrade(lead); // ← 추가
+            Logger.Log($"[StartingDataContainer] 세트 보너스: {(setBonus != null ? setBonus.bonusDescription : "없음")}, 등급: {setBonusGrade}");
+        }
     }
     public void DestroyStartingDataContainer()
     {

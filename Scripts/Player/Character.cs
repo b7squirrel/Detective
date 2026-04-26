@@ -123,6 +123,56 @@ public class Character : MonoBehaviour
         MaxHealth = GameManager.instance.startingDataContainer.GetLeadAttr().Hp;
         DamageBonus = GameManager.instance.startingDataContainer.GetLeadAttr().Atk;
         Logger.Log("In Character, Damage Bonus = " + DamageBonus);
+
+        ApplySetBonus();
+    }
+
+    void ApplySetBonus()
+    {
+        SetBonusDefinition bonus = GameManager.instance.startingDataContainer.GetSetBonus();
+        if (bonus == null)
+        {
+            Logger.Log("[Character] 세트 보너스 없음");
+            return;
+        }
+
+        int grade = GameManager.instance.startingDataContainer.GetSetBonusGrade();
+        Logger.Log($"[Character] 세트 보너스 적용: {bonus.bonusDescription}, 등급: {grade}");
+
+        if (grade < 0 || grade >= 5)
+        {
+            Logger.LogWarning($"[Character] 세트 등급 범위 오류: {grade}");
+            return;
+        }
+
+        if (bonus.moveSpeedBonus[grade] != 0)
+            MoveSpeed += MoveSpeed * bonus.moveSpeedBonus[grade];
+
+        if (bonus.attackBonus[grade] != 0)
+            DamageBonus += (int)(DamageBonus * bonus.attackBonus[grade]);
+
+        if (bonus.armorBonus[grade] != 0)
+            Armor += (int)(Armor * bonus.armorBonus[grade]);
+
+        if (bonus.maxHpBonus[grade] != 0)
+            MaxHealth += (int)(MaxHealth * bonus.maxHpBonus[grade]);
+
+        if (bonus.cooldownBonus[grade] != 0)
+            Cooldown -= Cooldown * bonus.cooldownBonus[grade];
+
+        if (bonus.criticalChanceBonus[grade] != 0)
+            CriticalDamageChance += CriticalDamageChance * bonus.criticalChanceBonus[grade];
+
+        if (bonus.hpRegenBonus[grade] != 0)
+            HpRegenerationRate += HpRegenerationRate * bonus.hpRegenBonus[grade];
+
+        if (bonus.magnetSizeBonus[grade] != 0)
+            MagnetSize += MagnetSize * bonus.magnetSizeBonus[grade];
+
+        if (bonus.knockBackBonus[grade] != 0)
+            knockBackChance += knockBackChance * bonus.knockBackBonus[grade];
+
+        Logger.Log($"[Character] 세트 보너스 적용 완료 - MoveSpeed: {MoveSpeed}, DamageBonus: {DamageBonus}, MaxHealth: {MaxHealth}");
     }
 
     #region TakeDamage
@@ -191,7 +241,7 @@ Handheld.Vibrate();
     {
         if (isTearEffectActivated) return;
         SoundManager.instance.PlaySoundWith(_hurtSound, .4f, true, .2f);
-        
+
     }
     IEnumerator DoTearParticle()
     {
