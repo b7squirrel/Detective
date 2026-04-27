@@ -338,17 +338,30 @@ public class CardDataManager : MonoBehaviour
                 MyCardsList = new List<CardData>();
             else
                 MyCardsList.Clear();
-            
+
             if (startingCardData != null)
             {
                 Logger.Log("시작 카드를 로드합니다");
                 List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
-                
+
                 if (startingCards.Count > 0)
                 {
+                    int targetLevel = startingCards[0].Level; // txt의 Level 값을 목표로 저장
+                    startingCards[0].Level = 1;              // 추가 전 Level을 1로 초기화
+
                     AddNewCardToMyCardsList(startingCards[0]);
                     startingCards[0].StartingMember = StartingMember.Zero.ToString();
-                    
+
+                    StatManager statManager = FindObjectOfType<StatManager>();
+                    if (statManager != null)
+                    {
+                        int levelsToApply = targetLevel - 1; // 목표 레벨까지
+                        for (int j = 0; j < levelsToApply; j++)
+                        {
+                            statManager.LevelUp(startingCards[0]);
+                        }
+                    }
+
                     var gachaSys = FindObjectOfType<GachaSystem>();
                     if (gachaSys != null)
                     {
@@ -357,7 +370,7 @@ public class CardDataManager : MonoBehaviour
                     }
                 }
             }
-            
+
             Save();
         }
         catch (Exception e)
@@ -521,14 +534,24 @@ public class CardDataManager : MonoBehaviour
     {
         List<CardData> cards = GetMyCardList();
         if (cards == null) return;
-        
+
+        StatManager statManager = GetComponent<StatManager>();
+
         for (int i = 0; i < cards.Count; i++)
         {
-            if (cards[i] != null)
+            if (cards[i] == null) continue;
+
+            Logger.LogError($"[Before] {cards[i].Name} Level:{cards[i].Level} HP:{cards[i].Hp} ATK:{cards[i].Atk}");
+
+            int levelsToApply = StaticValues.MaxLevel - cards[i].Level;
+            for (int j = 0; j < levelsToApply; j++)
             {
-                cards[i].Level = StaticValues.MaxLevel;
+                statManager.LevelUp(cards[i]);
             }
+
+            Logger.LogError($"[After] {cards[i].Name} Level:{cards[i].Level} HP:{cards[i].Hp} ATK:{cards[i].Atk}");
         }
+
         Save();
         Logger.Log("모든 카드 최대 레벨로 설정 완료");
     }

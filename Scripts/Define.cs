@@ -304,7 +304,7 @@ public class Equation
 
     public int GetDamage(int _originalDamage, int _damageBonus)
     {
-        int damage = Mathf.CeilToInt(_originalDamage + (_originalDamage * _damageBonus / 10)); // original damage가 작더라도 잘 반영되도록 무조건 올림
+        int damage = _originalDamage + _damageBonus;
         return damage;
     }
 

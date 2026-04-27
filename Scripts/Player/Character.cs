@@ -175,6 +175,12 @@ public class Character : MonoBehaviour
         Logger.Log($"[Character] 세트 보너스 적용 완료 - MoveSpeed: {MoveSpeed}, DamageBonus: {DamageBonus}, MaxHealth: {MaxHealth}");
     }
 
+    public void AddDamageBonus(int amount)
+    {
+        DamageBonus += amount;
+        Logger.Log($"[Character] DamageBonus 증가: +{amount} → 총 {DamageBonus}");
+    }
+
     #region TakeDamage
     public void TakeDamage(int damage, EnemyType enemyType, SlimeAttackType attackType = SlimeAttackType.Slime)
     {

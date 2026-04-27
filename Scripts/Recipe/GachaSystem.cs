@@ -23,6 +23,9 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] TextAsset tutorialDuckPoolDatabase;
     [SerializeField] TextAsset tutorialItemPoolDatabase;
 
+    // 디버그 용도 뽑기
+    StatManager statManager;
+
     List<CardData> tutorialDuckPool;
     List<CardData> tutorialItemPool;
 
@@ -51,6 +54,8 @@ public class GachaSystem : MonoBehaviour
 
         cardsPicked = new List<CardData>();
         mainMenuManager = FindObjectOfType<MainMenuManager>();
+
+        statManager = GetComponent<StatManager>();
     }
 
     void Start()
@@ -318,54 +323,59 @@ public class GachaSystem : MonoBehaviour
 
     #region Debug 특정 카드 뽑기
     public void DrawSpecificCard(string _cardType, int index, int grade, int num, int skill, int evo)
+{
+    cardDataManager.BeginBatchOperation();
+    Logger.Log($"[GachaSystem] {num}개 특정 카드 뽑기 시작");
+
+    if (statManager == null)
+        statManager = GetComponent<StatManager>();
+
+    try
     {
-        cardDataManager.BeginBatchOperation();
-        Logger.Log($"[GachaSystem] {num}개 특정 카드 뽑기 시작");
-
-        try
+        for (int i = 0; i < num; i++)
         {
-            for (int i = 0; i < num; i++)
+            CardData newCardData;
+
+            if (_cardType == "Weapon")
             {
-                CardData newCardData;
+                newCardData = CloneCardData(weaponPools[index]);
+                newCardData.Grade = grade;
+                newCardData.PassiveSkill = skill + 1;
+                newCardData.EvoStage = evo;
+                statManager.ApplyEvoStats(newCardData, evo);
+                cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
+                AddEssentialEquip(newCardData);
 
-                if (_cardType == "Weapon")
-                {
-                    newCardData = CloneCardData(weaponPools[index]);
-                    newCardData.Grade = grade;
-                    newCardData.PassiveSkill = skill + 1;
-                    newCardData.EvoStage = evo;
-                    cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
-                    AddEssentialEquip(newCardData);
-
-                    cardsPicked.Add(newCardData);
-                    AddCardSlot(newCardData);
-                }
-                else if (_cardType == "Item")
-                {
-                    newCardData = CloneCardData(itemPools[index]);
-                    newCardData.Grade = grade;
-                    newCardData.PassiveSkill = skill + 1;
-                    newCardData.EvoStage = evo;
-                    cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
-
-                    cardsPicked.Add(newCardData);
-                    AddCardSlot(newCardData);
-                }
+                cardsPicked.Add(newCardData);
+                AddCardSlot(newCardData);
             }
+            else if (_cardType == "Item")
+            {
+                newCardData = CloneCardData(itemPools[index]);
+                newCardData.Grade = grade;
+                newCardData.PassiveSkill = skill + 1;
+                newCardData.EvoStage = evo;
+                statManager.ApplyEvoStats(newCardData, evo);
+                cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
 
-            cardDataManager.EndBatchOperation();
-            cardDataManager.RefreshCardList();
-            DelayedSaveEquipmentData();
+                cardsPicked.Add(newCardData);
+                AddCardSlot(newCardData);
+            }
+        }
 
-            Logger.Log("[GachaSystem] 특정 카드 뽑기 완료");
-        }
-        catch (Exception e)
-        {
-            Logger.LogError($"[GachaSystem] 특정 카드 뽑기 오류: {e.Message}");
-            cardDataManager.EndBatchOperation();
-            throw;
-        }
+        cardDataManager.EndBatchOperation();
+        cardDataManager.RefreshCardList();
+        DelayedSaveEquipmentData();
+
+        Logger.Log("[GachaSystem] 특정 카드 뽑기 완료");
     }
+    catch (Exception e)
+    {
+        Logger.LogError($"[GachaSystem] 특정 카드 뽑기 오류: {e.Message}");
+        cardDataManager.EndBatchOperation();
+        throw;
+    }
+}
     #endregion
 
     CardData CloneCardData(CardData original)
@@ -388,7 +398,7 @@ public class GachaSystem : MonoBehaviour
             original.StartingMember,
             original.DefaultItem,
             original.PassiveSkill.ToString(),
-            original.SetName 
+            original.SetName
         );
 
         return clone;

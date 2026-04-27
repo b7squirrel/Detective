@@ -22,32 +22,65 @@ public class StatManager : MonoBehaviour
     [SerializeField] StartingDataContainer statContainer;
     OriAttribute leadAttribute;
 
+    readonly int[] oriHpPerLevel = { 100, 200, 350, 600, 1000 };
+    readonly int[] oriAtkPerLevel = { 1, 2, 3, 5, 8 };
+    readonly int[] itemHpPerLevel = { 4, 6, 8, 12, 17 };
+    readonly int[] itemAtkPerLevel = { 1, 2, 3, 5, 8 };
+
     /// <summary>
     /// 오리, 아이템 구분해서 레벨업, 스탯업
     /// </summary>
     public void LevelUp(CardData _cardData)
     {
         int level = _cardData.Level;
-
         int newHp = _cardData.Hp;
         int newAtk = _cardData.Atk;
 
-        if (_cardData.EquipmentType == "Ori") // 오리라면
+        if (_cardData.EquipmentType == "Ori")
         {
-            newAtk += level; // Temp
-            newHp += level; // Temp
+            newHp += oriHpPerLevel[_cardData.Grade];
+            newAtk += oriAtkPerLevel[_cardData.Grade];
         }
-        else // 장비라면
+        else
         {
-            // ⭐ Atk, Hp 모두 증가 (0이면 변화 없음)
-            if (_cardData.Atk > 0) newAtk += level;
-            if (_cardData.Hp > 0) newHp += level;
+            if (_cardData.Hp > 0)
+                newHp += itemHpPerLevel[_cardData.Grade];
+            if (_cardData.Atk > 0)
+            {
+                int atkIncrease = itemAtkPerLevel[_cardData.Grade];
+                newAtk += atkIncrease;
+                Character character = FindObjectOfType<Character>();
+                if (character != null && atkIncrease > 0)
+                    character.AddDamageBonus(atkIncrease);
+            }
         }
 
         level++;
-        
-        Logger.LogError($"New ATK = {newAtk}");
         UpdateStat(_cardData, level, newHp, newAtk);
+    }
+    public void ApplyEvoStats(CardData cardData, int evoStage)
+    {
+        if (evoStage <= 0) return;
+
+        int levelsPerEvo = StaticValues.MaxLevel - 1;
+
+        for (int e = 0; e < evoStage; e++)
+        {
+            if (cardData.EquipmentType == "Ori")
+            {
+                cardData.Hp += oriHpPerLevel[cardData.Grade] * levelsPerEvo;
+                cardData.Atk += oriAtkPerLevel[cardData.Grade] * levelsPerEvo;
+            }
+            else
+            {
+                if (cardData.Hp > 0)
+                    cardData.Hp += itemHpPerLevel[cardData.Grade] * levelsPerEvo;
+                if (cardData.Atk > 0)
+                    cardData.Atk += itemAtkPerLevel[cardData.Grade] * levelsPerEvo;
+            }
+        }
+
+        Logger.Log($"[StatManager] EvoStats 적용: {cardData.Name} Evo{evoStage} HP:{cardData.Hp} ATK:{cardData.Atk}");
     }
     void UpdateStat(CardData _cardData, int _level, int _hp, int _atk)
     {
