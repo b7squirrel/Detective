@@ -11,6 +11,10 @@ public class WhipWeapon : WeaponBase
     bool canMultiStrike;
     bool multiStrikeDone;
 
+    // 리드 오리일 때 플레이어 방향 참조
+    private Player player;
+    private Vector2 currentDir;
+
     [Header("Effect")]
     [SerializeField] GameObject elecHitEffect;
 
@@ -47,11 +51,11 @@ public class WhipWeapon : WeaponBase
     protected override void Awake()
     {
         base.Awake();
-
         anim = GetComponentInChildren<Animator>();
-
         if (weapon != null)
             weapon.SetActive(true);
+
+        player = GetComponentInParent<Player>(); // 동료일 땐 null이 됨
     }
 
     public override void SetData(WeaponData wd)
@@ -70,9 +74,25 @@ public class WhipWeapon : WeaponBase
     {
         base.Update();
 
+        // 리드 오리일 때만 플레이어 방향 추적
+        if (InitialWeapon && player != null && player.InputVec != Vector2.zero)
+            currentDir = player.InputVec;
+
         if (isAttacking)
-        {
             LockAttackDirection();
+    }
+
+    protected override void SetAngle()
+    {
+        if (InitialWeapon)
+        {
+            // 리드 오리: 플레이어 입력 방향 사용
+            angle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
+        }
+        else
+        {
+            // 동료 오리: 기존 적 탐색 방향 사용
+            base.SetAngle();
         }
     }
 
@@ -101,13 +121,17 @@ public class WhipWeapon : WeaponBase
     {
         isAttacking = true;
 
-        if (weaponContainerAnim != null)
+        if (InitialWeapon)
         {
-            attackFacingRight = weaponContainerAnim.FacingRight;
+            // 리드 오리: 플레이어 입력 방향 기반
+            attackFacingRight = currentDir.x >= 0;
         }
         else
         {
-            attackFacingRight = dir.x >= 0;
+            // 동료 오리: 기존 방식 유지
+            attackFacingRight = weaponContainerAnim != null
+                ? weaponContainerAnim.FacingRight
+                : dir.x >= 0;
         }
     }
 
