@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// 동료 강화 - Ally Power Boost
@@ -10,13 +11,15 @@ public class Skill500 : SkillBase
     float baseDuration; // 기본 지속시간
     float realDuration; // 업그레이드 적용된 지속시간
     float durationTimer;
-    
+
     [Header("Boost Settings")]
-    float damageMultiplier; 
-    
+    float damageMultiplier;
+
+    private List<WeaponBase> boostedWeapons = new List<WeaponBase>(); // ✅ 수정 - 부스트된 무기만 따로 보관
+
     [Header("Duration Upgrade")]
     [SerializeField] float durationIncreasePerLevel = 2f; // 레벨당 증가 시간 (초)
-    
+
     [Header("Visual Effects")]
     [SerializeField] Color boostColor = new Color(1f, 0.5f, 0f, 0.5f); // 주황색 (선택사항)
     
@@ -105,56 +108,28 @@ public class Skill500 : SkillBase
 
     void ApplyBoost()
     {
+        boostedWeapons.Clear();
         WeaponBase[] allWeapons = FindObjectsOfType<WeaponBase>();
-        if (allWeapons == null || allWeapons.Length == 0) return;
-        
-        int boostedCount = 0;
-        
-        for (int i = 0; i < allWeapons.Length; i++)
+
+        foreach (var weapon in allWeapons)
         {
-            // 동료들만 강화 (InitialWeapon == false)
-            if (!allWeapons[i].InitialWeapon)
+            if (!weapon.InitialWeapon)
             {
-                allWeapons[i].SetAllyDamageMultiplier(damageMultiplier);
-                boostedCount++;
-                
-                // ⭐ 선택사항: 시각적 효과 추가
-                // WeaponContainerAnim containerAnim = allWeapons[i].GetComponentInParent<WeaponContainerAnim>();
-                // if (containerAnim != null)
-                // {
-                //     containerAnim.Scale(1.2f); // 크기 증가 효과
-                // }
+                weapon.SetAllyDamageMultiplier(damageMultiplier);
+                boostedWeapons.Add(weapon); // 캐싱
             }
         }
-        
-        _boostedAllyCount = boostedCount;
-        Logger.LogError($"[Skill500] 💪 {boostedCount}명의 동료 강화 적용!");
     }
 
     void ReleaseBoost()
     {
-        WeaponBase[] allWeapons = FindObjectsOfType<WeaponBase>();
-        if (allWeapons == null || allWeapons.Length == 0) return;
-        
-        int releasedCount = 0;
-        
-        for (int i = 0; i < allWeapons.Length; i++)
+        // ✅ 저장된 목록만 순회 - 씬 탐색 없음
+        foreach (var weapon in boostedWeapons)
         {
-            if (!allWeapons[i].InitialWeapon)
-            {
-                allWeapons[i].ResetAllyDamageMultiplier();
-                releasedCount++;
-                
-                // ⭐ 선택사항: 크기 원래대로
-                // WeaponContainerAnim containerAnim = allWeapons[i].GetComponentInParent<WeaponContainerAnim>();
-                // if (containerAnim != null)
-                // {
-                //     containerAnim.Scale(0.8f); // 원래 크기
-                // }
-            }
+            if (weapon != null)
+                weapon.ResetAllyDamageMultiplier();
         }
-        
-        Logger.LogError($"[Skill500] 💨 {releasedCount}명의 동료 강화 해제");
+        boostedWeapons.Clear();
     }
 
     void UpdateDebugValues()

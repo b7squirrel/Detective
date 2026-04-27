@@ -1,24 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Skill200 : SkillBase
 {
     public override SkillType SkillType => SkillType.SluggishSlumber;
-    
+
     float baseDuration;
     float realDuration;
     float durationTimer;
     float slownessFactor;
-    
+
     [Header("Duration Upgrade")]
     [SerializeField] float durationIncreasePerLevel = 2f;
-    
+
     [Header("Visual Effects")]
     [SerializeField] Color slowColor = new Color(0.5f, 0.5f, 1f, 1f);
-    
+
     // ⭐ 느려진 적들을 관리하는 리스트
     private List<EnemyBase> slowedEnemies = new List<EnemyBase>();
-    
+
+    private Dictionary<EnemyBase, UnityAction> landingCallbacks
+    = new Dictionary<EnemyBase, UnityAction>();
+
     [Header("Debug")]
     [SerializeField] float _cooldownCounter;
     [SerializeField] float _realCoolDownTime;
@@ -31,11 +35,11 @@ public class Skill200 : SkillBase
     public override void Init(SkillManager skillManager, CardData cardData, SkillData data)
     {
         base.Init(skillManager, cardData, data);
-        
+
         baseDuration = new Equation().GetSkillDuration(rate, Grade, EvoStage, data.baseDuration);
         CalculateRealDuration();
         slownessFactor = new Equation().GetSlowSpeedFactor(Grade, EvoStage);
-        
+
         Logger.LogError($"[Skill200-느림보 최면술] 초기화 완료\n" +
                         $"  EvoStage: {EvoStage}\n" +
                         $"  Grade: {Grade}\n" +
@@ -48,7 +52,7 @@ public class Skill200 : SkillBase
     {
         base.ApplyDurationUpgrade(level);
         CalculateRealDuration();
-        
+
         Debug.Log($"[Skill200] 💫 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
     }
 
@@ -61,7 +65,7 @@ public class Skill200 : SkillBase
     {
         base.UseSkill();
         DebugValues();
-        
+
         if (skillCounter > realCoolDownTime)
         {
             if (durationTimer > realDuration)
@@ -81,14 +85,14 @@ public class Skill200 : SkillBase
                     isActivated = true;
                     skillUi.BadgeUpAnim();
                     skillUi.PlayBadgeAnim("Duration");
-                    
+
                     // ⭐ 스킬 시작 시 한 번만 적용
                     ApplySlowEffect();
                 }
-                
+
                 // ⭐ 스킬 지속 중에는 새로 생성된 적만 체크
                 CheckAndApplyToNewEnemies();
-                
+
                 durationTimer += Time.deltaTime;
                 return;
             }
@@ -100,17 +104,17 @@ public class Skill200 : SkillBase
     {
         Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
         if (allEnemies == null || allEnemies.Length == 0) return;
-        
+
         slowedEnemies.Clear(); // 리스트 초기화
-        
+
         for (int i = 0; i < allEnemies.Length; i++)
         {
             EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
             if (enemy == null) continue;
-            
+
             ApplySlowToEnemy(enemy);
         }
-        
+
         _affectedEnemyCount = slowedEnemies.Count;
     }
 
@@ -120,15 +124,15 @@ public class Skill200 : SkillBase
         // 프레임당 최대 5마리만 체크 (성능 최적화)
         Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
         if (allEnemies == null || allEnemies.Length == 0) return;
-        
+
         int checkCount = 0;
         int maxChecksPerFrame = 5; // 프레임당 최대 5마리만
-        
+
         for (int i = 0; i < allEnemies.Length && checkCount < maxChecksPerFrame; i++)
         {
             EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
             if (enemy == null || enemy.IsSlowed) continue;
-            
+
             // 새로운 적 발견
             ApplySlowToEnemy(enemy);
             checkCount++;
@@ -138,15 +142,20 @@ public class Skill200 : SkillBase
     // ⭐ 개별 적에게 느림 적용 + 리스트에 추가
     void ApplySlowToEnemy(EnemyBase enemy)
     {
-        if (enemy.IsSlowed) return; // 이미 느린 적은 스킵
-        
+        if (enemy.IsSlowed) return;
+
         enemy.IsSlowed = true;
         enemy.CastSlownessToEnemy(slownessFactor);
-        
         slowedEnemies.Add(enemy);
-        
-        // ⭐ 적이 착지할 때마다 재적용되도록 콜백 등록
-        RegisterEnemyCallback(enemy);
+
+        // ✅ 콜백을 변수에 저장
+        ShadowHeightEnemy shadowHeight = enemy.GetComponent<ShadowHeightEnemy>();
+        if (shadowHeight != null)
+        {
+            UnityAction callback = () => ReapplySlowOnLanding(enemy);
+            landingCallbacks[enemy] = callback;
+            shadowHeight.onGroundHitEvent.AddListener(callback);
+        }
     }
 
     // ⭐ 적의 착지 이벤트에 콜백 등록
@@ -166,14 +175,13 @@ public class Skill200 : SkillBase
     {
         if (!isActivated) return; // 스킬이 꺼져있으면 무시
         if (enemy == null || !enemy.gameObject.activeInHierarchy) return;
-        
+
         // 착지 직후 느림 재적용
         enemy.CastSlownessToEnemy(slownessFactor);
     }
 
     void ReleaseSlowEffect()
     {
-        // ⭐ 리스트에 있는 적들만 해제 (훨씬 빠름)
         for (int i = slowedEnemies.Count - 1; i >= 0; i--)
         {
             EnemyBase enemy = slowedEnemies[i];
@@ -182,18 +190,18 @@ public class Skill200 : SkillBase
                 slowedEnemies.RemoveAt(i);
                 continue;
             }
-            
+
             enemy.IsSlowed = false;
             enemy.ResetCurrentSpeedToDefault();
-            
-            // ⭐ 콜백 해제
+
+            // ✅ 저장된 콜백으로 제거
             ShadowHeightEnemy shadowHeight = enemy.GetComponent<ShadowHeightEnemy>();
-            if (shadowHeight != null)
+            if (shadowHeight != null && landingCallbacks.TryGetValue(enemy, out UnityAction cb))
             {
-                shadowHeight.onGroundHitEvent.RemoveListener(() => ReapplySlowOnLanding(enemy));
+                shadowHeight.onGroundHitEvent.RemoveListener(cb);
             }
+            landingCallbacks.Remove(enemy);
         }
-        
         slowedEnemies.Clear();
     }
 

@@ -46,20 +46,20 @@ public class SkillUI : MonoBehaviour
 
     void SetNumStar(int numStars)
     {
-        stars = null;
-        if (stars == null)
+        // ✅ 기존 별 정리
+        if (stars != null)
         {
-            stars = new GameObject[3];
-            for (int i = 0; i < stars.Length; i++)
+            foreach (var star in stars)
             {
-                stars[i] = Instantiate(starPrefab, starContainer);
-                stars[i].SetActive(false);
+                if (star != null) Destroy(star);
             }
         }
-        
-        for (int i = 0; i < numStars; i++)
+
+        stars = new GameObject[3];
+        for (int i = 0; i < stars.Length; i++)
         {
-            stars[i].SetActive(true);
+            stars[i] = Instantiate(starPrefab, starContainer);
+            stars[i].SetActive(i < numStars);
         }
     }
 

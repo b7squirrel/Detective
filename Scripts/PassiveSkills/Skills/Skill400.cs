@@ -71,6 +71,7 @@ public class Skill400 : SkillBase
             {
                 skillCounter = 0;
                 durationTimer = 0;
+                isActivated = false;
                 GameManager.instance.IsPlayerInvincible = false;
                 skillUi.PlayBadgeAnim("Done"); // ⭐ UI 애니메이션 추가
                 return;
