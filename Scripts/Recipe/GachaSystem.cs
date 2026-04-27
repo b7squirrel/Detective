@@ -246,35 +246,52 @@ public class GachaSystem : MonoBehaviour
         cardDataManager.BeginBatchOperation();
         cardsPicked.Clear();
 
+        StatManager statManager = GetComponent<StatManager>();
+
         try
         {
             string cardType = GetCardTypeFromTableId(gachaTableId);
 
             if (cardType == "Weapon" && tutorialDuckPool != null && tutorialDuckPool.Count > 0)
             {
-                // 튜토리얼 오리 카드 고정 지급
                 CardData tutorialCard = CloneCardData(tutorialDuckPool[0]);
+                int targetLevel = tutorialDuckPool[0].Level;
+                tutorialCard.Level = 1;
+
+                if (statManager != null)
+                {
+                    for (int j = 0; j < targetLevel - 1; j++)
+                        statManager.LevelUp(tutorialCard);
+                }
+
                 cardDataManager.AddNewCardToMyCardsList(tutorialCard);
                 AddEssentialEquip(tutorialCard);
                 cardsPicked.Add(tutorialCard);
                 AddCardSlot(tutorialCard);
 
-                Logger.Log($"[GachaSystem] 튜토리얼 오리 카드 지급: {tutorialCard.Name}");
+                Logger.Log($"[GachaSystem] 튜토리얼 오리 카드 지급: {tutorialCard.Name} HP:{tutorialCard.Hp} ATK:{tutorialCard.Atk}");
             }
             else if (cardType == "Item" && tutorialItemPool != null && tutorialItemPool.Count > 0)
             {
-                // 튜토리얼 아이템 카드 고정 지급
                 CardData tutorialCard = CloneCardData(tutorialItemPool[0]);
+                int targetLevel = tutorialItemPool[0].Level;
+                tutorialCard.Level = 1;
+
+                if (statManager != null)
+                {
+                    for (int j = 0; j < targetLevel - 1; j++)
+                        statManager.LevelUp(tutorialCard);
+                }
+
                 cardDataManager.AddNewCardToMyCardsList(tutorialCard);
                 cardsPicked.Add(tutorialCard);
                 AddCardSlot(tutorialCard);
 
-                Logger.Log($"[GachaSystem] 튜토리얼 아이템 카드 지급: {tutorialCard.Name}");
+                Logger.Log($"[GachaSystem] 튜토리얼 아이템 카드 지급: {tutorialCard.Name} ATK:{tutorialCard.Atk}");
             }
             else
             {
                 Logger.LogWarning("[GachaSystem] 튜토리얼 카드 풀이 없어 일반 뽑기로 대체합니다.");
-                // 풀이 없으면 랜덤 1개
                 int rarity = raritySystem.GetRandomRarity(gachaTableId, false);
                 string cardType2 = GetCardTypeFromTableId(gachaTableId);
                 DrawWithRarity(cardType2, rarity);
@@ -291,7 +308,7 @@ public class GachaSystem : MonoBehaviour
             throw;
         }
 
-        // UI 업데이트 (기존과 동일)
+        // UI 업데이트
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
 
@@ -299,9 +316,7 @@ public class GachaSystem : MonoBehaviour
             cardSlotManager = FindObjectOfType<CardSlotManager>();
 
         for (int i = 0; i < cardsPicked.Count; i++)
-        {
             cardSlotManager.AddItemSlotOf(cardsPicked[i]);
-        }
 
         content.SetActive(false);
         darkBG.SetActive(true);
@@ -323,59 +338,59 @@ public class GachaSystem : MonoBehaviour
 
     #region Debug 특정 카드 뽑기
     public void DrawSpecificCard(string _cardType, int index, int grade, int num, int skill, int evo)
-{
-    cardDataManager.BeginBatchOperation();
-    Logger.Log($"[GachaSystem] {num}개 특정 카드 뽑기 시작");
-
-    if (statManager == null)
-        statManager = GetComponent<StatManager>();
-
-    try
     {
-        for (int i = 0; i < num; i++)
+        cardDataManager.BeginBatchOperation();
+        Logger.Log($"[GachaSystem] {num}개 특정 카드 뽑기 시작");
+
+        if (statManager == null)
+            statManager = GetComponent<StatManager>();
+
+        try
         {
-            CardData newCardData;
-
-            if (_cardType == "Weapon")
+            for (int i = 0; i < num; i++)
             {
-                newCardData = CloneCardData(weaponPools[index]);
-                newCardData.Grade = grade;
-                newCardData.PassiveSkill = skill + 1;
-                newCardData.EvoStage = evo;
-                statManager.ApplyEvoStats(newCardData, evo);
-                cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
-                AddEssentialEquip(newCardData);
+                CardData newCardData;
 
-                cardsPicked.Add(newCardData);
-                AddCardSlot(newCardData);
-            }
-            else if (_cardType == "Item")
-            {
-                newCardData = CloneCardData(itemPools[index]);
-                newCardData.Grade = grade;
-                newCardData.PassiveSkill = skill + 1;
-                newCardData.EvoStage = evo;
-                statManager.ApplyEvoStats(newCardData, evo);
-                cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
+                if (_cardType == "Weapon")
+                {
+                    newCardData = CloneCardData(weaponPools[index]);
+                    newCardData.Grade = grade;
+                    newCardData.PassiveSkill = skill + 1;
+                    newCardData.EvoStage = evo;
+                    statManager.ApplyEvoStats(newCardData, evo);
+                    cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
+                    AddEssentialEquip(newCardData);
 
-                cardsPicked.Add(newCardData);
-                AddCardSlot(newCardData);
+                    cardsPicked.Add(newCardData);
+                    AddCardSlot(newCardData);
+                }
+                else if (_cardType == "Item")
+                {
+                    newCardData = CloneCardData(itemPools[index]);
+                    newCardData.Grade = grade;
+                    newCardData.PassiveSkill = skill + 1;
+                    newCardData.EvoStage = evo;
+                    statManager.ApplyEvoStats(newCardData, evo);
+                    cardDataManager.AddNewCardToMyCardsListWithSkill(newCardData);
+
+                    cardsPicked.Add(newCardData);
+                    AddCardSlot(newCardData);
+                }
             }
+
+            cardDataManager.EndBatchOperation();
+            cardDataManager.RefreshCardList();
+            DelayedSaveEquipmentData();
+
+            Logger.Log("[GachaSystem] 특정 카드 뽑기 완료");
         }
-
-        cardDataManager.EndBatchOperation();
-        cardDataManager.RefreshCardList();
-        DelayedSaveEquipmentData();
-
-        Logger.Log("[GachaSystem] 특정 카드 뽑기 완료");
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 특정 카드 뽑기 오류: {e.Message}");
+            cardDataManager.EndBatchOperation();
+            throw;
+        }
     }
-    catch (Exception e)
-    {
-        Logger.LogError($"[GachaSystem] 특정 카드 뽑기 오류: {e.Message}");
-        cardDataManager.EndBatchOperation();
-        throw;
-    }
-}
     #endregion
 
     CardData CloneCardData(CardData original)
