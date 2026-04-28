@@ -72,11 +72,11 @@ public class WhipWeapon : WeaponBase
 
     protected override void Update()
     {
-        base.Update();
-
-        // 리드 오리일 때만 플레이어 방향 추적
+        // base보다 먼저 currentDir 업데이트 → FlipWeaponTools에 즉시 반영
         if (InitialWeapon && player != null && player.InputVec != Vector2.zero)
             currentDir = player.InputVec;
+
+        base.Update(); // 내부에서 FlipWeaponTools() 호출
 
         if (isAttacking)
             LockAttackDirection();
@@ -135,15 +135,21 @@ public class WhipWeapon : WeaponBase
         }
     }
 
+    // 3. 공격 중: 부모가 뒤집혔다면 로컬 Y=180으로 보정해서 월드 방향을 고정
     void LockAttackDirection()
     {
-        float yRotation = attackFacingRight ? 0f : 180f;
-        transform.eulerAngles = new Vector3(0, yRotation, 0);
+        if (weaponContainerAnim == null) return;
+
+        bool parentFacingRight = weaponContainerAnim.FacingRight;
+        bool needsFlip = (attackFacingRight != parentFacingRight);
+        transform.localEulerAngles = new Vector3(0, needsFlip ? 180f : 0f, 0);
     }
 
+    // 4. 공격 종료: 로컬 리셋 → 부모 방향이 자동 반영됨
     void EndAttack()
     {
         isAttacking = false;
+        transform.localEulerAngles = Vector3.zero;
     }
 
     /// <summary>
@@ -333,21 +339,18 @@ public class WhipWeapon : WeaponBase
         multiStrikeDone = true;
     }
 
+    // 1. 평상시: 부모 flip을 그대로 따라감
     protected override void FlipWeaponTools()
     {
-        if (!isAttacking && weaponContainerAnim != null)
-        {
-            float yRotation = weaponContainerAnim.FacingRight ? 0f : 180f;
-            transform.eulerAngles = new Vector3(0, yRotation, 0);
-        }
+        if (isAttacking) return;
+        transform.localEulerAngles = Vector3.zero;
     }
 
+    // 2. 기본 클래스 LockFlip도 로컬로
     protected override void LockFlip()
     {
         if (!isAttacking)
-        {
-            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-        }
+            transform.localEulerAngles = Vector3.zero;
     }
 
     #region Animation Events
