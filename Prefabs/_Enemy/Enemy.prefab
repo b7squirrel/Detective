@@ -132,7 +132,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6026055795198948595
 Transform:
   m_ObjectHideFlags: 0
@@ -299,7 +299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4440052700476040268
 Transform:
   m_ObjectHideFlags: 0
@@ -343,8 +343,8 @@ Transform:
   m_GameObject: {fileID: 4475035654877301682}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.87, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.04, y: 1.79, z: 0}
+  m_LocalScale: {x: 0.6440809, y: 0.6440809, z: 0.6440809}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4230202729391454313}
@@ -390,7 +390,7 @@ SpriteRenderer:
   m_SortingLayerID: -556371709
   m_SortingLayer: 4
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 745b6c9b6bc2141fabff0caf8f66933f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -455,7 +455,7 @@ Animator:
   m_GameObject: {fileID: 5297514985837409348}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: e528fe5e406fa644a9a7f95329c2b329, type: 2}
+  m_Controller: {fileID: 22100000, guid: be250dbe10cb74489a040e6111ac6595, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -552,12 +552,10 @@ MonoBehaviour:
   dieExplosionPrefeab: {fileID: 8342542712997089027, guid: 1feb77121f65f8346815d0b584df0f77, type: 3}
   knockbackEffect: {fileID: 1724609311885633146, guid: 83d5deb238425114e8b523d59bdecb73, type: 3}
   hitEffectPoint: {fileID: 2267519023532398335}
-  whiteFlashDuration: 0.01
   knockBackSpeed: 30
   knockBackDelay: 0.2
   srFlash:
   - {fileID: 7866643054979264505}
-  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hits:
   - {fileID: 8300000, guid: e899ef94d61bed2449d5d7c6b81521ca, type: 3}
@@ -627,6 +625,7 @@ MonoBehaviour:
   verticalVelocity: 40
   landingDamageRadius: 0
   landingRangeIndicator: {fileID: 0}
+  indicatorBlinkSpeed: 30
   isGrounded: 0
 --- !u!114 &5548818968600387970
 MonoBehaviour:
@@ -949,7 +948,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3, y: 2.5166667}
+  m_Size: {x: 1.28, y: 1.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
