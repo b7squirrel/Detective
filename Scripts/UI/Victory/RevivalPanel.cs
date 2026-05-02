@@ -21,10 +21,13 @@ public class RevivalPanel : MonoBehaviour
     Coroutine countdownCoroutine;
     bool isRevived = false;
     bool hasUsedRevival = false; // 이번 판에 부활을 이미 사용했는지
+    PanelTween panelTween;
 
     void Start()
     {
         panel.SetActive(false);
+        panelTween = panel.GetComponent<PanelTween>();
+
         cristalCostText.text = $"{cristalCost}개로 부활";
 
         adButton.onClick.AddListener(OnAdButtonClicked);
@@ -43,7 +46,7 @@ public class RevivalPanel : MonoBehaviour
 
         character = _character;
         isRevived = false;
-        panel.SetActive(true);
+        panelTween.ShowWithScale(); // panel.SetActive(true) 대신
         adButton.interactable = AdsManager.IsRewardedAdReady;
         countdownCoroutine = StartCoroutine(CountdownCo());
     }
@@ -84,16 +87,37 @@ public class RevivalPanel : MonoBehaviour
 
     void OnAdButtonClicked()
     {
-        // 광고 시작 전 게임 일시정지
-        GameManager.instance.pauseManager.PauseGame();
-
-        AdsManager.Instance.ShowDailyFreeGemRewardedAd(() =>
+        // ★ 광고 시작 전 카운트다운 반드시 중지
+        if (countdownCoroutine != null)
         {
-            Logger.Log("[RevivalPanel] 광고 시청 완료 → 부활");
-            // 광고 종료 후 게임 재개
-            GameManager.instance.pauseManager.UnPauseGame();
-            DoRevive();
-        });
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
+        }
+
+        GameManager.instance.pauseManager.PauseGame();
+        bool rewarded = false;
+
+        AdsManager.Instance.ShowDailyFreeGemRewardedAd(
+            onRewarded: () =>
+            {
+                rewarded = true;
+            },
+            onClosed: () =>
+            {
+                if (rewarded)
+                {
+                    Logger.Log("[RevivalPanel] 광고 닫힘 → 부활");
+                    DoRevive();
+                }
+                else
+                {
+                    // 끝까지 안 본 경우 → 카운트다운 재개
+                    Logger.Log("[RevivalPanel] 광고 미완료 → 카운트다운 재개");
+                    GameManager.instance.pauseManager.UnPauseGame();
+                    countdownCoroutine = StartCoroutine(CountdownCo());
+                }
+            }
+        );
     }
 
     void OnCristalButtonClicked()
@@ -145,6 +169,6 @@ public class RevivalPanel : MonoBehaviour
     void Hide()
     {
         countdownText.color = Color.yellow; // 색상 초기화
-        panel.SetActive(false);
+        panelTween.HideWithScale(); // panel.SetActive(false) 대신
     }
 }

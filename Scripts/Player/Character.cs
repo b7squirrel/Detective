@@ -317,8 +317,15 @@ Handheld.Vibrate();
         HapticManager.PlayDeath();
         hpBar.gameObject.SetActive(false);
         OnDie?.Invoke();
+        StartCoroutine(DieCo());
+    }
 
-        // 부활 패널 표시 시도
+    IEnumerator DieCo()
+    {
+        GameManager.instance.pauseManager.PauseGame();
+        yield return new WaitForSecondsRealtime(0.8f);
+        // UnPauseGame() 제거 ← 여기가 문제였음
+
         RevivalPanel revivalPanel = FindObjectOfType<RevivalPanel>();
         if (revivalPanel != null)
         {
@@ -326,8 +333,8 @@ Handheld.Vibrate();
         }
         else
         {
-            // 부활 패널이 없으면 바로 게임오버
             Logger.LogWarning("[Character] RevivalPanel을 찾을 수 없습니다. 바로 게임오버.");
+            GameManager.instance.pauseManager.UnPauseGame(); // 게임오버로 갈 때만 해제
             ProcessDeath();
         }
     }

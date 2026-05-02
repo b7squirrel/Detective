@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class AdsManager : SingletonBehaviour<AdsManager>
 {
-    
-
     protected override void Init()
     {
         base.Init();
@@ -24,7 +22,6 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         {
             Logger.Log("[AdsManager] Google Ads 초기화 시작...");
 
-            //Check if initialization was successful
             var isInitSuccess = true;
             var statusMap = initStatus.getAdapterStatusMap();
             foreach (var status in statusMap)
@@ -32,20 +29,16 @@ public class AdsManager : SingletonBehaviour<AdsManager>
                 var className = status.Key;
                 var adapterStatus = status.Value;
                 Logger.Log($"Adapter: {className}, State: {adapterStatus.InitializationState}, Description: {adapterStatus.Description}");
-                if(adapterStatus.InitializationState != AdapterState.Ready)
+                if (adapterStatus.InitializationState != AdapterState.Ready)
                 {
                     isInitSuccess = false;
                 }
             }
 
-            if(isInitSuccess)
-            {
+            if (isInitSuccess)
                 Logger.Log($"Google Ads initialization successful.");
-            }
             else
-            {
                 Logger.LogError($"Google Ads initialization failed.");
-            }
         });
     }
 
@@ -83,16 +76,14 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     {
         Logger.Log($"EnableTopBannerAd value : {value}");
 
-        if(value)
+        if (value)
         {
-            if(m_TopBannerView == null)
+            if (m_TopBannerView == null)
             {
                 AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
                 m_TopBannerView = new BannerView(m_TopBannerAdId, adaptiveSize, AdPosition.Top);
 
-                // create ad request
                 AdRequest request = new AdRequest();
-                // load the banner with the request
                 m_TopBannerView.LoadAd(request);
                 ListenToTopBannerAdEvents();
             }
@@ -103,7 +94,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         }
         else
         {
-            if(m_TopBannerView != null)
+            if (m_TopBannerView != null)
             {
                 m_TopBannerView.Hide();
             }
@@ -112,46 +103,32 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
     private void ListenToTopBannerAdEvents()
     {
-        if(m_TopBannerView == null)
+        if (m_TopBannerView == null)
         {
             Logger.LogError("m_TopBannerView is null.");
             return;
         }
 
         m_TopBannerView.OnBannerAdLoaded += () =>
-        {
             Logger.Log($"m_TopBannerView loaded an ad with response : {m_TopBannerView.GetResponseInfo()}");
-        };
 
         m_TopBannerView.OnBannerAdLoadFailed += (LoadAdError error) =>
-        {
             Logger.LogError($"m_TopBannerView failed to load an ad with error : {error}");
-        };
 
         m_TopBannerView.OnAdPaid += (AdValue adValue) =>
-        {
             Logger.Log($"m_TopBannerView paid {adValue.Value}{adValue.CurrencyCode}.");
-        };
 
         m_TopBannerView.OnAdImpressionRecorded += () =>
-        {
             Logger.Log($"m_TopBannerView recorded an impression.");
-        };
 
         m_TopBannerView.OnAdClicked += () =>
-        {
             Logger.Log($"m_TopBannerView was clicked.");
-        };
 
         m_TopBannerView.OnAdFullScreenContentOpened += () =>
-        {
             Logger.Log($"m_TopBannerView full screen content opened.");
-        };
 
         m_TopBannerView.OnAdFullScreenContentClosed += () =>
-        {
             Logger.Log($"m_TopBannerView full screen content closed.");
-        };
     }
     #endregion
 
@@ -180,23 +157,21 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 #endif
 #else
 #if UNITY_ANDROID
-    m_StageClearInterstitialAdId = AOS_STAGE_CLEAR_INTERSTITIAL_AD_ID;
+        m_StageClearInterstitialAdId = AOS_STAGE_CLEAR_INTERSTITIAL_AD_ID;
 #elif UNITY_IOS
-    m_StageClearInterstitialAdId = IOS_STAGE_CLEAR_INTERSTITIAL_AD_ID;
+        m_StageClearInterstitialAdId = IOS_STAGE_CLEAR_INTERSTITIAL_AD_ID;
 #endif
 #endif
     }
 
     private void LoadStageClearInterstitialAd()
     {
-        // create ad request
         var adRequest = new AdRequest();
 
-        // send request to load ad
         InterstitialAd.Load(m_StageClearInterstitialAdId, adRequest,
             (InterstitialAd ad, LoadAdError error) =>
             {
-                if(error != null || ad == null)
+                if (error != null || ad == null)
                 {
                     Logger.LogError($"Interstitial ad failed to load. Error: {error}");
                     return;
@@ -210,31 +185,23 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
     private void ListenToStageClearInterstitialAdEvents()
     {
-        if(m_StageClearInterstitial == null)
+        if (m_StageClearInterstitial == null)
         {
             Logger.LogError($"m_StageClearInterstitial is null");
             return;
         }
 
         m_StageClearInterstitial.OnAdPaid += (AdValue adValue) =>
-        {
             Logger.Log($"m_StageClearInterstitial ad paid {adValue.Value}{adValue.CurrencyCode}.");
-        };
 
         m_StageClearInterstitial.OnAdImpressionRecorded += () =>
-        {
             Logger.Log($"m_StageClearInterstitial ad recorded an impression.");
-        };
 
         m_StageClearInterstitial.OnAdClicked += () =>
-        {
             Logger.Log($"m_StageClearInterstitial ad was clicked.");
-        };
 
         m_StageClearInterstitial.OnAdFullScreenContentOpened += () =>
-        {
             Logger.Log($"m_StageClearInterstitial ad full screen content opened.");
-        };
 
         m_StageClearInterstitial.OnAdFullScreenContentClosed += () =>
         {
@@ -246,21 +213,16 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
         m_StageClearInterstitial.OnAdFullScreenContentFailed += (AdError error) =>
         {
-            Logger.LogError($"m_StageClearInterstitial ad failed to open full screnn content. Error: {error}");
+            Logger.LogError($"m_StageClearInterstitial ad failed to open full screen content. Error: {error}");
             LoadStageClearInterstitialAd();
             m_OnFinishStageClearInterstitialAd?.Invoke();
             m_OnFinishStageClearInterstitialAd = null;
         };
     }
 
-	//예시
-	//AdsManager.Instance.ShowStageClearInterstitialAd(() =>
-    //{
-    //    StartNextStage();
-    //});
     public void ShowStageClearInterstitialAd(Action onFinishStageClearInterstitialAd = null)
     {
-        if(m_StageClearInterstitial != null && m_StageClearInterstitial.CanShowAd())
+        if (m_StageClearInterstitial != null && m_StageClearInterstitial.CanShowAd())
         {
             Logger.Log($"Show stage clear interstitial ad.");
             m_StageClearInterstitial.Show();
@@ -274,14 +236,17 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     #endregion
 
     #region RewardedAd
-    public static bool IsRewardedAdReady { get; private set; } = false; // 광고 준비 상태 플래그
-    
+    public static bool IsRewardedAdReady { get; private set; } = false;
+
     private RewardedAd m_DailyFreeGemRewardedAd;
     private string m_DailyFreeGemRewardedAdId = string.Empty;
     private const string AOS_REWARDED_AD_TEST_AD_ID = "ca-app-pub-3940256099942544/5224354917";
     private const string IOS_REWARDED_AD_TEST_AD_ID = "ca-app-pub-3940256099942544/1712485313";
     private const string AOS_DAILY_FREE_GEM_REWARDED_AD_ID = "";
     private const string IOS_DAILY_FREE_GEM_REWARDED_AD_ID = "";
+
+    // ★ 광고창이 완전히 닫힐 때 호출되는 콜백
+    private Action m_OnDailyFreeGemRewardedAdClosed = null;
 
     private void InitRewardedAds()
     {
@@ -299,13 +264,13 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 #endif
 #else
 #if UNITY_ANDROID
-    m_DailyFreeGemRewardedAdId = AOS_DAILY_FREE_GEM_REWARDED_AD_ID;
+        m_DailyFreeGemRewardedAdId = AOS_DAILY_FREE_GEM_REWARDED_AD_ID;
 #elif UNITY_IOS
-    m_DailyFreeGemRewardedAdId = IOS_DAILY_FREE_GEM_REWARDED_AD_ID;
+        m_DailyFreeGemRewardedAdId = IOS_DAILY_FREE_GEM_REWARDED_AD_ID;
 #endif
 #endif
     }
-    
+
     private void LoadDailyFreeGemRewardedAd()
     {
         Logger.Log("[AdsManager] 보상형 광고 로드 시작...");
@@ -314,15 +279,16 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         RewardedAd.Load(m_DailyFreeGemRewardedAdId, adRequest,
             (RewardedAd ad, LoadAdError error) =>
             {
-                if(error != null || ad == null)
+                if (error != null || ad == null)
                 {
                     Logger.LogError($"[AdsManager] 보상형 광고 로드 실패. Error: {error}");
+                    IsRewardedAdReady = false;
                     return;
                 }
 
                 Logger.Log($"[AdsManager] 보상형 광고 로드 성공! Response: {ad.GetResponseInfo()}");
                 m_DailyFreeGemRewardedAd = ad;
-                IsRewardedAdReady = true; // 광고 준비 완료 플래그
+                IsRewardedAdReady = true;
                 ListenToDailyFreeGemRewardedAdEvents();
             });
     }
@@ -336,49 +302,51 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         }
 
         m_DailyFreeGemRewardedAd.OnAdPaid += (AdValue adValue) =>
-        {
             Logger.Log($"m_DailyFreeGemRewardedAd paid {adValue.Value}{adValue.CurrencyCode}.");
-        };
 
         m_DailyFreeGemRewardedAd.OnAdImpressionRecorded += () =>
-        {
-            Logger.Log($"m_DailyFreeGemRewardedAd recoreded an impression.");
-        };
+            Logger.Log($"m_DailyFreeGemRewardedAd recorded an impression.");
 
         m_DailyFreeGemRewardedAd.OnAdClicked += () =>
-        {
             Logger.Log($"m_DailyFreeGemRewardedAd was clicked.");
-        };
 
         m_DailyFreeGemRewardedAd.OnAdFullScreenContentOpened += () =>
-        {
             Logger.Log($"m_DailyFreeGemRewardedAd full screen content opened.");
-        };
 
+        // ★ 광고창이 완전히 닫힌 시점 — 여기서 onClosed 콜백 호출
         m_DailyFreeGemRewardedAd.OnAdFullScreenContentClosed += () =>
         {
             Logger.Log($"m_DailyFreeGemRewardedAd full screen content closed.");
+            IsRewardedAdReady = false;
+            m_OnDailyFreeGemRewardedAdClosed?.Invoke();
+            m_OnDailyFreeGemRewardedAdClosed = null;
             LoadDailyFreeGemRewardedAd();
         };
 
         m_DailyFreeGemRewardedAd.OnAdFullScreenContentFailed += (AdError error) =>
         {
             Logger.LogError($"m_DailyFreeGemRewardedAd failed to open full screen content with error: {error}");
+            IsRewardedAdReady = false;
+            m_OnDailyFreeGemRewardedAdClosed?.Invoke();
+            m_OnDailyFreeGemRewardedAdClosed = null;
             LoadDailyFreeGemRewardedAd();
         };
     }
 
-    public void ShowDailyFreeGemRewardedAd(Action onRewardDailyFreeGemAd = null)
+    // ★ onRewarded: 리워드 지급 시점 (광고 닫기 전)
+    // ★ onClosed:   광고창이 완전히 닫힌 시점 ← UnPause, 부활 등은 여기서
+    public void ShowDailyFreeGemRewardedAd(Action onRewarded = null, Action onClosed = null)
     {
         Logger.Log($"[AdsManager] Show DailyFreeGemRewardedAd 호출");
         Logger.Log($"[AdsManager] 광고 준비 상태: {IsRewardedAdReady}");
 
-        if(m_DailyFreeGemRewardedAd != null && m_DailyFreeGemRewardedAd.CanShowAd())
+        if (m_DailyFreeGemRewardedAd != null && m_DailyFreeGemRewardedAd.CanShowAd())
         {
+            m_OnDailyFreeGemRewardedAdClosed = onClosed; // ★ 닫힘 콜백 등록
             m_DailyFreeGemRewardedAd.Show((Reward reward) =>
             {
                 Logger.Log("Rewarded DailyFreeGem");
-                onRewardDailyFreeGemAd?.Invoke();
+                onRewarded?.Invoke(); // 리워드 지급만 기록, 게임 재개 X
             });
         }
         else
@@ -390,13 +358,13 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
     protected override void Dispose()
     {
-        if(m_TopBannerView != null)
+        if (m_TopBannerView != null)
         {
             m_TopBannerView.Destroy();
             m_TopBannerView = null;
         }
 
-        if(m_StageClearInterstitial != null)
+        if (m_StageClearInterstitial != null)
         {
             m_StageClearInterstitial.Destroy();
             m_StageClearInterstitial = null;
