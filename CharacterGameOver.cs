@@ -8,8 +8,8 @@ public class CharacterGameOver : MonoBehaviour
     [SerializeField] GameObject weaponsGroup;
 
     [Header("Regular Feedback")]
-    [SerializeField] AudioClip gameOverSound;
-    [SerializeField] AudioClip gameOverVocalSound;
+    // [SerializeField] AudioClip gameOverSound;
+    // [SerializeField] AudioClip gameOverVocalSound;
     [SerializeField] AudioClip gameOverPanelSound;
 
     
@@ -18,9 +18,9 @@ public class CharacterGameOver : MonoBehaviour
     public void GameOver()
     {
         gameMode = PlayerDataManager.Instance.GetGameMode();
-
-        SoundManager.instance.StopAllSounds();
-        SoundManager.instance.Play(gameOverSound);
+        // ★ deathVocalSound를 제외한 모든 사운드 정지
+        Character character = GetComponent<Character>();
+        SoundManager.instance.StopAllSoundsExcept(character.deathVocalSound);
         MusicManager.instance.Stop();
         StartCoroutine(GameOverCo());
         GameManager.instance.joystick.SetActive(false);
@@ -29,7 +29,7 @@ public class CharacterGameOver : MonoBehaviour
     {
         GameManager.instance.pauseManager.PauseGame();
         yield return new WaitForSecondsRealtime(.5f);
-        SoundManager.instance.Play(gameOverVocalSound);
+        // SoundManager.instance.Play(gameOverVocalSound);
 
         yield return new WaitForSecondsRealtime(1.2f);
         SoundManager.instance.Play(gameOverPanelSound);

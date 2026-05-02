@@ -507,6 +507,27 @@ public class SoundManager : MonoBehaviour
 
         StopAllLoops();
     }
+    public void StopAllSoundsExcept(AudioClip exceptClip)
+    {
+        if (audioSourcePool == null) return;
+
+        foreach (var audioSource in audioSourcePool)
+        {
+            if (audioSource != null && audioSource.isPlaying && audioSource.clip != exceptClip)
+            {
+                try
+                {
+                    audioSource.Stop();
+                }
+                catch (System.Exception e)
+                {
+                    Logger.LogError($"사운드 중단 중 오류: {e.Message}");
+                }
+            }
+        }
+
+        StopAllLoops();
+    }
 
     void OnDestroy()
     {

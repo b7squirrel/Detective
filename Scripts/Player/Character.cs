@@ -39,6 +39,10 @@ public class Character : MonoBehaviour
 
     bool isHurtSoundPlaying; // hurt sound가 재생 중이면 재생하지 않기 위한 플래그
 
+    [Header("죽음 사운드")]
+    [SerializeField] AudioClip deathSound;
+    [field: SerializeField] public AudioClip deathVocalSound { get; private set; }
+
     [Header("부활")]
     [SerializeField] GameObject shockwavePrefab;
     [SerializeField] AudioClip shockWaveSound;
@@ -323,8 +327,17 @@ Handheld.Vibrate();
     IEnumerator DieCo()
     {
         GameManager.instance.pauseManager.PauseGame();
-        yield return new WaitForSecondsRealtime(0.8f);
-        // UnPauseGame() 제거 ← 여기가 문제였음
+
+        // ★ 즉시 첫 번째 사운드
+        if (deathSound != null)
+            SoundManager.instance.Play(deathSound);
+
+        // ★ 0.5초 후 두 번째 사운드 (gameOverVocalSound와 같은 타이밍)
+        yield return new WaitForSecondsRealtime(0.5f);
+        if (deathVocalSound != null)
+            SoundManager.instance.Play(deathVocalSound);
+
+        yield return new WaitForSecondsRealtime(0.3f); // 합계 0.8초
 
         RevivalPanel revivalPanel = FindObjectOfType<RevivalPanel>();
         if (revivalPanel != null)
@@ -334,7 +347,7 @@ Handheld.Vibrate();
         else
         {
             Logger.LogWarning("[Character] RevivalPanel을 찾을 수 없습니다. 바로 게임오버.");
-            GameManager.instance.pauseManager.UnPauseGame(); // 게임오버로 갈 때만 해제
+            GameManager.instance.pauseManager.UnPauseGame();
             ProcessDeath();
         }
     }

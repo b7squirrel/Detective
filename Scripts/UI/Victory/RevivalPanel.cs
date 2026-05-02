@@ -13,6 +13,9 @@ public class RevivalPanel : MonoBehaviour
     [SerializeField] Button cristalButton;
     [SerializeField] Button giveUpButton;
 
+    [Header("사운드")]
+    [SerializeField] AudioClip revivalPanelSound;
+
     [Header("설정")]
     [SerializeField] int countdownSeconds = 8;
     [SerializeField] int cristalCost = 30;
@@ -49,6 +52,10 @@ public class RevivalPanel : MonoBehaviour
         panelTween.ShowWithScale(); // panel.SetActive(true) 대신
         adButton.interactable = AdsManager.IsRewardedAdReady;
         countdownCoroutine = StartCoroutine(CountdownCo());
+
+        // 사운드
+        if (revivalPanelSound != null)
+        SoundManager.instance.Play(revivalPanelSound);
     }
 
     IEnumerator CountdownCo()
