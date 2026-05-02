@@ -5,8 +5,8 @@ using UnityEngine;
 public class WhipWeapon : WeaponBase
 {
     [SerializeField] GameObject weapon;
-    [SerializeField] Transform hitPoint; // ⭐ 공격 중심점
-    private bool boltAlternateToggle = false; // 시너지 두 번째 공격이 반대 방향으로 나가도록
+    [SerializeField] Transform hitPoint;
+    private bool boltAlternateToggle = false;
 
     bool canMultiStrike;
     bool multiStrikeDone;
@@ -26,9 +26,6 @@ public class WhipWeapon : WeaponBase
     [Header("Hit Effects")]
     [SerializeField] GameObject hitEffectPrefab;
 
-    // ─────────────────────────────────────────────────────────
-    //  ⚡ 전기 볼트 설정
-    // ─────────────────────────────────────────────────────────
     [Header("전기 볼트")]
     [Tooltip("HammerBolt 설정 에셋 (Project 창에서 생성 후 연결)")]
     [SerializeField] private HammerBoltConfig hammerBoltConfig;
@@ -39,8 +36,8 @@ public class WhipWeapon : WeaponBase
     [Tooltip("볼트 유지 시간(초)")]
     [SerializeField] private float boltDuration = 0.5f;
 
-    [Tooltip("시너지 활성화 시 볼트 개수 (앞뒤 + 양옆 등 확장 가능)")]
-    [SerializeField] private int synergyBoltCount = 2; // 앞 + 뒤
+    [Tooltip("시너지 활성화 시 볼트 개수")]
+    [SerializeField] private int synergyBoltCount = 2;
 
     private HashSet<Collider2D> hitEnemiesThisAttack = new HashSet<Collider2D>();
 
@@ -55,7 +52,7 @@ public class WhipWeapon : WeaponBase
         if (weapon != null)
             weapon.SetActive(true);
 
-        player = GetComponentInParent<Player>(); // 동료일 땐 null이 됨
+        player = GetComponentInParent<Player>(); // 동료일 땐 null
     }
 
     public override void SetData(WeaponData wd)
@@ -76,10 +73,25 @@ public class WhipWeapon : WeaponBase
         if (InitialWeapon && player != null && player.InputVec != Vector2.zero)
             currentDir = player.InputVec;
 
-        base.Update(); // 내부에서 FlipWeaponTools() 호출
+        base.Update();
 
         if (isAttacking)
+        {
+            // animation event 대신 Animator 상태로 공격 종료 감지
+            var state = anim.GetCurrentAnimatorStateInfo(0);
+            bool stillInAttack = state.IsName("Hammer Attack")
+                              || state.IsName("Hammer SynergyAttack")
+                              || state.IsName("Hammer BackAttack")
+                              || state.IsName("Hammer MultiAttack");
+
+            if (!stillInAttack)
+            {
+                EndAttack();
+                return;
+            }
+
             LockAttackDirection();
+        }
     }
 
     protected override void SetAngle()
@@ -103,18 +115,16 @@ public class WhipWeapon : WeaponBase
         hitEnemiesThisAttack.Clear();
         multiStrikeDone = false;
         canMultiStrike = weaponStats.numberOfAttacks >= 2;
-        boltAlternateToggle = false; // ← 사이클 시작 시 리셋
+        boltAlternateToggle = false;
 
         StartAttack();
 
-        if (!isSynergyWeaponActivated)
-        {
-            anim.SetTrigger("Attack");
-        }
-        else
-        {
+        if (isSynergyWeaponActivated)
             anim.SetTrigger("SAttack");
-        }
+        else if (canMultiStrike)
+            anim.SetTrigger("MultiAttack");
+        else
+            anim.SetTrigger("Attack");
     }
 
     void StartAttack()
@@ -123,19 +133,17 @@ public class WhipWeapon : WeaponBase
 
         if (InitialWeapon)
         {
-            // 리드 오리: 플레이어 입력 방향 기반
             attackFacingRight = currentDir.x >= 0;
         }
         else
         {
-            // 동료 오리: 기존 방식 유지
             attackFacingRight = weaponContainerAnim != null
                 ? weaponContainerAnim.FacingRight
                 : dir.x >= 0;
         }
     }
 
-    // 3. 공격 중: 부모가 뒤집혔다면 로컬 Y=180으로 보정해서 월드 방향을 고정
+    // 공격 중: 부모가 뒤집혔다면 로컬 Y=180으로 보정해서 월드 방향 고정
     void LockAttackDirection()
     {
         if (weaponContainerAnim == null) return;
@@ -145,7 +153,7 @@ public class WhipWeapon : WeaponBase
         transform.localEulerAngles = new Vector3(0, needsFlip ? 180f : 0f, 0);
     }
 
-    // 4. 공격 종료: 로컬 리셋 → 부모 방향이 자동 반영됨
+    // 공격 종료: 로컬 리셋 → 부모 방향이 자동 반영
     void EndAttack()
     {
         isAttacking = false;
@@ -153,7 +161,7 @@ public class WhipWeapon : WeaponBase
     }
 
     /// <summary>
-    /// ⭐ 범위 공격 (애니메이션 이벤트에서 호출)
+    /// 범위 공격 (애니메이션 이벤트에서 호출)
     /// hitPoint 위치에서 sizeOfArea 반지름의 원 안에 있는 모든 적 공격
     /// </summary>
     void AttackAtHitPoint()
@@ -164,12 +172,9 @@ public class WhipWeapon : WeaponBase
             return;
         }
 
-        // ─────────────────────────────────────────────────────
-        //  ⚡ 전기 볼트 발사
-        // ─────────────────────────────────────────────────────
+        // 전기 볼트 발사
         FireLightningBolts();
 
-        // ⭐ hitPoint 위치에서 원형 범위 공격
         Vector2 attackPosition = hitPoint.position;
         float attackRadius = weaponStats.sizeOfArea;
 
@@ -208,9 +213,7 @@ public class WhipWeapon : WeaponBase
                     );
 
                     if (!string.IsNullOrEmpty(weaponName))
-                    {
                         DamageTracker.instance.RecordDamage(weaponName, damage);
-                    }
 
                     hitEnemiesThisAttack.Add(collision);
                 }
@@ -250,13 +253,13 @@ public class WhipWeapon : WeaponBase
     }
 
     // ─────────────────────────────────────────────────────────────
-    //  ⚡ 전기 볼트 발사 로직
+    //  전기 볼트 발사 로직
     // ─────────────────────────────────────────────────────────────
 
     /// <summary>
     /// 공격 방향으로 전기 볼트를 발사합니다.
-    /// 시너지 비활성화: 공격 방향 1개
-    /// 시너지 활성화:   공격 방향 + 반대 방향 (앞뒤 2개)
+    /// 일반 공격:        앞으로 1개
+    /// 멀티/시너지 공격: AttackAtHitPoint 호출 때마다 앞/뒤 번갈아 1개씩
     /// </summary>
     private void FireLightningBolts()
     {
@@ -266,24 +269,20 @@ public class WhipWeapon : WeaponBase
         float boltRange = boltBaseRange * weaponStats.sizeOfArea;
         Vector3 forwardDir = attackFacingRight ? Vector3.right : Vector3.left;
 
-        if (!isSynergyWeaponActivated)
+        if (!isSynergyWeaponActivated && !canMultiStrike)
         {
-            // 일반 공격: 항상 앞으로 1개
+            // 일반 공격: 앞으로 1개
             SpawnSingleBolt(origin, origin + forwardDir * boltRange);
         }
         else
         {
-            // 시너지 공격: 호출될 때마다 앞/뒤 번갈아 1개씩
+            // 멀티/시너지 공격: 호출될 때마다 앞/뒤 번갈아
             Vector3 boltDir = boltAlternateToggle ? -forwardDir : forwardDir;
             SpawnSingleBolt(origin, origin + boltDir * boltRange);
-            boltAlternateToggle = !boltAlternateToggle; // 다음 호출을 위해 토글
+            boltAlternateToggle = !boltAlternateToggle;
         }
     }
 
-    /// <summary>
-    /// LightningBolt 오브젝트를 생성하고 SpawnBolt를 호출합니다.
-    /// </summary>
-    // WhipWeapon.cs - SpawnSingleBolt() 수정
     private void SpawnSingleBolt(Vector3 start, Vector3 end)
     {
         if (hammerBoltConfig == null)
@@ -291,7 +290,8 @@ public class WhipWeapon : WeaponBase
             Debug.LogWarning("[WhipWeapon] HammerBoltConfig가 연결되지 않았습니다!");
             return;
         }
-        float adjustedDuration = isSynergyWeaponActivated
+
+        float adjustedDuration = (isSynergyWeaponActivated || canMultiStrike)
             ? boltDuration * 1.3f
             : boltDuration;
 
@@ -316,37 +316,14 @@ public class WhipWeapon : WeaponBase
         );
     }
 
-    // ─────────────────────────────────────────────────────────────
-
-    IEnumerator AttackCo(float firstAttackDirection)
-    {
-        yield return new WaitForSeconds(.1f);
-
-        GetAttackParameters();
-        hitEnemiesThisAttack.Clear();
-
-        StartAttack();
-
-        if (!isSynergyWeaponActivated)
-        {
-            anim.SetTrigger("Attack");
-        }
-        else
-        {
-            anim.SetTrigger("SAttack");
-        }
-
-        multiStrikeDone = true;
-    }
-
-    // 1. 평상시: 부모 flip을 그대로 따라감
+    // 평상시: 부모 flip을 그대로 따라감
     protected override void FlipWeaponTools()
     {
         if (isAttacking) return;
         transform.localEulerAngles = Vector3.zero;
     }
 
-    // 2. 기본 클래스 LockFlip도 로컬로
+    // 기본 클래스 LockFlip도 로컬로
     protected override void LockFlip()
     {
         if (!isAttacking)
@@ -371,21 +348,11 @@ public class WhipWeapon : WeaponBase
         if (shootSound != null)
             SoundManager.instance.Play(shootSound);
     }
+
     void PlayElectricitySound()
     {
         if (electricitySound != null)
             SoundManager.instance.PlaySoundWith(electricitySound, 0.5f, true, .1f);
-    }
-
-    void MultiAttack(float firstAttackDirection)
-    {
-        if (multiStrikeDone)
-            return;
-
-        if (canMultiStrike)
-        {
-            StartCoroutine(AttackCo(firstAttackDirection));
-        }
     }
 
     void GenElecHitEffect()
@@ -406,12 +373,12 @@ public class WhipWeapon : WeaponBase
 
         effect.transform.position = hitPoint.position;
 
-        // ⭐ 데미지 영역(반지름 = sizeOfArea)과 동일한 크기로 스케일 설정
         float diameter = weaponStats.sizeOfArea * 2f;
         effect.transform.localScale = new Vector3(diameter, diameter, 1f);
 
         Logger.Log($"[WhipWeapon] 이펙트 위치: {hitPoint.position}, 스케일: {diameter}");
     }
+
     #endregion
 
 #if UNITY_EDITOR
@@ -422,7 +389,6 @@ public class WhipWeapon : WeaponBase
             Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
             Gizmos.DrawWireSphere(hitPoint.position, weaponStats.sizeOfArea);
 
-            // ⚡ 볼트 사거리 미리보기
             float boltRange = boltBaseRange * weaponStats.sizeOfArea;
             Gizmos.color = new Color(0.3f, 0.7f, 1f, 0.5f);
             Gizmos.DrawLine(hitPoint.position, hitPoint.position + Vector3.right * boltRange);

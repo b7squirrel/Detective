@@ -219,6 +219,13 @@ public class HammerBolt : MonoBehaviour
                 Idamageable target = hit.collider.GetComponent<Idamageable>();
                 if (target != null)
                 {
+                    // ⭐ 데미지 숫자 표시 추가
+                    MessageSystem.instance.PostMessage(
+                        boltDamage.ToString(),
+                        hit.collider.transform.position,
+                        false // 볼트는 크리티컬 판정 없음
+                    );
+
                     target.TakeDamage(
                         boltDamage,
                         boltKnockback,
