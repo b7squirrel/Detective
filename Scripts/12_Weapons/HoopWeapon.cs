@@ -6,7 +6,7 @@ using UnityEngine;
 // sizeOfArea를 체력으로 사용하자
 public class HoopWeapon : WeaponBase
 {
-    [SerializeField] GameObject hoopProjectile;
+    [SerializeField] GameObject hoopProjectile; // 폴백
     [SerializeField] GameObject hoopSynergyProjectile;
     [SerializeField] List<Transform> projectiles;
     [SerializeField] List<Transform> projectilesSynergy;
@@ -14,6 +14,9 @@ public class HoopWeapon : WeaponBase
     [SerializeField] Transform projSpinSynergy;
     float projectileHealth;
     bool isProjectileActive;
+
+    // ⭐ 런타임에 결정되는 프로젝타일
+    GameObject currentHoopPrefab;
 
     public override void Init(WeaponStats stats, bool isLead)
     {
@@ -25,15 +28,32 @@ public class HoopWeapon : WeaponBase
         projSpinSynergy = new GameObject("Projectile Synergy Spin Board").transform;
         projSpinSynergy.position = transform.position;
         projSpinSynergy.parent = transform;
-
     }
+
+    protected override void OnWeaponDataReady()
+    {
+        Item equippedItem = GetEssentialEquippedItem();
+
+        if (equippedItem != null && equippedItem.projectilePrefab != null)
+        {
+            currentHoopPrefab = equippedItem.projectilePrefab;
+            Logger.Log($"[HoopWeapon] 프로젝타일 사용: {equippedItem.Name} / IsLead: {InitialWeapon}");
+        }
+        else
+        {
+            currentHoopPrefab = hoopProjectile;
+            Logger.LogWarning("[HoopWeapon] 기본값 사용");
+        }
+    }
+
     protected override void Update()
     {
         base.Update();
         projSpin.transform.Rotate(Vector3.forward * weaponStats.projectileSpeed * Time.deltaTime);
         projSpinSynergy.transform.Rotate(Vector3.back * weaponStats.projectileSpeed * Time.deltaTime);
 
-        // 업그레이드 되면 프로젝타일을 중단시키고 다시 시작해서 갯수를 weaponStats.numberOfAttacks에 맞춰줌. 매 프레임 검사하지 말고 1초에 한 번씩 하기
+        // 업그레이드 되면 프로젝타일을 중단시키고 다시 시작해서 갯수를 weaponStats.numberOfAttacks에 맞춰줌
+        // 매 프레임 검사하지 말고 1초에 한 번씩 하기
         if (Time.frameCount % 30 == 0)
         {
             int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
@@ -62,13 +82,18 @@ public class HoopWeapon : WeaponBase
         if (isSynergyWeaponActivated)
         {
             Gen(projectilesSynergy, projSpinSynergy, 2f);
-            // Debug.Log("시너지 Gen");
         }
     }
 
-    // 어떤 스핀판에 붙일지, 회전 방향은 시게인지 반시계인지, 기본 4.5거리에서 얼마나 더 넗게 퍼지는지
+    // 어떤 스핀판에 붙일지, 회전 방향은 시계인지 반시계인지, 기본 4.5거리에서 얼마나 더 넓게 퍼지는지
     void Gen(List<Transform> projectiles, Transform projSpin, float distanceOffset)
     {
+        if (currentHoopPrefab == null)
+        {
+            Logger.LogError("[HoopWeapon] currentHoopPrefab이 null입니다!");
+            return;
+        }
+
         // 초기화
         if (projectiles == null)
         {
@@ -76,19 +101,18 @@ public class HoopWeapon : WeaponBase
         }
 
         int numberOfProjectilesToGen = weaponStats.numberOfAttacks - projectiles.Count;
-        // if (isSynergyWeaponActivated)
-        //     Debug.Log("시너지 만들어낼 갯수 " + numberOfProjectilesToGen);
 
         // 생성
         for (int i = 0; i < numberOfProjectilesToGen; i++)
         {
-            Transform hoopObject = Instantiate(hoopProjectile, projSpin.position, Quaternion.identity).transform;
+            // ⭐ currentHoopPrefab 사용
+            Transform hoopObject = Instantiate(currentHoopPrefab, projSpin.position, Quaternion.identity).transform;
             hoopObject.parent = projSpin;
             hoopObject.GetComponentInChildren<SpriteRenderer>().sortingLayerName = "Weapon";
             projectiles.Add(hoopObject);
         }
 
-        //배치, stat 리셋
+        // 배치, stat 리셋
         for (int i = 0; i < projectiles.Count; i++)
         {
             projectiles[i].gameObject.SetActive(true);
@@ -112,11 +136,12 @@ public class HoopWeapon : WeaponBase
     public void TakeDamageProjectile()
     {
         projectileHealth--;
-        if(projectileHealth < 0)
+        if (projectileHealth < 0)
         {
             DestroyProjectiles();
         }
     }
+
     void DestroyProjectiles()
     {
         for (int i = 0; i < projectiles.Count; i++)
@@ -127,9 +152,8 @@ public class HoopWeapon : WeaponBase
         for (int i = 0; i < projectilesSynergy.Count; i++)
         {
             projectilesSynergy[i].gameObject.SetActive(false);
-            
         }
-        
+
         isProjectileActive = false;
         timer = weaponStats.timeToAttack;
         projectileHealth = weaponStats.sizeOfArea;
