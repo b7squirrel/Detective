@@ -67,19 +67,39 @@ public class GameInitializer : MonoBehaviour
         InitializationProgress = 0f;
         hasShownDailyRewardThisSession = false;
     }
-    
+
     IEnumerator InitializeGame()
     {
         Log("=== 게임 초기화 시작 ===");
         IsInitialized = false;
         InitializationProgress = 0f;
-        
+
+        Debug.Log("[GameInitializer] 0/7: 클라우드 로그인 시도...");
+
+        float waitTime = 0f;
+        while (CloudSaveManager.Instance == null && waitTime < 3f)
+        {
+            waitTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (CloudSaveManager.Instance != null)
+        {
+            yield return StartCoroutine(CloudSaveManager.Instance.SignInAndSync());
+            Debug.Log("[GameInitializer] 클라우드 초기화 완료");
+        }
+        else
+        {
+            Debug.LogWarning("[GameInitializer] CloudSaveManager를 찾을 수 없습니다.");
+        }
+        Log("v 클라우드 초기화 완료 (로그인 실패해도 게임 진행)");
+
         // 1단계: CardsDictionary 초기화 대기 (Awake에서 실행됨)
         Log("1/7: CardsDictionary 초기화 대기...");
         yield return new WaitUntil(() => CardsDictionary.IsDataLoaded);
         Log("v CardsDictionary 로드 완료");
         InitializationProgress = 0.16f;
-        
+
         // 2단계: ProductDataTable 초기화 대기 (Awake에서 실행됨)
         Log("2/7: ProductDataTable 초기화 대기...");
         yield return new WaitUntil(() => ProductDataTable.IsDataLoaded);
