@@ -4,6 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 게임의 모든 데이터 매니저를 순서대로 초기화하는 중앙 관리자
 /// 초기화 순서:
+/// 0. CloudSaveManager (구글 플레이 로그인 및 클라우드 동기화)
 /// 1. CardsDictionary (ScriptableObject 데이터)
 /// 2. ProductDataTable (상품 데이터)
 /// 3. PlayerDataManager (플레이어 진행 데이터)
@@ -53,6 +54,9 @@ public class GameInitializer : MonoBehaviour
     // 세션 동안 한 번만 실행되도록 플래그 추가
     private static bool hasShownDailyRewardThisSession = false;
 
+    // 각 단계별 타임아웃 (초)
+    private const float STEP_TIMEOUT = 10f;
+
     void Awake()
     {
         // 씬 전환 시에도 유지 (선택사항)
@@ -74,12 +78,12 @@ public class GameInitializer : MonoBehaviour
         IsInitialized = false;
         InitializationProgress = 0f;
 
+        // 0단계: 클라우드 로그인 및 동기화
         Debug.Log("[GameInitializer] 0/7: 클라우드 로그인 시도...");
-
-        float waitTime = 0f;
-        while (CloudSaveManager.Instance == null && waitTime < 3f)
+        float cloudWait = 0f;
+        while (CloudSaveManager.Instance == null && cloudWait < 3f)
         {
-            waitTime += Time.deltaTime;
+            cloudWait += Time.deltaTime;
             yield return null;
         }
 
@@ -92,52 +96,93 @@ public class GameInitializer : MonoBehaviour
         {
             Debug.LogWarning("[GameInitializer] CloudSaveManager를 찾을 수 없습니다.");
         }
-        Log("v 클라우드 초기화 완료 (로그인 실패해도 게임 진행)");
 
         // 1단계: CardsDictionary 초기화 대기 (Awake에서 실행됨)
         Log("1/7: CardsDictionary 초기화 대기...");
-        yield return new WaitUntil(() => CardsDictionary.IsDataLoaded);
+        float t1 = 0f;
+        while (!CardsDictionary.IsDataLoaded && t1 < STEP_TIMEOUT)
+        {
+            t1 += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log($"[GameInitializer] ✅ 1 CardsDictionary OK (waited {t1:F2}s, loaded={CardsDictionary.IsDataLoaded})");
         Log("v CardsDictionary 로드 완료");
         InitializationProgress = 0.16f;
 
         // 2단계: ProductDataTable 초기화 대기 (Awake에서 실행됨)
         Log("2/7: ProductDataTable 초기화 대기...");
-        yield return new WaitUntil(() => ProductDataTable.IsDataLoaded);
+        float t2 = 0f;
+        while (!ProductDataTable.IsDataLoaded && t2 < STEP_TIMEOUT)
+        {
+            t2 += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log($"[GameInitializer] ✅ 2 ProductDataTable OK (waited {t2:F2}s, loaded={ProductDataTable.IsDataLoaded})");
         Log("v ProductDataTable 로드 완료");
         InitializationProgress = 0.33f;
 
         // 3단계: PlayerDataManager 초기화 대기 (Awake에서 실행됨)
         Log("3/7: PlayerDataManager 초기화 대기...");
-        yield return new WaitUntil(() => PlayerDataManager.IsDataLoaded);
+        float t3 = 0f;
+        while (!PlayerDataManager.IsDataLoaded && t3 < STEP_TIMEOUT)
+        {
+            t3 += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log($"[GameInitializer] ✅ 3 PlayerDataManager OK (waited {t3:F2}s, loaded={PlayerDataManager.IsDataLoaded})");
         Log("v PlayerDataManager 로드 완료");
         InitializationProgress = 0.5f;
 
         // 4단계: DailyResetManager (Awake에서 실행됨)
         Log("4/7: DailyResetManager 초기화 대기...");
-        yield return new WaitUntil(() => DailyResetManager.IsInitialized);
+        float t4 = 0f;
+        while (!DailyResetManager.IsInitialized && t4 < STEP_TIMEOUT)
+        {
+            t4 += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log($"[GameInitializer] ✅ 4 DailyResetManager OK (waited {t4:F2}s, loaded={DailyResetManager.IsInitialized})");
         Log("v DailyResetManager 로드 완료");
         InitializationProgress = 0.57f;
 
         // 5단계: WeeklyResetManager 추가
         Log("5/8: WeeklyResetManager 초기화 대기...");
-        yield return new WaitUntil(() => WeeklyResetManager.IsInitialized);
+        float t5 = 0f;
+        while (!WeeklyResetManager.IsInitialized && t5 < STEP_TIMEOUT)
+        {
+            t5 += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log($"[GameInitializer] ✅ 5 WeeklyResetManager OK (waited {t5:F2}s, loaded={WeeklyResetManager.IsInitialized})");
         Log("v WeeklyResetManager 로드 완료");
         InitializationProgress = 0.63f;
 
         // 6단계: CardDataManager 초기화 대기 (Start에서 실행됨)
-        Log("5/7: CardDataManager 초기화 대기...");
-        yield return new WaitUntil(() => CardDataManager.IsDataLoaded);
+        Log("6/7: CardDataManager 초기화 대기...");
+        float t6 = 0f;
+        while (!CardDataManager.IsDataLoaded && t6 < STEP_TIMEOUT)
+        {
+            t6 += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log($"[GameInitializer] ✅ 6 CardDataManager OK (waited {t6:F2}s, loaded={CardDataManager.IsDataLoaded})");
         Log("v CardDataManager 로드 완료");
         InitializationProgress = 0.66f;
         
         // 7단계: EquipmentDataManager 초기화 대기 (Start에서 실행됨)
-        Log("6/7: EquipmentDataManager 초기화 대기...");
-        yield return new WaitUntil(() => EquipmentDataManager.IsDataLoaded);
+        Log("7/7: EquipmentDataManager 초기화 대기...");
+        float t7 = 0f;
+        while (!EquipmentDataManager.IsDataLoaded && t7 < STEP_TIMEOUT)
+        {
+            t7 += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log($"[GameInitializer] ✅ 7 EquipmentDataManager OK (waited {t7:F2}s, loaded={EquipmentDataManager.IsDataLoaded})");
         Log("v EquipmentDataManager 로드 완료");
         InitializationProgress = 0.83f;
         
         // 8단계: CardList 초기화 확인 (EquipmentDataManager.Start에서 실행됨)
-        Log("7/7: CardList 초기화 확인...");
+        Log("8/8: CardList 초기화 확인...");
         // CardList는 EquipmentDataManager.Start()에서 InitCardList()가 호출되므로
         // 추가 대기 없이 다음 프레임만 기다림
         yield return null;
@@ -146,16 +191,21 @@ public class GameInitializer : MonoBehaviour
 
         // 모든 초기화 완료
         IsInitialized = true;
+        Debug.Log("[GameInitializer] ✅ IsInitialized = true");
         OnGameInitialized?.Invoke();
+        Debug.Log("[GameInitializer] ✅ OnGameInitialized 완료");
 
         // ⭐ 추가: 모든 초기화 완료 후 주간 리셋 체크
         // ⭐ 1. 주간 팝업 먼저
         yield return new WaitForSeconds(0.1f);
+        Debug.Log("[GameInitializer] ✅ 주간 리셋 체크 시작");
         bool weeklyPopupShown = WeeklyResetManager.Instance.CheckWeeklyReset();
+        Debug.Log($"[GameInitializer] ✅ 주간 팝업: {weeklyPopupShown}");
 
         // ⭐ 2. 주간 팝업이 떴으면 닫힐 때까지 대기
         if (weeklyPopupShown)
         {
+            Debug.Log("[GameInitializer] ✅ 주간 팝업 닫힘 대기 중...");
             yield return new WaitUntil(() =>
             {
                 var popup = FindObjectOfType<WeeklyRewardPopup>(true);
@@ -165,11 +215,13 @@ public class GameInitializer : MonoBehaviour
         }
 
         // ⭐ 3. 일일 보상 팝업
+        Debug.Log("[GameInitializer] ✅ 일일 보상 체크");
         if (!hasShownDailyRewardThisSession)
         {
             CheckAndShowDailyReward();
             hasShownDailyRewardThisSession = true;
         }
+        Debug.Log("[GameInitializer] ✅ 초기화 완전 완료");
     }
 
     void CheckAndShowDailyReward()

@@ -116,6 +116,12 @@ public class CloudSaveManager : MonoBehaviour
     public IEnumerator SignInAndSync()
     {
 #if UNITY_ANDROID
+        // 이미 초기화됐으면 스킵
+        if (IsInitialized)
+        {
+            Debug.Log("[CloudSaveManager] 이미 초기화됨. 스킵.");
+            yield break;
+        }
         Debug.Log("[CloudSaveManager] Google Play 로그인 시도...");
 
         bool loginDone = false;

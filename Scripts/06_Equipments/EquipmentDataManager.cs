@@ -129,6 +129,11 @@ public class EquipmentDataManager : MonoBehaviour
         
         InitializeCardList();
     }
+
+    void OnDestroy()
+    {
+        IsDataLoaded = false;
+    }
     
     void OnApplicationQuit()
     {

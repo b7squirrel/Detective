@@ -164,6 +164,11 @@ public class CardDataManager : MonoBehaviour
     private bool isBatchMode = false;
     private bool needsSave = false;
 
+    void OnDestroy()
+    {
+        IsDataLoaded = false;
+    }
+    
     void Start()
     {
         InitializeDataDirectory();

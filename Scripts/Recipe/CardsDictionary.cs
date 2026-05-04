@@ -30,6 +30,10 @@ public class CardsDictionary : MonoBehaviour
     [Header("자동 로드 설정")]
     [SerializeField] string itemSOFolderPath = "03_Equipment"; // Resources/ 이후 경로
 
+    void OnDestroy()
+    {
+        IsDataLoaded = false;
+    }
     void Awake()
     {
         // ★ 1. SO 자동 로드
@@ -153,6 +157,11 @@ public class CardsDictionary : MonoBehaviour
 
     void SetIndex()
     {
+        // ★ 임시 디버그
+        Logger.Log($"ItemPool 개수: {ItemPool?.Count ?? -1}");
+        if (ItemPool != null && ItemPool.Count > 0)
+            Logger.Log($"첫 번째 항목: Name='{ItemPool[0].Name}', Grade={ItemPool[0].Grade}, Type={ItemPool[0].Type}");
+
         for (int i = 0; i < itemData.Count; i++)
         {
             // ★ itemData[i].itemIndex = i;  ← 제거
