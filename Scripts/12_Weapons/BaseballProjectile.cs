@@ -60,7 +60,18 @@ public class BaseballProjectile : ProjectileBase
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (hasHitOnce) return;
-        hasHitOnce = true;  // ★ 먼저 설정!
+
+        // 유효한 충돌 대상인지 먼저 확인. 
+        // 슬라임드롭을 먼저 통과하면 hasHitOnce인 상태로 적에게 도달해서 그냥 통과하므로
+        bool validHit = other.CompareTag("Enemy") ||
+                        other.CompareTag("Props") ||
+                        other.CompareTag("Wall") ||
+                        other.CompareTag("MainCamera");
+
+        if (!validHit) return; // ← Untagged인 SlimeDrop은 여기서 걸러짐
+
+        hasHitOnce = true;
+
 
         GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
         Vector2 hitPosition = transform.position;

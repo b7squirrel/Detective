@@ -105,7 +105,10 @@ public class WeaponBase : MonoBehaviour
         {
             if (angleQueryBuffer[1] == Vector2.zero)
             {
-                angleExtra = angle + 120f;
+                // angleExtra = angle + 120f;
+                float offset = 15f; // 원하시면 조절 가능 (10~20 정도 추천)
+                dirExtra = Quaternion.AngleAxis(offset, Vector3.forward) * dir;
+                angleExtra = angle + offset;
             }
             else
             {

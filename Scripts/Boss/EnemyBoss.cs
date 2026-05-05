@@ -560,7 +560,17 @@ public class EnemyBoss : EnemyBase, Idamageable
     // 투사체를 발사할 때 멈춰있고, 플레이어에게 밀려나지 않도록 할 때 사용
     public void SetMovable(bool movable)
     {
-        rb.bodyType = movable ? RigidbodyType2D.Dynamic : RigidbodyType2D.Kinematic;
+        // 키네틱으로 하면 트리거 이벤트가 끊겨서 플레이어의 onTrigger2dEnter가 먹지 않음
+        // rb.bodyType = movable ? RigidbodyType2D.Dynamic : RigidbodyType2D.Kinematic;
+        if (movable)
+        {
+            rb.constraints = RigidbodyConstraints2D.None;
+        }
+        else
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+        // bodyType은 Dynamic 유지 → 트리거 감지 정상 작동
     }
 
     IEnumerator SetStateDispPosToPlayer()
