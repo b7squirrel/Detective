@@ -341,4 +341,10 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         playerData.hasTakenDailyReward = taken;
         SavePlayerData();
     }
+
+    public void ReloadFromDisk()
+    {
+        LoadPlayerData();
+        Logger.Log("[PlayerDataManager] 디스크에서 데이터 재로드 완료");
+    }
 }

@@ -243,6 +243,10 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             TutorialManager.instance.AdvanceStep(); // → Step3_MergeUnlocked
         }
+
+        // ⭐ 장비 장착 즉시 클라우드 강제 저장
+        // ⭐ 딜레이 저장 완료 후 클라우드 저장
+        StartCoroutine(SaveToCloudAfterDelay());
     }
 
     // info panel의 UnEquip 버튼
@@ -265,8 +269,18 @@ public class EquipmentPanelManager : MonoBehaviour
 
         UpdateCardSlotOfPool(CardOnDisplay); // 카드 슬롯 풀의 슬로 그림도 업데이트
         UpdateCardSlotOfPool(unequippedCardData); //해제하는 장비의 그림도 업데이트. isEquipped
-        
+
         DeActivateEquipInfoPanel();
+
+        // ⭐ 장비 해제 즉시 클라우드 강제 저장
+        // ⭐ 딜레이 저장 완료 후 클라우드 저장
+        StartCoroutine(SaveToCloudAfterDelay());
+    }
+    private IEnumerator SaveToCloudAfterDelay()
+    {
+        // DelayedSave의 0.04초보다 약간 더 기다림
+        yield return new WaitForSeconds(0.1f);
+        CloudSaveManager.Instance?.ForceSaveToCloud();
     }
     #endregion
 

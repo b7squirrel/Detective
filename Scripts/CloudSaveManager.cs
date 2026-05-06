@@ -23,6 +23,7 @@ public class CloudSaveData
     public string myEquipmentsJson = "";   // 장비 배치 데이터
     public int tutorialStep = 0;          // 튜토리얼 단계
     public string achievementsJson = "";   // 영구 업적 진행도
+    public long savedAtTicks = 0; // 저장 시각 (DateTime.Ticks)
 
     // ─── 나중에 추가할 데이터는 아래에 필드만 추가하면 됩니다 ───
     // public List<string> collectedEquipmentIds = new List<string>();  // 장비 도감 (출시 후 추가 예정)
@@ -234,24 +235,19 @@ public class CloudSaveManager : MonoBehaviour
     {
         try
         {
-            if (string.IsNullOrEmpty(cloudData.playerDataJson)) return;
+            // 클라우드 저장 시각이 더 최신이면 적용
+            // 재설치한 경우 로컬 savedAtTicks=0이므로 항상 클라우드 적용
+            long localTicks = PlayerPrefs.GetString("CloudSavedAt", "0")
+                .Equals("0") ? 0 : long.Parse(PlayerPrefs.GetString("CloudSavedAt", "0"));
 
-            PlayerData cloudPlayerData = JsonUtility.FromJson<PlayerData>(cloudData.playerDataJson);
-            PlayerDataManager pdm = FindObjectOfType<PlayerDataManager>();
-
-            if (pdm == null || cloudPlayerData == null) return;
-
-            int localStage = pdm.GetCurrentStageNumber();
-            int cloudStage = cloudPlayerData.currentStageNumber;
-
-            if (cloudStage > localStage)
+            if (cloudData.savedAtTicks > localTicks)
             {
-                Debug.Log($"[CloudSaveManager] 클라우드가 더 최신 (Stage: 로컬 {localStage} < 클라우드 {cloudStage})");
+                Debug.Log($"[CloudSaveManager] 클라우드가 더 최신 → 적용");
                 ApplyAllCloudData(cloudData);
             }
             else
             {
-                Debug.Log($"[CloudSaveManager] 로컬이 최신 또는 동일 (Stage: {localStage}). 클라우드 업데이트.");
+                Debug.Log($"[CloudSaveManager] 로컬이 최신 또는 동일 → 클라우드 업데이트");
                 StartCoroutine(UploadToCloud());
             }
         }
@@ -275,6 +271,10 @@ public class CloudSaveManager : MonoBehaviour
                     Application.persistentDataPath, "playerData.json");
                 System.IO.File.WriteAllText(path, cloudData.playerDataJson, Encoding.UTF8);
                 Debug.Log("[CloudSaveManager] PlayerData 적용 완료");
+
+                // DontDestroyOnLoad이므로 메모리도 즉시 갱신
+                if (PlayerDataManager.Instance != null)
+                    PlayerDataManager.Instance.ReloadFromDisk();
             }
 
             // 2. 카드 데이터
@@ -310,7 +310,11 @@ public class CloudSaveManager : MonoBehaviour
                 ApplyAchievements(cloudData.achievementsJson);
 
             PlayerPrefs.Save();
-            Debug.Log("[CloudSaveManager] 모든 클라우드 데이터 적용 완료");
+            Debug.Log("[CloudSaveManager] 모든 클라우드 데이터 적용 완료 - 씬 리로드");
+
+            // 클라우드 데이터 적용 후 씬 리로드하여 모든 매니저 재초기화
+            UnityEngine.SceneManagement.SceneManager.LoadScene(
+                UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
         catch (Exception e)
         {
@@ -428,6 +432,11 @@ public class CloudSaveManager : MonoBehaviour
 
             // 5. 영구 업적
             data.achievementsJson = BuildAchievementsJson();
+
+            // 6. 저장 시각 기록 (클라우드/로컬 최신 판단용)
+            data.savedAtTicks = DateTime.Now.Ticks;
+            PlayerPrefs.SetString("CloudSavedAt", data.savedAtTicks.ToString());
+            PlayerPrefs.Save();
 
             Debug.Log("[CloudSaveManager] SaveData 빌드 완료");
         }

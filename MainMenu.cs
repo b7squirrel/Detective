@@ -245,10 +245,13 @@ public class MainMenu : MonoBehaviour
         {
             Debug.LogError($"HintsOnLoading 처리 오류: {e.Message}");
         }
-        
+
         Debug.Log("게임 데이터 저장 완료");
+
+        // ⭐ 스테이지 클리어 후 강제 클라우드 저장
+        CloudSaveManager.Instance?.ForceSaveToCloud();
     }
-    
+
     void CleanupGameManager()
     {
         try

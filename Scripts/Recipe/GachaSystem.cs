@@ -212,6 +212,9 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.RefreshCardList();
             ImmediateSaveEquipmentData();
 
+            // ⭐ 클라우드 저장 추가
+            CloudSaveManager.Instance?.SaveToCloud();
+
             Logger.Log($"[GachaSystem] 상자/팩 열기 완료: 총 {drawCount}개 뽑음");
         }
         catch (Exception e)
