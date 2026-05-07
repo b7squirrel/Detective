@@ -27,6 +27,10 @@ public class LaunchManager : MonoBehaviour
     [Header("일일 보상 버튼")]
     [SerializeField] ButtonBadgeUI dailyButtonUI;
 
+    [Header("판매 패널")]
+    [SerializeField] SellPanelManager sellPanelManager;
+    [SerializeField] GameObject sellPanelObject;
+
     void OnEnable()
     {
         // stageInfoUi.PlayFromStart();
@@ -188,4 +192,18 @@ public class LaunchManager : MonoBehaviour
         cardSlotManager.SettrigerAnim("Off");
         startButton.SetActive(true);
     }
+
+    #region 판매 패널 연결
+    public void OnSellPanelButton()
+    {
+        sellPanelManager.gameObject.SetActive(true);
+        sellPanelObject.SetActive(true);
+    }
+
+    public void OnReturnFromSellPanel()
+    {
+        sellPanelManager.gameObject.SetActive(false);
+        sellPanelObject.SetActive(false);
+    }
+    #endregion
 }

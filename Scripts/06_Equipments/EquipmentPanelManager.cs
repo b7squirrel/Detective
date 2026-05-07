@@ -25,10 +25,6 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] EquipInfoPanel equipInfoPanel;
     [SerializeField] AllField field; // 모든 카드
 
-    [Header("판매 패널")]
-    [SerializeField] SellPanelManager sellPanelManager;
-    [SerializeField] GameObject sellPanelObject;
-
     [Header("Equipment Slots")]
     [SerializeField] TMPro.TextMeshProUGUI upgradeCost;
     [SerializeField] GameObject itemMaxLevel;
@@ -520,51 +516,4 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         DOTween.KillAll();
     }
-
-    #region 판매 패널 연결
-
-    /// <summary>
-    /// 장비 화면의 판매 버튼에 연결
-    /// 애니메이션은 Inspector에서 별도 처리
-    /// </summary>
-    public void OnSellPanelButton()
-    {
-        // 장비 정보창이 열려 있으면 닫기
-        DeActivateEquipInfoPanel(false);
-
-        // 오리 디스플레이 초기화
-        ClearAllEquipmentSlots();
-        CardOnDisplay = null;
-
-        // 판매 패널 활성화 (애니메이션은 별도 처리)
-        sellPanelManager.gameObject.SetActive(true);
-        sellPanelObject.gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// 판매 패널의 돌아가기 버튼에서 호출
-    /// 애니메이션은 Inspector에서 별도 처리
-    /// </summary>
-    public void OnReturnFromSellPanel()
-    {
-        // 판매 패널 비활성화
-        sellPanelManager.gameObject.SetActive(false);
-        sellPanelObject.gameObject.SetActive(false);
-
-        // 장비 화면 초기 상태로 복귀
-        cardToEquip = null;
-        SetAllFieldTypeOf("Weapon");
-        DeActivateEquipInfoPanel(false);
-        CardOnDisplay = null;
-
-        charUpgradeButton.gameObject.SetActive(false);
-        ClearAllEquipmentSlots();
-
-        warningLackCanvasGroup.alpha = 0;
-        charWarningLackCanvasGroup.alpha = 0;
-
-        cardSlotManager.InitialSortingByGrade();
-    }
-
-    #endregion
 }
