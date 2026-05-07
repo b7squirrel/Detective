@@ -28,6 +28,10 @@ public class SellCardSlot : MonoBehaviour
     [Header("판매가 표시")]
     [SerializeField] TextMeshProUGUI sellPriceText;  // 선택 시 판매가 표시
 
+    [Header("사운드")]
+    [SerializeField] AudioClip selectSound; // 카드 선택 시 사운드
+    [SerializeField] AudioClip deSelectSound; // 선택 해제 시 사운드
+
     // ───── 상태 ─────
     CardData cardData;
     bool isSelected = false;
@@ -134,6 +138,15 @@ public class SellCardSlot : MonoBehaviour
         isSelected = !isSelected;
         RefreshOverlays();
         onToggleCallback?.Invoke(this, isSelected);
+
+        if(isSelected)
+        {
+            SoundManager.instance.Play(selectSound);
+        }
+        else
+        {
+            SoundManager.instance.Play(deSelectSound);
+        }
     }
 
     // ───── 외부에서 강제 해제 (팝업 취소 시 등) ─────

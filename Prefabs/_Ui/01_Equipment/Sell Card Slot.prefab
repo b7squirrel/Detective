@@ -2077,6 +2077,8 @@ MonoBehaviour:
   equippedEssentialOverlay: {fileID: 2800367913858381975}
   leadOverlay: {fileID: 3970366746393989423}
   sellPriceText: {fileID: 983438329956476420}
+  selectSound: {fileID: 8300000, guid: 3501fe6e8627372428c19ff2689db693, type: 3}
+  deSelectSound: {fileID: 8300000, guid: 3611d6d2f46f304489c9a01a766a3ded, type: 3}
 --- !u!1 &2927696855769246079
 GameObject:
   m_ObjectHideFlags: 0
@@ -4595,7 +4597,6 @@ GameObject:
   - component: {fileID: 8640975957887065603}
   - component: {fileID: 1049581907901858337}
   - component: {fileID: 1093910887227765063}
-  - component: {fileID: 8202588641522322744}
   - component: {fileID: 8472697443109513235}
   m_Layer: 5
   m_Name: Button
@@ -4717,23 +4718,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8202588641522322744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7005259108896316110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 798e263560093b142914725fbc2f0960, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buttonSound: {fileID: 8300000, guid: 450fa833f05c9094a9850dae27ad046c, type: 3}
-  buttonSoundAlt: {fileID: 0}
-  buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
-  shouldBeLocked: 0
-  ignoreButtonEffectAnim: 1
 --- !u!95 &8472697443109513235
 Animator:
   serializedVersion: 5
@@ -5247,13 +5231,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1906859952257995755}
   - component: {fileID: 223200838611553719}
+  - component: {fileID: 2304124908397635890}
   m_Layer: 5
   m_Name: Check Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1906859952257995755
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5284,6 +5269,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8322465178418804966}
   m_CullTransparentMesh: 1
+--- !u!95 &2304124908397635890
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8322465178418804966}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2e4f38ec4f9db4af1985c7775941a841, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8484947789803028542
 GameObject:
   m_ObjectHideFlags: 0

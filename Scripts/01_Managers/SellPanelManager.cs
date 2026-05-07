@@ -77,6 +77,10 @@ public class SellPanelManager : MonoBehaviour
     [SerializeField] GameObject essentialItemWarningPopup;
     [SerializeField] PanelTween essentialItemWarningPopupTween;
 
+    [Header("사운드")]
+    [SerializeField] AudioClip panelOpen;
+    [SerializeField] AudioClip panelClose;
+
     // ───── GemCollectFX ─────
     [Header("코인 애니메이션")]
 
@@ -117,6 +121,9 @@ public class SellPanelManager : MonoBehaviour
 
         CloseAllPopups();
 
+        // 사운드 재생
+        if (panelOpen != null) SoundManager.instance.Play(panelOpen);
+
         // 오리 탭부터 시작
         SwitchTab(true);
     }
@@ -124,6 +131,9 @@ public class SellPanelManager : MonoBehaviour
     void OnDisable()
     {
         ClearAllSlots();
+
+        // 사운드 재생
+        if (panelClose != null) SoundManager.instance.Play(panelClose);
     }
 
     #endregion
