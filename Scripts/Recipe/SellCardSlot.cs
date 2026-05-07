@@ -17,10 +17,10 @@ public class SellCardSlot : MonoBehaviour
     [SerializeField] GameObject checkOverlay;       // 체크 원 이미지 (인스펙터에서 스프라이트 연결)
 
     [Header("장착중 오버레이")]
-    [SerializeField] GameObject equippedLockOverlay; // 반투명 잠금 이미지
+    [SerializeField] GameObject equippedOverlay; // 반투명 잠금 이미지
 
-    [Header("필수 장비 오버레이")]
-    [SerializeField] GameObject essentialOverlay; // 필수 장비 표시 이미지
+    [Header("장착중 필수 장비 오버레이")]
+    [SerializeField] GameObject equippedEssentialOverlay; // 착용 중 + 필수 (판매 불가)
 
     [Header("리드 오리 오버레이")]
     [SerializeField] GameObject leadOverlay; // "리드" 또는 왕관 이미지
@@ -53,10 +53,6 @@ public class SellCardSlot : MonoBehaviour
         onToggleCallback = callback;
 
         cardDisp.InitWeaponCardDisplay(weaponData, data);
-
-        // ⭐ 오리 카드는 필수 오버레이 항상 숨기기
-        if (essentialOverlay != null)
-            essentialOverlay.SetActive(false);
 
         // ⭐ 리드 오리는 버튼 비활성화 + 리드 오버레이 표시
         bool isLead = data.StartingMember == StartingMember.Zero.ToString();
@@ -111,13 +107,18 @@ public class SellCardSlot : MonoBehaviour
 
         cardDisp.InitItemCardDisplay(itemData, data, equipped);
 
-        // ⭐ 아이템 카드만 필수 오버레이 표시
-        if (essentialOverlay != null)
-            essentialOverlay.SetActive(data.BindingTo != "All");
+        bool isEssential = !string.IsNullOrEmpty(data.BindingTo) && data.BindingTo != "All";
+        bool isBlocked = isEssential && equipped;
 
-        // ⭐ 리드 오버레이는 아이템에서 항상 숨기기
+        // ⭐ 세 가지 오버레이 상호 배타적으로 제어
+        if (equippedEssentialOverlay != null)
+            equippedEssentialOverlay.SetActive(isEssential && equipped);   // 장착 중 필수 장비
+
         if (leadOverlay != null)
             leadOverlay.SetActive(false);
+
+        // ⭐ 버튼 비활성화
+        GetComponentInChildren<Button>().interactable = !isBlocked;
 
         RefreshOverlays();
         UpdatePriceText();
@@ -149,8 +150,12 @@ public class SellCardSlot : MonoBehaviour
         if (checkOverlay != null)
             checkOverlay.SetActive(isSelected);
 
-        if (equippedLockOverlay != null)
-            equippedLockOverlay.SetActive(isEquipped);
+        // ⭐ 장착 중 오버레이: 비필수 장비가 장착 중일 때만
+        bool isEssential = cardData != null &&
+            !string.IsNullOrEmpty(cardData.BindingTo) && cardData.BindingTo != "All";
+
+        if (equippedOverlay != null)
+            equippedOverlay.SetActive(isEquipped && !isEssential);
     }
 
     void UpdatePriceText()

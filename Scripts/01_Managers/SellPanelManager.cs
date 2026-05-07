@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 /// <summary>
 /// 판매 패널 전체를 제어합니다.
@@ -35,6 +36,9 @@ public class SellPanelManager : MonoBehaviour
     [SerializeField] GameObject itemTab;
     [SerializeField] Button duckTabButton;
     [SerializeField] Button itemTabButton;
+    [SerializeField] Animator duckTabAnimator; // ⭐ 추가
+    [SerializeField] Animator itemTabAnimator; // ⭐ 추가
+    [SerializeField] Animator fieldOutlineAnimator; // ⭐ 추가
     bool isDuckTab = true;
 
     // ───── 선택 상태 ─────
@@ -87,11 +91,11 @@ public class SellPanelManager : MonoBehaviour
 
     void Awake()
     {
-        cardDataManager   = FindObjectOfType<CardDataManager>();
-        cardList          = FindObjectOfType<CardList>();
-        cardsDictionary   = FindObjectOfType<CardsDictionary>();
+        cardDataManager = FindObjectOfType<CardDataManager>();
+        cardList = FindObjectOfType<CardList>();
+        cardsDictionary = FindObjectOfType<CardsDictionary>();
         playerDataManager = PlayerDataManager.Instance;
-        cardSlotManager   = FindObjectOfType<CardSlotManager>();
+        cardSlotManager = FindObjectOfType<CardSlotManager>();
 
         priceReader.Load(sellPriceDataAsset);
 
@@ -128,8 +132,8 @@ public class SellPanelManager : MonoBehaviour
     #region 탭 전환
     // ─────────────────────────────────────────
 
-    public void OnDuckTabButton()  => SwitchTab(true);
-    public void OnItemTabButton()  => SwitchTab(false);
+    public void OnDuckTabButton() => SwitchTab(true);
+    public void OnItemTabButton() => SwitchTab(false);
 
     void SwitchTab(bool toDuck)
     {
@@ -137,6 +141,14 @@ public class SellPanelManager : MonoBehaviour
 
         duckTab.SetActive(toDuck);
         itemTab.SetActive(!toDuck);
+
+        // ⭐ 탭 버튼 애니메이션
+        if (duckTabAnimator != null)
+            duckTabAnimator.SetTrigger(toDuck ? "On" : "Off");
+        if (itemTabAnimator != null)
+            itemTabAnimator.SetTrigger(toDuck ? "Off" : "On");
+        if (fieldOutlineAnimator != null)
+            fieldOutlineAnimator.SetTrigger(toDuck ? "Duck" : "Item");
 
         // 선택 초기화
         selectedSlots.Clear();
@@ -158,39 +170,58 @@ public class SellPanelManager : MonoBehaviour
         List<CardData> cards = cardDataManager.GetMyCardList()
             .FindAll(x => x.Type == cardType);
 
+        List<CardData> sellable = cards.FindAll(x => !IsBlocked(x));
+        List<CardData> blocked = cards.FindAll(x => IsBlocked(x));
+
         Transform content = isDuckTab ? duckContent : itemContent;
 
-        foreach (CardData data in cards)
+        // ── sellable 먼저 생성
+        foreach (CardData data in sellable)
+            CreateSlot(data, cardType, content);
+
+        // ── 행이 끝까지 채워지지 않았으면 filler로 채우기
+        int columns = 5;
+        int remainder = sellable.Count % columns;
+        int fillCount = remainder == 0 ? 0 : columns - remainder;
+
+        for (int i = 0; i < fillCount; i++)
         {
-            GameObject obj = Instantiate(sellCardSlotPrefab, content);
-
-            // ⭐ 카드 크기 0.5로 설정
-            obj.transform.localScale = Vector3.one * 0.5f;
-
-            SellCardSlot slot = obj.GetComponent<SellCardSlot>();
-
-            int price = equation.GetSellPrice(data, priceReader);
-            bool equipped = IsCardEquipped(data);
-
-            if (cardType == CardType.Weapon.ToString())
-            {
-                WeaponData wData = cardsDictionary.GetWeaponItemData(data).weaponData;
-                slot.SetupAsDuck(data, wData, price, equipped, OnSlotToggled);
-
-                // ⭐ 장비 스프라이트 적용
-                EquipmentCard[] equipCards = cardList.GetEquipmentsCardData(data);
-                slot.ApplyEquipSprites(equipCards, cardsDictionary);
-            }
-            else
-            {
-                Item iData = cardsDictionary.GetWeaponItemData(data).itemData;
-                slot.SetupAsItem(data, iData, price, equipped, OnSlotToggled);
-            }
-
-            activeSlots.Add(slot);
+            GameObject filler = new GameObject("Filler", typeof(RectTransform));
+            filler.transform.SetParent(content, false);
+            RectTransform rt = filler.GetComponent<RectTransform>();
+            rt.sizeDelta = new Vector2(100, 257); // Grid Cell Size와 동일
         }
 
+        // ── blocked 나중에 생성
+        foreach (CardData data in blocked)
+            CreateSlot(data, cardType, content);
+
         Logger.Log($"[SellPanelManager] {cardType} 슬롯 {activeSlots.Count}개 생성");
+    }
+
+    void CreateSlot(CardData data, string cardType, Transform content)
+    {
+        GameObject obj = Instantiate(sellCardSlotPrefab, content);
+        obj.transform.localScale = Vector3.one * 0.5f;
+
+        SellCardSlot slot = obj.GetComponent<SellCardSlot>();
+        int price = equation.GetSellPrice(data, priceReader);
+        bool equipped = IsCardEquipped(data);
+
+        if (cardType == CardType.Weapon.ToString())
+        {
+            WeaponData wData = cardsDictionary.GetWeaponItemData(data).weaponData;
+            slot.SetupAsDuck(data, wData, price, equipped, OnSlotToggled);
+            EquipmentCard[] equipCards = cardList.GetEquipmentsCardData(data);
+            slot.ApplyEquipSprites(equipCards, cardsDictionary);
+        }
+        else
+        {
+            Item iData = cardsDictionary.GetWeaponItemData(data).itemData;
+            slot.SetupAsItem(data, iData, price, equipped, OnSlotToggled);
+        }
+
+        activeSlots.Add(slot);
     }
 
     void ClearAllSlots()
@@ -201,6 +232,14 @@ public class SellPanelManager : MonoBehaviour
                 Destroy(slot.gameObject);
         }
         activeSlots.Clear();
+
+        // ⭐ filler도 제거
+        Transform content = isDuckTab ? duckContent : itemContent;
+        foreach (Transform child in content)
+        {
+            if (child != null && child.name == "Filler")
+                Destroy(child.gameObject);
+        }
     }
 
     #endregion
@@ -258,13 +297,8 @@ public class SellPanelManager : MonoBehaviour
         // ── 오리 탭 ──
         if (isDuckTab)
         {
-            // ⭐ Weapon 타입만 정확히 필터링
             int totalDuckCount = cardDataManager.GetMyCardList()
                 .FindAll(x => x.Type == CardType.Weapon.ToString()).Count;
-
-            int selectedDuckCount = selectedSlots.Count;
-
-            Logger.Log($"[SellPanelManager] 전체 오리: {totalDuckCount}, 선택한 오리: {selectedDuckCount}");
 
             if (selectedSlots.Count >= totalDuckCount)
             {
@@ -272,36 +306,36 @@ public class SellPanelManager : MonoBehaviour
                 return;
             }
 
-            // 장비가 달린 오리가 있는지 확인
-            List<SellCardSlot> ducksWithEquip = selectedSlots
-                .FindAll(s => HasEquipment(s.GetCardData()));
+            // ⭐ 비필수 장비가 달린 오리가 하나라도 있는지 확인
+            List<SellCardSlot> ducksWithNonEssentialEquip = selectedSlots
+                .FindAll(s => HasNonEssentialEquipment(s.GetCardData()));
 
-            if (ducksWithEquip.Count > 0)
+            if (ducksWithNonEssentialEquip.Count > 0)
             {
                 int totalEquipCount = 0;
-                foreach (SellCardSlot s in ducksWithEquip)
+                foreach (SellCardSlot s in ducksWithNonEssentialEquip)
                     totalEquipCount += GetEquipmentCount(s.GetCardData());
 
-                ShowDuckWithEquipPopup(ducksWithEquip.Count, totalEquipCount);
+                ShowDuckWithEquipPopup(ducksWithNonEssentialEquip.Count, totalEquipCount);
                 return;
             }
 
-            // 장비 없는 오리만 선택 → 바로 판매
+            // 필수 장비만 있거나 장비 없는 오리만 선택 → 바로 판매
             ExecuteSell(new List<SellCardSlot>(selectedSlots), false);
             return;
         }
 
         // ── 아이템 탭 ──
 
-        // 필수 장비 판매 차단
-        List<SellCardSlot> essentialSlots = selectedSlots
-            .FindAll(s => s.GetCardData().BindingTo != "All");
+        // 필수 장비 판매 차단 (SellCardSlot에서 선택 자체를 막음)
+        // List<SellCardSlot> essentialSlots = selectedSlots
+        //     .FindAll(s => s.GetCardData().BindingTo != "All");
 
-        if (essentialSlots.Count > 0)
-        {
-            ShowEssentialItemWarning(essentialSlots.Count);
-            return;
-        }
+        // if (essentialSlots.Count > 0)
+        // {
+        //     ShowEssentialItemWarning(essentialSlots.Count);
+        //     return;
+        // }
 
         // 장착 중인 아이템 확인
         List<SellCardSlot> equippedSlots = selectedSlots
@@ -425,19 +459,16 @@ public class SellPanelManager : MonoBehaviour
             earnedGold += slot.GetSellPrice();
 
             if (data.Type == CardType.Weapon.ToString())
-            {
-                // 오리 판매
                 SellDuck(data, sellEquipmentsToo, ref earnedGold);
-            }
             else
-            {
-                // 아이템 판매
                 SellItem(data);
-            }
 
-            // 슬롯 제거
-            activeSlots.Remove(slot);
-            Destroy(slot.gameObject);
+            // ⭐ 아이템 탭만 개별 슬롯 제거 (오리 탭은 코루틴에서 일괄 처리)
+            if (!isDuckTab)
+            {
+                activeSlots.Remove(slot);
+                Destroy(slot.gameObject);
+            }
         }
 
         // 선택 목록 정리
@@ -461,6 +492,18 @@ public class SellPanelManager : MonoBehaviour
 
         // 기존 카드 풀 슬롯 제거
         cardSlotManager.InitialSortingByGrade();
+
+        // ⭐ filler 재정리
+        // ⭐ 오리 탭은 슬롯 재생성, 아이템 탭은 filler 재정리
+        // 오리탭은 필러가 없어서 판매 후 재생성해서 정렬, 아이템탭은 필러를 리프레시 해서 재정렬
+        if (isDuckTab)
+        {
+            StartCoroutine(RegenereateDuckSlotsCo());
+        }
+        else
+        {
+            RefreshFillers();
+        }
 
         // 장비 데이터 저장
         cardList.DelayedSaveEquipments();
@@ -558,9 +601,105 @@ public class SellPanelManager : MonoBehaviour
 
     void CloseAllPopups()
     {
-        if (equippedItemPopup != null)  equippedItemPopup.SetActive(false);
+        if (equippedItemPopup != null) equippedItemPopup.SetActive(false);
         if (duckWithEquipPopup != null) duckWithEquipPopup.SetActive(false);
     }
 
+    /// <summary>
+    /// 선택이 막힌 카드인지 판단
+    /// 오리: 리드 오리 / 아이템: 필수 장비
+    /// </summary>
+    bool IsBlocked(CardData data)
+    {
+        if (data.Type == CardType.Weapon.ToString())
+            return data.StartingMember == StartingMember.Zero.ToString();
+        else
+        {
+            bool isEssential = !string.IsNullOrEmpty(data.BindingTo) && data.BindingTo != "All";
+            if (!isEssential) return false;
+
+            // ⭐ 필수 장비라도 장착 중일 때만 blocked
+            EquipmentCard ec = cardList.FindEquipmentCard(data);
+            return ec != null && ec.IsEquipped;
+        }
+    }
+
+    /// <summary>
+    /// 판매 후 filler를 재정리합니다.
+    /// sellable이 없으면 filler 전부 제거, 있으면 행 맞춤 재계산
+    /// </summary>
+    void RefreshFillers()
+    {
+        Transform content = isDuckTab ? duckContent : itemContent;
+
+        // 기존 filler 전부 제거
+        List<Transform> fillers = new List<Transform>();
+        foreach (Transform child in content)
+        {
+            if (child != null && child.name == "Filler")
+                fillers.Add(child);
+        }
+        foreach (Transform f in fillers)
+            Destroy(f.gameObject);
+
+        // 현재 남은 sellable 수 계산
+        int sellableCount = activeSlots.FindAll(s => s.GetComponent<Button>()?.interactable == true).Count;
+
+        if (sellableCount == 0) return; // sellable 없으면 filler 불필요
+
+        // filler 재추가
+        int columns = 5;
+        int remainder = sellableCount % columns;
+        int fillCount = remainder == 0 ? 0 : columns - remainder;
+
+        for (int i = 0; i < fillCount; i++)
+        {
+            GameObject filler = new GameObject("Filler", typeof(RectTransform));
+            filler.transform.SetParent(content, false);
+            RectTransform rt = filler.GetComponent<RectTransform>();
+            rt.sizeDelta = new Vector2(100, 257);
+        }
+
+        // filler를 sellable 슬롯 바로 뒤로 이동
+        int fillerIndex = sellableCount;
+        foreach (Transform child in content)
+        {
+            if (child != null && child.name == "Filler")
+            {
+                child.SetSiblingIndex(fillerIndex++);
+            }
+        }
+    }
+    bool HasNonEssentialEquipment(CardData duckData)
+    {
+        EquipmentCard[] equips = cardList.GetEquipmentsCardData(duckData);
+        foreach (var e in equips)
+        {
+            if (e == null) continue;
+            // ⭐ 필수 장비가 아닌 장비가 하나라도 있으면 true
+            bool isEssential = e.CardData.BindingTo == duckData.Name;
+            if (!isEssential) return true;
+        }
+        return false;
+    }
+    IEnumerator RegenereateDuckSlotsCo()
+    {
+        // ⭐ activeSlots가 아니라 duckContent의 모든 자식을 직접 제거
+        List<GameObject> toDestroy = new List<GameObject>();
+        foreach (Transform child in duckContent)
+        {
+            if (child != null)
+                toDestroy.Add(child.gameObject);
+        }
+        foreach (GameObject go in toDestroy)
+            DestroyImmediate(go);
+
+        activeSlots.Clear();
+
+        // 한 프레임 대기 후 재생성
+        yield return null;
+
+        GenerateSlots("Weapon");
+    }
     #endregion
 }
