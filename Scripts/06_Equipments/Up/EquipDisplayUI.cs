@@ -26,6 +26,7 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject charButton;
     [SerializeField] GameObject backButton;
     [SerializeField] GameObject charUpgradeButton; // 디스플레이되는 오리카드 업그레이드 버튼
+    [SerializeField] GameObject sellButton; // 카드 판매 버튼
 
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
 
@@ -100,6 +101,7 @@ public class EquipDisplayUI : MonoBehaviour
         charButton.SetActive(true);
         backButton.SetActive(true);
         charUpgradeButton.SetActive(true);
+        sellButton.SetActive(true);
     }
 
     public void SetAtkHpStats(int _currentAtk, int _currnetHp)
@@ -194,6 +196,7 @@ public class EquipDisplayUI : MonoBehaviour
 
         charButton.SetActive(false);
         charUpgradeButton.SetActive(false);
+        sellButton.SetActive(false);
 
         // Tween 정리
         atkPopTween?.Kill();
@@ -212,6 +215,7 @@ public class EquipDisplayUI : MonoBehaviour
         atkLabel.SetActive(true);
         hpLabel.SetActive(true);
         charUpgradeButton.SetActive(true);
+        sellButton.SetActive(true);
 
         charWarningLackCanvasGroup.gameObject.SetActive(true);
     }

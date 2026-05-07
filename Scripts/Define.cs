@@ -302,6 +302,46 @@ public class Equation
         return Mathf.RoundToInt(baseCostTotal * evoMultiplier);
     }
 
+    /// <summary>
+    /// 카드 판매 가격 계산
+    /// 판매가 = (기본가 + 누적 업그레이드 투자비 × 회수율) × EVO 배율
+    /// </summary>
+    public int GetSellPrice(CardData cardData, SellPriceDataReader reader)
+    {
+        SellPriceData priceData = reader.GetPriceData(cardData.Grade);
+        if (priceData == null) return 0;
+
+        // 1. 타입별 기본가
+        bool isDuck = cardData.Type == CardType.Weapon.ToString();
+        int basePrice = isDuck ? priceData.DuckBasePrice : priceData.ItemBasePrice;
+
+        // 2. 누적 투자 비용 계산 (레벨 1 → 현재 레벨까지 GetUpgradeCost 합산)
+        int totalInvested = 0;
+        for (int lv = 1; lv < cardData.Level; lv++)
+        {
+            totalInvested += GetUpgradeCost(lv, cardData.Grade, 0); // EVO 배율은 이미 EvoMulti에서 반영
+        }
+
+        // 3. 회수분 계산
+        int recoveryAmount = Mathf.RoundToInt(totalInvested * priceData.RecoveryRate);
+
+        // 4. EVO 배율 적용
+        float evoMulti = cardData.EvoStage switch
+        {
+            1 => priceData.EVO1Multi,
+            2 => priceData.EVO2Multi,
+            _ => priceData.EVO0Multi
+        };
+
+        int finalPrice = Mathf.RoundToInt((basePrice + recoveryAmount) * evoMulti);
+
+        Logger.Log($"[Equation] 판매가 계산: {cardData.Name} " +
+                   $"Grade{cardData.Grade} Lv{cardData.Level} EVO{cardData.EvoStage} " +
+                   $"= 기본가{basePrice} + 회수{recoveryAmount} × EVO{evoMulti} = {finalPrice}골드");
+
+        return finalPrice;
+    }
+
     public int GetDamage(int _originalDamage, int _damageBonus)
     {
         int damage = _originalDamage + _damageBonus;
