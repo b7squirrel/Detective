@@ -42,7 +42,7 @@ public class Skill500 : SkillBase
         // ⭐ 이 부분 추가
         damageMultiplier = 1.5f + (Grade * 0.1f) + (EvoStage * 0.15f);
 
-        Logger.LogError($"[Skill500-파티 타임] 초기화 완료\n" +
+        Logger.Log($"[Skill500-파티 타임] 초기화 완료\n" +
                         $"  EvoStage: {EvoStage}\n" +
                         $"  Grade: {Grade}\n" +
                         $"  쿨다운: {realCoolDownTime}초\n" +
@@ -56,7 +56,7 @@ public class Skill500 : SkillBase
         base.ApplyDurationUpgrade(level);
         CalculateRealDuration();
         
-        Logger.LogError($"[Skill500] 🔥 동료 강화 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+        Logger.Log($"[Skill500] 🔥 동료 강화 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
     }
 
     // 실제 지속시간 계산
@@ -97,7 +97,7 @@ public class Skill500 : SkillBase
                     
                     ApplyBoost();
                     
-                    Logger.LogError($"[Skill500] 🔥 동료 강화 시작! (지속시간: {realDuration}초, 배수: {damageMultiplier}x)");
+                    Logger.Log($"[Skill500] 🔥 동료 강화 시작! (지속시간: {realDuration}초, 배수: {damageMultiplier}x)");
                 }
                 
                 durationTimer += Time.deltaTime;

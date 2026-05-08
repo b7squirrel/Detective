@@ -15,6 +15,7 @@ public class SellCardSlot : MonoBehaviour
 
     [Header("선택 오버레이")]
     [SerializeField] GameObject checkOverlay;       // 체크 원 이미지 (인스펙터에서 스프라이트 연결)
+    [SerializeField] GameObject selectionOutline;       // 선택시 하얀 테두리
 
     [Header("장착중 오버레이")]
     [SerializeField] GameObject equippedOverlay; // 반투명 잠금 이미지
@@ -162,6 +163,8 @@ public class SellCardSlot : MonoBehaviour
     {
         if (checkOverlay != null)
             checkOverlay.SetActive(isSelected);
+        if (selectionOutline != null)
+            selectionOutline.SetActive(isSelected);
 
         // ⭐ 장착 중 오버레이: 비필수 장비가 장착 중일 때만
         bool isEssential = cardData != null &&
