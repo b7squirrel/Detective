@@ -32,7 +32,7 @@ public class Skill400 : SkillBase
         CalculateRealDuration();
 
         // ⭐ 디버그 로그
-        Logger.LogError($"[Skill400-천하 무적] 초기화 완료\n" +
+        Logger.Log($"[Skill400-천하 무적] 초기화 완료\n" +
                         $"  EvoStage: {EvoStage}\n" +
                         $"  Grade: {Grade}\n" +
                         $"  쿨다운: {realCoolDownTime}초\n" +
@@ -45,7 +45,7 @@ public class Skill400 : SkillBase
         base.ApplyDurationUpgrade(level);
         CalculateRealDuration();
         
-        Logger.LogError($"[Skill400] 🛡️ 무적 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
+        Logger.Log($"[Skill400] 🛡️ 무적 지속시간 업그레이드 LV{level} - {baseDuration}초 → {realDuration}초");
     }
 
     // ⭐ 실제 지속시간 계산

@@ -40,7 +40,7 @@ public class Skill200 : SkillBase
         CalculateRealDuration();
         slownessFactor = new Equation().GetSlowSpeedFactor(Grade, EvoStage);
 
-        Logger.LogError($"[Skill200-느림보 최면술] 초기화 완료\n" +
+        Logger.Log($"[Skill200-느림보 최면술] 초기화 완료\n" +
                         $"  EvoStage: {EvoStage}\n" +
                         $"  Grade: {Grade}\n" +
                         $"  쿨다운: {realCoolDownTime}초\n" +

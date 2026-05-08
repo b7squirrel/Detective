@@ -27,7 +27,7 @@ public class Skill300 : SkillBase
 
         // ⭐ 디버그 로그
         int totalHits = 1 + (durationUpgradeLevel * additionalHitsPerLevel);
-        Logger.LogError($"[Skill300-넓은 공격] 초기화 완료\n" +
+        Logger.Log($"[Skill300-넓은 공격] 초기화 완료\n" +
                         $"  EvoStage: {EvoStage}\n" +
                         $"  Grade: {Grade}\n" +
                         $"  쿨다운: {realCoolDownTime}초\n" +
@@ -41,7 +41,7 @@ public class Skill300 : SkillBase
         base.ApplyDurationUpgrade(level);
         
         int totalHits = 1 + (durationUpgradeLevel * additionalHitsPerLevel);
-        Logger.LogError($"[Skill300] 💥 다회 공격 업그레이드 LV{level} - 공격 횟수: {totalHits}회");
+        Logger.Log($"[Skill300] 💥 다회 공격 업그레이드 LV{level} - 공격 횟수: {totalHits}회");
     }
 
     public override void UseSkill()
@@ -81,11 +81,11 @@ public class Skill300 : SkillBase
                 
                 if (hit == 0)
                 {
-                    Logger.LogError($"[Skill300] ⚡ 첫 번째 공격!");
+                    Logger.Log($"[Skill300] ⚡ 첫 번째 공격!");
                 }
                 else
                 {
-                    Logger.LogError($"[Skill300] 💥 추가 공격 {hit}번째!");
+                    Logger.Log($"[Skill300] 💥 추가 공격 {hit}번째!");
                 }
             }
             

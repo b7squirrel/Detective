@@ -47,7 +47,7 @@ public class Skill100 : SkillBase
         character = GameManager.instance.character;
 
         // ⭐ 디버그 로그
-        Logger.LogError($"[Skill100-회복] 초기화 완료\n" +
+        Logger.Log($"[Skill100-회복] 초기화 완료\n" +
                         $"  EvoStage: {EvoStage}\n" +
                         $"  Grade: {Grade}\n" +
                         $"  쿨다운: {realCoolDownTime}초\n" +

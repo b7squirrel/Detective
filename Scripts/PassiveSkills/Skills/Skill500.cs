@@ -82,7 +82,7 @@ public class Skill500 : SkillBase
                 ReleaseBoost();
                 skillUi.PlayBadgeAnim("Done");
                 
-                Logger.LogError($"[Skill500] ✨ 동료 강화 종료");
+                Logger.Log($"[Skill500] ✨ 동료 강화 종료");
                 return;
             }
             else
