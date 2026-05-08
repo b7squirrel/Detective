@@ -23,6 +23,7 @@ public class LaunchManager : MonoBehaviour
 
     CardData currentLead;
     OriAttribute currentAttr;
+    Animator panelAnim;
 
     [Header("일일 보상 버튼")]
     [SerializeField] ButtonBadgeUI dailyButtonUI;
@@ -41,6 +42,9 @@ public class LaunchManager : MonoBehaviour
         if (cardSlotManager == null) 
             cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Off");
+
+        if(panelAnim == null) panelAnim = sellPanelObject.GetComponent<Animator>();
+        panelAnim.SetTrigger("Up");
     }
     
     void OnDisable()
@@ -198,12 +202,13 @@ public class LaunchManager : MonoBehaviour
     {
         sellPanelManager.gameObject.SetActive(true);
         sellPanelObject.SetActive(true);
+        panelAnim.SetTrigger("Up");
     }
 
     public void OnReturnFromSellPanel()
     {
         sellPanelManager.gameObject.SetActive(false);
-        sellPanelObject.SetActive(false);
+        panelAnim.SetTrigger("Down");
     }
     #endregion
 }

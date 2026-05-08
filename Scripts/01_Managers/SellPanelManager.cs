@@ -28,6 +28,7 @@ public class SellPanelManager : MonoBehaviour
     [SerializeField] GameObject sellCardSlotPrefab;
     [SerializeField] Transform duckContent;   // 오리 탭 ScrollView Content
     [SerializeField] Transform itemContent;   // 아이템 탭 ScrollView Content
+    [SerializeField] float slotScale; // 
     List<SellCardSlot> activeSlots = new List<SellCardSlot>();
 
     // ───── 탭 ─────
@@ -49,6 +50,7 @@ public class SellPanelManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] TextMeshProUGUI totalPriceText;  // "총 판매가: 1,200"
     [SerializeField] Button sellButton;
+    [SerializeField] Animator sellButtonAnimator; // ⭐ 추가
     [SerializeField] RectTransform coinIconRect;       // GemCollectFX 타겟용
 
     // ───── 팝업: 장착 중인 아이템 판매 확인 ─────
@@ -98,7 +100,8 @@ public class SellPanelManager : MonoBehaviour
         cardDataManager = FindObjectOfType<CardDataManager>();
         cardList = FindObjectOfType<CardList>();
         cardsDictionary = FindObjectOfType<CardsDictionary>();
-        playerDataManager = PlayerDataManager.Instance;
+        // ⭐ Instance 대신 FindObjectOfType으로 통일. 초기화 타이밍 때문에 Null이 되는 것을 방지
+        playerDataManager = FindObjectOfType<PlayerDataManager>();
         cardSlotManager = FindObjectOfType<CardSlotManager>();
 
         priceReader.Load(sellPriceDataAsset);
@@ -110,6 +113,10 @@ public class SellPanelManager : MonoBehaviour
         sellWithEquipButton.onClick.AddListener(() => OnDuckWithEquipConfirmed(true));
         sellWithoutEquipButton.onClick.AddListener(() => OnDuckWithEquipConfirmed(false));
         duckWithEquipCancelButton.onClick.AddListener(OnDuckWithEquipCanceled);
+
+        // ⭐ 초기 비활성화
+        if (sellButton != null) sellButton.interactable = false;
+        if (sellButtonAnimator != null) sellButtonAnimator.SetTrigger("Deactivate"); // ⭐ 추가
     }
 
     void OnEnable()
@@ -212,7 +219,7 @@ public class SellPanelManager : MonoBehaviour
     void CreateSlot(CardData data, string cardType, Transform content)
     {
         GameObject obj = Instantiate(sellCardSlotPrefab, content);
-        obj.transform.localScale = Vector3.one * 0.5f;
+        obj.transform.localScale = Vector3.one * slotScale;
 
         SellCardSlot slot = obj.GetComponent<SellCardSlot>();
         int price = equation.GetSellPrice(data, priceReader);
@@ -286,9 +293,14 @@ public class SellPanelManager : MonoBehaviour
         if (totalPriceText != null)
             totalPriceText.text = totalSellPrice.ToString("N0");
 
-        // 선택된 게 없으면 판매 버튼 비활성
+        bool hasSelection = selectedSlots.Count > 0;
+
         if (sellButton != null)
-            sellButton.interactable = selectedSlots.Count > 0;
+            sellButton.interactable = hasSelection;
+
+        // ⭐ 애니메이터 트리거
+        if (sellButtonAnimator != null)
+            sellButtonAnimator.SetTrigger(hasSelection ? "Activate" : "Deactivate");
     }
 
     #endregion
@@ -491,13 +503,17 @@ public class SellPanelManager : MonoBehaviour
         pendingSellSlots.Clear();
 
         // 골드 지급
+        if (playerDataManager == null)
+            playerDataManager = PlayerDataManager.Instance;
+
         playerDataManager.AddCoin(earnedGold);
 
         // 코인 촤르르륵 애니메이션
         if (gemCollectFX != null && coinIconRect != null)
         {
             int animCount = Mathf.Clamp(slotsToSell.Count, 1, 10);
-            gemCollectFX.PlayGemCollectFX(coinIconRect, animCount, false);
+            // gemCollectFX.PlayGemCollectFX(coinIconRect, animCount, false);
+            gemCollectFX.PlayGemCollectFX(coinIconRect, 30, false);
         }
 
         // 기존 카드 풀 슬롯 제거
