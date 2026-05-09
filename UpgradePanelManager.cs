@@ -13,6 +13,7 @@ public class UpgradePanelManager : MonoBehaviour
     [SerializeField] List<UpgradeButton> upgradeButtons;
 
     [SerializeField] GameObject confetti; // 폭죽 숨기고 보이게 하기
+    [SerializeField] GameObject FG; // 터치 블락
 
     Animator anim;
     Level level;
