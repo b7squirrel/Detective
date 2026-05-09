@@ -265,24 +265,24 @@ public class Equation
         switch (gradeIndex)
         {
             case 0: // 일반
-                baseCost = 100;
-                perLevelCost = 15;
+                baseCost = 200;
+                perLevelCost = 30;
                 break;
             case 1: // 희귀
-                baseCost = 300;
-                perLevelCost = 45;
+                baseCost = 600;
+                perLevelCost = 90;
                 break;
             case 2: // 고급
-                baseCost = 800;
-                perLevelCost = 120;
+                baseCost = 1600;
+                perLevelCost = 240;
                 break;
             case 3: // 전설
-                baseCost = 2000;
-                perLevelCost = 300;
+                baseCost = 4000;
+                perLevelCost = 600;
                 break;
             case 4: // 신화
-                baseCost = 5000;
-                perLevelCost = 750;
+                baseCost = 10000;
+                perLevelCost = 1500;
                 break;
             default:
                 Debug.LogError($"Invalid gradeIndex: {gradeIndex}");
