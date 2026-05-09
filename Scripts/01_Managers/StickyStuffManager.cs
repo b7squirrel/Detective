@@ -38,7 +38,7 @@ public class StickyStuffManager : MonoBehaviour
     void SetPlayerMoveSpeed()
     {
         float currentSlowdownFactor = Mathf.Pow(slowDownFactor, totalNumOfStickySlimes);
-        Player.instance.SetSlowDownFator(currentSlowdownFactor);
+        Player.instance.SetSlowDownFactor(currentSlowdownFactor);
     }
     void ResetPlayerMoveSpeed()
     {

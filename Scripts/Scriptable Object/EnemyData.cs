@@ -8,10 +8,10 @@ public class EnemyData : ScriptableObject
     public string Name;
     public RuntimeAnimatorController animController;
     public EnemyType enemyType;
-    
+
     [Header("Enemy Role")]
     public EnemyRole enemyRole = EnemyRole.Balanced;
-    
+
     [Header("Boss Type")]
     public BossType bossType = BossType.Normal;
 
@@ -23,11 +23,11 @@ public class EnemyData : ScriptableObject
     [Tooltip("이 적 타입의 HP 스케일링 배율 (1.0 = 기본)")]
     [Range(0.5f, 120f)]
     public float hpScalingMultiplier = 1.0f;
-    
+
     [Tooltip("이 적 타입의 속도 스케일링 배율 (1.0 = 기본)")]
     [Range(0.1f, 2.0f)]
     public float speedScalingMultiplier = 1.0f;
-    
+
     [Tooltip("이 적 타입의 공격력 스케일링 배율 (1.0 = 기본)")]
     [Range(0.5f, 120f)]
     public float damageScalingMultiplier = 1.0f;
@@ -46,19 +46,19 @@ public class EnemyData : ScriptableObject
     [Header("Special Abilities - Laser")]
     [Tooltip("레이저 쿨다운 (초)")]
     public float laserCooldown = 5f;
-    
+
     [Tooltip("레이저 예고 시간 (초) - 빨간 선 표시")]
     public float laserAnticipationTime = 1f;
-    
+
     [Tooltip("레이저 발사 지속 시간 (초)")]
     public float laserFireDuration = 0.3f;
-    
+
     [Tooltip("레이저 데미지")]
     public int laserDamage = 20;
-    
+
     [Tooltip("레이저 사거리")]
     public float laserRange = 100f;
-    
+
     [Tooltip("레이저 두께")]
     public float laserWidth = 0.2f;
 
@@ -98,7 +98,8 @@ public enum EnemyType
     Melee,
     Ranged,
     Explode,
-    Projectile
+    Projectile,
+    None
 }
 
 public enum SpecialAbility

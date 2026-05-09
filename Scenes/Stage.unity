@@ -305,6 +305,8 @@ GameObject:
   - component: {fileID: 1203505532}
   - component: {fileID: 1203505533}
   - component: {fileID: 1203505535}
+  - component: {fileID: 1203505536}
+  - component: {fileID: 1203505537}
   m_Layer: 0
   m_Name: ---WORLD---
   m_TagString: Untagged
@@ -1723,6 +1725,35 @@ MonoBehaviour:
   - {fileID: 5702617547349231471, guid: d5cee18a03f724e95be5408fdb90f8ff, type: 3}
   - {fileID: 999590266812322053, guid: 12d790d17c519450a8eef97203a80003, type: 3}
   - {fileID: 5595334113436600555, guid: 76be32e5ab9484ce99cc0f1156d77fb0, type: 3}
+--- !u!114 &1203505536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203505524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 383a4adf21de042e1a8a43c18b5c9bd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  desertSlowFactor: 0.6
+  iceSlideDecay: 0.99
+--- !u!114 &1203505537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203505524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49add9129b4e74298a1b54d12b84ccd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volcanoPrefab: {fileID: 0}
+  spawnInterval: 3
+  spawnCountPerInterval: 2
 --- !u!1001 &1834807250
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1774,6 +1805,10 @@ PrefabInstance:
     - target: {fileID: 7129860240687650309, guid: 9d927498414913049a2d068aa6b27957, type: 3}
       propertyPath: m_Name
       value: Walls
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129860240687650309, guid: 9d927498414913049a2d068aa6b27957, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7129860240687650311, guid: 9d927498414913049a2d068aa6b27957, type: 3}
       propertyPath: m_RootOrder

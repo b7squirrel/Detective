@@ -7,6 +7,7 @@ public class StageGroundEffectManager : MonoBehaviour
 
     Player player;
     Character character;
+    LavaVolcanoSpawner lavaVolcanoSpawner; 
 
     public void Init(StageGroundType groundType)
     {
@@ -24,7 +25,7 @@ public class StageGroundEffectManager : MonoBehaviour
                 break;
 
             case StageGroundType.GreyLava:
-                character.StartLavaDrain();
+                lavaVolcanoSpawner.StartSpawning();
                 break;
 
             default:

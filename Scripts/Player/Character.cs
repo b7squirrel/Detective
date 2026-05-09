@@ -12,6 +12,7 @@ public class Character : MonoBehaviour
     GameObject magnetSynEffect;
     bool isSynergyMagnetEffectActivated; // 시너지 자석 이펙트가 트리거 되면 그 때부터 계속 발산
     bool isTearEffectActivated;
+    Coroutine lavaDrainCoroutine;
 
     [field: SerializeField] public int MaxHealth { get; set; } = 3000;
     [field: SerializeField] public int Armor { get; set; } = 0;
@@ -421,6 +422,36 @@ Handheld.Vibrate();
         Logger.Log("[Character] 무적 종료");
     }
     #endregion
+
+    public void StartLavaDrain()
+    {
+        if (lavaDrainCoroutine != null)
+            StopCoroutine(lavaDrainCoroutine);
+
+        lavaDrainCoroutine = StartCoroutine(LavaDrainCo());
+    }
+
+    public void StopLavaDrain()
+    {
+        if (lavaDrainCoroutine != null)
+        {
+            StopCoroutine(lavaDrainCoroutine);
+            lavaDrainCoroutine = null;
+        }
+    }
+
+    IEnumerator LavaDrainCo()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+
+            if (GameManager.instance.IsPlayerDead) yield break;
+            if (GameManager.instance.IsPaused) continue;
+
+            TakeDamage(5, EnemyType.None); // 초당 5 데미지
+        }
+    }
 
     #region 디버그
     public void MaxPlayerHealth()

@@ -34,7 +34,7 @@ public class WeaponContainer : MonoBehaviour
 
     void ApplyMovements()
     {
-        if (player.IsPlayerMoving() == false)
+        if (player.IsActuallyMoving() == false)
         {
             for (int i = weaponContainers.Count; i > 0; i--)
             {

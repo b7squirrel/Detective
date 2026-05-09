@@ -31,7 +31,11 @@ public class Player : MonoBehaviour, IBouncable
 
     // 점액 위에 있을 때 속도가 느려지게 하기 위한 인자. 
     // 속도 업그레이드가 되어도 여전히 일정 비율로 느려지도록 직접 speed를 건드리지 않고 slowDownFactor로 속도 제어
-    float slowDownFactor; 
+    float slowDownFactor;
+    bool isIceMode;
+    float iceSlideDecay;
+    Vector2 iceVelocity;
+    float iceAcceleration; // 현재 가속도
 
     public bool ShouldBeStill { get; set; } // 메뉴, 이벤트 등 플레이어가 움직이면 안되는 상황
 
@@ -46,13 +50,13 @@ public class Player : MonoBehaviour, IBouncable
 
     void Start()
     {
-        GameEvents.OnGameStart?.Invoke();       
+        GameEvents.OnGameStart?.Invoke();
     }
 
     void LateUpdate()
     {
-        if (ShouldBeStill || 
-            GameManager.instance.IsPaused || 
+        if (ShouldBeStill ||
+            GameManager.instance.IsPaused ||
             GameManager.instance.IsPlayerDead)
         {
             InputVec = Vector2.zero;
@@ -85,16 +89,39 @@ public class Player : MonoBehaviour, IBouncable
             rb.velocity = bouncingForce;
             return;
         }
+
         if (bouncingCoroutine != null)
             StopCoroutine(bouncingCoroutine);
 
 #if UNITY_EDITOR
-
 #elif UNITY_ANDROID
-        InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
+    InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
 #endif
-        Vector2 nextVec = InputVec * character.MoveSpeed * slowDownFactor * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + nextVec);
+
+        if (isIceMode)
+        {
+            if (InputVec != Vector2.zero)
+            {
+                iceAcceleration = 1f; // 처음부터 최고 가속
+
+                Vector2 targetVelocity = InputVec * character.MoveSpeed * 6f * Time.fixedDeltaTime;
+
+                // 현재 속도가 낮으면 빠르게 반응, 속도가 붙으면 방향전환 느려짐
+                float currentSpeed = iceVelocity.magnitude;
+                float maxSpeed = character.MoveSpeed * Time.fixedDeltaTime;
+                float lerpFactor = Mathf.Lerp(0.3f, 0.03f, currentSpeed / maxSpeed);
+                // 0.3f: 처음 시작 시 반응속도 / 0.03f: 고속 시 방향전환 반응속도
+
+                iceVelocity = Vector2.Lerp(iceVelocity, targetVelocity, lerpFactor);
+            }
+            else
+            {
+                iceAcceleration = 0f;
+            }
+
+            iceVelocity *= iceSlideDecay;
+            rb.MovePosition(rb.position + iceVelocity);
+        }
     }
     void Flip()
     {
@@ -107,7 +134,7 @@ public class Player : MonoBehaviour, IBouncable
             FacingDir *= -1f;
         }
 
-        if(FacingDir < 0) 
+        if (FacingDir < 0)
         {
             weaponContainerAnim.FacingRight = false;
         }
@@ -136,13 +163,28 @@ public class Player : MonoBehaviour, IBouncable
         return true;
     }
 
-    public void SetSlowDownFator(float factor)
+    public bool IsActuallyMoving()
+    {
+        if (isIceMode)
+            return iceVelocity.magnitude > 0.001f; // 실제 이동 속도 기준
+        return InputVec != Vector2.zero;
+    }
+
+    public void SetSlowDownFactor(float factor)
     {
         slowDownFactor = factor;
     }
     public void ResetSlowDownFactor()
     {
         slowDownFactor = 1f;
+    }
+
+    public void EnableIceMode(bool enabled, float decay)
+    {
+        isIceMode = enabled;
+        iceSlideDecay = decay;
+        iceVelocity = Vector2.zero;
+        iceAcceleration = 0f;
     }
 
     #region OnDead Event

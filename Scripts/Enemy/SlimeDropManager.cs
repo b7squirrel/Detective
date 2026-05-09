@@ -109,7 +109,7 @@ public class SlimeDropManager : MonoBehaviour
     #region 플레이어 속도 제어
     void SetPlayerMoveSpeed(float _slowDownFactor)
     {
-        Player.instance.SetSlowDownFator(_slowDownFactor);
+        Player.instance.SetSlowDownFactor(_slowDownFactor);
     }
     #endregion
 }
