@@ -147,25 +147,24 @@ public class MyGrade
     public static int Unique = 3;
     public static int Legendary = 4;
 
-    //public static string[] mGrades = { "Common", "Rare", "Epic", "Legendary", "Mythic" };
     public static string[] mGrades = { "일반", "희귀", "고급", "전설", "신화" };
 
     public static Color[] GradeColors = new Color[]
     {
-        new Color(.6f,.6f,.6f), // white #999999
-        new Color(1,0.8f,0), // yellow  #FFCC00
-        new Color(0,0.8f,1), // blue #00CCFF
-        new Color(0.5f,1,0), // green #80FF00
-        new Color(.7f,0.3f,1) // purple #B34DFF
+        new Color(.6f,.6f,.6f), // common white #999999
+        new Color(0.5f,1,0), // rare green #80FF00
+        new Color(0,0.8f,1), // epic blue #00CCFF
+        new Color(.7f,0.3f,1), // unique purple #B34DFF
+        new Color(1,0.8f,0) // legendary yellow  #FFCC00
     };
 
     public static Color[] GradeGlowColors = new Color[]
     {
         new Color(1f,1f,1f,0.25f), // white
-        new Color(1,0.9f,0.6f,0.25f), // yellow
-        new Color(0.5f,0.9f,0.7f,0.25f), // blue
         new Color(1,0.9f,0.7f, 0.25f), // green
-        new Color(1,0.5f,0.9f, 0.25f) // purple
+        new Color(0.5f,0.9f,0.7f,0.25f), // blue
+        new Color(1,0.5f,0.9f, 0.25f), // purple
+        new Color(1,0.9f,0.6f,0.25f) // yellow
     };
 }
 
