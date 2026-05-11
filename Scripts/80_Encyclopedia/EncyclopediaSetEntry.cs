@@ -62,7 +62,8 @@ public class EncyclopediaSetEntry : MonoBehaviour
     // ── 실제 표시 처리 ────────────────────────────────────
     void ApplyVisuals(HashSet<string> acquiredNames)
     {
-        setNameText.text = GetDisplayName(cachedInfo.setName);
+        // ★ Essential 아이템의 setDisplayName 사용
+        setNameText.text = GetSetDisplayName();
 
         for (int i = 0; i < 4; i++)
         {
@@ -135,6 +136,33 @@ public class EncyclopediaSetEntry : MonoBehaviour
             entryBackground.color = allAcquired ? colorComplete : colorIncomplete;
             glow.gameObject.SetActive(allAcquired);
         }
+    }
+    string GetSetDisplayName()
+    {
+        // 슬롯 순서대로 Essential 아이템 탐색
+        for (int i = 0; i < 4; i++)
+        {
+            foreach (var item in cachedInfo.slotItems[i])
+            {
+                if (!item.isEssential || item.itemSO == null) continue;
+
+                // 영어 선택 시 ItemTexts에서 조회, 없으면 SO 값 사용
+                if (LocalizationManager.IsInitialized
+                    && LocalizationManager.CurrentLanguage == Language.English)
+                {
+                    string engName = LocalizationManager.Item
+                                        .GetSetDisplayName(item.internalName);
+                    if (!string.IsNullOrEmpty(engName)) return engName;
+                }
+
+                // 한국어 또는 영어 fallback — SO의 setDisplayName
+                if (!string.IsNullOrEmpty(item.itemSO.setDisplayName))
+                    return item.itemSO.setDisplayName;
+            }
+        }
+
+        // Essential 아이템이 없는 세트 (Arc Baby 등) — setName 원본 사용
+        return cachedInfo.setName;
     }
     static string GetDisplayName(string internalName)
     {
