@@ -383,6 +383,13 @@ if (hand != null)
     // ⭐ 패널 닫기 (버튼에 연결)
     public void ClosePanel()
     {
+        // ⭐ 이미 비활성이면 코루틴 없이 바로 종료
+        if (!gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         StartCoroutine(ClosePanelCo());
     }
 

@@ -213,4 +213,9 @@ public class CardsDictionary : MonoBehaviour
         Logger.LogError($"[CardsDictionary] CardData를 찾을 수 없음: Name '{name}', Grade {grade}");
         return null;
     }
+
+    public Item GetItemByName(string name, int grade = 0)
+    {
+        return itemData.Find(x => x != null && x.Name == name && x.grade == grade);
+    }
 }

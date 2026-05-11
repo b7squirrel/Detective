@@ -1,151 +1,129 @@
 // ============================================================
-//  파일 3 of 4 : EncyclopediaPopup.cs
-//  역할 : 세트 상세 팝업 (등급 탭 + 아이템 목록 + 세트 효과)
+//  EncyclopediaPopup.cs  (교체 버전)
+//  변경사항:
+//    - 등급 탭 제거
+//    - 아이템 목록 / HP / ATK 제거
+//    - SetBonusDefinition 배열을 읽어 등급별 5줄 자동 생성
+//  삭제 가능: EncyclopediaItemRow.cs (더 이상 사용 안 함)
 // ============================================================
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
- 
+
 public class EncyclopediaPopup : MonoBehaviour
 {
     [Header("Header")]
     [SerializeField] TextMeshProUGUI setNameText;
- 
-    [Header("Grade Tabs")]
-    // 인덱스 0=일반, 1=희귀, 2=고급, 3=전설, 4=신화
-    [SerializeField] Button[] gradeButtons;    // 5개
-    [SerializeField] Image[]  gradeButtonBgs;  // gradeButtons 각각의 Image (선택 색상용)
- 
-    [Header("Item List")]
-    [SerializeField] Transform  itemListParent; // Viewport > Content
-    [SerializeField] GameObject itemRowPrefab;  // EncyclopediaItemRow 프리팹
- 
-    [Header("Set Bonus")]
-    [SerializeField] GameObject      bonusPanel;
-    [SerializeField] TextMeshProUGUI bonusDescText;
- 
+
+    [Header("Bonus Content")]
+    // SetBonusDefinition이 있을 때 — 5줄 자동 생성
+    [SerializeField] TextMeshProUGUI bonusContentText;
+    // SetBonusDefinition이 없을 때 — 대체 안내 문구
+    [SerializeField] TextMeshProUGUI noBonusText;
+
     [Header("Close")]
     [SerializeField] Button closeButton;
- 
-    // ── 상태 ─────────────────────────────────────────────────
-    EncycSetInfo       currentSet;
-    SetBonusDefinition currentBonus;
-    int                currentGrade;
- 
+
+    // ── 스탯 이름 매핑 ───────────────────────────────────────
+    // (표시 이름, 단위 suffix, 소수점 자리, 양수 부호)
+    readonly struct StatDef
+    {
+        public readonly string label;   // "이동속도"
+        public readonly string suffix;  // "%" or ""
+        public StatDef(string l, string s) { label = l; suffix = s; }
+    }
+
     // ── 초기화 ───────────────────────────────────────────────
     void Awake()
     {
-        // 등급 버튼 이벤트
-        for (int i = 0; i < gradeButtons.Length; i++)
-        {
-            int g = i;
-            gradeButtons[i].onClick.AddListener(() => SelectGrade(g));
-        }
- 
         closeButton.onClick.AddListener(Hide);
         gameObject.SetActive(false);
     }
- 
-    // ── 공개 API ─────────────────────────────────────────────
+
+    // ── 공개 API (EncyclopediaManager에서 호출) ───────────────
     public void Show(EncycSetInfo info, SetBonusDefinition bonus)
     {
-        currentSet   = info;
-        currentBonus = bonus;
-        currentGrade = 0;
+        setNameText.text = info.setName;
+
+        if (bonus == null)
+        {
+            bonusContentText.gameObject.SetActive(false);
+            noBonusText.gameObject.SetActive(true);
+            noBonusText.text = "세트 효과가 아직 정의되지 않았습니다.";
+        }
+        else
+        {
+            noBonusText.gameObject.SetActive(false);
+            bonusContentText.gameObject.SetActive(true);
+            bonusContentText.text = BuildBonusText(bonus);
+        }
+
         gameObject.SetActive(true);
-        Refresh();
     }
- 
-    // ── 내부 ─────────────────────────────────────────────────
+
+    // ── 닫기 ─────────────────────────────────────────────────
     void Hide() => gameObject.SetActive(false);
- 
-    void SelectGrade(int grade)
+
+    // ── 5줄 텍스트 생성 ──────────────────────────────────────
+    /// <summary>
+    /// 각 등급(0~4)에서 0이 아닌 스탯을 수집해 한 줄로 포맷
+    /// TMP Rich Text로 등급 이름에 색상 적용
+    /// 예) <color=#FFCC00>[희귀]</color>  이동속도 +8%, 공격력 +3%
+    /// </summary>
+    static string BuildBonusText(SetBonusDefinition bonus)
     {
-        currentGrade = grade;
-        RefreshGradeButtons();
-        RefreshItemList();
-    }
- 
-    void Refresh()
-    {
-        setNameText.text = currentSet.setName;
-        RefreshGradeButtons();
-        RefreshItemList();
-        RefreshBonus();
-    }
- 
-    void RefreshGradeButtons()
-    {
-        for (int i = 0; i < gradeButtonBgs.Length; i++)
+        var sb = new StringBuilder();
+
+        for (int g = 0; g < StaticValues.MaxGrade; g++)
         {
-            bool selected = (i == currentGrade);
-            // 선택: 등급 색상 / 비선택: 어두운 회색
-            gradeButtonBgs[i].color = selected
-                ? MyGrade.GradeColors[i]
-                : new Color(0.2f, 0.2f, 0.2f, 1f);
- 
-            // 버튼 안 텍스트도 선택 시 굵게 (옵션)
-            var label = gradeButtons[i].GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null)
-            {
-                label.text       = MyGrade.mGrades[i];
-                label.fontStyle  = selected ? FontStyles.Bold : FontStyles.Normal;
-            }
+            // 등급 이름 (색상 태그)
+            Color  col  = MyGrade.GradeColors[g];
+            string hex  = ColorUtility.ToHtmlStringRGB(col);
+            string name = MyGrade.mGrades[g];
+
+            // 해당 등급의 유효 스탯 수집
+            string statLine = CollectStats(bonus, g);
+            if (string.IsNullOrEmpty(statLine)) statLine = "-";
+
+            sb.Append($"<color=#{hex}>[{name}]</color>  {statLine}");
+
+            if (g < StaticValues.MaxGrade - 1)
+                sb.AppendLine();
         }
+
+        return sb.ToString();
     }
- 
-    void RefreshItemList()
+
+    /// <summary>특정 등급에서 값이 있는 스탯만 모아 "이름 +X%, ..." 형태로 반환</summary>
+    static string CollectStats(SetBonusDefinition b, int g)
     {
-        // 기존 행 제거
-        foreach (Transform child in itemListParent)
-            Destroy(child.gameObject);
- 
-        string[] slotLabels = { "Head", "Face", "Chest", "Hand" };
- 
-        for (int slotIdx = 0; slotIdx < 4; slotIdx++)
-        {
-            var items = currentSet.slotItems[slotIdx];
- 
-            if (items.Count == 0)
-            {
-                // 빈 슬롯: 회색 빈 행 표시
-                GameObject row = Instantiate(itemRowPrefab, itemListParent);
-                row.GetComponent<EncyclopediaItemRow>()
-                   .InitEmpty(slotLabels[slotIdx]);
-                continue;
-            }
- 
-            foreach (EncycItemInfo item in items)
-            {
-                string displayName = GetDisplayName(item.internalName);
- 
-                GameObject row = Instantiate(itemRowPrefab, itemListParent);
-                row.GetComponent<EncyclopediaItemRow>()
-                   .Init(slotLabels[slotIdx], displayName,
-                         item.isEssential,
-                         item.hp[currentGrade],
-                         item.atk[currentGrade]);
-            }
-        }
+        var parts = new List<string>();
+
+        TryAdd(parts, "이동속도",    b.moveSpeedBonus[g],      "%");
+        TryAdd(parts, "공격력",      b.attackBonus[g],         "%");
+        TryAdd(parts, "방어력",      b.armorBonus[g],          "");
+        TryAdd(parts, "최대 HP",     b.maxHpBonus[g],          "%");
+        TryAdd(parts, "쿨타임 감소", b.cooldownBonus[g],       "%");
+        TryAdd(parts, "치명타",      b.criticalChanceBonus[g], "%");
+        TryAdd(parts, "HP 회복",     b.hpRegenBonus[g],        "");
+        TryAdd(parts, "자석 범위",   b.magnetSizeBonus[g],     "");
+        TryAdd(parts, "넉백",        b.knockBackBonus[g],      "%");
+
+        return string.Join(", ", parts);
     }
- 
-    void RefreshBonus()
+
+    /// <summary>값이 0이 아닐 때만 리스트에 추가</summary>
+    static void TryAdd(List<string> parts, string label, float value, string suffix)
     {
-        if (currentBonus == null || string.IsNullOrEmpty(currentBonus.bonusDescription))
-        {
-            bonusPanel.SetActive(false);
-            return;
-        }
-        bonusPanel.SetActive(true);
-        bonusDescText.text = currentBonus.bonusDescription;
-    }
- 
-    // ── 다국어 이름 조회 ─────────────────────────────────────
-    static string GetDisplayName(string internalName)
-    {
-        if (LocalizationManager.IsInitialized)
-            return LocalizationManager.Item.GetItemDisplayName(internalName);
-        return internalName;
+        if (value == 0f) return;
+
+        // 소수점이 없으면 정수로 표시
+        string formatted = value == Mathf.Floor(value)
+            ? $"{value:0}"
+            : $"{value:0.#}";
+
+        parts.Add($"{label} +{formatted}{suffix}");
     }
 }
