@@ -122,6 +122,11 @@ public class Player : MonoBehaviour, IBouncable
             iceVelocity *= iceSlideDecay;
             rb.MovePosition(rb.position + iceVelocity);
         }
+        else  // ← 이게 없으면 아이스 모드가 아닐 때 이동 코드가 실행되지 않습니다
+        {
+            Vector2 nextVec = InputVec * character.MoveSpeed * slowDownFactor * Time.fixedDeltaTime;
+            rb.MovePosition(rb.position + nextVec);
+        }
     }
     void Flip()
     {
