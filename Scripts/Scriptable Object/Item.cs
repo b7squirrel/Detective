@@ -52,6 +52,8 @@ public class Item : ScriptableObject
 {
     public string Name;
     public string DisplayName;
+    public string setDisplayName;  //  "테니스 로컬"
+    public string itemDisplayName; //  "라켓"
     public int grade;
     public Sprite charImage;
     public Sprite equippedImage;

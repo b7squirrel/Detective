@@ -6,17 +6,23 @@ public class ItemTexts : ScriptableObject
     [Header("Item Display Names")]
     [Tooltip("Item의 Name과 매칭됩니다")]
     public ItemLocalizedName[] itemNames = new ItemLocalizedName[9];
-    
+
+    [Header("Set Display Names (영어)")]
+    public ItemLocalizedName[] setDisplayNames;   // "Tennis Local Racket" → "Tennis Local"
+
+    [Header("Item Part Display Names (영어)")]
+    public ItemLocalizedName[] itemPartNames;     // "Tennis Local Racket" → "Racket"
+
     [System.Serializable]
     public class ItemLocalizedName
     {
         [Tooltip("Item.Name (내부 식별용)")]
         public string itemInternalName;
-        
+
         [Tooltip("화면에 표시될 이름")]
         public string displayName;
     }
-    
+
     // 내부 이름으로 표시 이름 찾기
     public string GetItemDisplayName(string itemInternalName)
     {
@@ -28,7 +34,27 @@ public class ItemTexts : ScriptableObject
         Debug.LogWarning($"Item display name not found: {itemInternalName}");
         return itemInternalName;
     }
-    
+
+    public string GetSetDisplayName(string itemInternalName)
+    {
+        foreach (var item in setDisplayNames)
+        {
+            if (item != null && item.itemInternalName == itemInternalName)
+                return item.displayName;
+        }
+        return ""; // fallback: SO의 setDisplayName 사용
+    }
+
+    public string GetItemPartDisplayName(string itemInternalName)
+    {
+        foreach (var item in itemPartNames)
+        {
+            if (item != null && item.itemInternalName == itemInternalName)
+                return item.displayName;
+        }
+        return ""; // fallback: SO의 itemDisplayName 사용
+    }
+
     [Header("Item Skill Names")]
     public string[] itemSkillNames = new string[]
     {
