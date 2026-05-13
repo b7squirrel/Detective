@@ -130,7 +130,13 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 }
                 else
                 {
-                    Logger.Log("[ShopManager] IAP 구매는 실제 결제 연동이 필요합니다.");
+                    if (IAPManager.Instance == null)
+                    {
+                        Logger.LogError("[ShopManager] IAPManager가 없습니다.");
+                        return;
+                    }
+                    Logger.Log($"[ShopManager] IAP 구매 시작: {productData.ProductId}");
+                    IAPManager.Instance.BuyProduct(productData.ProductId);
                 }
                 break;
 
