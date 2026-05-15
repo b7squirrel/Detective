@@ -23,6 +23,8 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] TextAsset tutorialDuckPoolDatabase;
     [SerializeField] TextAsset tutorialItemPoolDatabase;
 
+    public static bool IsInitialized { get; private set; } = false;
+
     // 디버그 용도 뽑기
     StatManager statManager;
 
@@ -63,6 +65,8 @@ public class GachaSystem : MonoBehaviour
         StartCoroutine(InitializeGachaSystem());
     }
 
+    void OnDestroy() { IsInitialized = false; }
+
     IEnumerator InitializeGachaSystem()
     {
         // 게임 초기화 대기
@@ -78,6 +82,7 @@ public class GachaSystem : MonoBehaviour
         if (tutorialItemPoolDatabase != null)
             tutorialItemPool = new ReadCardData().GetCardsList(tutorialItemPoolDatabase);
 
+        IsInitialized = true; 
         Logger.Log("[GachaSystem] 초기화 완료");
     }
 

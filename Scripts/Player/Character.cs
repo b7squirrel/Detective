@@ -126,6 +126,11 @@ public class Character : MonoBehaviour
             return;
         }
         MaxHealth = GameManager.instance.startingDataContainer.GetLeadAttr().Hp;
+        if (MaxHealth <= 0)
+        {
+            Debug.LogError("[Character] MaxHealth = 0! startingDataContainer 초기화 실패.");
+            MaxHealth = 3000;
+        }
         DamageBonus = GameManager.instance.startingDataContainer.GetLeadAttr().Atk;
         Logger.Log("In Character, Damage Bonus = " + DamageBonus);
 

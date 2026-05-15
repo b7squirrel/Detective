@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class StartingDataContainer : MonoBehaviour
 {
+    // ✅ 추가: 항상 최신 인스턴스를 가리키는 static 참조
+    public static StartingDataContainer instance;
     OriAttribute leadAttr = new OriAttribute(0, 0);
     WeaponData leadWd;
     List<Item> itemDatas = new();
@@ -20,6 +22,18 @@ public class StartingDataContainer : MonoBehaviour
     [SerializeField] int atk = 0;
     [SerializeField] List<Item> itemDatasDebug = new();
     [SerializeField] int essectialIndexDebug;
+
+    void Awake()
+    {
+        // ✅ 기존 인스턴스가 있으면 오래된 것을 파괴하고 새것으로 교체
+        if (instance != null && instance != this)
+        {
+            Debug.Log("[StartingDataContainer] 구 인스턴스 파괴, 신규로 교체");
+            Destroy(instance.gameObject);
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);  // DontDestroy 컴포넌트 제거 후 여기서 처리
+    }
 
     public void SetLead(CardData lead, OriAttribute leadAttr)
     {
@@ -43,16 +57,6 @@ public class StartingDataContainer : MonoBehaviour
         EquipmentCard[] equipCard = cardList.GetEquipmentsCardData(lead);
         for (int i = 0; i < 4; i++)
         {
-            // ⭐ 임시 디버그
-            if (equipCard[i] != null)
-            {
-                Logger.Log($"[StartingDataContainer] 슬롯 {i}: {equipCard[i].CardData.Name} / EssentialEquip: {equipCard[i].CardData.EssentialEquip}");
-            }
-            else
-            {
-                Logger.Log($"[StartingDataContainer] 슬롯 {i}: null");
-            }
-
             if (equipCard[i] == null)
             {
                 itemDatas.Add(null);
@@ -67,7 +71,7 @@ public class StartingDataContainer : MonoBehaviour
                 essectialIndexDebug = i;
             }
         }
-        Logger.Log($"[StartingDataContainer] 최종 essentialIndex: {essectialEquipmentIndex}");
+        Debug.Log($"[StartingDataContainer] 최종 essentialIndex: {essectialEquipmentIndex}");
 
         // 세자리 수로 스킬을 구분
         skillName = lead.PassiveSkill * 100
@@ -81,8 +85,11 @@ public class StartingDataContainer : MonoBehaviour
         {
             setBonus = setBonusChecker.GetSetBonus(lead);
             setBonusGrade = setBonusChecker.GetLowestGrade(lead); // ← 추가
-            Logger.Log($"[StartingDataContainer] 세트 보너스: {(setBonus != null ? setBonus.bonusDescription : "없음")}, 등급: {setBonusGrade}");
+            Debug.Log($"[StartingDataContainer] 세트 보너스: {(setBonus != null ? setBonus.bonusDescription : "없음")}, 등급: {setBonusGrade}");
         }
+
+        // SetLead() 마지막 부분에 추가
+        Debug.Log($"[StartingDataContainer] 최종 Hp={this.leadAttr.Hp}, Atk={this.leadAttr.Atk}");
     }
     public void DestroyStartingDataContainer()
     {

@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Confirmation Button")]
     [SerializeField] GameObject confimationButton;
-    
+
     [Header("BG")]
     public GameObject darkBG;
     public GameObject lightBG;
@@ -64,7 +64,9 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         currentCamera = Camera.main;
-        startingDataContainer = FindObjectOfType<StartingDataContainer>();
+        // ✅ FindObjectOfType 대신 static instance 사용
+        startingDataContainer = StartingDataContainer.instance;
+
         stageManager = FindObjectOfType<PlayerDataManager>();
 
         GemManager = GetComponent<GemManager>();
@@ -88,7 +90,7 @@ public class GameManager : MonoBehaviour
         stickyStuffManager = GetComponent<StickyStuffManager>();
 
         loopSoundManager = GetComponent<LoopSoundManager>();
-        
+
         enemyStatCalculator = GetComponent<EnemyStatCalculator>();
 
         confimationButton.SetActive(false);
@@ -188,7 +190,7 @@ public class GameManager : MonoBehaviour
     {
         // 일단은 0.8초 후에 나오도록 함.
         yield return new WaitForSecondsRealtime(_delayToActivate);
-        confimationButton.SetActive(true);
+    confimationButton.SetActive(true);
     }
     public void ActivateConfirmationButtonWithoutDelay()
     {

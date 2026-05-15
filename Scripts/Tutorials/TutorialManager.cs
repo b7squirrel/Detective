@@ -171,6 +171,7 @@ public class TutorialManager : MonoBehaviour
         PlayerPrefs.DeleteKey("TutorialCrystalGiven");
         PlayerPrefs.DeleteKey("TutorialShopPhase");
         CurrentStep = TutorialStep.Step0_OnlyBattle;
+        PlayerPrefs.DeleteKey("TutorialMove_Shown"); 
         PlayerPrefs.Save();
 
         OnStepChanged?.Invoke(CurrentStep);

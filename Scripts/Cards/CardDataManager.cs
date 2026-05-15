@@ -45,7 +45,7 @@ public class CardData
         BindingTo = _bindingTo?.Trim() ?? "";
         StartingMember = _startingMember?.Trim() ?? "";
         DefaultItem = _defaultItem?.Trim() ?? "";
-        
+
         // 숫자 필드들 안전하게 파싱
         Grade = SafeParseInt(_Grade, "Grade");
         EvoStage = SafeParseInt(_EvoStage, "EvoStage");
@@ -55,7 +55,7 @@ public class CardData
         PassiveSkill = SafeParseInt(_passiveSkill, "PassiveSkill");
         SetName = _setName?.Trim() ?? "";
     }
-    
+
     // filedName은 디버깅을 위한 문자열
     private int SafeParseInt(string value, string fieldName)
     {
@@ -80,11 +80,11 @@ public class CardData
 public class ReadCardData
 {
     public List<CardData> cardList;
-    
+
     public List<CardData> GetCardsList(TextAsset cardDataText)
     {
         cardList = new List<CardData>();
-        
+
         try
         {
             if (cardDataText == null || string.IsNullOrEmpty(cardDataText.text))
@@ -92,33 +92,33 @@ public class ReadCardData
                 Logger.LogError("카드 데이터 파일이 비어있습니다.");
                 return cardList;
             }
-            
+
             // 크로스 플랫폼 텍스트 정규화
             string normalizedText = cardDataText.text
                 .Replace("\r\n", "\n")  // Windows → Unix
                 .Replace("\r", "\n");   // Old Mac → Unix
-            
+
             // 마지막 줄바꿈 제거
             if (normalizedText.EndsWith("\n"))
             {
                 normalizedText = normalizedText.Substring(0, normalizedText.Length - 1);
             }
-            
+
             string[] lines = normalizedText.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            
+
             for (int i = 0; i < lines.Length; i++)
             {
                 try
                 {
                     string[] row = lines[i].Split('\t');
-                    
+
                     // 최소 필요한 열 개수 확인 (14개)
                     if (row.Length < 14)
                     {
                         Logger.LogWarning($"라인 {i}: 열 개수 부족 ({row.Length}/14) - 건너뜀");
                         continue;
                     }
-                    
+
                     // 각 셀의 데이터 정리
                     for (int j = 0; j < row.Length; j++)
                     {
@@ -138,14 +138,14 @@ public class ReadCardData
                     Logger.LogError($"라인 {i} 파싱 오류: {e.Message}");
                 }
             }
-            
+
             Logger.Log($"카드 데이터 로드 완료: {cardList.Count}개");
         }
         catch (Exception e)
         {
             Logger.LogError($"카드 데이터 읽기 오류: {e.Message}");
         }
-        
+
         return cardList;
     }
 }
@@ -154,12 +154,12 @@ public class CardDataManager : MonoBehaviour
 {
     public TextAsset startingCardData;
     public List<CardData> MyCardsList;
-    public static bool IsDataLoaded {get; private set;} = false;
-    
+    public static bool IsDataLoaded { get; private set; } = false;
+
     string filePath;
     string myCards = "MyCards.txt";
     bool isInitializing = false;
-    
+
     // ⭐ 배치 처리 플래그 추가
     private bool isBatchMode = false;
     private bool needsSave = false;
@@ -168,7 +168,7 @@ public class CardDataManager : MonoBehaviour
     {
         IsDataLoaded = false;
     }
-    
+
     void Start()
     {
         InitializeDataDirectory();
@@ -177,7 +177,7 @@ public class CardDataManager : MonoBehaviour
         IsDataLoaded = true;
         Logger.Log($"[CardDataManager] 데이터 로드 완료");
     }
-    
+
     void OnApplicationQuit()
     {
         IsDataLoaded = false;
@@ -195,7 +195,7 @@ public class CardDataManager : MonoBehaviour
     public void EndBatchOperation()
     {
         isBatchMode = false;
-        
+
         if (needsSave)
         {
             SaveWithoutInitCardList();
@@ -212,19 +212,19 @@ public class CardDataManager : MonoBehaviour
     void SaveWithoutInitCardList()
     {
         if (isInitializing) return;
-        
+
         try
         {
             isInitializing = true;
-            
+
             if (MyCardsList == null)
             {
                 MyCardsList = new List<CardData>();
             }
-            
+
             string jsonData = JsonUtility.ToJson(new Serialization<CardData>(MyCardsList), true);
             File.WriteAllText(filePath, jsonData, System.Text.Encoding.UTF8);
-            
+
             Logger.Log($"[CardDataManager] 카드 데이터 저장 완료: {MyCardsList.Count}개");
         }
         catch (Exception e)
@@ -247,7 +247,7 @@ public class CardDataManager : MonoBehaviour
                 Directory.CreateDirectory(dataDir);
                 Logger.Log($"플레이어 데이터 디렉토리 생성: {dataDir}");
             }
-            
+
             filePath = Path.Combine(dataDir, myCards);
         }
         catch (Exception e)
@@ -259,7 +259,7 @@ public class CardDataManager : MonoBehaviour
     void Save()
     {
         if (isInitializing) return;
-        
+
         // ⭐ 배치 모드면 저장 예약만
         if (isBatchMode)
         {
@@ -267,10 +267,10 @@ public class CardDataManager : MonoBehaviour
             Logger.Log("[CardDataManager] 배치 모드: 저장 예약");
             return;
         }
-        
+
         // 일반 저장
         SaveWithoutInitCardList();
-        
+
         // InitCardList는 필요할 때만 외부에서 호출
         var cardListComponent = GetComponent<CardList>();
         if (cardListComponent != null)
@@ -278,7 +278,7 @@ public class CardDataManager : MonoBehaviour
             cardListComponent.InitCardList();
         }
     }
-    
+
     // ⭐ 외부에서 명시적으로 CardList 갱신
     public void RefreshCardList()
     {
@@ -290,7 +290,7 @@ public class CardDataManager : MonoBehaviour
             Logger.Log("[CardDataManager] CardList 갱신 완료");
         }
     }
-    
+
     // ⭐ 배치 모드 중 CardList에 즉시 추가
     void AddCardToCardListImmediately(CardData cardData)
     {
@@ -311,19 +311,19 @@ public class CardDataManager : MonoBehaviour
                 ResetCards();
                 return;
             }
-            
+
             string jsonData = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
-            
+
             if (string.IsNullOrEmpty(jsonData))
             {
                 Logger.LogWarning("저장 파일이 비어있습니다. 초기화합니다.");
                 ResetCards();
                 return;
             }
-            
+
             var serializedData = JsonUtility.FromJson<Serialization<CardData>>(jsonData);
             MyCardsList = serializedData?.Data ?? new List<CardData>();
-            
+
             Logger.Log($"카드 데이터 로드 완료: {MyCardsList.Count}개");
         }
         catch (Exception e)
@@ -337,45 +337,33 @@ public class CardDataManager : MonoBehaviour
     {
         try
         {
-            Logger.Log("카드 데이터 초기화");
-            
-            if (MyCardsList == null)
-                MyCardsList = new List<CardData>();
-            else
-                MyCardsList.Clear();
+            if (MyCardsList == null) MyCardsList = new List<CardData>();
+            else MyCardsList.Clear();
 
             if (startingCardData != null)
             {
-                Logger.Log("시작 카드를 로드합니다");
                 List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
 
                 if (startingCards.Count > 0)
                 {
-                    int targetLevel = startingCards[0].Level; // txt의 Level 값을 목표로 저장
-                    startingCards[0].Level = 1;              // 추가 전 Level을 1로 초기화
+                    int targetLevel = startingCards[0].Level;
+                    startingCards[0].Level = 1;
 
-                    AddNewCardToMyCardsList(startingCards[0]);
+                    // ✅ 수정: StartingMember를 먼저 설정한 뒤 추가
                     startingCards[0].StartingMember = StartingMember.Zero.ToString();
+                    AddNewCardToMyCardsList(startingCards[0]);
 
                     StatManager statManager = FindObjectOfType<StatManager>();
                     if (statManager != null)
                     {
-                        int levelsToApply = targetLevel - 1; // 목표 레벨까지
+                        int levelsToApply = targetLevel - 1;
                         for (int j = 0; j < levelsToApply; j++)
-                        {
                             statManager.LevelUp(startingCards[0]);
-                        }
                     }
 
-                    var gachaSys = FindObjectOfType<GachaSystem>();
-                    if (gachaSys != null)
-                    {
-                        gachaSys.AddDefaultEquip(startingCards[0]);
-                        gachaSys.ImmediateSaveEquipmentData();
-                    }
+                    // ✅ 수정: GachaSystem 호출 완전 제거 (GameInitializer로 이동)
                 }
             }
-
             Save();
         }
         catch (Exception e)
@@ -397,7 +385,7 @@ public class CardDataManager : MonoBehaviour
     public void RemoveCardFromMyCardList(CardData cardToRemove)
     {
         if (cardToRemove == null || MyCardsList == null) return;
-        
+
         int mID = cardToRemove.ID;
         int indexToRemove = -1;
 
@@ -410,7 +398,7 @@ public class CardDataManager : MonoBehaviour
             }
         }
 
-        if(indexToRemove != -1)
+        if (indexToRemove != -1)
         {
             MyCardsList.RemoveAt(indexToRemove);
             Save();
@@ -421,22 +409,22 @@ public class CardDataManager : MonoBehaviour
     public void AddNewCardToMyCardsList(CardData _cardData)
     {
         if (_cardData == null) return;
-        
+
         if (MyCardsList == null)
             MyCardsList = new List<CardData>();
-        
+
         _cardData.ID = GenerateRandomId();
         AddRandomSkill(_cardData);
-        
+
         MyCardsList.Add(_cardData);
         Logger.Log($"[CardDataManager] 카드 추가: {_cardData.Name} (ID: {_cardData.ID})");
-        
+
         // ⭐ 배치 모드 중에도 CardList에 즉시 추가
         if (isBatchMode)
         {
             AddCardToCardListImmediately(_cardData);
         }
-        
+
         Save();
     }
 
@@ -449,16 +437,16 @@ public class CardDataManager : MonoBehaviour
 
         _cardData.ID = GenerateRandomId();
         MyCardsList.Add(_cardData);
-        
+
         // ⭐ 배치 모드 중에도 CardList에 즉시 추가
         if (isBatchMode)
         {
             AddCardToCardListImmediately(_cardData);
         }
-        
+
         Save();
     }
-    
+
     public void AddUpgradedCardToMyCardList(CardData _cardData)
     {
         if (_cardData == null) return;
@@ -469,31 +457,31 @@ public class CardDataManager : MonoBehaviour
         MyCardsList.Add(_cardData);
         Save();
     }
-    
+
     void AddRandomSkill(CardData _cardData)
     {
         int skill = UnityEngine.Random.Range(1, StaticValues.MaxSkillNumbers + 1);
         _cardData.PassiveSkill = skill;
     }
-    
+
     public void UpgradeCardData(CardData _cardData, int _level, int _hp, int _atk)
     {
         if (_cardData == null) return;
-        
+
         _cardData.Level = _level;
         _cardData.Hp = _hp;
         _cardData.Atk = _atk;
         Save();
     }
-    
+
     public void UpdateStartingmemberOfCard(CardData cardToUpdate, string orderIndex)
     {
         if (cardToUpdate == null) return;
-        
+
         cardToUpdate.StartingMember = orderIndex ?? "";
         Save();
     }
-    
+
     public void DeleteData()
     {
         ResetCards();
@@ -504,12 +492,12 @@ public class CardDataManager : MonoBehaviour
         int randomId;
         int attempts = 0;
         const int maxAttempts = 1000;
-        
+
         do
         {
             randomId = UnityEngine.Random.Range(1, 10000);
             attempts++;
-            
+
             if (attempts > maxAttempts)
             {
                 Logger.LogError("고유 ID 생성 실패. 시스템 시간 기반 ID 사용.");
@@ -523,7 +511,7 @@ public class CardDataManager : MonoBehaviour
     bool ItemIdExists(int id)
     {
         if (MyCardsList == null) return false;
-        
+
         for (int i = 0; i < MyCardsList.Count; i++)
         {
             if (MyCardsList[i]?.ID == id)

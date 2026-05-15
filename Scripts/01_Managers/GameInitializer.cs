@@ -17,10 +17,10 @@ public class GameInitializer : MonoBehaviour
     [Header("초기화할 매니저들")]
     [Tooltip("ScriptableObject 데이터 관리")]
     [SerializeField] CardsDictionary cardsDictionary;
-    
+
     [Tooltip("상품 데이터 테이블")]
     [SerializeField] ProductDataTable productDataTable;
-    
+
     [Tooltip("플레이어 진행 데이터 관리")]
     [SerializeField] PlayerDataManager playerDataManager;
 
@@ -32,20 +32,23 @@ public class GameInitializer : MonoBehaviour
 
     [Tooltip("플레이어 카드 데이터 관리")]
     [SerializeField] CardDataManager cardDataManager;
-    
+
     [Tooltip("장비 장착 데이터 관리")]
     [SerializeField] EquipmentDataManager equipmentDataManager;
-    
+
     [Header("초기화 상태")]
     [SerializeField] private bool showDebugLogs = true;
-    
+
+    // ✅ 추가: 중복 실행 방지
+    private static bool isRunning = false;
+
     /// <summary>
     /// 모든 초기화가 완료되었는지 여부
     /// 다른 스크립트에서 이 값을 체크하여 초기화 완료를 확인할 수 있음
     /// </summary>
     public static bool IsInitialized { get; private set; } = false;
     public static event System.Action OnGameInitialized; // UI등이 실행되도록
-    
+
     /// <summary>
     /// 초기화 진행률 (0.0 ~ 1.0)
     /// </summary>
@@ -61,10 +64,19 @@ public class GameInitializer : MonoBehaviour
     {
         // 씬 전환 시에도 유지 (선택사항)
         // DontDestroyOnLoad(gameObject);
-        
+        // ✅ 이미 실행 중이면 이 인스턴스는 즉시 파괴
+        if (isRunning)
+        {
+            Debug.LogWarning("[GameInitializer] 중복 인스턴스 감지 - 파괴합니다.");
+            Destroy(gameObject);
+            return;
+        }
+
+        isRunning = true;
+
         StartCoroutine(InitializeGame());
     }
-    
+
     void OnApplicationQuit()
     {
         IsInitialized = false;
@@ -168,7 +180,7 @@ public class GameInitializer : MonoBehaviour
         Debug.Log($"[GameInitializer] ✅ 6 CardDataManager OK (waited {t6:F2}s, loaded={CardDataManager.IsDataLoaded})");
         Log("v CardDataManager 로드 완료");
         InitializationProgress = 0.66f;
-        
+
         // 7단계: EquipmentDataManager 초기화 대기 (Start에서 실행됨)
         Log("7/7: EquipmentDataManager 초기화 대기...");
         float t7 = 0f;
@@ -180,7 +192,7 @@ public class GameInitializer : MonoBehaviour
         Debug.Log($"[GameInitializer] ✅ 7 EquipmentDataManager OK (waited {t7:F2}s, loaded={EquipmentDataManager.IsDataLoaded})");
         Log("v EquipmentDataManager 로드 완료");
         InitializationProgress = 0.83f;
-        
+
         // 8단계: CardList 초기화 확인 (EquipmentDataManager.Start에서 실행됨)
         Log("8/8: CardList 초기화 확인...");
         // CardList는 EquipmentDataManager.Start()에서 InitCardList()가 호출되므로
@@ -194,6 +206,34 @@ public class GameInitializer : MonoBehaviour
         Debug.Log("[GameInitializer] ✅ IsInitialized = true");
         OnGameInitialized?.Invoke();
         Debug.Log("[GameInitializer] ✅ OnGameInitialized 완료");
+
+        // ✅ 추가: 첫 설치 감지 및 장비 초기화
+        // 모든 시스템이 완전히 준비된 후 실행
+        yield return null; // GachaSystem.InitializeGachaSystem() 코루틴이 진행되도록 한 프레임 대기
+        yield return new WaitUntil(() => GachaSystem.IsInitialized);
+
+        EquipmentDataManager edm = FindObjectOfType<EquipmentDataManager>();
+        CardDataManager cdm = FindObjectOfType<CardDataManager>();
+        GachaSystem gachaSys = FindObjectOfType<GachaSystem>();
+
+        // 장비 데이터가 없으면 첫 설치로 판단
+        if (edm != null && cdm != null && gachaSys != null
+            && edm.GetMyEquipmentsList().Count == 0)
+        {
+            CardData leadCard = cdm.GetMyCardList()
+                .Find(x => x.StartingMember == StartingMember.Zero.ToString());
+
+            if (leadCard != null)
+            {
+                gachaSys.AddDefaultEquip(leadCard);
+                gachaSys.ImmediateSaveEquipmentData();
+                Debug.Log("[GameInitializer] ✅ 첫 설치 장비 초기화 완료");
+            }
+            else
+            {
+                Debug.LogError("[GameInitializer] ❌ 첫 설치인데 리드 카드를 찾을 수 없음!");
+            }
+        }
 
         // ⭐ 추가: 모든 초기화 완료 후 주간 리셋 체크
         // ⭐ 1. 주간 팝업 먼저
@@ -227,7 +267,7 @@ public class GameInitializer : MonoBehaviour
     void CheckAndShowDailyReward()
     {
         PlayerDataManager pdm = PlayerDataManager.Instance;
- 
+
         if (pdm == null) return;
 
         // 오늘 출석 보상을 아직 안 받았으면
@@ -245,6 +285,15 @@ public class GameInitializer : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        // 이 인스턴스가 실제로 실행 중이었을 때만 플래그 해제
+        isRunning = false;
+        IsInitialized = false;
+        InitializationProgress = 0f;
+        hasShownDailyRewardThisSession = false;
+    }
+
     void Log(string message)
     {
         if (showDebugLogs)
@@ -252,21 +301,21 @@ public class GameInitializer : MonoBehaviour
             Logger.Log($"[GameInitializer] {message} (Frame: {Time.frameCount})");
         }
     }
-    
+
     /// <summary>
     /// 에디터에서 초기화 상태 확인용
     /// </summary>
     void OnGUI()
     {
         if (!showDebugLogs) return;
-        
+
         GUIStyle style = new GUIStyle();
         style.fontSize = 20;
         style.normal.textColor = IsInitialized ? Color.green : Color.yellow;
-        
-        GUI.Label(new Rect(10, 10, 400, 30), 
+
+        GUI.Label(new Rect(10, 10, 400, 30),
             $"Game Initialization: {InitializationProgress * 100:F0}%", style);
-        
+
         if (IsInitialized)
         {
             GUI.Label(new Rect(10, 40, 400, 30), "✓ Ready!", style);

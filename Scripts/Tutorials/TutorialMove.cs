@@ -10,6 +10,17 @@ public class TutorialMove : MonoBehaviour
 
     void OnEnable()
     {
+        // ✅ 추가: 이미 보여준 적 있으면 즉시 파괴
+        if (PlayerPrefs.GetInt("TutorialMove_Shown", 0) == 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // ✅ 추가: 즉시 저장 (게임이 비정상 종료되어도 기록 보장)
+        PlayerPrefs.SetInt("TutorialMove_Shown", 1);
+        PlayerPrefs.Save();
+
         SetObject();
         StartCoroutine(ShowInstructionSequence());
     }
