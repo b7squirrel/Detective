@@ -36,6 +36,7 @@ public class Player : MonoBehaviour, IBouncable
     float iceSlideDecay;
     Vector2 iceVelocity;
     float iceAcceleration; // 현재 가속도
+    Vector2 windForce;
 
     public bool ShouldBeStill { get; set; } // 메뉴, 이벤트 등 플레이어가 움직이면 안되는 상황
 
@@ -125,7 +126,8 @@ public class Player : MonoBehaviour, IBouncable
         else  // ← 이게 없으면 아이스 모드가 아닐 때 이동 코드가 실행되지 않습니다
         {
             Vector2 nextVec = InputVec * character.MoveSpeed * slowDownFactor * Time.fixedDeltaTime;
-            rb.MovePosition(rb.position + nextVec);
+                nextVec += windForce * Time.fixedDeltaTime; // 바람 힘 추가
+                rb.MovePosition(rb.position + nextVec);
         }
     }
     void Flip()
@@ -182,6 +184,10 @@ public class Player : MonoBehaviour, IBouncable
     public void ResetSlowDownFactor()
     {
         slowDownFactor = 1f;
+    }
+    public void SetWindForce(Vector2 force)
+    {
+        windForce = force;
     }
 
     public void EnableIceMode(bool enabled, float decay)
