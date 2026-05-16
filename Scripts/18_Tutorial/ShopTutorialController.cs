@@ -48,6 +48,7 @@ public class ShopTutorialController : MonoBehaviour
 
     const string CRYSTAL_GIVEN_KEY = "TutorialCrystalGiven";
     const string SHOP_PHASE_KEY = "TutorialShopPhase";
+    Coroutine _activeScrollCoroutine = null;
 
     // ─────────────────────────────────────────
     // 초기화
@@ -138,8 +139,10 @@ public class ShopTutorialController : MonoBehaviour
                 break;
 
             case ShopTutorialPhase.HighlightItemCard:
-                // 오리카드 이미 뽑음 → 아이템카드 하이라이트
-                StartCoroutine(ScrollThenHighlightItem());
+                if (_activeScrollCoroutine == null) // 이미 진행 중이면 중복 시작 안 함
+                    StartCoroutine(ScrollThenHighlightItem());
+                else
+                    Debug.Log("[ShopTutorial] OnShopTabEntered: 이미 하이라이트 진행 중");
                 break;
 
             case ShopTutorialPhase.Done:
@@ -170,12 +173,32 @@ public class ShopTutorialController : MonoBehaviour
 
     IEnumerator ScrollThenHighlightItem()
     {
-        yield return new WaitForSeconds(1.0f);
-        yield return StartCoroutine(ScrollToPosition(scrollToDuckCardPosY));
+        // 중복 실행 방지: 이미 진행 중이면 중단
+        if (_activeScrollCoroutine != null)
+        {
+            Debug.Log("[ShopTutorial] ScrollThenHighlightItem 이미 진행 중 - 스킵");
+            yield break;
+        }
+        _activeScrollCoroutine = StartCoroutine(ScrollThenHighlightItemInternal());
+        yield return _activeScrollCoroutine;
+        _activeScrollCoroutine = null;
+    }
 
-        // ✅ 하이라이트 표시 후 스크롤 잠금
+    IEnumerator ScrollThenHighlightItemInternal()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        // 대기 후 step이 여전히 유효한지 확인
+        if (TutorialManager.instance?.CurrentStep != TutorialStep.Step1_ShopUnlocked)
+        {
+            Debug.LogWarning("[ShopTutorial] 대기 중 Step이 변경됨! 아이템카드 하이라이트 취소");
+            yield break;
+        }
+
+        yield return StartCoroutine(ScrollToPosition(scrollToDuckCardPosY));
         LockScroll();
         tutorialHighlight.HighlightUI(itemCardButton, fg);
+        Debug.Log("[ShopTutorial] ✅ 아이템카드 하이라이트 표시 완료");
     }
 
     IEnumerator ScrollToPosition(float targetPosY)
@@ -292,13 +315,12 @@ public class ShopTutorialController : MonoBehaviour
 
     void HideAll()
     {
+        _activeScrollCoroutine = null; // 레퍼런스 초기화
         StopAllCoroutines();
         tutorialHighlight?.Hide();
         if (fg != null) fg.SetActive(false);
-
-        // ✅ 튜토리얼 종료 시 스크롤 복구
         UnlockScroll();
-
         phase = ShopTutorialPhase.None;
+        Debug.Log("[ShopTutorial] HideAll 호출됨 - 호출 스택 확인 필요");
     }
 }
