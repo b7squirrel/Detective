@@ -14,6 +14,7 @@ public class EncyclopediaSetEntry : MonoBehaviour
     [Header("카드 배경 스프라이트")]
     [SerializeField] Sprite acquiredCardSprite;
     [SerializeField] Sprite unacquiredCardSprite;
+    [SerializeField] Sprite emptySlotSprite; 
 
     [Header("Set Entry 배경")]
     [SerializeField] Image entryBackground;
@@ -95,8 +96,9 @@ public class EncyclopediaSetEntry : MonoBehaviour
                 }
                 else
                 {
-                    slotItemImages[i].sprite = null;
-                    slotItemImages[i].color = ITEM_EMPTY;
+                    // ★ 데이터 없음 — 가로줄 placeholder 표시
+                    slotItemImages[i].sprite = emptySlotSprite;
+                    slotItemImages[i].color = new Color(1f, 1f, 1f, 0.5f); // 흐리게
                 }
             }
 
