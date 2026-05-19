@@ -32,10 +32,19 @@ public class Player : MonoBehaviour, IBouncable
     // 점액 위에 있을 때 속도가 느려지게 하기 위한 인자. 
     // 속도 업그레이드가 되어도 여전히 일정 비율로 느려지도록 직접 speed를 건드리지 않고 slowDownFactor로 속도 제어
     float slowDownFactor;
+
     bool isIceMode;
     float iceSlideDecay;
     Vector2 iceVelocity;
     float iceAcceleration; // 현재 가속도
+
+    [Header("아이스 사운드")]
+    [SerializeField] AudioClip iceSlideSound;
+    [SerializeField][Range(0f, 1f)] float iceSlideSoundVolume = 0.3f;
+
+    [Header("아이스 트레일")]
+    [SerializeField] TrailRenderer iceTrail;
+
     Vector2 windForce;
 
     public bool ShouldBeStill { get; set; } // 메뉴, 이벤트 등 플레이어가 움직이면 안되는 상황
@@ -66,6 +75,7 @@ public class Player : MonoBehaviour, IBouncable
 
         Flip();
     }
+
     void FixedUpdate()
     {
         if (ShouldBeStill ||
@@ -96,7 +106,7 @@ public class Player : MonoBehaviour, IBouncable
 
 #if UNITY_EDITOR
 #elif UNITY_ANDROID
-    InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
+        InputVec = new Vector2(joy.Horizontal, joy.Vertical).normalized;
 #endif
 
         if (isIceMode)
@@ -122,14 +132,26 @@ public class Player : MonoBehaviour, IBouncable
 
             iceVelocity *= iceSlideDecay;
             rb.MovePosition(rb.position + iceVelocity);
+
+            if (iceTrail != null)
+                iceTrail.emitting = iceVelocity.magnitude > 0.001f;
+
+            // 미끄러지기 시작하는 순간 한 번만 재생
+            // 0.5f 쿨다운으로 짧은 시간 내 중복 재생 방지
+            if (iceVelocity.magnitude > 0.001f && iceAcceleration == 1f)
+            {
+                if (iceSlideSound != null)
+                    SoundManager.instance.PlaySoundWith(iceSlideSound, iceSlideSoundVolume, false, 0.5f);
+            }
         }
-        else  // ← 이게 없으면 아이스 모드가 아닐 때 이동 코드가 실행되지 않습니다
+        else // 아이스 모드가 아닐 때 일반 이동
         {
             Vector2 nextVec = InputVec * character.MoveSpeed * slowDownFactor * Time.fixedDeltaTime;
-                nextVec += windForce * Time.fixedDeltaTime; // 바람 힘 추가
-                rb.MovePosition(rb.position + nextVec);
+            nextVec += windForce * Time.fixedDeltaTime; // 바람 힘 추가
+            rb.MovePosition(rb.position + nextVec);
         }
     }
+
     void Flip()
     {
         if (GameManager.instance.IsPaused) return;
@@ -142,13 +164,9 @@ public class Player : MonoBehaviour, IBouncable
         }
 
         if (FacingDir < 0)
-        {
             weaponContainerAnim.FacingRight = false;
-        }
         else
-        {
             weaponContainerAnim.FacingRight = true;
-        }
     }
 
     public void GetBounced(float bouncingForce, Vector2 direction, float bouncingTime)
@@ -156,6 +174,7 @@ public class Player : MonoBehaviour, IBouncable
         this.bouncingForce = bouncingForce * direction;
         bouncingCoroutine = StartCoroutine(GetBouncedCo(bouncingTime));
     }
+
     IEnumerator GetBouncedCo(float bouncingTime)
     {
         isBouncing = true;
@@ -174,8 +193,10 @@ public class Player : MonoBehaviour, IBouncable
     {
         if (isIceMode)
             return iceVelocity.magnitude > 0.001f; // 실제 이동 속도 기준
+
         if (windForce.magnitude > 0.1f) // 바람에 밀리는 중이면 이동 중으로 판단
             return true;
+
         return InputVec != Vector2.zero;
     }
 
@@ -183,10 +204,12 @@ public class Player : MonoBehaviour, IBouncable
     {
         slowDownFactor = factor;
     }
+
     public void ResetSlowDownFactor()
     {
         slowDownFactor = 1f;
     }
+
     public void SetWindForce(Vector2 force)
     {
         windForce = force;
@@ -198,6 +221,10 @@ public class Player : MonoBehaviour, IBouncable
         iceSlideDecay = decay;
         iceVelocity = Vector2.zero;
         iceAcceleration = 0f;
+
+        // 아이스 모드일 때만 트레일 활성화
+        if (iceTrail != null)
+            iceTrail.emitting = enabled;
     }
 
     #region OnDead Event
