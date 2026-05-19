@@ -9,6 +9,7 @@ public class StageGroundEffectManager : MonoBehaviour
     LavaVolcanoSpawner lavaVolcanoSpawner;
     EarthquakeManager earthquakeManager;
     FireballManager fireballManager;
+    SnowManager snowManager; 
 
     Player player;
     Character character;
@@ -21,6 +22,7 @@ public class StageGroundEffectManager : MonoBehaviour
         desertWindManager = GetComponent<DesertWindManager>();
         earthquakeManager = GetComponent<EarthquakeManager>(); 
         fireballManager = GetComponent<FireballManager>();
+        snowManager = GetComponent<SnowManager>();
 
         IsIceStage = (groundType == StageGroundType.BlueIce);
 
@@ -35,6 +37,7 @@ public class StageGroundEffectManager : MonoBehaviour
                 break;
             case StageGroundType.BlueIce:
                 player.EnableIceMode(true, iceSlideDecay);
+                snowManager.StartSnow();
                 break;
             case StageGroundType.GreyStone: // 추가
                 earthquakeManager.StartEarthquake();
