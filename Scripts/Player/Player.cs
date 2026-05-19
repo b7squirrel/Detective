@@ -174,6 +174,8 @@ public class Player : MonoBehaviour, IBouncable
     {
         if (isIceMode)
             return iceVelocity.magnitude > 0.001f; // 실제 이동 속도 기준
+        if (windForce.magnitude > 0.1f) // 바람에 밀리는 중이면 이동 중으로 판단
+            return true;
         return InputVec != Vector2.zero;
     }
 
