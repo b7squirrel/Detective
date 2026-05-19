@@ -5177,8 +5177,9 @@ GameObject:
   - component: {fileID: 1203505533}
   - component: {fileID: 1203505535}
   - component: {fileID: 1203505536}
-  - component: {fileID: 1203505537}
   - component: {fileID: 1203505538}
+  - component: {fileID: 1203505539}
+  - component: {fileID: 1203505540}
   m_Layer: 0
   m_Name: ---WORLD---
   m_TagString: Untagged
@@ -6613,21 +6614,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desertSlowFactor: 0.6
   iceSlideDecay: 0.97
---- !u!114 &1203505537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203505524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49add9129b4e74298a1b54d12b84ccd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volcanoPrefab: {fileID: 0}
-  spawnInterval: 3
-  spawnCountPerInterval: 2
 --- !u!114 &1203505538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6649,6 +6635,46 @@ MonoBehaviour:
   sandDustParticle: {fileID: 183132974}
   windAmbientSound: {fileID: 8300000, guid: 7d822e1d0a1bb4c4a9ac2316bbc5017c, type: 3}
   windSoundVolume: 0.4
+--- !u!114 &1203505539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203505524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4330c5d55d0e74899b6c6ea80e00eff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minInterval: 5
+  maxInterval: 10
+  earthquakeDuration: 2
+  warningTime: 0.8
+  minShakeRange: 0.4
+  maxShakeRange: 0.6
+  slowFactorDuringQuake: 0.3
+  rumbleSound: {fileID: 8300000, guid: 224aec353006ed44382a28fbc655b581, type: 3}
+  rumbleVolume: 0.814
+--- !u!114 &1203505540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203505524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31af7cc52a45f498e999b351b4cb631c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minInterval: 3
+  maxInterval: 6
+  minCount: 3
+  maxCount: 5
+  warningDuration: 1.5
+  indicatorPrefab: {fileID: 1210335645790477703, guid: 3dab61f518a7a4e47a662cbae450a672, type: 3}
+  fireballPrefab: {fileID: 6069979452437651223, guid: 0abe34a9f48524d878fbfe7c5ccca7b0, type: 3}
 --- !u!1001 &1834807250
 PrefabInstance:
   m_ObjectHideFlags: 0

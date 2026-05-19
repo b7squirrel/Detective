@@ -6,17 +6,21 @@ public class StageGroundEffectManager : MonoBehaviour
     [SerializeField] float iceSlideDecay = 0.92f; // 1에 가까울수록 더 많이 미끄러짐
     public static bool IsIceStage { get; private set; }
     DesertWindManager desertWindManager;
+    LavaVolcanoSpawner lavaVolcanoSpawner;
+    EarthquakeManager earthquakeManager;
+    FireballManager fireballManager;
 
     Player player;
     Character character;
-    LavaVolcanoSpawner lavaVolcanoSpawner;
 
     public void Init(StageGroundType groundType)
     {
         player = FindObjectOfType<Player>();
         character = FindObjectOfType<Character>();
         lavaVolcanoSpawner = GetComponent<LavaVolcanoSpawner>();
-        desertWindManager = GetComponent<DesertWindManager>(); // 추가
+        desertWindManager = GetComponent<DesertWindManager>();
+        earthquakeManager = GetComponent<EarthquakeManager>(); 
+        fireballManager = GetComponent<FireballManager>();
 
         IsIceStage = (groundType == StageGroundType.BlueIce);
 
@@ -32,8 +36,11 @@ public class StageGroundEffectManager : MonoBehaviour
             case StageGroundType.BlueIce:
                 player.EnableIceMode(true, iceSlideDecay);
                 break;
+            case StageGroundType.GreyStone: // 추가
+                earthquakeManager.StartEarthquake();
+                break;
             case StageGroundType.GreyLava:
-                lavaVolcanoSpawner.StartSpawning();
+                fireballManager.StartSpawning();
                 break;
             default:
                 break;

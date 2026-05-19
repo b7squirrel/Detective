@@ -4,7 +4,7 @@ public class CameraShake : MonoBehaviour
 {
     public static CameraShake instance;
     [SerializeField] Camera mainCamera;
-    [SerializeField][Range(.01f, 2f)] float shakeRange = .05f;
+    [Range(.01f, 2f)] public float shakeRange = .05f;
     [SerializeField][Range(.1f, 1f)] float duration = .5f;
 
     Vector3 originalCameraPos;
