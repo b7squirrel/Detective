@@ -24,6 +24,8 @@ public class EarthquakeManager : MonoBehaviour
     [SerializeField] AudioClip rumbleSound;
     [SerializeField][Range(0f, 1f)] float rumbleVolume = 0.7f;
 
+    [SerializeField] DebrisManager debrisManager;
+
     Player player;
     Coroutine earthquakeCoroutine;
 
@@ -73,6 +75,7 @@ public class EarthquakeManager : MonoBehaviour
 
         // 속도 감소
         player?.SetSlowDownFactor(slowFactorDuringQuake);
+        debrisManager?.StartDebris();
 
         // 카메라 쉐이크
         float elapsed = 0f;
@@ -85,6 +88,8 @@ public class EarthquakeManager : MonoBehaviour
             }
             yield return null;
         }
+
+        debrisManager?.StopDebris(); 
 
         // 지진 종료
         if (rumbleSound != null)
