@@ -226,7 +226,12 @@ public class GameInitializer : MonoBehaviour
             if (leadCard != null)
             {
                 gachaSys.AddDefaultEquip(leadCard);
-                gachaSys.ImmediateSaveEquipmentData();
+
+                // ✅ 추가: 첫 설치 장비 설정 완료 후 CardSlot 디스플레이 갱신
+                // InitSlots()가 AddDefaultEquip()보다 먼저 실행되므로
+                // 슬롯들이 장비 없이 렌더링된 상태 → 강제로 재렌더링
+                CardSlotManager.instance?.UpdateAllCardSlotDisplay();
+
                 Debug.Log("[GameInitializer] ✅ 첫 설치 장비 초기화 완료");
             }
             else
