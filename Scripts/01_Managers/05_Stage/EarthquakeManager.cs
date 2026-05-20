@@ -19,6 +19,7 @@ public class EarthquakeManager : MonoBehaviour
 
     [Header("속도 감소")]
     [SerializeField] float slowFactorDuringQuake = 0.3f; // 지진 중 이동속도 배율
+    public static float EnemySpeedMultiplier { get; private set; } = 1f;
 
     [Header("사운드")]
     [SerializeField] AudioClip rumbleSound;
@@ -71,17 +72,15 @@ public class EarthquakeManager : MonoBehaviour
 
     IEnumerator DoEarthquake()
     {
-        // 사운드 먼저 재생 (지진 예고)
         if (rumbleSound != null)
             SoundManager.instance.Play(rumbleSound);
 
         yield return new WaitForSeconds(warningTime);
 
-        // 속도 감소
         player?.SetSlowDownFactor(slowFactorDuringQuake);
+        EnemySpeedMultiplier = slowFactorDuringQuake; // 추가
         debrisManager?.StartDebris();
 
-        // 카메라 쉐이크
         float elapsed = 0f;
         while (elapsed < earthquakeDuration)
         {
@@ -93,9 +92,9 @@ public class EarthquakeManager : MonoBehaviour
             yield return null;
         }
 
-        debrisManager?.StopDebris(); 
+        debrisManager?.StopDebris();
+        EnemySpeedMultiplier = 1f; // 추가 — 지진 종료 시 복구
 
-        // 지진 종료
         // if (rumbleSound != null)
         //     SoundManager.instance.StopLoop(rumbleSound);
 

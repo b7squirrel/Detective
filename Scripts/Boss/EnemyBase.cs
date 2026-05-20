@@ -547,7 +547,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
             rb.velocity = currentSpeed * GroupDir;
             return;
         }
-        Vector2 nextVec = currentSpeed * Time.fixedDeltaTime * dirVec.normalized;
+        Vector2 nextVec = currentSpeed * EarthquakeManager.EnemySpeedMultiplier
+    * Time.fixedDeltaTime * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
