@@ -11516,12 +11516,14 @@ MonoBehaviour:
   minInterval: 5
   maxInterval: 10
   earthquakeDuration: 2
-  warningTime: 0.8
+  warningTime: 0.3
   minShakeRange: 0.4
   maxShakeRange: 0.6
   slowFactorDuringQuake: 0.3
   rumbleSound: {fileID: 8300000, guid: 224aec353006ed44382a28fbc655b581, type: 3}
   rumbleVolume: 0.814
+  earthquakeShakeRange: 0.3
+  earthquakeShakeDuration: 0.5
   debrisManager: {fileID: 1203505541}
 --- !u!114 &1203505540
 MonoBehaviour:

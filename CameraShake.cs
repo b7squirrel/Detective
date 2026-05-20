@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CameraShake : MonoBehaviour
@@ -32,10 +33,33 @@ public class CameraShake : MonoBehaviour
         cameraPos.y += cameraPosY;
         mainCamera.transform.position = cameraPos;
     }
+
+    public void Shake(float customRange, float customDuration)
+    {
+        if (isShaking) return;
+        originalCameraPos = mainCamera.transform.position;
+
+        // 임시로 range와 duration 교체
+        float originalRange = shakeRange;
+        float originalDuration = duration;
+
+        shakeRange = customRange;
+
+        InvokeRepeating("StartShake", 0f, .005f);
+        Invoke("StopShake", customDuration);
+
+        // 원래 값 복구는 StopShake 이후에 해야 하므로 코루틴으로 처리
+        StartCoroutine(RestoreShakeValuesCo(originalRange, customDuration));
+    }
+    IEnumerator RestoreShakeValuesCo(float originalRange, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        shakeRange = originalRange;
+    }
     void StopShake()
     {
         CancelInvoke("StartShake");
         mainCamera.transform.position = originalCameraPos;
-        isShaking=false;
+        isShaking = false;
     }
 }

@@ -24,6 +24,10 @@ public class EarthquakeManager : MonoBehaviour
     [SerializeField] AudioClip rumbleSound;
     [SerializeField][Range(0f, 1f)] float rumbleVolume = 0.7f;
 
+    [Header("지진 카메라 쉐이크")]
+    [SerializeField] float earthquakeShakeRange = 0.3f;
+    [SerializeField] float earthquakeShakeDuration = 0.5f;
+
     [SerializeField] DebrisManager debrisManager;
 
     Player player;
@@ -69,7 +73,7 @@ public class EarthquakeManager : MonoBehaviour
     {
         // 사운드 먼저 재생 (지진 예고)
         if (rumbleSound != null)
-            SoundManager.instance.PlayLoop(rumbleSound, rumbleVolume);
+            SoundManager.instance.Play(rumbleSound);
 
         yield return new WaitForSeconds(warningTime);
 
@@ -83,7 +87,7 @@ public class EarthquakeManager : MonoBehaviour
         {
             if (!GameManager.instance.IsPaused)
             {
-                CameraShake.instance.Shake();
+                CameraShake.instance.Shake(earthquakeShakeRange, earthquakeShakeDuration);
                 elapsed += Time.deltaTime;
             }
             yield return null;
@@ -92,8 +96,8 @@ public class EarthquakeManager : MonoBehaviour
         debrisManager?.StopDebris(); 
 
         // 지진 종료
-        if (rumbleSound != null)
-            SoundManager.instance.StopLoop(rumbleSound);
+        // if (rumbleSound != null)
+        //     SoundManager.instance.StopLoop(rumbleSound);
 
         player?.ResetSlowDownFactor();
     }
