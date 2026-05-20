@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class StorePanelManager : MonoBehaviour
 {
-    CardSlotManager cardSlotManager;
-    ScrollRect scrollRect;
+    [SerializeField] CardSlotManager cardSlotManager;
+    [SerializeField] ScrollRect scrollRect;
     void OnEnable()
     {
         if(cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();

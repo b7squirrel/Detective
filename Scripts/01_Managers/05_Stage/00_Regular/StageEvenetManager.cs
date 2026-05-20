@@ -108,14 +108,25 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
     IEnumerator TriggerEvent(float _duration, bool _forceSpawn)
     {
         isWaiting = true;
-        yield return new WaitForSeconds(_duration);
+
+        // ⭐ 수정: 시간정지 중에는 타이머를 멈춤
+        float remaining = _duration;
+        while (remaining > 0f)
+        {
+            if (!onStopWatchEffect) // 시간정지 중엔 카운트 안 함
+            {
+                remaining -= Time.deltaTime;
+            }
+            yield return null;
+        }
 
         if (GameManager.instance.IsPlayerDead == false)
             isWaiting = false;
 
-        if (onStopWatchEffect) yield break; // 스톱위치가 작동 중이면 이벤트 홀드
+        // ⭐ yield break 제거 - 타이머 자체가 이미 시간정지를 반영했으므로 불필요
+        // if (onStopWatchEffect) yield break; // 스톱위치가 작동 중이면 이벤트 홀드
 
-        bool isSubBoss = stageEvents[eventIndexer].eventType == StageEventType.SpawnSubBoss ? true : false;
+        bool isSubBoss = stageEvents[eventIndexer].eventType == StageEventType.SpawnSubBoss;
         GameManager.instance.progressionBar.UpdateProgressBar(isSubBoss);
 
         switch (stageEvents[eventIndexer].eventType)
@@ -152,7 +163,6 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         forceSpawnIndex--;
         if (forceSpawnIndex <= 0) forceSpawn = false;
 
-        // ???源?
         SendStageEventIndex(eventIndexer);
     }
 

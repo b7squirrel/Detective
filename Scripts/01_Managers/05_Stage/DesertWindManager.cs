@@ -38,6 +38,12 @@ public class DesertWindManager : MonoBehaviour
         windCoroutine = StartCoroutine(WindCo());
         StartCoroutine(WindTransitionCo());
 
+        // ✅ 파티클 재생 추가
+        if (windParticle != null && !windParticle.isPlaying)
+            windParticle.Play();
+        if (sandDustParticle != null && !sandDustParticle.isPlaying)
+            sandDustParticle.Play();
+
         // 바람 소리 루프 재생
         if (windAmbientSound != null)
             SoundManager.instance.PlayLoop(windAmbientSound, windSoundVolume);
@@ -52,7 +58,11 @@ public class DesertWindManager : MonoBehaviour
         }
         currentWind = Vector2.zero;
         player?.SetWindForce(Vector2.zero);
-        
+
+        // ✅ 파티클 정지 추가
+        if (windParticle != null) windParticle.Stop();
+        if (sandDustParticle != null) sandDustParticle.Stop();
+
         // 바람 소리 정지
         if (windAmbientSound != null)
             SoundManager.instance.StopLoop(windAmbientSound);
