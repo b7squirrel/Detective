@@ -17,6 +17,7 @@ public class DesertWindManager : MonoBehaviour
     [Header("파티클")]
     [SerializeField] ParticleSystem windParticle;
     [SerializeField] ParticleSystem sandDustParticle;
+    [SerializeField] ParticleSystem sandFogParticle; 
 
     [Header("사운드")]
     [SerializeField] AudioClip windAmbientSound;
@@ -43,6 +44,8 @@ public class DesertWindManager : MonoBehaviour
             windParticle.Play();
         if (sandDustParticle != null && !sandDustParticle.isPlaying)
             sandDustParticle.Play();
+        if (sandFogParticle != null && !sandFogParticle.isPlaying)
+            sandFogParticle.Play();
 
         // 바람 소리 루프 재생
         if (windAmbientSound != null)
@@ -62,6 +65,7 @@ public class DesertWindManager : MonoBehaviour
         // ✅ 파티클 정지 추가
         if (windParticle != null) windParticle.Stop();
         if (sandDustParticle != null) sandDustParticle.Stop();
+        if (sandFogParticle != null) sandFogParticle.Stop();
 
         // 바람 소리 정지
         if (windAmbientSound != null)
@@ -127,7 +131,17 @@ public class DesertWindManager : MonoBehaviour
             var vel = sandDustParticle.velocityOverLifetime;
             vel.enabled = true;
             vel.space = ParticleSystemSimulationSpace.World;
-            vel.x = dir.x > 0 ? 3f : -3f;
+            vel.x = dir.x > 0 ? 25f : -25f;
+            vel.y = 0f;
+            vel.z = 0f;
+        }
+        // 안개는 아주 느리게
+        if (sandFogParticle != null)
+        {
+            var vel = sandFogParticle.velocityOverLifetime;
+            vel.enabled = true;
+            vel.space = ParticleSystemSimulationSpace.World;
+            vel.x = dir.x > 0 ? 15f : -15f;
             vel.y = 0f;
             vel.z = 0f;
         }

@@ -34,33 +34,41 @@ public class WeaponContainer : MonoBehaviour
 
     void ApplyMovements()
     {
-        if (player.IsActuallyMoving() == false)
+        // 애니메이션은 IsActuallyMoving() 기준 (바람 제외, return 없음)
+        if (player.IsActuallyMoving())
+            weaponContainerAnims[0].SetAnimState(1f);
+        else
+            weaponContainerAnims[0].SetAnimState(0f);
+
+        // 동료 이동은 IsPhysicallyMoving() 기준 (바람 포함) — return에 막히지 않음
+        if (player.IsPhysicallyMoving())
         {
-            for (int i = weaponContainers.Count; i > 0; i--)
+            for (int i = weaponContainers.Count - 1; i > 0; i--)
             {
-                weaponContainerAnims[i - 1].SetAnimState(0f);
+                float speed = (i == 1) ? moveSpeed - 1.6f : moveSpeed;
+
+                weaponContainers[i].position =
+                    Vector2.Lerp(weaponContainers[i].position,
+                        weaponContainers[i - 1].position, speed * Time.deltaTime);
+
+                weaponContainerAnims[i].FacingRight =
+                    (weaponContainers[i].position.x
+                        - weaponContainers[i - 1].position.x) < 0;
+
+                weaponContainerAnims[i].SetAnimState(1f);
             }
-            return;
         }
-        
-        weaponContainerAnims[0].SetAnimState(1f);
-        for (int i = weaponContainers.Count - 1; i > 0; i--)
+        else
         {
-            float speed = (i == 1) ? moveSpeed - 1.6f : moveSpeed; // 플레이어의 바로 뒤 아이는 조금 간격을 더 두자
-
-            weaponContainers[i].position =
-                Vector2.Lerp(weaponContainers[i].position, weaponContainers[i - 1].position, speed * Time.deltaTime);
-
-            weaponContainerAnims[i].FacingRight =
-                (weaponContainers[i].position.x - weaponContainers[i - 1].position.x) < 0;
-
-            weaponContainerAnims[i].SetAnimState(1f);
+            // 동료도 멈추면 아이들 애니메이션
+            for (int i = weaponContainers.Count - 1; i > 0; i--)
+                weaponContainerAnims[i].SetAnimState(0f);
         }
     }
 
     void ScaleOnInvincible()
     {
-        if(GameManager.instance.IsPlayerInvincible)
+        if (GameManager.instance.IsPlayerInvincible)
         {
             Player.instance.transform.localScale = 1.6f * Vector2.one;
             weaponContainerAnims[0].SetSpritesInvincible(true);
