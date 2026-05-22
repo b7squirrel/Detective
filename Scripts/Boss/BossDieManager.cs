@@ -10,6 +10,7 @@ public class BossDieManager : MonoBehaviour
     Animator anim;
     DropCoins dropCoins;
     [SerializeField] LayerMask testLayer;
+    int slowMoActiveCount = 0; // 현재 활성 SlowMo 수
 
     void Awake()
     {
@@ -98,16 +99,20 @@ public class BossDieManager : MonoBehaviour
 
     IEnumerator SlowMoCo(float _desiredTimeScale, float _duration)
     {
-        // ⭐ 현재 timeScale 저장
-        float originalTimeScale = Time.timeScale;
-
+        slowMoActiveCount++;
         Time.timeScale = _desiredTimeScale;
+
         yield return new WaitForSecondsRealtime(_duration);
 
-        // ⭐ 저장된 값으로 복구
-        Time.timeScale = originalTimeScale;
+        slowMoActiveCount--;
 
-        Logger.Log($"[BossDieManager] SlowMo done, restored timeScale to {originalTimeScale}");
+        // 모든 SlowMo가 끝났을 때만 복구
+        if (slowMoActiveCount <= 0)
+        {
+            slowMoActiveCount = 0;
+            Time.timeScale = 1f;
+            Logger.Log("[BossDieManager] 모든 SlowMo 종료, timeScale 1로 복구");
+        }
     }
 
     void RemoveAllEnemies()
