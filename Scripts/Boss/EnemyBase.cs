@@ -857,29 +857,33 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
 
     // 보스가 등장할 때 적들을 모두 제거할 때 사용
-    // 아무것도 드롭하지 않으며 킬 카운트에도 포함되지 않음
+    // ✅ DieOnBossEvent
     public void DieOnBossEvent()
     {
-        if (isBoss || isSubBoss) return; // 보스이거나 서브보스라면 없애지 않음
+        if (isBoss || isSubBoss) return;
         GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
         if (explosionEffect != null) explosionEffect.transform.position = transform.position;
 
         IsSlowed = false;
         finishedSpawn = false;
+        Spawner.instance.SubtractEnemyNumber(); // ⭐ 추가
         gameObject.SetActive(false);
     }
 
-    public virtual void Deactivate() // 화면 밖으로 사라지는 그룹 적들 경우 아무것도 드롭하지 않고 그냥 사라지도록
+    // ✅ Deactivate
+    public virtual void Deactivate()
     {
         IsGrouping = false;
         IsSlowed = false;
-
+        Spawner.instance.SubtractEnemyNumber(); // ⭐ 추가
         gameObject.SetActive(false);
     }
 
+    // ✅ DieWithoutDrop
     public virtual void DieWithoutDrop()
     {
         IsSlowed = false;
+        Spawner.instance.SubtractEnemyNumber(); // ⭐ 추가
         gameObject.SetActive(false);
     }
 

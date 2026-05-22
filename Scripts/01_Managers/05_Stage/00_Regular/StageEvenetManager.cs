@@ -109,22 +109,16 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
     {
         isWaiting = true;
 
-        // ⭐ 수정: 시간정지 중에는 타이머를 멈춤
         float remaining = _duration;
         while (remaining > 0f)
         {
-            if (!onStopWatchEffect) // 시간정지 중엔 카운트 안 함
-            {
+            if (!onStopWatchEffect)
                 remaining -= Time.deltaTime;
-            }
             yield return null;
         }
 
-        if (GameManager.instance.IsPlayerDead == false)
-            isWaiting = false;
-
-        // ⭐ yield break 제거 - 타이머 자체가 이미 시간정지를 반영했으므로 불필요
-        // if (onStopWatchEffect) yield break; // 스톱위치가 작동 중이면 이벤트 홀드
+        // ⭐ 수정: IsPlayerDead 조건 제거
+        isWaiting = false;
 
         bool isSubBoss = stageEvents[eventIndexer].eventType == StageEventType.SpawnSubBoss;
         GameManager.instance.progressionBar.UpdateProgressBar(isSubBoss);
@@ -133,29 +127,21 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         {
             case StageEventType.SpawnEnemy:
                 for (int i = 0; i < stageEvents[eventIndexer].count; i++)
-                {
                     spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy, _forceSpawn);
-                }
                 break;
-
             case StageEventType.SpawnEnemyGroup:
                 SpawnEnemyGroup(stageEvents[eventIndexer].count);
                 break;
-
             case StageEventType.SpawnSubBoss:
                 SpawnSubBoss(_forceSpawn);
                 break;
-
             case StageEventType.SpawnEnemyBoss:
                 spawner.SpawnBoss(stageEvents[eventIndexer].enemyToSpawn);
                 break;
-
             case StageEventType.Incoming:
                 GameManager.instance.GetComponent<IncomingWarningPanel>().Init();
                 break;
-            case StageEventType.SubBossIncoming: // 인커밍과는 다르게 서브 보스 인커밍은 단순히 강제로 적들을 스폰하는 역할만 한다.
-                break;
-            default:
+            case StageEventType.SubBossIncoming:
                 break;
         }
 
@@ -205,7 +191,7 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         debugManager.SetStageEventIndex(_index);
     }
 
-    
+
 
     #endregion
 }

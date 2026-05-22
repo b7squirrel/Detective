@@ -138,6 +138,7 @@ public class Spawner : MonoBehaviour
         enemy.transform.position = start;
         enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
         enemy.GetComponent<Enemy>().SetFlying(target);
+        AddEnemyNumber(); // ⭐ 추가
     }
 
     IEnumerator SpawnBossCo(EnemyData enemyToSpawn)
