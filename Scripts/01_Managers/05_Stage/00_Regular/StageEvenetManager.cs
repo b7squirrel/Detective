@@ -22,6 +22,7 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
     int forceSpawnIndex;
 
     int subBossNums;
+    int subBossSpawnedCount; // 현재 스테이지에서 몇 번째 서브보스인지 추적
 
     MusicManager musicManager;
     public bool IsWinningStage { get; set; }
@@ -36,6 +37,8 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
 
         readStageData = GetComponent<ReadStageData>();
         readStageData.Init(_stageTextData, _enemyDatas);
+
+        subBossSpawnedCount = 0;
 
         List<int> segmentsLengths = new();
         int length = 0;
@@ -162,8 +165,37 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         // ✅ 변경: SpawnSubBossEnemy() → subBossPools 사용
         spawner.SpawnSubBossEnemy(stageEvents[eventIndexer].enemyToSpawn, _forceSpawn);
 
-        string subBossName = stageEvents[eventIndexer].enemyToSpawn.Name;
+        // ✅ 수정: EnemyData.Name 대신 Localization SO에서 접두사 포함 이름 가져오기
+        string subBossName = GetLocalizedSubBossName();
         GameManager.instance.bossWarningPanel.Init(subBossName);
+
+        subBossSpawnedCount++; // ✅ 추가
+    }
+
+    // ✅ 추가: 현재 스테이지와 서브보스 등장 순서로 로컬라이즈된 이름 반환
+    string GetLocalizedSubBossName()
+    {
+        if (LocalizationManager.Game == null ||
+            LocalizationManager.Game.stageBossName == null)
+        {
+            // fallback: EnemyData 이름 사용
+            return stageEvents[eventIndexer].enemyToSpawn.Name;
+        }
+
+        PlayerDataManager pdm = FindObjectOfType<PlayerDataManager>();
+        if (pdm == null)
+            return stageEvents[eventIndexer].enemyToSpawn.Name;
+
+        int stageIndex = pdm.GetCurrentStageNumber();
+        int set = (stageIndex - 1) / 6;           // 세트 번호 (0, 1, 2, 3, 4)
+        int nameIndex = set * 6 + subBossSpawnedCount; // 배열 인덱스
+
+        string[] names = LocalizationManager.Game.stageBossName;
+        if (nameIndex >= 0 && nameIndex < names.Length)
+            return names[nameIndex];
+
+        Debug.LogWarning($"[StageEvenetManager] stageBossName 범위 초과: {nameIndex} / {names.Length}");
+        return stageEvents[eventIndexer].enemyToSpawn.Name;
     }
 
     void SpawnEnemyGroup(int number)
