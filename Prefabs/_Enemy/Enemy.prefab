@@ -384,7 +384,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4440052700476040268
 Transform:
   m_ObjectHideFlags: 0
@@ -541,7 +541,7 @@ Animator:
   m_GameObject: {fileID: 5297514985837409348}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 704b18454902bd74b86cb0a9cb9e0370, type: 2}
+  m_Controller: {fileID: 22100000, guid: e528fe5e406fa644a9a7f95329c2b329, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -793,6 +793,7 @@ MonoBehaviour:
   overlayMadness: {fileID: 3455645964738222921}
   overlayHelmet: {fileID: 4475035654877301682}
   overlayFuse: {fileID: 2203463610597252329}
+  crown: {fileID: 0}
 --- !u!114 &6792740238980971270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1048,7 +1049,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.4571428, y: 1.3285714}
+  m_Size: {x: 3, y: 2.5166667}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0

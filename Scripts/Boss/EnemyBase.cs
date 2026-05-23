@@ -860,7 +860,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     // ✅ DieOnBossEvent
     public void DieOnBossEvent()
     {
-        if (isBoss || isSubBoss) return;
+        if (isBoss) return; // 서브 보스도 제거
         GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
         if (explosionEffect != null) explosionEffect.transform.position = transform.position;
 
