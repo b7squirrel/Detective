@@ -25,13 +25,15 @@ public class StageAssetManager : MonoBehaviour
         return bossPrefab;
     }
 
-    public int GetSubBossIndex(string enemyName)
+    // ✅ GetSubBossIndex 자체가 불필요 — 삭제
+    // 서브보스 프리팹이 1개이므로 항상 index 0
+    public GameObject GetSubBossEnemy()
     {
-        for (int i = 0; i < subBossEnemies.Length; i++)
+        if (subBossEnemies == null || subBossEnemies.Length == 0)
         {
-            if (subBossEnemies[i].name == enemyName) return i;
+            Logger.LogError("[StageAssetManager] SubBoss enemies not assigned!");
+            return null;
         }
-        Logger.LogError($"[StageAssetManager] SubBoss not found: {enemyName}");
-        return 0;
+        return subBossEnemies[0];
     }
 }

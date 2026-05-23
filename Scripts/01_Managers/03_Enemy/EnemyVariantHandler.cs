@@ -16,6 +16,10 @@ public class EnemyVariantHandler : MonoBehaviour
     [SerializeField] GameObject overlayHelmet;    // 헬멧 이미지
     [SerializeField] GameObject overlayFuse;      // 심지 이미지
 
+    // ⭐ 추가: 없으면 무시하므로 일반 적 프리펩은 그대로 사용 가능
+    [Header("Optional")]
+    [SerializeField] GameObject crown;
+
     public EnemyVariantType CurrentVariant { get; private set; }
 
     // EnemyBase의 InitEnemy()에서 호출
@@ -39,11 +43,13 @@ public class EnemyVariantHandler : MonoBehaviour
 
             case EnemyVariantType.Helmet:
                 if (overlayHelmet != null) overlayHelmet.SetActive(true);
+                if (crown != null) crown.SetActive(false); // ⭐ 추가
                 break;
 
             case EnemyVariantType.MadnessHelmet:
                 if (overlayMadness != null) overlayMadness.SetActive(true);
                 if (overlayHelmet != null) overlayHelmet.SetActive(true);
+                if (crown != null) crown.SetActive(false); // ⭐ 추가
                 break;
 
             case EnemyVariantType.Explosive:
@@ -57,6 +63,9 @@ public class EnemyVariantHandler : MonoBehaviour
         if (overlayMadness != null) overlayMadness.SetActive(false);
         if (overlayHelmet != null) overlayHelmet.SetActive(false);
         if (overlayFuse != null) overlayFuse.SetActive(false);
+
+        // ⭐ 초기화 시 왕관 다시 활성화
+    if (crown != null) crown.SetActive(true);
     }
 
     // 스테이지 번호로 variant 결정 (EnemyBase에서 호출)

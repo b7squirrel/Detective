@@ -76,11 +76,8 @@ public class Spawner : MonoBehaviour
         if (!forceSpawn && currentEnemyNumbers >= maxEnemyInScene)
             return;
 
-        // 이름으로 subBossEnemies[] 인덱스 자동 매칭
-        StageAssetManager sam = FindAnyObjectByType<StageAssetManager>();
-        int subBossIndex = sam.GetSubBossIndex(enemyToSpawn.Name);
-
-        GameObject enemy = GameManager.instance.poolManager.GetSubBossEnemy(subBossIndex);
+        // ✅ 이름 매칭 제거, 항상 index 0 사용
+        GameObject enemy = GameManager.instance.poolManager.GetSubBossEnemy(0);
         if (enemy == null) return;
 
         enemy.transform.position = GetAvailablePoints();
