@@ -53,13 +53,14 @@ public class StageManager : MonoBehaviour
                                                     contents.innerRadiusForChest, contents.outerRadiusForChest);
         spawnGemsOnStart.GenGemsAndChest();
 
-        stageAssetManager.Init(contents.enemies, contents.bossPrefab, contents.effects, contents.bossEffects);
+        stageAssetManager.Init(contents.bossPrefab, contents.effects, contents.bossEffects);
 
         stageGroundManager.InitGround(contents.stageGroundType);
         stageGroundEffectManager.Init(contents.stageGroundType);
 
         // poolManager가 stageAssetManager를 참조하니까 먼저 초기화하면 안 됨
         poolManager.InitEnemyPools();
+        poolManager.InitSubBossPools(); 
 
         StartCoroutine(UpdateTimeUI());
     }

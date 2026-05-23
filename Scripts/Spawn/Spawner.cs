@@ -69,6 +69,27 @@ public class Spawner : MonoBehaviour
     }
 
     /// <summary>
+    /// SubBoss 전용 스폰 — subBossPools 사용
+    /// </summary>
+    public void SpawnSubBossEnemy(EnemyData enemyToSpawn, bool forceSpawn)
+    {
+        if (!forceSpawn && currentEnemyNumbers >= maxEnemyInScene)
+            return;
+
+        // 이름으로 subBossEnemies[] 인덱스 자동 매칭
+        StageAssetManager sam = FindAnyObjectByType<StageAssetManager>();
+        int subBossIndex = sam.GetSubBossIndex(enemyToSpawn.Name);
+
+        GameObject enemy = GameManager.instance.poolManager.GetSubBossEnemy(subBossIndex);
+        if (enemy == null) return;
+
+        enemy.transform.position = GetAvailablePoints();
+        enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
+
+        AddEnemyNumber();
+    }
+
+    /// <summary>
     /// 무한 모드 전용 스폰 (maxEnemyInScene 제한 무시)
     /// </summary>
     public void SpawnForInfiniteMode(EnemyData enemyToSpawn, int index, bool isBoss = false)

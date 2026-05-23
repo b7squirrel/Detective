@@ -19799,7 +19799,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c923eff6341811d47b6cc141a19617bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemies: []
+  enemies:
+  - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
+  subBossEnemies:
+  - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
   bossPrefab: {fileID: 0}
   effects: []
   bossEffects: []
@@ -19860,9 +19863,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
     enemies:
     - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
-    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
-    - {fileID: 2017777881417455486, guid: 377ccdc91bde71a408249f564fc614ae, type: 3}
-    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
     bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
     effects: []
     bossEffects: []
@@ -19903,9 +19903,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
     enemies:
     - {fileID: 5297514985837409348, guid: 064f25e6af23f74418bc756c8ca0979f, type: 3}
-    - {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
-    - {fileID: 2017777881417455486, guid: 377ccdc91bde71a408249f564fc614ae, type: 3}
-    - {fileID: 6414451162540868822, guid: 756861d756d9db74992c0b15e588dc13, type: 3}
     bossPrefab: {fileID: 8170831695603223110, guid: 12d95f9601a937542b0f55137bff0377, type: 3}
     effects: []
     bossEffects: []
@@ -20140,7 +20137,7 @@ MonoBehaviour:
     stageGroundType: 1
     enemyNumForNextEvent: 50
     stageMusicType: 6
-    stageDataText: {fileID: 4900000, guid: 740861fb49ceb4064bc1019b67e37e7d, type: 3}
+    stageDataText: {fileID: 4900000, guid: 1a99e8411e401db49b0bb1f8fce9b33e, type: 3}
     enemyData:
     - {fileID: 11400000, guid: 870db12b9bd73fe439c7739760824b10, type: 2}
     - {fileID: 11400000, guid: acff36a4e154ab9429b085c3916b987c, type: 2}

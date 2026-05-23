@@ -7,6 +7,11 @@ public class PoolManager : MonoBehaviour
     [SerializeField] GameObject[] enemies;
     [SerializeField] List<GameObject>[] enemyPools;
 
+    [Header("Sub Bosses")]
+    GameObject[] subBossEnemies;
+    List<GameObject>[] subBossPools;
+    GameObject subBossFolder;
+
     StageAssetManager stageAssetManager;
 
     Dictionary<string, List<GameObject>> miscPools;
@@ -53,6 +58,31 @@ public class PoolManager : MonoBehaviour
         {
             enemyPools[i] = new List<GameObject>();
         }
+    }
+
+    /// <summary>
+    /// SubBoss 전용 풀 초기화 — InitEnemyPools() 이후에 호출
+    /// </summary>
+    public void InitSubBossPools()
+    {
+        StageAssetManager sam = FindAnyObjectByType<StageAssetManager>();
+        if (sam == null || sam.subBossEnemies == null || sam.subBossEnemies.Length == 0)
+        {
+            Logger.LogError("[PoolManager] SubBoss enemies not assigned in StageAssetManager!");
+            return;
+        }
+
+        subBossEnemies = sam.subBossEnemies;
+        subBossPools = new List<GameObject>[subBossEnemies.Length];
+
+        for (int i = 0; i < subBossPools.Length; i++)
+            subBossPools[i] = new List<GameObject>();
+
+        subBossFolder = new GameObject { name = "SubBosses" };
+        subBossFolder.transform.position = Vector3.zero;
+        subBossFolder.transform.parent = transform;
+
+        Logger.Log($"[PoolManager] SubBoss pools initialized: {subBossEnemies.Length} types");
     }
 
     /// <summary>
@@ -106,6 +136,34 @@ public class PoolManager : MonoBehaviour
         }
 
         return select;
+    }
+
+    /// <summary>
+    /// SubBoss 전용 GetEnemy — enemyPools[]와 완전히 분리
+    /// </summary>
+    public GameObject GetSubBossEnemy(int index)
+    {
+        if (subBossPools == null || index >= subBossPools.Length)
+        {
+            Logger.LogError($"[PoolManager] SubBoss pool error. index: {index}");
+            return null;
+        }
+
+        List<GameObject> pool = subBossPools[index];
+
+        for (int i = 0; i < pool.Count; i++)
+        {
+            if (!pool[i].activeSelf)
+            {
+                pool[i].SetActive(true);
+                return pool[i];
+            }
+        }
+
+        // 풀에 비활성 오브젝트 없으면 새로 생성
+        GameObject newObj = Instantiate(subBossEnemies[index], subBossFolder.transform);
+        pool.Add(newObj);
+        return newObj;
     }
     #endregion
 

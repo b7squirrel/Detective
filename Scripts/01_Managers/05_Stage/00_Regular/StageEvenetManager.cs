@@ -158,7 +158,10 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
     }
     void SpawnSubBoss(bool _forceSpawn)
     {
-        spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.subBoss, _forceSpawn);
+        // ✅ 기존: spawner.Spawn(..., (int)SpawnItem.subBoss, ...)  → enemyPools 공유
+        // ✅ 변경: SpawnSubBossEnemy() → subBossPools 사용
+        spawner.SpawnSubBossEnemy(stageEvents[eventIndexer].enemyToSpawn, _forceSpawn);
+
         string subBossName = stageEvents[eventIndexer].enemyToSpawn.Name;
         GameManager.instance.bossWarningPanel.Init(subBossName);
     }
