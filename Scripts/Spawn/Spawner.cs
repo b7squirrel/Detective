@@ -165,7 +165,7 @@ public class Spawner : MonoBehaviour
         StageInfo stageInfo = FindObjectOfType<StageInfo>();
         PlayerDataManager playerDataManager = FindObjectOfType<PlayerDataManager>();
         int stageIndex = playerDataManager.GetCurrentStageNumber();
-        string enemyName = stageInfo.GetStageInfo(stageIndex).Title;
+        string enemyName = stageInfo.GetStageBossName(stageIndex);
 
         // 보스 경고 메시지
         GameManager.instance.bossWarningPanel.Init(enemyName);

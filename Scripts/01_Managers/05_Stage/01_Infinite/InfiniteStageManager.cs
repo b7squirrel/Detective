@@ -522,22 +522,19 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
     {
         int waveInCycle = currentWave % 6;
         if (waveInCycle == 0) waveInCycle = 6;
-        int subBossOrder = waveInCycle - 1; // 0~4
+        int subBossOrder = waveInCycle - 1;
 
-        if (stageInfo != null) // 필드 캐싱 사용
+        if (stageInfo != null)
         {
             int stageIndex = subBossOrder + 1;
-            return stageInfo.GetStageInfo(stageIndex).Title;
+            return stageInfo.GetStageBossName(stageIndex); // ✅ .Title → GetStageBossName()
         }
 
-        // stageInfo가 없으면 EnemyData.Name으로 폴백
+        // fallback
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
-            if (enemyConfigs[i].IsSubBoss() &&
-                enemyConfigs[i].orderIndex == subBossOrder)
-            {
+            if (enemyConfigs[i].IsSubBoss() && enemyConfigs[i].orderIndex == subBossOrder)
                 return enemyConfigs[i].data.Name;
-            }
         }
         return "";
     }
@@ -548,28 +545,22 @@ public class InfiniteStageManager : MonoBehaviour, ISpawnController
         int bossCount = 0;
 
         for (int i = 0; i < enemyConfigs.Length; i++)
-        {
-            if (enemyConfigs[i].IsStageBoss())
-                bossCount++;
-        }
+            if (enemyConfigs[i].IsStageBoss()) bossCount++;
 
         if (bossCount == 0) return "";
         int bossOrder = bossNumber % bossCount;
 
-        if (stageInfo != null) // 필드 캐싱 사용 (기존의 지역변수 FindObjectOfType 제거)
+        if (stageInfo != null)
         {
             int stageIndex = (bossOrder + 1) * 6;
-            return stageInfo.GetStageInfo(stageIndex).Title;
+            return stageInfo.GetStageBossName(stageIndex); // ✅ .Title → GetStageBossName()
         }
 
-        // stageInfo가 없으면 EnemyData.Name으로 폴백
+        // fallback
         for (int i = 0; i < enemyConfigs.Length; i++)
         {
-            if (enemyConfigs[i].IsStageBoss() &&
-                enemyConfigs[i].orderIndex == bossOrder)
-            {
+            if (enemyConfigs[i].IsStageBoss() && enemyConfigs[i].orderIndex == bossOrder)
                 return enemyConfigs[i].data.Name;
-            }
         }
         return "";
     }

@@ -4,9 +4,8 @@ using UnityEngine;
 [System.Serializable]
 public class Stages
 {
-    public string Title;
+    // ✅ Title 제거 - 보스 이름은 Localization SO에서만 관리
     public GameObject bossImagePrefab;
-    public Sprite stageBG;
     public StageGroundType stageGroundType;
 }
 
@@ -14,23 +13,32 @@ public class StageInfo : MonoBehaviour
 {
     public List<Stages> stages;
     [SerializeField] Sprite[] LobbyStageBGs;
+
     public Stages GetStageInfo(int stageIndex)
     {
         return stages[stageIndex - 1];
     }
-    public bool IsFinalStage(int stageIndex)
+
+    // ✅ 새로 추가 - 언어 설정에 맞는 보스 이름 반환
+    public string GetStageBossName(int stageIndex)
     {
-        return stages.Count == stageIndex;
+        if (LocalizationManager.Game != null &&
+            LocalizationManager.Game.stageBossName != null &&
+            stageIndex >= 1 &&
+            stageIndex - 1 < LocalizationManager.Game.stageBossName.Length)
+        {
+            return LocalizationManager.Game.stageBossName[stageIndex - 1];
+        }
+        Debug.LogWarning($"[StageInfo] stageBossName 없음 (index: {stageIndex})");
+        return "";
     }
-    public int GetMaxStage()
-    {
-        return stages.Count;
-    }
+
+    public bool IsFinalStage(int stageIndex) => stages.Count == stageIndex;
+    public int GetMaxStage() => stages.Count;
+
     public Sprite GetStageBGSrpite(int stageIndex)
     {
-        // Logger.LogError($"stageIndex = {stageIndex}");
         StageGroundType groundType = GetStageInfo(stageIndex).stageGroundType;
-        int index = (int)groundType;
-        return LobbyStageBGs[index]; //stageIndex는 실제 스테이지 숫자임
+        return LobbyStageBGs[(int)groundType];
     }
 }

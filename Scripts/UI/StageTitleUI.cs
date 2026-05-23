@@ -18,9 +18,9 @@ public class StageTitleUI : MonoBehaviour
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
         StageInfo stageInfo = FindObjectOfType<StageInfo>();
         int index = playerData.GetCurrentStageNumber();
-        title.text = "Stage " + index.ToString();
-        bossName.text = stageInfo.GetStageInfo(index).Title;
 
+        title.text = "Stage " + index.ToString();
+        bossName.text = stageInfo.GetStageBossName(index); // ✅ .Title → GetStageBossName()
         StartCoroutine(StageTitleUpCo());
     }
 

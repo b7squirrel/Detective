@@ -19,8 +19,7 @@ public class StageTitleGroundUI : MonoBehaviour
         int index = playerData.GetCurrentStageNumber();
 
         titleText.text = "STAGE " + index.ToString();
-        bossNameText.text = stageInfo.GetStageInfo(index).Title;
-
+        bossNameText.text = stageInfo.GetStageBossName(index); // ✅ .Title → GetStageBossName()
         StartCoroutine(StageTitleUpCo());
     }
 

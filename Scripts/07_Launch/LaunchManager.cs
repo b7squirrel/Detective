@@ -61,7 +61,7 @@ public class LaunchManager : MonoBehaviour
     void InitStageInfo()
     {
         int stageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
-        Stages currentStage = stageInfo.GetStageInfo(stageNum);
+        // ✅ currentStage 변수 제거 (Title 사용 없음)
         stageInfoUi.InitStageInfoUI();
     }
 
