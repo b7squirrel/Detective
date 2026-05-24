@@ -56,11 +56,11 @@ public class Enemy : EnemyBase
 
         float sqrDist = ((Vector2)transform.position - Target.position).sqrMagnitude;
 
-        if (sqrDist > 2500f)      // 50유닛 이상: 3프레임에 1번 (완전히 화면 밖)
+        if (sqrDist > 900f)      // 50유닛 이상: 3프레임에 1번 (완전히 화면 밖)
         {
             if (Time.frameCount % 3 != updateOffset) return;
         }
-        else if (sqrDist > 1225f) // 35~50유닛: 2프레임에 1번 (화면 밖 근처)
+        else if (sqrDist > 400f) // 35~50유닛: 2프레임에 1번 (화면 밖 근처)
         {
             if (Time.frameCount % 2 != updateOffset) return;
         }
@@ -76,12 +76,11 @@ public class Enemy : EnemyBase
 
         float sqrDist = ((Vector2)transform.position - Target.position).sqrMagnitude;
 
-        // Flip: 멀리 있는 적은 덜 자주 계산
-        if (sqrDist > 225f)
+        if (sqrDist > 900f)
         {
             if (Time.frameCount % 3 != updateOffset) return;
         }
-        else if (sqrDist > 64f)
+        else if (sqrDist > 400f)
         {
             if (Time.frameCount % 2 != updateOffset) return;
         }
