@@ -99,6 +99,12 @@ public class GameManager : MonoBehaviour
 
         IsBossStage = false;
 
+        Physics2D.IgnoreLayerCollision(
+    LayerMask.NameToLayer("Enemy"),
+    LayerMask.NameToLayer("Enemy"),
+    true
+);
+
     }
     void Start()
     {

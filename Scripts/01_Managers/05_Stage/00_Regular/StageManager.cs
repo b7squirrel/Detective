@@ -16,6 +16,7 @@ public class StageManager : MonoBehaviour
     PlayerDataManager playerDataManager;
     TimeWaveUI timeWaveUI;
     StageTime stageTime;
+    GeneralFuctions generalFuctions = new GeneralFuctions(); // 필드로 선언
 
     void Awake()
     {
@@ -59,12 +60,32 @@ public class StageManager : MonoBehaviour
         stageGroundEffectManager.Init(contents.stageGroundType);
 
         // poolManager가 stageAssetManager를 참조하니까 먼저 초기화하면 안 됨
-        poolManager.InitEnemyPools();
-        poolManager.InitSubBossPools(); 
+        WarmUpPoolsByStage(currentStageNum);
 
         StartCoroutine(UpdateTimeUI());
     }
 
+    void WarmUpPoolsByStage(int stageNum)
+    {
+        // ✅ 이 두 줄이 반드시 WarmUp보다 먼저 와야 함
+        poolManager.InitEnemyPools();
+        poolManager.InitSubBossPools();
+
+        int warmUpCount;
+        switch (stageNum)
+        {
+            case 1: warmUpCount = 30; break;
+            case 2: warmUpCount = 60; break;
+            case 3: warmUpCount = 80; break;
+            case 4: warmUpCount = 100; break;
+            case 5: warmUpCount = 130; break;
+            case 6:
+            default: warmUpCount = 180; break;
+        }
+
+        poolManager.WarmUpEnemyPools(warmUpCount);
+        poolManager.WarmUpSubBossPools(2);
+    }
 
     IEnumerator UpdateTimeUI()
     {
@@ -78,7 +99,7 @@ public class StageManager : MonoBehaviour
             if (timeWaveUI != null)
             {
                 float currentTime = stageTime.GetElapsedTime();
-                string timeFormatted = new GeneralFuctions().FormatTime(currentTime);
+                string timeFormatted = generalFuctions.FormatTime(currentTime);
                 timeWaveUI.InitTimeUI(timeFormatted);
             }
             yield return new WaitForSeconds(.1f); // 0.1초마다 업데이트

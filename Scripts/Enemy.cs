@@ -23,6 +23,8 @@ public class Enemy : EnemyBase
     // 점프
     bool canJump;
 
+    int updateOffset; // 적마다 업데이트 시점을 분산시키기 위한 오프셋
+
     [Header("Flying Enemies")]
     [SerializeField] float flyingSpeed;
     public bool IsFlying { get; set; }
@@ -42,28 +44,50 @@ public class Enemy : EnemyBase
         SetWalking();
 
         if (enemyLayer == 0) enemyLayer = LayerMask.GetMask("Enemy");
+
+        // ↓ 이 줄 추가: 적마다 다른 오프셋으로 한 프레임에 몰리지 않게 분산
+        updateOffset = Mathf.Abs(GetInstanceID() % 3);
     }
 
     void FixedUpdate()
     {
-        if (!isLive)
-            return;
-        if (GameManager.instance.player == null)
-            return;
+        if (!isLive) return;
+        if (GameManager.instance.player == null) return;
+
+        float sqrDist = ((Vector2)transform.position - Target.position).sqrMagnitude;
+
+        if (sqrDist > 2500f)      // 50유닛 이상: 3프레임에 1번 (완전히 화면 밖)
+        {
+            if (Time.frameCount % 3 != updateOffset) return;
+        }
+        else if (sqrDist > 1225f) // 35~50유닛: 2프레임에 1번 (화면 밖 근처)
+        {
+            if (Time.frameCount % 2 != updateOffset) return;
+        }
+        // 35유닛 이내: 매 프레임 (화면 안 또는 화면 근처)
 
         ApplyMovement();
     }
 
     private void LateUpdate()
     {
-        if (!isLive)
-            return;
-        if (GameManager.instance.player == null)
-            return;
+        if (!isLive) return;
+        if (GameManager.instance.player == null) return;
+
+        float sqrDist = ((Vector2)transform.position - Target.position).sqrMagnitude;
+
+        // Flip: 멀리 있는 적은 덜 자주 계산
+        if (sqrDist > 225f)
+        {
+            if (Time.frameCount % 3 != updateOffset) return;
+        }
+        else if (sqrDist > 64f)
+        {
+            if (Time.frameCount % 2 != updateOffset) return;
+        }
 
         Flip();
 
-        // 벽에 끼거나 해서 walking으로 돌아오지 못하면 빠져나오도록
         if (flyingTimeCounter > 0 && IsFlying)
         {
             flyingTimeCounter -= Time.deltaTime;

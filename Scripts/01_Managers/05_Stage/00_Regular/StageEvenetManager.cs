@@ -129,8 +129,15 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         switch (stageEvents[eventIndexer].eventType)
         {
             case StageEventType.SpawnEnemy:
-                for (int i = 0; i < stageEvents[eventIndexer].count; i++)
-                    spawner.Spawn(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemy, _forceSpawn);
+                // 기존: 한 프레임에 전부 스폰
+                // for (int i = 0; i < stageEvents[eventIndexer].count; i++)
+                //     spawner.Spawn(...);
+
+                // 변경: 프레임 분산 스폰
+                StartCoroutine(SpawnOverFrames(
+                    stageEvents[eventIndexer].enemyToSpawn,
+                    stageEvents[eventIndexer].count,
+                    _forceSpawn));
                 break;
             case StageEventType.SpawnEnemyGroup:
                 SpawnEnemyGroup(stageEvents[eventIndexer].count);
@@ -170,6 +177,29 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         GameManager.instance.bossWarningPanel.Init(subBossName);
 
         subBossSpawnedCount++; // ✅ 추가
+    }
+
+    /// <summary>
+    /// 여러 적을 한 프레임에 몰아서 스폰하지 않고 분산시킴.
+    /// count가 3 이하면 한 번에 스폰 (분산 의미 없음)
+    /// </summary>
+    IEnumerator SpawnOverFrames(EnemyData enemyData, int count, bool forceSpawn)
+    {
+        const int spawnPerFrame = 3; // 한 프레임에 최대 3마리
+
+        int spawned = 0;
+        while (spawned < count)
+        {
+            int thisFrame = Mathf.Min(spawnPerFrame, count - spawned);
+            for (int i = 0; i < thisFrame; i++)
+            {
+                spawner.Spawn(enemyData, (int)SpawnItem.enemy, forceSpawn);
+            }
+            spawned += thisFrame;
+
+            if (spawned < count)
+                yield return null; // 다음 프레임으로 넘김
+        }
     }
 
     // ✅ 추가: 현재 스테이지와 서브보스 등장 순서로 로컬라이즈된 이름 반환

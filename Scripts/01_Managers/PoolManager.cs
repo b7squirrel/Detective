@@ -27,7 +27,7 @@ public class PoolManager : MonoBehaviour
 
     #region 초기화
     /// <summary>
-    /// 폴더 초기화
+    /// 폴더 초기화 — StageManager.Start()에서 가장 먼저 호출
     /// </summary>
     public void InitPools()
     {
@@ -41,7 +41,8 @@ public class PoolManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 레벨의 Stage Asset Manager에서 적들의 종류를 가져옴
+    /// 레벨의 Stage Asset Manager에서 적들의 종류를 가져옴.
+    /// stageAssetManager.Init() 이후에 호출해야 함.
     /// </summary>
     public void InitEnemyPools()
     {
@@ -86,7 +87,55 @@ public class PoolManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 무한 모드용 - 직접 적 목록을 전달받음
+    /// 스테이지 시작 전에 Enemy 풀을 미리 생성.
+    /// 실제 소환 시 Instantiate 없이 SetActive(true)만 하므로 스파이크 방지.
+    /// 적 프리팹은 1종류(index 0)이며 animController만 교체되어 LV1~LV5로 사용됨.
+    /// InitEnemyPools() 이후에 호출해야 함.
+    /// </summary>
+    public void WarmUpEnemyPools(int totalCount)
+    {
+        if (enemies == null || enemies.Length == 0)
+        {
+            Logger.LogError("[PoolManager] enemies 배열이 비어있습니다!");
+            return;
+        }
+
+        // 적 프리팹은 1종류 (index 0)
+        for (int i = 0; i < totalCount; i++)
+        {
+            GameObject obj = Instantiate(enemies[0], enemyFolder.transform);
+            obj.SetActive(false);
+            enemyPools[0].Add(obj);
+        }
+
+        Logger.Log($"[PoolManager] Enemy WarmUp 완료: {totalCount}개");
+    }
+
+    /// <summary>
+    /// 스테이지 시작 전에 SubBoss 풀을 미리 생성.
+    /// 동시에 1마리만 등장하지만 여유분 확보를 위해 countPerType = 2 권장.
+    /// InitSubBossPools() 이후에 호출해야 함.
+    /// </summary>
+    public void WarmUpSubBossPools(int countPerType)
+    {
+        if (subBossEnemies == null) return;
+
+        for (int i = 0; i < subBossEnemies.Length; i++)
+        {
+            for (int j = 0; j < countPerType; j++)
+            {
+                GameObject obj = Instantiate(subBossEnemies[i], subBossFolder.transform);
+                obj.SetActive(false);
+                subBossPools[i].Add(obj);
+            }
+        }
+
+        Logger.Log($"[PoolManager] SubBoss WarmUp 완료: {subBossEnemies.Length}종 × {countPerType}개");
+    }
+
+    /// <summary>
+    /// 무한 모드용 — 직접 적 목록을 전달받음.
+    /// 일반 스테이지의 InitEnemyPools() 대신 사용.
     /// </summary>
     public void InitInfiniteEnemyPools(GameObject[] infiniteEnemies)
     {
@@ -129,6 +178,7 @@ public class PoolManager : MonoBehaviour
             }
         }
 
+        // WarmUp이 충분하다면 이 분기는 거의 실행되지 않음
         if (select == null)
         {
             select = Instantiate(enemies[index], enemyFolder.transform);
@@ -160,7 +210,7 @@ public class PoolManager : MonoBehaviour
             }
         }
 
-        // 풀에 비활성 오브젝트 없으면 새로 생성
+        // WarmUp이 충분하다면 이 분기는 거의 실행되지 않음
         GameObject newObj = Instantiate(subBossEnemies[index], subBossFolder.transform);
         pool.Add(newObj);
         return newObj;
@@ -173,8 +223,9 @@ public class PoolManager : MonoBehaviour
     {
         if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
 
-        string poolingTag = prefab.GetComponent<PoolingKey>().Key;
-        int maxNum = prefab.GetComponent<PoolingKey>().maxNum;
+        PoolingKey key = prefab.GetComponent<PoolingKey>();
+        string poolingTag = key.Key;
+        int maxNum = key.maxNum;
 
         if (miscPools.ContainsKey(poolingTag)) // 해당 key의 pool이 있다면
         {
