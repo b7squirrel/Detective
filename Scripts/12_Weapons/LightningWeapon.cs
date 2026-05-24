@@ -4,26 +4,45 @@ using UnityEngine;
 
 public class LightningWeapon : WeaponBase
 {
-    [SerializeField] GameObject lightning;          // LightningBolt 프리팹 (PoolingKey 부착)
-    [SerializeField] GameObject lightningSynergy;   // 시너지용 프리팹
+    [SerializeField] GameObject lightning;
+    [SerializeField] GameObject lightningSynergy;
     [SerializeField] float duration = 0.4f;
 
     List<Vector2> targets;
     [SerializeField] bool isClean;
 
     [Header("Synergy")]
-    [SerializeField] float synergyInterval = 0.1f; // 번개 사이 시간차
+    [SerializeField] float synergyInterval = 0.1f;
 
     [Header("Sound")]
     [SerializeField] AudioClip shoot, strike;
 
     [Header("Effects")]
     [SerializeField] Transform strikeEffect;
-    [SerializeField] GameObject sparkEffect; // 스파크 프리팹
+    [SerializeField] GameObject sparkEffect;
 
     Vector2 startPosition, endPosition;
 
-    // ─────────────────────────────────────────
+    // ✅ 캐싱: Awake에서 한 번만 GetComponent
+    HitEffects hitEffects;
+
+    // ✅ NonAlloc용 버퍼
+    static readonly Collider2D[] lightningHitBuffer = new Collider2D[20];
+    static readonly Collider2D[] areaBuffer = new Collider2D[50];
+
+    // ✅ FindLandingPositions에서 매번 new List 방지
+    readonly List<Collider2D> candidatesBuffer = new List<Collider2D>(20);
+    readonly List<Collider2D> recurringPoolBuffer = new List<Collider2D>(20);
+
+    // ✅ SecondaryAttack에 전달할 타겟 목록 재사용
+    readonly List<Vector2> secondShootPointBuffer = new List<Vector2>(10);
+
+    protected override void Awake()
+    {
+        base.Awake();
+        hitEffects = GetComponent<HitEffects>(); // ✅ 캐싱
+    }
+
     protected override void Attack()
     {
         base.Attack();
@@ -39,15 +58,13 @@ public class LightningWeapon : WeaponBase
         effect.SetParent(ShootPoint);
         SoundManager.instance.PlaySoundWith(strike, 1f, true, 0);
 
-
         for (int i = 0; i < targets.Count; i++)
         {
             endPosition = targets[i];
 
-            // 데미지 적용
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
-            ApplyDamage(colliders);
-
+            // ✅ NonAlloc으로 GC 방지
+            int count = Physics2D.OverlapCircleNonAlloc(endPosition, weaponStats.sizeOfArea, lightningHitBuffer);
+            ApplyDamage(count);
 
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightning);
             if (bolt != null)
@@ -61,18 +78,13 @@ public class LightningWeapon : WeaponBase
             }
         }
 
-        List<Vector2> secondShootPoint = new List<Vector2>(targets);
-
-        // 시너지
         if (!isSynergyWeaponActivated) return;
+        if (isClean) { isClean = false; return; }
 
-        if (isClean)
-        {
-            isClean = false;
-            return;
-        }
-
-        StartCoroutine(SecondaryAttack(secondShootPoint));
+        // ✅ new List 대신 버퍼 재사용
+        secondShootPointBuffer.Clear();
+        secondShootPointBuffer.AddRange(targets);
+        StartCoroutine(SecondaryAttack(secondShootPointBuffer));
     }
 
     IEnumerator SecondaryAttack(List<Vector2> _secondShootPoint)
@@ -89,8 +101,9 @@ public class LightningWeapon : WeaponBase
             int targetIndex = Random.Range(0, targets.Count);
             endPosition = targets[targetIndex];
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(endPosition, weaponStats.sizeOfArea);
-            ApplyDamage(colliders);
+            // ✅ NonAlloc으로 GC 방지
+            int count = Physics2D.OverlapCircleNonAlloc(endPosition, weaponStats.sizeOfArea, lightningHitBuffer);
+            ApplyDamage(count);
 
             GameObject bolt = GameManager.instance.poolManager.GetMisc(lightningSynergy);
             if (bolt != null)
@@ -99,39 +112,33 @@ public class LightningWeapon : WeaponBase
                 if (boltScript != null)
                 {
                     boltScript.SetDamage(damage);
-                    boltScript.Activate(_secondShootPoint[i], endPosition, duration-synergyInterval); // 모든 전기가 동시에 사라지도록
+                    boltScript.Activate(_secondShootPoint[i], endPosition, duration - synergyInterval);
                 }
             }
         }
     }
-    // ─────────────────────────────────────────
-    void ApplyDamage(Collider2D[] colliders)
+
+    void ApplyDamage(int count)
     {
-        for (int i = 0; i < colliders.Length; i++)
+        // ✅ 캐싱된 hitEffects 사용
+        GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
+
+        for (int i = 0; i < count; i++)
         {
-            Idamageable enemy = colliders[i].transform.GetComponent<Idamageable>();
-            GameObject enemyObject = colliders[i].gameObject;
+            Idamageable enemy = lightningHitBuffer[i].GetComponent<Idamageable>();
+            if (enemy == null) continue;
+            if (!lightningHitBuffer[i].gameObject.activeSelf) continue;
 
-            if (enemy != null && enemyObject.activeSelf)
-            {
-                PostMessage(damage, colliders[i].transform.position);
+            PostMessage(damage, lightningHitBuffer[i].transform.position);
 
-                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enemy.TakeDamage(damage,
-                                 knockback,
-                                 knockbackSpeedFactor,
-                                 Player.instance.transform.position,
-                                 hitEffect);
+            enemy.TakeDamage(damage, knockback, knockbackSpeedFactor,
+                Player.instance.transform.position, hitEffect);
 
-                DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
+            DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
 
-                // ⚡ 스파크 이펙트 스폰
-                GameObject spark = GameManager.instance.poolManager.GetMisc(sparkEffect);
-                if (spark != null)
-                {
-                    spark.transform.position = colliders[i].transform.position;
-                }
-            }
+            GameObject spark = GameManager.instance.poolManager.GetMisc(sparkEffect);
+            if (spark != null)
+                spark.transform.position = lightningHitBuffer[i].transform.position;
         }
     }
 
@@ -140,55 +147,55 @@ public class LightningWeapon : WeaponBase
         if (targets == null)
             targets = new List<Vector2>();
 
-        targets.Clear(); // ✅ 항상 초기화
+        targets.Clear();
 
         Vector2 center = GameManager.instance.player.transform.position;
 
-        Collider2D[] enemies =
-            Physics2D.OverlapAreaAll(
-                center - new Vector2(halfWidth * 0.8f, halfHeight * 0.8f),
-                center + new Vector2(halfWidth * 0.8f, halfHeight * 0.8f),
-                enemy);
+        // ✅ OverlapAreaNonAlloc으로 GC 방지
+        int count = Physics2D.OverlapAreaNonAlloc(
+            center - new Vector2(halfWidth * 0.8f, halfHeight * 0.8f),
+            center + new Vector2(halfWidth * 0.8f, halfHeight * 0.8f),
+            areaBuffer,
+            enemy);
 
-        if (enemies.Length == 0)
+        if (count == 0)
         {
             isClean = true;
             return;
         }
 
-        // ✅ Vector2 대신 Collider2D로 저장
-        List<Collider2D> candidates = new List<Collider2D>();
-
-        for (int i = 0; i < enemies.Length; i++)
+        // ✅ 버퍼 재사용 (new List 제거)
+        candidatesBuffer.Clear();
+        for (int i = 0; i < count; i++)
         {
-            if (enemies[i].GetComponent<Idamageable>() == null) continue;
-            candidates.Add(enemies[i]);
+            if (areaBuffer[i].GetComponent<Idamageable>() != null)
+                candidatesBuffer.Add(areaBuffer[i]);
         }
 
-        if (candidates.Count == 0)
+        if (candidatesBuffer.Count == 0)
         {
             isClean = true;
             return;
         }
 
-        // ✅ recurringPool도 Collider2D로
-        List<Collider2D> recurringPool = new List<Collider2D>(candidates);
+        recurringPoolBuffer.Clear();
+        recurringPoolBuffer.AddRange(candidatesBuffer);
 
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
             Collider2D pick;
 
-            if (candidates.Count == 0)
+            if (candidatesBuffer.Count == 0)
             {
-                pick = recurringPool[Random.Range(0, recurringPool.Count)];
+                pick = recurringPoolBuffer[Random.Range(0, recurringPoolBuffer.Count)];
             }
             else
             {
-                pick = candidates[Random.Range(0, candidates.Count)];
-                candidates.Remove(pick);
+                int idx = Random.Range(0, candidatesBuffer.Count);
+                pick = candidatesBuffer[idx];
+                candidatesBuffer.RemoveAt(idx);
             }
 
-            // ✅ 타겟을 꺼낼 때마다 새로 랜덤 포인트 계산 → 분산 효과
             EnemyBase enemyBase = pick.GetComponent<EnemyBase>();
             Vector2 targetPoint = enemyBase != null
                 ? enemyBase.GetRandomBodyPoint()

@@ -464,8 +464,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 327865993
-  m_SortingLayer: 8
+  m_SortingLayerID: -556371709
+  m_SortingLayer: 4
   m_SortingOrder: 9
   m_Sprite: {fileID: 21300000, guid: 50cdaf1642494fb4197f4920478e6ef4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -549,8 +549,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 327865993
-  m_SortingLayer: 8
+  m_SortingLayerID: -556371709
+  m_SortingLayer: 4
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: bd34fed956c684a6fa5946fd15f99872, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -645,8 +645,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 327865993
-  m_SortingLayer: 8
+  m_SortingLayerID: -556371709
+  m_SortingLayer: 4
   m_SortingOrder: 12
   m_Sprite: {fileID: 21300000, guid: cba8f48a265434ad7be0e24a8e1ed490, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -811,20 +811,19 @@ MonoBehaviour:
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
   hitEffectPoint: {fileID: 2248165805170968403}
-  whiteFlashDuration: 0.08
   knockBackSpeed: 12
   knockBackDelay: 0
   srFlash:
   - {fileID: 2680882880294298429}
   - {fileID: 1848755104661323650}
   - {fileID: 3277307161616684042}
-  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hits:
   - {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   dies:
   - {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   - {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
+  subBossAlarm: {fileID: 0}
   HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
   HpBarPos: {fileID: 8813300678232938863}
   hpBar: {fileID: 0}

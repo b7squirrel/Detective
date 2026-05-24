@@ -6,9 +6,16 @@ public class GarlicWeapon : WeaponBase
     float effectRadius;
     [SerializeField] float[] effectArea = new float[4];
 
+    // ✅ 캐싱: Awake에서 한 번만 GetComponent
+    HitEffects hitEffects;
+
+    // ✅ NonAlloc용 버퍼
+    readonly Collider2D[] garlicHitBuffer = new Collider2D[30];
+
     protected override void Awake()
     {
         base.Awake();
+        hitEffects = GetComponent<HitEffects>(); // ✅ 캐싱
     }
 
     public override void Init(WeaponStats stats, bool isLead)
@@ -29,7 +36,6 @@ public class GarlicWeapon : WeaponBase
         }
         else
         {
-            // ⭐ 어느 쪽이 null인지 구분
             Logger.LogWarning($"[GarlicWeapon] 기본값 사용 - equippedItem: {(equippedItem == null ? "null" : "있음")}, projectilePrefab: {(equippedItem?.projectilePrefab == null ? "null" : "있음")}");
         }
     }
@@ -38,47 +44,44 @@ public class GarlicWeapon : WeaponBase
     {
         base.Attack();
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, effectArea[(int)weaponStats.sizeOfArea]);
+        // ✅ NonAlloc으로 GC 방지
+        int count = Physics2D.OverlapCircleNonAlloc(
+            transform.position,
+            effectArea[(int)weaponStats.sizeOfArea],
+            garlicHitBuffer);
 
         effectRadius = weaponStats.sizeOfArea;
 
         note.GetComponent<Animator>().SetTrigger((weaponStats.sizeOfArea).ToString());
         note.Play();
 
-        ApplyDamage(colliders);
+        ApplyDamage(count);
     }
 
-    private void ApplyDamage(Collider2D[] colliders)
+    private void ApplyDamage(int count)
     {
-        for (int i = 0; i < colliders.Length; i++)
+        // ✅ 캐싱된 hitEffects 사용
+        GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
+
+        for (int i = 0; i < count; i++)
         {
-            Idamageable enemy = colliders[i].transform.GetComponent<Idamageable>();
+            Idamageable enemy = garlicHitBuffer[i].GetComponent<Idamageable>();
+            if (enemy == null) continue;
 
-            if (enemy != null)
-            {
-                PostMessage(damage, colliders[i].transform.position);
+            PostMessage(damage, garlicHitBuffer[i].transform.position);
 
-                Vector2 enemyDir = colliders[i].transform.position - transform.position;
-                Vector2 offsetDir = -(enemyDir.normalized);
-                Vector2 hitPoint = (Vector2)colliders[i].transform.position + (offsetDir * 2f); // 대략 적 콜라이더의 반정도
+            Vector2 enemyDir = garlicHitBuffer[i].transform.position - transform.position;
+            Vector2 offsetDir = -enemyDir.normalized;
+            Vector2 hitPoint = (Vector2)garlicHitBuffer[i].transform.position + offsetDir * 2f;
 
-                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enemy.TakeDamage(damage, knockback, knockbackSpeedFactor, hitPoint, hitEffect);
+            enemy.TakeDamage(damage, knockback, knockbackSpeedFactor, hitPoint, hitEffect);
 
-                // ✨ 데미지 기록 추가
-                // ✨ weaponData.DisplayName 사용
-                DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
-            }
+            DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
         }
-    }
-
-    void SetNoteParticle()
-    {
-        
     }
 
     protected override void FlipWeaponTools()
     {
-        // Debug.Log("Garlic");
+        // Garlic은 뒤집기 불필요
     }
 }

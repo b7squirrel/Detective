@@ -154,8 +154,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -556371709
-  m_SortingLayer: 4
+  m_SortingLayerID: 327865993
+  m_SortingLayer: 8
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 4872605f9116e4a3d9ba8f020d8e05f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -250,8 +250,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -556371709
-  m_SortingLayer: 4
+  m_SortingLayerID: 327865993
+  m_SortingLayer: 8
   m_SortingOrder: 12
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -534,8 +534,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -556371709
-  m_SortingLayer: 4
+  m_SortingLayerID: 327865993
+  m_SortingLayer: 8
   m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: 8af6e5ffffe6849939c7fede6352f120, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -653,8 +653,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -556371709
-  m_SortingLayer: 4
+  m_SortingLayerID: 327865993
+  m_SortingLayer: 8
   m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: 8d1fa506ed92347ba8518776c429ed4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -10736,7 +10736,6 @@ MonoBehaviour:
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
   hitEffectPoint: {fileID: 979157755931132213}
-  whiteFlashDuration: 0.08
   knockBackSpeed: 12
   knockBackDelay: 0
   srFlash:
@@ -10745,13 +10744,13 @@ MonoBehaviour:
   - {fileID: 2342817019543593600}
   - {fileID: 4831119380665204793}
   - {fileID: 459075181448662938}
-  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hits:
   - {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   dies:
   - {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   - {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
+  subBossAlarm: {fileID: 0}
   HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
   HpBarPos: {fileID: 6054906440720893064}
   hpBar: {fileID: 0}

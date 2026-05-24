@@ -3,89 +3,70 @@ using UnityEngine;
 public class PlaneProjectile : ProjectileBase
 {
     Vector3 target;
-    [SerializeField] LayerMask targetLayer; // 조준해서 던지는 것은 enemy지만 터지면 enemy, prop 둘 다 공격
-    [SerializeField] float speed = 10f; // 미사일의 이동 속도
-    [SerializeField] float rotateSpeed = 600f; // 회전 속도
-    Vector3 offsetDirection; // 초기 옵셋 방향
-    float sizeOfArea = 1f; // 타격 범위
+    [SerializeField] LayerMask targetLayer;
+    [SerializeField] float speed = 10f;
+    [SerializeField] float rotateSpeed = 600f;
+    Vector3 offsetDirection;
+    float sizeOfArea = 1f;
 
+    // ✅ 캐싱: Awake에서 한 번만 GetComponent
     TrailRenderer trailRenderer;
-    int frameCount = 0;
 
-    // 다시 활성화 될 때 트레일이 이상하게 시작되는 문제를 해결하기 위해서
+    // ✅ NonAlloc용 static 버퍼
+    static readonly Collider2D[] planeHitBuffer = new Collider2D[10];
+
+    protected override void Awake()
+    {
+        base.Awake(); // ✅ hitEffects 캐싱
+        trailRenderer = GetComponent<TrailRenderer>();
+    }
+
     private void OnDisable()
     {
-        if(trailRenderer == null) trailRenderer = GetComponent<TrailRenderer>();
-        trailRenderer.Clear();
+        // ✅ 캐싱된 trailRenderer 사용
+        if (trailRenderer != null)
+            trailRenderer.Clear();
     }
+
     protected override void Update()
     {
         if (Time.timeScale == 0f) return;
         AttackCoolTimer();
         ApplyMovement();
 
-        frameCount++;
-        if(frameCount > 30) frameCount = 0;
-
-        if(frameCount % 8 == 0)
+        if (Time.frameCount % 8 == 0)
         {
             CastDamage();
         }
     }
+
     protected override void ApplyMovement()
     {
-        // // 타겟을 향한 현재 방향을 계산합니다.
-        // Vector3 directionToTarget = (target - transform.position).normalized;
-
-        // // 현재 방향에서 타겟을 향한 방향으로 회전시킵니다.
-        // float rotateAmount = Vector3.Cross(transform.up, directionToTarget).z;
-        // transform.Rotate(0, 0, rotateAmount * rotateSpeed * Time.deltaTime);
-
-        // // 미사일을 전진시킵니다.
-        // transform.position += transform.up * speed * Time.deltaTime;
-
-        // // 목표물에 도착하면 데미지 띄우고 비활성화
-        // if (Vector3.Distance(transform.position, target) < 1f)
-        // {
-        //     CastDamage();
-        //     DieProjectile();
-        // }
-        // 타겟을 향한 현재 방향을 계산합니다.
         Vector3 directionToTarget = (target - transform.position).normalized;
-
-        // 현재 방향 벡터 (transform.up)
         Vector3 currentDirection = transform.up;
 
-        // 두 벡터 사이의 각도를 계산
         float angle = Vector3.SignedAngle(currentDirection, directionToTarget, Vector3.forward);
-
-        // 회전량을 제한하여 부드러운 회전
         float maxRotationThisFrame = rotateSpeed * Time.deltaTime;
         float rotationAmount = Mathf.Clamp(angle, -maxRotationThisFrame, maxRotationThisFrame);
 
-        // 회전 적용
         transform.Rotate(0, 0, rotationAmount);
-
-        // 미사일을 전진시킵니다.
         transform.position += transform.up * speed * Time.deltaTime;
 
-        // 목표물에 도착하면 데미지 띄우고 비활성화
         if (Vector3.Distance(transform.position, target) < 1f)
         {
             CastDamage();
             DieProjectile();
         }
     }
-    public void Init(Vector3 _taget, int damage)
+
+    public void Init(Vector3 _target, int damage)
     {
-        // 타겟과의 초기 각도 오프셋을 설정합니다.
-        target = _taget;
+        target = _target;
 
         float randomAngle = UnityEngine.Random.Range(-70f, 70f);
         offsetDirection = Quaternion.Euler(0, 0, randomAngle) * (target - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, offsetDirection);
 
-        // ✨ 부모 관계없이 일정한 크기 유지
         transform.SetParent(null);
         transform.localScale = 0.5f * Vector3.one;
 
@@ -96,9 +77,7 @@ public class PlaneProjectile : ProjectileBase
     {
         TimeToLive -= Time.deltaTime;
         if (TimeToLive < 0f)
-        {
             DieProjectile();
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -108,32 +87,30 @@ public class PlaneProjectile : ProjectileBase
 
     protected override void CastDamage()
     {
-        if (Time.frameCount % 10 != 0) return; // 10프레임 간격으로 데미지를 입도록
+        if (Time.frameCount % 10 != 0) return;
 
-        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, sizeOfArea, targetLayer);
-        for (int i = 0; i < hit.Length; i++)
+        // ✅ NonAlloc으로 GC 방지
+        int count = Physics2D.OverlapCircleNonAlloc(transform.position, sizeOfArea, planeHitBuffer, targetLayer);
+
+        for (int i = 0; i < count; i++)
         {
-            Transform enmey = hit[i].GetComponent<Transform>();
-            if (enmey.GetComponent<Idamageable>() != null)
-            {
-                if (enmey.GetComponent<DestructableObject>() == null)
-                    PostMessage(Damage, enmey.transform.position);
+            // ✅ GetComponent 중복 호출 제거
+            Idamageable damageable = planeHitBuffer[i].GetComponent<Idamageable>();
+            if (damageable == null) continue;
 
-                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enmey.GetComponent<Idamageable>().TakeDamage(Damage,
-                                                             KnockBackChance,
-                                                             KnockBackSpeedFactor,
-                                                             transform.position,
-                                                             hitEffect);
+            if (planeHitBuffer[i].GetComponent<DestructableObject>() == null)
+                PostMessage(Damage, planeHitBuffer[i].transform.position);
 
-                // ✨ 데미지 기록 추가
-                if (!string.IsNullOrEmpty(WeaponName))
-                {
-                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
-                }
+            // ✅ 캐싱된 hitEffects 사용
+            GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
+            damageable.TakeDamage(
+                Damage, KnockBackChance, KnockBackSpeedFactor,
+                transform.position, hitEffect);
 
-                hitDetected = true;
-            }
+            if (!string.IsNullOrEmpty(WeaponName))
+                DamageTracker.instance.RecordDamage(WeaponName, Damage);
+
+            hitDetected = true;
         }
     }
 }

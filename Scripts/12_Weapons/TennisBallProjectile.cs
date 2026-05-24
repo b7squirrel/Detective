@@ -9,26 +9,43 @@ public class TennisBallProjectile : ProjectileBase
     Animator anim;
     TrailRenderer trailRenderer;
 
+    // ✅ 반사 직후 재충돌 방지용
+    private bool isReflecting = false;
+    private float reflectCooldown = 0f;
+    private const float REFLECT_COOLDOWN_TIME = 0.05f; // 3프레임 정도
+
     protected override void Awake()
     {
-        base.Awake(); // ✅ ProjectileBase.Awake() 호출 → hitEffects 캐싱
-
+        base.Awake();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         trailRenderer = GetComponent<TrailRenderer>();
     }
 
-    private void OnDisable()
+    protected override void Update()
     {
-        if (trailRenderer != null)
+        // ✅ 쿨다운 타이머 업데이트
+        if (isReflecting)
         {
-            trailRenderer.Clear();
+            reflectCooldown -= Time.deltaTime;
+            if (reflectCooldown <= 0f)
+                isReflecting = false;
         }
+
+        base.Update();
+    }
+
+    protected override void ApplyMovement()
+    {
+        // transform.position 대신 물리 속도로 이동
+        rb.velocity = Direction.normalized * Speed;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        // ✅ 캐싱된 hitEffects 사용 (매 충돌마다 GetComponent 제거)
+        // ✅ 반사 쿨다운 중이면 무시
+        if (isReflecting) return;
+
         GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
 
         if (other.contacts.Length > 0)
@@ -42,17 +59,14 @@ public class TennisBallProjectile : ProjectileBase
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            // 데미지 처리
             other.gameObject.GetComponent<Idamageable>().TakeDamage(
                 Damage, KnockBackChance, KnockBackSpeedFactor,
                 transform.position, hitEffect);
-
             PostMessage(Damage, other.transform.position);
-
             if (!string.IsNullOrEmpty(WeaponName))
                 DamageTracker.instance.RecordDamage(WeaponName, Damage);
 
-            HandleReflection(normalVector, rb);
+            ReflectWithCooldown(normalVector); // ✅ 변경
             TriggerHitEffects();
 
             if (ShouldDeactivate(ref deflection))
@@ -62,7 +76,6 @@ public class TennisBallProjectile : ProjectileBase
                  other.gameObject.CompareTag("Wall") ||
                  other.gameObject.CompareTag("Props"))
         {
-            // 소품이면 데미지 처리
             if (other.gameObject.CompareTag("Props"))
             {
                 other.gameObject.GetComponent<Idamageable>()?.TakeDamage(
@@ -70,7 +83,7 @@ public class TennisBallProjectile : ProjectileBase
                     transform.position, hitEffect);
             }
 
-            HandleReflection(normalVector, rb);
+            ReflectWithCooldown(normalVector); // ✅ 변경
             TriggerHitEffects();
 
             if (ShouldDeactivate(ref deflection))
@@ -78,42 +91,38 @@ public class TennisBallProjectile : ProjectileBase
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    // ✅ 반사 + 즉시 콜라이더에서 탈출 + 쿨다운 시작
+    private void ReflectWithCooldown(Vector2 normalVector)
     {
-        // ✅ 캐싱된 hitEffects 사용
-        GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
+        HandleReflection(normalVector, rb);
 
-        if (other.gameObject.CompareTag("Props"))
-        {
-            other.gameObject.GetComponent<Idamageable>()?.TakeDamage(
-                Damage, KnockBackChance, KnockBackSpeedFactor,
-                transform.position, hitEffect);
+        // 콜라이더 반지름보다 충분히 크게 밀어냄
+        transform.position += (Vector3)(Direction.normalized * 0.6f);
 
-            // 트리거는 단순 반대 방향 반사
-            Direction = -Direction.normalized;
-            rb.velocity = Vector2.zero;
-            TriggerHitEffects();
-
-            if (ShouldDeactivate(ref deflection))
-                DeactivateBall();
-        }
-    }
-
-    private void TriggerHitEffects()
-    {
-        if (anim != null)
-            anim.SetTrigger("Hit");
-
-        if (hitSound != null)
-            SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .034f);
+        isReflecting = true;
+        reflectCooldown = REFLECT_COOLDOWN_TIME;
     }
 
     private void DeactivateBall()
     {
-        deflection = 3; // 초기값으로 리셋
+        deflection = 3;
+        isReflecting = false; // ✅ 리셋
+        reflectCooldown = 0f;
         TimeToLive = 3f;
         transform.localScale = Vector3.one;
         gameObject.SetActive(false);
+    }
+    private void TriggerHitEffects()
+    {
+        if (anim != null)
+            anim.SetTrigger("Hit");
+        if (hitSound != null)
+            SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .034f);
+    }
+    private void OnDisable()
+    {
+        if (trailRenderer != null)
+            trailRenderer.Clear();
     }
 
     protected override void CastDamage()

@@ -17,7 +17,7 @@ public class ProjectileBase : MonoBehaviour
 
     // ✅ NonAlloc용 버퍼: 모든 발사체가 공유 (static)
     // 발사체는 메인 스레드에서만 실행되므로 static 공유 안전
-    static readonly Collider2D[] overlapBuffer = new Collider2D[10];
+    protected static readonly Collider2D[] overlapBuffer = new Collider2D[10];
 
     protected virtual void Awake()
     {
@@ -102,12 +102,13 @@ public class ProjectileBase : MonoBehaviour
     }
 
     #region 반사 로직
+    // ProjectileBase
     protected void HandleReflection(Vector2 normalVector, Rigidbody2D rb)
     {
         Vector2 incomingVector = Direction.normalized;
         Vector2 deflectionVector = Vector2.Reflect(incomingVector, normalVector).normalized;
         Direction = deflectionVector;
-        rb.velocity = Vector2.zero;
+        rb.velocity = deflectionVector * Speed; // ✅ 반사 방향으로 즉시 속도 적용
     }
 
     protected bool ShouldDeactivate(ref int deflection)

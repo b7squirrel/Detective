@@ -11,7 +11,6 @@ public class WhipWeapon : WeaponBase
     bool canMultiStrike;
     bool multiStrikeDone;
 
-    // 리드 오리일 때 플레이어 방향 참조
     private Player player;
     private Vector2 currentDir;
 
@@ -27,21 +26,19 @@ public class WhipWeapon : WeaponBase
     [SerializeField] GameObject hitEffectPrefab;
 
     [Header("전기 볼트")]
-    [Tooltip("HammerBolt 설정 에셋 (Project 창에서 생성 후 연결)")]
     [SerializeField] private HammerBoltConfig hammerBoltConfig;
-
-    [Tooltip("기본 사거리 배수 (실제 거리 = baseRange × sizeOfArea)")]
     [SerializeField] private float boltBaseRange = 4f;
-
-    [Tooltip("볼트 유지 시간(초)")]
     [SerializeField] private float boltDuration = 0.5f;
-
-    [Tooltip("시너지 활성화 시 볼트 개수")]
     [SerializeField] private int synergyBoltCount = 2;
+
+    // ✅ 캐싱: Awake에서 한 번만 GetComponent
+    HitEffects hitEffects;
+
+    // ✅ NonAlloc용 버퍼
+    readonly Collider2D[] whipHitBuffer = new Collider2D[20];
 
     private HashSet<Collider2D> hitEnemiesThisAttack = new HashSet<Collider2D>();
 
-    // 공격 방향 고정용
     private bool isAttacking = false;
     private bool attackFacingRight = true;
 
@@ -49,10 +46,12 @@ public class WhipWeapon : WeaponBase
     {
         base.Awake();
         anim = GetComponentInChildren<Animator>();
+        hitEffects = GetComponent<HitEffects>(); // ✅ 캐싱
+
         if (weapon != null)
             weapon.SetActive(true);
 
-        player = GetComponentInParent<Player>(); // 동료일 땐 null
+        player = GetComponentInParent<Player>();
     }
 
     public override void SetData(WeaponData wd)
@@ -69,7 +68,6 @@ public class WhipWeapon : WeaponBase
 
     protected override void Update()
     {
-        // base보다 먼저 currentDir 업데이트 → FlipWeaponTools에 즉시 반영
         if (InitialWeapon && player != null && player.InputVec != Vector2.zero)
             currentDir = player.InputVec;
 
@@ -77,7 +75,6 @@ public class WhipWeapon : WeaponBase
 
         if (isAttacking)
         {
-            // animation event 대신 Animator 상태로 공격 종료 감지
             var state = anim.GetCurrentAnimatorStateInfo(0);
             bool stillInAttack = state.IsName("Hammer Attack")
                               || state.IsName("Hammer SynergyAttack")
@@ -97,15 +94,9 @@ public class WhipWeapon : WeaponBase
     protected override void SetAngle()
     {
         if (InitialWeapon)
-        {
-            // 리드 오리: 플레이어 입력 방향 사용
             angle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
-        }
         else
-        {
-            // 동료 오리: 기존 적 탐색 방향 사용
             base.SetAngle();
-        }
     }
 
     protected override void Attack()
@@ -132,28 +123,20 @@ public class WhipWeapon : WeaponBase
         isAttacking = true;
 
         if (InitialWeapon)
-        {
             attackFacingRight = currentDir.x >= 0;
-        }
         else
-        {
-            attackFacingRight = weaponContainerAnim != null
-                ? weaponContainerAnim.FacingRight
-                : dir.x >= 0;
-        }
+            attackFacingRight = weaponContainerAnim != null ? weaponContainerAnim.FacingRight : dir.x >= 0;
     }
 
-    // 공격 중: 부모가 뒤집혔다면 로컬 Y=180으로 보정해서 월드 방향 고정
     void LockAttackDirection()
     {
         if (weaponContainerAnim == null) return;
 
         bool parentFacingRight = weaponContainerAnim.FacingRight;
-        bool needsFlip = (attackFacingRight != parentFacingRight);
+        bool needsFlip = attackFacingRight != parentFacingRight;
         transform.localEulerAngles = new Vector3(0, needsFlip ? 180f : 0f, 0);
     }
 
-    // 공격 종료: 로컬 리셋 → 부모 방향이 자동 반영
     void EndAttack()
     {
         isAttacking = false;
@@ -162,7 +145,6 @@ public class WhipWeapon : WeaponBase
 
     /// <summary>
     /// 범위 공격 (애니메이션 이벤트에서 호출)
-    /// hitPoint 위치에서 sizeOfArea 반지름의 원 안에 있는 모든 적 공격
     /// </summary>
     void AttackAtHitPoint()
     {
@@ -172,22 +154,22 @@ public class WhipWeapon : WeaponBase
             return;
         }
 
-        // 전기 볼트 발사
         FireLightningBolts();
 
         Vector2 attackPosition = hitPoint.position;
         float attackRadius = weaponStats.sizeOfArea;
 
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(
-            attackPosition,
-            attackRadius,
-            enemy
-        );
+        // ✅ NonAlloc으로 GC 방지
+        int count = Physics2D.OverlapCircleNonAlloc(attackPosition, attackRadius, whipHitBuffer, enemy);
 
-        foreach (Collider2D collision in hitColliders)
+        // ✅ 캐싱된 hitEffects 사용 (매 공격마다 GetComponent 제거)
+        GameObject hitEffect = hitEffectPrefab != null ? hitEffectPrefab
+            : (hitEffects != null ? hitEffects.hitEffect : null);
+
+        for (int i = 0; i < count; i++)
         {
-            if (hitEnemiesThisAttack.Contains(collision))
-                continue;
+            Collider2D collision = whipHitBuffer[i];
+            if (hitEnemiesThisAttack.Contains(collision)) continue;
 
             if (collision.CompareTag("Enemy"))
             {
@@ -195,22 +177,9 @@ public class WhipWeapon : WeaponBase
                 if (enemyTarget != null)
                 {
                     PostMessage(damage, collision.transform.position);
-
-                    GameObject hitEffect = hitEffectPrefab;
-                    if (hitEffect == null)
-                    {
-                        HitEffects hitEffects = GetComponent<HitEffects>();
-                        if (hitEffects != null)
-                            hitEffect = hitEffects.hitEffect;
-                    }
-
                     enemyTarget.TakeDamage(
-                        damage,
-                        knockback,
-                        knockbackSpeedFactor,
-                        collision.ClosestPoint(attackPosition),
-                        hitEffect
-                    );
+                        damage, knockback, knockbackSpeedFactor,
+                        collision.ClosestPoint(attackPosition), hitEffect);
 
                     if (!string.IsNullOrEmpty(weaponName))
                         DamageTracker.instance.RecordDamage(weaponName, damage);
@@ -223,21 +192,9 @@ public class WhipWeapon : WeaponBase
                 Idamageable prop = collision.GetComponent<Idamageable>();
                 if (prop != null)
                 {
-                    GameObject hitEffect = hitEffectPrefab;
-                    if (hitEffect == null)
-                    {
-                        HitEffects hitEffects = GetComponent<HitEffects>();
-                        if (hitEffects != null)
-                            hitEffect = hitEffects.hitEffect;
-                    }
-
                     prop.TakeDamage(
-                        damage,
-                        knockback,
-                        knockbackSpeedFactor,
-                        collision.ClosestPoint(attackPosition),
-                        hitEffect
-                    );
+                        damage, knockback, knockbackSpeedFactor,
+                        collision.ClosestPoint(attackPosition), hitEffect);
 
                     hitEnemiesThisAttack.Add(collision);
                 }
@@ -252,15 +209,6 @@ public class WhipWeapon : WeaponBase
 #endif
     }
 
-    // ─────────────────────────────────────────────────────────────
-    //  전기 볼트 발사 로직
-    // ─────────────────────────────────────────────────────────────
-
-    /// <summary>
-    /// 공격 방향으로 전기 볼트를 발사합니다.
-    /// 일반 공격:        앞으로 1개
-    /// 멀티/시너지 공격: AttackAtHitPoint 호출 때마다 앞/뒤 번갈아 1개씩
-    /// </summary>
     private void FireLightningBolts()
     {
         if (hitPoint == null) return;
@@ -271,12 +219,10 @@ public class WhipWeapon : WeaponBase
 
         if (!isSynergyWeaponActivated && !canMultiStrike)
         {
-            // 일반 공격: 앞으로 1개
             SpawnSingleBolt(origin, origin + forwardDir * boltRange);
         }
         else
         {
-            // 멀티/시너지 공격: 호출될 때마다 앞/뒤 번갈아
             Vector3 boltDir = boltAlternateToggle ? -forwardDir : forwardDir;
             SpawnSingleBolt(origin, origin + boltDir * boltRange);
             boltAlternateToggle = !boltAlternateToggle;
@@ -295,35 +241,21 @@ public class WhipWeapon : WeaponBase
             ? boltDuration * 1.3f
             : boltDuration;
 
-        GameObject hitEffect = hitEffectPrefab;
-        if (hitEffect == null)
-        {
-            HitEffects hitEffects = GetComponent<HitEffects>();
-            if (hitEffects != null)
-                hitEffect = hitEffects.hitEffect;
-        }
+        // ✅ 캐싱된 hitEffects 사용
+        GameObject hitEffect = hitEffectPrefab != null ? hitEffectPrefab
+            : (hitEffects != null ? hitEffects.hitEffect : null);
 
         HammerBolt.Create(
-            hammerBoltConfig,
-            start,
-            end,
-            adjustedDuration,
-            damage,
-            knockback,
-            knockbackSpeedFactor,
-            hitEffect,
-            enemy
-        );
+            hammerBoltConfig, start, end, adjustedDuration,
+            damage, knockback, knockbackSpeedFactor, hitEffect, enemy);
     }
 
-    // 평상시: 부모 flip을 그대로 따라감
     protected override void FlipWeaponTools()
     {
         if (isAttacking) return;
         transform.localEulerAngles = Vector3.zero;
     }
 
-    // 기본 클래스 LockFlip도 로컬로
     protected override void LockFlip()
     {
         if (!isAttacking)
@@ -332,21 +264,16 @@ public class WhipWeapon : WeaponBase
 
     #region Animation Events
 
-    void ResetHitList()
-    {
-        hitEnemiesThisAttack.Clear();
-    }
+    void ResetHitList() => hitEnemiesThisAttack.Clear();
 
     void PlayHitSound()
     {
-        if (hitSound != null)
-            SoundManager.instance.Play(hitSound);
+        if (hitSound != null) SoundManager.instance.Play(hitSound);
     }
 
     void PlayShootSound()
     {
-        if (shootSound != null)
-            SoundManager.instance.Play(shootSound);
+        if (shootSound != null) SoundManager.instance.Play(shootSound);
     }
 
     void PlayElectricitySound()
@@ -364,7 +291,6 @@ public class WhipWeapon : WeaponBase
         }
 
         GameObject effect = GameManager.instance.poolManager.GetMisc(elecHitEffect);
-
         if (effect == null)
         {
             Logger.LogWarning("[WhipWeapon] GetMisc가 null을 반환했습니다!");

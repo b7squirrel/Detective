@@ -5,16 +5,18 @@ public class PunchWeapon : WeaponBase
     [SerializeField] Transform punchSpin;
     [SerializeField] Transform punchPrefab;
     BoxCollider2D boxCol;
-    Player player; // 무기 방향을 정하는 InputVec을 가져오기 위해
-    Vector2 currentDir; // 정지해 있을 때의 방향을 정하기 위해
-    bool isAttacking; // 공격 중일 떄는 무기가 회전하지 않도록 하기 위해
+    Player player;
+    Vector2 currentDir;
+    bool isAttacking;
     [SerializeField] SpriteRenderer sr;
     [SerializeField] float SynergyKnockBackSpeedFactor;
+
+    // ✅ 캐싱: Awake에서 한 번만 GetComponent
+    HitEffects hitEffects;
 
     [Header("Sounds")]
     [SerializeField] AudioClip punch;
     [SerializeField] AudioClip punchSynergy;
-    
 
     protected override void Awake()
     {
@@ -22,6 +24,7 @@ public class PunchWeapon : WeaponBase
         boxCol = GetComponentInChildren<BoxCollider2D>();
         anim = GetComponent<Animator>();
         player = GetComponentInParent<Player>();
+        hitEffects = GetComponent<HitEffects>(); // ✅ 캐싱
         isAttacking = false;
     }
 
@@ -40,10 +43,9 @@ public class PunchWeapon : WeaponBase
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Idamageable enemy = collision.transform.GetComponent<Idamageable>();
-
         if (enemy != null)
         {
-            // Attck 할 때 damge와 knockback 값을 가져와서 저장했음
+            // Attack()에서 damage와 knockback 값을 가져와서 저장했음
         }
     }
 
@@ -52,30 +54,24 @@ public class PunchWeapon : WeaponBase
         if (enemyTrans.GetComponent<DestructableObject>() == null)
             PostMessage(damage, enemyTrans.position);
 
-        GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
+        // ✅ 캐싱된 hitEffects 사용
+        GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
+
         if (isSynergyWeaponActivated)
-        {
             enemy.TakeDamage(damage, knockback, SynergyKnockBackSpeedFactor, transform.position, hitEffect);
-        }
         else
-        {
             enemy.TakeDamage(damage, knockback, knockbackSpeedFactor, transform.position, hitEffect);
-        }
-        
-        // ✨ 데미지 기록 추가
+
         if (weaponData != null)
-        {
             DamageTracker.instance.RecordDamage(weaponData.DisplayName, damage);
-        }
     }
 
-    // 공격을 할 동안은 무기의 회전이나 Flip이 없어야 함
     protected override void Attack()
     {
         base.Attack();
 
         isAttacking = true;
-        if(isSynergyWeaponActivated)
+        if (isSynergyWeaponActivated)
         {
             anim.SetTrigger("AttackSynergy");
             SoundManager.instance.PlaySoundWith(punchSynergy, .4f, true, .1f);
@@ -87,40 +83,24 @@ public class PunchWeapon : WeaponBase
         }
     }
 
-    // IEnumerator AttackCo()
-    // {
-
-    // }
-
     protected override void RotateWeapon()
     {
         if (GameManager.instance.IsPaused) return;
-
         if (isAttacking) return;
-
-        // Quaternion targetAngle = Quaternion.Euler(0, 0, angle);
-
-        // punchSpin.rotation = Quaternion.Slerp(punchSpin.rotation, targetAngle, .6f);
-
         punchSpin.eulerAngles = new Vector3(0, 0, angle);
     }
 
     protected override void FlipWeaponTools()
     {
-        if(GameManager.instance.IsPaused) return;
+        if (GameManager.instance.IsPaused) return;
         if (isAttacking) return;
 
         if (currentDir.x > 0)
-        {
             sr.flipY = false;
-        }
         else if (currentDir.x < 0)
-        {
             sr.flipY = true;
-        }
     }
 
-    // Essential Container로 Essectial Weapon을 넣을 타이밍을 보기 위해
     public bool CheckIsAttacking()
     {
         return isAttacking;

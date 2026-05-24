@@ -2,19 +2,29 @@ using UnityEngine;
 
 public class BombProjectile : ProjectileBase
 {
-    public Vector2 GroundVelocity{get; private set;}
+    public Vector2 GroundVelocity { get; private set; }
     float sizeOfArea;
-    [SerializeField] LayerMask target; // 조준해서 던지는 것은 enemy지만 터지면 enemy, prop 둘 다 공격
-    [SerializeField] GameObject hitEffect; // 폭발 이펙트
-    [SerializeField] GameObject starEffect; // 폭발 이펙트 - 별
+    [SerializeField] LayerMask target;
+    [SerializeField] GameObject hitEffect;   // 폭발 이펙트
+    [SerializeField] GameObject starEffect;  // 폭발 이펙트 - 별
     [SerializeField] AudioClip hitSFX;
 
+    // ✅ 캐싱: Awake에서 한 번만 GetComponent
     TrailRenderer trailRenderer;
+
+    // ✅ NonAlloc용 버퍼
+    readonly Collider2D[] explodeHitBuffer = new Collider2D[20];
+
+    protected override void Awake()
+    {
+        base.Awake(); // ✅ hitEffects 캐싱
+
+        // ✅ Awake에서 캐싱 (OnEnable/Explode에서 반복 GetComponent 제거)
+        trailRenderer = GetComponentInChildren<TrailRenderer>();
+    }
 
     void OnEnable()
     {
-        if(trailRenderer == null) trailRenderer = GetComponentInChildren<TrailRenderer>();
-
         if (trailRenderer != null)
         {
             trailRenderer.Clear();
@@ -25,51 +35,53 @@ public class BombProjectile : ProjectileBase
     protected override void Update()
     {
         ApplyMovement();
-        // Debug.DrawLine(transform.position, Player.instance.transform.position, Color.red);
     }
+
     protected override void ApplyMovement()
     {
         transform.position += (Vector3)GroundVelocity * Time.deltaTime;
     }
+
     public void Explode()
     {
         GenerateHitEffect();
         SoundManager.instance.Play(hitSFX);
         CastDamage();
 
-        trailRenderer.enabled = false;
+        // ✅ 캐싱된 trailRenderer 사용
+        if (trailRenderer != null)
+            trailRenderer.enabled = false;
 
-        GetComponentInChildren<TrailRenderer>().enabled = false;
         gameObject.SetActive(false);
     }
+
     protected override void CastDamage()
     {
-        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, sizeOfArea, target);
-        for (int i = 0; i < hit.Length; i++)
+        // ✅ NonAlloc으로 GC 방지
+        int count = Physics2D.OverlapCircleNonAlloc(transform.position, sizeOfArea, explodeHitBuffer, target);
+
+        for (int i = 0; i < count; i++)
         {
-            Transform enmey = hit[i].GetComponent<Transform>();
-            if (enmey.GetComponent<Idamageable>() != null)
-            {
-                if (enmey.GetComponent<DestructableObject>() == null)
-                    PostMessage(Damage, enmey.transform.position);
+            // ✅ GetComponent 중복 제거
+            Idamageable damageable = explodeHitBuffer[i].GetComponent<Idamageable>();
+            if (damageable == null) continue;
 
-                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enmey.GetComponent<Idamageable>().TakeDamage(Damage,
-                                                             KnockBackChance,
-                                                             KnockBackSpeedFactor,
-                                                             transform.position,
-                                                             hitEffect);
+            if (explodeHitBuffer[i].GetComponent<DestructableObject>() == null)
+                PostMessage(Damage, explodeHitBuffer[i].transform.position);
 
-                // ✨ 데미지 기록 추가
-                if (!string.IsNullOrEmpty(WeaponName))
-                {
-                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
-                }
+            // ✅ 캐싱된 hitEffects 사용
+            GameObject hitEffectObj = hitEffects != null ? hitEffects.hitEffect : null;
+            damageable.TakeDamage(
+                Damage, KnockBackChance, KnockBackSpeedFactor,
+                transform.position, hitEffectObj);
 
-                hitDetected = true;
-            }
+            if (!string.IsNullOrEmpty(WeaponName))
+                DamageTracker.instance.RecordDamage(WeaponName, Damage);
+
+            hitDetected = true;
         }
     }
+
     public void Init(Vector2 target, WeaponStats weaponStats)
     {
         Speed = weaponStats.projectileSpeed;
@@ -79,18 +91,17 @@ public class BombProjectile : ProjectileBase
         GroundVelocity = dir * Speed;
 
         if (trailRenderer != null)
-        {
             trailRenderer.enabled = true;
-        }
     }
+
     void GenerateHitEffect()
     {
         GameObject smoke = GameManager.instance.poolManager.GetMisc(hitEffect);
         smoke.transform.position = transform.position;
+        smoke.transform.localScale = Vector2.one * sizeOfArea;
+
         GameObject stars = GameManager.instance.poolManager.GetMisc(starEffect);
         stars.transform.position = transform.position;
-
-        smoke.transform.localScale = Vector2.one * sizeOfArea;
         stars.transform.localScale = Vector2.one * sizeOfArea;
     }
 }
