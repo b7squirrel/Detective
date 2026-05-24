@@ -1,9 +1,9 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// 화살은 처음 지면에 닿을 때 큰 데미지를 줌.
-/// 지면에 남아 있는 동안 데미지를 주기는 하지만 크게 의미가 없도록 빨리 사라지도록 함
+/// 지면에 남아 있는 동안 데미지를 주기는 하지만 크게 의미가 없도록 빨리 사라지도록 함.
 /// party 오리와 차별. 파티 오리는 지면에 있을 때 데미지가 의미가 있고 데미지가 작음.
 /// </summary>
 public class BowProjectile : MonoBehaviour
@@ -17,7 +17,7 @@ public class BowProjectile : MonoBehaviour
     public float SizeOfArea { get; set; }
 
     [Header("Ground Settings")]
-    [SerializeField] float groundDuration = .3f; // 지면에 남아있는 시간
+    [SerializeField] float groundDuration = .3f;  // 지면에 남아있는 시간
     [SerializeField] float damageInterval = 0.5f; // 데미지 간격
 
     [Header("Target")]
@@ -32,22 +32,28 @@ public class BowProjectile : MonoBehaviour
     [Header("Sound")]
     [SerializeField] AudioClip hitGroundSound;
 
+    // ✅ 캐싱: Awake에서 한 번만 GetComponent
+    HitEffects hitEffects;
     ShadowHeight shadowHeight;
+
     bool isGrounded = false;
 
     // 회전을 위한 변수
     Vector3 previousBodyPosition;
-    Transform bodyTransform; // ShadowHeight의 trnsBody
-    Quaternion landingRotation; // ✅ 착지 각도 저장용
-    Quaternion previousRotation; // ✅ 직전 프레임의 각도 저장
+    Transform bodyTransform;       // ShadowHeight의 trnsBody
+    Quaternion landingRotation;    // 착지 각도 저장용
+    Quaternion previousRotation;   // 직전 프레임의 각도 저장
+
+    // ✅ NonAlloc용 버퍼: 매 데미지마다 배열 생성하지 않도록 재사용
+    readonly Collider2D[] groundHitBuffer = new Collider2D[20];
 
     Coroutine groundDamageCo;
 
     void Awake()
     {
         shadowHeight = GetComponent<ShadowHeight>();
+        hitEffects = GetComponent<HitEffects>(); // ✅ 캐싱
 
-        // SpriteRenderer의 Transform을 bodyTransform으로 사용
         if (spriteRenderer != null)
         {
             bodyTransform = spriteRenderer.transform;
@@ -77,7 +83,7 @@ public class BowProjectile : MonoBehaviour
         // 착지 전에만 회전
         if (!isGrounded)
         {
-            // ✅ 회전하기 전에 현재 각도를 저장
+            // 회전하기 전에 현재 각도를 저장
             if (bodyTransform != null)
             {
                 previousRotation = bodyTransform.localRotation;
@@ -95,7 +101,7 @@ public class BowProjectile : MonoBehaviour
 
     void LateUpdate()
     {
-        // 착지 후에는 수직으로 고정
+        // 착지 후에는 착지 각도로 고정
         if (isGrounded && bodyTransform != null)
         {
             bodyTransform.localRotation = landingRotation;
@@ -106,23 +112,18 @@ public class BowProjectile : MonoBehaviour
     {
         if (bodyTransform == null) return;
 
-        // 현재 body 위치
         Vector3 currentBodyPosition = bodyTransform.position;
 
-        // 이동 방향 계산 (velocity)
+        // 이동 방향으로 velocity 계산
         Vector2 velocity = (currentBodyPosition - previousBodyPosition) / Time.fixedDeltaTime;
 
         // velocity가 충분히 크면 회전
         if (velocity.magnitude > 0.5f)
         {
-            // 각도 계산 (화살촉이 이동 방향을 향하도록)
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
-
-            // 로컬 rotation 사용
             bodyTransform.localRotation = Quaternion.Euler(0, 0, angle);
         }
 
-        // 이전 위치 업데이트
         previousBodyPosition = currentBodyPosition;
     }
 
@@ -130,20 +131,18 @@ public class BowProjectile : MonoBehaviour
     {
         isGrounded = true;
 
-        // ✅ 직전 프레임의 회전 각도 사용 (착지 순간의 급격한 변화 방지)
+        // 직전 프레임의 회전 각도 사용 (착지 순간의 급격한 변화 방지)
         if (bodyTransform != null)
         {
             landingRotation = previousRotation;
-            bodyTransform.localRotation = landingRotation; // 즉시 적용
+            bodyTransform.localRotation = landingRotation;
         }
 
-        // 지면 그림자 활성화
         ActivateGroundShadow(true);
 
-        // 사운드 재생
-        if(hitGroundSound != null) PlayGroundHitSound();
+        if (hitGroundSound != null)
+            PlayGroundHitSound();
 
-        // 지면 데미지 코루틴 시작
         if (groundDamageCo != null)
             StopCoroutine(groundDamageCo);
         groundDamageCo = StartCoroutine(GroundDamageCo());
@@ -153,55 +152,46 @@ public class BowProjectile : MonoBehaviour
     {
         float elapsedTime = 0f;
 
-        // 지속 시간 동안 반복
         while (elapsedTime < groundDuration)
         {
-            // 주변 적들에게 데미지
             CastGroundDamage();
-
-            // 다음 데미지까지 대기
             yield return new WaitForSeconds(damageInterval);
             elapsedTime += damageInterval;
         }
 
-        // 비활성화
         Deactivate();
     }
 
     void CastGroundDamage()
     {
-        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, SizeOfArea, target);
+        // ✅ NonAlloc으로 GC 방지
+        int count = Physics2D.OverlapCircleNonAlloc(
+            transform.position, SizeOfArea, groundHitBuffer, target);
 
-        for (int i = 0; i < hit.Length; i++)
+        for (int i = 0; i < count; i++)
         {
-            Transform enemy = hit[i].GetComponent<Transform>();
+            // ✅ GetComponent 중복 제거
+            Idamageable damageable = groundHitBuffer[i].GetComponent<Idamageable>();
+            if (damageable == null) continue;
 
-            if (enemy.GetComponent<Idamageable>() != null)
-            {
-                if (enemy.GetComponent<DestructableObject>() == null)
-                    PostMessage(Damage, enemy.transform.position);
+            if (groundHitBuffer[i].GetComponent<DestructableObject>() == null)
+                PostMessage(Damage, groundHitBuffer[i].transform.position);
 
-                GameObject hitEffectObj = GetComponent<HitEffects>()?.hitEffect;
-                enemy.GetComponent<Idamageable>().TakeDamage(
-                    Damage,
-                    KnockBackChance,
-                    KnockBackSpeedFactor,
-                    transform.position,
-                    hitEffectObj
-                );
+            // ✅ 캐싱된 hitEffects 사용
+            GameObject hitEffectObj = hitEffects != null ? hitEffects.hitEffect : null;
+            damageable.TakeDamage(
+                Damage, KnockBackChance, KnockBackSpeedFactor,
+                transform.position, hitEffectObj);
 
-                // 데미지 기록
-                if (!string.IsNullOrEmpty(WeaponName))
-                {
-                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
-                }
-            }
+            if (!string.IsNullOrEmpty(WeaponName))
+                DamageTracker.instance.RecordDamage(WeaponName, Damage);
         }
     }
 
     void PostMessage(int damage, Vector3 targetPosition)
     {
-        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, IsCriticalDamageProj);
+        MessageSystem.instance.PostMessage(
+            damage.ToString(), targetPosition, IsCriticalDamageProj);
     }
 
     void Deactivate()
@@ -211,10 +201,8 @@ public class BowProjectile : MonoBehaviour
 
     void OnDisable()
     {
-        // Invoke 정리
         CancelInvoke(nameof(Deactivate));
 
-        // 코루틴 정리
         if (groundDamageCo != null)
         {
             StopCoroutine(groundDamageCo);

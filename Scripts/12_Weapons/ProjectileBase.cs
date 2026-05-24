@@ -2,25 +2,33 @@ using UnityEngine;
 
 public class ProjectileBase : MonoBehaviour
 {
-    [field : SerializeField] public Vector3 Direction { get; set; }
-    [field : SerializeField] public float Speed {get; set;}
+    [field: SerializeField] public Vector3 Direction { get; set; }
+    [field: SerializeField] public float Speed { get; set; }
     protected bool hitDetected = false;
     public int Damage { get; set; } = 5;
-    public float KnockBackChance {get; set;}
-    [field: SerializeField] public float KnockBackSpeedFactor { get; set;}
-    public bool IsCriticalDamageProj {get; set;}
-    [field : SerializeField] public float TimeToLive {get; set;} = 3f;
-
-    // ✨ 투사체를 발사한 무기 이름
+    public float KnockBackChance { get; set; }
+    [field: SerializeField] public float KnockBackSpeedFactor { get; set; }
+    public bool IsCriticalDamageProj { get; set; }
+    [field: SerializeField] public float TimeToLive { get; set; } = 3f;
     public string WeaponName { get; set; }
+
+    // ✅ 캐싱: Awake에서 한 번만 GetComponent
+    protected HitEffects hitEffects;
+
+    // ✅ NonAlloc용 버퍼: 모든 발사체가 공유 (static)
+    // 발사체는 메인 스레드에서만 실행되므로 static 공유 안전
+    static readonly Collider2D[] overlapBuffer = new Collider2D[10];
+
+    protected virtual void Awake()
+    {
+        hitEffects = GetComponent<HitEffects>();
+    }
 
     protected virtual void Update()
     {
-        if (Time.timeScale == 0)
-            return;
+        if (Time.timeScale == 0) return;
         ApplyMovement();
         CastDamage();
-        
         AttackCoolTimer();
     }
 
@@ -40,29 +48,33 @@ public class ProjectileBase : MonoBehaviour
 
     protected virtual void CastDamage()
     {
-        Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, .7f);
-        for (int i = 0; i < hit.Length; i++)
+        // ✅ NonAlloc: 배열 재사용으로 GC 제거
+        int count = Physics2D.OverlapCircleNonAlloc(transform.position, .7f, overlapBuffer);
+
+        for (int i = 0; i < count; i++)
         {
-            Transform enmey = hit[i].GetComponent<Transform>();
-            if (enmey.GetComponent<Idamageable>() != null)
-            {
-                if (enmey.GetComponent<DestructableObject>() == null)
-                    PostMessage(Damage, enmey.transform.position);
+            // ✅ GetComponent 횟수 최소화
+            Idamageable damageable = overlapBuffer[i].GetComponent<Idamageable>();
+            if (damageable == null) continue;
 
-                GameObject hitEffect = GetComponent<HitEffects>().hitEffect;
-                enmey.GetComponent<Idamageable>().TakeDamage(Damage, KnockBackChance, KnockBackSpeedFactor, transform.position, hitEffect);
-                hitDetected = true;
+            if (overlapBuffer[i].GetComponent<DestructableObject>() == null)
+                PostMessage(Damage, overlapBuffer[i].transform.position);
 
-                // ✨ 무기 이름과 함께 데미지 기록
-                if (!string.IsNullOrEmpty(WeaponName))
-                {
-                    DamageTracker.instance.RecordDamage(WeaponName, Damage);
-                }
+            // ✅ 캐싱된 hitEffects 사용
+            GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
+            damageable.TakeDamage(
+                Damage, KnockBackChance, KnockBackSpeedFactor,
+                transform.position, hitEffect);
 
-                break;
-            }
+            hitDetected = true;
+
+            if (!string.IsNullOrEmpty(WeaponName))
+                DamageTracker.instance.RecordDamage(WeaponName, Damage);
+
+            break;
         }
-        if (hitDetected == true)
+
+        if (hitDetected)
         {
             HitObject();
             hitDetected = false;
@@ -72,19 +84,20 @@ public class ProjectileBase : MonoBehaviour
     protected virtual void HitObject()
     {
         TimeToLive = 3f;
-        transform.localScale = new Vector3(1, 1, 1);
+        transform.localScale = Vector3.one;
         gameObject.SetActive(false);
     }
 
     protected virtual void PostMessage(int damage, Vector3 targetPosition)
     {
-        MessageSystem.instance.PostMessage(damage.ToString(), targetPosition, IsCriticalDamageProj);
+        MessageSystem.instance.PostMessage(
+            damage.ToString(), targetPosition, IsCriticalDamageProj);
     }
 
     protected virtual void DieProjectile()
     {
         TimeToLive = 3f;
-        transform.localScale = new Vector3(1, 1, 1);
+        transform.localScale = Vector3.one;
         gameObject.SetActive(false);
     }
 
@@ -96,8 +109,7 @@ public class ProjectileBase : MonoBehaviour
         Direction = deflectionVector;
         rb.velocity = Vector2.zero;
     }
-    
-    // 공통 메서드: deflection 감소 및 비활성화 체크
+
     protected bool ShouldDeactivate(ref int deflection)
     {
         deflection--;
