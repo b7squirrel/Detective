@@ -1,21 +1,16 @@
+// TennisWeapon.cs
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TennisWeapon : WeaponBase
 {
-    [SerializeField] GameObject weaponTennisBall; // 동료 오리 폴백용
+    [SerializeField] GameObject weaponTennisBall;
     [SerializeField] AudioClip shoot;
-
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
 
-    // 런타임에 결정되는 프로젝타일
     GameObject currentTennisBallPrefab;
-
-    // Attack에서 매번 new List 하지 않도록 필드로 캐싱
     private List<Vector2> enemyQueryBuffer = new List<Vector2>(1);
-
-    // if-else 체인 대신 배열로 관리 (인덱스 → 각도)
     private static readonly float[] angleOffsets =
     {
         0f, -15f, 15f, -30f, 30f, -45f, 45f, -60f, 60f,
@@ -45,12 +40,9 @@ public class TennisWeapon : WeaponBase
     protected override void Attack()
     {
         base.Attack();
-
-        // 버퍼 재사용으로 new List 방지
         EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
         if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
             return;
-
         AttackCo();
     }
 
@@ -58,7 +50,6 @@ public class TennisWeapon : WeaponBase
     {
         AnimShoot();
         SoundManager.instance.Play(shoot);
-
         Transform muzzleEffect = GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
         muzzleEffect.transform.position = ShootPoint.position;
 
@@ -69,10 +60,9 @@ public class TennisWeapon : WeaponBase
 
             tennisBall.transform.position = ShootPoint.position;
 
-            // 배열로 각도 조회 (if-else 체인 제거)
             float index = i < angleOffsets.Length ? angleOffsets[i] : 0f;
-
             Vector3 direction = Quaternion.AngleAxis(index, Vector3.forward) * dir;
+
             ProjectileBase projectile = tennisBall.GetComponent<ProjectileBase>();
             projectile.Speed = weaponStats.projectileSpeed;
             projectile.Direction = direction;
@@ -81,13 +71,17 @@ public class TennisWeapon : WeaponBase
             projectile.KnockBackChance = GetKnockBackChance();
             projectile.TimeToLive = 1.5f;
             projectile.WeaponName = weaponData.DisplayName;
+
+            // ✅ 발사할 때마다 deflection 명시적으로 초기화
+            TennisBallProjectile tennisBallProj = tennisBall.GetComponent<TennisBallProjectile>();
+            if (tennisBallProj != null)
+                tennisBallProj.SetDeflection(3);
         }
     }
 
     protected override void FlipWeaponTools()
     {
         if (weaponTools == null) return;
-
         if (flip)
         {
             weaponTools.GetComponent<Transform>().transform.eulerAngles = new Vector3(0, 180f, 0);
