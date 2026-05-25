@@ -9,6 +9,10 @@ public class TennisWeapon : WeaponBase
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
 
+    // ✅ 시너지 활성화 시 추가 반사 횟수
+    private const int BASE_DEFLECTION = 3;
+    private const int SYNERGY_DEFLECTION = 6; // 원하는 값으로 조정
+
     GameObject currentTennisBallPrefab;
     private List<Vector2> enemyQueryBuffer = new List<Vector2>(1);
     private static readonly float[] angleOffsets =
@@ -53,6 +57,9 @@ public class TennisWeapon : WeaponBase
         Transform muzzleEffect = GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
         muzzleEffect.transform.position = ShootPoint.position;
 
+        // ✅ 시너지 여부에 따라 반사 횟수 결정
+        int deflectionCount = isSynergyWeaponActivated ? SYNERGY_DEFLECTION : BASE_DEFLECTION;
+
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
             GameObject tennisBall = GameManager.instance.poolManager.GetMisc(currentTennisBallPrefab);
@@ -75,8 +82,15 @@ public class TennisWeapon : WeaponBase
             // ✅ 발사할 때마다 deflection 명시적으로 초기화
             TennisBallProjectile tennisBallProj = tennisBall.GetComponent<TennisBallProjectile>();
             if (tennisBallProj != null)
-                tennisBallProj.SetDeflection(3);
+            tennisBallProj.SetDeflection(deflectionCount); // ✅ 시너지 반영
         }
+    }
+
+    // ✅ WeaponBase의 ActivateSynergyWeapon 오버라이드
+    public override void ActivateSynergyWeapon()
+    {
+        base.ActivateSynergyWeapon(); // isSynergyWeaponActivated = true
+        Logger.Log("[TennisWeapon] 시너지 활성화: 반사 횟수 증가");
     }
 
     protected override void FlipWeaponTools()
