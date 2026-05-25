@@ -88,7 +88,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected float stunnedSpeed = 14f;
 
     // 공격 프레임 간격 (모드별로 다르게 설정)
-    protected int attackFrameInterval = 3; // 기본값 3프레임
+    protected int attackFrameInterval = 5; // 기본값 3프레임
 
     [Header("특수 능력")]
     protected EnemyDashAbility dashAbility;
@@ -607,10 +607,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
             return;
 
-        if (IsGrouping && collision.gameObject.CompareTag("Wall"))
-        {
-            GroupDir = (Player.instance.transform.position - transform.position).normalized;
-        }
+        // ✅ 추가: 모든 적이 동일 프레임에 처리되지 않도록 분산
+        if (Time.frameCount % attackFrameInterval != (GetInstanceID() & 3)) return;
 
         if (GameManager.instance.player == null)
             return;
