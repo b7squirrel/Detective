@@ -107,7 +107,8 @@ public class Character : MonoBehaviour
         MagnetSize += 0.25f * MagneticArea * MagnetSize; // 레벨업 당 25% 증가
 
         int MoveSpeedUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.MoveSpeed);
-        MoveSpeed += 0.05f * MoveSpeedUpgradeLevel * MoveSpeed; // 레벱업 당 5% 증가
+        Logger.Log($"[영구업그레이드] MoveSpeed 레벨: {MoveSpeedUpgradeLevel}, 현재값: {MoveSpeed}");
+        MoveSpeed += 0.05f * MoveSpeedUpgradeLevel * MoveSpeed;  // 레벨업 당 5% 증가
 
         int CooldownUpgradeLevel = dataContainer.GetUpgradeLevel(PlayerPersistentUpgrades.CoolDown);
         Cooldown -= 0.025f * CooldownUpgradeLevel * Cooldown; // 레벨업 당 2.5% 감소
@@ -147,7 +148,6 @@ public class Character : MonoBehaviour
         }
 
         int grade = GameManager.instance.startingDataContainer.GetSetBonusGrade();
-        Logger.Log($"[Character] 세트 보너스 적용: {bonus.bonusDescription}, 등급: {grade}");
 
         if (grade < 0 || grade >= 5)
         {
@@ -155,23 +155,40 @@ public class Character : MonoBehaviour
             return;
         }
 
+        // ← 적용 전 스탯 저장
+        int beforeHp = MaxHealth;
+        int beforeAtk = DamageBonus;
+        int beforeArmor = Armor;
+        float beforeSpeed = MoveSpeed;
+        float beforeCooldown = Cooldown;
+        float beforeCritical = CriticalDamageChance;
+        float beforeHpRegen = HpRegenerationRate;
+        float beforeMagnet = MagnetSize;
+        float beforeKnockBack = knockBackChance;
+
+        Logger.Log($"[세트 보너스] 세트명: {bonus.setName} / 등급: {grade} / 설명: {bonus.bonusDescription}");
+        Logger.Log($"[세트 보너스 적용 전] HP:{beforeHp} ATK:{beforeAtk} Armor:{beforeArmor} Speed:{beforeSpeed:F2} Cooldown:{beforeCooldown:F2} Critical:{beforeCritical:F2} HpRegen:{beforeHpRegen:F2} Magnet:{beforeMagnet:F2} KnockBack:{beforeKnockBack:F2}");
+
         if (bonus.moveSpeedBonus[grade] != 0)
             MoveSpeed += MoveSpeed * bonus.moveSpeedBonus[grade];
 
         if (bonus.attackBonus[grade] != 0)
             DamageBonus += (int)(DamageBonus * bonus.attackBonus[grade]);
 
+        // Armor: 고정값으로 변경
         if (bonus.armorBonus[grade] != 0)
-            Armor += (int)(Armor * bonus.armorBonus[grade]);
+            Armor += (int)bonus.armorBonus[grade]; // 퍼센트 아닌 고정값
 
         if (bonus.maxHpBonus[grade] != 0)
             MaxHealth += (int)(MaxHealth * bonus.maxHpBonus[grade]);
 
+        // Cooldown: 고정값으로 변경
         if (bonus.cooldownBonus[grade] != 0)
-            Cooldown -= Cooldown * bonus.cooldownBonus[grade];
+            Cooldown -= bonus.cooldownBonus[grade]; // 쿨타임 감소 고정값 (초 단위)
 
+        // CriticalDamageChance: 고정값으로 변경
         if (bonus.criticalChanceBonus[grade] != 0)
-            CriticalDamageChance += CriticalDamageChance * bonus.criticalChanceBonus[grade];
+            CriticalDamageChance += bonus.criticalChanceBonus[grade]; // 고정값 (0~100 범위)
 
         if (bonus.hpRegenBonus[grade] != 0)
             HpRegenerationRate += HpRegenerationRate * bonus.hpRegenBonus[grade];
@@ -182,7 +199,8 @@ public class Character : MonoBehaviour
         if (bonus.knockBackBonus[grade] != 0)
             knockBackChance += knockBackChance * bonus.knockBackBonus[grade];
 
-        Logger.Log($"[Character] 세트 보너스 적용 완료 - MoveSpeed: {MoveSpeed}, DamageBonus: {DamageBonus}, MaxHealth: {MaxHealth}");
+        // ← 적용 후 스탯 및 변화량 출력
+        Logger.Log($"[세트 보너스 적용 후] HP:{MaxHealth}(+{MaxHealth - beforeHp}) ATK:{DamageBonus}(+{DamageBonus - beforeAtk}) Armor:{Armor}(+{Armor - beforeArmor}) Speed:{MoveSpeed:F2}(+{MoveSpeed - beforeSpeed:F2}) Cooldown:{Cooldown:F2}({Cooldown - beforeCooldown:F2}) Critical:{CriticalDamageChance:F2}(+{CriticalDamageChance - beforeCritical:F2}) HpRegen:{HpRegenerationRate:F2}(+{HpRegenerationRate - beforeHpRegen:F2}) Magnet:{MagnetSize:F2}(+{MagnetSize - beforeMagnet:F2}) KnockBack:{knockBackChance:F2}(+{knockBackChance - beforeKnockBack:F2})");
     }
 
     public void AddDamageBonus(int amount)

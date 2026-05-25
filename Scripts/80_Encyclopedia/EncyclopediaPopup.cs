@@ -101,29 +101,42 @@ public class EncyclopediaPopup : MonoBehaviour
     {
         var parts = new List<string>();
 
-        TryAdd(parts, "이동속도",    b.moveSpeedBonus[g],      "%");
-        TryAdd(parts, "공격력",      b.attackBonus[g],         "%");
-        TryAdd(parts, "방어력",      b.armorBonus[g],          "");
-        TryAdd(parts, "최대 HP",     b.maxHpBonus[g],          "%");
-        TryAdd(parts, "쿨타임 감소", b.cooldownBonus[g],       "%");
-        TryAdd(parts, "치명타",      b.criticalChanceBonus[g], "%");
-        TryAdd(parts, "HP 회복",     b.hpRegenBonus[g],        "");
-        TryAdd(parts, "자석 범위",   b.magnetSizeBonus[g],     "");
-        TryAdd(parts, "넉백",        b.knockBackBonus[g],      "%");
+        // 퍼센트 스탯
+        TryAdd(parts, "이동속도",    b.moveSpeedBonus[g],      true);  // true = 퍼센트
+        TryAdd(parts, "공격력",      b.attackBonus[g],         true);
+        TryAdd(parts, "최대 HP",     b.maxHpBonus[g],          true);
+        TryAdd(parts, "HP 회복",     b.hpRegenBonus[g],        true);
+        TryAdd(parts, "자석 범위",   b.magnetSizeBonus[g],     true);
+        TryAdd(parts, "넉백",        b.knockBackBonus[g],      true);
+
+        // 고정값 스탯
+        TryAdd(parts, "방어력",      b.armorBonus[g],          false); // false = 고정값
+        TryAdd(parts, "쿨타임 감소", b.cooldownBonus[g],       false);
+        TryAdd(parts, "치명타",      b.criticalChanceBonus[g], false);
 
         return string.Join(", ", parts);
     }
 
     /// <summary>값이 0이 아닐 때만 리스트에 추가</summary>
-    static void TryAdd(List<string> parts, string label, float value, string suffix)
+    static void TryAdd(List<string> parts, string label, float value, bool isPercent)
     {
         if (value == 0f) return;
 
-        // 소수점이 없으면 정수로 표시
-        string formatted = value == Mathf.Floor(value)
-            ? $"{value:0}"
-            : $"{value:0.#}";
+        string formatted;
+        if (isPercent)
+        {
+            float displayValue = value * 100f;
+            formatted = displayValue == Mathf.Floor(displayValue)
+                ? $"{label} +{displayValue:0}%"
+                : $"{label} +{displayValue:0.#}%";
+        }
+        else
+        {
+            formatted = value == Mathf.Floor(value)
+                ? $"{label} +{value:0}"
+                : $"{label} +{value:0.#}";
+        }
 
-        parts.Add($"{label} +{formatted}{suffix}");
+        parts.Add(formatted);
     }
 }
