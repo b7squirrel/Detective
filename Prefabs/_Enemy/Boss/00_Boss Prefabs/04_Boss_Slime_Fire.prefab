@@ -908,7 +908,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropPrefab: {fileID: 4112818284512135873, guid: 6d97589cbd4394abea61ad85be863cd2, type: 3}
   DropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
-  dropDamage: 8
+  dropDamage: 1000
   slowDownFactor: 0.7
 --- !u!114 &3050015207732895396
 MonoBehaviour:
@@ -984,12 +984,12 @@ MonoBehaviour:
   timeToDropSlime: 100
   homingBallPrefab: {fileID: 4579585065997787372, guid: 3c994f760849742788bdb57c9677ba51, type: 3}
   shootPoint: {fileID: 2248165805170968403}
-  maxProjectileNum: 10
-  ballSpeed: 6
+  maxProjectileNum: 20
+  ballSpeed: 8
   homingDelay: 2
   randomAngleRange: 20
   fireInterval: 0.5
-  ballLifetime: 4
+  ballLifetime: 8
   fireRate: 4
   damage: 10000
   playerLayer:
@@ -1037,15 +1037,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 051ef13ad4d1d4fda96aafa0b8f57583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToDropSlime: 0
-  fireProjectile: {fileID: 2768949295831322874, guid: 43143215f2371471e97ebeed4feffa94, type: 3}
+  timeToDropSlime: 100
+  fireProjectile: {fileID: 1552547427917143382, guid: 34a58d9340c824820872260c8aa04541, type: 3}
   ballSpeed: 10
   damage: 15000
-  projectilesPerFan: 9
+  projectilesPerFan: 6
   fanAngle: 70
+  trackingSpeed: 90
   rotateSpeed: 120
   maxRotateAngle: 75
-  burstInterval: 0.2
+  burstInterval: 0.5
   totalAttackDuration: 6
+  muzzleFlameEffect: {fileID: 0}
   stateLoopSound: {fileID: 8300000, guid: 6f983d56ad85b6047a3bbfbfbe5060cb, type: 3}
   burstFireSound: {fileID: 8300000, guid: 9e7b00fb30590fd408d3c436a9f19f50, type: 3}

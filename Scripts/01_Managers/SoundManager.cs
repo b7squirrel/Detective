@@ -529,6 +529,45 @@ public class SoundManager : MonoBehaviour
         StopAllLoops();
     }
 
+    // ── SoundManager에 추가할 메서드 2개 ──
+    // 기존 StopAllSounds() 근처에 붙여넣으세요.
+
+    /// <summary>
+    /// 현재 재생 중인 모든 사운드를 일시 정지 (루프 포함)
+    /// ResumeAllSounds()로 재개 가능
+    /// </summary>
+    public void PauseAllSounds()
+    {
+        if (audioSourcePool == null) return;
+
+        foreach (var audioSource in audioSourcePool)
+        {
+            if (audioSource != null && audioSource.isPlaying)
+            {
+                try { audioSource.Pause(); }
+                catch (System.Exception e) { Logger.LogError($"PauseAllSounds 오류: {e.Message}"); }
+            }
+        }
+    }
+
+    /// <summary>
+    /// PauseAllSounds()로 멈춘 사운드를 모두 재개
+    /// </summary>
+    public void ResumeAllSounds()
+    {
+        if (audioSourcePool == null) return;
+
+        foreach (var audioSource in audioSourcePool)
+        {
+            // isPlaying이 false이고 clip이 있으면 Pause 상태
+            if (audioSource != null && !audioSource.isPlaying && audioSource.clip != null)
+            {
+                try { audioSource.UnPause(); }
+                catch (System.Exception e) { Logger.LogError($"ResumeAllSounds 오류: {e.Message}"); }
+            }
+        }
+    }
+
     void OnDestroy()
     {
         StopAllSounds();

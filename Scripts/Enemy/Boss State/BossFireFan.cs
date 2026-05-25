@@ -2,9 +2,9 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// State2 공격: 부채꼴 형태의 불을 좌우로 천천히 회전하며 발사
-/// BossFireRing을 대체합니다. Boss 오브젝트에서 BossFireRing 컴포넌트를 이것으로 교체하세요.
-/// ※ fireProjectile 프리팹에 PoolingKey 컴포넌트가 있어야 합니다.
+/// State2 공격: 부채꼴 형태의 불을 좌우로 회전하며 발사.
+/// 부채꼴 중심이 플레이어 방향을 실시간으로 추적하고,
+/// 그 위에 진자 스윕 오프셋이 더해집니다.
 /// </summary>
 public class BossFireFan : MonoBehaviour
 {
@@ -13,21 +13,29 @@ public class BossFireFan : MonoBehaviour
     [SerializeField] float timeToDropSlime;
 
     [Header("투사체 설정")]
-    [SerializeField] GameObject fireProjectile;   // EnemyFireProjectile 프리팹 (PoolingKey 필수)
+    [SerializeField] GameObject fireProjectile;
     [SerializeField] float ballSpeed = 10f;
     [SerializeField] int damage = 15;
 
     [Header("부채꼴 형태 설정")]
-    [SerializeField] int projectilesPerFan = 7;   // 한 번에 발사하는 투사체 수 (홀수 권장)
-    [SerializeField] float fanAngle = 70f;         // 부채꼴 전체 각도 (degree)
+    [SerializeField] int projectilesPerFan = 7;
+    [SerializeField] float fanAngle = 70f;
 
-    [Header("회전(스윕) 설정")]
-    [SerializeField] float rotateSpeed = 50f;      // 초당 회전 속도 (degree/s)
-    [SerializeField] float maxRotateAngle = 75f;   // 중심으로부터 최대 회전 각도 (degree)
+    [Header("플레이어 추적 설정")]
+    [SerializeField] float trackingSpeed = 90f;  // 초당 최대 추적 각도 (degree/s)
+                                                  // 낮을수록 느리게 따라감 → 피할 여지 생김
+                                                  // 권장: 60~120
+
+    [Header("진자 스윕 설정")]
+    [SerializeField] float rotateSpeed = 50f;     // 진자 속도 (degree/s)
+    [SerializeField] float maxRotateAngle = 75f;  // 진자 최대 각도
 
     [Header("발사 타이밍")]
-    [SerializeField] float burstInterval = 0.35f;   // 부채꼴 한 번 발사 주기 (초)
-    [SerializeField] float totalAttackDuration = 6f; // State2 전체 지속 시간 (초)
+    [SerializeField] float burstInterval = 0.35f;
+    [SerializeField] float totalAttackDuration = 6f;
+
+    [Header("파티클 이펙트")]
+    [SerializeField] GreenFireParticle muzzleFlameEffect;
 
     [Header("사운드")]
     [SerializeField] AudioClip stateLoopSound;
@@ -37,7 +45,8 @@ public class BossFireFan : MonoBehaviour
     Transform shootPoint;
     Transform player;
 
-    float currentAngleOffset = 0f;
+    float currentAimAngle = 0f;   // 실시간으로 플레이어를 향하는 기준 각도
+    float currentAngleOffset = 0f; // 진자 오프셋 (기준 각도에 더해짐)
     float rotateDir = 1f;
 
     bool isFiring = false;
@@ -66,6 +75,10 @@ public class BossFireFan : MonoBehaviour
         if (shootPoint == null)
             shootPoint = enemyBoss.GetShootPoint();
 
+        // 진입 시 플레이어 방향으로 즉시 조준
+        Vector2 toPlayer = ((Vector2)player.position - (Vector2)shootPoint.position).normalized;
+        currentAimAngle = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg;
+
         currentAngleOffset = 0f;
         rotateDir = 1f;
         isFiring = false;
@@ -78,6 +91,8 @@ public class BossFireFan : MonoBehaviour
 
         enemyBoss.SetMovable(false);
         PlayStateLoopSound();
+        muzzleFlameEffect?.Play();
+
         fireCoroutine = StartCoroutine(FireFanCo());
     }
 
@@ -94,6 +109,7 @@ public class BossFireFan : MonoBehaviour
             fireCoroutine = null;
         }
         isFiring = false;
+        muzzleFlameEffect?.Stop();
         StopStateLoopSound();
         enemyBoss.SetMovable(true);
     }
@@ -102,10 +118,6 @@ public class BossFireFan : MonoBehaviour
     {
         isFiring = true;
 
-        // 진입 시점의 플레이어 방향을 기준 각도로 고정
-        Vector2 toPlayer = ((Vector2)player.position - (Vector2)shootPoint.position).normalized;
-        float baseAngle = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg;
-
         float elapsed = 0f;
         float burstTimer = 0f;
 
@@ -113,7 +125,14 @@ public class BossFireFan : MonoBehaviour
         {
             float dt = Time.deltaTime;
 
-            // 부채꼴 중심 각도를 진자처럼 좌우 회전
+            // ── 1. 플레이어 방향으로 기준 각도를 부드럽게 회전 ──
+            Vector2 toPlayer = ((Vector2)player.position - (Vector2)shootPoint.position).normalized;
+            float targetAngle = Mathf.Atan2(toPlayer.y, toPlayer.x) * Mathf.Rad2Deg;
+
+            // MoveTowardsAngle: 360° 경계를 자연스럽게 처리해 줌
+            currentAimAngle = Mathf.MoveTowardsAngle(currentAimAngle, targetAngle, trackingSpeed * dt);
+
+            // ── 2. 진자 오프셋 계산 ──
             currentAngleOffset += rotateDir * rotateSpeed * dt;
             if (Mathf.Abs(currentAngleOffset) >= maxRotateAngle)
             {
@@ -121,11 +140,12 @@ public class BossFireFan : MonoBehaviour
                 currentAngleOffset = Mathf.Clamp(currentAngleOffset, -maxRotateAngle, maxRotateAngle);
             }
 
-            // burstInterval 주기로 부채꼴 발사
+            // ── 3. burstInterval 주기로 발사 ──
             burstTimer -= dt;
             if (burstTimer <= 0f)
             {
-                FireFanBurst(baseAngle + currentAngleOffset);
+                // 기준 각도(플레이어 방향) + 진자 오프셋
+                FireFanBurst(currentAimAngle + currentAngleOffset);
                 burstTimer = burstInterval;
             }
 
@@ -162,9 +182,8 @@ public class BossFireFan : MonoBehaviour
                 Mathf.Sin(angle * Mathf.Deg2Rad)
             );
 
-            // ── 풀링으로 투사체 가져오기 ──
             GameObject proj = GameManager.instance.poolManager.GetMisc(fireProjectile);
-            if (proj == null) continue; // maxNum 제한에 걸렸을 때는 건너뜀
+            if (proj == null) continue;
 
             proj.transform.position = shootPoint.position;
 

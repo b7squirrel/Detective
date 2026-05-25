@@ -23,7 +23,7 @@ public class RevivalPanel : MonoBehaviour
     Character character;
     Coroutine countdownCoroutine;
     bool isRevived = false;
-    bool hasUsedRevival = false; // 이번 판에 부활을 이미 사용했는지
+    bool hasUsedRevival = false;
     PanelTween panelTween;
 
     void Start()
@@ -40,7 +40,6 @@ public class RevivalPanel : MonoBehaviour
 
     public void Show(Character _character)
     {
-        // 이미 부활을 사용했으면 바로 게임오버
         if (hasUsedRevival)
         {
             _character.ProcessDeath();
@@ -49,13 +48,17 @@ public class RevivalPanel : MonoBehaviour
 
         character = _character;
         isRevived = false;
-        panelTween.ShowWithScale(); // panel.SetActive(true) 대신
+        panelTween.ShowWithScale();
         adButton.interactable = AdsManager.IsRewardedAdReady;
         countdownCoroutine = StartCoroutine(CountdownCo());
 
-        // 사운드
+        // 패널 효과음은 먼저 재생한 뒤 나머지 사운드를 멈춤
+        // (효과음을 Pause 후에 재생하면 Pause 상태에 걸리기 때문)
         if (revivalPanelSound != null)
-        SoundManager.instance.Play(revivalPanelSound);
+            SoundManager.instance.Play(revivalPanelSound);
+
+        // ── 부활 팝업 등장 시 모든 사운드 일시 정지 ──
+        SoundManager.instance.PauseAllSounds();
     }
 
     IEnumerator CountdownCo()
@@ -65,36 +68,28 @@ public class RevivalPanel : MonoBehaviour
         {
             countdownText.text = $"{remaining}초";
 
-            // 남은 시간에 따라 색상 변경
             if (remaining > 5)
-            {
                 countdownText.color = Color.yellow;
-            }
             else if (remaining > 2)
-            {
-                countdownText.color = new Color(1f, 0.5f, 0f); // 주황
-            }
+                countdownText.color = new Color(1f, 0.5f, 0f);
             else
-            {
                 countdownText.color = Color.red;
-            }
 
             yield return new WaitForSecondsRealtime(1f);
             remaining--;
         }
 
-        // 타임아웃
+        // 타임아웃 → 게임오버 (사운드 재개 없음)
         if (isRevived == false)
         {
             Logger.Log("[RevivalPanel] 카운트다운 종료 → 게임오버");
-            Hide();
+            Hide(resumeSounds: false);
             character.ProcessDeath();
         }
     }
 
     void OnAdButtonClicked()
     {
-        // ★ 광고 시작 전 카운트다운 반드시 중지
         if (countdownCoroutine != null)
         {
             StopCoroutine(countdownCoroutine);
@@ -105,10 +100,7 @@ public class RevivalPanel : MonoBehaviour
         bool rewarded = false;
 
         AdsManager.Instance.ShowDailyFreeGemRewardedAd(
-            onRewarded: () =>
-            {
-                rewarded = true;
-            },
+            onRewarded: () => { rewarded = true; },
             onClosed: () =>
             {
                 if (rewarded)
@@ -118,7 +110,6 @@ public class RevivalPanel : MonoBehaviour
                 }
                 else
                 {
-                    // 끝까지 안 본 경우 → 카운트다운 재개
                     Logger.Log("[RevivalPanel] 광고 미완료 → 카운트다운 재개");
                     GameManager.instance.pauseManager.UnPauseGame();
                     countdownCoroutine = StartCoroutine(CountdownCo());
@@ -133,7 +124,6 @@ public class RevivalPanel : MonoBehaviour
         if (currentCristal < cristalCost)
         {
             Logger.LogWarning("[RevivalPanel] 크리스탈 부족");
-            // 추후 부족 알림 UI 추가 가능
             return;
         }
 
@@ -146,14 +136,14 @@ public class RevivalPanel : MonoBehaviour
     {
         Logger.Log("[RevivalPanel] 포기 선택 → 게임오버");
 
-        // 카운트다운 코루틴 중지
         if (countdownCoroutine != null)
         {
             StopCoroutine(countdownCoroutine);
             countdownCoroutine = null;
         }
 
-        Hide();
+        // 게임오버이므로 사운드 재개 없이 패널만 닫음
+        Hide(resumeSounds: false);
         character.ProcessDeath();
     }
 
@@ -161,7 +151,7 @@ public class RevivalPanel : MonoBehaviour
     {
         if (isRevived) return;
         isRevived = true;
-        hasUsedRevival = true; // ⭐ 추가
+        hasUsedRevival = true;
 
         if (countdownCoroutine != null)
         {
@@ -169,13 +159,20 @@ public class RevivalPanel : MonoBehaviour
             countdownCoroutine = null;
         }
 
-        Hide();
+        // 부활 시에만 사운드 재개
+        Hide(resumeSounds: true);
         character.Revive();
     }
 
-    void Hide()
+    /// <summary>
+    /// resumeSounds: true → 부활(사운드 재개) / false → 게임오버(재개 안 함)
+    /// </summary>
+    void Hide(bool resumeSounds)
     {
-        countdownText.color = Color.yellow; // 색상 초기화
-        panelTween.HideWithScale(); // panel.SetActive(false) 대신
+        countdownText.color = Color.yellow;
+        panelTween.HideWithScale();
+
+        if (resumeSounds)
+            SoundManager.instance.ResumeAllSounds();
     }
 }
