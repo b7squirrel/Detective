@@ -55,6 +55,35 @@ public class TennisBallProjectile : ProjectileBase
         }
     }
 
+    // 트리거를 추가해서 상자도 부술 수 있도록
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (isReflecting) return;
+
+        GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
+
+        if (other.gameObject.CompareTag("Props"))
+        {
+            // 충돌 법선 벡터를 직접 계산 (Trigger는 contact point가 없으므로)
+            Vector2 normalVector = (transform.position - other.transform.position).normalized;
+
+            other.gameObject.GetComponent<Idamageable>()?.TakeDamage(
+                Damage, KnockBackChance, KnockBackSpeedFactor,
+                transform.position, hitEffect);
+
+            PostMessage(Damage, other.transform.position);
+
+            if (!string.IsNullOrEmpty(WeaponName))
+                DamageTracker.instance.RecordDamage(WeaponName, Damage);
+
+            ReflectWithCooldown(normalVector);
+            TriggerHitEffects();
+
+            if (ShouldDeactivate(ref deflection))
+                DeactivateBall();
+        }
+    }
+
     private void HandleCollisionWithNormal(Collision2D other, Vector2 normalVector, GameObject hitEffect)
     {
         if (other.gameObject.CompareTag("Enemy"))
