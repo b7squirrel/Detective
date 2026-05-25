@@ -191,16 +191,14 @@ public class Player : MonoBehaviour, IBouncable
 
     public bool IsActuallyMoving()
     {
-        if (isIceMode)
-            return iceVelocity.magnitude > 0.001f;
-
-        return InputVec != Vector2.zero; // 바람 조건 제거
+        // 아이스 모드, 바람 모두 입력 기준으로 통일
+        return InputVec != Vector2.zero;
     }
 
     public bool IsPhysicallyMoving()
     {
         if (isIceMode)
-            return iceVelocity.magnitude > 0.001f;
+            return iceVelocity.magnitude > 0.001f; // 실제 이동 기준
 
         if (windForce.magnitude > 0.1f)
             return true;
