@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5254902}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
 --- !u!1 &3251136800570788822
@@ -437,7 +437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5254902}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
 --- !u!1 &4207708922448702571
@@ -724,7 +724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5254902}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
 --- !u!1 &5877899254712104623
@@ -816,7 +816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5254902}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
 --- !u!1 &5937874223002769205
@@ -1107,8 +1107,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 721.1818, y: 244.7575}
+  m_AnchoredPosition: {x: -3.2178, y: -24.8044}
+  m_SizeDelta: {x: 692.2214, y: 230.2773}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2826159947529001283
 CanvasRenderer:
@@ -1131,7 +1131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.30588236}
+  m_Color: {r: 1, g: 0.9935858, b: 0.6556604, a: 0.5372549}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1147,7 +1147,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.25
+  m_PixelsPerUnitMultiplier: 0.41
 --- !u!1 &8268172520839878723
 GameObject:
   m_ObjectHideFlags: 0
@@ -1179,9 +1179,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7961875150386738254}
   - {fileID: 5957147575688780805}
   - {fileID: 7572019999966896849}
-  - {fileID: 7961875150386738254}
   - {fileID: 4137111463656401977}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1254,8 +1254,8 @@ MonoBehaviour:
   unacquiredCardSprite: {fileID: 21300000, guid: 91c79e5e43bd04f7c959c7462d860358, type: 3}
   emptySlotSprite: {fileID: 21300000, guid: 08f04ddda702c4a51b44f7cdaef9aa53, type: 3}
   entryBackground: {fileID: 2243985929209232736}
-  colorComplete: {r: 0.88600266, g: 1, b: 0, a: 0.72156864}
-  colorIncomplete: {r: 0.1, g: 0.1, b: 0.15, a: 0.5019608}
+  colorComplete: {r: 0.6235258, g: 1, b: 0.2688679, a: 0.35686275}
+  colorIncomplete: {r: 0.4811321, g: 0.4811321, b: 0.4811321, a: 0.5019608}
   glow: {fileID: 5937874223002769205}
   setNameText: {fileID: 8938124557753586967}
   slotLabels: []

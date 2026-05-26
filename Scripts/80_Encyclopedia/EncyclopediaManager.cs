@@ -224,7 +224,7 @@ public class EncyclopediaManager : MonoBehaviour
     void OnEntryTapped(EncycSetInfo info)
     {
         SetBonusDefinition bonus = setDefinitions?.Find(s => s.setName == info.setName);
-        popup.Show(info, bonus);
+        popup.Show(info, bonus, acquiredItemNames); // ★ acquiredItemNames 추가
     }
 
     static int ParseIntSafe(string s) { int.TryParse(s?.Trim(), out int v); return v; }

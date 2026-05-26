@@ -17,6 +17,10 @@ public class EncyclopediaPopup : MonoBehaviour
     [Header("Header")]
     [SerializeField] TextMeshProUGUI setNameText;
 
+    [Header("슬롯 이미지 (팝업)")]
+    [SerializeField] Image[] popupSlotImages; // 4개 Head/Face/Chest/Hand
+    [SerializeField] Sprite emptySlotSprite; // 빈 슬롯 표시용
+
     [Header("Bonus Content")]
     // SetBonusDefinition이 있을 때 — 5줄 자동 생성
     [SerializeField] TextMeshProUGUI bonusContentText;
@@ -25,6 +29,10 @@ public class EncyclopediaPopup : MonoBehaviour
 
     [Header("Close")]
     [SerializeField] Button closeButton;
+
+    static readonly Color ITEM_ACQUIRED   = Color.white;
+    static readonly Color ITEM_UNACQUIRED = new Color(1f, 1f, 1f, 0.3f);
+    static readonly Color ITEM_EMPTY      = new Color(1f, 1f, 1f, 0.2f);
 
     // ── 스탯 이름 매핑 ───────────────────────────────────────
     // (표시 이름, 단위 suffix, 소수점 자리, 양수 부호)
@@ -43,9 +51,13 @@ public class EncyclopediaPopup : MonoBehaviour
     }
 
     // ── 공개 API (EncyclopediaManager에서 호출) ───────────────
-    public void Show(EncycSetInfo info, SetBonusDefinition bonus)
+    public void Show(EncycSetInfo info,
+                     SetBonusDefinition bonus,
+                     HashSet<string> acquiredNames)
     {
-        setNameText.text = info.setName;
+        setNameText.text = GetSetDisplayName(info);
+
+        RefreshSlotImages(info, acquiredNames);
 
         if (bonus == null)
         {
@@ -65,6 +77,63 @@ public class EncyclopediaPopup : MonoBehaviour
 
     // ── 닫기 ─────────────────────────────────────────────────
     void Hide() => gameObject.SetActive(false);
+
+    // ── 슬롯 이미지 ──────────────────────────────────────
+    void RefreshSlotImages(EncycSetInfo info, HashSet<string> acquiredNames)
+    {
+        if (popupSlotImages == null) return;
+
+        for (int i = 0; i < popupSlotImages.Length; i++)
+        {
+            if (popupSlotImages[i] == null) continue;
+
+            var  items   = info.slotItems[i];
+            bool hasDef  = items.Count > 0;
+            EncycItemInfo first = hasDef ? items[0] : null;
+            bool acquired = hasDef
+                            && acquiredNames != null
+                            && acquiredNames.Contains(first.internalName);
+
+            Sprite spr = first?.itemSO?.charImage;
+
+            if (hasDef && spr != null)
+            {
+                popupSlotImages[i].sprite = spr;
+                popupSlotImages[i].color  = acquired
+                    ? ITEM_ACQUIRED
+                    : ITEM_UNACQUIRED;
+            }
+            else
+            {
+                popupSlotImages[i].sprite = emptySlotSprite;
+                popupSlotImages[i].color  = ITEM_EMPTY;
+            }
+        }
+    }
+
+    // ── 세트 표시명 ──────────────────────────────────────
+    static string GetSetDisplayName(EncycSetInfo info)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            foreach (var item in info.slotItems[i])
+            {
+                if (!item.isEssential || item.itemSO == null) continue;
+
+                if (LocalizationManager.IsInitialized
+                    && LocalizationManager.CurrentLanguage == Language.English)
+                {
+                    string eng = LocalizationManager.Item
+                                    .GetSetDisplayName(item.internalName);
+                    if (!string.IsNullOrEmpty(eng)) return eng;
+                }
+
+                if (!string.IsNullOrEmpty(item.itemSO.setDisplayName))
+                    return item.itemSO.setDisplayName;
+            }
+        }
+        return info.setName;
+    }
 
     // ── 5줄 텍스트 생성 ──────────────────────────────────────
     /// <summary>
