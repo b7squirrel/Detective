@@ -19,7 +19,15 @@ public class EncyclopediaPopup : MonoBehaviour
 
     [Header("슬롯 이미지 (팝업)")]
     [SerializeField] Image[] popupSlotImages; // 4개 Head/Face/Chest/Hand
+    [SerializeField] Image[] popupSlotCardImages;    // ★ 4개 — 카드 배경 Image
+    [SerializeField] Sprite acquiredCardSprite;     // ★ 획득 카드 배경
+    [SerializeField] Sprite unacquiredCardSprite;   // ★ 미획득 카드 배경
     [SerializeField] Sprite emptySlotSprite; // 빈 슬롯 표시용
+
+    [Header("팝업 배경")]
+    [SerializeField] Image popupBackground;
+    [SerializeField] Color colorComplete = new Color(1f, 0.85f, 0.2f, 1f);
+    [SerializeField] Color colorIncomplete = new Color(0.1f, 0.1f, 0.15f, 1f);
 
     [Header("Bonus Content")]
     // SetBonusDefinition이 있을 때 — 5줄 자동 생성
@@ -30,9 +38,9 @@ public class EncyclopediaPopup : MonoBehaviour
     [Header("Close")]
     [SerializeField] Button closeButton;
 
-    static readonly Color ITEM_ACQUIRED   = Color.white;
+    static readonly Color ITEM_ACQUIRED = Color.white;
     static readonly Color ITEM_UNACQUIRED = new Color(1f, 1f, 1f, 0.3f);
-    static readonly Color ITEM_EMPTY      = new Color(1f, 1f, 1f, 0.2f);
+    static readonly Color ITEM_EMPTY = new Color(1f, 1f, 1f, 0.2f);
 
     // ── 스탯 이름 매핑 ───────────────────────────────────────
     // (표시 이름, 단위 suffix, 소수점 자리, 양수 부호)
@@ -87,27 +95,53 @@ public class EncyclopediaPopup : MonoBehaviour
         {
             if (popupSlotImages[i] == null) continue;
 
-            var  items   = info.slotItems[i];
-            bool hasDef  = items.Count > 0;
+            var items = info.slotItems[i];
+            bool hasDef = items.Count > 0;
             EncycItemInfo first = hasDef ? items[0] : null;
             bool acquired = hasDef
                             && acquiredNames != null
                             && acquiredNames.Contains(first.internalName);
 
-            Sprite spr = first?.itemSO?.charImage;
+            // ★ 카드 배경 스프라이트
+            if (popupSlotCardImages != null && i < popupSlotCardImages.Length
+                && popupSlotCardImages[i] != null)
+            {
+                popupSlotCardImages[i].sprite = (hasDef && acquired)
+                    ? acquiredCardSprite
+                    : unacquiredCardSprite;
+            }
 
+            Sprite spr = first?.itemSO?.charImage;
             if (hasDef && spr != null)
             {
                 popupSlotImages[i].sprite = spr;
-                popupSlotImages[i].color  = acquired
+                popupSlotImages[i].color = acquired
                     ? ITEM_ACQUIRED
                     : ITEM_UNACQUIRED;
             }
             else
             {
                 popupSlotImages[i].sprite = emptySlotSprite;
-                popupSlotImages[i].color  = ITEM_EMPTY;
+                popupSlotImages[i].color = ITEM_EMPTY;
             }
+        }
+
+        // ★ 팝업 배경색 — 데이터 있는 슬롯이 모두 획득됐는지 확인
+        if (popupBackground != null)
+        {
+            bool allAcquired = true;
+            for (int i = 0; i < 4; i++)
+            {
+                var items = info.slotItems[i];
+                if (items.Count == 0) continue;
+                if (acquiredNames == null
+                    || !acquiredNames.Contains(items[0].internalName))
+                {
+                    allAcquired = false;
+                    break;
+                }
+            }
+            popupBackground.color = allAcquired ? colorComplete : colorIncomplete;
         }
     }
 
@@ -148,8 +182,8 @@ public class EncyclopediaPopup : MonoBehaviour
         for (int g = 0; g < StaticValues.MaxGrade; g++)
         {
             // 등급 이름 (색상 태그)
-            Color  col  = MyGrade.GradeColors[g];
-            string hex  = ColorUtility.ToHtmlStringRGB(col);
+            Color col = MyGrade.GradeColors[g];
+            string hex = ColorUtility.ToHtmlStringRGB(col);
             string name = MyGrade.mGrades[g];
 
             // 해당 등급의 유효 스탯 수집
@@ -171,17 +205,17 @@ public class EncyclopediaPopup : MonoBehaviour
         var parts = new List<string>();
 
         // 퍼센트 스탯
-        TryAdd(parts, "이동속도",    b.moveSpeedBonus[g],      true);  // true = 퍼센트
-        TryAdd(parts, "공격력",      b.attackBonus[g],         true);
-        TryAdd(parts, "최대 HP",     b.maxHpBonus[g],          true);
-        TryAdd(parts, "HP 회복",     b.hpRegenBonus[g],        true);
-        TryAdd(parts, "자석 범위",   b.magnetSizeBonus[g],     true);
-        TryAdd(parts, "넉백",        b.knockBackBonus[g],      true);
+        TryAdd(parts, "이동속도", b.moveSpeedBonus[g], true);  // true = 퍼센트
+        TryAdd(parts, "공격력", b.attackBonus[g], true);
+        TryAdd(parts, "최대 HP", b.maxHpBonus[g], true);
+        TryAdd(parts, "HP 회복", b.hpRegenBonus[g], true);
+        TryAdd(parts, "자석 범위", b.magnetSizeBonus[g], true);
+        TryAdd(parts, "넉백", b.knockBackBonus[g], true);
 
         // 고정값 스탯
-        TryAdd(parts, "방어력",      b.armorBonus[g],          false); // false = 고정값
-        TryAdd(parts, "쿨타임 감소", b.cooldownBonus[g],       false);
-        TryAdd(parts, "치명타",      b.criticalChanceBonus[g], false);
+        TryAdd(parts, "방어력", b.armorBonus[g], false); // false = 고정값
+        TryAdd(parts, "쿨타임 감소", b.cooldownBonus[g], false);
+        TryAdd(parts, "치명타", b.criticalChanceBonus[g], false);
 
         return string.Join(", ", parts);
     }
