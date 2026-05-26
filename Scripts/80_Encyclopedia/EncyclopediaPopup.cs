@@ -54,7 +54,7 @@ public class EncyclopediaPopup : MonoBehaviour
     // ── 초기화 ───────────────────────────────────────────────
     void Awake()
     {
-        closeButton.onClick.AddListener(Hide);
+        // closeButton.onClick.AddListener(Hide);
         gameObject.SetActive(false);
     }
 
