@@ -33,6 +33,7 @@ public class PanelTween : MonoBehaviour
     /// </summary>
     public void ShowWithScale()
     {
+        panelTrns.DOKill(); // 진행 중인 애니메이션 강제 종료
         gameObject.SetActive(true);
         
         // 시작 스케일을 0으로 설정

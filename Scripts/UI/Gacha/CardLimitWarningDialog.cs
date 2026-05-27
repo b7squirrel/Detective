@@ -21,9 +21,11 @@ public class CardLimitWarningDialog : MonoBehaviour
 
     Coroutine co;
     bool isManuallyClose = false; // 수동으로 닫혔는지 플래그
+    private System.Action onClosed;
 
-    public void SetWarningText(string cardType, int cardCount, int maxCardCount)
+    public void SetWarningText(string cardType, int cardCount, int maxCardCount, System.Action onClosedCallback = null)
     {
+        onClosed = onClosedCallback; 
         int maxCardNum = cardType == "오리" ? maxOriCard : maxItemCard;
         // string warning = $"{cardType} 카드가 {maxCardNum}장을 넘겼어요! ({cardCount}/{maxCardNum})\n\n" +
         //                 "카드를 판매하거나 합성해서\n" +
@@ -61,13 +63,17 @@ public class CardLimitWarningDialog : MonoBehaviour
     {
         warningPanel.SetActive(false);
         BG.SetActive(false);
+        onClosed?.Invoke();  // 추가
+        onClosed = null;     // 추가
     }
 
     IEnumerator WarningCo()
     {
         // 패널 열기
-        warningPanel.SetActive(true);
         BG.SetActive(true);
+        // warningPanel.SetActive(true);
+        warningPanel.GetComponent<PanelTween>()?.ShowWithScale();
+        
         FindObjectOfType<UICameraShake>().Shake(.3f, 5f); // 1.65초 동안 12의 크기로 흔들기
         SoundManager.instance.Play(warningSound);
         yield return new WaitForSecondsRealtime(warningDuration);

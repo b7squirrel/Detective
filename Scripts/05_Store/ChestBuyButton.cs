@@ -3,12 +3,8 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 
-// ✅ 추가: 어떤 종류의 뽑기 버튼인지 구분
 public enum ChestType { Duck, Item, Other }
 
-/// <summary>
-/// 상자 구매 버튼 (Inspector에서 Button.onClick에 연결하는 방식)
-/// </summary>
 public class ChestBuyButton : MonoBehaviour
 {
     [Header("UI Components")]
@@ -21,32 +17,26 @@ public class ChestBuyButton : MonoBehaviour
     [SerializeField] RectTransform gemPoint;
 
     [Header("화면 전환")]
-    [SerializeField] GameObject fg;  // 인스펙터에서 연결
+    [SerializeField] GameObject fg;
 
     [Header("튜토리얼")]
-    [SerializeField] ChestType chestType = ChestType.Other; // 인스펙터에서 설정
+    [SerializeField] ChestType chestType = ChestType.Other;
 
     private ProductData productData;
     private Animator animator;
-    private bool isProcessing = false;  // 중복 클릭 방지
+    private bool isProcessing = false;
 
     void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-    /// <summary>
-    /// 상품 정보 설정 (ShopUI에서 호출)
-    /// </summary>
     public void SetInfo(ProductData data)
     {
         productData = data;
         UpdateUI();
     }
 
-    /// <summary>
-    /// UI 업데이트
-    /// </summary>
     void UpdateUI()
     {
         if (productData == null)
@@ -60,9 +50,7 @@ public class ChestBuyButton : MonoBehaviour
         Logger.Log($"[ChestBuyButton] - PurchaseCost: {productData.PurchaseCost}");
 
         if (productImage != null && productSprite != null)
-        {
             productImage.sprite = productSprite;
-        }
 
         if (costText != null)
         {
@@ -70,22 +58,17 @@ public class ChestBuyButton : MonoBehaviour
             {
                 float dollars = productData.PurchaseCost / 100f;
                 costText.text = $"${dollars:F2}";
-                Logger.Log($"[ChestBuyButton] IAP 가격 설정: {productData.PurchaseCost} 센트 → ${dollars:F2}");
             }
             else
             {
                 costText.text = $"{productData.PurchaseCost:N0}";
-                Logger.Log($"[ChestBuyButton] 일반 가격 설정: {productData.PurchaseCost}");
             }
         }
     }
 
-    /// <summary>
-    /// 버튼 클릭 시 호출 (Inspector에서 Button.onClick에 연결)
-    /// </summary>
     public void OnPurchaseButtonClicked()
     {
-        if (isProcessing) return;  // 이미 처리 중이면 무시
+        if (isProcessing) return;
 
         if (productData == null)
         {
@@ -116,31 +99,46 @@ public class ChestBuyButton : MonoBehaviour
         // 1. 버튼 눌림 애니메이션
         if (animator != null) animator.SetTrigger("Pressed");
 
-        // 2. FG 즉시 활성화 (다른 버튼 입력 차단)
+        // 2. FG 활성화 (터치 차단)
         if (fg != null) fg.SetActive(true);
 
-        // 3. 애니메이션이 끝날 때까지 대기 (0.1초)
+        // 3. 애니메이션 대기
         yield return new WaitForSeconds(0.1f);
 
-        // // 4. 화면 전환 요청
-        // Logger.Log($"[ChestBuyButton] 구매 버튼 클릭: {productData.ProductId}");
-        // ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint);
-
         if (TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked
-        && ShopTutorialController.instance != null)
+            && ShopTutorialController.instance != null)
         {
             ShopTutorialController.instance.OnGachaOpened(chestType);
         }
 
         Debug.Log($"[ChestBuy] PurchaseProduct 호출: {Time.time}");
-        ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint);
 
-        // ✅ isProcessing은 가챠 패널이 닫힌 후에 리셋되어야 함
-        // 지금은 여기서 바로 false로 바꾸지 않음
-        // isProcessing = false; ← 제거
+        // 경고 팝업이 닫힐 때 isProcessing을 해제하는 콜백
+        System.Action onWarningClosed = () =>
+        {
+            isProcessing = false;
+        };
+
+        bool success = ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint, onWarningClosed);
+
+        if (!success)
+        {
+            // FG는 다음 프레임에 끔
+            // (Warning BG가 켜진 후에 끄면 자연스러운 전환)
+            StartCoroutine(DeactivateFGNextFrame());
+            isProcessing = false;  // 단, isProcessing은 바로 콜백으로 처리
+            // isProcessing은 경고 팝업이 닫힐 때 onWarningClosed 콜백에서 해제
+        }
+        // 성공 시: isProcessing과 FG 모두 GachaPanelManager가 닫힐 때 ResetState()에서 해제
     }
 
-    // ✅ 추가: 가챠 패널이 닫힐 때 호출 (GachaPanelManager에서 호출)
+    IEnumerator DeactivateFGNextFrame()
+    {
+        yield return null;  // Warning BG가 켜진 후 한 프레임 대기
+        if (fg != null) fg.SetActive(false);
+    }
+
+    // 가챠 패널이 닫힐 때 GachaPanelManager에서 호출
     public void ResetState()
     {
         isProcessing = false;

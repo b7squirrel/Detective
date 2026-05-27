@@ -229,7 +229,7 @@ public class Skills
 
 public class StaticValues
 {
-    public static int MaxCardNum = 800;
+    public static int MaxCardNum = 200;
 
     public static int MaxLevel = 30;
     public static int MaxEvoStage = 3; // evo stage 0, 1, 2

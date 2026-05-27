@@ -73,25 +73,25 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     /// <summary>
     /// 상품 구매 (FX 위치 포함)
     /// </summary>
-    public void PurchaseProduct(string productId, RectTransform fxStartPoint = null)
-    {
+    public bool PurchaseProduct(string productId, RectTransform fxStartPoint = null, System.Action onFailureClosed = null)
+{
         if (!GameInitializer.IsInitialized)
         {
             Logger.LogError("[ShopManager] 게임이 아직 초기화되지 않았습니다.");
-            return;
+            return false;
         }
 
         if (ProductDataTable.Instance == null)
         {
             Logger.LogError("[ShopManager] ProductDataTable이 없습니다.");
-            return;
+            return false;
         }
 
         var productData = ProductDataTable.Instance.GetProductById(productId);
         if (productData == null)
         {
             Logger.LogError($"[ShopManager] Product Data가 없습니다. Product ID: {productId}");
-            return;
+            return false;
         }
 
         Logger.Log($"[ShopManager] 구매 시도: {productData.ProductName} (ID: {productId})");
@@ -99,28 +99,26 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         // ⭐ 상자/팩 구매 시 카드 수 체크
         if (productData.ProductType == ProductType.Box || productData.ProductType == ProductType.Pack)
         {
-            if (!CanPurchaseCards(productData))
+            if (!CanPurchaseCards(productData, onFailureClosed))  // ← 콜백 전달
             {
                 Logger.Log($"[ShopManager] 카드 수 초과로 구매 불가: {productData.ProductId}");
-                return; // 구매 취소
+                return false;
             }
         }
 
         switch (productData.PurchaseType)
         {
             case PurchaseType.Cristal:
+            if (!PurchaseWithCristal(productData)) return false;  
                 if (PurchaseWithCristal(productData))
-                {
-                    GiveProductReward(productData, fxStartPoint);
-                }
-                break;
+                GiveProductReward(productData, fxStartPoint);
+                return true;
 
             case PurchaseType.Gold:
+            if (!PurchaseWithGold(productData)) return false; 
                 if (PurchaseWithGold(productData))
-                {
-                    GiveProductReward(productData, fxStartPoint);
-                }
-                break;
+                GiveProductReward(productData, fxStartPoint);
+                return true;
 
             case PurchaseType.IAP:
                 if (enableIAPTestMode)
@@ -133,36 +131,35 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                     if (IAPManager.Instance == null)
                     {
                         Logger.LogError("[ShopManager] IAPManager가 없습니다.");
-                        return;
+                        return false;
                     }
                     Logger.Log($"[ShopManager] IAP 구매 시작: {productData.ProductId}");
                     IAPManager.Instance.BuyProduct(productData.ProductId);
                 }
-                break;
+                return true;
 
             case PurchaseType.Ad:
                 // ⭐ 광고 시청 처리
                 PurchaseWithAd(productData, fxStartPoint);
-                break;
+                return true;
         }
+        return false;
     }
 
     /// <summary>
     /// ⭐ 카드 구매 가능 여부 체크 (최대 카드 수 확인)
     /// </summary>
-    bool CanPurchaseCards(ProductData productData)
+    bool CanPurchaseCards(ProductData productData, System.Action onWarningClosed = null)
     {
         if (productData == null)
             return false;
 
-        // ⭐ 초기화 확인 (이중 체크)
         if (!GameInitializer.IsInitialized)
         {
             Logger.LogError("[ShopManager] 게임 초기화가 완료되지 않았습니다.");
             return false;
         }
 
-        // ⭐ CardDataManager 확인
         var cardDataManager = FindObjectOfType<CardDataManager>();
         if (cardDataManager == null || !CardDataManager.IsDataLoaded)
         {
@@ -170,38 +167,31 @@ public class ShopManager : SingletonBehaviour<ShopManager>
             return false;
         }
 
-        // GachaTableId로 카드 타입 판단
         string cardType = GetCardTypeFromTableId(productData.GachaTableId);
-
-        // 현재 카드 수 조회
         int currentCardCount = GetCurrentCardCount(cardType);
-
-        // 뽑을 카드 수
         int drawCount = productData.DrawCount;
-
-        // 최대 카드 수
         int maxCardCount = StaticValues.MaxCardNum;
 
         Logger.Log($"[ShopManager] 카드 수 체크: {cardType} - 현재 {currentCardCount}개, +{drawCount}개 = {currentCardCount + drawCount}개 (최대 {maxCardCount}개)");
 
-        // 구매 후 최대치를 넘는지 체크
         if (currentCardCount + drawCount > maxCardCount)
         {
-            // ⭐ 경고 다이얼로그 표시
             if (cardLimitWarningDialog != null)
             {
                 string cardTypeName = cardType == "Weapon" ? "오리" : "아이템";
                 cardLimitWarningDialog.SetWarningText(
                     cardTypeName,
                     currentCardCount + drawCount,
-                    maxCardCount
+                    maxCardCount,
+                    onWarningClosed  // ← 콜백 전달
                 );
             }
             else
             {
                 Logger.LogWarning("[ShopManager] CardLimitWarningDialog를 찾을 수 없습니다.");
+                // 다이얼로그가 없으면 콜백을 바로 호출해서 isProcessing이 막히지 않도록
+                onWarningClosed?.Invoke();
             }
-
             return false;
         }
 
