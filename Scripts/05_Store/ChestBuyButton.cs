@@ -142,6 +142,10 @@ public class ChestBuyButton : MonoBehaviour
     public void ResetState()
     {
         isProcessing = false;
-        if (fg != null) fg.SetActive(false);
+
+        // ✅ 튜토리얼 중에는 fg를 ShopTutorialController가 관리하므로 건드리지 않음
+        bool inShopTutorial = TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked;
+        if (fg != null && !inShopTutorial)
+            fg.SetActive(false);
     }
 }

@@ -77,10 +77,11 @@ public class MergeTutorialController : MonoBehaviour
     // 이 시점이면 메인 메뉴가 실제로 보이는 상태
     IEnumerator WaitThenStart()
     {
+        if (fg != null) fg.SetActive(true);
+        
         yield return new WaitUntil(() => GameInitializer.IsInitialized);
         yield return new WaitForSeconds(0.5f); // UI 렌더링 여유
 
-        if (fg != null) fg.SetActive(true);
         ShowPopup(mergeOpenPopup);
         StartCoroutine(HighlightAfterDelay(mergeTabButton, MergeTutorialPhase.HighlightMergeTab, 1.5f));
     }

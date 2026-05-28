@@ -107,12 +107,13 @@ public class AchievementTutorialController : MonoBehaviour
     // 이 시점이면 메인 메뉴가 실제로 보이는 상태
     IEnumerator WaitThenStart()
     {
+        if (fg != null) fg.SetActive(true);
+        
         yield return new WaitUntil(() => GameInitializer.IsInitialized);
         yield return new WaitForSeconds(0.5f);
 
         phase = AchievementTutorialPhase.HighlightAchievementTab;
 
-        if (fg != null) fg.SetActive(true);
         ShowPopup(achievementOpenPopup);
 
         if (AchievementManager.Instance != null)

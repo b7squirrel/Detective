@@ -81,6 +81,9 @@ public class GearTutorialController : MonoBehaviour
     // Gear 탭 버튼이 실제로 활성화될 때까지 대기
     IEnumerator WaitForMainMenuThenStart()
     {
+        // ✅ 대기 전에 먼저 차단
+        if (fg != null) fg.SetActive(true);
+
         yield return new WaitUntil(() => GameInitializer.IsInitialized);
         yield return new WaitForSeconds(0.5f);
 

@@ -110,13 +110,11 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         {
             case PurchaseType.Cristal:
             if (!PurchaseWithCristal(productData)) return false;  
-                if (PurchaseWithCristal(productData))
                 GiveProductReward(productData, fxStartPoint);
                 return true;
 
             case PurchaseType.Gold:
             if (!PurchaseWithGold(productData)) return false; 
-                if (PurchaseWithGold(productData))
                 GiveProductReward(productData, fxStartPoint);
                 return true;
 

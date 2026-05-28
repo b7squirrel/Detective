@@ -186,9 +186,21 @@ public class ShopTutorialController : MonoBehaviour
 
     IEnumerator ScrollThenHighlightItemInternal()
     {
-        yield return new WaitForSeconds(1.0f);
+        if (_activeScrollCoroutine != null)
+        {
+            Debug.Log("[ShopTutorial] ScrollThenHighlightItem 이미 진행 중 - 스킵");
+            yield break;
+        }
 
-        // 대기 후 step이 여전히 유효한지 확인
+        // ✅ 대기 중에도 fg가 켜져 있는지 매 프레임 보장
+        float elapsed = 0f;
+        while (elapsed < 1.0f)
+        {
+            if (fg != null && !fg.activeSelf) fg.SetActive(true); // 혹시 꺼졌으면 다시 켬
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
         if (TutorialManager.instance?.CurrentStep != TutorialStep.Step1_ShopUnlocked)
         {
             Debug.LogWarning("[ShopTutorial] 대기 중 Step이 변경됨! 아이템카드 하이라이트 취소");
@@ -248,14 +260,15 @@ public class ShopTutorialController : MonoBehaviour
     // ─────────────────────────────────────────
     public void OnGachaClosed()
     {
+        // ✅ 가장 먼저 fg 활성화 (ResetState보다 늦게 호출돼도 즉시 막음)
         if (fg != null) fg.SetActive(true);
+
         if (TutorialManager.instance?.CurrentStep != TutorialStep.Step1_ShopUnlocked) return;
 
         Logger.Log($"[ShopTutorial] OnGachaClosed - pendingChestType: {pendingChestType}, phase: {phase}");
 
         if (pendingChestType == ChestType.Duck && phase == ShopTutorialPhase.HighlightItemCard)
         {
-            // ✅ 추가: 다음 하이라이트 전까지 스크롤 잠금
             LockScroll();
             StartCoroutine(ScrollThenHighlightItem());
         }
