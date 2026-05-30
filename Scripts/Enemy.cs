@@ -62,7 +62,8 @@ public class Enemy : EnemyBase
         }
         else if (sqrDist > 400f) // 35~50유닛: 2프레임에 1번 (화면 밖 근처)
         {
-            if (Time.frameCount % 2 != updateOffset) return;
+            // ✅ 수정: updateOffset % 2로 변환 (0,1,2 → 0,1,0)
+            if (Time.frameCount % 2 != updateOffset % 2) return;
         }
         // 35유닛 이내: 매 프레임 (화면 안 또는 화면 근처)
 
@@ -82,7 +83,8 @@ public class Enemy : EnemyBase
         }
         else if (sqrDist > 400f)
         {
-            if (Time.frameCount % 2 != updateOffset) return;
+            // ✅ 수정: updateOffset % 2로 변환
+            if (Time.frameCount % 2 != updateOffset % 2) return;
         }
 
         Flip();

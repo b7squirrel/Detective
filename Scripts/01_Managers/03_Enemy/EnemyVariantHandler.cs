@@ -54,6 +54,7 @@ public class EnemyVariantHandler : MonoBehaviour
 
             case EnemyVariantType.Explosive:
                 if (overlayFuse != null) overlayFuse.SetActive(true);
+                if (crown != null) crown.SetActive(false); 
                 break;
         }
     }

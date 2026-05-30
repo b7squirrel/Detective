@@ -46,6 +46,22 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     path: Sprite Trans/Overlay Helmet
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: 0, y: 0, z: 18.582}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: Sprite Trans/Spirte/Overlay Fuse
   m_PositionCurves:
   - curve:
       serializedVersion: 2
@@ -292,6 +308,22 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     path: Shadow/Sprite Shadow on Ice
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: -0.23, y: 1.88, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: Sprite Trans/Spirte/Overlay Fuse
   m_ScaleCurves:
   - curve:
       serializedVersion: 2
@@ -664,6 +696,22 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     path: Shadow/Sprite Shadow on Ice
+  - curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: {x: -3.7055886, y: 3.7055886, z: 1.2693851}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+        outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    path: Sprite Trans/Spirte/Overlay Fuse
   m_FloatCurves:
   - serializedVersion: 2
     curve:
@@ -800,6 +848,47 @@ AnimationClip:
     classID: 212
     script: {fileID: 0}
     flags: 2
+  - serializedVersion: 2
+    curve:
+    - time: 0
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - time: 0.033333335
+      value: {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - time: 0.06666667
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - time: 0.1
+      value: {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - time: 0.13333334
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - time: 0.16666667
+      value: {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - time: 0.2
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - time: 0.23333333
+      value: {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - time: 0.26666668
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - time: 0.3
+      value: {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - time: 0.33333334
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - time: 0.36666667
+      value: {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - time: 0.4
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - time: 0.43333334
+      value: {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - time: 0.46666667
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - time: 0.5
+      value: {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - time: 0.53333336
+      value: {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    attribute: m_Sprite
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 212
+    script: {fileID: 0}
+    flags: 2
   m_SampleRate: 60
   m_WrapMode: 0
   m_Bounds:
@@ -907,6 +996,15 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
+      path: 496597989
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
       path: 2353699449
       attribute: 1
       script: {fileID: 0}
@@ -943,6 +1041,15 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
+      path: 496597989
+      attribute: 1
+      script: {fileID: 0}
+      typeID: 4
+      customType: 0
+      isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
       path: 2353699449
       attribute: 4
       script: {fileID: 0}
@@ -953,6 +1060,15 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 3365003236
+      attribute: 4
+      script: {fileID: 0}
+      typeID: 4
+      customType: 4
+      isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
+      path: 496597989
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -998,6 +1114,15 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 1371655989
+      attribute: 3
+      script: {fileID: 0}
+      typeID: 4
+      customType: 0
+      isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
+      path: 496597989
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -1053,6 +1178,23 @@ AnimationClip:
     - {fileID: 21300000, guid: 7e935cacf2eab423fbfcd4590189bf36, type: 3}
     - {fileID: 21300000, guid: dd67dea6b3ffc4183b966179eef94aef, type: 3}
     - {fileID: 21300000, guid: dd67dea6b3ffc4183b966179eef94aef, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
+    - {fileID: 21300000, guid: d896eeb9c53a84a4c81ceda833d54949, type: 3}
+    - {fileID: 21300000, guid: b77da38ae4f744889b67c55c77676a08, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -3354,6 +3496,195 @@ AnimationClip:
     classID: 4
     script: {fileID: 0}
     flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0.23
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.x
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1.88
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.y
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalPosition.z
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.x
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.y
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 18.582
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: localEulerAnglesRaw.z
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -3.7055886
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.x
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 3.7055886
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.y
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1.2693851
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalScale.z
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
   m_EulerEditorCurves:
   - serializedVersion: 2
     curve:
@@ -3424,6 +3755,42 @@ AnimationClip:
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
     path: Shadow/Sprite Shadow
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.x
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.y
+    path: Sprite Trans/Spirte/Overlay Fuse
+    classID: 4
+    script: {fileID: 0}
+    flags: 0
+  - serializedVersion: 2
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    attribute: m_LocalEulerAngles.z
+    path: Sprite Trans/Spirte/Overlay Fuse
     classID: 4
     script: {fileID: 0}
     flags: 0
