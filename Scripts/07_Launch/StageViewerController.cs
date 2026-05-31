@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// 스테이지 이미지 탭 시 오버레이를 표시하고, 뷰어 인덱스로 스테이지를 탐색합니다.
@@ -19,6 +20,7 @@ public class StageViewerController : MonoBehaviour
 
     [Header("스테이지 설명 패널 (오버레이 열릴 때만 활성화)")]
     [SerializeField] GameObject stageDescriptionPanel;  // Stage Description Panel
+    [SerializeField] TextMeshProUGUI descriptionText;   // 설명 텍스트 컴포넌트
 
     [Header("자물쇠")]
     [SerializeField] GameObject imageLock;               // Image Lock 오브젝트
@@ -39,6 +41,9 @@ public class StageViewerController : MonoBehaviour
 
     [Header("화살표 끝 도달 사운드")]
     [SerializeField] AudioClip arrowLimitClip;           // 더 이상 이동 불가 시 재생할 사운드 클립
+
+    [Header("스테이지 이미지 버튼 효과")]
+    [SerializeField] ButtonEffect stageImageButtonEffect;  // Stage Image Button의 ButtonEffect 컴포넌트
 
     // 참조
     StageInfoUI stageInfoUIScript;
@@ -176,7 +181,20 @@ public class StageViewerController : MonoBehaviour
 
     void OnStageImageTapped()
     {
-        if (isOverlayOpen) return;
+        // ⭐ 오버레이가 열려있으면 닫기 (CloseOverlay와 동일한 효과)
+        // ButtonEffect의 ShoutldBeInitialSound를 false로 설정해 퇴장 사운드 재생
+        if (isOverlayOpen)
+        {
+            if (stageImageButtonEffect != null)
+            {
+                stageImageButtonEffect.ShoutldBeInitialSound = false;
+                stageImageButtonEffect.PlayButtonSound();
+                // onClick 순서상 뒤에 오는 자동 PlayButtonSound() 호출을 스킵
+                stageImageButtonEffect.ignoreSoundOnce = true;
+            }
+            CloseOverlay();
+            return;
+        }
 
         // 참조가 아직 없으면 재시도
         if (playerDataManager == null)
@@ -189,6 +207,16 @@ public class StageViewerController : MonoBehaviour
             viewingStageIndex = 1;
 
         Logger.Log($"[StageViewerController] 오버레이 열기 - 현재 스테이지: {viewingStageIndex}");
+
+        // ⭐ 로비 상태에서 입장 → 입장 사운드 직접 호출 후 자동 재생 스킵
+        if (stageImageButtonEffect != null)
+        {
+            stageImageButtonEffect.ShoutldBeInitialSound = true;
+            stageImageButtonEffect.PlayButtonSound();
+            // onClick 순서상 뒤에 오는 자동 PlayButtonSound() 호출을 스킵
+            stageImageButtonEffect.ignoreSoundOnce = true;
+        }
+
         OpenOverlay();
     }
 
@@ -314,6 +342,15 @@ public class StageViewerController : MonoBehaviour
 
         // StageInfoUI에 뷰어 인덱스 기준으로 UI 업데이트 요청
         stageInfoUIScript.UpdateStageInfoUIByIndex(viewingStageIndex);
+
+        // 스테이지 그라운드 타입으로 설명 텍스트 업데이트
+        // GreenForest/OrangeDesert 등 같은 타입이 여러 스테이지에 반복되므로
+        // 스테이지 번호가 아닌 그라운드 타입 기준으로 설명을 가져옴
+        if (descriptionText != null && LocalizationManager.Game != null)
+        {
+            StageGroundType groundType = stageInfo.GetStageInfo(viewingStageIndex).stageGroundType;
+            descriptionText.text = LocalizationManager.Game.GetStageGroundDescription(groundType);
+        }
 
         // 실제 저장된 현재 스테이지와 비교해 자물쇠 여부 판단
         int currentStage = playerDataManager.GetCurrentStageNumber();

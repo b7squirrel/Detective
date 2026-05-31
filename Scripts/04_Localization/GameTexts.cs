@@ -162,6 +162,32 @@ public class GameTexts : ScriptableObject
         "아뜨아뜨 여왕"
     };
 
+    [Header("Stage Ground Descriptions")]
+    [Tooltip("StageGroundType enum 순서와 일치: GreenForest(0), OrangeDesert(1), GreyStone(2), BlueIce(3), GreyLava(4)")]
+    [TextArea(2, 4)]
+    public string[] stageGroundDescriptions = new string[]
+{
+    // GreenForest (0)
+    "평화로운 숲 스테이지입니다.",
+    // OrangeDesert (1)
+    "사막의 모래 폭풍은 오리들의 이동을 방해합니다.",
+    // GreyStone (2)
+    "돌산의 지진이 오리들의 이동속도를 느리게 합니다.",
+    // BlueIce (3)
+    "얼음판이 미끄러워 이동을 컨트롤하기 어렵습니다.",
+    // GreyLava (4)
+    "하늘에서 화염구가 떨어져 아군과 적군 모두에게 피해를 줍니다."
+};
+
+    // 헬퍼 메서드 - StageGroundType으로 설명 반환
+    public string GetStageGroundDescription(StageGroundType groundType)
+    {
+        int index = (int)groundType;
+        if (stageGroundDescriptions != null && index >= 0 && index < stageGroundDescriptions.Length)
+            return stageGroundDescriptions[index];
+        return "";
+    }
+
     [Header("Game Warning")]
     [TextArea(1, 2)]
     public string[] cardLimitWarnings = new string[]
