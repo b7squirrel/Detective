@@ -244,32 +244,34 @@ public class MainMenuManager : MonoBehaviour
         BtnImageRect[buttonIndex].GetComponent<Image>().enabled = active;
     }
     #endregion
+
     // UpPanelManager의 UpgradeUICo 와 탭해서 계속하기 버튼에서 참조.
+    // ── SetActiveBottomTabs 수정: false일 때도 DOTween 사용 ──
     public void SetActiveBottomTabs(bool active)
     {
         tabButtons = tabs.GetComponentsInChildren<Button>();
         if (active)
         {
-            // 탭을 원래대로 되돌림
+            // 탭을 원래대로 되돌림 (DOTween)
             tabs.DOAnchorPosY(68f, .5f);
 
             // 탭 버튼이 작동하도록 하기
             for (int i = 0; i < tabButtons.Length; i++)
-            {
                 tabButtons[i].interactable = true;
-            }
         }
         else
         {
             // 탭 버튼이 작동하지 않도록
             for (int i = 0; i < tabButtons.Length; i++)
-            {
                 tabButtons[i].interactable = false;
-            }
-            // 탭을 화면 아래로 이동
-            tabs.anchoredPosition = new Vector2(tabs.anchoredPosition.x, -300f);
+
+            // ⭐ 기존: anchoredPosition 직접 설정 → DOTween과 충돌
+            // 수정: DOTween으로 통일해서 Kill이 제대로 작동하도록
+            tabs.DOAnchorPosY(-300f, .3f);
         }
     }
+
+
     public void SetActiveTopTabs(bool active)
     {
         if (active)
@@ -281,6 +283,15 @@ public class MainMenuManager : MonoBehaviour
             upperTabs.anchoredPosition = new Vector2(upperTabs.anchoredPosition.x, 300f);
         }
     }
+
+    /// <summary>
+    /// StageViewerController에서 DOTween.Kill 호출 시 타겟으로 사용.
+    /// 진행 중인 탭 이동 Tween을 중단해서 빠른 연속 클릭 시 위치 꼬임 방지.
+    /// </summary>
+    public RectTransform GetBottomTabsTransform() => tabs;
+    public RectTransform GetUpperTabsTransform() => upperTabs;
+
+
     public void SetSlotSwapState(bool isFinished)
     {
         slotSwapFinished = isFinished;

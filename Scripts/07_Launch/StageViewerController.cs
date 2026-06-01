@@ -10,45 +10,56 @@ using TMPro;
 public class StageViewerController : MonoBehaviour
 {
     [Header("오버레이")]
-    [SerializeField] GameObject stageOverlay;           // Stage Overlay 오브젝트
-    [SerializeField] Button stageImageButton;            // Stage Image (탭 감지용 버튼)
-    [SerializeField] Button closeButton;                 // 닫기 버튼
+    [SerializeField] GameObject stageOverlay;              // Stage Overlay 오브젝트
+    [SerializeField] GameObject currencyOverlay;            // Currency Overlay 오브젝트 (함께 활성/비활성)
+    [SerializeField] Button stageImageButton;               // Stage Image (탭 감지용 버튼)
+    [SerializeField] Button closeButton;                    // 닫기 버튼
 
     [Header("뷰어 화살표 (오버레이 열릴 때만 활성화)")]
-    [SerializeField] Button nextViewButton;              // Next Stage Button (뷰어용)
-    [SerializeField] Button prevViewButton;              // Previous Stage Button (뷰어용)
+    [SerializeField] Button nextViewButton;                 // Next Stage Button (뷰어용)
+    [SerializeField] Button prevViewButton;                 // Previous Stage Button (뷰어용)
 
     [Header("스테이지 설명 패널 (오버레이 열릴 때만 활성화)")]
-    [SerializeField] GameObject stageDescriptionPanel;  // Stage Description Panel
-    [SerializeField] TextMeshProUGUI descriptionText;   // 설명 텍스트 컴포넌트
+    [SerializeField] GameObject stageDescriptionPanel;      // Stage Description Panel
+    [SerializeField] TextMeshProUGUI descriptionText;       // 설명 텍스트 컴포넌트
 
     [Header("자물쇠")]
-    [SerializeField] GameObject imageLock;               // Image Lock 오브젝트
+    [SerializeField] GameObject imageLock;                  // Image Lock 오브젝트
 
     [Header("스테이지 이미지 확대 및 이동")]
-    [SerializeField] RectTransform stageInfoUI;          // Stage info UI RectTransform (스케일 및 이동 대상)
-    [SerializeField] RectTransform stageTitleRibbon;     // Stage Title Ribbon RectTransform (함께 이동)
-    [SerializeField] float enlargedScale = 1.4f;         // 확대 배율
-    [SerializeField] float scaleSpeed = 20f;             // 확대/축소 속도
-    [SerializeField] float moveDownAmount = 40f;         // Stage info UI 아래 이동량 (Inspector에서 조정)
+    [SerializeField] RectTransform stageInfoUI;             // Stage info UI RectTransform (스케일 및 이동 대상)
+    [SerializeField] RectTransform stageTitleRibbon;        // Stage Title Ribbon RectTransform (함께 이동)
+    [SerializeField] float enlargedScale = 1.4f;            // 확대 배율
+    [SerializeField] float scaleSpeed = 20f;                // 확대/축소 속도
+    [SerializeField] float moveDownAmount = 40f;            // Stage info UI 아래 이동량 (Inspector에서 조정)
     // 리본은 Stage info UI 이동량 + 이미지 팽창량만큼 추가로 내려야 이미지와 간격 유지
     // 팽창량 = stageImageHeight * (enlargedScale - 1) * 0.5f
     // stageImageHeight: Stage Image RectTransform의 Height 값 (408)
-    [SerializeField] float stageImageHeight = 408f;      // Stage Image Height (팽창량 계산용)
+    [SerializeField] float stageImageHeight = 408f;         // Stage Image Height (팽창량 계산용)
 
     [Header("애니메이션")]
-    [SerializeField] Animator enemyImagePanelAnim;       // Enemy Image Panel 애니메이터
+    [SerializeField] Animator enemyImagePanelAnim;          // Enemy Image Panel 애니메이터
 
     [Header("화살표 끝 도달 사운드")]
-    [SerializeField] AudioClip arrowLimitClip;           // 더 이상 이동 불가 시 재생할 사운드 클립
+    [SerializeField] AudioClip arrowLimitClip;              // 더 이상 이동 불가 시 재생할 사운드 클립
 
     [Header("스테이지 이미지 버튼 효과")]
-    [SerializeField] ButtonEffect stageImageButtonEffect;  // Stage Image Button의 ButtonEffect 컴포넌트
+    [SerializeField] ButtonEffect stageImageButtonEffect;   // Stage Image Button의 ButtonEffect 컴포넌트
+
+    [Header("스타트 버튼")]
+    [SerializeField] Animator startButtonAnim;
+    Button startButton;
+
+    [Header("오버레이 전환 쿨다운")]
+    // 빠른 연속 클릭 시 탭 애니메이션이 꼬이는 것을 방지
+    [SerializeField] float transitionCooldown = 0.5f;       // 오버레이 열기/닫기 최소 간격(초)
+    float lastTransitionTime = -999f;                       // 마지막 전환 시각
 
     // 참조
     StageInfoUI stageInfoUIScript;
     StageInfo stageInfo;
     PlayerDataManager playerDataManager;
+    MainMenuManager mainMenuManager;                        // 탭 활성/비활성 제어용
 
     // 화살표 버튼 Animator 캐싱 (Start에서 한 번만 가져옴)
     Animator nextViewButtonAnim;
@@ -120,6 +131,10 @@ public class StageViewerController : MonoBehaviour
         if (prevViewButton != null)
             prevViewButtonAnim = prevViewButton.GetComponent<Animator>();
 
+        mainMenuManager = FindObjectOfType<MainMenuManager>();
+        if (mainMenuManager == null)
+            Logger.LogWarning("[StageViewerController] MainMenuManager를 찾을 수 없습니다.");
+
         // 버튼 이벤트 연결
         if (stageImageButton != null)
             stageImageButton.onClick.AddListener(OnStageImageTapped);
@@ -132,6 +147,12 @@ public class StageViewerController : MonoBehaviour
 
         if (prevViewButton != null)
             prevViewButton.onClick.AddListener(OnPrevView);
+
+        if (startButton == null && startButtonAnim != null)
+            startButton = startButtonAnim.GetComponent<Button>();
+
+        if (startButton != null)
+            startButton.interactable = true;
     }
 
     void Update()
@@ -176,12 +197,34 @@ public class StageViewerController : MonoBehaviour
     }
 
     // ───────────────────────────────────────────
+    // 쿨다운 체크
+    // ───────────────────────────────────────────
+
+    /// <summary>
+    /// 오버레이 전환(열기/닫기) 쿨다운 체크.
+    /// DOTween 애니메이션 도중 빠른 연속 클릭으로 탭 위치가 꼬이는 것을 방지.
+    /// </summary>
+    bool CanTransition()
+    {
+        if (Time.time - lastTransitionTime < transitionCooldown)
+        {
+            Logger.Log("[StageViewerController] 전환 쿨다운 중 - 클릭 무시");
+            return false;
+        }
+        lastTransitionTime = Time.time;
+        return true;
+    }
+
+    // ───────────────────────────────────────────
     // 오버레이 열기 / 닫기
     // ───────────────────────────────────────────
 
     void OnStageImageTapped()
     {
-        // ⭐ 오버레이가 열려있으면 닫기 (CloseOverlay와 동일한 효과)
+        // 쿨다운 중이면 무시 (빠른 연속 클릭 방지)
+        if (!CanTransition()) return;
+
+        // 오버레이가 열려있으면 닫기
         // ButtonEffect의 ShoutldBeInitialSound를 false로 설정해 퇴장 사운드 재생
         if (isOverlayOpen)
         {
@@ -208,7 +251,7 @@ public class StageViewerController : MonoBehaviour
 
         Logger.Log($"[StageViewerController] 오버레이 열기 - 현재 스테이지: {viewingStageIndex}");
 
-        // ⭐ 로비 상태에서 입장 → 입장 사운드 직접 호출 후 자동 재생 스킵
+        // 로비 상태에서 입장 → 입장 사운드 직접 호출 후 자동 재생 스킵
         if (stageImageButtonEffect != null)
         {
             stageImageButtonEffect.ShoutldBeInitialSound = true;
@@ -244,9 +287,16 @@ public class StageViewerController : MonoBehaviour
 
         UpdateViewerUI();
 
+        // 오버레이 진입 시 위/아래 탭 비활성화
+        // KillAll로 진행 중인 DOTween을 먼저 중단하고 새 상태 적용
+        SetTabsActive(false);
+
         // 오버레이 열릴 때 애니메이션 재생
         if (enemyImagePanelAnim != null)
             enemyImagePanelAnim.Play(0);
+
+        if (startButtonAnim != null) startButtonAnim.SetTrigger("Hide");
+        if (startButton != null) startButton.interactable = false;
     }
 
     public void CloseOverlay()
@@ -263,10 +313,32 @@ public class StageViewerController : MonoBehaviour
         // Stage Title Ribbon: 원래 위치로
         ribbonTargetPosY = ribbonOriginalPosY;
 
+        // 오버레이 종료 시 위/아래 탭 활성화
+        SetTabsActive(true);
+
         // 뷰어 탐색 중 다른 스테이지를 보고 있었을 수 있으므로
         // 현재 실제 도전 중인 스테이지 UI로 복원
         if (stageInfoUIScript != null)
             stageInfoUIScript.InitStageInfoUI();
+
+        if (startButtonAnim != null) startButtonAnim.SetTrigger("Activate");
+        if (startButton != null) startButton.interactable = true;
+    }
+
+    /// <summary>
+    /// 위/아래 탭 활성화 제어.
+    /// DOTween이 진행 중일 수 있으므로 KillAll로 먼저 정리 후 새 상태 적용.
+    /// </summary>
+    void SetTabsActive(bool active)
+    {
+        if (mainMenuManager == null) return;
+
+        // 진행 중인 DOTween Tween을 먼저 Kill해서 위치 꼬임 방지
+        DG.Tweening.DOTween.Kill(mainMenuManager.GetBottomTabsTransform());
+        DG.Tweening.DOTween.Kill(mainMenuManager.GetUpperTabsTransform());
+
+        mainMenuManager.SetActiveBottomTabs(active);
+        mainMenuManager.SetActiveTopTabs(active);
     }
 
     // ───────────────────────────────────────────
@@ -277,6 +349,9 @@ public class StageViewerController : MonoBehaviour
     {
         if (stageOverlay != null)
             stageOverlay.SetActive(isActive);
+
+        if (currencyOverlay != null)
+            currencyOverlay.SetActive(isActive);
 
         if (nextViewButton != null)
             nextViewButton.gameObject.SetActive(isActive);

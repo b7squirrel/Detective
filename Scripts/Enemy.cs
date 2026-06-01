@@ -223,26 +223,40 @@ public class Enemy : EnemyBase
 
     protected override void AttackExplode(int _damage)
     {
+        // ⭐ 진입 로그
+        Logger.Log($"[AttackExplode] 진입 - {gameObject.name} / suppressDieEffect={suppressDieEffect}");
+
         EnemyScalingConfig config = GameManager.instance.enemyStatCalculator.GetScalingConfig();
 
-        // 폭발 데미지 (배율 적용)
-        int explosiveDamage = Mathf.RoundToInt(_damage * config.explosiveDamageMultiplier);
+        if (config.explosiveDieSound != null)
+            SoundManager.instance.PlaySoundWith(config.explosiveDieSound, 1f, true, .2f);
+        else if (dieSound != null)
+            SoundManager.instance.PlaySoundWith(dieSound, 1f, true, .2f);
+        else
+            for (int i = 0; i < dies.Length; i++)
+                SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
 
-        // 범위 안의 플레이어에게 데미지
-        Collider2D hit = Physics2D.OverlapCircle(transform.position, config.explosiveRadius, playerLayer);
-        if (hit != null && hit.TryGetComponent(out Character player))
+        if (config.explosiveDieEffect != null)
         {
-            player.TakeDamage(explosiveDamage, EnemyType.Explode);
+            GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(config.explosiveDieEffect);
+            if (explosionEffect != null) explosionEffect.transform.position = transform.position;
         }
 
-        // 폭발 이펙트 (shockwave 재사용)
+        int explosiveDamage = Mathf.RoundToInt(_damage * config.explosiveDamageMultiplier);
+
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, config.explosiveRadius, playerLayer);
+        if (hit != null && hit.TryGetComponent(out Character player))
+            player.TakeDamage(explosiveDamage, EnemyType.Explode);
+
         if (shockwave != null)
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
             wave.GetComponent<Shockwave>().Init(0, config.explosiveRadius, enemyLayer, transform.position);
         }
+        suppressDieEffect = true;
+        Logger.Log($"[AttackExplode] suppressDieEffect 세팅 완료 - {gameObject.name}");
 
-        Die();
+        Die(suppressDieEffect: true); // ⭐ 일반 이펙트 억제
     }
     #endregion
 

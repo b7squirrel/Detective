@@ -42,6 +42,10 @@ public class EnemyScalingConfig : ScriptableObject
     [Tooltip("폭발 범위 반경")]
     public float explosiveRadius = 2f;
 
+    [Tooltip("폭발 때의 피드백")]
+    public AudioClip explosiveDieSound;
+    public GameObject explosiveDieEffect; 
+
     // ⭐ 회피 확률 관련 추가
     [Header("Dodge Chance Scaling")]
     [Tooltip("스테이지 1에서의 기본 회피 확률 (0.0 ~ 1.0)")]

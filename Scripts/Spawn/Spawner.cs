@@ -41,6 +41,7 @@ public class Spawner : MonoBehaviour
     }
     public void SubtractEnemyNumber()
     {
+        Logger.Log($"[Spawner] SubtractEnemyNumber 호출 - currentEnemyCount={currentEnemyNumbers}");
         currentEnemyNumbers--;
     }
     public int GetCurrentEnemyNums()

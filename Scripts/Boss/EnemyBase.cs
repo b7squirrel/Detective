@@ -52,6 +52,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     protected ShadowHeightEnemy shadowHeightEnemy; // CastSlownessToEnemy 등에서 매번 GetComponent 하지 않도록 캐싱
 
     int goldReward; // 처치 시 지급할 골드
+    protected bool suppressDieEffect = false;
+    protected bool isDying = false; 
 
     // static (모든 적이 공유)
     static InfiniteStageManager infiniteStageManager;
@@ -189,6 +191,9 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // LayerMask는 한 번만 계산
         if (wallLayer == 0) wallLayer = LayerMask.GetMask("Wall");
         if (shockwaveEnemyLayer == 0) shockwaveEnemyLayer = LayerMask.GetMask("Enemy");
+
+        suppressDieEffect = false;
+        isDying = false;
     }
 
     /// <summary>
@@ -604,6 +609,8 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 닿으면 player HP 감소
     protected void OnCollisionStay2D(Collision2D collision)
     {
+         if (isDying) return; 
+
         if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
             return;
 
@@ -741,19 +748,26 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (Stats.hp < 1)
         {
-            if (dieSound != null)
+            Logger.Log($"[TakeDamage] Die() 호출 - {gameObject.name} / suppressDieEffect={suppressDieEffect} / variant={variantHandler?.CurrentVariant}");
+
+            bool isExplosive = variantHandler != null &&
+                               variantHandler.CurrentVariant == EnemyVariantType.Explosive;
+
+            if (isExplosive)
+            {
+                // Explosive는 폭발 사운드/이펙트 없이 조용히 제거
+                // (AttackExplode에서 처리하지 못한 경우이므로 최소한 일반 이펙트는 억제)
+                suppressDieEffect = true;
+            }
+            else if (dieSound != null)
             {
                 SoundManager.instance.PlaySoundWith(dieSound, 1f, true, .2f);
             }
             else
             {
                 for (int i = 0; i < dies.Length; i++)
-                {
                     SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
-                }
             }
-
-            Die();
         }
         else
         {
@@ -780,17 +794,37 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     public virtual void Die()
     {
+        Die(suppressDieEffect: false);
+    }
+    public virtual void Die(bool suppressDieEffect)
+    {
+        // ⭐ 이미 죽는 중이면 무시
+        if (!gameObject.activeSelf)
+        {
+            // ⭐ 이미 비활성화된 상태에서 Die()가 호출되고 있는지 확인
+            Logger.Log($"[Die] 이미 비활성화된 오브젝트에 Die() 호출 - {gameObject.name}");
+            return;
+        }
+
+        if (isDying) // ⭐ 추가 - 같은 프레임 중복 호출 방지
+        {
+            Logger.Log($"[Die] 이미 죽는 중 - {gameObject.name}");
+            return;
+        }
+        isDying = true; // ⭐ 추가
+
+        // ⭐ Die()가 몇 번 호출되는지 확인
+        Logger.Log($"[Die] 진입 - {gameObject.name} / suppressDieEffect={suppressDieEffect} / activeSelf={gameObject.activeSelf}");
+
+
         dropOnDestroy?.CheckDrop();
-
         StopAllCoroutines();
-
         IsGrouping = false;
         ResetFlip();
 
         GameManager.instance.KillManager.UpdateCurrentKills(enemyType, isSubBoss, isBoss);
         GoldRewardManager.Instance.AddKillGold(goldReward);
 
-        // 쪼개진 적(슬라임 조각 등)은 킬 카운트 제외, 무한 모드와 일반 모드 분리
         if (!isSplited && AchievementManager.Instance != null)
         {
             if (PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
@@ -800,7 +834,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         Spawner.instance.SubtractEnemyNumber();
-
         IsSlowed = false;
         finishedSpawn = false;
         DestroyHPbar();
@@ -812,45 +845,44 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
         else if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
         {
-            BossDieManager.instance.DieEventInfinite(.1f, 2f); // deadBody 연출만, IsBossDead 없음
+            BossDieManager.instance.DieEventInfinite(.1f, 2f);
         }
 
         if (isSubBoss)
-        {
             CameraShake.instance.Shake();
-        }
 
         if (shockwave != null)
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
             wave.GetComponent<Shockwave>().Init(0, 10f, shockwaveEnemyLayer, transform.position);
-
             BossDieManager.instance.SlowMo(.5f, .5f);
         }
 
+        // ⭐ 이펙트는 여기 한 군데만 처리
         if (isSplitable)
         {
             for (int i = 0; i < splitNum; i++)
-            {
                 Spawner.instance.SpawnSplit(splitableEnemyData, 0, true, transform.position);
-            }
             GameObject explosionEffect = GameManager.instance.poolManager.GetMisc(dieEffectPrefeab);
+            if (explosionEffect != null) explosionEffect.transform.position = transform.position;
+        }
+        else if (!suppressDieEffect)
+        {
+            Logger.Log($"[Die] 일반 이펙트 생성 - {gameObject.name} / variant={variantHandler?.CurrentVariant}");
+            GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
             if (explosionEffect != null) explosionEffect.transform.position = transform.position;
         }
         else
         {
-            GameObject explosionEffect = GameManager.instance.feedbackManager.GetDieEffect();
-            if (explosionEffect != null) explosionEffect.transform.position = transform.position;
+            Logger.Log($"[Die] 이펙트 억제됨 - {gameObject.name}");
         }
+        // ⭐ 아래에 기존 이펙트 코드가 또 있다면 완전히 삭제
 
-        // 무한 모드 킬 카운트. 쪼개진 조각 적은 제외
         if (isInfiniteMode && infiniteStageManager != null && isSplited == false)
-        {
             infiniteStageManager.OnEnemyKilled();
-        }
 
         OnDeath?.Invoke();
-
+        Logger.Log($"[Die] SetActive(false) 직전 - {gameObject.name}");
         gameObject.SetActive(false);
     }
 
