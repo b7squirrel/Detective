@@ -755,18 +755,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
             if (isExplosive)
             {
-                // Explosive는 폭발 사운드/이펙트 없이 조용히 제거
-                // (AttackExplode에서 처리하지 못한 경우이므로 최소한 일반 이펙트는 억제)
-                suppressDieEffect = true;
-            }
-            else if (dieSound != null)
-            {
-                SoundManager.instance.PlaySoundWith(dieSound, 1f, true, .2f);
+                // suppressDieEffect = true;
+                Die(suppressDieEffect: false);
             }
             else
             {
-                for (int i = 0; i < dies.Length; i++)
-                    SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
+                if (dieSound != null)
+                    SoundManager.instance.PlaySoundWith(dieSound, 1f, true, .2f);
+                else
+                    for (int i = 0; i < dies.Length; i++)
+                        SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
+
+                Die(); // ← 사운드 유무와 관계없이 항상 호출
             }
         }
         else
