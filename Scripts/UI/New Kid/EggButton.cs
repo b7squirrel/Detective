@@ -37,6 +37,15 @@ public class EggButton : MonoBehaviour
 
     [SerializeField] Image nameTag;
 
+    [Header("Grade Colors")]
+    [SerializeField]
+    Color[] eggGradeColors = new Color[]
+{
+    new Color(0.91f, 0.52f, 0.29f), // 신병 - 주황
+    new Color(0.91f, 0.29f, 0.50f), // 고참 - 핫핑크
+    new Color(0.91f, 0.78f, 0.29f), // 정예 - 금색
+};
+
     [Header("레어 오리 확률")]
     [SerializeField] float desiredFontSizeFactor;
     float initFontSize;
@@ -151,7 +160,7 @@ public class EggButton : MonoBehaviour
     {
         for (int i = 0; i < gradeTags.Length; i++)
         {
-            gradeTags[i].color = MyGrade.EggGradeColors[i];
+            gradeTags[i].color = eggGradeColors[i];
         }
     }
 
@@ -201,7 +210,7 @@ public class EggButton : MonoBehaviour
         gradeTitle.fontSize = defaultFontSize * 1.2f;
 
         yield return new WaitForSecondsRealtime(.04f);
-        gradeTags[_gradeIndex].color = MyGrade.EggGradeColors[_gradeIndex];
+        gradeTags[_gradeIndex].color = eggGradeColors[_gradeIndex];
         gradeTitle.fontSize = defaultFontSize;
 
         isPopFeedbackDone = true;
@@ -231,7 +240,7 @@ public class EggButton : MonoBehaviour
             {
                 currentProbability = i * 25f;
                 fixedProbability = currentProbability;
-                nameTag.color = MyGrade.EggGradeColors[i];
+                nameTag.color = eggGradeColors[i]; // ← 여기도
                 break;
             }
         }
