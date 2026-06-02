@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: GuitarF_2
+  m_EditorClassIdentifier: 
+  grade: 2
+  Name: Guitar
+  DisplayName: "\uAE30\uD0C0 \uC624\uB9AC"
+  SynergyDispName: "\uD504\uB808\uC2A4\uD1A0"
+  charImage: {fileID: 21300000, guid: 2c77965621ecd3b479d5c67b4339f17b, type: 3}
+  faceImage: {fileID: 21300000, guid: 3c7324c4ad55bb644b812f44cd736748, type: 3}
+  SynergyWeapon: Rocker
+  SynergyItem: {fileID: 11400000, guid: 345063fe01eca2345bfaa975c540b87d, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: bb2c5fbc939a9a24a88ea0adcbf3d3ef, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: 06e7adb02ced5514dbe3e5c355d56503, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: bb2c5fbc939a9a24a88ea0adcbf3d3ef, type: 2}
+  DefaultHead: {fileID: -1050372065, guid: 120c0acfc10a86940ad836c78ca0fc98, type: 3}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 958767226, guid: 120c0acfc10a86940ad836c78ca0fc98, type: 3}
+  defaultItems:
+  - {fileID: 11400000, guid: d3781b03215409c43b0036afcd3ac05c, type: 2}
+  - {fileID: 11400000, guid: 3c6d8123338c1894287cad82e30cd69b, type: 2}
+  - {fileID: 11400000, guid: fa13cc91d5b3748c18e4ea2d67fbcac3, type: 2}
+  - {fileID: 11400000, guid: 8f8753a67dc7a974c84ae6dea395866d, type: 2}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 5274905772770385771, guid: 59fada570aa42492ea2686ba1b83d05e, type: 3}
+  stats:
+    damage: 40
+    timeToAttack: 0.7
+    numberOfAttacks: 0
+    sizeOfArea: 0
+    projectileSpeed: 0
+    knockBackChance: 10
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 6391488162450220913, guid: a3055110ed60e4741b9af2ec7dec8b64, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 59f2f721e83014356b1c8491d3f4fbf3, type: 2}
+  - {fileID: 11400000, guid: eb0a0ea3dc5634ecb9d3c2961a0dbb15, type: 2}
+  - {fileID: 11400000, guid: ccf74037b2c9e41d689f6a647944859e, type: 2}
+  - {fileID: 11400000, guid: 2ed2b9ce756944ef3927354eb1d8a71a, type: 2}
+  - {fileID: 11400000, guid: 3449eeb14e71947b88e482402e72c482, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: c46418a14de21416b836193b7fc65add, type: 2}
+  equipmentType: 3
