@@ -166,7 +166,25 @@ public class MyGrade
         new Color(1,0.5f,0.9f, 0.25f), // purple
         new Color(1,0.9f,0.6f,0.25f) // yellow
     };
+    
+    // 알 전용 등급 (3단계)
+    public static string[] EggGrades = { "신병", "고참", "정예" };
+
+    public static Color[] EggGradeColors = new Color[]
+    {
+    new Color(0.91f, 0.52f, 0.29f), // 신병 - 주황 #E8854A
+    new Color(0.91f, 0.29f, 0.50f), // 고참 - 핫핑크 #E84A80
+    new Color(0.91f, 0.78f, 0.29f), // 정예 - 금색 #E8C74A
+    };
+
+    public static Color[] EggGradeGlowColors = new Color[]
+    {
+    new Color(1f, 0.6f, 0.3f, 0.25f), // 신병
+    new Color(1f, 0.3f, 0.5f, 0.25f), // 고참
+    new Color(1f, 0.9f, 0.3f, 0.25f), // 정예
+    };
 }
+
 
 // 정렬 관련
 public enum SortType

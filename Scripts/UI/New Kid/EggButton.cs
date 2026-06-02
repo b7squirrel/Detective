@@ -14,39 +14,37 @@ public class EggButton : MonoBehaviour
 
     [Header("White Flash")]
     [SerializeField] Material whiteMat;
-    Coroutine whiteFlashCo; 
+    Coroutine whiteFlashCo;
     Material initMat;
     Image image;
-    [SerializeField] Image[] gradeTags;
+    [SerializeField] Image[] gradeTags; // Inspector에서 3개로 조정
     Coroutine popFeedbackCo;
     bool isPopFeedbackDone;
 
     [Header("Probability Settings")]
-    [SerializeField] private float increaseProbability; // 버튼 클릭시 증가량
-    [SerializeField] private float decreaseRate; // 초당 감소량
-    [SerializeField] private float maxProbability; // 최대 확률
+    [SerializeField] private float increaseProbability;
+    [SerializeField] private float decreaseRate;
+    [SerializeField] private float maxProbability;
     float currentProbability = 0f;
     string pastGrade;
     int currentGradeIndex, pastGradeIndex;
-    [SerializeField] RectTransform gradeRoll; // 클릭에 따라 grade가 점점 올라가도록
-    [SerializeField] RectTransform gradePanel; // 등급이 올라갈 때 스케일을 잠깐 올리도록
-    [SerializeField] TMPro.TextMeshProUGUI gradeTitle; // 등급이 올라갈 때 등급 텍스트도 변경
+    [SerializeField] RectTransform gradeRoll;
+    [SerializeField] RectTransform gradePanel;
+    [SerializeField] TMPro.TextMeshProUGUI gradeTitle;
     [SerializeField] Animator gradePanelAnim;
-    bool isGradeFixed; // 등급이 결정된 이후에는 다이얼이 더 이상 움직이지 않도록 하려고
-    float fixedProbability; // 확정된 등급의 y높이를 프레임에 딱 맞추기 위해서
+    bool isGradeFixed;
+    float fixedProbability;
 
-    [SerializeField] Image nameTag; // 이름표의 색깔을 등급과 맞추기 위해
-    
+    [SerializeField] Image nameTag;
+
     [Header("레어 오리 확률")]
     [SerializeField] float desiredFontSizeFactor;
     float initFontSize;
     bool isInit;
     float rateToGetRare;
 
-    bool isClicked; // 너무 연속으로 클릭되는 것을 막기 위해
-
+    bool isClicked;
     Animator anim;
-
     bool pickedEgg;
 
     void OnEnable()
@@ -56,7 +54,7 @@ public class EggButton : MonoBehaviour
 
         if (image == null) image = GetComponent<Image>();
         if (initMat == null) initMat = image.material;
-        image.material = initMat; // whiteMat이 적용된 상태로 시작하지 않기 위해
+        image.material = initMat;
         isGradeFixed = false;
         PlayGradePanelAnim("Init");
 
@@ -65,11 +63,12 @@ public class EggButton : MonoBehaviour
             isInit = true;
         }
     }
+
     void OnButtonClick()
     {
-        // 확률 증가
         currentProbability = Mathf.Min(currentProbability + increaseProbability, maxProbability);
     }
+
     void ResetCurrentProbability()
     {
         currentProbability = 0f;
@@ -78,7 +77,6 @@ public class EggButton : MonoBehaviour
 
     void Update()
     {
-        // 확률이 0보다 크고 아직 등급이 결정되지 않았다면 서서히 감소
         if (currentProbability > 0 && isGradeFixed == false)
         {
             currentProbability = Mathf.Max(0f, currentProbability - (decreaseRate * Time.unscaledDeltaTime));
@@ -88,16 +86,14 @@ public class EggButton : MonoBehaviour
 
     public void InitRate()
     {
-        ResetCurrentProbability(); // 확률 초기화
-        UpdateGradeTitle(); // 초기화된 확률에 대한 등급 패널 초기화
+        ResetCurrentProbability();
+        UpdateGradeTitle();
         InitGradeColors();
         popFeedbackCo = null;
         isPopFeedbackDone = true;
         rateToGetRare = 0f;
-
     }
 
-    // 버튼이 눌러지면 이벤트로 실행
     public void PlayEggClickSound()
     {
         if (pickedEgg)
@@ -110,10 +106,10 @@ public class EggButton : MonoBehaviour
             SoundManager.instance.Play(pickEggSound);
         }
     }
-    // 버튼이 눌러지면 이벤트로 실행
+
     public void EggClickedFeedback()
     {
-        if (isClicked || isGradeFixed) return; // isGradeFixed 체크 추가
+        if (isClicked || isGradeFixed) return;
 
         OnButtonClick();
 
@@ -123,7 +119,21 @@ public class EggButton : MonoBehaviour
         UpdateGradeTitle();
         UpdateRateForGameManager();
 
-        // 기존 코루틴 중단 후 새로 시작
+        // 3단계(정예) 도달 상태에서 클릭 시 피드백 반복 재생
+        if (currentGradeIndex == MyGrade.EggGrades.Length - 1)
+        {
+            for (int i = 0; i < upgradeSounds.Length; i++)
+            {
+                SoundManager.instance.Play(upgradeSounds[i]);
+            }
+            PlayGradePanelAnim("Upgrade");
+
+            if (isPopFeedbackDone)
+            {
+                popFeedbackCo = StartCoroutine(PopFeedbackCo(currentGradeIndex));
+            }
+        }
+
         if (whiteFlashCo != null) StopCoroutine(whiteFlashCo);
         whiteFlashCo = StartCoroutine(EggWhiteFlashCo());
     }
@@ -141,27 +151,24 @@ public class EggButton : MonoBehaviour
     {
         for (int i = 0; i < gradeTags.Length; i++)
         {
-            gradeTags[i].color = MyGrade.GradeColors[i];
+            gradeTags[i].color = MyGrade.EggGradeColors[i];
         }
     }
 
     void UpdateGradeTitle()
     {
-        // Slider 값 업데이트
-        // 등급 롤의 위치를 확률에 따라 업데이트
-        // 등급 간 거리 = 128, 등급 총 거리 = 512
-        // 백분위와의 비율 100:512 = 1 : x
-        // 5.12를 곱해줘서 확률을 거리로 변환
-        gradeRoll.anchoredPosition = new Vector2(gradeRoll.anchoredPosition.x, currentProbability * 5.12f);
+        // 3번째 등급(index 2) 도달 시 롤을 더 이상 올리지 않음
+        float clampedProbability = Mathf.Min(currentProbability, 2 * 25f);
+        gradeRoll.anchoredPosition = new Vector2(gradeRoll.anchoredPosition.x, clampedProbability * 5.12f);
+
         currentGradeIndex = pastGradeIndex;
 
-        for (int i = 0; i < MyGrade.mGrades.Length; i++)
+        for (int i = 0; i < MyGrade.EggGrades.Length; i++)
         {
             if (currentProbability >= i * 25f && currentProbability < (i + 1) * 25f)
             {
                 currentGradeIndex = i;
-                gradeTitle.text = MyGrade.mGrades[i];
-
+                gradeTitle.text = MyGrade.EggGrades[i];
                 break;
             }
         }
@@ -180,15 +187,6 @@ public class EggButton : MonoBehaviour
                     popFeedbackCo = StartCoroutine(PopFeedbackCo(currentGradeIndex));
                 }
             }
-            else
-            {
-                //for (int i = 0; i < upgradeSounds.Length; i++)
-                //{
-                //    Debug.Log("Down");
-                //    SoundManager.instance.Play(downGradeSounds[i]);
-                //    PlayGradePanelAnim("Downgrade");
-                //}
-            }
         }
 
         pastGradeIndex = currentGradeIndex;
@@ -203,9 +201,8 @@ public class EggButton : MonoBehaviour
         gradeTitle.fontSize = defaultFontSize * 1.2f;
 
         yield return new WaitForSecondsRealtime(.04f);
-        gradeTags[_gradeIndex].color = MyGrade.GradeColors[_gradeIndex];
+        gradeTags[_gradeIndex].color = MyGrade.EggGradeColors[_gradeIndex];
         gradeTitle.fontSize = defaultFontSize;
-
 
         isPopFeedbackDone = true;
     }
@@ -214,27 +211,27 @@ public class EggButton : MonoBehaviour
     {
         gradePanelAnim.SetTrigger(_triggerParameter);
     }
+
     public void PlayGradePanelFixedAnim()
     {
         PlayGradePanelAnim("Fixed");
 
-        // 실행 중인 white flash 코루틴 즉시 중단
         if (whiteFlashCo != null)
         {
             StopCoroutine(whiteFlashCo);
             whiteFlashCo = null;
         }
 
-        image.material = initMat; // 확실하게 초기화
+        image.material = initMat;
         isGradeFixed = true;
 
-        for (int i = 0; i < MyGrade.mGrades.Length; i++)
+        for (int i = 0; i < MyGrade.EggGrades.Length; i++)
         {
             if (currentProbability >= i * 25f && currentProbability < (i + 1) * 25f)
             {
                 currentProbability = i * 25f;
                 fixedProbability = currentProbability;
-                nameTag.color = MyGrade.GradeColors[i];
+                nameTag.color = MyGrade.EggGradeColors[i];
                 break;
             }
         }
@@ -246,14 +243,8 @@ public class EggButton : MonoBehaviour
         GameManager.instance.SetRateToGetRare(rateToGetRare);
     }
 
-    public void ChangeEggImage()
-    {
-
-    }
-    public void GetEggStats()
-    {
-
-    }
+    public void ChangeEggImage() { }
+    public void GetEggStats() { }
 
     public int GetWeaponGradeIndex()
     {

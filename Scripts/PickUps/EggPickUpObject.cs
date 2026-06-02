@@ -45,6 +45,7 @@ public class EggPickUpObject : Collectable, IPickUpObject
         }
 
         string weaponName = weaponsToPick[index].Name;
+        Debug.Log($"[EggPickUpObject] 선택된 무기: '{weaponName}', index: {index}");
         GameManager.instance.eggPanelManager.EggPanelUP();
         GameManager.instance.eggPanelManager.SetWeaponName(weaponName);
     }
