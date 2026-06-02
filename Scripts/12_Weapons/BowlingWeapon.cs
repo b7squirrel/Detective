@@ -124,7 +124,6 @@ public class BowlingWeapon : WeaponBase
             return;
         }
 
-        // ⭐ currentBowlingBallPrefab 사용
         GameObject ball = GameManager.instance.poolManager.GetMisc(currentBowlingBallPrefab);
         if (ball == null)
         {
@@ -132,20 +131,21 @@ public class BowlingWeapon : WeaponBase
             return;
         }
 
-        // 활성화된 볼링공 리스트에 추가
         activeBowlingBalls.Add(ball);
         ball.transform.position = transform.position;
         ball.transform.localScale = Vector3.one * weaponStats.sizeOfArea;
 
-        // 발사체 설정
-        ProjectileBase projectile = ball.GetComponent<ProjectileBase>();
+        BowlingProjectile projectile = ball.GetComponent<BowlingProjectile>();
         projectile.Speed = weaponStats.projectileSpeed;
-        projectile.Direction = direction; // 파라미터로 받은 방향 사용
-        projectile.Damage = damage;                    // ⭐ 캐싱된 값
+        projectile.Direction = direction;
+        projectile.Damage = damage;
         projectile.IsCriticalDamageProj = isCriticalDamage;
-        projectile.KnockBackChance = knockback;        // ⭐ 캐싱된 값
-        projectile.TimeToLive = 5f; // 볼링공은 더 오래 지속
+        projectile.KnockBackChance = knockback;
+        projectile.KnockBackSpeedFactor = knockbackSpeedFactor;
+        projectile.TimeToLive = 5f;
         projectile.WeaponName = weaponData.DisplayName;
+
+        projectile.Launch(); // ✅ 모든 파라미터 설정 후 마지막에 호출
     }
 
     protected override void FlipWeaponTools()
