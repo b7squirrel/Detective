@@ -294,25 +294,19 @@ public class Level : MonoBehaviour
     }
 
     // 알에서 중복되는 무기가 나오지 않도록 하기위한 플래그
-    public bool HavingWeapon(UpgradeData item)
+    public bool HavingWeapon(WeaponData weaponData)
     {
         WeaponData leadWd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
-        if (item.weaponData.Name == leadWd.Name) return true;
+        if (weaponData.Name == leadWd.Name) return true;
 
-        List<UpgradeData> weaponUpgrade = new();
+        List<UpgradeData> weaponUpgrades = new();
         for (int i = 0; i < acquiredUpgrades.Count; i++)
         {
             if (acquiredUpgrades[i].weaponData != null)
-            {
-                weaponUpgrade.Add(acquiredUpgrades[i]);
-            }
+                weaponUpgrades.Add(acquiredUpgrades[i]);
         }
-        UpgradeData identicalWeapon =
-            weaponUpgrade.Find(x => x.weaponData.Name == item.weaponData.Name);
-        if (identicalWeapon == null)
-            return false;
 
-        return true;
+        return weaponUpgrades.Find(x => x.weaponData.Name == weaponData.Name) != null;
     }
 
     internal void AddUpgradesIntoTheListOfAvailableUpgrades(List<UpgradeData> upgradesToAdd)

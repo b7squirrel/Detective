@@ -48,8 +48,6 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] AudioClip jumpUp;
     [SerializeField] AudioClip breakingEgg;
 
-    WeaponDataDictionary wdDictionary;
-
     // 알에 아이디 부여
     [SerializeField] int eggIndex;
 
@@ -88,7 +86,7 @@ public class EggPanelManager : MonoBehaviour
         rawImage.SetActive(true);
         flashEffect.SetActive(true);
         anim.SetTrigger("Idle");
-        float animationSpeed = PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite? 1.5f : 1f;
+        float animationSpeed = PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite ? 1.5f : 1f;
         anim.speed = animationSpeed;
     }
     void CloseNewKidImage()
@@ -194,9 +192,43 @@ public class EggPanelManager : MonoBehaviour
     }
     UpgradeData GetAcquireData(string _name, int _grade)
     {
-        if (wdDictionary == null) wdDictionary = FindObjectOfType<WeaponDataDictionary>();
-        UpgradeData acquireData = wdDictionary.GetAcquireDataFrom(currentWeaponName, currentGrade);
+        string folderName = GetFolderName(_name);
+        if (string.IsNullOrEmpty(folderName)) return null;
+
+        string path = $"Weapons/Friends/{folderName}/{_name}F_{_grade}_Acquire";
+        UpgradeData acquireData = Resources.Load<UpgradeData>(path);
+
+        if (acquireData == null)
+            Logger.LogError($"[EggPanelManager] Acquire 데이터를 찾을 수 없습니다: {path}");
+
         return acquireData;
+    }
+
+    string GetFolderName(string _name)
+    {
+        switch (_name)
+        {
+            case "Cannon": return "01_Cannon";
+            case "Bow": return "02_Bow";
+            case "Bowling": return "03_Bowling";
+            case "Cat": return "04_Cat";
+            case "Cowboy": return "05_Cowboy";
+            case "Guitar": return "06_Guitar";
+            case "Hammer": return "07_Hammer";
+            case "Yoyo": return "08_Yoyo";
+            case "Laser": return "09_Laser";
+            case "Nano": return "10_Nano";
+            case "Origami": return "11_Origami";
+            case "Whistle": return "12_Whistle";
+            case "Tennis": return "13_Tennis";
+            case "Tesla": return "14_Tesla";
+            case "Volley": return "15_Volley";
+            case "Zap": return "16_Zap";
+            case "Arc": return "17_Arc";
+            default:
+                Logger.LogError($"[EggPanelManager] 폴더명 매핑 없음: {_name}");
+                return "";
+        }
     }
 
     IEnumerator CloseCo()
