@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: ArcF_0
+  m_EditorClassIdentifier: 
+  grade: 0
+  Name: Arc
+  DisplayName: "\uBC18\uC0AC \uB808\uC774\uC838 \uC624\uB9AC"
+  SynergyDispName: "\uBC18\uC0AC\uBC18\uC0AC \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 8e3c2434f22c67542b84e5fed018d197, type: 3}
+  SynergyWeapon: Arc Synergy
+  SynergyItem: {fileID: 11400000, guid: 20155fcb50cd1dc4fb5339ff2364c93a, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: 70a35e59ce0f1439d98859b9a00afc1e, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: cbb8f7bbd4ce84921b8b6a7da9d0ef1f, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: 70a35e59ce0f1439d98859b9a00afc1e, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 26e8039bb2ba14cbf85adfe9971101fd, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 7800594954442624611, guid: 86610ad7fc61749f384353be43feb5d2, type: 3}
+  stats:
+    damage: 2
+    timeToAttack: 2
+    numberOfAttacks: 1
+    sizeOfArea: 0
+    projectileSpeed: 12
+    knockBackChance: 25
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 7905564860043665824, guid: 6b0847a4c842f4b2ba5cb3cb1b2c2aca, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: e9f6444508f1f4f269c40e8a4c8e5027, type: 2}
+  - {fileID: 11400000, guid: 611345341b4194c278d0de98e6bf3ee2, type: 2}
+  - {fileID: 11400000, guid: 54b55d17ae01a4817a6e1bac85b51a19, type: 2}
+  - {fileID: 11400000, guid: bcb526ac25eab4ec6b2743cc92e4c951, type: 2}
+  - {fileID: 11400000, guid: d53d6a6f8811849b993eb6ce72d16bea, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: c4f48f59da7b84e7ca4b874ccdec0b31, type: 2}
+  equipmentType: 4

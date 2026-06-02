@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Plane_4
+  m_EditorClassIdentifier: 
+  grade: 4
+  Name: Origami
+  DisplayName: "\uC885\uC774 \uC811\uAE30"
+  SynergyDispName: "\uC885\uC774 \uC811\uAE30 \uC7A5\uC778"
+  charImage: {fileID: 21300000, guid: a5d3436f7c44075478b2c138647635fe, type: 3}
+  faceImage: {fileID: 21300000, guid: 8e3c2434f22c67542b84e5fed018d197, type: 3}
+  SynergyWeapon: Paper Storm
+  SynergyItem: {fileID: 11400000, guid: 19f5b53173fbfe843a87811665586130, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: 84afe442e6532406ba0956ae75f89b4a, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: 156e26a3ec9c940a082cfbfd4f5cfa39, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: 84afe442e6532406ba0956ae75f89b4a, type: 2}
+  DefaultHead: {fileID: -1496928472, guid: adac61e0a0532f64d8ed8e125139193f, type: 3}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 11400000, guid: dee2d06d4117c7e4d9a52b7cd87b948b, type: 2}
+  - {fileID: 11400000, guid: 5f5d855de87a240939ade49733bb564c, type: 2}
+  - {fileID: 11400000, guid: fbccf8e64dc624545a306ce33bbfd491, type: 2}
+  - {fileID: 11400000, guid: 070921e4fa55a44c494d73892a7e05d9, type: 2}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 4994908367473084417, guid: f09b71c68f2f7ca4b9f2fbeff3080999, type: 3}
+  stats:
+    damage: 13
+    timeToAttack: 3
+    numberOfAttacks: 5
+    sizeOfArea: 2
+    projectileSpeed: 8
+    knockBackChance: 40
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 2830375067195287894, guid: c8416dc1973318342ae185f4858e6084, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 5bde39d6de6ced746b8f37fdf9d45076, type: 2}
+  - {fileID: 11400000, guid: 53a3a30df24f69c409a32614e50ce279, type: 2}
+  - {fileID: 11400000, guid: 906e605c8d37eb640913f2046fd865ec, type: 2}
+  - {fileID: 11400000, guid: fe3c147caad71bc43a0626c5df0b53e2, type: 2}
+  - {fileID: 11400000, guid: bf9e091ac7821e24ea25c6e92aee0bf1, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: c63c7808825ffca40a14b60742b58685, type: 2}
+  equipmentType: 3

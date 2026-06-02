@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: TennisF_1
+  m_EditorClassIdentifier: 
+  grade: 1
+  Name: Tennis
+  DisplayName: "\uD14C\uB2C8\uC2A4 \uC624\uB9AC"
+  SynergyDispName: "\uC218\uD37C \uC11C\uBE0C \uC624\uB9AC"
+  charImage: {fileID: 21300000, guid: 3bafff59f3f379c41b65e97e6ae1f871, type: 3}
+  faceImage: {fileID: 21300000, guid: 8e3c2434f22c67542b84e5fed018d197, type: 3}
+  SynergyWeapon: Tennis King
+  SynergyItem: {fileID: 11400000, guid: 7a64f5031e72cd64581e534d57086656, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: 8da414d99ee926343b79c22299e05734, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: d3fc247569af14d4b96f5a3e972af7bb, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: 8da414d99ee926343b79c22299e05734, type: 2}
+  DefaultHead: {fileID: -726992558, guid: 302dcf9506e1f77418b2cb742135d63f, type: 3}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: -460708083, guid: 302dcf9506e1f77418b2cb742135d63f, type: 3}
+  defaultItems:
+  - {fileID: 11400000, guid: e6e1c8dd2e226814dabdfef91cc03f5b, type: 2}
+  - {fileID: 11400000, guid: 89e25403bf58447ce9db140e887ca031, type: 2}
+  - {fileID: 11400000, guid: f3f049e577cee4d988481bd3b4f42b25, type: 2}
+  - {fileID: 11400000, guid: b80a8d5b555cb4fe8bc8a8b9476ef932, type: 2}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 1322226256919037930, guid: a41f421e8582c424d94aaa1115e0914d, type: 3}
+  stats:
+    damage: 20
+    timeToAttack: 2
+    numberOfAttacks: 1
+    sizeOfArea: 0
+    projectileSpeed: 25
+    knockBackChance: 20
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 5958538054296379712, guid: 7abd89f57795ae747851e4ad7d13ea7a, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: ef4f07eb53a7f4144ba2e114782b5729, type: 2}
+  - {fileID: 11400000, guid: 2b95d914788b44628b2801b19f7ae090, type: 2}
+  - {fileID: 11400000, guid: 2b338d6e11cd04b0489455d47338eeac, type: 2}
+  - {fileID: 11400000, guid: 729e3c500ccac402b931f48ecc116224, type: 2}
+  - {fileID: 11400000, guid: 21ae9be1a9eeb4e38b26d6ca9bf4382b, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: c756d09a1218a479bb796b7d785b05e9, type: 2}
+  equipmentType: 3

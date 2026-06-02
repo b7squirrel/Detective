@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: HammerF_2
+  m_EditorClassIdentifier: 
+  grade: 2
+  Name: Hammer
+  DisplayName: "\uD1A0\uB974 \uC624\uB9AC"
+  SynergyDispName: "\uD1A0\uB974\uD1A0\uB974 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 168235e7e09f822428ef367d85165661, type: 3}
+  SynergyWeapon: Hammer Synergy
+  SynergyItem: {fileID: 11400000, guid: 0a8e636c5e214834084a4fc0390cc2a3, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: 025585b34a3cd40efbeba0b980e7a783, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: cee68dedcb00643aab6daabc50bc0c76, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: 025585b34a3cd40efbeba0b980e7a783, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 11400000, guid: 31bdd8008df6742d881fe5aa779e9aba, type: 2}
+  - {fileID: 11400000, guid: b29d04b6c8c3341048bdad576cb0eed8, type: 2}
+  - {fileID: 11400000, guid: 216e70b6f89154c36b2a87bc150b7128, type: 2}
+  - {fileID: 11400000, guid: 614ad6a8c60ce4211aab6b39a7a23bcb, type: 2}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 50
+    timeToAttack: 3
+    numberOfAttacks: 1
+    sizeOfArea: 1
+    projectileSpeed: 0
+    knockBackChance: 30
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 9130164228983271373, guid: 7bb9fb3495b4b1a4296c88faa06b1f9d, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 3045c9bd734f04632b6ef4f9950973a4, type: 2}
+  - {fileID: 11400000, guid: d2f97355d146a4a6998c4b0264c0e71c, type: 2}
+  - {fileID: 11400000, guid: bbb8aec8e8e71417eb5fee8ae73608bc, type: 2}
+  - {fileID: 11400000, guid: 1157b398b70764ab4b5bc62651ad6b1b, type: 2}
+  - {fileID: 11400000, guid: da809f6ddc8444bbe951cb0e9363212b, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 40834454b3d814f96be9c127aaf397e3, type: 2}
+  equipmentType: 3

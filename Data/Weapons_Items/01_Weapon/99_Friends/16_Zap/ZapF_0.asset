@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: ZapF_0
+  m_EditorClassIdentifier: 
+  grade: 0
+  Name: Zap
+  DisplayName: "\uC9C0\uC9C0\uC9C1 \uC624\uB9AC"
+  SynergyDispName: "\uC9C0\uC9C0\uC9C0\uC9C1 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 3c7324c4ad55bb644b812f44cd736748, type: 3}
+  SynergyWeapon: Zap Synergy
+  SynergyItem: {fileID: 11400000, guid: 20155fcb50cd1dc4fb5339ff2364c93a, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: d1f3eaedff8b74e389c785e7facff18c, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: c21b78c7212f84885a76fd2ba38d4fb0, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: d1f3eaedff8b74e389c785e7facff18c, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 9b8e8ba494ad447dd9a4adfef1772726, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 5791959645636730739, guid: 4c64a7bfb04d541fcbf36e3952d7fdda, type: 3}
+  stats:
+    damage: 20
+    timeToAttack: 2
+    numberOfAttacks: 1
+    sizeOfArea: 1
+    projectileSpeed: 16
+    knockBackChance: 2
+    currentLevel: 5
+  weaponBasePrefab: {fileID: 1303675601332995048, guid: b84a083a7d41048e4a22df4d306bbeea, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 77d30be813df047e2a1a282d8efeafb9, type: 2}
+  - {fileID: 11400000, guid: 00eb6d04112e94465b1a298ef7f23d9e, type: 2}
+  - {fileID: 11400000, guid: ca32914cbc3c6425eb01992954c9253c, type: 2}
+  - {fileID: 11400000, guid: efbcc9270aa3640d8ba4ca722e7bdca7, type: 2}
+  - {fileID: 11400000, guid: b78ba5126b4eb4304b983bbaaa2c3412, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 6e8c2c90113794d87b8f5066fa4a1c89, type: 2}
+  equipmentType: 4

@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: BowlingF_2
+  m_EditorClassIdentifier: 
+  grade: 2
+  Name: Bowling
+  DisplayName: "\uBCFC\uB9C1 \uC624\uB9AC"
+  SynergyDispName: "\uBCFC\uB9C1\uBCFC\uB9C1 \uC624\uB9AC"
+  charImage: {fileID: 0}
+  faceImage: {fileID: 21300000, guid: 775fb914c3c3b814a960c54d5233e9b4, type: 3}
+  SynergyWeapon: Bowling Synergy
+  SynergyItem: {fileID: 11400000, guid: 0a8e636c5e214834084a4fc0390cc2a3, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: 08c9736d5a9834fb6bf04b3ba38e5f6f, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: 1b4b9d19aef094d569e79b9db221a1cd, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: 08c9736d5a9834fb6bf04b3ba38e5f6f, type: 2}
+  DefaultHead: {fileID: 0}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 11400000, guid: a0d157b67191c407b8bca3fd588e620c, type: 2}
+  - {fileID: 11400000, guid: 43a2ce74d3fb8423f95cc121d5da5203, type: 2}
+  - {fileID: 11400000, guid: b4043669231e344c0b9cd2425b3d2698, type: 2}
+  - {fileID: 11400000, guid: def08b0cf6658449d83880838c019260, type: 2}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 5076648040088663088, guid: 208022e37ecc4421594b23006dbbec2d, type: 3}
+  stats:
+    damage: 100
+    timeToAttack: 5
+    numberOfAttacks: 1
+    sizeOfArea: 0.8
+    projectileSpeed: 12
+    knockBackChance: 30
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 3151599576962117163, guid: ad8309eb3c72148d7a22191f21da8013, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 94e8a5638cc624e7ca3f8b844dfab7de, type: 2}
+  - {fileID: 11400000, guid: b30bd87c3d6b84b5c95a2a128bf51f2d, type: 2}
+  - {fileID: 11400000, guid: 2290b4289c52c4b4e89897676656aaea, type: 2}
+  - {fileID: 11400000, guid: 7b362f0a73f9d483b8a486a73c8928ae, type: 2}
+  - {fileID: 11400000, guid: b129890f0dfde4c4ba7fec1b1fe91bdd, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: a127731f70a9745afaae0904611760ac, type: 2}
+  equipmentType: 3

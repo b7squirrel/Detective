@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: Punch_4
+  m_EditorClassIdentifier: 
+  grade: 4
+  Name: Whistle
+  DisplayName: "\uBFCC\uBFCC \uC624\uB9AC"
+  SynergyDispName: "\uAC70\uB300 \uBFCC\uBFCC \uC624\uB9AC"
+  charImage: {fileID: 21300000, guid: 837dcbdabc2b2e64fae3ee0ecce59c5a, type: 3}
+  faceImage: {fileID: 21300000, guid: 168235e7e09f822428ef367d85165661, type: 3}
+  SynergyWeapon: Super Whistle
+  SynergyItem: {fileID: 11400000, guid: 0a8e636c5e214834084a4fc0390cc2a3, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
+    PauseCardAnim: {fileID: 9100000, guid: 94aeda860d24e5e468b69a85e2002d9b, type: 2}
+  DefaultHead: {fileID: -1607450562, guid: 4f6f01115af08cc4e94ad17f0bc111eb, type: 3}
+  DefaultChest: {fileID: -1302215180, guid: 4f6f01115af08cc4e94ad17f0bc111eb, type: 3}
+  DefaultFace: {fileID: -1518428499, guid: 4f6f01115af08cc4e94ad17f0bc111eb, type: 3}
+  DefaultHands: {fileID: 1958365839, guid: 4f6f01115af08cc4e94ad17f0bc111eb, type: 3}
+  defaultItems:
+  - {fileID: 11400000, guid: b26f1b8df93424a48aa121189247469e, type: 2}
+  - {fileID: 11400000, guid: f0c1d1b15a3828a4c8d22a7639674078, type: 2}
+  - {fileID: 11400000, guid: 327ba9e5d6247e34ca72723c79ddeab9, type: 2}
+  - {fileID: 11400000, guid: 3b9f6e6e057ea3a4fb148f9ec59a16e8, type: 2}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 0}
+  stats:
+    damage: 300
+    timeToAttack: 1.2
+    numberOfAttacks: 1
+    sizeOfArea: 0
+    projectileSpeed: 0
+    knockBackChance: 30
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 3878785206359950514, guid: ba9a7a5fac4d7954296840cc8ce2abe4, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 2fe9707e510f10842a8549aa743b557f, type: 2}
+  - {fileID: 11400000, guid: 81987d57d5d086047b0290124703904d, type: 2}
+  - {fileID: 11400000, guid: f809da2dfbbd1d8498e581829a8fc891, type: 2}
+  - {fileID: 11400000, guid: b6dd2c73ffe18d0438bc3a7a017dac3c, type: 2}
+  - {fileID: 11400000, guid: 72be5c273b20c3647bfc81cd3b16b8c1, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 2726114963ce1d04988b761ed0ddff04, type: 2}
+  equipmentType: 2

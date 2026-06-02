@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72e7a08f91b2f14184c619243c81735, type: 3}
+  m_Name: BombF_2
+  m_EditorClassIdentifier: 
+  grade: 2
+  Name: Cannon
+  DisplayName: "\uD5E4\uB529 \uD3ED\uD0C4"
+  SynergyDispName: "\uD574\uD2B8\uD2B8\uB9AD \uC624\uB9AC"
+  charImage: {fileID: 21300000, guid: a5d3436f7c44075478b2c138647635fe, type: 3}
+  faceImage: {fileID: 21300000, guid: 775fb914c3c3b814a960c54d5233e9b4, type: 3}
+  SynergyWeapon: Splash Bomb
+  SynergyItem: {fileID: 11400000, guid: 19f5b53173fbfe843a87811665586130, type: 2}
+  Animators:
+    CardImageAnim: {fileID: 22100000, guid: f4a27db573f90e54c919adbfd94fa76b, type: 2}
+    InGamePlayerAnim: {fileID: 22100000, guid: 639b4e05fce8c5249b67e9ff7da519d5, type: 2}
+    PauseCardAnim: {fileID: 22100000, guid: f4a27db573f90e54c919adbfd94fa76b, type: 2}
+  DefaultHead: {fileID: -400487131, guid: 44ee5bbc967aa9b42a3dd048788e17a6, type: 3}
+  DefaultChest: {fileID: 0}
+  DefaultFace: {fileID: 0}
+  DefaultHands: {fileID: 0}
+  defaultItems:
+  - {fileID: 11400000, guid: ab9fa37d29614da40bb8d3bd0c70c59a, type: 2}
+  - {fileID: 11400000, guid: bfe5f6596f5cbd24c88aa53e7112bb5e, type: 2}
+  - {fileID: 11400000, guid: 12c657ff374b14dbf9c891c7fd706e20, type: 2}
+  - {fileID: 11400000, guid: 2b77164ad279a4033927ec60cf7eb947, type: 2}
+  charEffectImage: {fileID: 0}
+  weaponPrefab: {fileID: 4994908367473084417, guid: ae8eac7649e801d4384d2264f1e612ad, type: 3}
+  stats:
+    damage: 260
+    timeToAttack: 2
+    numberOfAttacks: 1
+    sizeOfArea: 2
+    projectileSpeed: 8
+    knockBackChance: 40
+    currentLevel: 0
+  weaponBasePrefab: {fileID: 2462116282299986100, guid: 7e17ae1cb82dbf140b28440bf12becf6, type: 3}
+  upgrades:
+  - {fileID: 11400000, guid: 931763b2d861b4ffbb2010c0f5311971, type: 2}
+  - {fileID: 11400000, guid: c537348fcbded412ea2513fb59426868, type: 2}
+  - {fileID: 11400000, guid: 3b923333f62864a0ca3b27723cd10975, type: 2}
+  - {fileID: 11400000, guid: 231e43d5f2f7d46e3adac72b048875a7, type: 2}
+  - {fileID: 11400000, guid: e304932dba37f4a41aa7dad841e14b8f, type: 2}
+  synergyUpgrade: {fileID: 11400000, guid: 587a291dd8ee647e3a91cc8caf96bf83, type: 2}
+  equipmentType: 0
