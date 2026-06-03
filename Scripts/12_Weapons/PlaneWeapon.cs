@@ -13,6 +13,10 @@ public class PlaneWeapon : WeaponBase
     [SerializeField] float targetAngle;
     [SerializeField] float targetSpeed;
 
+    [Header("시너지 - 흡혈")]
+    [SerializeField][Range(0f, 1f)] float lifeStealRatio = 0.1f;
+    [SerializeField][Range(0f, 100f)] float lifeStealChance = 30f;
+
     // GenProjectile에서 매번 new List 하지 않도록 필드로 캐싱
     private List<Vector2> enemyQueryBuffer = new List<Vector2>(1);
 
@@ -33,6 +37,20 @@ public class PlaneWeapon : WeaponBase
         }
     }
 
+    public void OnProjectileHit(int damage)
+    {
+        if (!isSynergyWeaponActivated) return;
+
+        // 확률 체크
+        float roll = UnityEngine.Random.Range(0f, 100f);
+        if (roll > lifeStealChance) return;
+
+        int healAmount = Mathf.RoundToInt(damage * lifeStealRatio);
+        if (healAmount <= 0) return;
+        Wielder.Heal(healAmount, false);
+        Wielder.ShowHealEffect();
+    }
+
     void GenProjectile()
     {
         // 버퍼 재사용으로 new List 방지
@@ -44,7 +62,7 @@ public class PlaneWeapon : WeaponBase
         plane.transform.position = transform.position;
 
         PlaneProjectile planeProj = plane.GetComponent<PlaneProjectile>();
-        planeProj.Init(enemyQueryBuffer[0], damage);
+        planeProj.Init(enemyQueryBuffer[0], damage, this);
         planeProj.WeaponName = weaponData.DisplayName;
     }
 

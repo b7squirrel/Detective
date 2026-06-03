@@ -318,6 +318,13 @@ Handheld.Vibrate();
 
     }
 
+    public void ShowHealEffect()
+    {
+        Logger.Log($"[Character] ShowHealEffect 호출 - activeSelf: {healEffect.activeSelf}");
+        if (healEffect.activeSelf) return;
+        healEffect.SetActive(true);
+    }
+
     public int GetCurrentHP()
     {
         return currentHealth;

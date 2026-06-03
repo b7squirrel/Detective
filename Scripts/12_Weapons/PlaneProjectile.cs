@@ -15,6 +15,8 @@ public class PlaneProjectile : ProjectileBase
     // ✅ NonAlloc용 static 버퍼
     static readonly Collider2D[] planeHitBuffer = new Collider2D[10];
 
+    PlaneWeapon owner;
+
     protected override void Awake()
     {
         base.Awake(); // ✅ hitEffects 캐싱
@@ -59,17 +61,15 @@ public class PlaneProjectile : ProjectileBase
         }
     }
 
-    public void Init(Vector3 _target, int damage)
+    public void Init(Vector3 _target, int damage, PlaneWeapon _owner)
     {
         target = _target;
-
+        owner = _owner; // ✅ 추가
         float randomAngle = UnityEngine.Random.Range(-70f, 70f);
         offsetDirection = Quaternion.Euler(0, 0, randomAngle) * (target - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(Vector3.forward, offsetDirection);
-
         transform.SetParent(null);
         transform.localScale = 0.5f * Vector3.one;
-
         Damage = damage;
     }
 
@@ -109,6 +109,8 @@ public class PlaneProjectile : ProjectileBase
 
             if (!string.IsNullOrEmpty(WeaponName))
                 DamageTracker.instance.RecordDamage(WeaponName, Damage);
+
+            owner?.OnProjectileHit(Damage);
 
             hitDetected = true;
         }
