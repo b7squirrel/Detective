@@ -18,6 +18,9 @@ public class PunchWeapon : WeaponBase
     [SerializeField] AudioClip punch;
     [SerializeField] AudioClip punchSynergy;
 
+    Vector2 prevContainerPos;
+    Transform myContainer; // 자신의 WeaponContainerAnim 오브젝트
+
     protected override void Awake()
     {
         base.Awake();
@@ -26,13 +29,43 @@ public class PunchWeapon : WeaponBase
         player = GetComponentInParent<Player>();
         hitEffects = GetComponent<HitEffects>(); // ✅ 캐싱
         isAttacking = false;
+
+        // 동료 오리용: 자신의 컨테이너(WeaponContainerAnim) Transform 캐싱
+        myContainer = GetComponentInParent<WeaponContainerAnim>()?.transform;
+    }
+
+    public override void Init(WeaponStats stats, bool isLead)
+    {
+        base.Init(stats, isLead);
+
+        // ✅ 첫 프레임 방향 오류 방지
+        if (myContainer != null)
+            prevContainerPos = myContainer.position;
     }
 
     protected override void Update()
     {
         base.Update();
-        if (player.InputVec == Vector2.zero) return;
-        currentDir = player.InputVec;
+        if (InitialWeapon) // 리드 오리: 기존 방식 유지
+        {
+            if (player.InputVec == Vector2.zero) return;
+            currentDir = player.InputVec;
+        }
+        else // 동료 오리: 컨테이너의 이동 방향으로 currentDir 계산
+        {
+            if (myContainer == null) return;
+
+            Vector2 containerPos = myContainer.position;
+            Vector2 moved = containerPos - prevContainerPos;
+
+            // 충분히 움직였을 때만 방향 업데이트 (너무 작은 떨림 무시)
+            if (moved.magnitude > 0.001f)
+            {
+                currentDir = moved.normalized;
+            }
+
+            prevContainerPos = containerPos; // 다음 프레임을 위해 현재 위치 저장
+        }
     }
 
     protected override void SetAngle()

@@ -231,7 +231,7 @@ public class GachaSystem : MonoBehaviour
     // ─────────────────────────────────────────────────────────
     //  초보자 팩 전용 뽑기
     //  - 오리 1장 (Epic 90% / Legendary 10%)
-    //  - 필수 슬롯 제외 나머지 중 Epic 장비 2개
+    //  - 필수 슬롯 제외 나머지 중 오리 세트 Epic 장비 2개
     //  - 골드는 ShopManager.GiveProductReward()에서 처리
     // ─────────────────────────────────────────────────────────
     void OpenBoxForStarterPack(string gachaTableId, int guaranteedCount)
@@ -244,7 +244,6 @@ public class GachaSystem : MonoBehaviour
 
         try
         {
-            // 오리 뽑기 (확정 슬롯 여부: guaranteedCount > 0)
             int duckRarity = raritySystem.GetRandomRarity(gachaTableId, guaranteedCount > 0);
             CardData duckCard = DrawDuckCardWithRarity(duckRarity);
 
@@ -255,8 +254,6 @@ public class GachaSystem : MonoBehaviour
                 return;
             }
 
-            // 필수 슬롯 제외 나머지 중 Epic 장비 2개
-            // ⭐ GivePackEquipments 내부에서 오리 슬롯 갱신까지 처리
             GivePackEquipments(duckCard, 2, MyGrade.Epic);
 
             cardDataManager.EndBatchOperation();
@@ -279,7 +276,7 @@ public class GachaSystem : MonoBehaviour
     // ─────────────────────────────────────────────────────────
     //  전문가 팩 전용 뽑기
     //  - 오리 1장 (Legendary 85% / Mythic 15% 확정)
-    //  - 필수 슬롯 제외 나머지 중 Legendary 장비 2개
+    //  - 필수 슬롯 제외 나머지 중 오리 세트 Legendary 장비 2개
     //  - 골드는 ShopManager.GiveProductReward()에서 처리
     // ─────────────────────────────────────────────────────────
     void OpenBoxForProPack(string gachaTableId)
@@ -292,7 +289,6 @@ public class GachaSystem : MonoBehaviour
 
         try
         {
-            // 오리 뽑기 (확정 슬롯 — Legendary 85% / Mythic 15%)
             int duckRarity = raritySystem.GetRandomRarity(gachaTableId, true);
             CardData duckCard = DrawDuckCardWithRarity(duckRarity);
 
@@ -303,8 +299,6 @@ public class GachaSystem : MonoBehaviour
                 return;
             }
 
-            // 필수 슬롯 제외 나머지 중 Legendary(=3) 장비 2개
-            // ⭐ GivePackEquipments 내부에서 오리 슬롯 갱신까지 처리
             GivePackEquipments(duckCard, 2, MyGrade.Legendary);
 
             cardDataManager.EndBatchOperation();
@@ -406,8 +400,8 @@ public class GachaSystem : MonoBehaviour
 
     /// <summary>
     /// 오리 카드를 뽑아 내 카드 목록에 추가하고 필수 장비를 장착합니다.
-    /// ⭐ AddCardSlot은 호출하지 않습니다.
-    ///    ShowGachaResult()에서 cardsPicked 순회 시 AddItemSlotOf()로 처리됩니다.
+    /// AddCardSlot은 호출하지 않습니다.
+    /// ShowGachaResult()에서 cardsPicked 순회 시 AddItemSlotOf()로 처리됩니다.
     /// </summary>
     CardData DrawDuckCardWithRarity(int rarity)
     {
@@ -425,7 +419,6 @@ public class GachaSystem : MonoBehaviour
         cardDataManager.AddNewCardToMyCardsList(duckCard);
         AddEssentialEquip(duckCard);
 
-        // ⭐ cardsPicked에만 추가. AddCardSlot은 ShowGachaResult()에서 처리.
         cardsPicked.Add(duckCard);
 
         Logger.Log($"[GachaSystem] 팩 오리 카드: {duckCard.Name} (Grade {duckCard.Grade})");
@@ -434,11 +427,15 @@ public class GachaSystem : MonoBehaviour
 
     /// <summary>
     /// 오리의 필수 장비 슬롯을 제외한 나머지 슬롯 중 count개를
-    /// 지정 등급(targetGrade)의 장비로 채워줍니다.
+    /// 지정 등급(targetGrade)의 세트 장비로 채워줍니다.
     ///
-    /// ⭐ 장비 카드는 cardsPicked와 AddCardSlot에 추가하지 않습니다.
-    ///    ShowGachaResult()의 AddItemSlotOf()가 오리 기준으로 장비 슬롯을 생성합니다.
-    ///    장비 장착 후 UpdateCardDisplay()로 오리 슬롯 이미지를 즉시 갱신합니다.
+    /// 우선순위:
+    /// 1순위 — 뽑힌 오리의 필수 장비와 같은 SetName + 지정 등급
+    /// 2순위 — 등급과 부위만 맞는 아무 비필수 장비 (폴백)
+    ///
+    /// 장비 카드는 cardsPicked/AddCardSlot에 추가하지 않습니다.
+    /// ShowGachaResult()의 AddItemSlotOf()가 오리 기준으로 장비 슬롯을 생성합니다.
+    /// 장비 장착 후 UpdateCardDisplay()로 오리 슬롯 이미지를 즉시 갱신합니다.
     /// </summary>
     void GivePackEquipments(CardData duckCard, int count, int targetGrade)
     {
@@ -452,17 +449,37 @@ public class GachaSystem : MonoBehaviour
         Shuffle(availableSlots);
         int giveCount = Mathf.Min(count, availableSlots.Count);
 
+        // ⭐ 필수 장비의 SetName을 기준으로 세트 결정
+        string targetSetName = GetEssentialSetName(duckCard);
+        Logger.Log($"[GachaSystem] {duckCard.Name} 세트 장비 기준: '{targetSetName}'");
+
         for (int i = 0; i < giveCount; i++)
         {
             string targetSlot = availableSlots[i];
 
-            List<CardData> candidates = itemPools.FindAll(
-                item => item.EquipmentType == targetSlot && item.Grade == targetGrade
+            // 1순위: 같은 세트 + 지정 등급 + 비필수
+            List<CardData> candidates = itemPools.FindAll(item =>
+                item.EquipmentType == targetSlot &&
+                item.Grade == targetGrade &&
+                item.EssentialEquip != "Essential" &&
+                !string.IsNullOrEmpty(targetSetName) &&
+                item.SetName == targetSetName
             );
+
+            // 2순위: 등급 + 부위 + 비필수 (폴백)
+            if (candidates.Count == 0)
+            {
+                candidates = itemPools.FindAll(item =>
+                    item.EquipmentType == targetSlot &&
+                    item.Grade == targetGrade &&
+                    item.EssentialEquip != "Essential"
+                );
+                Logger.LogWarning($"[GachaSystem] '{targetSetName}' 세트 장비 없음 → 전체 폴백: {targetSlot} / Grade {targetGrade}");
+            }
 
             if (candidates.Count == 0)
             {
-                Logger.LogWarning($"[GachaSystem] 팩 장비 후보 없음: {targetSlot} / Grade {targetGrade}");
+                Logger.LogWarning($"[GachaSystem] 팩 장비 후보 없음 (전체 폴백도 없음): {targetSlot} / Grade {targetGrade}");
                 continue;
             }
 
@@ -474,16 +491,49 @@ public class GachaSystem : MonoBehaviour
             if (cardList != null)
                 cardList.Equip(duckCard, equipCard);
 
-            // ⭐ cardsPicked/AddCardSlot 추가 안 함
-            // ShowGachaResult() → AddItemSlotOf()가 오리 기준으로 처리
-
-            Logger.Log($"[GachaSystem] 팩 장비 지급: {equipCard.Name} ({targetSlot}, Grade {targetGrade})");
+            Logger.Log($"[GachaSystem] 팩 장비 지급: {equipCard.Name} ({targetSlot}, Grade {targetGrade}, Set: {equipCard.SetName})");
         }
 
-        // ⭐ 모든 장비 장착 완료 후 오리 슬롯 이미지 즉시 갱신
+        // 모든 장비 장착 완료 후 오리 슬롯 이미지 즉시 갱신
         if (cardSlotManager == null)
             cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.UpdateCardDisplay(duckCard);
+    }
+
+    /// <summary>
+    /// 오리의 필수 장비 SetName을 반환합니다.
+    /// 여러 세트가 있으면 (예: Tennis Champion / Tennis Local) 랜덤 선택.
+    /// 예: Tennis 오리 → "Tennis Local" 또는 "Tennis Champion"
+    /// </summary>
+    string GetEssentialSetName(CardData duckCard)
+    {
+        // 이 오리의 필수 장비 후보 (같은 등급)
+        List<CardData> essentialItems = itemPools.FindAll(item =>
+            item.EssentialEquip == "Essential" &&
+            item.BindingTo == duckCard.Name &&
+            item.Grade == duckCard.Grade
+        );
+
+        if (essentialItems.Count == 0)
+        {
+            Logger.LogWarning($"[GachaSystem] {duckCard.Name} (Grade {duckCard.Grade})의 필수 장비를 찾을 수 없습니다.");
+            return null;
+        }
+
+        // 중복 없이 SetName 목록 추출
+        List<string> setNames = new List<string>();
+        foreach (var item in essentialItems)
+        {
+            if (!string.IsNullOrEmpty(item.SetName) && !setNames.Contains(item.SetName))
+                setNames.Add(item.SetName);
+        }
+
+        if (setNames.Count == 0) return null;
+
+        // 여러 세트 중 랜덤 선택 (예: Tennis Local / Tennis Champion)
+        string chosen = setNames[UnityEngine.Random.Range(0, setNames.Count)];
+        Logger.Log($"[GachaSystem] {duckCard.Name} 세트 선택: {chosen} (후보: {string.Join(", ", setNames)})");
+        return chosen;
     }
 
     /// <summary>
