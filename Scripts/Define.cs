@@ -14,7 +14,7 @@ public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // Target Slot to 
 
 // Card Data
 public enum CardType { Weapon, Item, none }
-public enum Grade { Common, Rare, Epic, Unique, Legendary }
+public enum Grade { Common, Rare, Epic, Legendary, Mythic }
 public enum EquipmentType { Head, Chest, Face, Hand, Ori }
 public enum EssentialEquip { Head, Chest, Face, Hand, Essential }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
@@ -144,8 +144,8 @@ public class MyGrade
     public static int Common = 0;
     public static int Rare = 1;
     public static int Epic = 2;
-    public static int Unique = 3;
-    public static int Legendary = 4;
+    public static int Legendary = 3;
+    public static int Mythic = 4;
 
     public static string[] mGrades = { "일반", "희귀", "고급", "전설", "신화" };
 

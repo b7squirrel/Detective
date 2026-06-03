@@ -25,7 +25,6 @@ public class GachaSystem : MonoBehaviour
 
     public static bool IsInitialized { get; private set; } = false;
 
-    // 디버그 용도 뽑기
     StatManager statManager;
 
     List<CardData> tutorialDuckPool;
@@ -33,7 +32,6 @@ public class GachaSystem : MonoBehaviour
 
     MainMenuManager mainMenuManager;
 
-    // ⭐ 가챠 확률 시스템 추가
     GachaRaritySystem raritySystem;
 
     Dictionary<string, int> defaultEquipIndex = new Dictionary<string, int>{
@@ -52,7 +50,7 @@ public class GachaSystem : MonoBehaviour
     {
         cardDataManager = GetComponent<CardDataManager>();
         cardList = GetComponent<CardList>();
-        raritySystem = GetComponent<GachaRaritySystem>(); // ⭐ 확률 시스템 참조
+        raritySystem = GetComponent<GachaRaritySystem>();
 
         cardsPicked = new List<CardData>();
         mainMenuManager = FindObjectOfType<MainMenuManager>();
@@ -69,31 +67,29 @@ public class GachaSystem : MonoBehaviour
 
     IEnumerator InitializeGachaSystem()
     {
-        // 게임 초기화 대기
         yield return new WaitUntil(() => GameInitializer.IsInitialized);
 
-        // 이제 안전하게 초기화
         weaponPools = new ReadCardData().GetCardsList(weaponPoolDatabase);
         itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
 
-        // ✅ 튜토리얼 풀 초기화
         if (tutorialDuckPoolDatabase != null)
             tutorialDuckPool = new ReadCardData().GetCardsList(tutorialDuckPoolDatabase);
         if (tutorialItemPoolDatabase != null)
             tutorialItemPool = new ReadCardData().GetCardsList(tutorialItemPoolDatabase);
 
-        IsInitialized = true; 
+        IsInitialized = true;
         Logger.Log("[GachaSystem] 초기화 완료");
     }
 
-    // ⭐ 등급을 지정해서 뽑는 새로운 메서드
+    // ─────────────────────────────────────────────────────────
+    //  등급 지정 뽑기 (내부 공통)
+    // ─────────────────────────────────────────────────────────
     void DrawWithRarity(string _cardType, int rarity)
     {
         CardData newCardData;
 
         if (_cardType == "Weapon")
         {
-            // 해당 등급의 카드만 필터링
             List<CardData> filteredPool = weaponPools.FindAll(card => card.Grade == rarity);
 
             if (filteredPool.Count == 0)
@@ -129,7 +125,7 @@ public class GachaSystem : MonoBehaviour
         }
     }
 
-    // ⭐ 기존 Draw는 유지 (디버그용)
+    // 디버그용 — 등급 무시 랜덤 뽑기
     void Draw(string _cardType)
     {
         CardData newCardData;
@@ -155,10 +151,12 @@ public class GachaSystem : MonoBehaviour
         }
     }
 
-    // ⭐ ShopManager에서 호출할 새로운 메서드
+    // ─────────────────────────────────────────────────────────
+    //  OpenBox — 상자/팩 열기 진입점 (ShopManager에서 호출)
+    // ─────────────────────────────────────────────────────────
     public void OpenBox(string gachaTableId, int drawCount, int guaranteedCount, string guaranteedRarity)
     {
-        // ✅ 튜토리얼 단계일 때 고정 카드 지급
+        // 튜토리얼 분기
         if (TutorialManager.instance != null &&
             TutorialManager.instance.CurrentStep == TutorialStep.Step1_ShopUnlocked)
         {
@@ -166,12 +164,22 @@ public class GachaSystem : MonoBehaviour
             return;
         }
 
-        // ⭐ 디버깅 로그 추가
-        Logger.Log($"[GachaSystem] OpenBox 시작");
-        Logger.Log($"  - gachaTableId: {gachaTableId}");
-        Logger.Log($"  - drawCount: {drawCount}");
-        Logger.Log($"  - guaranteedCount: {guaranteedCount}");
-        Logger.Log($"  - guaranteedRarity: {guaranteedRarity}");
+        // 팩 전용 분기
+        if (gachaTableId == "single_starter" || gachaTableId == "ten_starter")
+        {
+            OpenBoxForStarterPack(gachaTableId, guaranteedCount);
+            return;
+        }
+
+        if (gachaTableId == "ten_pro")
+        {
+            OpenBoxForProPack(gachaTableId);
+            return;
+        }
+
+        // 일반 상자 처리
+        Logger.Log($"[GachaSystem] OpenBox 시작 - tableId: {gachaTableId}, drawCount: {drawCount}, guaranteedCount: {guaranteedCount}, guaranteedRarity: {guaranteedRarity}");
+
         if (raritySystem == null)
         {
             Logger.LogError("[GachaSystem] GachaRaritySystem이 없습니다.");
@@ -182,32 +190,22 @@ public class GachaSystem : MonoBehaviour
         mainMenuManager.SetActiveBottomTabs(false);
 
         cardDataManager.BeginBatchOperation();
-        Logger.Log($"[GachaSystem] 상자/팩 열기: {gachaTableId}, {drawCount}개 뽑기");
-
         cardsPicked.Clear();
 
         try
         {
             int normalSlots = drawCount - guaranteedCount;
-            Logger.Log($"[GachaSystem] normalSlots: {normalSlots}, guaranteedCount: {guaranteedCount}");
-
-            // ⭐ gachaTableId로 타입 판단
             string cardType = GetCardTypeFromTableId(gachaTableId);
 
-            // 일반 슬롯 뽑기
             for (int i = 0; i < normalSlots; i++)
             {
-                Logger.Log($"[GachaSystem] 일반 슬롯 뽑기 시작 #{i + 1}");
                 int rarity = raritySystem.GetRandomRarity(gachaTableId, false);
                 DrawWithRarity(cardType, rarity);
                 Logger.Log($"[GachaSystem] 일반 슬롯 #{i + 1}/{normalSlots}: Grade {rarity}");
             }
 
-            // 확정 슬롯 뽑기
-            Logger.Log($"[GachaSystem] 확정 슬롯 루프 시작 (count: {guaranteedCount})");
             for (int i = 0; i < guaranteedCount; i++)
             {
-                Logger.Log($"[GachaSystem] 확정 슬롯 뽑기 시작 #{i + 1}");
                 int rarity = raritySystem.GetRandomRarity(gachaTableId, true);
                 DrawWithRarity(cardType, rarity);
                 Logger.Log($"[GachaSystem] 확정 슬롯 #{i + 1}/{guaranteedCount}: Grade {rarity}");
@@ -216,36 +214,119 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.EndBatchOperation();
             cardDataManager.RefreshCardList();
             ImmediateSaveEquipmentData();
-
-            // ⭐ 클라우드 저장 추가
             CloudSaveManager.Instance?.SaveToCloud();
 
-            Logger.Log($"[GachaSystem] 상자/팩 열기 완료: 총 {drawCount}개 뽑음");
+            Logger.Log($"[GachaSystem] 상자 열기 완료: 총 {drawCount}개");
         }
         catch (Exception e)
         {
-            Logger.LogError($"[GachaSystem] 상자/팩 열기 오류: {e.Message}");
+            Logger.LogError($"[GachaSystem] 상자 열기 오류: {e.Message}");
             cardDataManager.EndBatchOperation();
             throw;
         }
 
-        // UI 업데이트
-        gachaPanelManager.gameObject.SetActive(true);
-        gachaPanelManager.InitGachaPanel(cardsPicked);
-
-        if (cardSlotManager == null)
-            cardSlotManager = FindObjectOfType<CardSlotManager>();
-
-        for (int i = 0; i < cardsPicked.Count; i++)
-        {
-            cardSlotManager.AddItemSlotOf(cardsPicked[i]);
-        }
-
-        content.SetActive(false);
-        darkBG.SetActive(true);
+        ShowGachaResult();
     }
 
-    // ✅ 신규: 튜토리얼 전용 뽑기
+    // ─────────────────────────────────────────────────────────
+    //  초보자 팩 전용 뽑기
+    //  - 오리 1장 (Epic 90% / Legendary 10%)
+    //  - 필수 슬롯 제외 나머지 중 Epic 장비 2개
+    //  - 골드는 ShopManager.GiveProductReward()에서 처리
+    // ─────────────────────────────────────────────────────────
+    void OpenBoxForStarterPack(string gachaTableId, int guaranteedCount)
+    {
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
+
+        cardDataManager.BeginBatchOperation();
+        cardsPicked.Clear();
+
+        try
+        {
+            // 오리 뽑기 (확정 슬롯 여부: guaranteedCount > 0)
+            int duckRarity = raritySystem.GetRandomRarity(gachaTableId, guaranteedCount > 0);
+            CardData duckCard = DrawDuckCardWithRarity(duckRarity);
+
+            if (duckCard == null)
+            {
+                Logger.LogError("[GachaSystem] 초보자 팩: 오리 카드 뽑기 실패");
+                cardDataManager.EndBatchOperation();
+                return;
+            }
+
+            // 필수 슬롯 제외 나머지 중 Epic 장비 2개
+            // ⭐ GivePackEquipments 내부에서 오리 슬롯 갱신까지 처리
+            GivePackEquipments(duckCard, 2, MyGrade.Epic);
+
+            cardDataManager.EndBatchOperation();
+            cardDataManager.RefreshCardList();
+            ImmediateSaveEquipmentData();
+            CloudSaveManager.Instance?.SaveToCloud();
+
+            Logger.Log("[GachaSystem] 초보자 팩 뽑기 완료");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 초보자 팩 뽑기 오류: {e.Message}");
+            cardDataManager.EndBatchOperation();
+            throw;
+        }
+
+        ShowGachaResult();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  전문가 팩 전용 뽑기
+    //  - 오리 1장 (Legendary 85% / Mythic 15% 확정)
+    //  - 필수 슬롯 제외 나머지 중 Legendary 장비 2개
+    //  - 골드는 ShopManager.GiveProductReward()에서 처리
+    // ─────────────────────────────────────────────────────────
+    void OpenBoxForProPack(string gachaTableId)
+    {
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
+
+        cardDataManager.BeginBatchOperation();
+        cardsPicked.Clear();
+
+        try
+        {
+            // 오리 뽑기 (확정 슬롯 — Legendary 85% / Mythic 15%)
+            int duckRarity = raritySystem.GetRandomRarity(gachaTableId, true);
+            CardData duckCard = DrawDuckCardWithRarity(duckRarity);
+
+            if (duckCard == null)
+            {
+                Logger.LogError("[GachaSystem] 전문가 팩: 오리 카드 뽑기 실패");
+                cardDataManager.EndBatchOperation();
+                return;
+            }
+
+            // 필수 슬롯 제외 나머지 중 Legendary(=3) 장비 2개
+            // ⭐ GivePackEquipments 내부에서 오리 슬롯 갱신까지 처리
+            GivePackEquipments(duckCard, 2, MyGrade.Legendary);
+
+            cardDataManager.EndBatchOperation();
+            cardDataManager.RefreshCardList();
+            ImmediateSaveEquipmentData();
+            CloudSaveManager.Instance?.SaveToCloud();
+
+            Logger.Log("[GachaSystem] 전문가 팩 뽑기 완료");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 전문가 팩 뽑기 오류: {e.Message}");
+            cardDataManager.EndBatchOperation();
+            throw;
+        }
+
+        ShowGachaResult();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  튜토리얼 전용 뽑기
+    // ─────────────────────────────────────────────────────────
     private void OpenBoxForTutorial(string gachaTableId)
     {
         mainMenuManager.SetActiveTopTabs(false);
@@ -316,7 +397,101 @@ public class GachaSystem : MonoBehaviour
             throw;
         }
 
-        // UI 업데이트
+        ShowGachaResult();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  팩 뽑기 헬퍼 메서드들
+    // ─────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// 오리 카드를 뽑아 내 카드 목록에 추가하고 필수 장비를 장착합니다.
+    /// ⭐ AddCardSlot은 호출하지 않습니다.
+    ///    ShowGachaResult()에서 cardsPicked 순회 시 AddItemSlotOf()로 처리됩니다.
+    /// </summary>
+    CardData DrawDuckCardWithRarity(int rarity)
+    {
+        List<CardData> filteredPool = weaponPools.FindAll(card => card.Grade == rarity);
+
+        if (filteredPool.Count == 0)
+        {
+            Logger.LogWarning($"[GachaSystem] 등급 {rarity}의 오리가 없습니다.");
+            return null;
+        }
+
+        int pickIndex = UnityEngine.Random.Range(0, filteredPool.Count);
+        CardData duckCard = CloneCardData(filteredPool[pickIndex]);
+
+        cardDataManager.AddNewCardToMyCardsList(duckCard);
+        AddEssentialEquip(duckCard);
+
+        // ⭐ cardsPicked에만 추가. AddCardSlot은 ShowGachaResult()에서 처리.
+        cardsPicked.Add(duckCard);
+
+        Logger.Log($"[GachaSystem] 팩 오리 카드: {duckCard.Name} (Grade {duckCard.Grade})");
+        return duckCard;
+    }
+
+    /// <summary>
+    /// 오리의 필수 장비 슬롯을 제외한 나머지 슬롯 중 count개를
+    /// 지정 등급(targetGrade)의 장비로 채워줍니다.
+    ///
+    /// ⭐ 장비 카드는 cardsPicked와 AddCardSlot에 추가하지 않습니다.
+    ///    ShowGachaResult()의 AddItemSlotOf()가 오리 기준으로 장비 슬롯을 생성합니다.
+    ///    장비 장착 후 UpdateCardDisplay()로 오리 슬롯 이미지를 즉시 갱신합니다.
+    /// </summary>
+    void GivePackEquipments(CardData duckCard, int count, int targetGrade)
+    {
+        List<string> allSlots = new List<string> { "Head", "Chest", "Face", "Hand" };
+
+        // 필수 슬롯 제외
+        string essentialSlot = duckCard.EssentialEquip;
+        List<string> availableSlots = allSlots.FindAll(s => s != essentialSlot);
+
+        // 랜덤 순서로 섞어서 count개 선택
+        Shuffle(availableSlots);
+        int giveCount = Mathf.Min(count, availableSlots.Count);
+
+        for (int i = 0; i < giveCount; i++)
+        {
+            string targetSlot = availableSlots[i];
+
+            List<CardData> candidates = itemPools.FindAll(
+                item => item.EquipmentType == targetSlot && item.Grade == targetGrade
+            );
+
+            if (candidates.Count == 0)
+            {
+                Logger.LogWarning($"[GachaSystem] 팩 장비 후보 없음: {targetSlot} / Grade {targetGrade}");
+                continue;
+            }
+
+            int pickIndex = UnityEngine.Random.Range(0, candidates.Count);
+            CardData equipCard = CloneCardData(candidates[pickIndex]);
+
+            cardDataManager.AddNewCardToMyCardsList(equipCard);
+
+            if (cardList != null)
+                cardList.Equip(duckCard, equipCard);
+
+            // ⭐ cardsPicked/AddCardSlot 추가 안 함
+            // ShowGachaResult() → AddItemSlotOf()가 오리 기준으로 처리
+
+            Logger.Log($"[GachaSystem] 팩 장비 지급: {equipCard.Name} ({targetSlot}, Grade {targetGrade})");
+        }
+
+        // ⭐ 모든 장비 장착 완료 후 오리 슬롯 이미지 즉시 갱신
+        if (cardSlotManager == null)
+            cardSlotManager = FindObjectOfType<CardSlotManager>();
+        cardSlotManager.UpdateCardDisplay(duckCard);
+    }
+
+    /// <summary>
+    /// 가챠 결과 UI 표시 공통 헬퍼
+    /// cardsPicked(오리 카드만)를 순회하며 AddItemSlotOf()로 장비 슬롯까지 생성합니다.
+    /// </summary>
+    void ShowGachaResult()
+    {
         gachaPanelManager.gameObject.SetActive(true);
         gachaPanelManager.InitGachaPanel(cardsPicked);
 
@@ -330,7 +505,21 @@ public class GachaSystem : MonoBehaviour
         darkBG.SetActive(true);
     }
 
-    // ⭐ 테이블 ID로 카드 타입 판단
+    /// <summary>
+    /// List를 제자리 셔플 (Fisher-Yates)
+    /// </summary>
+    void Shuffle<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────
+    //  테이블 ID → 카드 타입 판단
+    // ─────────────────────────────────────────────────────────
     private string GetCardTypeFromTableId(string gachaTableId)
     {
         if (gachaTableId.Contains("duck") || gachaTableId.Contains("random"))
@@ -338,12 +527,15 @@ public class GachaSystem : MonoBehaviour
         else if (gachaTableId.Contains("item"))
             return "Item";
         else if (gachaTableId.Contains("starter") || gachaTableId.Contains("pro"))
-            return "Weapon"; // 팩도 무기 카드 지급
+            return "Weapon";
 
         Logger.LogWarning($"[GachaSystem] 알 수 없는 테이블 ID: {gachaTableId}, Weapon으로 처리");
         return "Weapon";
     }
 
+    // ─────────────────────────────────────────────────────────
+    //  Debug — 특정 카드 뽑기
+    // ─────────────────────────────────────────────────────────
     #region Debug 특정 카드 뽑기
     public void DrawSpecificCard(string _cardType, int index, int grade, int num, int skill, int evo)
     {
@@ -401,12 +593,14 @@ public class GachaSystem : MonoBehaviour
     }
     #endregion
 
+    // ─────────────────────────────────────────────────────────
+    //  CloneCardData
+    // ─────────────────────────────────────────────────────────
     CardData CloneCardData(CardData original)
     {
-        if (original == null)
-            return null;
+        if (original == null) return null;
 
-        CardData clone = new CardData(
+        return new CardData(
             "",
             original.Type,
             original.Grade.ToString(),
@@ -423,15 +617,16 @@ public class GachaSystem : MonoBehaviour
             original.PassiveSkill.ToString(),
             original.SetName
         );
-
-        return clone;
     }
 
+    // ─────────────────────────────────────────────────────────
+    //  필수 장비 / 기본 장비 장착
+    // ─────────────────────────────────────────────────────────
     public void AddEssentialEquip(CardData _oriCardData)
     {
         if (itemPools == null)
         {
-            itemPools = new();
+            itemPools = new List<CardData>();
             itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
         }
 
@@ -460,7 +655,6 @@ public class GachaSystem : MonoBehaviour
             return;
         }
 
-        // ★ itemIndex 대신 Name + Grade로 검색
         CardData itemCardData = cardDictionary.GetItemCardData(defaultItem.Name, _oriCardData.Grade);
 
         if (itemCardData == null)
@@ -492,7 +686,7 @@ public class GachaSystem : MonoBehaviour
     {
         if (itemPools == null)
         {
-            itemPools = new();
+            itemPools = new List<CardData>();
             itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
         }
 
@@ -535,10 +729,12 @@ public class GachaSystem : MonoBehaviour
         }
     }
 
-    // ⭐ 기존 DrawWeapons는 유지 (디버그/레거시 코드)
+    // ─────────────────────────────────────────────────────────
+    //  레거시 / 디버그용 뽑기 메서드
+    // ─────────────────────────────────────────────────────────
     public void DrawWeapons(int num)
     {
-        Logger.Log($"[GachaSystem] ★★★ DrawWeapons 호출됨! num={num}, Time={Time.time}");
+        Logger.Log($"[GachaSystem] DrawWeapons 호출됨! num={num}");
         int weaponCount = CountWeaponCards();
         int totalMaxCardLimit = StaticValues.MaxCardNum;
 
@@ -553,8 +749,6 @@ public class GachaSystem : MonoBehaviour
         mainMenuManager.SetActiveBottomTabs(false);
 
         cardDataManager.BeginBatchOperation();
-        Logger.Log($"[GachaSystem] {num}개 무기 뽑기 시작");
-
         cardsPicked.Clear();
 
         try
@@ -569,7 +763,7 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.RefreshCardList();
             ImmediateSaveEquipmentData();
 
-            Logger.Log("[GachaSystem] 가챠 완료 - 모든 데이터 저장됨");
+            Logger.Log("[GachaSystem] 가챠 완료");
         }
         catch (Exception e)
         {
@@ -578,26 +772,13 @@ public class GachaSystem : MonoBehaviour
             throw;
         }
 
-        gachaPanelManager.gameObject.SetActive(true);
-        gachaPanelManager.InitGachaPanel(cardsPicked);
-
-        if (cardSlotManager == null)
-            cardSlotManager = FindObjectOfType<CardSlotManager>();
-
-        for (int i = 0; i < cardsPicked.Count; i++)
-        {
-            cardSlotManager.AddItemSlotOf(cardsPicked[i]);
-        }
-
-        content.SetActive(false);
-        darkBG.SetActive(true);
+        ShowGachaResult();
     }
 
     void AddCardSlot(CardData card)
     {
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.AddSlot(card);
-
         Debug.Log($"{card.ID} : {card.Name} 이 슬롯에 추가되었습니다.");
     }
 
@@ -629,8 +810,6 @@ public class GachaSystem : MonoBehaviour
         mainMenuManager.SetActiveBottomTabs(false);
 
         cardDataManager.BeginBatchOperation();
-        Logger.Log($"[GachaSystem] {num}개 아이템 뽑기 시작");
-
         cardsPicked.Clear();
 
         try
@@ -653,11 +832,7 @@ public class GachaSystem : MonoBehaviour
             throw;
         }
 
-        gachaPanelManager.gameObject.SetActive(true);
-        gachaPanelManager.InitGachaPanel(cardsPicked);
-
-        content.SetActive(false);
-        darkBG.SetActive(true);
+        ShowGachaResult();
     }
 
     public void DrawCombo(int num)
@@ -667,15 +842,8 @@ public class GachaSystem : MonoBehaviour
         cardsPicked.Clear();
         for (int i = 0; i < num; i++)
         {
-            for (int j = 0; j < 3; j++)
-            {
-                Draw("Weapon");
-            }
-
-            for (int k = 0; k < 7; k++)
-            {
-                Draw("Item");
-            }
+            for (int j = 0; j < 3; j++) Draw("Weapon");
+            for (int k = 0; k < 7; k++) Draw("Item");
         }
         DebugGacha(cardsPicked);
     }
@@ -693,15 +861,10 @@ public class GachaSystem : MonoBehaviour
     {
         List<CardData> myCards = cardDataManager.GetMyCardList();
         int count = 0;
-
         foreach (var card in myCards)
         {
-            if (card.Type == CardType.Weapon.ToString())
-            {
-                count++;
-            }
+            if (card.Type == CardType.Weapon.ToString()) count++;
         }
-
         return count;
     }
 
@@ -709,15 +872,10 @@ public class GachaSystem : MonoBehaviour
     {
         List<CardData> myCards = cardDataManager.GetMyCardList();
         int count = 0;
-
         foreach (var card in myCards)
         {
-            if (card.Type == CardType.Item.ToString())
-            {
-                count++;
-            }
+            if (card.Type == CardType.Item.ToString()) count++;
         }
-
         return count;
     }
 

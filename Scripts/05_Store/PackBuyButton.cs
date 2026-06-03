@@ -4,31 +4,31 @@ using TMPro;
 using System.Collections;
 
 /// <summary>
-/// 팩 구매 버튼 (Inspector에서 Button.onClick에 연결하는 방식)
+/// 팩 구매 버튼
 /// </summary>
 public class PackBuyButton : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI priceText;
 
     [Header("화면 전환")]
-    [SerializeField] GameObject fg;  // 인스펙터에서 연결
+    [SerializeField] GameObject fg;
+
+    // ⭐ 골드 FX 시작 위치
+    [Header("FX 위치")]
+    [SerializeField] RectTransform gemPoint;
 
     private ProductData productData;
     private Animator anim;
-    private bool isProcessing = false;  // 중복 클릭 방지
+    private bool isProcessing = false;
 
     void Awake()
     {
         anim = GetComponent<Animator>();
     }
 
-    /// <summary>
-    /// 상품 정보 설정 (ShopUI에서 호출)
-    /// </summary>
     public void SetInfo(ProductData data)
     {
         productData = data;
-
         if (priceText != null)
         {
             if (data.PurchaseType == PurchaseType.IAP)
@@ -41,16 +41,12 @@ public class PackBuyButton : MonoBehaviour
                 priceText.text = $"{data.PurchaseCost:N0}";
             }
         }
-
         Logger.Log($"[PackBuyButton] 설정 완료: {data.ProductId}");
     }
 
-    /// <summary>
-    /// 버튼 클릭 시 호출 (Inspector에서 Button.onClick에 연결)
-    /// </summary>
     public void OnPurchaseButtonClicked()
     {
-        if (isProcessing) return;  // 이미 처리 중이면 무시
+        if (isProcessing) return;
 
         if (productData == null)
         {
@@ -77,14 +73,23 @@ public class PackBuyButton : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         Logger.Log($"[PackBuyButton] 클릭: {productData.ProductId}");
-        ShopManager.Instance.PurchaseProduct(productData.ProductId);
 
-        // ✅ 수정: isProcessing만 리셋 (fg는 ResetState에서 처리)
-        // 가챠 패널이 열리는 경우 ResetState()가 GachaPanelManager에서 호출됨
+        // ⭐ 골드 보상이 있는 팩이면 GachaPanelManager에 FX 파라미터 미리 등록
+        if (productData.RewardGold > 0 && gemPoint != null)
+        {
+            GachaPanelManager gachaPanelManager = FindObjectOfType<GachaPanelManager>(true);
+            if (gachaPanelManager != null)
+            {
+                gachaPanelManager.RegisterGoldFX(gemPoint, productData.RewardGold);
+                Logger.Log($"[PackBuyButton] 골드 FX 등록: {productData.RewardGold}골드, 위치: {gemPoint.name}");
+            }
+        }
+
+        ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint);
+
         isProcessing = false;
     }
 
-    // ✅ 추가: 가챠 패널이 닫힐 때 호출
     public void ResetState()
     {
         isProcessing = false;

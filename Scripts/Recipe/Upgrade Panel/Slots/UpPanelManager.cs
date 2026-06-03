@@ -430,6 +430,9 @@ public class UpPanelManager : MonoBehaviour
         int newCardEvoStage = CardToUpgrade.EvoStage + 1;
         CardToUpgrade.PassiveSkill = UnityEngine.Random.Range(1, StaticValues.MaxSkillNumbers + 1); // 스킬을 랜덤하게 다시 부여
 
+        // 추가: 최고 등급 & 최고 EvoStage 여부 체크 (레벨 리셋 방지용)
+        bool isMaxState = false;
+
         if (newCardEvoStage > StaticValues.MaxEvoStage - 1) // Evo 레벨이 최고 레벨을 초과하면
         {
             newCardGrade++; // 다음 등급으로
@@ -439,6 +442,7 @@ public class UpPanelManager : MonoBehaviour
                 // Grade와 EvoStage를 최고 등급으로 되돌림
                 newCardGrade = StaticValues.MaxGrade - 1;
                 newCardEvoStage = StaticValues.MaxEvoStage - 1;
+                isMaxState = true; // 최고 상태임을 표시
             }
             else
             {
@@ -451,7 +455,10 @@ public class UpPanelManager : MonoBehaviour
         //CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newCardGrade);
         CardToUpgrade.Grade = newCardGrade;
         CardToUpgrade.EvoStage = newCardEvoStage;
-        CardToUpgrade.Level = 1;
+
+        // 최고 상태일 때는 레벨 리셋 안 함
+        if (!isMaxState)
+            CardToUpgrade.Level = 1;
 
         RemoveCard(cardToFeed);
         UpdateCardSlotDisplay(CardToUpgrade);

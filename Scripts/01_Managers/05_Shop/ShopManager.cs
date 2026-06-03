@@ -96,6 +96,23 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
         Logger.Log($"[ShopManager] 구매 시도: {productData.ProductName} (ID: {productId})");
 
+        if (productData.ProductType == ProductType.Pack)
+        {
+            if (PackPurchaseManager.Instance == null)
+            {
+                Logger.LogError("[ShopManager] PackPurchaseManager가 없습니다.");
+                return false;
+            }
+
+            if (!PackPurchaseManager.Instance.CanPurchasePack(productId, out string reason))
+            {
+                Logger.Log($"[ShopManager] 팩 구매 불가: {reason}");
+                ShowPackUnavailablePopup(reason);
+                onFailureClosed?.Invoke();
+                return false;
+            }
+        }
+
         // ⭐ 상자/팩 구매 시 카드 수 체크
         if (productData.ProductType == ProductType.Box || productData.ProductType == ProductType.Pack)
         {
@@ -413,7 +430,22 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
             case ProductType.Pack:
                 Logger.Log($"[ShopManager] 팩 보상 처리: {productData.ProductId}");
+
+                if (productData.RewardGold > 0)
+                {
+                    int packGold = playerDataManager.GetCurrentCoinNumber();
+                    // ⭐ Silent로 저장 — FX와 UI 갱신은 GachaPanelManager가 딜레이 후 처리
+                    playerDataManager.SetCoinNumberAsSilent(packGold + productData.RewardGold);
+                    Logger.Log($"[ShopManager] 팩 골드 지급: +{productData.RewardGold}");
+
+                    // fxStartPoint가 없을 때만 즉시 UI 갱신 (FX 없음)
+                    if (fxStartPoint == null)
+                        playerDataManager.SetCoinNumberAs(playerDataManager.GetCurrentCoinNumber());
+                }
+
+                // 가챠 패널 열기 (FX는 GachaPanelManager.InitGachaPanel()에서 재생)
                 OpenBox(productData, fxStartPoint);
+                PackPurchaseManager.Instance?.OnPackPurchased(productData.ProductId);
                 break;
 
             case ProductType.Box:
@@ -486,6 +518,10 @@ public class ShopManager : SingletonBehaviour<ShopManager>
             Logger.LogWarning("[ShopManager] GemCollectFX를 찾을 수 없습니다.");
         }
     }
+    public void PlayGoldFX(RectTransform startPoint, int amount)
+    {
+        PlayGoldCollectFX(startPoint, amount);
+    }
 
     void PlayCristalCollectFX(RectTransform startPoint, int amount)
     {
@@ -502,6 +538,16 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         {
             Logger.LogWarning("[ShopManager] GemCollectFX를 찾을 수 없습니다.");
         }
+    }
+
+    void ShowPackUnavailablePopup(string message)
+    {
+        // TODO: 기존 경고 팝업 UI 재활용하거나 별도 팝업 구현
+        // 우선은 로그만 출력
+        Logger.Log($"[ShopManager] 팩 구매 불가: {message}");
+
+        // 예시: lackOfCristalWarningPanel처럼 팝업 텍스트를 바꿔서 재활용
+        // packUnavailablePanel.SetActive(true);
     }
 
     void ShowInsufficientCurrencyPopup(string currencyType)

@@ -24,6 +24,8 @@ public class CloudSaveData
     public int tutorialStep = 0;          // 튜토리얼 단계
     public string achievementsJson = "";   // 영구 업적 진행도
     public long savedAtTicks = 0; // 저장 시각 (DateTime.Ticks)
+    public bool starterPackPurchased = false;  // 초보자 팩 1회 구매 기록
+    public bool proPackPurchased = false;      // 전문가 팩 1회 구매 기록
 
     // ─── 나중에 추가할 데이터는 아래에 필드만 추가하면 됩니다 ───
     // public List<string> collectedEquipmentIds = new List<string>();  // 장비 도감 (출시 후 추가 예정)
@@ -309,6 +311,12 @@ public class CloudSaveManager : MonoBehaviour
             if (!string.IsNullOrEmpty(cloudData.achievementsJson))
                 ApplyAchievements(cloudData.achievementsJson);
 
+            // 6. 팩 구매 기록 복원
+            PackPurchaseManager.Instance?.ApplyFromCloud(
+                cloudData.starterPackPurchased,
+                cloudData.proPackPurchased
+            );
+
             PlayerPrefs.Save();
             Debug.Log("[CloudSaveManager] 모든 클라우드 데이터 적용 완료 - 씬 리로드");
 
@@ -433,7 +441,15 @@ public class CloudSaveManager : MonoBehaviour
             // 5. 영구 업적
             data.achievementsJson = BuildAchievementsJson();
 
-            // 6. 저장 시각 기록 (클라우드/로컬 최신 판단용)
+            // 6. 팩 구매
+            if (PackPurchaseManager.Instance != null)
+            {
+                var (starter, pro) = PackPurchaseManager.Instance.GetPurchaseStateForCloud();
+                data.starterPackPurchased = starter;
+                data.proPackPurchased = pro;
+            }
+
+            // 7. 저장 시각 기록 (클라우드/로컬 최신 판단용)
             data.savedAtTicks = DateTime.Now.Ticks;
             PlayerPrefs.SetString("CloudSavedAt", data.savedAtTicks.ToString());
             PlayerPrefs.Save();
