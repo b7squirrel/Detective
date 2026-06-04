@@ -235,11 +235,11 @@ public class EquipDisplayUI : MonoBehaviour
         seq.OnStart(() => whiteFlash.SetActive(true));  // 시작 시 활성화
 
         seq.Append(charImage.DOScale(new Vector3(1.1f, 0.75f, 1f), 0.07f).SetEase(Ease.InSine));
-        seq.Append(charImage.DOScale(new Vector3(0.9f, 1.4f, 1f), 0.09f).SetEase(Ease.OutExpo));
+        seq.Append(charImage.DOScale(new Vector3(0.9f, 1.2f, 1f), 0.09f).SetEase(Ease.OutExpo));
         RectTransform charRect = charImage as RectTransform;
-        seq.Join(charRect.DOAnchorPosY(60f, 0.09f).SetEase(Ease.OutExpo));
-        seq.Append(charImage.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutExpo));
-        seq.Join(charRect.DOAnchorPosY(0f, 0.2f).SetEase(Ease.OutExpo));
+        seq.Join(charRect.DOAnchorPosY(30f, 0.09f).SetEase(Ease.OutExpo));
+        seq.Append(charImage.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutExpo));
+        seq.Join(charRect.DOAnchorPosY(0f, 0.1f).SetEase(Ease.OutExpo));
 
         seq.OnComplete(() => whiteFlash.SetActive(false)); // 끝날 때 비활성화
 
@@ -255,9 +255,15 @@ public class EquipDisplayUI : MonoBehaviour
 
         Sequence seq = DOTween.Sequence();
         // 세로로 줄고 가로로 늘어남 (스쿼시)
-        seq.Append(charImage.DOScale(new Vector3(1.2f, 0.3f, 1f), 0.1f).SetEase(Ease.InSine));
+        seq.Append(charImage.DOScale(new Vector3(1.2f, 0.2f, 1f), 0.1f).SetEase(Ease.InSine));
+        
+        
+        seq.Join(charRect.DOAnchorPosY(-30f, 0.09f).SetEase(Ease.OutExpo));
+
         // 원래대로 복귀
         seq.Append(charImage.DOScale(Vector3.one, 0.15f).SetEase(Ease.OutExpo));
+
+        seq.Join(charRect.DOAnchorPosY(0f, 0.1f).SetEase(Ease.OutExpo));
 
         charPopTween = seq;
     }
