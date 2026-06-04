@@ -52,6 +52,12 @@ public class EquipmentPanelManager : MonoBehaviour
     float textOffset = 23.5f;
     Coroutine hideCoroutine;
 
+    [Header("Set Glow")]
+    [SerializeField] GameObject oriSlotGlow;        // 오리카드의 Set Glow
+    [SerializeField] GameObject[] equipSlotGlows;   // 장비 슬롯 4개의 Set Glow (Head/Chest/Face/Hand 순)
+    [SerializeField] GameObject [] otherGlows; // 다른 세트 글로우들. ray, circle...
+    SetBonusChecker setBonusChecker;
+
     [Header("코인 부족 경고 팝업")]
     [SerializeField] GameObject lackOfCoinWarningPopup; // Canvas에 미리 만들어둔 팝업
     PanelTween lackOfCoinWarningPopupTween; // PanelTween 컴포넌트 캐싱
@@ -77,6 +83,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
+
+        setBonusChecker = FindObjectOfType<SetBonusChecker>();
 
         // ⭐ PanelTween 컴포넌트 캐싱
         if (lackOfCoinWarningPopup != null)
@@ -138,6 +146,7 @@ public class EquipmentPanelManager : MonoBehaviour
         Logger.Log("Card on Display = " + CardOnDisplay.Name);
 
         GearTutorialController.instance?.OnDuckSelected();
+        UpdateSetGlow(); 
     }
 
     public void SetAllFieldTypeOf(string cardType)
@@ -202,6 +211,7 @@ public class EquipmentPanelManager : MonoBehaviour
         equipmentSlotsManager.ClearEquipSlots(); // logic
         equipDisplayUI.OffDisplay(); // UI
         oriSlot.EmptySlot(); // 슬롯 비활성화
+        SetGlowActive(false);
     }
 
     #region Info패널 장착/해제 버튼
@@ -247,6 +257,7 @@ public class EquipmentPanelManager : MonoBehaviour
         // ⭐ 장비 장착 즉시 클라우드 강제 저장
         // ⭐ 딜레이 저장 완료 후 클라우드 저장
         StartCoroutine(SaveToCloudAfterDelay());
+        UpdateSetGlow();
     }
 
     // info panel의 UnEquip 버튼
@@ -275,6 +286,7 @@ public class EquipmentPanelManager : MonoBehaviour
         // ⭐ 장비 해제 즉시 클라우드 강제 저장
         // ⭐ 딜레이 저장 완료 후 클라우드 저장
         StartCoroutine(SaveToCloudAfterDelay());
+        UpdateSetGlow();
     }
     private IEnumerator SaveToCloudAfterDelay()
     {
@@ -427,6 +439,43 @@ public class EquipmentPanelManager : MonoBehaviour
     int GetAmountToUpgrade(CardData cardData)
     {
         return equation.GetUpgradeCost(cardData.Level, cardData.Grade, cardData.EvoStage);
+    }
+    #endregion
+
+    #region 세트 글로우 효과
+    void UpdateSetGlow()
+    {
+        if (CardOnDisplay == null || setBonusChecker == null)
+        {
+            SetGlowActive(false);
+            return;
+        }
+
+        bool isSetComplete = setBonusChecker.GetSetBonus(CardOnDisplay) != null;
+        SetGlowActive(isSetComplete);
+    }
+
+    void SetGlowActive(bool active)
+    {
+        if (oriSlotGlow != null)
+            oriSlotGlow.SetActive(active);
+
+        if (equipSlotGlows != null)
+        {
+            for (int i = 0; i < equipSlotGlows.Length; i++)
+            {
+                if (equipSlotGlows[i] != null)
+                    equipSlotGlows[i].SetActive(active);
+            }
+        }
+
+        if (otherGlows != null)
+        {
+            for (int i = 0; i < otherGlows.Length; i++)
+            {
+                otherGlows[i].SetActive(active);
+            }
+        }
     }
     #endregion
 
