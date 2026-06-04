@@ -283,7 +283,7 @@ public class EquipmentPanelManager : MonoBehaviour
         UpdateCardSlotOfPool(CardOnDisplay); // 카드 슬롯 풀의 슬로 그림도 업데이트
         UpdateCardSlotOfPool(unequippedCardData); //해제하는 장비의 그림도 업데이트. isEquipped
 
-        equipDisplayUI.PopCharImage();
+        equipDisplayUI.UnEquipCharImage();
         DeActivateEquipInfoPanel();
 
         // ⭐ 장비 해제 즉시 클라우드 강제 저장

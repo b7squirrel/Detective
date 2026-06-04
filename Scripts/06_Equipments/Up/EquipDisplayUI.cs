@@ -30,6 +30,7 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
 
     [SerializeField] RectTransform charImage; // Char Disp 하위의 Char Image Transform
+    [SerializeField] GameObject whiteFlash;
     Tween charPopTween;
 
     [Header("Debug")]
@@ -205,6 +206,8 @@ public class EquipDisplayUI : MonoBehaviour
         charPopTween?.Kill();
         charImage.localScale = Vector3.one;
 
+        whiteFlash.SetActive(false);
+
         // 폰트 사이즈 초기화
         if (initAtkFontSize > 0) atk.fontSize = initAtkFontSize;
         if (initHpFontSize > 0) hp.fontSize = initHpFontSize;
@@ -226,18 +229,35 @@ public class EquipDisplayUI : MonoBehaviour
     {
         charPopTween?.Kill();
         charImage.localScale = Vector3.one;
-        charImage.localPosition = Vector3.zero; // 위치 초기화
+        charImage.localPosition = Vector3.zero;
 
         Sequence seq = DOTween.Sequence();
-        // antic: 납작하게 눌림
+        seq.OnStart(() => whiteFlash.SetActive(true));  // 시작 시 활성화
+
         seq.Append(charImage.DOScale(new Vector3(1.1f, 0.75f, 1f), 0.07f).SetEase(Ease.InSine));
-        // 팡: 세로로 길게 튀어오름 + 위로 살짝 이동 (동시에)
         seq.Append(charImage.DOScale(new Vector3(0.9f, 1.4f, 1f), 0.09f).SetEase(Ease.OutExpo));
         RectTransform charRect = charImage as RectTransform;
         seq.Join(charRect.DOAnchorPosY(60f, 0.09f).SetEase(Ease.OutExpo));
-        // 복귀: 크기 + 위치 동시에
         seq.Append(charImage.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutExpo));
         seq.Join(charRect.DOAnchorPosY(0f, 0.2f).SetEase(Ease.OutExpo));
+
+        seq.OnComplete(() => whiteFlash.SetActive(false)); // 끝날 때 비활성화
+
+        charPopTween = seq;
+    }
+    public void UnEquipCharImage()
+    {
+        charPopTween?.Kill();
+        charImage.localScale = Vector3.one;
+        charImage.localPosition = Vector3.zero;
+
+        RectTransform charRect = charImage as RectTransform;
+
+        Sequence seq = DOTween.Sequence();
+        // 세로로 줄고 가로로 늘어남 (스쿼시)
+        seq.Append(charImage.DOScale(new Vector3(1.2f, 0.3f, 1f), 0.1f).SetEase(Ease.InSine));
+        // 원래대로 복귀
+        seq.Append(charImage.DOScale(Vector3.one, 0.15f).SetEase(Ease.OutExpo));
 
         charPopTween = seq;
     }
