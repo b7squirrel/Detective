@@ -238,6 +238,8 @@ public class EquipmentPanelManager : MonoBehaviour
         // ⭐ false: SettrigerAnim 스킵, 아래 SetAllFieldTypeOf에서 1번만 호출
         DeActivateEquipInfoPanel(false);
 
+        equipDisplayUI.PopCharImage();
+
         SetAllFieldTypeOf("Item");
         setCardDataOnSlot.PutCardDataIntoSlot(CardOnDisplay, oriSlot); // 오리 디스플레이 갱신
 
@@ -281,6 +283,7 @@ public class EquipmentPanelManager : MonoBehaviour
         UpdateCardSlotOfPool(CardOnDisplay); // 카드 슬롯 풀의 슬로 그림도 업데이트
         UpdateCardSlotOfPool(unequippedCardData); //해제하는 장비의 그림도 업데이트. isEquipped
 
+        equipDisplayUI.PopCharImage();
         DeActivateEquipInfoPanel();
 
         // ⭐ 장비 해제 즉시 클라우드 강제 저장
