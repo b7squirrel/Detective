@@ -58,6 +58,9 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] GameObject [] otherGlows; // 다른 세트 글로우들. ray, circle...
     SetBonusChecker setBonusChecker;
 
+    [Header("Set Complete Sound")]
+    [SerializeField] AudioClip setCompleteSound;
+
     [Header("코인 부족 경고 팝업")]
     [SerializeField] GameObject lackOfCoinWarningPopup; // Canvas에 미리 만들어둔 팝업
     PanelTween lackOfCoinWarningPopupTween; // PanelTween 컴포넌트 캐싱
@@ -456,6 +459,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
         bool isSetComplete = setBonusChecker.GetSetBonus(CardOnDisplay) != null;
         SetGlowActive(isSetComplete);
+        if(isSetComplete) PlaySetCompleteSound();
     }
 
     void SetGlowActive(bool active)
@@ -479,6 +483,11 @@ public class EquipmentPanelManager : MonoBehaviour
                 otherGlows[i].SetActive(active);
             }
         }
+    }
+
+    void PlaySetCompleteSound()
+    {
+        SoundManager.instance.Play(setCompleteSound);
     }
     #endregion
 
