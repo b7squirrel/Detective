@@ -43,13 +43,9 @@ public class PackPurchaseManager : SingletonBehaviour<PackPurchaseManager>
             return true;
         }
 
-        if (productId == "pack_003") // 전문가 팩
+        if (productId == "pack_003")
         {
-            if (!IsProPackUnlocked())
-            {
-                reason = $"스테이지 {proPackUnlockStageNumber} 도달 후 구매 가능합니다.";
-                return false;
-            }
+            // ✅ 변경: 스테이지 조건 제거 — 1회성 체크만 유지
             if (IsProPackPurchased())
             {
                 reason = "이미 구매한 상품입니다.";
@@ -93,21 +89,6 @@ public class PackPurchaseManager : SingletonBehaviour<PackPurchaseManager>
     public bool IsProPackPurchased()
         => PlayerPrefs.GetInt(KEY_PRO_PURCHASED, 0) == 1;
 
-    /// <summary>
-    /// 전문가 팩 해금 조건 달성 여부.
-    /// PlayerDataManager.currentStageNumber가 조건 이상이면 해금.
-    /// </summary>
-    public bool IsProPackUnlocked()
-    {
-        if (PlayerDataManager.Instance == null)
-        {
-            Logger.LogWarning("[PackPurchaseManager] PlayerDataManager가 없습니다.");
-            return false;
-        }
-
-        int currentStage = PlayerDataManager.Instance.GetCurrentStageNumber();
-        return currentStage >= proPackUnlockStageNumber;
-    }
 
     // ───────────────────────────────────────────
     //  클라우드 동기화용 — CloudSaveData 연동
@@ -169,7 +150,6 @@ public class PackPurchaseManager : SingletonBehaviour<PackPurchaseManager>
     void DebugUnlockPro()
     {
         Logger.Log($"[PackPurchaseManager] 현재 스테이지: {PlayerDataManager.Instance?.GetCurrentStageNumber()}, 해금 조건: {proPackUnlockStageNumber}");
-        Logger.Log($"[PackPurchaseManager] 해금 여부: {IsProPackUnlocked()}");
     }
 #endif
 }

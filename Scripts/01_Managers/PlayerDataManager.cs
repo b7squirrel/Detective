@@ -19,6 +19,9 @@ public class PlayerData
     public string lastLoginDate;        // "2025-12-30" 형식
     public int consecutiveDays;         // 연속 출석일
     public bool hasTakenDailyReward;    // 오늘 출석 보상 수령 여부
+
+    // 무한모드 해금
+    public bool isInfiniteModeUnlocked;
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -36,6 +39,9 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     // ⭐ 추가: 데이터 로드 완료 플래그
     public static bool IsDataLoaded { get; private set; } = false;
 
+    // 무한모드 해금
+    public bool IsInfiniteModeUnlocked() => playerData.isInfiniteModeUnlocked;
+
     // ⭐ SingletonBehaviour의 Init()을 override하여 초기화
     protected override void Init()
     {
@@ -46,7 +52,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         IsDataLoaded = true;
 
         stageInfo = FindObjectOfType<StageInfo>();
-        if(stageInfo == null)
+        if (stageInfo == null)
         {
             Logger.LogWarning("[PlayerDataManager] StageInfo를 찾을 수 없습니다.");
         }
@@ -255,7 +261,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     {
         InfiniteStageManager infiniteManager = FindObjectOfType<InfiniteStageManager>();
         int currentWave = infiniteManager.GetCurrentWave();
-        int clearedWaves = infiniteManager.GetClearedWaves(); 
+        int clearedWaves = infiniteManager.GetClearedWaves();
         float currentTime = infiniteManager.GetSurvivalTime();
 
         // 최고 기록 갱신 체크
@@ -296,7 +302,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         }
 
         CristalManager cristalManager = FindObjectOfType<CristalManager>();
-    if (cristalManager != null)
+        if (cristalManager != null)
         {
             int cristalNum = cristalManager.GetCurrentCristals();
             SetCristalNumberAs(cristalNum);
@@ -346,5 +352,13 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     {
         LoadPlayerData();
         Logger.Log("[PlayerDataManager] 디스크에서 데이터 재로드 완료");
+    }
+
+    public void UnlockInfiniteMode()
+    {
+        if (playerData.isInfiniteModeUnlocked) return;
+        playerData.isInfiniteModeUnlocked = true;
+        SavePlayerData();
+        Logger.Log("[PlayerDataManager] 무한모드 해금 완료");
     }
 }
