@@ -4,7 +4,11 @@ using Lofelt.NiceVibrations;
 public class HapticManager : MonoBehaviour
 {
     public static HapticManager Instance { get; private set; }
-    [SerializeField] private bool hapticsEnabled = true;
+
+    // ✅ 수정: SerializeField 제거 — PlayerPrefs에서 로드
+    private bool hapticsEnabled = true;
+
+    const string KEY_HAPTICS = "HapticsState";
 
     void Awake()
     {
@@ -16,13 +20,37 @@ public class HapticManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
     void Start()
     {
-        HapticController.Init(); // ← 초기화 추가
+        HapticController.Init();
+        Load(); // ✅ 추가
     }
+
+    // ───────────────────────────────────────────
+    //  저장 / 불러오기
+    // ───────────────────────────────────────────
+
+    void Load()
+    {
+        hapticsEnabled = PlayerPrefs.GetInt(KEY_HAPTICS, 1) == 1;
+    }
+
+    public void SetState(bool state)
+    {
+        hapticsEnabled = state;
+        PlayerPrefs.SetInt(KEY_HAPTICS, state ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    public bool GetState() => hapticsEnabled;
+
+    // ───────────────────────────────────────────
+    //  기존 진동 메서드 유지
+    // ───────────────────────────────────────────
 
     public static void PlayDamage()
     {
