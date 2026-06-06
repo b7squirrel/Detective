@@ -6,61 +6,51 @@ using UnityEngine;
 /// </summary>
 public class CoinManager : MonoBehaviour
 {
-    // 현재 플레이어가 보유한 총 코인 수
     int currentCoins;
-
-    // 이번 게임(세션)에서 획득한 코인 수
     int coinNumsPickedup;
-
-    // 코인 획득 시 발생하는 이벤트 (UI 업데이트용)
     public event Action OnCoinAcquired;
-
-    // 플레이어 데이터 관리자 참조
     PlayerDataManager playerDataManager;
 
     void Start()
     {
-        // 저장된 데이터 매니저 가져오기
         playerDataManager = FindObjectOfType<PlayerDataManager>();
-
-        // 저장된 캔디(코인) 개수 불러오기
         currentCoins = playerDataManager.GetCurrentCoinNumber();
-
-        // 현재 보유한 코인으로 UI 초기화 (증가량 0)
         updateCurrentCoinNumbers(0);
-
-        // 이번 세션에서 획득한 코인 수 초기화
         coinNumsPickedup = 0;
     }
 
-    //코인 획득 시 호출 - 코인 수 업데이트 및 이벤트 발생
+    // 코인 획득 시 호출 - CoinMultiplier 배율 적용
     public void updateCurrentCoinNumbers(int coinsToAdd)
     {
-        // 총 보유 코인에 추가
+        // coinsToAdd > 0 조건으로 Start() 초기화 호출 시에는 배율 미적용
+        if (coinsToAdd > 0 && FieldItemEffect.instance != null && FieldItemEffect.instance.CoinMultiplier > 1f)
+        {
+            int multiplied = Mathf.RoundToInt(coinsToAdd * FieldItemEffect.instance.CoinMultiplier);
+            Logger.Log($"[CoinManager] 골드 {FieldItemEffect.instance.CoinMultiplier}배 적용! {coinsToAdd} → {multiplied}");
+            coinsToAdd = multiplied;
+        }
+
         currentCoins += coinsToAdd;
-
-        // 이번 세션 획득 코인에 추가
         coinNumsPickedup += coinsToAdd;
-
-        // UI 업데이트를 위한 이벤트 발생
         OnCoinAcquired?.Invoke();
     }
 
-    // 현재 보유한 총 코인 수 반환
     public int GetCurrentCoins() => currentCoins;
-
-    // 이번 게임에서 획득한 코인 수 반환
     public int GetCoinNumPickedup() => coinNumsPickedup;
 
-    // ⭐ 새 메서드: UI만 업데이트 (데이터는 이미 저장됨)
+    // UI만 업데이트 (MoveToUI 도착 시 호출)
     public void UpdateCoinUIOnly(int amount)
     {
+        if (amount > 0 && FieldItemEffect.instance != null && FieldItemEffect.instance.CoinMultiplier > 1f)
+        {
+            amount = Mathf.RoundToInt(amount * FieldItemEffect.instance.CoinMultiplier);
+        }
+
         currentCoins += amount;
         coinNumsPickedup += amount;
         OnCoinAcquired?.Invoke();
     }
 
-    // ⭐ PlayerData와 동기화 (Start에서 호출 시)
     public void SyncWithPlayerData()
     {
         currentCoins = playerDataManager.GetCurrentCoinNumber();
