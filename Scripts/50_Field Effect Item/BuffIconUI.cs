@@ -13,6 +13,7 @@ public class BuffIconUI : MonoBehaviour
     [SerializeField] GameObject multiplierCoin;       // Multiplier Coin 오브젝트
     [SerializeField] GameObject multiplierExp;        // Multiplier Exp 오브젝트
     [SerializeField] Image timerRing;                 // Timer Ring Image (Fill Method: Radial 360)
+    [SerializeField] AudioClip popSound;
 
     float totalDuration;
     float remainingTime;
@@ -86,10 +87,10 @@ public class BuffIconUI : MonoBehaviour
         if (!showMultiplier) return;
 
         // Coin / Exp 아이콘 중 해당하는 것만 표시
-        if (multiplierCoin != null)
-            multiplierCoin.SetActive(buffType == FieldBuffType.DoubleCoin);
-        if (multiplierExp != null)
-            multiplierExp.SetActive(buffType == FieldBuffType.DoubleExp);
+        // if (multiplierCoin != null)
+        //     multiplierCoin.SetActive(buffType == FieldBuffType.DoubleCoin);
+        // if (multiplierExp != null)
+        //     multiplierExp.SetActive(buffType == FieldBuffType.DoubleExp);
     }
 
     /// <summary>
@@ -113,7 +114,8 @@ public class BuffIconUI : MonoBehaviour
     System.Collections.IEnumerator PopAnimation()
     {
         Vector3 originalScale = transform.localScale;
-        Vector3 bigScale = originalScale * 1.25f;
+        Vector3 bigScale = originalScale * 2.5f;
+        if (popSound != null) SoundManager.instance.PlaySoundWith(popSound, 1.4f, false, 0);
 
         float t = 0f;
         float popDuration = 0.1f;

@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Critical Hit
   DisplayName: "\uD589\uC6B4 \uBC18\uC9C0"
+  setDisplayName: 
+  itemDisplayName: 
   grade: 0
-  charImage: {fileID: 21300000, guid: 58bba553e2585495f8c63b6f164b14e4, type: 3}
+  charImage: {fileID: 21300000, guid: c3aa06b808dd34930b0a1a2dde321a01, type: 3}
   equippedImage: {fileID: 0}
   spriteRow:
     sprites: []
@@ -49,3 +51,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5489fa5f84f9e38468a0269fa0af1ea1, type: 2}
   dropChance: 0
   itemIndex: 0
+  projectilePrefab: {fileID: 0}
+  projectileVerticalVelocity: 10

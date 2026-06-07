@@ -14,13 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: HP Regen
   DisplayName: "\uD68C\uBCF5 \uBC34\uB4DC"
+  setDisplayName: 
+  itemDisplayName: 
   grade: 0
-  charImage: {fileID: 21300000, guid: 07bc32228ac1843258e55da7e247ad13, type: 3}
+  charImage: {fileID: 21300000, guid: d5dfe9d794af24dd98a9cd8261f245b6, type: 3}
   equippedImage: {fileID: 0}
   spriteRow:
     sprites: []
   needToOffset: 0
   posHead: {x: 0, y: 0}
+  worldPosHead: {x: 0, y: 0}
   CardItemAnimator:
     CardImageAnim: {fileID: 0}
     InGamePlayerAnim: {fileID: 0}
@@ -48,3 +51,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 86e0977253b5b3840b54ab191e0ed12e, type: 2}
   dropChance: 0
   itemIndex: 0
+  projectilePrefab: {fileID: 0}
+  projectileVerticalVelocity: 10
