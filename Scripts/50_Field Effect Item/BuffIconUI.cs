@@ -99,13 +99,15 @@ public class BuffIconUI : MonoBehaviour
     {
         if (multiplierText == null) return;
 
-        float multiplier = 1f;
         if (buffType == FieldBuffType.DoubleExp)
-            multiplier = FieldItemEffect.instance.ExpMultiplier;
+        {
+            multiplierText.text = $"x{(int)FieldItemEffect.instance.ExpMultiplier}";
+        }
         else if (buffType == FieldBuffType.DoubleCoin)
-            multiplier = FieldItemEffect.instance.CoinMultiplier;
-
-        multiplierText.text = $"x{(int)multiplier}";
+        {
+            // DoubleCoin은 배율 대신 추가 드롭 방식이므로 고정 텍스트
+            multiplierText.text = "+코인";
+        }
     }
 
     System.Collections.IEnumerator PopAnimation()

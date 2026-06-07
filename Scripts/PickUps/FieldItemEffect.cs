@@ -34,15 +34,20 @@ public class FieldItemEffect : MonoBehaviour
     // =============================================
     // 임시 버프 시스템
     // =============================================
-    const float MAX_MULTIPLIER = 20f;
+    const float MAX_MULTIPLIER = 4f;
 
-    // 경험치 / 골드 배율 (1 = 기본, 2~4 = 버프)
+    // 경험치 배율 (1 = 기본, 2~최대 = 버프)
     public float ExpMultiplier { get; private set; } = 1f;
-    public float CoinMultiplier { get; private set; } = 1f;
+
+    // DoubleCoin은 배율 대신 추가 드롭 방식. 활성화 여부만 관리.
+    public bool IsDoubleCoin { get; private set; } = false;
 
     // 최대 배율 도달 여부 (ChestDrop 드롭 차단용)
     public bool IsExpAtMax => ExpMultiplier >= MAX_MULTIPLIER;
-    public bool IsCoinAtMax => CoinMultiplier >= MAX_MULTIPLIER;
+    public bool IsCoinAtMax => IsDoubleCoin; // 이미 활성화 중이면 상자에서 추가 드롭 안 함
+
+    // 경험치 버프 활성화 여부
+    public bool IsDoubleExp => ExpMultiplier > 1f;
 
     // SpeedBoost / DamageBoost 중첩 방지
     bool isSpeedBoostActive = false;
@@ -79,19 +84,19 @@ public class FieldItemEffect : MonoBehaviour
                 break;
             case FieldBuffType.DoubleExp:
                 if (ExpMultiplier < MAX_MULTIPLIER)
-                    ExpMultiplier += 1;
+                    ExpMultiplier += 1f;
                 if (coDoubleExp != null) StopCoroutine(coDoubleExp);
                 coDoubleExp = StartCoroutine(DoubleExpCo(duration));
                 OnBuffApplied?.Invoke(buffType, duration);
                 Logger.Log($"[FieldBuff] 경험치 배율 → {ExpMultiplier}배, 타이머 {duration}초 리셋");
                 break;
             case FieldBuffType.DoubleCoin:
-                if (CoinMultiplier < MAX_MULTIPLIER)
-                    CoinMultiplier += 1f;
+                // 추가 드롭 방식이므로 배율 중첩 없이 활성화만 관리. 타이머만 갱신.
+                IsDoubleCoin = true;
                 if (coDoubleCoin != null) StopCoroutine(coDoubleCoin);
                 coDoubleCoin = StartCoroutine(DoubleCoinCo(duration));
                 OnBuffApplied?.Invoke(buffType, duration);
-                Logger.Log($"[FieldBuff] 골드 배율 → {CoinMultiplier}배, 타이머 {duration}초 리셋");
+                Logger.Log($"[FieldBuff] 동전 추가 드롭 버프 시작(갱신), 타이머 {duration}초 리셋");
                 break;
         }
     }
@@ -161,10 +166,10 @@ public class FieldItemEffect : MonoBehaviour
     IEnumerator DoubleCoinCo(float duration)
     {
         yield return new WaitForSeconds(duration);
-        CoinMultiplier = 1f;
+        IsDoubleCoin = false;
         coDoubleCoin = null;
         OnBuffExpired?.Invoke(FieldBuffType.DoubleCoin);
-        Logger.Log("[FieldBuff] 골드 버프 종료 → 1배로 초기화");
+        Logger.Log("[FieldBuff] 동전 추가 드롭 버프 종료");
     }
     // =============================================
 
