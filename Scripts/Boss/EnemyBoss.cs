@@ -564,7 +564,7 @@ public class EnemyBoss : EnemyBase, Idamageable
         // rb.bodyType = movable ? RigidbodyType2D.Dynamic : RigidbodyType2D.Kinematic;
         if (movable)
         {
-            rb.constraints = RigidbodyConstraints2D.None;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
         else
         {

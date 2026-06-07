@@ -92,7 +92,7 @@ public class MoveToUI : MonoBehaviour
         // 정적 쿨다운으로 소리 재생 제어
         if (Time.time - lastCoinSoundTime >= coinSoundInterval)
         {
-            SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .1f);
+            SoundManager.instance.PlaySoundWith(hitSound, .5f, false, .1f);
             lastCoinSoundTime = Time.time;
         }
 

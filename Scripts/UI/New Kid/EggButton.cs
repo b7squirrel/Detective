@@ -12,6 +12,9 @@ public class EggButton : MonoBehaviour
     [SerializeField] AudioClip[] downGradeSounds;
     [SerializeField] AudioClip gradeFixedSound;
 
+    [Header("Hand")]
+    [SerializeField] GameObject handSL;
+
     [Header("White Flash")]
     [SerializeField] Material whiteMat;
     Coroutine whiteFlashCo;
@@ -36,6 +39,9 @@ public class EggButton : MonoBehaviour
     float fixedProbability;
 
     [SerializeField] Image nameTag;
+
+    bool isMaxGradeReached; // 정예 도달 여부
+    [SerializeField] AudioClip maxGradeSound; // 정예 도달 사운드
 
     [Header("Grade Colors")]
     [SerializeField]
@@ -88,6 +94,17 @@ public class EggButton : MonoBehaviour
     {
         if (currentProbability > 0 && isGradeFixed == false)
         {
+            // 정예(최고 등급) 도달 시 감소하지 않음
+            if (currentGradeIndex >= MyGrade.EggGrades.Length - 1)
+            {
+                if (!isMaxGradeReached)
+                {
+                    isMaxGradeReached = true;
+                    SoundManager.instance.Play(maxGradeSound);
+                }
+                return;
+            }
+
             currentProbability = Mathf.Max(0f, currentProbability - (decreaseRate * Time.unscaledDeltaTime));
             UpdateGradeTitle();
         }
@@ -101,6 +118,8 @@ public class EggButton : MonoBehaviour
         popFeedbackCo = null;
         isPopFeedbackDone = true;
         rateToGetRare = 0f;
+        isMaxGradeReached = false;
+        if (handSL != null) handSL.SetActive(true);
     }
 
     public void PlayEggClickSound()
@@ -233,6 +252,8 @@ public class EggButton : MonoBehaviour
 
         image.material = initMat;
         isGradeFixed = true;
+
+        if (handSL != null) handSL.SetActive(false);
 
         for (int i = 0; i < MyGrade.EggGrades.Length; i++)
         {
