@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public class FieldItemEffect : MonoBehaviour
     // =============================================
     // 임시 버프 시스템
     // =============================================
-    const float MAX_MULTIPLIER = 4f;
+    const float MAX_MULTIPLIER = 20f;
 
     // 경험치 / 골드 배율 (1 = 기본, 2~4 = 버프)
     public float ExpMultiplier { get; private set; } = 1f;
@@ -48,6 +49,10 @@ public class FieldItemEffect : MonoBehaviour
     bool isDamageBoostActive = false;
     float currentSpeedBoostValue = 0f;
     int currentDamageBoostValue = 0;
+
+    // UI 연동 이벤트
+    public event Action<FieldBuffType, float> OnBuffApplied;  // 버프 시작/갱신 (타입, 지속시간)
+    public event Action<FieldBuffType> OnBuffExpired;          // 버프 종료 (타입)
 
     Coroutine coSpeedBoost, coDamageBoost, coDoubleExp, coDoubleCoin;
 
@@ -65,18 +70,19 @@ public class FieldItemEffect : MonoBehaviour
             case FieldBuffType.SpeedBoost:
                 if (coSpeedBoost != null) StopCoroutine(coSpeedBoost);
                 coSpeedBoost = StartCoroutine(SpeedBoostCo(duration, value));
+                OnBuffApplied?.Invoke(buffType, duration);
                 break;
             case FieldBuffType.DamageBoost:
                 if (coDamageBoost != null) StopCoroutine(coDamageBoost);
                 coDamageBoost = StartCoroutine(DamageBoostCo(duration, (int)value));
+                OnBuffApplied?.Invoke(buffType, duration);
                 break;
             case FieldBuffType.DoubleExp:
-                // 배율 증가 (최대치 미만일 때만)
                 if (ExpMultiplier < MAX_MULTIPLIER)
-                    ExpMultiplier += 1f;
-                // 기존 타이머 취소 후 새로 시작 (항상)
+                    ExpMultiplier += 1;
                 if (coDoubleExp != null) StopCoroutine(coDoubleExp);
                 coDoubleExp = StartCoroutine(DoubleExpCo(duration));
+                OnBuffApplied?.Invoke(buffType, duration);
                 Logger.Log($"[FieldBuff] 경험치 배율 → {ExpMultiplier}배, 타이머 {duration}초 리셋");
                 break;
             case FieldBuffType.DoubleCoin:
@@ -84,6 +90,7 @@ public class FieldItemEffect : MonoBehaviour
                     CoinMultiplier += 1f;
                 if (coDoubleCoin != null) StopCoroutine(coDoubleCoin);
                 coDoubleCoin = StartCoroutine(DoubleCoinCo(duration));
+                OnBuffApplied?.Invoke(buffType, duration);
                 Logger.Log($"[FieldBuff] 골드 배율 → {CoinMultiplier}배, 타이머 {duration}초 리셋");
                 break;
         }
@@ -111,6 +118,7 @@ public class FieldItemEffect : MonoBehaviour
         isSpeedBoostActive = false;
         currentSpeedBoostValue = 0f;
         coSpeedBoost = null;
+        OnBuffExpired?.Invoke(FieldBuffType.SpeedBoost);
         Logger.Log("[FieldBuff] 속도 버프 종료");
     }
 
@@ -136,6 +144,7 @@ public class FieldItemEffect : MonoBehaviour
         isDamageBoostActive = false;
         currentDamageBoostValue = 0;
         coDamageBoost = null;
+        OnBuffExpired?.Invoke(FieldBuffType.DamageBoost);
         Logger.Log("[FieldBuff] 데미지 버프 종료");
     }
 
@@ -145,6 +154,7 @@ public class FieldItemEffect : MonoBehaviour
         yield return new WaitForSeconds(duration);
         ExpMultiplier = 1f;
         coDoubleExp = null;
+        OnBuffExpired?.Invoke(FieldBuffType.DoubleExp);
         Logger.Log("[FieldBuff] 경험치 버프 종료 → 1배로 초기화");
     }
 
@@ -153,6 +163,7 @@ public class FieldItemEffect : MonoBehaviour
         yield return new WaitForSeconds(duration);
         CoinMultiplier = 1f;
         coDoubleCoin = null;
+        OnBuffExpired?.Invoke(FieldBuffType.DoubleCoin);
         Logger.Log("[FieldBuff] 골드 버프 종료 → 1배로 초기화");
     }
     // =============================================

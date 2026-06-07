@@ -388,13 +388,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 8a39875e78b01485fa79e00b325b35f6, type: 3}
-  m_Type: 1
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillClockwise: 0
+  m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6651990323285293506
@@ -406,6 +406,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3825042531559105834}
+  - component: {fileID: -4402418778863047960}
   m_Layer: 5
   m_Name: Buff Armour
   m_TagString: Untagged
@@ -435,6 +436,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &-4402418778863047960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6651990323285293506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c971a6224e494accae8f96f2cc424a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  multiplierGroup: {fileID: 2515259172994193878}
+  multiplierText: {fileID: 7256439108864389862}
+  multiplierCoin: {fileID: 2094089507115903997}
+  multiplierExp: {fileID: 7742171366585697073}
+  timerRing: {fileID: 2096617089814454422}
 --- !u!1 &7742171366585697073
 GameObject:
   m_ObjectHideFlags: 0
