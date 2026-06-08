@@ -62,6 +62,9 @@ public class EggButton : MonoBehaviour
     Animator anim;
     bool pickedEgg;
 
+    [Header("디버그")]
+    [SerializeField] GameObject debugButtonGroup; // 디버그 버튼들을 묶은 그룹 오브젝트
+
     void OnEnable()
     {
         pickedEgg = false;
@@ -280,4 +283,12 @@ public class EggButton : MonoBehaviour
     {
         return currentGradeIndex;
     }
+
+    #region 디버그
+    public void DebugSetGrade(int gradeIndex)
+    {
+        currentProbability = gradeIndex * 25f;
+        UpdateGradeTitle();
+    }
+    #endregion
 }
