@@ -561,4 +561,49 @@ public class CloudSaveManager : MonoBehaviour
     {
         ForceSaveToCloud();
     }
+
+    // ─────────────────────────────────────────────────────────
+    // 디버그 용도. 클라우드, 로컬 데이터 초기화
+    // ─────────────────────────────────────────────────────────
+    public void DeleteCloudSave()
+    {
+#if UNITY_ANDROID
+        if (!IsAuthenticated) return;
+
+        OpenSavedGame((status, game) =>
+        {
+            if (status != SavedGameRequestStatus.Success) return;
+
+            PlayGamesPlatform.Instance.SavedGame.Delete(game);
+            Debug.Log("[CloudSaveManager] 클라우드 저장 데이터 삭제 완료");
+        });
+#endif
+    }
+
+    public void ResetAllLocalData()
+    {
+        // PlayerPrefs 초기화
+        PlayerPrefs.DeleteAll();
+
+        // 로컬 파일 삭제
+        string[] paths = {
+        System.IO.Path.Combine(Application.persistentDataPath, "playerData.json"),
+        System.IO.Path.Combine(Application.persistentDataPath, "PlayerData", "MyCards.txt"),
+        System.IO.Path.Combine(Application.persistentDataPath, "MyEquipmentsData", "MyEquipments.txt")
+    };
+
+        foreach (var path in paths)
+        {
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+        }
+
+        Debug.Log("로컬 데이터 초기화 완료 - 앱 재시작 필요");
+    }
+
+    public void ResetAll()
+    {
+        DeleteCloudSave();
+        ResetAllLocalData();
+    }
 }
