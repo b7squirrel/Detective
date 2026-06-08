@@ -93,7 +93,7 @@ public class BaseballProjectile : ProjectileBase
             if (!string.IsNullOrEmpty(WeaponName))
                 DamageTracker.instance.RecordDamage(WeaponName, Damage);
 
-            TriggerHitEffects();
+            TriggerHitEffects(transform.position);
             gameObject.SetActive(false);
         }
         else if (other.CompareTag("Props"))
@@ -102,23 +102,36 @@ public class BaseballProjectile : ProjectileBase
                 Damage, KnockBackChance, KnockBackSpeedFactor,
                 transform.position, hitEffect);
 
-            TriggerHitEffects();
+            TriggerHitEffects(transform.position);
             gameObject.SetActive(false);
         }
         else if (other.CompareTag("Wall") || other.CompareTag("MainCamera"))
         {
-            TriggerHitEffects();
+            TriggerHitEffects(transform.position);
             gameObject.SetActive(false);
         }
     }
 
-    private void TriggerHitEffects()
+    private void TriggerHitEffects(Vector2 position)
     {
         if (anim != null)
             anim.SetTrigger("Hit");
 
         if (hitSound != null)
             SoundManager.instance.Play(hitSound);
+
+        if (anim != null)
+            anim.SetTrigger("Hit");
+
+        if (hitSound != null)
+            SoundManager.instance.Play(hitSound);
+
+        // 이펙트 스폰 추가
+        if (hitEffects != null && hitEffects.hitEffect != null)
+        {
+            GameObject fx = GameManager.instance.poolManager.GetMisc(hitEffects.hitEffect);
+            fx.transform.position = position;
+        }
     }
 
     protected override void CastDamage()
