@@ -605,5 +605,9 @@ public class CloudSaveManager : MonoBehaviour
     {
         DeleteCloudSave();
         ResetAllLocalData();
+
+        // 씬 리로드로 모든 매니저 재초기화
+        UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }
