@@ -36,8 +36,8 @@ public class BossWarningPanel : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(.5f);
         bossWarningPanel.SetActive(false);
-        GameManager.instance.pauseManager.UnPauseGame();
         GameManager.instance.popupManager.IsUIDone = true;
+        GameManager.instance.pauseManager.UnPauseGame();
     }
     IEnumerator ActivateBossWarning()
     {

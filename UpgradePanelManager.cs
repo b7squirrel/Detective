@@ -143,7 +143,11 @@ public class UpgradePanelManager : MonoBehaviour
         HideButtons();
         greyBase.SetActive(false);
         panel.SetActive(false);
-        Player.instance.GetComponent<Level>().CheckLevelUp();
+        // 죽은 상태면 레벨업 체크 안 함
+        if (!GameManager.instance.IsPlayerDead)
+        {
+            Player.instance.GetComponent<Level>().CheckLevelUp();
+        }
 
     }
 }

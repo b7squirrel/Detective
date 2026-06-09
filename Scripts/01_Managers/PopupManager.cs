@@ -80,6 +80,19 @@ public class PopupManager : MonoBehaviour
 
         currentProcessingEvent = uiEventQueue.Dequeue(); // 현재 처리 중인 이벤트 저장
 
+        // 죽은 상태면 Upgrade 이벤트는 스킵
+        if (GameManager.instance.IsPlayerDead &&
+            currentProcessingEvent.EventName == "Upgrade")
+        {
+            // 큐 전체를 비워버림
+            uiEventQueue.Clear();
+            currentUpgradeCount = 0;
+            currentEggCount = 0;
+            isProcessing = false;
+            currentProcessingEvent = null;
+            yield break;
+        }
+
         // UI 이벤트 실행
         currentProcessingEvent.ShowUI?.Invoke();
 

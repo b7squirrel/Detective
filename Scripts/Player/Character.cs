@@ -73,6 +73,8 @@ public class Character : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.instance.IsPlayerDead) return;
+        
         HpRegenerationTimer += Time.deltaTime * HpRegenerationRate;
 
         if (HpRegenerationTimer > 1f)
@@ -349,6 +351,9 @@ Handheld.Vibrate();
     #region Die
     void Die()
     {
+        // 즉시 Dead 플래그 세팅
+        GameManager.instance.IsPlayerDead = true;
+
         HapticManager.PlayDeath();
         hpBar.gameObject.SetActive(false);
         OnDie?.Invoke();
@@ -378,7 +383,7 @@ Handheld.Vibrate();
         else
         {
             Logger.LogWarning("[Character] RevivalPanel을 찾을 수 없습니다. 바로 게임오버.");
-            GameManager.instance.pauseManager.UnPauseGame();
+            GameManager.instance.pauseManager.UnPauseGame(); // ← 이 줄 삭제
             ProcessDeath();
         }
     }

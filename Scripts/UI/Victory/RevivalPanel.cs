@@ -50,6 +50,10 @@ public class RevivalPanel : MonoBehaviour
         isRevived = false;
         panelTween.ShowWithScale();
         adButton.interactable = AdsManager.IsRewardedAdReady;
+
+        // 여기서 반드시 정지 보장
+        GameManager.instance.pauseManager.PauseGame();
+
         countdownCoroutine = StartCoroutine(CountdownCo());
 
         // 패널 효과음은 먼저 재생한 뒤 나머지 사운드를 멈춤
@@ -110,9 +114,9 @@ public class RevivalPanel : MonoBehaviour
                 }
                 else
                 {
-                    Logger.Log("[RevivalPanel] 광고 미완료 → 카운트다운 재개");
-                    GameManager.instance.pauseManager.UnPauseGame();
-                    countdownCoroutine = StartCoroutine(CountdownCo());
+                    Logger.Log("[RevivalPanel] 광고 미완료 → 게임오버");
+                    Hide(resumeSounds: false);
+                    character.ProcessDeath();
                 }
             }
         );
@@ -120,15 +124,19 @@ public class RevivalPanel : MonoBehaviour
 
     void OnCristalButtonClicked()
     {
+        cristalButton.interactable = false;
+        adButton.interactable = false;
+        giveUpButton.interactable = false;
+
         int currentCristal = PlayerDataManager.Instance.GetCurrentCristalNumber();
         if (currentCristal < cristalCost)
         {
             Logger.LogWarning("[RevivalPanel] 크리스탈 부족");
+            cristalButton.interactable = true; // 부족하면 다시 활성화
             return;
         }
 
         PlayerDataManager.Instance.AddCristal(-cristalCost);
-        Logger.Log($"[RevivalPanel] 크리스탈 {cristalCost}개 소모 → 부활");
         DoRevive();
     }
 
