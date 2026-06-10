@@ -104,6 +104,7 @@ public class GameTexts : ScriptableObject
     public string stage = "스테이지";
     public string dailyChallenge = "일일 도전";
     public string weeklyChallenge = "주간 도전";
+    public string challenge = "도전!";
 
     [Header("Options")]
     public string language = "언어";
@@ -207,6 +208,9 @@ public class GameTexts : ScriptableObject
         "팁: 동료 오리들이 리드 오리를\n둘러싸도록 해보세요.\n적들의 공격을 막아 줄거에요.",
         "팁: 달콤 우유는 우주에서 가장 맛있는\n음료수입니다. 체력까지 채워줍니다!",
         "팁: 스테이지 클리어를 계속 실패한다면\n카드를 업그레이드 시켜보세요.",
+        "팁: 헬멧 적은 단단합니다.\n 더 많은 공격이 필요합니다.",
+        "팁: 눈이 빛나는 적은 공격 속도가 빠릅니다.",
+        "팁: 심지가 달린 적에게 닿으면 큰 데미지를 입습니다.",
     };
 
     // 랜덤 힌트 가져오기
