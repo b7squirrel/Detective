@@ -76,13 +76,13 @@ public class FieldItemEffect : MonoBehaviour
                 if (coSpeedBoost != null) StopCoroutine(coSpeedBoost);
                 coSpeedBoost = StartCoroutine(SpeedBoostCo(duration, value));
                 OnBuffApplied?.Invoke(buffType, duration);
-                MessageSystem.instance.PostBuffMessage("빠른 발!", MessageSystem.instance.GetBuffColor(FieldBuffType.SpeedBoost));
+                MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.buffSpeedBoost, MessageSystem.instance.GetBuffColor(FieldBuffType.SpeedBoost));
                 break;
             case FieldBuffType.DamageBoost:
                 if (coDamageBoost != null) StopCoroutine(coDamageBoost);
                 coDamageBoost = StartCoroutine(DamageBoostCo(duration, (int)value));
                 OnBuffApplied?.Invoke(buffType, duration);
-                MessageSystem.instance.PostBuffMessage("공격력 UP!", MessageSystem.instance.GetBuffColor(FieldBuffType.DamageBoost));
+                MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.buffDamageBoost, MessageSystem.instance.GetBuffColor(FieldBuffType.DamageBoost));
                 break;
             case FieldBuffType.DoubleExp:
                 if (ExpMultiplier < MAX_MULTIPLIER)
@@ -90,7 +90,9 @@ public class FieldItemEffect : MonoBehaviour
                 if (coDoubleExp != null) StopCoroutine(coDoubleExp);
                 coDoubleExp = StartCoroutine(DoubleExpCo(duration));
                 OnBuffApplied?.Invoke(buffType, duration);
-                MessageSystem.instance.PostBuffMessage($"경험치 {(int)ExpMultiplier}배!", MessageSystem.instance.GetBuffColor(FieldBuffType.DoubleExp));
+                var g = LocalizationManager.Game;
+                string expMsg = $"{g.buffExpPrefix} {(int)ExpMultiplier}{g.buffExpSuffix}";
+                MessageSystem.instance.PostBuffMessage(expMsg, MessageSystem.instance.GetBuffColor(FieldBuffType.DoubleExp));
                 Logger.Log($"[FieldBuff] 경험치 배율 → {ExpMultiplier}배, 타이머 {duration}초 리셋");
                 break;
             case FieldBuffType.DoubleCoin:
@@ -98,7 +100,7 @@ public class FieldItemEffect : MonoBehaviour
                 if (coDoubleCoin != null) StopCoroutine(coDoubleCoin);
                 coDoubleCoin = StartCoroutine(DoubleCoinCo(duration));
                 OnBuffApplied?.Invoke(buffType, duration);
-                MessageSystem.instance.PostBuffMessage("골드 파티!", MessageSystem.instance.GetBuffColor(FieldBuffType.DoubleCoin));
+                MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.coinFrenzy, MessageSystem.instance.GetBuffColor(FieldBuffType.DoubleCoin));
                 Logger.Log($"[FieldBuff] 동전 추가 드롭 버프 시작(갱신), 타이머 {duration}초 리셋");
                 break;
         }

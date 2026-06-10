@@ -58,6 +58,7 @@ public class GameTexts : ScriptableObject
     [Header("Launch Panel")]
     public string tabToSelectLead = "탭해서 리드 오리 선택.";
     public string startButton = "시작!";
+    public string hint = "힌트";
 
     [Header("Equip Panel")]
     public string duck = "오리";
@@ -65,6 +66,7 @@ public class GameTexts : ScriptableObject
     public string chest = "가슴";
     public string face = "얼굴";
     public string hand = "손";
+    public string equipped = "장착 중";
 
     [Header("Merge Panel")]
     [TextArea(2, 4)]
@@ -81,6 +83,7 @@ public class GameTexts : ScriptableObject
     public string achievementsTitle = "업적";
     public string dailyQuestsTitle = "일일 임무";
     public string weeklyQuestsTitle = "주간 임무";
+    public string tapToClaim = "탭 해서 보상 받기";
 
     [Header("Daily Reward Panel")]
     public string daily = "일일 보상";
@@ -95,6 +98,11 @@ public class GameTexts : ScriptableObject
     public string day6 = "6일차";
     public string day7 = "7일차";
 
+    [Header("Sell Cards")]
+    public string sellCards = "카드 판매";
+    [Header("Encyclopedia")]
+    public string encyclopedia = "카드 도감";
+
     [Header("무한 모드")]
     public string duckChallenge = "도전 오리!!";
     public string wave = "웨이브";
@@ -105,6 +113,17 @@ public class GameTexts : ScriptableObject
     public string dailyChallenge = "일일 도전";
     public string weeklyChallenge = "주간 도전";
     public string challenge = "도전!";
+
+    [Header("Field")]
+    public string composedBy = "작곡";
+    public string coinFrenzy = "코인 파티!";
+    public string exp = "경험치";
+
+    [Header("Buff Messages")]
+    public string buffSpeedBoost = "빠른 발!";
+    public string buffDamageBoost = "공격력 UP!";
+    public string buffExpPrefix = "경험치";
+    public string buffExpSuffix = "x!";
 
     [Header("Options")]
     public string language = "언어";

@@ -143,6 +143,22 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.weeklyChallenge;
             case UITextKey.Challenge:
                 return LocalizationManager.Game.challenge;
+            case UITextKey.SellCards:
+                return LocalizationManager.Game.sellCards;
+            case UITextKey.Encyclopedia:
+                return LocalizationManager.Game.encyclopedia;
+            case UITextKey.Hint:
+                return LocalizationManager.Game.hint;
+            case UITextKey.Equipped:
+                return LocalizationManager.Game.equipped;
+            case UITextKey.TapToClaim:
+                return LocalizationManager.Game.tapToClaim;
+            case UITextKey.ComposedBy:
+                return LocalizationManager.Game.composedBy;
+            case UITextKey.CoinFrenzy:
+                return LocalizationManager.Game.coinFrenzy;
+            case UITextKey.EXP:
+                return LocalizationManager.Game.exp;
             default:
                 return key.ToString();
         }
@@ -213,5 +229,14 @@ public enum UITextKey
     WeeklyMission,
     DailyChallenge,
     WeeklyChallenge,
-    Challenge
+    Challenge,
+    SellCards,
+    Encyclopedia,
+    Hint,
+    Equipped,
+    TapToClaim,
+    ComposedBy,
+    CoinFrenzy,
+    EXP
+
 }
