@@ -73,6 +73,7 @@ public class GameTexts : ScriptableObject
     public string face = "얼굴";
     public string hand = "손";
     public string equipped = "장착 중";
+    public string maxLevel = "최고 레벨";
 
     [Header("Merge Panel")]
     [TextArea(2, 4)]
