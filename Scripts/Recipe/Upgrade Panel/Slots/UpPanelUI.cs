@@ -110,6 +110,7 @@ public class UpPanelUI : MonoBehaviour
     {
         // 경고 메시지의 타이프라이터 효과
         TMP_Typewriter warning = confirmationWarningText.GetComponent<TMP_Typewriter>();
+        confirmationWarningText.text = LocalizationManager.Game.fuseTheseTwo; // ← 직접 세팅
         warning.ResetMaxVisibleChar();
 
         // 타이핑 소리와 함께 시작

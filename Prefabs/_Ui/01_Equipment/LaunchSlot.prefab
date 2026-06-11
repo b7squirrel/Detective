@@ -1119,6 +1119,7 @@ GameObject:
   - component: {fileID: 2285384057925765407}
   - component: {fileID: 1392990524637834055}
   - component: {fileID: 5900621659108581681}
+  - component: {fileID: 2783899367339821170}
   m_Layer: 5
   m_Name: Equipped Text
   m_TagString: Untagged
@@ -1242,6 +1243,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2783899367339821170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3328501372827721579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 64
 --- !u!1 &3447987350479314367
 GameObject:
   m_ObjectHideFlags: 0
@@ -3033,6 +3047,7 @@ MonoBehaviour:
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
   ignoreButtonEffectAnim: 0
+  ignoreSoundOnce: 0
 --- !u!95 &8706233143667944189
 Animator:
   serializedVersion: 5

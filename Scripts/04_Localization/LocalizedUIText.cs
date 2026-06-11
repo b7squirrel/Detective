@@ -159,6 +159,22 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.coinFrenzy;
             case UITextKey.EXP:
                 return LocalizationManager.Game.exp;
+            case UITextKey.Loading:
+                return LocalizationManager.Game.loading;
+            case UITextKey.Congratulations:
+                return LocalizationManager.Game.congratulations;
+            case UITextKey.Failed:
+                return LocalizationManager.Game.failed;
+            case UITextKey.KillBonus:
+                return LocalizationManager.Game.killBonus;
+            case UITextKey.StageReward:
+                return LocalizationManager.Game.stageReward;
+            case UITextKey.GreatJob:
+                return LocalizationManager.Game.greatJob;
+            case UITextKey.SoClose:
+                return LocalizationManager.Game.soClose;
+            case UITextKey.FuseTheseTwo:
+                return LocalizationManager.Game.fuseTheseTwo;
             default:
                 return key.ToString();
         }
@@ -237,6 +253,13 @@ public enum UITextKey
     TapToClaim,
     ComposedBy,
     CoinFrenzy,
-    EXP
-
+    EXP,
+    Loading,
+    Congratulations,
+    Failed,
+    KillBonus,
+    StageReward,
+    GreatJob,
+    SoClose,
+    FuseTheseTwo
 }

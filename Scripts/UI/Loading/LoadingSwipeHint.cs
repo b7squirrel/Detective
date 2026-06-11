@@ -4,7 +4,6 @@ using TMPro;
 public class LoadingSwipeHint : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI hintText;
-    [SerializeField] private string fallbackText = "로딩 중...";
     
     private void Start()
     {
@@ -26,11 +25,6 @@ public class LoadingSwipeHint : MonoBehaviour
         if (LocalizationManager.IsInitialized && LocalizationManager.Game != null)
         {
             hintText.text = LocalizationManager.Game.GetRandomHint();
-        }
-        else
-        {
-            // 폴백 텍스트 사용
-            hintText.text = fallbackText;
         }
     }
 }

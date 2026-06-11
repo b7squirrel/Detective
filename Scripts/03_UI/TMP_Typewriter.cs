@@ -29,9 +29,8 @@ public class TMP_Typewriter : MonoBehaviour
     public void Play()
     {
         if (textUI == null) return;
-
         Stop();
-
+        textUI.ForceMeshUpdate(); // ← 여기서 먼저 강제 업데이트
         typingCo = StartCoroutine(TypeRoutine());
     }
 
@@ -60,7 +59,6 @@ public class TMP_Typewriter : MonoBehaviour
     IEnumerator TypeRoutine()
     {
         isPlaying = true;
-        textUI.ForceMeshUpdate();
         int totalChars = textUI.textInfo.characterCount;
         textUI.maxVisibleCharacters = 0;
 

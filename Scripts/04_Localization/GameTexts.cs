@@ -71,6 +71,7 @@ public class GameTexts : ScriptableObject
     [Header("Merge Panel")]
     [TextArea(2, 4)]
     public string unequipBeforeMerging = "머지를 진행하면 재료 카드에 장착된 장비가 자동으로 해제됩니다.";
+    public string fuseTheseTwo = "두 카드를 합칠까요?";
     public string UseForMerge = "사용";
     public string Cancel = "취소";
     public string Warning = "경고";
@@ -107,6 +108,7 @@ public class GameTexts : ScriptableObject
     public string duckChallenge = "도전 오리!!";
     public string wave = "웨이브";
     public string survivalTime = "생존 시간";
+    public string currentRecord = "현재 기록";
     public string bestWave = "최고 기록";
     public string nextTarget = "다음 목표";
     public string stage = "스테이지";
@@ -118,6 +120,16 @@ public class GameTexts : ScriptableObject
     public string composedBy = "작곡";
     public string coinFrenzy = "코인 파티!";
     public string exp = "경험치";
+
+    [Header("Result")]
+    public string congratulations = "축하해요!";
+    public string failed = "실패...";
+    public string challengeResult = "도전 결과";
+    public string killBonus = "적 처치 보상";
+    public string waveBonus = "웨이브 보상";
+    public string stageReward = "스테이지 보상!";
+    public string greatJob = "참 잘했어요!";
+    public string soClose = "아쉬워요...";
 
     [Header("Buff Messages")]
     public string buffSpeedBoost = "빠른 발!";

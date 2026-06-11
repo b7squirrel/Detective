@@ -101,12 +101,13 @@ public class ResultPanel : MonoBehaviour
 
         ResetRecs(); // ← 여기서 카드 Hide도 같이 처리됨
 
-        string title = isWinningStage ? "축하해요!" : "실패...";
-        string stamp = isWinningStage ? "참\n잘했어요!" : "아쉬워요..";
+        var g = LocalizationManager.Game;
+        string title = isWinningStage ? g.congratulations : g.failed;
+        string stamp = isWinningStage ? g.greatJob : g.soClose;
         titleText.text = title;
         killText.text = killNum.ToString();
         coinText.text = killGold.ToString();
-        stageNumberText.text = stageNum.ToString();
+        stageNumberText.text = LocalizationManager.Game.stage + " " + stageNum.ToString();
         stampText.text = stamp;
 
         Sequence seq = DOTween.Sequence();
@@ -144,10 +145,10 @@ public class ResultPanel : MonoBehaviour
             Logger.Log($"[RewardCard] killGold={killGold}, clearBonus={clearBonus}, isWinning={isWinningStage}");
 
             // if (killGold > 0)
-                killRewardCard.Initialize("적 처치 보상", goldSprite, killGold, delay: 0f);
+                killRewardCard.Initialize(g.killBonus, goldSprite, killGold, delay: 0f);
 
             // if (isWinningStage)
-                clearRewardCard.Initialize("스테이지 보상", goldSprite, clearBonus, delay: 0.2f);
+                clearRewardCard.Initialize(g.stageReward, goldSprite, clearBonus, delay: 0.2f);
         });
 
         // Stamp
@@ -181,11 +182,13 @@ public class ResultPanel : MonoBehaviour
         bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
 
         ResetRecs();
-        titleText.text = "도전 결과";
+        var g = LocalizationManager.Game;
+        titleText.text = g.challengeResult;
         killText.text = killNum.ToString();
         coinText.text = infiniteGold.ToString(); // ← coinNum → infiniteGold
-        survivalTimeText.text = survivalTime;
-        bestRecordText.text = bestRecord;
+        survivalTimeTitleText.text = g.currentRecord;
+        bestRecordTitleText.text = g.bestWave;
+        stampText.text = g.greatJob;
 
         bestRecordCircle.SetActive(false);
 
@@ -349,11 +352,12 @@ public class ResultPanel : MonoBehaviour
         seq.AppendInterval(0.3f);
         seq.AppendCallback(() =>
         {
+            var g = LocalizationManager.Game;
             // if (killGold > 0)
-                killRewardCard.Initialize("적 처치 보상", goldSprite, killGold, delay: 0f);
+                killRewardCard.Initialize(g.killBonus, goldSprite, killGold, delay: 0f);
 
             // if (waveBonus > 0)
-                clearRewardCard.Initialize("웨이브 보상", goldSprite, waveBonus, delay: 0.4f);
+                clearRewardCard.Initialize(g.waveBonus, goldSprite, waveBonus, delay: 0.4f);
         });
 
         // Stamp

@@ -50,7 +50,7 @@ public class MusicCreditManager : MonoBehaviour
         // 음악 크레딧 UI 표시
         if (creditUI == null) creditUI = FindObjectOfType<MusicCreditUI>();
         string title = "\"" + musicType.GetDescription() + "\"";
-        string credit = "작곡 " + creditData.AudioCredits[index].Credit;
+        string credit = LocalizationManager.Game.composedBy + " " + creditData.AudioCredits[index].Credit;
         StartCoroutine(ShowCreditUI(title, credit, index));
     }
 
@@ -106,7 +106,7 @@ public class MusicCreditManager : MonoBehaviour
 
         AudioCredit currentMusic = creditData.InfiniteModeAudioCredits[musicIndex];
         string title = "\"" + currentMusic.MusicType.GetDescription() + "\"";
-        string credit = "작곡 " + currentMusic.Credit;
+        string credit = LocalizationManager.Game.composedBy + " " + currentMusic.Credit;
 
         // ⭐⭐⭐ 웨이브 1 또는 6의 배수 + 1 웨이브(7, 13, 19...)에서만 크레딧 UI 표시
         bool showCredit = (currentWave == 1) || ((currentWave - 1) % 6 == 0 && currentWave > 1);
@@ -144,7 +144,7 @@ public class MusicCreditManager : MonoBehaviour
 
         AudioCredit nextMusic = creditData.InfiniteModeAudioCredits[nextMusicIndex];
         string title = "\"" + nextMusic.MusicType.GetDescription() + "\"";
-        string credit = "작곡 " + nextMusic.Credit;
+        string credit = LocalizationManager.Game.composedBy + " " + nextMusic.Credit;
 
         // 새로운 음악 재생 및 크레딧 표시
         StartCoroutine(ShowCreditUI(title, credit, nextMusicIndex, true, true));
