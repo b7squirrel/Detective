@@ -17,9 +17,25 @@ public class GachaPanelManager : MonoBehaviour
     private RectTransform pendingGemPoint;
     private int pendingGoldAmount;
 
+    [Header("타이틀")]
+    [SerializeField] TMPro.TextMeshProUGUI titleText;
+
     public void InitGachaPanel(List<CardData> cards)
     {
         if (mainMenuManager == null) mainMenuManager = FindObjectOfType<MainMenuManager>();
+
+        // 타이틀 세팅
+        var g = LocalizationManager.Game;
+        bool isItem = cards.Count > 0 && cards[0].Type == "Item";
+        if (isItem)
+        {
+            titleText.text = cards.Count == 1 ? g.newItem : g.newItems;
+        }
+        else
+        {
+            titleText.text = cards.Count == 1 ? g.newFriend : g.newFriends;
+        }
+
         gachaField.GenerateAllCardsOfType(cards);
         ActivateButtonTapToCon(true);
 

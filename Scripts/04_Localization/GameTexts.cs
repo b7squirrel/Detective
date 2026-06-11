@@ -54,6 +54,12 @@ public class GameTexts : ScriptableObject
     public string singleDraw = "1회 뽑기";
     public string tenXDraw = "10회 뽑기";
     public string watchAdToDraw = "광고 보고 뽑기";
+    
+    [Header("Gacha")]
+    public string newFriend = "새로운 친구";
+    public string newFriends = "새로운 친구들";
+    public string newItem = "새로운 아이템";
+    public string newItems = "새로운 아이템";
 
     [Header("Launch Panel")]
     public string tabToSelectLead = "탭해서 리드 오리 선택.";
