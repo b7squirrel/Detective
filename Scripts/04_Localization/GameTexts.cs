@@ -56,10 +56,16 @@ public class GameTexts : ScriptableObject
     public string watchAdToDraw = "광고 보고 뽑기";
     
     [Header("Gacha")]
-    public string newFriend = "새로운 친구";
-    public string newFriends = "새로운 친구들";
-    public string newItem = "새로운 아이템";
-    public string newItems = "새로운 아이템";
+    public string newFriend = "새로운 아기 오리!";
+    public string newFriends = "새로운 아기 오리들!";
+    public string newItem = "새로운 아이템!";
+    public string newItems = "새로운 아이템!";
+
+    [Header("Egg")]
+    public string tap = "탭";
+    public string rookieDuck = "초보 오리";
+    public string braveDuck = "용감한 오리";
+    public string superDuck = "슈퍼 오리";
 
     [Header("Launch Panel")]
     public string tabToSelectLead = "탭해서 리드 오리 선택.";

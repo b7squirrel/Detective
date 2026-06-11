@@ -179,8 +179,18 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.maxLevel;
             case UITextKey.NoItemsToEquip:
                 return LocalizationManager.Game.noItemsToEquip;
-                case UITextKey.Warning:
+            case UITextKey.Warning:
                 return LocalizationManager.Game.Warning;
+            case UITextKey.NewFriend:
+                return LocalizationManager.Game.newFriend;
+                case UITextKey.Tap:
+                return LocalizationManager.Game.tap;
+                case UITextKey.RookieDuck:
+                return LocalizationManager.Game.rookieDuck;
+                case UITextKey.BraveDuck:
+                return LocalizationManager.Game.braveDuck;
+                case UITextKey.SuperDuck:
+                return LocalizationManager.Game.superDuck;
             default:
                 return key.ToString();
         }
@@ -269,5 +279,10 @@ public enum UITextKey
     SoClose,
     FuseTheseTwo,
     MaxLevel,
-    NoItemsToEquip
+    NoItemsToEquip,
+    NewFriend,
+    Tap,
+    RookieDuck,
+    BraveDuck,
+    SuperDuck
 }
