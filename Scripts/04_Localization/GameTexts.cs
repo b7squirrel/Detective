@@ -135,6 +135,10 @@ public class GameTexts : ScriptableObject
     public string coinFrenzy = "코인 파티!";
     public string exp = "경험치";
 
+    [Header("Upgrade Panel")]
+    public string chooseASkill = "스킬을 선택해 주세요.";
+    public string synergy = "시너지";
+
     [Header("Result")]
     public string congratulations = "축하해요!";
     public string failed = "실패...";

@@ -191,6 +191,10 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.braveDuck;
                 case UITextKey.SuperDuck:
                 return LocalizationManager.Game.superDuck;
+                case UITextKey.ChooseASkill:
+                return LocalizationManager.Game.chooseASkill;
+                case UITextKey.Synergy:
+                return LocalizationManager.Game.synergy;
             default:
                 return key.ToString();
         }
@@ -284,5 +288,7 @@ public enum UITextKey
     Tap,
     RookieDuck,
     BraveDuck,
-    SuperDuck
+    SuperDuck,
+    ChooseASkill,
+    Synergy
 }
