@@ -177,6 +177,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.fuseTheseTwo;
             case UITextKey.MaxLevel:
                 return LocalizationManager.Game.maxLevel;
+            case UITextKey.NoItemsToEquip:
+                return LocalizationManager.Game.noItemsToEquip;
             default:
                 return key.ToString();
         }
@@ -264,5 +266,6 @@ public enum UITextKey
     GreatJob,
     SoClose,
     FuseTheseTwo,
-    MaxLevel
+    MaxLevel,
+    NoItemsToEquip
 }

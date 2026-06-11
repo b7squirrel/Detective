@@ -74,6 +74,7 @@ public class GameTexts : ScriptableObject
     public string hand = "손";
     public string equipped = "장착 중";
     public string maxLevel = "최고 레벨";
+    public string noItemsToEquip = "장착할 아이템이 없어요!";
 
     [Header("Merge Panel")]
     [TextArea(2, 4)]
