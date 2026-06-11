@@ -82,7 +82,7 @@ public class GameTexts : ScriptableObject
     public string fuseTheseTwo = "두 카드를 합칠까요?";
     public string UseForMerge = "사용";
     public string Cancel = "취소";
-    public string Warning = "경고";
+    public string Warning = "주의!!";
 
     [Header("기타 패널 제목")]
     public string Gear = "장비";

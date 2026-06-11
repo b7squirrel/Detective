@@ -179,6 +179,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.maxLevel;
             case UITextKey.NoItemsToEquip:
                 return LocalizationManager.Game.noItemsToEquip;
+                case UITextKey.Warning:
+                return LocalizationManager.Game.Warning;
             default:
                 return key.ToString();
         }
