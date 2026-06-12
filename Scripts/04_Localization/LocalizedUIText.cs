@@ -183,18 +183,20 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.Warning;
             case UITextKey.NewFriend:
                 return LocalizationManager.Game.newFriend;
-                case UITextKey.Tap:
+            case UITextKey.Tap:
                 return LocalizationManager.Game.tap;
-                case UITextKey.RookieDuck:
+            case UITextKey.RookieDuck:
                 return LocalizationManager.Game.rookieDuck;
-                case UITextKey.BraveDuck:
+            case UITextKey.BraveDuck:
                 return LocalizationManager.Game.braveDuck;
-                case UITextKey.SuperDuck:
+            case UITextKey.SuperDuck:
                 return LocalizationManager.Game.superDuck;
-                case UITextKey.ChooseASkill:
+            case UITextKey.ChooseASkill:
                 return LocalizationManager.Game.chooseASkill;
-                case UITextKey.Synergy:
+            case UITextKey.Synergy:
                 return LocalizationManager.Game.synergy;
+            case UITextKey.SynergyItem:
+                return LocalizationManager.Game.synergyItem;
             default:
                 return key.ToString();
         }
@@ -290,5 +292,6 @@ public enum UITextKey
     BraveDuck,
     SuperDuck,
     ChooseASkill,
-    Synergy
+    Synergy,
+    SynergyItem
 }

@@ -176,7 +176,7 @@ public class EggPanelManager : MonoBehaviour
         UpgradeData newWd = GetAcquireData(currentWeaponName, currentGrade);
 
         // 이름 반영
-        oriName.GetComponent<TMPro.TextMeshProUGUI>().text = newWd.weaponData.DisplayName;
+        oriName.GetComponent<TMPro.TextMeshProUGUI>().text = LocalizationManager.Char.GetWeaponDisplayName(newWd.weaponData.Name);
 
         // 장비 스프라이트 설정
         Init(newWd.weaponData);
