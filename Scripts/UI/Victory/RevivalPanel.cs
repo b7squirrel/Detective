@@ -70,7 +70,7 @@ public class RevivalPanel : MonoBehaviour
         int remaining = countdownSeconds;
         while (remaining > 0)
         {
-            countdownText.text = $"{remaining}초";
+            countdownText.text = $"{remaining}";
 
             if (remaining > 5)
                 countdownText.color = Color.yellow;

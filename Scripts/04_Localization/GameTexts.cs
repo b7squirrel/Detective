@@ -68,6 +68,11 @@ public class GameTexts : ScriptableObject
     public string superDuck = "슈퍼 오리";
     public string synergyItem = "시너지 아이템";
 
+    [Header("Revival")]
+    public string getBackUp = "다시 일어나요!";
+    public string giveUp = "게임 종료";
+    public string watchAdnRevive = "광고 보고 부활";
+
     [Header("Launch Panel")]
     public string tabToSelectLead = "탭해서 리드 오리 선택.";
     public string startButton = "시작!";

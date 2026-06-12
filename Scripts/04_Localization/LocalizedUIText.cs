@@ -197,6 +197,12 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.synergy;
             case UITextKey.SynergyItem:
                 return LocalizationManager.Game.synergyItem;
+            case UITextKey.GetBackUp:
+                return LocalizationManager.Game.getBackUp;
+            case UITextKey.WatchAdnRevive:
+                return LocalizationManager.Game.watchAdnRevive;
+            case UITextKey.GiveUp:
+                return LocalizationManager.Game.giveUp;
             default:
                 return key.ToString();
         }
@@ -293,5 +299,8 @@ public enum UITextKey
     SuperDuck,
     ChooseASkill,
     Synergy,
-    SynergyItem
+    SynergyItem,
+    GetBackUp,
+    WatchAdnRevive,
+    GiveUp
 }
