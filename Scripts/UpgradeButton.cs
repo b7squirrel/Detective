@@ -42,8 +42,6 @@ public class UpgradeButton : MonoBehaviour
 
     void OnEnable()
     {
-
-
         ClearLevelstars();
         levelBar.SetActive(false);
         unSelectionPanel.SetActive(false);
@@ -52,11 +50,16 @@ public class UpgradeButton : MonoBehaviour
 
     public void Set(UpgradeData upgradeData)
     {
+        if (upgradeData == null)
+        {
+            Debug.LogError("[UpgradeButton] upgradeData가 null입니다!");
+            return;
+        }
+
         if (anim == null) anim = GetComponent<Animator>();
         anim.SetTrigger("Reset");
 
         titleGroup.SetActive(true);
-        // 일단 비활성화 하고 더 아래쪽에서 조건에 따라 표시하거나 비활성화 한채로 두기
         newWeaponText.SetActive(false);
         newItemText.SetActive(false);
 
@@ -65,29 +68,31 @@ public class UpgradeButton : MonoBehaviour
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
 
             upgradePanelWeaponIcon.gameObject.SetActive(true);
-            upgradePanelWeaponIcon.InitWeaponIcon(upgradeData.weaponData); // 오리 아이콘 셋업
+            upgradePanelWeaponIcon.InitWeaponIcon(upgradeData.weaponData);
 
-            if(oriIconAnim == null) oriIconAnim = upgradePanelWeaponIcon.GetComponentInChildren<Animator>();
+            if (oriIconAnim == null) oriIconAnim = upgradePanelWeaponIcon.GetComponentInChildren<Animator>();
 
-            // 애니메이션 속도 조절
             float animationSpeed = PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite ? 1.7f : 1f;
             oriIconAnim.speed = animationSpeed;
 
-            // 시너지 업그레이드일 때는 시너지 이름 표시
             if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade)
-            {
-                upgradeName.text = upgradeData.weaponData.DisplayName;
-            }
+                upgradeName.text = LocalizationManager.Char.GetWeaponDisplayName(upgradeData.weaponData.Name);
             else
-            {
-                upgradeName.text = upgradeData.weaponData.SynergyDispName;
-            }
+                upgradeName.text = LocalizationManager.Char.GetWeaponSynergyName(upgradeData.weaponData.Name);
         }
         else // 오리가 아닌 카드들이라면
         {
-            if (upgradeData == null) Debug.Log("upgrade Data를 넘겨받지 못했습니다.");
-            if (upgradeData.item == null) Debug.Log("upgrade Data의 item이 Null입니다..");
-            if (upgradeData.item.charImage == null) Debug.Log("upgrade Data의 item의 charImage가 Null입니다...");
+            if (upgradeData.item == null)
+            {
+                Debug.LogError("[UpgradeButton] upgradeData.item이 null입니다!");
+                return;
+            }
+
+            Debug.Log($"[UpgradeButton] item.name = {upgradeData.item.name}");
+
+            if (upgradeData.item.charImage == null)
+                Debug.Log("upgrade Data의 item의 charImage가 Null입니다...");
+
             iconItem.sprite = upgradeData.item.charImage;
             iconItem.preserveAspect = true;
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 1f);
@@ -95,15 +100,10 @@ public class UpgradeButton : MonoBehaviour
             iconItem.SetNativeSize();
 
             if (upgradeData.item.DisplayName != "")
-                upgradeName.text = upgradeData.item.DisplayName;
+                upgradeName.text = LocalizationManager.Upgrade.GetItemName(upgradeData.item.name);
         }
-        //if (upgradeData.DisplayName != "")
-        //{
-        //    upgradeName.text = upgradeData.weaponData.DisplayName;
-        //    //upgradeNameShadow.text = upgradeData.Name;
-        //}
 
-        description.text = upgradeData.description;
+        description.text = LocalizationManager.Upgrade.GetDescription(upgradeData.name);
 
         synergyGroup.SetActive(false);
         synergyCouipleIcon.color = new Color(1, 1, 1, 0);
@@ -111,11 +111,11 @@ public class UpgradeButton : MonoBehaviour
 
         levelBar.SetActive(true);
 
-        if (upgradeData.weaponData != null) // 넘겨 받은 업그레이드 데이터가 Weapon 이라면
+        if (upgradeData.weaponData != null)
         {
-            if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade) // 시너지 업그레이드가 아닌 경우에만 시너지 커플 표시
+            if (upgradeData.upgradeType != UpgradeType.SynergyUpgrade)
             {
-                synergyGroup.SetActive(true); // 일반 오리일 때만 시너지 포스트잇 표시
+                synergyGroup.SetActive(true);
                 synergyCouipleIcon.color = new Color(1, 1, 1, 1);
                 synergyCouipleIcon.sprite = upgradeData.weaponData.SynergyItem.charImage;
                 synergyCouipleIcon.preserveAspect = true;
@@ -123,9 +123,8 @@ public class UpgradeButton : MonoBehaviour
             }
         }
 
-        if (upgradeData.upgradeType == UpgradeType.WeaponUpgrade) // 무기 업그레이드일 경우
+        if (upgradeData.upgradeType == UpgradeType.WeaponUpgrade)
         {
-            // 별 5개, 연두 패널
             if (weaponContainer == null) weaponContainer = Player.instance.GetComponent<WeaponContainer>();
             SetLevelStarAlpha(weaponContainer.GetWeaponLevel(upgradeData.weaponData), StaticValues.MaxGrade);
             panel_item.SetActive(false);
@@ -133,14 +132,12 @@ public class UpgradeButton : MonoBehaviour
             panel_weapon.SetActive(true);
             panel_instant_items.SetActive(false);
 
-            // 처음 획득한 카드라면 새로운 오리! 텍스트 표시
             if (weaponContainer.GetWeaponLevel(upgradeData.weaponData) == 0) newWeaponText.SetActive(true);
 
             titleSticker.color = weaponStickerColor;
         }
         else if (upgradeData.upgradeType == UpgradeType.ItemUpgrade || upgradeData.upgradeType == UpgradeType.ItemGet)
         {
-            // 별 3개, 파란 패널
             if (passiveItems == null) passiveItems = Player.instance.GetComponent<PassiveItems>();
             SetLevelStarAlpha(passiveItems.GetItemLevel(upgradeData.item), StaticValues.MaxItemGrade);
             panel_item.SetActive(true);
@@ -148,14 +145,12 @@ public class UpgradeButton : MonoBehaviour
             panel_weapon.SetActive(false);
             panel_instant_items.SetActive(false);
 
-            // 처음 획득한 카드라면 새로운 아이템! 텍스트 표시
             if (passiveItems.GetItemLevel(upgradeData.item) == 0) newItemText.SetActive(true);
 
             titleSticker.color = itemStickerColor;
         }
         else if (upgradeData.upgradeType == UpgradeType.SynergyUpgrade)
         {
-            Debug.Log("Synergy");
             panel_item.SetActive(false);
             panel_weapon.SetActive(false);
             panel_synergy.SetActive(true);

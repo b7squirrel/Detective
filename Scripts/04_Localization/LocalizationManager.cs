@@ -16,15 +16,21 @@ public class LocalizationManager : MonoBehaviour
     [Header("Character Texts")]
     [SerializeField] private CharTexts koreanCharTexts;
     [SerializeField] private CharTexts englishCharTexts;
-    
+
     [Header("Item Texts")]
     [SerializeField] private ItemTexts koreanItemTexts;
     [SerializeField] private ItemTexts englishItemTexts;
-    
+
     [Header("Achievement Texts")]
     [SerializeField] private AchievementTexts koreanAchievementTexts;
     [SerializeField] private AchievementTexts englishAchievementTexts;
-    
+
+    [Header("Upgrade Texts")]
+    [SerializeField] private UpgradeTexts koreanUpgradeTexts;
+    [SerializeField] private UpgradeTexts englishUpgradeTexts;
+
+    public static UpgradeTexts Upgrade { get; private set; }
+
     [Header("Debug")]
     [SerializeField] private Language currentLanguage;
     
@@ -71,9 +77,10 @@ public class LocalizationManager : MonoBehaviour
         Char = language == Language.Korean ? koreanCharTexts : englishCharTexts;
         Item = language == Language.Korean ? koreanItemTexts : englishItemTexts;
         Achievement = language == Language.Korean ? koreanAchievementTexts : englishAchievementTexts;
+        Upgrade = language == Language.Korean ? koreanUpgradeTexts : englishUpgradeTexts;
         
         // Null 체크
-        if (Game == null || Char == null || Item == null || Achievement == null)
+        if (Game == null || Char == null || Item == null || Achievement == null || Upgrade == null)
         {
             Debug.LogError("LocalizationManager: One or more Texts assets are not assigned!");
             return;
