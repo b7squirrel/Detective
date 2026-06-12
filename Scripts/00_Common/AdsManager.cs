@@ -347,6 +347,10 @@ public class AdsManager : SingletonBehaviour<AdsManager>
             {
                 Logger.Log("Rewarded DailyFreeGem");
                 onRewarded?.Invoke(); // 리워드 지급만 기록, 게임 재개 X
+
+                // ⭐ 광고 뽑기 업적
+                if (AchievementManager.Instance != null)
+                    AchievementManager.Instance.AddProgress(AchievementType.AD_DRAW);
             });
         }
         else

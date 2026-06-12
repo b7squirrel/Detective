@@ -13,117 +13,75 @@ MonoBehaviour:
   m_Name: AchievementTexts English
   m_EditorClassIdentifier: 
   achievements:
-  - achievementId: FIFTH_BOSS
-    title: Fifth Boss Hunt
-    description: Defeat Queen Scorcher
-  - achievementId: FIRST_BOSS
-    title: First Boss Hunt
-    description: Defeat Queen Bubble
-  - achievementId: FORTH_BOSS
-    title: Fourth Boss Hunt
-    description: Defean Queen Zapper
-  - achievementId: KILL_100
-    title: Novice Duck Hunter
-    description: ' Eliminate 100 Enemies'
-  - achievementId: KILL_1000
-    title: Expert Duck Hunter
-    description: ' Eliminate 1000 Enemies'
-  - achievementId: KILL_10000
-    title: Legend Duck Hunter
-    description: ' Eliminate 10000 Enemies'
-  - achievementId: MIDBOSS_10
-    title: Bearded Prince Hunter
-    description: Defeat Bearded Princes 10 times
-  - achievementId: MIDBOSS_30
-    title: Bearded Prince Hunter
-    description: Defeat Bearded Princes 30 times
-  - achievementId: MIDBOSS_5
-    title: Bearded Prince Hunter
-    description: Defeat Bearded Princes 5 times
-  - achievementId: MIDBOSS_50
-    title: Bearded Prince Hunter
-    description: Defeat Bearded Princes 50 times
-  - achievementId: NO_DEATH_CLEAR
-    title: Impossible Mission
-    description: Clear stage without taking damage
-  - achievementId: RANGED_200
-    title: Far-Sighted Duck
-    description: Eliminate 200 ranged enemies
-  - achievementId: SECOND_BOSS
-    title: Second Boss Hunt
-    description: Defeat Queen Roller
-  - achievementId: SLIME_500
-    title: Slime Cleanup
-    description: Eliminate 500 slimes
-  - achievementId: THIRD_BOSS
-    title: Third Boss Hunt
-    description: Defeat Queen Driller
-  - achievementId: "\uAD34\uC218_\uC624\uB9AC_\uB9CC\uB098\uAE30_381ac211"
-    title: New Friends
-    description: Meet Laser Duck
-  - achievementId: "\uAE30\uD0C0_\uC624\uB9AC_\uB9CC\uB098\uAE30_4ddb57ae"
-    title: New Friends
-    description: Meet Guitar Duck
-  - achievementId: "\uC694\uC694_\uC624\uB9AC_\uB9CC\uB098\uAE30_de542113"
-    title: New Friends
-    description: Meet Yo-Yo Duck
-  - achievementId: "\uC885\uC774_\uC811\uAE30_\uC624\uB9AC_\uB9CC\uB098\uAE30_c305d7f9"
-    title: New Friends
-    description: Meet Origami Duck
-  - achievementId: "\uCD95\uAD6C_\uC624\uB9AC_\uB9CC\uB098\uAE30_279f37c7"
-    title: New Friends
-    description: Meet Soccer Duck
-  - achievementId: "\uCE74\uC6B0_\uC624\uB9AC_\uB9CC\uB098\uAE30_4e128cea"
-    title: New Friends
-    description: Meet Cow Duck
-  - achievementId: "\uD14C\uB2C8\uC2A4_\uC624\uB9AC_\uB9CC\uB098\uAE30_eaa84f65"
-    title: New Friends
-    description: Meet Tennis Duck
-  - achievementId: "\uD14C\uC2AC\uB77C_\uC624\uB9AC_\uB9CC\uB098\uAE30_3face752"
-    title: New Friends
-    description: Meet Volt Duck
-  - achievementId: daily_kill_30
-    title: Today's Hunt
-    description: Defeat 30 slimes
-  - achievementId: daily_survive_180
-    title: Survival Training
-    description: Survive for 3 minutes
-  - achievementId: daily_weapon_5
-    title: Weapon Collector
-    description: Acquire 5 weapons
-  - achievementId: daily_shop_10
-    title: Chest Hunter
-    description: Open 10 reward chests
-  - achievementId: daily_play_1
-    title: Today's Challenge
+  - achievementId: 02_ad_draw_25
+    title: Box Master
+    description: Open the daily ad box 25 times
+  - achievementId: 10_STAGE_REACH_12
+    title: Adventurer
+    description: Reach Stage 12
+  - achievementId: 10_STAGE_REACH_18
+    title: Veteran Duck
+    description: Reach Stage 18
+  - achievementId: 10_STAGE_REACH_24
+    title: Legendary Duck
+    description: Reach Stage 24
+  - achievementId: 10_STAGE_REACH_6
+    title: First Steps
+    description: Reach Stage 6
+  - achievementId: 11_Boss_Defeat_1
+    title: Royal Encounter
+    description: Defeat the Slime Queen 1 time
+  - achievementId: 11_Boss_Defeat_2
+    title: Twice is Too Much!
+    description: Defeat the Slime Queen 2 times
+  - achievementId: 11_Boss_Defeat_3
+    title: Royal Nemesis
+    description: Defeat the Slime Queen 3 times
+  - achievementId: 11_Boss_Defeat_4
+    title: Crown Collector
+    description: Defeat the Slime Queen 4 times
+  - achievementId: 11_Boss_Defeat_5
+    title: The Queen is Scared!
+    description: Defeat the Slime Queen 5 times
+  - achievementId: daily_ad_draw_1
+    title: Lucky Beginner
+    description: Open the daily ad box 1 time
+  - achievementId: daily_ad_draw_5
+    title: Box Collector
+    description: Open the daily ad box 5 times
+  - achievementId: daily_kill_1500
+    title: Daily Sweep 2
+    description: Defeat 1500 slimes
+  - achievementId: daily_kill_3000
+    title: Daily Sweep 3
+    description: Defeat 3000 slimes
+  - achievementId: daily_kill_500
+    title: Daily Sweep 1
+    description: Defeat 500 slimes
+  - achievementId: daily_stage_clear_1
+    title: Today's Mission!
     description: Clear 1 stage
-  - achievementId: INF_D1_Wave5
-    title: "\uC6E8\uC774\uBE0C 5 \uB3C4\uB2EC"
-    description: "\uC6E8\uC774\uBE0C 5\uAE4C\uC9C0 \uC0DD\uC874"
-  - achievementId: INF_D2_Kill100
-    title: "\uC801 100\uB9C8\uB9AC \uCC98\uCE58"
-    description: "\uC801 100\uB9C8\uB9AC\uB97C \uCC98\uCE58"
-  - achievementId: INF_D3_Survive180
-    title: "3\uBD84 \uC0DD\uC874"
-    description: "3\uBD84\uAC04 \uC0DD\uC874"
-  - achievementId: INF_W1_Wave10
-    title: "\uC6E8\uC774\uBE0C 10 \uB3C4\uB2EC"
-    description: "\uC6E8\uC774\uBE0C 10\uAE4C\uC9C0 \uC0DD\uC874"
-  - achievementId: INF_W2_Kill500
-    title: "\uC801 500\uB9C8\uB9AC \uCC98\uCE58"
-    description: "\uC801 500\uB9C8\uB9AC\uB97C \uCC98\uCE58"
-  - achievementId: INF_W3_Wave20
-    title: "\uC6E8\uC774\uBE0C 20 \uB3C4\uB2EC"
-    description: "\uC6E8\uC774\uBE0C 20\uAE4C\uC9C0 \uC0DD\uC874"
-  - achievementId: INF_W4_Kill1500
-    title: "\uC801 1500\uB9C8\uB9AC \uCC98\uCE58"
-    description: "\uC801 1500\uB9C8\uB9AC\uB97C \uCC98\uCE58"
-  - achievementId: INF_W5_Wave30
-    title: "\uC6E8\uC774\uBE0C 30 \uB3C4\uB2EC"
-    description: "\uC6E8\uC774\uBE0C 30\uAE4C\uC9C0 \uC0DD\uC874"
-  - achievementId: INF_W6_Survive600
-    title: "10\uBD84 \uC0DD\uC874"
-    description: "10\uBD84\uAC04 \uC0DD\uC874"
+  - achievementId: daily_stage_clear_3
+    title: Nonstop Duck
+    description: Clear 50 stages
+  - achievementId: daily_survive_3
+    title: Hang in There!
+    description: Survive for 30 minutes
+  - achievementId: daily_survive_30
+    title: Iron Duck!
+    description: Survive for 30 minutes
   - achievementId: tutorial_merge
     title: First Merge!
-    description: Merge two cards for the first time
+    description: Merge two cards
+  - achievementId: W_KILL_15000
+    title: Weekly Sweep 2
+    description: Defeat 5000 slimes
+  - achievementId: W_KILL_30000
+    title: Weekly Sweep 3
+    description: Defeat 15000 slimes
+  - achievementId: W_KILL_5000
+    title: Weekly Sweep 1
+    description: Defeat 30000 slimes
+  - achievementId: WEEKLY_STAGE_CLEAR_6
+    title: Nonstop Duck
+    description: Clear 6 stages

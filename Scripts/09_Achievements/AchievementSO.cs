@@ -8,7 +8,11 @@ public enum AchievementType
     SHOP,
     PLAY,
     ETC,
-    WAVE
+    WAVE,
+    STAGE_CLEAR,   // ← 추가
+    STAGE_REACH,   // ← 추가
+    BOSS_DEFEAT,   // ← 추가
+    AD_DRAW        // ← 추가
 }
 
 public enum RewardType

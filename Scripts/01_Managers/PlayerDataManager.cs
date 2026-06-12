@@ -254,6 +254,18 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         int cristalNum = FindObjectOfType<CristalManager>().GetCurrentCristals();
         SetCristalNumberAs(cristalNum);
 
+        // ⭐ 생존 시간 업적 (일반 모드)
+        if (AchievementManager.Instance != null)
+        {
+            StageTime stageTime = FindObjectOfType<StageTime>();
+            if (stageTime != null)
+            {
+                int survivedMinutes = Mathf.FloorToInt(stageTime.GetElapsedTime() / 60f);
+                if (survivedMinutes > 0)
+                    AchievementManager.Instance.SetProgressIfGreaterNormal(AchievementType.SURVIVE, survivedMinutes);
+            }
+        }
+
         FindObjectOfType<PauseManager>().PauseGame();
     }
     // 최고 웨이브 기록, 최고 생존 시간 기록, 골드, 크리스탈 기록 저장
@@ -284,6 +296,14 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         {
             int cristalNum = cristalManager.GetCurrentCristals();
             SetCristalNumberAs(cristalNum);
+        }
+
+        // ⭐ 생존 시간 업적 (무한 모드)
+        if (AchievementManager.Instance != null)
+        {
+            int survivedMinutes = Mathf.FloorToInt(currentTime / 60f);
+            if (survivedMinutes > 0)
+                AchievementManager.Instance.SetProgressIfGreaterNormal(AchievementType.SURVIVE, survivedMinutes);
         }
 
         PauseGame();

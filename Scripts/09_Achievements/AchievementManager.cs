@@ -371,6 +371,22 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
+    // 일반 모드용 - isInfiniteMode 체크 없이 최고값 업데이트
+    public void SetProgressIfGreaterNormal(AchievementType type, int value)
+    {
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.type != type) continue;
+            if (ra.isCompleted) continue;
+
+            if (value > ra.progress)
+            {
+                ra.SetProgressIfGreater(value);
+                SaveAchievement(ra);
+            }
+        }
+    }
+
     // ⭐ 모든 업적 리셋 (디버그용)
     [ContextMenu("Debug 플레이모드 : Reset All Achievements")]
     public void ResetAllAchievements()
