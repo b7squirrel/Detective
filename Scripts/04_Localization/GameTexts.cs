@@ -274,4 +274,10 @@ public class GameTexts : ScriptableObject
         if (gameHints.Length == 0) return "";
         return gameHints[Random.Range(0, gameHints.Length)];
     }
+    // 디버깅 힌트
+    public string GetHint(int index)
+    {
+        if (gameHints.Length == 0) return "";
+        return gameHints[index];
+    }
 }

@@ -4,25 +4,32 @@ using TMPro;
 public class LoadingSwipeHint : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI hintText;
-    
+
+    [Header("디버깅")]
+    [SerializeField] private bool isDebugging;
+    [SerializeField] private int hintIndex;
+
     private void Start()
     {
         UpdateHint();
-        
-        // 언어 변경 이벤트 구독
         LocalizationManager.OnLanguageChanged += UpdateHint;
     }
-    
+
     private void OnDestroy()
     {
-        // 이벤트 구독 해제
         LocalizationManager.OnLanguageChanged -= UpdateHint;
     }
-    
+
     private void UpdateHint()
     {
-        // LocalizationManager 초기화 확인
-        if (LocalizationManager.IsInitialized && LocalizationManager.Game != null)
+        if (!LocalizationManager.IsInitialized || LocalizationManager.Game == null)
+            return;
+
+        if (isDebugging)
+        {
+            hintText.text = LocalizationManager.Game.GetHint(hintIndex);
+        }
+        else
         {
             hintText.text = LocalizationManager.Game.GetRandomHint();
         }
