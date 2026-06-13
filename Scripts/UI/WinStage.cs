@@ -28,9 +28,6 @@ public class WinStage : MonoBehaviour
 
             // 몇 번째 스테이지까지 클리어했는지 (최고값 기록)
             AchievementManager.Instance.SetProgressIfGreaterNormal(AchievementType.STAGE_REACH, clearedStageNum);
-
-            // 누적 보스 처치
-            AchievementManager.Instance.AddProgress(AchievementType.BOSS_DEFEAT);
         }
 
         if (TutorialManager.instance != null &&

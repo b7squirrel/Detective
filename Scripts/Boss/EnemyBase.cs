@@ -833,6 +833,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 AchievementManager.Instance.AddProgress(AchievementType.KILL, 1);
         }
 
+        // ⭐ 보스 처치 업적 (QueenBoss만 카운트)
+        if (bossType == BossType.QueenBoss && AchievementManager.Instance != null)
+        {
+            AchievementManager.Instance.AddProgress(AchievementType.BOSS_DEFEAT);
+        }
+
         Spawner.instance.SubtractEnemyNumber();
         IsSlowed = false;
         finishedSpawn = false;

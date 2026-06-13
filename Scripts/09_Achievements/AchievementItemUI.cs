@@ -39,6 +39,13 @@ public class AchievementItemUI : MonoBehaviour
     void OnDestroy()
     {
         LocalizationManager.OnLanguageChanged -= UpdateText;
+
+        // ⭐ 추가
+        if (ra != null)
+        {
+            ra.OnProgressChanged -= OnProgressChanged;
+            ra.OnCompleted -= OnCompleted;
+        }
     }
 
     void OnEnable()
@@ -54,7 +61,18 @@ public class AchievementItemUI : MonoBehaviour
 
     public void Bind(RuntimeAchievement runtime)
     {
+        // ⭐ 기존 구독 해제 (재바인딩 시 중복 방지)
+        if (ra != null)
+        {
+            ra.OnProgressChanged -= OnProgressChanged;
+            ra.OnCompleted -= OnCompleted;
+        }
+
         ra = runtime;
+
+        // ⭐ 이벤트 구독
+        ra.OnProgressChanged += OnProgressChanged;
+        ra.OnCompleted += OnCompleted;
 
         UpdateText();
 
@@ -91,6 +109,16 @@ public class AchievementItemUI : MonoBehaviour
         });
 
         SetCompleted(runtime.isCompleted);
+        Refresh();
+    }
+    void OnProgressChanged(RuntimeAchievement r)
+    {
+        Refresh();
+    }
+
+    void OnCompleted(RuntimeAchievement r)
+    {
+        SetCompleted(true);
         Refresh();
     }
 

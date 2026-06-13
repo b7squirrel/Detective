@@ -169,8 +169,18 @@ public class AchievementManager : MonoBehaviour
 
     public void Reward(string id, RectTransform pos, RewardType rewardType)
     {
-        if (!runtimeDict.TryGetValue(id, out var ra)) return;
-        if (ra.isRewarded) return;
+        Logger.Log($"[Reward] 호출됨 - id: {id}");  // ⭐ 임시 추가
+
+        if (!runtimeDict.TryGetValue(id, out var ra))
+        {
+            Logger.Log($"[Reward] ID를 찾을 수 없음: {id}");  // ⭐ 임시 추가
+            return;
+        }
+        if (ra.isRewarded)
+        {
+            Logger.Log($"[Reward] 이미 수령함: {id}");  // ⭐ 임시 추가
+            return;
+        }
 
         // ⭐ 추가: pos null 체크
         if (pos == null)
