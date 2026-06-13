@@ -105,6 +105,7 @@ public class GameTexts : ScriptableObject
     public string dailyQuestsTitle = "일일 임무";
     public string weeklyQuestsTitle = "주간 임무";
     public string tapToClaim = "탭 해서 보상 받기";
+    public string minute = "분";
 
     [Header("Daily Reward Panel")]
     public string daily = "일일 보상";

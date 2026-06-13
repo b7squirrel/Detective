@@ -40,6 +40,9 @@ public class CharacterGameOver : MonoBehaviour
         int killNum = GameManager.instance.GetComponent<KillManager>().GetCurrentKills();
         int coinNum = GameManager.instance.GetComponent<CoinManager>().GetCoinNumPickedup();
 
+        // ⭐ 패배 시 생존 시간 업적 누적
+        PlayerDataManager.Instance?.SaveSurviveTimeOnGameOver();
+
         // ✅ 추가: 패배 시에도 Step0이면 튜토리얼 진행
         if (TutorialManager.instance != null &&
             TutorialManager.instance.CurrentStep == TutorialStep.Step0_OnlyBattle)

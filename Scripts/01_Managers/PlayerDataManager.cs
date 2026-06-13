@@ -262,7 +262,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             {
                 int survivedMinutes = Mathf.FloorToInt(stageTime.GetElapsedTime() / 60f);
                 if (survivedMinutes > 0)
-                    AchievementManager.Instance.SetProgressIfGreaterNormal(AchievementType.SURVIVE, survivedMinutes);
+                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes);
             }
         }
 
@@ -303,13 +303,40 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         {
             int survivedMinutes = Mathf.FloorToInt(currentTime / 60f);
             if (survivedMinutes > 0)
-                AchievementManager.Instance.SetProgressIfGreaterNormal(AchievementType.SURVIVE, survivedMinutes);
+                AchievementManager.Instance.AddSurviveMinutes(survivedMinutes);
         }
 
         PauseGame();
 
         InfiniteMissionTracker tracker = FindObjectOfType<InfiniteMissionTracker>();
         tracker?.OnGameEnd();
+    }
+
+    // 패배 시 생존 시간만 업적에 누적 (코인/크리스탈 저장 없음)
+    public void SaveSurviveTimeOnGameOver()
+    {
+        if (AchievementManager.Instance == null) return;
+
+        if (currentGameMode == GameMode.Regular)
+        {
+            StageTime stageTime = FindObjectOfType<StageTime>();
+            if (stageTime != null)
+            {
+                int survivedMinutes = Mathf.FloorToInt(stageTime.GetElapsedTime() / 60f);
+                if (survivedMinutes > 0)
+                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes);
+            }
+        }
+        else
+        {
+            InfiniteStageManager infiniteManager = FindObjectOfType<InfiniteStageManager>();
+            if (infiniteManager != null)
+            {
+                int survivedMinutes = Mathf.FloorToInt(infiniteManager.GetSurvivalTime() / 60f);
+                if (survivedMinutes > 0)
+                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes);
+            }
+        }
     }
 
     void SaveCoinsAndCristals()

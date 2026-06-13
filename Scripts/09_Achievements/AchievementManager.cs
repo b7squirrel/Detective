@@ -397,6 +397,19 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
+    // 생존 시간 누적용 (영구/일일/주간 각각 따로 누적)
+    public void AddSurviveMinutes(int minutes)
+    {
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.type != AchievementType.SURVIVE) continue;
+            if (ra.isCompleted) continue;
+
+            ra.AddProgress(minutes);
+            SaveAchievement(ra);
+        }
+    }
+
     // ⭐ 모든 업적 리셋 (디버그용)
     [ContextMenu("Debug 플레이모드 : Reset All Achievements")]
     public void ResetAllAchievements()
@@ -433,5 +446,34 @@ public class AchievementManager : MonoBehaviour
         AchievementPanel panel = FindObjectOfType<AchievementPanel>(true);
         Logger.Log($"[Reset] AchievementPanel 찾음: {panel != null}");
         if (panel != null) panel.ReinitializeAll();
+    }
+
+    // 플레이 모드에서 AchievementManager 게임오브젝트를 선택하고 Inspector 우측 상단 ⋮ → Debug: Reset AD_DRAW Progress 로 실행
+    [ContextMenu("Debug: Reset AD_DRAW Progress")]
+    public void ResetAdDrawProgress()
+    {
+        if (!Application.isPlaying)
+        {
+            Logger.LogWarning("[Reset] 플레이 모드에서만 실행 가능합니다.");
+            return;
+        }
+
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.type != AchievementType.AD_DRAW) continue;
+
+            ra.progress = 0;
+            ra.isCompleted = false;
+            ra.isRewarded = false;
+
+            PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+            PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
+            PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
+
+            OnAnyProgressChanged?.Invoke(ra);
+        }
+
+        PlayerPrefs.Save();
+        Logger.Log("[Reset] AD_DRAW 업적 초기화 완료");
     }
 }

@@ -25,6 +25,11 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] Sprite gemIcon; // 보석 아이콘
     [SerializeField] Sprite coinIcon; // 코인 아이콘
 
+    [Header("진행도 아이콘")]
+    [SerializeField] GameObject killIcon;   // Icons/Kill
+    [SerializeField] GameObject chestIcon;  // Icons/Chest (AD_DRAW)
+    [SerializeField] GameObject timeIcon;   // Icons/Time (SURVIVE)
+
     [Header("사운드")]
     [SerializeField] AudioClip clipRewardButton;
 
@@ -79,9 +84,24 @@ public class AchievementItemUI : MonoBehaviour
         progressSlider.maxValue = runtime.original.targetValue;
         rewardText.text = runtime.original.rewardNum.ToString();
 
-        // ⭐ KILL 타입일 때만 progressText 표시
+        // KILL, SURVIVE 광고 뽑기 타입일 때 progressText 표시
+        bool showProgress =
+            runtime.original.type == AchievementType.KILL ||
+            runtime.original.type == AchievementType.SURVIVE ||
+            runtime.original.type == AchievementType.AD_DRAW;
+
         if (progressText != null)
-            progressText.gameObject.SetActive(runtime.original.type == AchievementType.KILL);
+            progressText.gameObject.SetActive(showProgress);
+
+        // 아이콘 표시
+        if (killIcon != null)
+            killIcon.SetActive(runtime.original.type == AchievementType.KILL);
+
+        if (chestIcon != null)
+            chestIcon.SetActive(runtime.original.type == AchievementType.AD_DRAW);
+
+        if (timeIcon != null)
+            timeIcon.SetActive(runtime.original.type == AchievementType.SURVIVE);
 
         // 보상 타입에 따라 아이콘 설정
         if (rewardIcon != null)
@@ -146,7 +166,14 @@ public class AchievementItemUI : MonoBehaviour
     public void Refresh()
     {
         progressSlider.value = ra.progress;
-        if (progressText != null) progressText.text = $"({ra.progress} / {ra.original.targetValue})";
+
+        if (progressText != null)
+        {
+            if (ra.original.type == AchievementType.SURVIVE)
+                progressText.text = $"{ra.progress}{LocalizationManager.Game.minute}";
+            else
+                progressText.text = $"{ra.progress}";
+        }
 
         rewardButton.interactable = ra.isCompleted && !ra.isRewarded;
     }
