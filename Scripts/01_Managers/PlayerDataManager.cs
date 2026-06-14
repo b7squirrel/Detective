@@ -262,7 +262,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             {
                 int survivedMinutes = Mathf.FloorToInt(stageTime.GetElapsedTime() / 60f);
                 if (survivedMinutes > 0)
-                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes);
+                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes, false);
             }
         }
 
@@ -303,7 +303,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         {
             int survivedMinutes = Mathf.FloorToInt(currentTime / 60f);
             if (survivedMinutes > 0)
-                AchievementManager.Instance.AddSurviveMinutes(survivedMinutes);
+                AchievementManager.Instance.AddSurviveMinutes(survivedMinutes, true);
         }
 
         PauseGame();
@@ -324,7 +324,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             {
                 int survivedMinutes = Mathf.FloorToInt(stageTime.GetElapsedTime() / 60f);
                 if (survivedMinutes > 0)
-                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes);
+                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes, false);
             }
         }
         else
@@ -334,7 +334,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             {
                 int survivedMinutes = Mathf.FloorToInt(infiniteManager.GetSurvivalTime() / 60f);
                 if (survivedMinutes > 0)
-                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes);
+                    AchievementManager.Instance.AddSurviveMinutes(survivedMinutes, true);
             }
         }
     }

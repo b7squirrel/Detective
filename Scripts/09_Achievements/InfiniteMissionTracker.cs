@@ -42,12 +42,15 @@ public class InfiniteMissionTracker : MonoBehaviour
     // 게임 종료 시 외부에서 호출 (PlayerDataManager.SaveInfiniteModeResources() 이후)
     public void OnGameEnd()
     {
-        if (AchievementManager.Instance == null) return;
-        if (infiniteStageManager == null) return;
+        // if (AchievementManager.Instance == null) return;
+        // if (infiniteStageManager == null) return;
+        // // 생존 시간 (초 단위 정수로 변환)
+        // int survivalSeconds = Mathf.FloorToInt(infiniteStageManager.GetSurvivalTime());
+        // AchievementManager.Instance.SetProgressIfGreater(AchievementType.SURVIVE, survivalSeconds);
+        // Logger.Log($"[InfiniteMissionTracker] SURVIVE 진행도 업데이트: {survivalSeconds}초");
 
-        // 생존 시간 (초 단위 정수로 변환)
-        int survivalSeconds = Mathf.FloorToInt(infiniteStageManager.GetSurvivalTime());
-        AchievementManager.Instance.SetProgressIfGreater(AchievementType.SURVIVE, survivalSeconds);
-        Logger.Log($"[InfiniteMissionTracker] SURVIVE 진행도 업데이트: {survivalSeconds}초");
+        // SURVIVE 업데이트는 PlayerDataManager.SaveInfiniteModeResources()에서
+        // AddSurviveMinutes(minutes, true)로 처리되므로 여기서는 제거됨
+        Logger.Log("[InfiniteMissionTracker] OnGameEnd 호출됨");
     }
 }

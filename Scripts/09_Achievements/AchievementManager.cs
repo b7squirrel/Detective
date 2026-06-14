@@ -397,12 +397,13 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    // 생존 시간 누적용 (영구/일일/주간 각각 따로 누적)
-    public void AddSurviveMinutes(int minutes)
+    // 생존 시간 누적용 - 일반/무한모드 분리
+    public void AddSurviveMinutes(int minutes, bool isInfiniteMode)
     {
         foreach (var ra in runtimeDict.Values)
         {
             if (ra.original.type != AchievementType.SURVIVE) continue;
+            if (ra.original.isInfiniteMode != isInfiniteMode) continue;
             if (ra.isCompleted) continue;
 
             ra.AddProgress(minutes);
