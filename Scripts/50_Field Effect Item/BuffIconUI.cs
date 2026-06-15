@@ -36,6 +36,10 @@ public class BuffIconUI : MonoBehaviour
 
         if (timerRing != null)
             timerRing.fillAmount = 0f;
+
+        // 재사용 시 이전 Pop 애니메이션 코루틴 정리 및 스케일 초기화
+        StopAllCoroutines();
+        transform.localScale = Vector3.one;
     }
 
     /// <summary>

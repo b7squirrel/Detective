@@ -36,7 +36,7 @@ public class HoopProjectile : ProjectileBase
     {
         if (hoopWeapon == null) return;
         if (Time.timeScale == 0) return;
-        if (Time.frameCount % 3 != 0) return; // 3프레임 간격으로 공격
+        if (Time.frameCount % 7 != 0) return; // 7프레임 간격으로 공격
 
         SetDamageStats();
         CastDamage();

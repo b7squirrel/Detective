@@ -20,6 +20,9 @@ public class BuffDisplayManager : MonoBehaviour
     [Header("아이콘이 생성될 부모 (Icons 오브젝트)")]
     [SerializeField] Transform iconsParent;
 
+    // 비활성화된 아이콘 풀 (버프 타입 → 아이콘)
+    Dictionary<FieldBuffType, BuffIconUI> pooledIcons = new Dictionary<FieldBuffType, BuffIconUI>();
+
     // 현재 활성화된 아이콘들 (버프 타입 → 아이콘)
     Dictionary<FieldBuffType, BuffIconUI> activeIcons = new Dictionary<FieldBuffType, BuffIconUI>();
 
@@ -45,20 +48,33 @@ public class BuffDisplayManager : MonoBehaviour
         }
         else
         {
-            // 새 아이콘 생성
-            GameObject prefab = GetPrefab(buffType);
-            if (prefab == null)
-            {
-                Logger.LogWarning($"[BuffDisplayManager] {buffType} 프리팹이 없습니다.");
-                return;
-            }
+            BuffIconUI icon;
 
-            GameObject iconObj = Instantiate(prefab, iconsParent);
-            BuffIconUI icon = iconObj.GetComponent<BuffIconUI>();
-            if (icon == null)
+            if (pooledIcons.TryGetValue(buffType, out BuffIconUI pooledIcon))
             {
-                Logger.LogError($"[BuffDisplayManager] {buffType} 프리팹에 BuffIconUI가 없습니다.");
-                return;
+                // 풀에 있던 아이콘 재사용
+                icon = pooledIcon;
+                icon.gameObject.SetActive(true);
+                pooledIcons.Remove(buffType);
+            }
+            else
+            {
+                // 풀에 없으면 새로 생성
+                GameObject prefab = GetPrefab(buffType);
+                if (prefab == null)
+                {
+                    Logger.LogWarning($"[BuffDisplayManager] {buffType} 프리팹이 없습니다.");
+                    return;
+                }
+
+                GameObject iconObj = Instantiate(prefab, iconsParent);
+                icon = iconObj.GetComponent<BuffIconUI>();
+                if (icon == null)
+                {
+                    Logger.LogError($"[BuffDisplayManager] {buffType} 프리팹에 BuffIconUI가 없습니다.");
+                    Destroy(iconObj);
+                    return;
+                }
             }
 
             icon.Init(buffType, duration);
@@ -70,8 +86,9 @@ public class BuffDisplayManager : MonoBehaviour
     {
         if (!activeIcons.TryGetValue(buffType, out BuffIconUI icon)) return;
 
-        Destroy(icon.gameObject);
+        icon.gameObject.SetActive(false);
         activeIcons.Remove(buffType);
+        pooledIcons[buffType] = icon;
     }
 
     GameObject GetPrefab(FieldBuffType buffType)

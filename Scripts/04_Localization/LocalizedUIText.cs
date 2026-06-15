@@ -203,6 +203,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.watchAdnRevive;
             case UITextKey.GiveUp:
                 return LocalizationManager.Game.giveUp;
+            case UITextKey.Coin:
+                return LocalizationManager.Game.coin;
             default:
                 return key.ToString();
         }
@@ -302,5 +304,6 @@ public enum UITextKey
     SynergyItem,
     GetBackUp,
     WatchAdnRevive,
-    GiveUp
+    GiveUp,
+    Coin
 }
