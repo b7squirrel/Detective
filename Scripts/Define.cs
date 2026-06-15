@@ -28,7 +28,7 @@ public enum TabTypePublic { Permanent, Daily, Weekly }
 public enum SkillType
 {
     None = 0,
-    SteelBody = 100,      // 강철 피부
+    HealthRecovery = 100, // 체력 회복
     SluggishSlumber = 200, // 느림보 최면술
     FlashDamage = 300,     // 넓은 공격
     InvincibleBody = 400,  // 천하 무적
@@ -203,12 +203,12 @@ public class Skills
 {
     public static string[] SkillNames = new string[]
     {
-        "강철 피부",
+        "체력 회복",
         "느림보 최면술",
         "넓은 공격",
         "천하 무적",
         "파티 타임"
-        //"Steel Body",
+        //"Health Recovery",
         //"Sluggish Slumber",
         //"Flash Damage",
         //"Invincible Body",
@@ -216,12 +216,12 @@ public class Skills
     };
     public static string[] SkillDescriptions = new string[]
     {
-        "동료들이 몸으로 적들의 공격을 막아줍니다.",
+        "잠시동안 체력을 천천히 회복합니다.",
         "잠시 최면을 걸어 적들을 느려지게 합니다.",
         "화면 안의 모든 적들에게 데미지를 줍니다.",
         "잠시동안 무적이 됩니다.",
         "잠시동안 자신과 동료들의 공격력을 올려줍니다."
-        //"Your friends' body shield you from enemies.",
+        //"Gradually restores your health for a short time.",
         //"Temporarily slow down all enemies on the screen for a duration.",
         //"Inflict periodic damage to all enemies on the screen.",
         //"Grant periodic invincibility to the player.",

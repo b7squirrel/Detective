@@ -18,6 +18,7 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         // ⭐ 초기화 추가
         needToOffset = false;
         headMain.anchoredPosition = Vector2.zero;
+        Debug.Log($"[UpgradeIcon] === InitWeaponIcon 시작: {wd.Name}, headMain reset 후 = {headMain.anchoredPosition}");
 
         if (leadWeaponData == null) leadWeaponData = GameManager.instance.startingDataContainer.GetLeadWeaponData();
 
@@ -41,9 +42,13 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
 
             if (item == null)
             {
+                Debug.Log($"[UpgradeIcon] 슬롯 {i} ({equipmentImages[i].name}): item = null");
                 SetEquipCardDisplay(i, null, false, Vector2.zero);
                 continue;
             }
+
+            Debug.Log($"[UpgradeIcon] 슬롯 {i} ({equipmentImages[i].name}): item = {item.name}, needToOffset = {item.needToOffset}, posHead = {item.posHead}");
+
             SpriteRow equipmentSpriteRow = item.spriteRow;
             Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
 
@@ -88,6 +93,7 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
             {
                 this.needToOffset = true;
                 headMain.anchoredPosition += offset;
+                Debug.Log($"[UpgradeIcon] 오프셋 적용됨 (슬롯 {index}): offset = {offset}, headMain = {headMain.anchoredPosition}");
             }
 
             cardSpriteAnim.StoreItemSpriteRow(index, spriteRow);

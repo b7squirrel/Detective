@@ -71,11 +71,11 @@ public class EquipInfoPanel : MonoBehaviour
                      StaticValues.MaxLevel.ToString();
         
         // 스킬 이름 및 설명
-        if (currentCardData.PassiveSkill >= 0 && currentCardData.PassiveSkill < Skills.SkillNames.Length)
+        int passiveSkillIndex = currentCardData.PassiveSkill - 1;
+        if (passiveSkillIndex >= 0 && passiveSkillIndex < LocalizationManager.Char.skillNames.Length)
         {
-            int passiveSkillIndex = currentCardData.PassiveSkill - 1;
-            skillName.text = LocalizationManager.Item.itemSkillNames[passiveSkillIndex];
-            skillDescription.text = LocalizationManager.Item.itemSkillDescriptions[passiveSkillIndex];
+            skillName.text = LocalizationManager.Char.skillNames[passiveSkillIndex];
+            skillDescription.text = LocalizationManager.Char.skillDescriptions[passiveSkillIndex];
         }
     }
 
@@ -106,8 +106,8 @@ public class EquipInfoPanel : MonoBehaviour
 
         GetPassiveSkillLevel(cardData);
 
-        grade.color = Color.white;
-        Name.color = Color.white;
+        // grade.color = Color.white;
+        // Name.color = Color.white;
 
         attributeATK.SetActive(false);
         attributeHP.SetActive(false);
@@ -204,12 +204,12 @@ public class EquipInfoPanel : MonoBehaviour
 
     void GetPassiveSkillLevel(CardData _cardData)
     {
-        if (_cardData.PassiveSkill >= 0 && _cardData.PassiveSkill < Skills.SkillNames.Length)
+        int passiveSkillIndex = _cardData.PassiveSkill - 1;
+        if (passiveSkillIndex >= 0 && passiveSkillIndex < LocalizationManager.Char.skillNames.Length)
         {
             // ★ 다국어 적용
-            int passiveSkillIndex = _cardData.PassiveSkill - 1;
-            skillName.text = LocalizationManager.Item.itemSkillNames[passiveSkillIndex];
-            skillDescription.text = LocalizationManager.Item.itemSkillDescriptions[passiveSkillIndex];
+            skillName.text = LocalizationManager.Char.skillNames[passiveSkillIndex];
+            skillDescription.text = LocalizationManager.Char.skillDescriptions[passiveSkillIndex];
 
             skillLabel.color = MyGrade.GradeColors[_cardData.Grade];
         }

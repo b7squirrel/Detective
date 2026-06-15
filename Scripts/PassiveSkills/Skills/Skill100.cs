@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 생명의 기운 - Life Recovery
+/// 체력 회복 - Health Recovery
 /// </summary>
 public class Skill100 : SkillBase
 {
-    public override SkillType SkillType => SkillType.SteelBody;
+    public override SkillType SkillType => SkillType.HealthRecovery;
     
     float baseDuration; // 기본 지속시간
     float realDuration; // 업그레이드 적용된 지속시간

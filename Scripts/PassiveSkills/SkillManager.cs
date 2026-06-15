@@ -69,7 +69,7 @@ public class SkillManager : MonoBehaviour
         int skillName = GameManager.instance.startingDataContainer.GetSkillName();
 
         // 기존 숫자 시스템을 SkillType으로 변환
-        // 100 -> SteelBody, 200 -> SluggishSlumber, etc.
+        // 100 -> HealthRecovery, 200 -> SluggishSlumber, 300 -> FlashDamage, 400 -> InvincibleBody, 500 -> PartyTime
         int skillNumber = (skillName / 100) % 10;
 
         SkillType skillType = (SkillType)(skillNumber * 100);

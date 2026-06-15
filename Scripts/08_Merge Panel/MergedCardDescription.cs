@@ -1,17 +1,38 @@
 using UnityEngine;
-
 public class MergedCardDescription : MonoBehaviour
 {
     [SerializeField] GameObject skillPanel;
     [SerializeField] TMPro.TextMeshProUGUI SkillTitle;
     [SerializeField] TMPro.TextMeshProUGUI SkillDescription;
 
+    CardData currentCardData;
+
+    void Awake()
+    {
+        LocalizationManager.OnLanguageChanged += UpdateText;
+    }
+
+    void OnDestroy()
+    {
+        LocalizationManager.OnLanguageChanged -= UpdateText;
+    }
+
     public void UpdateSkillDescription(CardData cardData)
     {
-        // ½ºÅ³
-        SkillTitle.text = Skills.SkillNames[cardData.PassiveSkill - 1];
-        SkillDescription.text = Skills.SkillDescriptions[cardData.PassiveSkill - 1];
+        currentCardData = cardData;
+        UpdateText();
+    }
 
-        SkillTitle.color = MyGrade.GradeColors[cardData.Grade];
+    void UpdateText()
+    {
+        if (currentCardData == null || LocalizationManager.Char == null) return;
+
+        int index = currentCardData.PassiveSkill - 1;
+        if (index < 0 || index >= LocalizationManager.Char.skillNames.Length) return;
+
+        // ìŠ¤í‚¬
+        SkillTitle.text = LocalizationManager.Char.skillNames[index];
+        SkillDescription.text = LocalizationManager.Char.skillDescriptions[index];
+        SkillTitle.color = MyGrade.GradeColors[currentCardData.Grade];
     }
 }
