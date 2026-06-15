@@ -6,11 +6,11 @@ public class LocalizedUIText : MonoBehaviour
     [Header("Text Key")]
     [SerializeField] private UITextKey textKey;
     
-    private TextMeshProUGUI textComponent;
+    private TMP_Text textComponent;
     
     void Start()
     {
-        textComponent = GetComponent<TextMeshProUGUI>();
+        textComponent = GetComponent<TMP_Text>();
         if (textComponent == null)
         {
             Debug.LogError($"TextMeshProUGUI component not found on {gameObject.name}");
