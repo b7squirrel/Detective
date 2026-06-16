@@ -14,6 +14,10 @@ public class InfiniteAchievementPanel : MonoBehaviour
     [SerializeField] private Button tabDailyButton;
     [SerializeField] private Button tabWeeklyButton;
 
+    [Header("빈 탭 메시지")]
+    [SerializeField] private GameObject allDoneMessageINF;
+    [SerializeField] private TextMeshProUGUI allDoneTextINF;
+
     [Header("탭 애니메이터")]
     [SerializeField] private Animator tabDailyAnimator;
     [SerializeField] private Animator tabWeeklyAnimator;
@@ -211,6 +215,18 @@ public class InfiniteAchievementPanel : MonoBehaviour
         {
             sortedItems[i].transform.SetSiblingIndex(i);
             sortedItems[i].gameObject.SetActive(true);
+        }
+
+        bool isEmpty = sortedItems.Count == 0;
+
+        if (allDoneMessageINF != null)
+            allDoneMessageINF.SetActive(isEmpty);
+
+        if (isEmpty && allDoneTextINF != null)
+        {
+            allDoneTextINF.text = currentTab == TabType.Daily
+                ? LocalizationManager.Game.allDoneInfDailyMessage
+                : LocalizationManager.Game.allDoneInfWeeklyMessage;
         }
     }
 }

@@ -29,7 +29,7 @@ public class AchievementPanel : MonoBehaviour
     [SerializeField] private Animator tabPermanentAnimator;
     [SerializeField] private Animator tabDailyAnimator;
     [SerializeField] private Animator tabWeeklyAnimator;
-    [SerializeField] private Animator panelOutlineAnimator; 
+    [SerializeField] private Animator panelOutlineAnimator;
 
     private enum TabType { Permanent, Daily, Weekly }
     private TabType currentTab = TabType.Daily;  // 기본: 일일 퀘스트

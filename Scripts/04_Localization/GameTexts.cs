@@ -110,7 +110,10 @@ public class GameTexts : ScriptableObject
     // ⭐ 추가
     public string allDoneDailyMessage = "오늘 임무 완료!\n내일 새로운 임무가 기다려요!";
     public string allDoneWeeklyMessage = "주간 임무 완료!\n다음 주에 또 만나요!";
-    public string allDonePermanentMessage = "모든 업적 달성!\n진정한 오리 전설이에요!";
+    public string allDonePermanentMessage = "모든 업적 달성!\n당신이 바로 진정한 오리의 전설이에요!";
+    // ⭐ 추가 - 무한모드용
+    public string allDoneInfDailyMessage = "오늘 도전 완료!\n내일 새로운 도전이 기다려요!";
+    public string allDoneInfWeeklyMessage = "주간 도전 완료!\n다음 주에 또 만나요!";
 
     [Header("Daily Reward Panel")]
     public string daily = "일일 보상";
