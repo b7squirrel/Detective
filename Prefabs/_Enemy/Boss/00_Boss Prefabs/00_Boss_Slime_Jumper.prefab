@@ -214,18 +214,17 @@ MonoBehaviour:
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
   hitEffectPoint: {fileID: 8488362740134233737}
-  whiteFlashDuration: 0.08
   knockBackSpeed: 12
   knockBackDelay: 0
   srFlash:
   - {fileID: 2284754291635670610}
-  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hits:
   - {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   dies:
   - {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   - {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
+  subBossAlarm: {fileID: 0}
   HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
   HpBarPos: {fileID: 3173228057631423548}
   hpBar: {fileID: 0}
@@ -354,7 +353,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 4338945772903457947, guid: 4e46f9ffa3f314f64be191a9c1b53c96, type: 3}
   projectileNums: 200
   jellyDamage: 0
-  projectilSpeed: 24
+  projectilSpeed: 10
   timeToDropSlime: 3
   projectileOffset: 20
   stateDuration: 3
@@ -395,6 +394,9 @@ MonoBehaviour:
   specialDropRate: 0
   dropAllItemList: 0
   exp: 0
+  coinPrefab: {fileID: 0}
+  bonusCoinMin: 3
+  bonusCoinMax: 5
 --- !u!1 &4104794032901784933
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,7 +537,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: bea0536fd789a9b41b496e40c24379a5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
