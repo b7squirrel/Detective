@@ -13,6 +13,9 @@ public class SlimeDropManager : MonoBehaviour
     [SerializeField] int dropDamage; // 슬라임 점액 데미지
     [SerializeField] float slowDownFactor; // 플레이어가 점액 위에 있을 때 속도 저하를 위한 인자
 
+    [Header("SFX")]
+    [SerializeField] AudioClip dropSFX;
+
     List<GameObject> drops = new(); // 보스를 처치하면 드롭들도 모두 사라지도록 하기 위해
     bool isTriggered; // 중첩되어 슬라임과 충돌했을 때 데미지가 너무 많이 들어가는 것을 방지
     int overrapingObjectsCount; // 슬라임 위에 있는지 체크하기 위한 플레이어와 중첩되는 슬라임 갯수
@@ -28,6 +31,8 @@ public class SlimeDropManager : MonoBehaviour
         drop.GetComponentInChildren<SlimeDrop>().InitDrop();
         if (slimeDropType == SlimeAttackType.None) slimeDropType = drop.GetComponentInChildren<SlimeDrop>().GetSlimeDropType();
         AddDrop(drop);
+        // ⭐ 사운드 재생
+        if (dropSFX != null) SoundManager.instance.PlaySoundWith(dropSFX, 2f, false, 0f);
     }
     public void DropObjectOnLanding(Vector2 dropPos)
     {
@@ -36,6 +41,8 @@ public class SlimeDropManager : MonoBehaviour
         drop.GetComponentInChildren<SlimeDrop>().InitDrop();
         if (slimeDropType == SlimeAttackType.None) slimeDropType = drop.GetComponentInChildren<SlimeDrop>().GetSlimeDropType();
         AddDrop(drop);
+        // ⭐ 사운드 재생
+        if (dropSFX != null) SoundManager.instance.PlaySoundWith(dropSFX, 2f, false, 0f);
     }
     #endregion
 

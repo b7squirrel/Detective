@@ -103,7 +103,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 12
   m_Sprite: {fileID: 21300000, guid: 14588dda3eece401b8c3530c49e46fdf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -339,7 +339,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 11
   m_Sprite: {fileID: 21300000, guid: 1a88b949cbf3c48f2a548eff5ca4c3a8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -664,20 +664,19 @@ MonoBehaviour:
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
   hitEffectPoint: {fileID: 7814706633938963400}
-  whiteFlashDuration: 0.08
   knockBackSpeed: 12
   knockBackDelay: 0
   srFlash:
   - {fileID: 2230716938696211907}
   - {fileID: 7085210654524388753}
   - {fileID: 7751931083551274101}
-  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hits:
   - {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   dies:
   - {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   - {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
+  subBossAlarm: {fileID: 0}
   HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
   HpBarPos: {fileID: 3753949127701031895}
   hpBar: {fileID: 0}
@@ -763,6 +762,7 @@ MonoBehaviour:
   DropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
   dropDamage: 8
   slowDownFactor: 0.7
+  dropSFX: {fileID: 8300000, guid: c5e47d0d4b855e64ab31a8fce5298419, type: 3}
 --- !u!114 &856374984649581830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,6 +857,9 @@ MonoBehaviour:
   specialDropRate: 0
   dropAllItemList: 0
   exp: 0
+  coinPrefab: {fileID: 0}
+  bonusCoinMin: 3
+  bonusCoinMax: 5
 --- !u!1 &7201347227933336307
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,7 +931,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -556371709
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 99257bdc689094d3193d1b1c5c0145a4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

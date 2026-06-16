@@ -2,55 +2,49 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// 플레이어의 주변으로 날아가는 적 투사체
-/// </summary>
 public class SlimeDropProjectile : MonoBehaviour
 {
     [SerializeField] Transform jumpSprite;
-    [SerializeField] GameObject slimeDropPrefab; // 투사체가 목표물에 도착하면 드롭될 점액프리펩
+    [SerializeField] GameObject slimeDropPrefab;
+
     SlimeDropManager slimeDropManager;
-    public UnityEvent onDoneEvent; // 투사체 죽음 이벤트
+    ShadowHeightProjectile shadowHeightProjectile;
 
-    // 투사체 초기화 시 매니저 참조도 함께 받기
-    public void InitProjectile(Vector2 startPoint, Vector2 endPoint, float duration, SlimeDropManager manager)
+    public UnityEvent onDoneEvent;
+
+    void Awake()
     {
-        slimeDropManager = manager; // 추가
-        StartCoroutine(MoveObjectCo(startPoint, endPoint, duration));
+        shadowHeightProjectile = GetComponent<ShadowHeightProjectile>();
+
+        // 착지 시 Bounce 호출 (divisionFactor는 상관없음, 바로 Done 처리됨)
+        shadowHeightProjectile.onGroundHitEvent.AddListener(() => shadowHeightProjectile.Bounce(2f));
+
+        // Done 시 ProjectileDone 호출
+        shadowHeightProjectile.onDone.AddListener(ProjectileDone);
     }
 
-    IEnumerator MoveObjectCo(Vector2 startPoint, Vector2 endPoint, float speed)
+    public void InitProjectile(Vector2 startPoint, Vector2 endPoint, float speed, SlimeDropManager manager)
     {
-        float elapsedTime = 0f;
-        float distance = Vector3.Distance(startPoint, endPoint);
-        float duration = distance / speed;
+        slimeDropManager = manager;
+        transform.position = startPoint;
 
-        while (elapsedTime < duration)
-        {
-            // 스톱워치로 시간이 멈춰 있다면 이동하지 않음
-            if (GameManager.instance.fieldItemEffect.IsStopedWithStopwatch()) yield return null;
-            if (Time.timeScale == 0) yield return null;
+        // ⭐ 랜덤 속도 오프셋 추가
+        float randomOffset = Random.Range(0f, speed * 2f);
+        float finalSpeed = speed + randomOffset;
 
-            // 수평 이동
-            float t = elapsedTime / duration;
-            transform.position = Vector3.Lerp(startPoint, endPoint, t);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+        Vector2 direction = (endPoint - startPoint).normalized;
+        Vector2 groundVelocity = direction * finalSpeed;
+        float verticalVelocity = 50f;
 
-        // 마지막 위치를 정확히 도착 지점으로 설정
-        transform.position = endPoint;
-
-        // 점액을 드롭하고 자신은 파괴
-        ProjectileDone();
+        shadowHeightProjectile.Initialize(groundVelocity, verticalVelocity);
     }
+
     void ProjectileDone()
     {
         onDoneEvent?.Invoke();
-        gameObject.SetActive(false); // 공통적으로 들어가야 하니 함수를 따로 빼지 않고 여기에 넣어 버리자
+        gameObject.SetActive(false);
     }
 
-    // 유니티 이벤트에 붙일 함수들
     public void Event_DropNormalSlimeDrop()
     {
         if (slimeDropManager == null)
@@ -58,7 +52,6 @@ public class SlimeDropProjectile : MonoBehaviour
             Debug.LogError("SlimeDropManager 참조 없음!");
             return;
         }
-        // Instantiate 직접 하지 않고 매니저를 통해 드롭
         slimeDropManager.DropObjectOnLanding(transform.position);
     }
 }

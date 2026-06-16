@@ -17,6 +17,9 @@ public class ShadowHeightProjectile : MonoBehaviour
     [SerializeField] SpriteRenderer bodySprite;
     [SerializeField] SpriteRenderer shadowSprite;
 
+    [Header("SFX")]
+    [SerializeField] AudioClip bounceSFX;
+
     Rigidbody2D rb;
     float gravity = -100f;
     float verticalVelocity;
@@ -182,6 +185,8 @@ public class ShadowHeightProjectile : MonoBehaviour
             trnsBody.position = new Vector3(trnsBody.position.x, trnsShadow.position.y, trnsBody.position.z);
             isGrounded = true;
             GroundHit();
+            // ⭐ 바운스 사운드 재생
+            if (bounceSFX != null) SoundManager.instance.Play(bounceSFX);
         }
     }
 

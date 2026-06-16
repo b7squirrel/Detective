@@ -908,8 +908,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropPrefab: {fileID: 4112818284512135873, guid: 6d97589cbd4394abea61ad85be863cd2, type: 3}
   DropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
-  dropDamage: 1000
+  dropDamage: 3000
   slowDownFactor: 0.7
+  dropSFX: {fileID: 8300000, guid: 787a4cf5f78d8a44582527142d60296b, type: 3}
 --- !u!114 &3050015207732895396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1025,6 +1026,9 @@ MonoBehaviour:
   specialDropRate: 0
   dropAllItemList: 0
   exp: 0
+  coinPrefab: {fileID: 0}
+  bonusCoinMin: 3
+  bonusCoinMax: 5
 --- !u!114 &4290183374265594317
 MonoBehaviour:
   m_ObjectHideFlags: 0
