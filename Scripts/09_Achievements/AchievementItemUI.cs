@@ -88,10 +88,13 @@ public class AchievementItemUI : MonoBehaviour
         bool showProgress =
             runtime.original.type == AchievementType.KILL ||
             runtime.original.type == AchievementType.SURVIVE ||
-            runtime.original.type == AchievementType.AD_DRAW;
+            runtime.original.type == AchievementType.AD_DRAW ||
+            runtime.isCompleted; ;
 
         if (progressText != null)
             progressText.gameObject.SetActive(showProgress);
+        if (progressSlider != null)
+            progressSlider.gameObject.SetActive(showProgress);
 
         // 아이콘 표시
         if (killIcon != null)

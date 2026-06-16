@@ -145,6 +145,7 @@ MonoBehaviour:
   trnsShadow: {fileID: 3730323277343568448}
   bodySprite: {fileID: 0}
   shadowSprite: {fileID: 0}
+  bounceSFX: {fileID: 0}
   isGrounded: 0
   forceMultiplier: 1
   deceleration: 0.98
@@ -249,7 +250,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -231762679
   m_SortingLayer: 10
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 88f9cb1f59060427f9e85e6e1983a3e9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -331,8 +332,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -231762679
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.40060252, g: 0.24684052, b: 0.4056604, a: 0.48235294}
