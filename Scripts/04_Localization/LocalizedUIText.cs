@@ -207,6 +207,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.coin;
             case UITextKey.Attack:
                 return LocalizationManager.Game.buffDamageBoost;
+            case UITextKey.CardDeckFull:
+                return LocalizationManager.Game.cardDeckFull;
             default:
                 return key.ToString();
         }
@@ -308,5 +310,6 @@ public enum UITextKey
     WatchAdnRevive,
     GiveUp,
     Coin,
-    Attack
+    Attack,
+    CardDeckFull
 }
