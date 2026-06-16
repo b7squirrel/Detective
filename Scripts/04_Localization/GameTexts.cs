@@ -158,7 +158,7 @@ public class GameTexts : ScriptableObject
 
     [Header("Buff Messages")]
     public string buffSpeedBoost = "빠른 발!";
-    public string buffDamageBoost = "공격력 UP!";
+    public string buffDamageBoost = "공격력";
     public string buffExpPrefix = "경험치";
     public string buffExpSuffix = "x!";
 

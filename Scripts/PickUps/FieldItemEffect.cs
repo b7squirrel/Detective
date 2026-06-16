@@ -55,6 +55,9 @@ public class FieldItemEffect : MonoBehaviour
     float currentSpeedBoostValue = 0f;
     int currentDamageBoostValue = 0;
 
+    // 데미지 부스트 중첩 스택 (BuffIconUI에서 UP1/UP2/UP3 표시에 사용)
+    public int DamageBoostStack { get; private set; } = 0;
+
     // UI 연동 이벤트
     public event Action<FieldBuffType, float> OnBuffApplied;  // 버프 시작/갱신 (타입, 지속시간)
     public event Action<FieldBuffType> OnBuffExpired;          // 버프 종료 (타입)
@@ -81,8 +84,8 @@ public class FieldItemEffect : MonoBehaviour
             case FieldBuffType.DamageBoost:
                 if (coDamageBoost != null) StopCoroutine(coDamageBoost);
                 coDamageBoost = StartCoroutine(DamageBoostCo(duration, (int)value));
+                // 메시지는 DamageBoostCo 안에서 스택 번호와 함께 출력
                 OnBuffApplied?.Invoke(buffType, duration);
-                MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.buffDamageBoost, MessageSystem.instance.GetBuffColor(FieldBuffType.DamageBoost));
                 break;
             case FieldBuffType.DoubleExp:
                 if (ExpMultiplier < MAX_MULTIPLIER)
@@ -138,21 +141,34 @@ public class FieldItemEffect : MonoBehaviour
 
         if (isDamageBoostActive)
         {
-            Logger.Log($"[FieldBuff] 데미지 버프 타이머 리셋 ({duration}초)");
+            // 현재 DamageBonus(이미 버프된 값)의 50%를 추가 중첩
+            // 예: 기본 100 → 1스택 150 → 2스택 225 → 3스택 337...
+            int additionalBoost = (int)(character.DamageBonus * 0.5f);
+            currentDamageBoostValue += additionalBoost;
+            character.AddDamageBonus(additionalBoost);
+            DamageBoostStack++;
+            Logger.Log($"[FieldBuff] 데미지 버프 중첩 +{additionalBoost}, 총 버프량: {currentDamageBoostValue}, 타이머 {duration}초 리셋");
         }
         else
         {
             isDamageBoostActive = true;
-            currentDamageBoostValue = value;
-            character.AddDamageBonus(value);
-            Logger.Log($"[FieldBuff] 데미지 버프 시작 +{value}, {duration}초");
+            DamageBoostStack = 1;
+            // 현재 DamageBonus의 50%를 추가 (1.5배 효과)
+            currentDamageBoostValue = (int)(character.DamageBonus * 0.5f);
+            character.AddDamageBonus(currentDamageBoostValue);
+            Logger.Log($"[FieldBuff] 데미지 버프 시작 +{currentDamageBoostValue} (현재의 1.5배), {duration}초");
         }
+
+        // "공격력 Up1", "공격력 Up2"... 출력
+        string dmgMsg = $"{LocalizationManager.Game.buffDamageBoost} Up{DamageBoostStack}";
+        MessageSystem.instance.PostBuffMessage(dmgMsg, MessageSystem.instance.GetBuffColor(FieldBuffType.DamageBoost));
 
         yield return new WaitForSeconds(duration);
 
         character.AddDamageBonus(-currentDamageBoostValue);
         isDamageBoostActive = false;
         currentDamageBoostValue = 0;
+        DamageBoostStack = 0;
         coDamageBoost = null;
         OnBuffExpired?.Invoke(FieldBuffType.DamageBoost);
         Logger.Log("[FieldBuff] 데미지 버프 종료");

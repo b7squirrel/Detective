@@ -85,7 +85,10 @@ public class BuffIconUI : MonoBehaviour
     {
         if (multiplierGroup == null) return;
 
-        bool showMultiplier = (buffType == FieldBuffType.DoubleExp || buffType == FieldBuffType.DoubleCoin);
+        // DamageBoost도 UP1/UP2/UP3 표시를 위해 multiplierGroup 활성화
+        bool showMultiplier = (buffType == FieldBuffType.DoubleExp
+                            || buffType == FieldBuffType.DoubleCoin
+                            || buffType == FieldBuffType.DamageBoost);
         multiplierGroup.SetActive(showMultiplier);
 
         if (!showMultiplier) return;
@@ -98,7 +101,7 @@ public class BuffIconUI : MonoBehaviour
     }
 
     /// <summary>
-    /// 현재 배율에 맞게 텍스트 업데이트
+    /// 현재 배율 및 스택에 맞게 텍스트 업데이트
     /// </summary>
     void UpdateMultiplierText(FieldBuffType buffType)
     {
@@ -112,6 +115,11 @@ public class BuffIconUI : MonoBehaviour
         {
             // DoubleCoin은 배율 대신 추가 드롭 방식이므로 고정 텍스트
             multiplierText.text = "+코인";
+        }
+        else if (buffType == FieldBuffType.DamageBoost)
+        {
+            // 중첩 스택에 따라 UP1, UP2, UP3... 표시
+            multiplierText.text = $"UP{FieldItemEffect.instance.DamageBoostStack}";
         }
     }
 

@@ -205,6 +205,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.giveUp;
             case UITextKey.Coin:
                 return LocalizationManager.Game.coin;
+            case UITextKey.Attack:
+                return LocalizationManager.Game.buffDamageBoost;
             default:
                 return key.ToString();
         }
@@ -305,5 +307,6 @@ public enum UITextKey
     GetBackUp,
     WatchAdnRevive,
     GiveUp,
-    Coin
+    Coin,
+    Attack
 }
