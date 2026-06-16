@@ -21,6 +21,10 @@ public class AchievementPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI titleText;  // 패널 제목
     [SerializeField] private ScrollRect scrollRect;
 
+    [Header("빈 탭 메시지")]
+    [SerializeField] private GameObject allDoneMessage;   // All Done Message 오브젝트
+    [SerializeField] private TextMeshProUGUI allDoneText; // All Done Text (TMP)
+
     [Header("탭 애니메이터")]
     [SerializeField] private Animator tabPermanentAnimator;
     [SerializeField] private Animator tabDailyAnimator;
@@ -293,6 +297,22 @@ public class AchievementPanel : MonoBehaviour
             // maxDisplayCount 이내만 활성화
             bool shouldShow = (maxDisplayCount <= 0) || (i < maxDisplayCount);
             sortedItems[i].gameObject.SetActive(shouldShow);
+        }
+        // ⭐ 빈 탭 메시지 처리
+        bool isEmpty = sortedItems.Count == 0;
+
+        if (allDoneMessage != null)
+            allDoneMessage.SetActive(isEmpty);
+
+        if (isEmpty && allDoneText != null)
+        {
+            allDoneText.text = currentTab switch
+            {
+                TabType.Daily => LocalizationManager.Game.allDoneDailyMessage,
+                TabType.Weekly => LocalizationManager.Game.allDoneWeeklyMessage,
+                TabType.Permanent => LocalizationManager.Game.allDonePermanentMessage,
+                _ => ""
+            };
         }
     }
 

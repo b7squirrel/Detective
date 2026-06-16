@@ -107,6 +107,10 @@ public class GameTexts : ScriptableObject
     public string weeklyQuestsTitle = "주간 임무";
     public string tapToClaim = "탭 해서 보상 받기";
     public string minute = "분";
+    // ⭐ 추가
+    public string allDoneDailyMessage = "오늘 임무 완료!\n내일 새로운 임무가 기다려요!";
+    public string allDoneWeeklyMessage = "주간 임무 완료!\n다음 주에 또 만나요!";
+    public string allDonePermanentMessage = "모든 업적 달성!\n진정한 오리 전설이에요!";
 
     [Header("Daily Reward Panel")]
     public string daily = "일일 보상";
