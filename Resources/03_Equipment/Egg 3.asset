@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4072edb1fe7c1214399706228de1c6f4, type: 3}
+  m_Name: Egg 3
+  m_EditorClassIdentifier: 
+  Name: Egg
+  DisplayName: "\uC54C"
+  setDisplayName: "\uC54C \uC138\uD2B8"
+  itemDisplayName: "\uC54C"
+  grade: 3
+  charImage: {fileID: 21300000, guid: e79c362e4764a4a7c8788e988222f4a1, type: 3}
+  equippedImage: {fileID: 0}
+  spriteRow:
+    sprites:
+    - {fileID: 21300000, guid: e79c362e4764a4a7c8788e988222f4a1, type: 3}
+    - {fileID: 21300000, guid: 329b745b3976141c0812b16e95822f79, type: 3}
+    - {fileID: 21300000, guid: 31de44d4869ba49b9a80db6753bbdda7, type: 3}
+    - {fileID: 21300000, guid: 4c6f3a3829cbc45cdb39d2cf4510e21b, type: 3}
+    - {fileID: 21300000, guid: ef5fe359590ab41368dfcc9ec7f248ca, type: 3}
+    - {fileID: 21300000, guid: eb91b79e7cf434d59b999ce6bbea894e, type: 3}
+    - {fileID: 21300000, guid: 9a605f41da839491cbfdec68658ab03b, type: 3}
+    - {fileID: 21300000, guid: f03e553e2d13f4618a7a444ddd4e146b, type: 3}
+    - {fileID: 21300000, guid: eef06a78997d2412781b9e4aa2671da8, type: 3}
+  needToOffset: 0
+  posHead: {x: 0, y: 0}
+  worldPosHead: {x: 0, y: 0}
+  CardItemAnimator:
+    CardImageAnim: {fileID: 0}
+    InGamePlayerAnim: {fileID: 0}
+    PauseCardAnim: {fileID: 0}
+  SynergyWeapons: []
+  stats:
+    armor: 0
+    magnetSize: 0
+    moveSpeed: 0
+    maxHp: 0
+    damage: 0
+    projectileAmount: 0
+    projectileSpeed: 0
+    knockBackChance: 0
+    criticalDamageChance: 0
+    coolTimeDown: 0
+    hpRegenRate: 0
+    hp: 0
+    coins: 0
+    currentLevel: 0
+  upgrades: []
+  dropChance: 0
+  itemIndex: 9998
+  projectilePrefab: {fileID: 0}
+  projectileVerticalVelocity: 10
