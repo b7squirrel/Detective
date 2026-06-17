@@ -53,6 +53,9 @@ public class EncyclopediaManager : MonoBehaviour
     [SerializeField] GameObject setEntryPrefab;
     [SerializeField] EncyclopediaPopup popup;
 
+    [Header("도감에서 숨길 세트")]
+    [SerializeField] List<string> hiddenSetNames = new List<string>();
+
     static readonly string[] SLOT_ORDER = { "Head", "Face", "Chest", "Hand" };
 
     List<EncycSetInfo> setList = new List<EncycSetInfo>();
@@ -67,7 +70,6 @@ public class EncyclopediaManager : MonoBehaviour
     }
     IEnumerator InitWhenReady()
     {
-        // CardDataManager와 CardsDictionary 모두 로드 완료될 때까지 대기
         yield return new WaitUntil(() =>
             CardDataManager.IsDataLoaded &&
             CardsDictionary.IsDataLoaded);
@@ -75,11 +77,21 @@ public class EncyclopediaManager : MonoBehaviour
         if (cardsDictionary == null)
             cardsDictionary = FindObjectOfType<CardsDictionary>();
 
-        // ★ SO 자동 로드
         LoadSetBonusDefinitions();
-
         BuildAcquiredSet();
-        BuildSetData();
+        BuildSetData(); // ★ 먼저 데이터 빌드
+
+        // ★ 빌드 후 숨길 세트 제거
+        if (hiddenSetNames != null && hiddenSetNames.Count > 0)
+        {
+            int removed = setList.RemoveAll(s => hiddenSetNames.Contains(s.setName));
+            Logger.Log($"[Encyclopedia] {removed}개 세트 숨김 처리");
+        }
+
+        // ★ 제거 후 정렬
+        setList.Sort((a, b) =>
+            string.Compare(a.setName, b.setName, StringComparison.OrdinalIgnoreCase));
+
         PopulateScrollView();
     }
     void LoadSetBonusDefinitions()
