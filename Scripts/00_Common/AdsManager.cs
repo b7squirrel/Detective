@@ -333,6 +333,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         };
     }
 
+    // ★ 부활 전용 — 업적 카운트 없음
     // ★ onRewarded: 리워드 지급 시점 (광고 닫기 전)
     // ★ onClosed:   광고창이 완전히 닫힌 시점 ← UnPause, 부활 등은 여기서
     public void ShowDailyFreeGemRewardedAd(Action onRewarded = null, Action onClosed = null)
@@ -342,20 +343,42 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
         if (m_DailyFreeGemRewardedAd != null && m_DailyFreeGemRewardedAd.CanShowAd())
         {
-            m_OnDailyFreeGemRewardedAdClosed = onClosed; // ★ 닫힘 콜백 등록
+            m_OnDailyFreeGemRewardedAdClosed = onClosed;
             m_DailyFreeGemRewardedAd.Show((Reward reward) =>
             {
                 Logger.Log("Rewarded DailyFreeGem");
-                onRewarded?.Invoke(); // 리워드 지급만 기록, 게임 재개 X
+                onRewarded?.Invoke();
+                // ⭐ 업적 카운트 없음 — 부활에도 사용되므로
+            });
+        }
+        else
+        {
+            Logger.LogError($"m_DailyFreeGemRewardedAd is not ready yet.");
+        }
+    }
 
-                // ⭐ 광고 뽑기 업적
+    // ⭐ 상자 전용 보상형 광고 — AD_DRAW 업적 카운트 포함
+    public void ShowBoxRewardedAd(Action onRewarded = null, Action onClosed = null)
+    {
+        Logger.Log($"[AdsManager] ShowBoxRewardedAd 호출");
+        Logger.Log($"[AdsManager] 광고 준비 상태: {IsRewardedAdReady}");
+
+        if (m_DailyFreeGemRewardedAd != null && m_DailyFreeGemRewardedAd.CanShowAd())
+        {
+            m_OnDailyFreeGemRewardedAdClosed = onClosed;
+            m_DailyFreeGemRewardedAd.Show((Reward reward) =>
+            {
+                Logger.Log("Rewarded BoxAd");
+                onRewarded?.Invoke();
+
+                // ⭐ 상자 광고만 업적 카운트
                 if (AchievementManager.Instance != null)
                     AchievementManager.Instance.AddProgress(AchievementType.AD_DRAW);
             });
         }
         else
         {
-            Logger.LogError($"m_DailyFreeGemRewardedAd is not ready yet.");
+            Logger.LogError($"[AdsManager] 광고가 준비되지 않았습니다.");
         }
     }
     #endregion

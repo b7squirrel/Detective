@@ -53,28 +53,20 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         {
             lackOfCristalWarningPanel = Instantiate(lackOfCristalWarningPanelPrefab, canvas.transform);
             lackOfCristalWarningPanel.SetActive(false);
-            DontDestroyOnLoad(lackOfCristalWarningPanel); // ⭐ 씬 전환 시에도 유지
+            DontDestroyOnLoad(lackOfCristalWarningPanel);
         }
         if (lackOfCristalWarningPanel != null)
         {
             lackOfCristalWarningPanel.SetActive(false);
-            DontDestroyOnLoad(lackOfCristalWarningPanel); // ⭐ 씬 전환 시에도 유지
+            DontDestroyOnLoad(lackOfCristalWarningPanel);
         }
-
-        // // ⭐ 골드 부족 경고 패널 생성
-        // if (lackOfGoldWarningPanelPrefab != null && lackOfGoldWarningPanel == null)
-        // {
-        //     lackOfGoldWarningPanel = Instantiate(lackOfGoldWarningPanelPrefab, canvas.transform);
-        //     lackOfGoldWarningPanel.SetActive(false);
-        //     DontDestroyOnLoad(lackOfGoldWarningPanel); // ⭐ 씬 전환 시에도 유지
-        // }
     }
 
     /// <summary>
     /// 상품 구매 (FX 위치 포함)
     /// </summary>
     public bool PurchaseProduct(string productId, RectTransform fxStartPoint = null, System.Action onFailureClosed = null)
-{
+    {
         if (!GameInitializer.IsInitialized)
         {
             Logger.LogError("[ShopManager] 게임이 아직 초기화되지 않았습니다.");
@@ -116,7 +108,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         // ⭐ 상자/팩 구매 시 카드 수 체크
         if (productData.ProductType == ProductType.Box || productData.ProductType == ProductType.Pack)
         {
-            if (!CanPurchaseCards(productData, onFailureClosed))  // ← 콜백 전달
+            if (!CanPurchaseCards(productData, onFailureClosed))
             {
                 Logger.Log($"[ShopManager] 카드 수 초과로 구매 불가: {productData.ProductId}");
                 return false;
@@ -126,12 +118,12 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         switch (productData.PurchaseType)
         {
             case PurchaseType.Cristal:
-            if (!PurchaseWithCristal(productData)) return false;  
+                if (!PurchaseWithCristal(productData)) return false;
                 GiveProductReward(productData, fxStartPoint);
                 return true;
 
             case PurchaseType.Gold:
-            if (!PurchaseWithGold(productData)) return false; 
+                if (!PurchaseWithGold(productData)) return false;
                 GiveProductReward(productData, fxStartPoint);
                 return true;
 
@@ -198,13 +190,12 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                     cardTypeName,
                     currentCardCount + drawCount,
                     maxCardCount,
-                    onWarningClosed  // ← 콜백 전달
+                    onWarningClosed
                 );
             }
             else
             {
                 Logger.LogWarning("[ShopManager] CardLimitWarningDialog를 찾을 수 없습니다.");
-                // 다이얼로그가 없으면 콜백을 바로 호출해서 isProcessing이 막히지 않도록
                 onWarningClosed?.Invoke();
             }
             return false;
@@ -220,7 +211,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     {
         var cardDataManager = FindObjectOfType<CardDataManager>();
 
-        // ⭐ 안전성 체크 (이미 CanPurchaseCards에서 체크하지만 방어적 코딩)
         if (cardDataManager == null)
         {
             Logger.LogError("[ShopManager] CardDataManager를 찾을 수 없습니다.");
@@ -229,7 +219,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
         var myCards = cardDataManager.GetMyCardList();
 
-        // ⭐ null 체크
         if (myCards == null)
         {
             Logger.LogWarning("[ShopManager] 카드 리스트가 null입니다.");
@@ -259,7 +248,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     string GetCardTypeFromTableId(string gachaTableId)
     {
         if (string.IsNullOrEmpty(gachaTableId))
-            return "Weapon"; // 기본값
+            return "Weapon";
 
         if (gachaTableId.Contains("duck") || gachaTableId.Contains("random") ||
             gachaTableId.Contains("starter") || gachaTableId.Contains("pro"))
@@ -272,7 +261,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     }
 
     /// <summary>
-    /// 광고 시청으로 구매
+    /// ⭐ 광고 시청으로 구매 — ShowBoxRewardedAd 사용 (AD_DRAW 업적 카운트 포함)
     /// </summary>
     async void PurchaseWithAd(ProductData productData, RectTransform fxStartPoint)
     {
@@ -315,7 +304,9 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
         Logger.Log($"[ShopManager] 광고 시청 시작: {productData.ProductName}");
 
-        AdsManager.Instance.ShowDailyFreeGemRewardedAd(async () =>
+        // ⭐ ShowDailyFreeGemRewardedAd → ShowBoxRewardedAd 로 교체
+        // ShowBoxRewardedAd는 광고 시청 완료 시 AD_DRAW 업적을 자동으로 카운트합니다
+        AdsManager.Instance.ShowBoxRewardedAd(async () =>
         {
             Logger.Log($"[ShopManager] 광고 시청 완료!");
 
@@ -331,7 +322,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
     void ShowAdLoadingPopup()
     {
-        // TODO: "광고를 불러오는 중입니다..." 팝업
         Logger.Log("[ShopManager] 광고 로딩 중... 잠시만 기다려주세요.");
     }
 
@@ -399,13 +389,9 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 Logger.Log($"[ShopManager] 골드 지급: +{productData.RewardGold} (총: {playerDataManager.GetCurrentCoinNumber()})");
 
                 if (fxStartPoint != null)
-                {
                     PlayGoldCollectFX(fxStartPoint, productData.RewardGold);
-                }
                 else
-                {
                     playerDataManager.SetCoinNumberAs(playerDataManager.GetCurrentCoinNumber());
-                }
 
                 ShowRewardPopup($"골드 {productData.RewardGold}개 획득!");
                 break;
@@ -417,13 +403,9 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 Logger.Log($"[ShopManager] 크리스탈 지급: +{productData.RewardCristal} (총: {playerDataManager.GetCurrentCristalNumber()})");
 
                 if (fxStartPoint != null)
-                {
                     PlayCristalCollectFX(fxStartPoint, productData.RewardCristal);
-                }
                 else
-                {
                     playerDataManager.SetCristalNumberAs(playerDataManager.GetCurrentCristalNumber());
-                }
 
                 ShowRewardPopup($"크리스탈 {productData.RewardCristal}개 획득!");
                 break;
@@ -434,16 +416,13 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 if (productData.RewardGold > 0)
                 {
                     int packGold = playerDataManager.GetCurrentCoinNumber();
-                    // ⭐ Silent로 저장 — FX와 UI 갱신은 GachaPanelManager가 딜레이 후 처리
                     playerDataManager.SetCoinNumberAsSilent(packGold + productData.RewardGold);
                     Logger.Log($"[ShopManager] 팩 골드 지급: +{productData.RewardGold}");
 
-                    // fxStartPoint가 없을 때만 즉시 UI 갱신 (FX 없음)
                     if (fxStartPoint == null)
                         playerDataManager.SetCoinNumberAs(playerDataManager.GetCurrentCoinNumber());
                 }
 
-                // 가챠 패널 열기 (FX는 GachaPanelManager.InitGachaPanel()에서 재생)
                 OpenBox(productData, fxStartPoint);
                 PackPurchaseManager.Instance?.OnPackPurchased(productData.ProductId);
                 break;
@@ -472,7 +451,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
             return;
         }
 
-        // ⭐ GachaSystem에 위임
         if (!string.IsNullOrEmpty(productData.GachaTableId))
         {
             if (gachaSystem == null)
@@ -505,19 +483,14 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     void PlayGoldCollectFX(RectTransform startPoint, int amount)
     {
         if (gemCollectFX == null)
-        {
             gemCollectFX = FindObjectOfType<GemCollectFX>();
-        }
 
         if (gemCollectFX != null)
-        {
             gemCollectFX.PlayGemCollectFX(startPoint, amount, false);
-        }
         else
-        {
             Logger.LogWarning("[ShopManager] GemCollectFX를 찾을 수 없습니다.");
-        }
     }
+
     public void PlayGoldFX(RectTransform startPoint, int amount)
     {
         PlayGoldCollectFX(startPoint, amount);
@@ -526,37 +499,22 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     void PlayCristalCollectFX(RectTransform startPoint, int amount)
     {
         if (gemCollectFX == null)
-        {
             gemCollectFX = FindObjectOfType<GemCollectFX>();
-        }
 
         if (gemCollectFX != null)
-        {
             gemCollectFX.PlayGemCollectFX(startPoint, amount, true);
-        }
         else
-        {
             Logger.LogWarning("[ShopManager] GemCollectFX를 찾을 수 없습니다.");
-        }
     }
 
     void ShowPackUnavailablePopup(string message)
     {
-        // TODO: 기존 경고 팝업 UI 재활용하거나 별도 팝업 구현
-        // 우선은 로그만 출력
         Logger.Log($"[ShopManager] 팩 구매 불가: {message}");
-
-        // 예시: lackOfCristalWarningPanel처럼 팝업 텍스트를 바꿔서 재활용
-        // packUnavailablePanel.SetActive(true);
     }
 
     void ShowInsufficientCurrencyPopup(string currencyType)
     {
-        // TODO: 부족 알림 팝업 표시
-        bool isCristal = currencyType == "Cristal" ? true : false;
-
-        // // ⭐ 경고 패널 생성
-        // if(lackOfCristalWarningPanel == null) CreateWarningPanels();
+        bool isCristal = currencyType == "Cristal";
 
         if (isCristal)
         {
@@ -570,46 +528,22 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 Logger.LogError("[ShopManager] lackOfCristalWarningPanel이 생성되지 않았습니다!");
             }
         }
-        // else
-        // {
-        //     if (lackOfGoldWarningPanel != null)
-        //     {
-        //         lackOfGoldWarningPanel.SetActive(true);
-        //         lackOfGoldWarningPanel.GetComponentInChildren<PanelTween>()?.ShowWithScale();
-        //     }
-        //     else
-        //     {
-        //         Logger.LogError("[ShopManager] lackOfGoldWarningPanel이 생성되지 않았습니다!");
-        //     }
-        // }
 
         Logger.Log($"[ShopManager] {currencyType}이(가) 부족합니다!");
     }
 
-    // ⭐ 파괴 시 정리
     protected override void OnDestroy()
     {
         base.OnDestroy();
-
-        // if (lackOfCristalWarningPanel != null)
-        //     Destroy(lackOfCristalWarningPanel);
-
-        // if (lackOfGoldWarningPanel != null)
-        //     Destroy(lackOfGoldWarningPanel);
     }
 
-    /// <summary>
-    /// 쿨다운 팝업
-    /// </summary>
     void ShowCooldownPopup(string remainingTime)
     {
-        // TODO: 쿨다운 팝업 표시
         Logger.Log($"[ShopManager] 상자를 열 수 없습니다. {remainingTime} 후 다시 시도하세요.");
     }
 
     void ShowRewardPopup(string message)
     {
-        // TODO: 보상 팝업 표시
         Logger.Log($"[ShopManager] {message}");
     }
 }
