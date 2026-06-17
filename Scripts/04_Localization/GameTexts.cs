@@ -149,6 +149,7 @@ public class GameTexts : ScriptableObject
     public string composedBy = "작곡";
     public string coinFrenzy = "코인 파티!";
     public string exp = "경험치";
+    public string enemiesIncoming = "적들이 몰려옵니다!";
 
     [Header("Upgrade Panel")]
     public string chooseASkill = "스킬을 선택해 주세요.";

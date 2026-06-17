@@ -23,6 +23,9 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] TextAsset tutorialDuckPoolDatabase;
     [SerializeField] TextAsset tutorialItemPoolDatabase;
 
+    [Header("가챠 제외 카드")]
+    [SerializeField] List<string> excludedCardNames = new List<string>();
+
     public static bool IsInitialized { get; private set; } = false;
 
     StatManager statManager;

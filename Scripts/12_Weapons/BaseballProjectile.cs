@@ -6,6 +6,7 @@ public class BaseballProjectile : ProjectileBase
     [SerializeField] GameObject deadProjectile;
     [SerializeField] float deadVerticalSpeed;
     [SerializeField] SpriteRenderer deadSprite;
+    [SerializeField] Sprite deadSpriteImage;
 
     [Header("Rotation Settings")]
     [SerializeField] bool rotateToDirection = true; // 회전 활성화 여부
@@ -79,7 +80,8 @@ public class BaseballProjectile : ProjectileBase
         Vector2 otherPosition = other.transform.position;
         Vector2 normalVector = (hitPosition - otherPosition).normalized;
 
-        GenDeadProjectile(normalVector * Speed, deadVerticalSpeed, deadSprite.sprite);
+        if (deadSpriteImage == null) deadSpriteImage = deadSprite.sprite;
+        GenDeadProjectile(normalVector * Speed, deadVerticalSpeed, deadSpriteImage);
 
         if (other.CompareTag("Enemy"))
         {
