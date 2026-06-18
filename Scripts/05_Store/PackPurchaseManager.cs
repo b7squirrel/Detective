@@ -33,29 +33,32 @@ public class PackPurchaseManager : SingletonBehaviour<PackPurchaseManager>
     {
         reason = "";
 
-        if (productId == "pack_001") // 초보자 팩
-        {
-            if (IsStarterPackPurchased())
-            {
-                reason = "이미 구매한 상품입니다.";
-                return false;
-            }
-            return true;
-        }
-
-        if (productId == "pack_003")
-        {
-            // ✅ 변경: 스테이지 조건 제거 — 1회성 체크만 유지
-            if (IsProPackPurchased())
-            {
-                reason = "이미 구매한 상품입니다.";
-                return false;
-            }
-            return true;
-        }
-
-        // 팩이 아닌 상품은 항상 통과
+        // 모든 팩 항상 통과
         return true;
+
+        // if (productId == "pack_001") // 초보자 팩
+        // {
+        //     if (IsStarterPackPurchased())
+        //     {
+        //         reason = "이미 구매한 상품입니다.";
+        //         return false;
+        //     }
+        //     return true;
+        // }
+
+        // if (productId == "pack_003")
+        // {
+        //     // ✅ 변경: 스테이지 조건 제거 — 1회성 체크만 유지
+        //     if (IsProPackPurchased())
+        //     {
+        //         reason = "이미 구매한 상품입니다.";
+        //         return false;
+        //     }
+        //     return true;
+        // }
+
+        // // 팩이 아닌 상품은 항상 통과
+        // return true;
     }
 
     /// <summary>
@@ -63,20 +66,22 @@ public class PackPurchaseManager : SingletonBehaviour<PackPurchaseManager>
     /// </summary>
     public void OnPackPurchased(string productId)
     {
-        if (productId == "pack_001")
-        {
-            PlayerPrefs.SetInt(KEY_STARTER_PURCHASED, 1);
-            PlayerPrefs.Save();
-            CloudSaveManager.Instance?.SaveToCloud();
-            Logger.Log("[PackPurchaseManager] 초보자 팩 구매 완료 저장");
-        }
-        else if (productId == "pack_003")
-        {
-            PlayerPrefs.SetInt(KEY_PRO_PURCHASED, 1);
-            PlayerPrefs.Save();
-            CloudSaveManager.Instance?.SaveToCloud();
-            Logger.Log("[PackPurchaseManager] 전문가 팩 구매 완료 저장");
-        }
+        // 구매 횟수 제한 없음 - 기록 저장 불필요
+        Logger.Log($"[PackPurchaseManager] 팩 구매 완료: {productId}");
+        // if (productId == "pack_001")
+        // {
+        //     PlayerPrefs.SetInt(KEY_STARTER_PURCHASED, 1);
+        //     PlayerPrefs.Save();
+        //     CloudSaveManager.Instance?.SaveToCloud();
+        //     Logger.Log("[PackPurchaseManager] 초보자 팩 구매 완료 저장");
+        // }
+        // else if (productId == "pack_003")
+        // {
+        //     PlayerPrefs.SetInt(KEY_PRO_PURCHASED, 1);
+        //     PlayerPrefs.Save();
+        //     CloudSaveManager.Instance?.SaveToCloud();
+        //     Logger.Log("[PackPurchaseManager] 전문가 팩 구매 완료 저장");
+        // }
     }
 
     // ───────────────────────────────────────────

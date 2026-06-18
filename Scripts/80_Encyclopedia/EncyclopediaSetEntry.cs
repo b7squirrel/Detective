@@ -87,6 +87,7 @@ public class EncyclopediaSetEntry : MonoBehaviour
                 if (hasDef && spr != null)
                 {
                     slotItemImages[i].sprite = spr;
+                    slotItemImages[i].SetNativeSize(); 
                     slotItemImages[i].color  = acquired
                         ? ITEM_ACQUIRED
                         : ITEM_UNACQUIRED;
@@ -94,6 +95,7 @@ public class EncyclopediaSetEntry : MonoBehaviour
                 else
                 {
                     slotItemImages[i].sprite = emptySlotSprite;
+                    slotItemImages[i].SetNativeSize(); // ← 빈 슬롯도 필요하면 추가
                     slotItemImages[i].color  = new Color(1f, 1f, 1f, 0.5f);
                 }
             }
