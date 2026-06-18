@@ -902,6 +902,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         IsSlowed = false;
         finishedSpawn = false;
+        DestroyHPbar(); 
         Spawner.instance.SubtractEnemyNumber(); // ⭐ 추가
         gameObject.SetActive(false);
     }
