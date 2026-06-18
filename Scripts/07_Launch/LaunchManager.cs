@@ -17,6 +17,7 @@ public class LaunchManager : MonoBehaviour
 
     [SerializeField] GameObject startButton;
     [SerializeField] GameObject BgToExitField;
+    [SerializeField] GameObject backButton;
 
     [SerializeField] StageInfoUI stageInfoUi;
     [SerializeField] StageInfo stageInfo;
@@ -51,6 +52,7 @@ public class LaunchManager : MonoBehaviour
     {
         BgToExitField.SetActive(false);
         startButton.SetActive(false);
+        backButton.SetActive(false);
     }
 
     public void UpdateStageInfo()
@@ -147,6 +149,7 @@ public class LaunchManager : MonoBehaviour
         yield return new WaitForSeconds(.2f);
         CloseField();
         BgToExitField.SetActive(false);
+        backButton.SetActive(false);
     }
 
     public void SetAllFieldTypeOf(string oriType, CardData currentLeadOri)
@@ -163,6 +166,7 @@ public class LaunchManager : MonoBehaviour
 
         BgToExitField.SetActive(true);
         startButton.SetActive(false);
+        backButton.SetActive(true);
 
         cardSlotManager.InitialSortingByGrade();
     }
@@ -195,6 +199,7 @@ public class LaunchManager : MonoBehaviour
     {
         cardSlotManager.SettrigerAnim("Off");
         startButton.SetActive(true);
+        backButton.SetActive(false);
     }
 
     #region 판매 패널 연결
