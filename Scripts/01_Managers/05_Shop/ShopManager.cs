@@ -6,8 +6,12 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     [Header("FX")]
     [SerializeField] private GemCollectFX gemCollectFX;
 
-    [Header("테스트 설정")]
-    [SerializeField] private bool enableIAPTestMode = true;
+    // [Header("테스트 설정")]
+    // [SerializeField] private bool enableIAPTestMode = true;
+
+    // 대신 프로퍼티로 GameConfig 참조
+    private bool EnableIAPTestMode =>
+        GameConfig.Instance != null && GameConfig.Instance.enableIAPTestMode;
 
     [Header("카드 제한 경고")]
     [SerializeField] private CardLimitWarningDialog cardLimitWarningDialog;
@@ -128,7 +132,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 return true;
 
             case PurchaseType.IAP:
-                if (enableIAPTestMode)
+                if (EnableIAPTestMode)
                 {
                     Logger.Log($"[ShopManager] [테스트 모드] IAP 구매: {productData.ProductName}");
                     GiveProductReward(productData, fxStartPoint);
