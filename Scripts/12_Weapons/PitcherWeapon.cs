@@ -110,4 +110,17 @@ public class PitcherWeapon : WeaponBase
             weaponTools.GetComponent<Transform>().transform.eulerAngles = new Vector3(0, 0, 0);
         }
     }
+    public override void ActivateSynergyWeapon()
+    {
+        base.ActivateSynergyWeapon();
+
+        Item equippedItem = GetEssentialEquippedItem();
+
+        if (equippedItem != null && equippedItem.synergyProjectilePrefab != null)
+        {
+            // 시너지 전용 프리팹이 있으면 교체
+            currentBallPrefab = equippedItem.synergyProjectilePrefab;
+        }
+        // synergyProjectilePrefab이 null이면 currentBallPrefab 그대로 유지 (기존 동작)
+    }
 }

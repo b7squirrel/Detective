@@ -74,6 +74,9 @@ public class Item : ScriptableObject
     [Tooltip("이 아이템을 장착했을 때 발사될 프로젝타일 프리팹")]
     public GameObject projectilePrefab;
 
+    [Tooltip("시너지 활성화 시 발사될 프로젝타일 프리팹 (없으면 기존 projectilePrefab 유지)")]
+    public GameObject synergyProjectilePrefab;
+
     [Tooltip("프로젝타일 관련 추가 설정값 (필요시 사용)")]
     public float projectileVerticalVelocity = 10f; // BombProjectile의 verticalVelocity
 
