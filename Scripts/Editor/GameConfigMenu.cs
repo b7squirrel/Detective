@@ -4,8 +4,9 @@ using UnityEngine;
 
 public static class GameConfigMenu
 {
-    private const string DebugModePath  = "Tools/QuackSurvivors/Config/Debug Mode";
+    private const string DebugModePath = "Tools/QuackSurvivors/Config/Debug Mode";
     private const string IAPTestModePath = "Tools/QuackSurvivors/Config/IAP Test Mode";
+    private const string HideFieldUIPath = "Tools/QuackSurvivors/Config/Hide Field UI";
 
     // ── Debug Mode ──────────────────────────────
 
@@ -48,6 +49,28 @@ public static class GameConfigMenu
         var config = LoadConfig();
         if (config == null) return false;
         Menu.SetChecked(IAPTestModePath, config.enableIAPTestMode);
+        return true;
+    }
+
+    // ── Hide Field UI ───────────────────────────
+
+    [MenuItem(HideFieldUIPath)]
+    private static void ToggleHideFieldUI()
+    {
+        var config = LoadConfig();
+        if (config == null) return;
+
+        config.hideFieldUI = !config.hideFieldUI;
+        Save(config);
+        Debug.Log($"[GameConfig] Hide Field UI: {config.hideFieldUI}");
+    }
+
+    [MenuItem(HideFieldUIPath, true)]
+    private static bool ValidateHideFieldUI()
+    {
+        var config = LoadConfig();
+        if (config == null) return false;
+        Menu.SetChecked(HideFieldUIPath, config.hideFieldUI);
         return true;
     }
 
