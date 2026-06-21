@@ -52,32 +52,33 @@ public class Skill300 : SkillBase
         if (skillCounter > realCoolDownTime)
         {
             skillCounter = 0;
-            
-            Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
-            if (allEnemies.Length != 0)
+
+            // ⭐ 실제 적 개수(enemyCount)로 판단 - 더 이상 항상 true가 아님
+            EnemyFinder.instance.GetAllEnemies(out int enemyCount);
+            if (enemyCount != 0)
             {
                 // ⭐ 업그레이드 레벨에 따라 여러 번 공격
                 int totalHits = 1 + (durationUpgradeLevel * additionalHitsPerLevel);
                 _totalHits = totalHits;
                 
-                StartCoroutine(MultiHitAttack(allEnemies, totalHits));
+                StartCoroutine(MultiHitAttack(totalHits));
             }
             
             skillUi.BadgeUpAnim();
         }
     }
 
-    // ⭐ 다회 공격 코루틴
-    IEnumerator MultiHitAttack(Collider2D[] enemies, int hitCount)
+    // ⭐ 다회 공격 코루틴 (매 hit마다 그 시점의 적을 새로 조회)
+    IEnumerator MultiHitAttack(int hitCount)
     {
         for (int hit = 0; hit < hitCount; hit++)
         {
             // 매 공격마다 현재 살아있는 적들을 다시 찾기
-            Collider2D[] currentEnemies = EnemyFinder.instance.GetAllEnemies();
+            Collider2D[] currentEnemies = EnemyFinder.instance.GetAllEnemies(out int currentCount);
             
-            if (currentEnemies.Length > 0)
+            if (currentCount > 0)
             {
-                ApplyDamages(currentEnemies);
+                ApplyDamages(currentEnemies, currentCount);
                 
                 if (hit == 0)
                 {
@@ -97,10 +98,12 @@ public class Skill300 : SkillBase
         }
     }
 
-    void ApplyDamages(Collider2D[] colliders)
+    void ApplyDamages(Collider2D[] colliders, int count)
     {
-        for (int i = 0; i < colliders.Length; i++)
+        for (int i = 0; i < count; i++)
         {
+            if (colliders[i] == null) continue;
+
             Idamageable enemy = colliders[i].transform.GetComponent<Idamageable>();
             GameObject enemyObject = colliders[i].gameObject;
             

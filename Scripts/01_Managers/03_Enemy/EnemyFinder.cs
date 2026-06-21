@@ -9,6 +9,9 @@ public class EnemyFinder : MonoBehaviour
     [SerializeField] LayerMask props;
     [SerializeField] float updateInterval = 0.1f;
 
+    // 필드 추가 - GetAllEnemies 전용 버퍼 분리
+    private Collider2D[] allEnemiesBuffer = new Collider2D[250];
+
     // 화면 크기
     private float halfHeight, halfWidth;
     private float searchRadius;
@@ -173,14 +176,14 @@ public class EnemyFinder : MonoBehaviour
     /// 화면 범위 내 모든 적 반환. NonAlloc 버퍼를 사용합니다.
     /// count를 반환하므로 호출부에서 배열 크기를 직접 제어할 수 있습니다.
     /// </summary>
-    public Collider2D[] GetAllEnemies()
+    // 기존 GetAllEnemies()를 이렇게 변경
+    public Collider2D[] GetAllEnemies(out int count)
     {
         Vector2 center = GameManager.instance.player.transform.position;
         float allEnemiesRadius = Mathf.Sqrt(halfWidth * halfWidth + halfHeight * halfHeight) * 1f;
 
-        // hitBuffer 재사용 (최대 250개)
-        Physics2D.OverlapCircleNonAlloc(center, allEnemiesRadius, hitBuffer, enemy | props);
-        return hitBuffer;
+        count = Physics2D.OverlapCircleNonAlloc(center, allEnemiesRadius, allEnemiesBuffer, enemy | props);
+        return allEnemiesBuffer;
     }
 
     public int GetCachedEnemyCount()

@@ -21,7 +21,7 @@ public class Skill200 : SkillBase
     private List<EnemyBase> slowedEnemies = new List<EnemyBase>();
 
     private Dictionary<EnemyBase, UnityAction> landingCallbacks
-    = new Dictionary<EnemyBase, UnityAction>();
+        = new Dictionary<EnemyBase, UnityAction>();
 
     [Header("Debug")]
     [SerializeField] float _cooldownCounter;
@@ -102,13 +102,15 @@ public class Skill200 : SkillBase
     // ⭐ 스킬 시작 시 한 번만 실행
     void ApplySlowEffect()
     {
-        Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
-        if (allEnemies == null || allEnemies.Length == 0) return;
+        Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies(out int enemyCount);
+        if (allEnemies == null || enemyCount == 0) return;
 
         slowedEnemies.Clear(); // 리스트 초기화
 
-        for (int i = 0; i < allEnemies.Length; i++)
+        for (int i = 0; i < enemyCount; i++)
         {
+            if (allEnemies[i] == null) continue;
+
             EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
             if (enemy == null) continue;
 
@@ -121,15 +123,16 @@ public class Skill200 : SkillBase
     // ⭐ 스킬 지속 중 새로 생성된 적만 체크 (가벼운 체크)
     void CheckAndApplyToNewEnemies()
     {
-        // 프레임당 최대 5마리만 체크 (성능 최적화)
-        Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies();
-        if (allEnemies == null || allEnemies.Length == 0) return;
+        Collider2D[] allEnemies = EnemyFinder.instance.GetAllEnemies(out int enemyCount);
+        if (allEnemies == null || enemyCount == 0) return;
 
         int checkCount = 0;
         int maxChecksPerFrame = 5; // 프레임당 최대 5마리만
 
-        for (int i = 0; i < allEnemies.Length && checkCount < maxChecksPerFrame; i++)
+        for (int i = 0; i < enemyCount && checkCount < maxChecksPerFrame; i++)
         {
+            if (allEnemies[i] == null) continue;
+
             EnemyBase enemy = allEnemies[i].GetComponent<EnemyBase>();
             if (enemy == null || enemy.IsSlowed) continue;
 
