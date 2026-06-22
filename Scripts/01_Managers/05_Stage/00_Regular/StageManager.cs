@@ -44,8 +44,8 @@ public class StageManager : MonoBehaviour
         poolManager.InitPools();
 
         stageEventManager.Init(contents.stageDataText,
-                                       contents.enemyData, contents.enemyNumForNextEvent,
-                                       contents.stageMusicType);
+    contents.enemyData,
+    contents.stageMusicType);
 
         spawnGemsOnStart.InitGemData(contents.gemToSpawn,
                                                    contents.numbersOfGemToSpawn,
