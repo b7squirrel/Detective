@@ -68,6 +68,15 @@ public class GameTexts : ScriptableObject
     public string packCountUnit = " 매";
     public string packCoinUnit = "개";
 
+    [Header("Chest Description")]
+    // 상자 설명 행 레이블
+    public string chestLabel1x = "1회";    // 영문: "1x"
+    public string chestLabel10x = "10회";   // 영문: "10x"
+    public string chestLabelPlus = "+";     // 영문: "+"  (동일)
+                                            // "이상" 텍스트
+    public string chestAbove = " 이상";    // 영문: " or above"  (또는 "" 로 비워도 됨)
+
+
     [Header("Gacha")]
     public string newFriend = "새로운 아기 오리!";
     public string newFriends = "새로운 아기 오리들!";

@@ -22,19 +22,19 @@ public class ChestBuyButton : MonoBehaviour
     [SerializeField] TextMeshProUGUI costText;
 
     [Header("설명 행 — 1뽑 버튼에만 연결")]
-    [Tooltip("Row_Single > LeftText  (예: 1회  희귀 이상 오리 카드)")]
+    [Tooltip("Row_Single > LeftText")]
     [SerializeField] TextMeshProUGUI singleLeftText;
-    [Tooltip("Row_Single > RightText (예: 1매)")]
+    [Tooltip("Row_Single > RightText")]
     [SerializeField] TextMeshProUGUI singleRightText;
 
-    [Tooltip("Row_Ten_Normal > LeftText  (예: 10회  희귀 이상 오리 카드)")]
+    [Tooltip("Row_Ten_Normal > LeftText")]
     [SerializeField] TextMeshProUGUI tenNormalLeftText;
-    [Tooltip("Row_Ten_Normal > RightText (예: 9매)")]
+    [Tooltip("Row_Ten_Normal > RightText")]
     [SerializeField] TextMeshProUGUI tenNormalRightText;
 
-    [Tooltip("Row_Ten_Guarantee > LeftText  (예: +  전설 이상 오리 카드)")]
+    [Tooltip("Row_Ten_Guarantee > LeftText")]
     [SerializeField] TextMeshProUGUI tenGuarLeftText;
-    [Tooltip("Row_Ten_Guarantee > RightText (예: 1매)")]
+    [Tooltip("Row_Ten_Guarantee > RightText")]
     [SerializeField] TextMeshProUGUI tenGuarRightText;
 
     [Header("FX 위치")]
@@ -98,35 +98,35 @@ public class ChestBuyButton : MonoBehaviour
         var g = LocalizationManager.Game;
         if (g == null) return;
 
-        string unit       = g.packCountUnit;
+        string unit       = g.packCountUnit;                    // " 매" / ""
         string rareC      = $"<color={COLOR_RARE}>{g.gradeNames[MyGrade.Rare]}</color>";
         string legendaryC = $"<color={COLOR_LEGENDARY}>{g.gradeNames[MyGrade.Legendary]}</color>";
-        string above      = $"<color={COLOR_WHITE}> 이상</color>";
+        string above      = $"<color={COLOR_WHITE}>{g.chestAbove}</color>";
         string w          = COLOR_WHITE;
+
+        // ─── GameTexts에서 레이블 가져오기 ───
+        string label1x   = $"<color={w}>{g.chestLabel1x}  </color>";
+        string label10x  = $"<color={w}>{g.chestLabel10x} </color>";
+        string labelPlus = $"<color={w}>   {g.chestLabelPlus}  </color>";
 
         // 카드 이름
         string cardName = (data.ProductId == "chest_001" || data.ProductId == "chest_002")
             ? g.duckCard
             : g.itemCard;
 
-        // 레이블
-        string label1  = $"<color={w}>1회  </color>";
-        string label10 = $"<color={w}>10회 </color>";
-        string labelPlus = $"<color={w}>     +  </color>";
-
-        // ─── Row_Single: 1회 희귀 이상 [오리/아이템] 카드 ───
+        // ─── Row_Single ───
         if (singleLeftText  != null)
-            singleLeftText.text  = $"{label1}{rareC}{above} <color={w}>{cardName}</color>";
+            singleLeftText.text  = $"{label1x}{rareC}{above} <color={w}>{cardName}</color>";
         if (singleRightText != null)
             singleRightText.text = $"<color={w}>1{unit}</color>";
 
-        // ─── Row_Ten_Normal: 10회 희귀 이상 [오리/아이템] 카드 ───
+        // ─── Row_Ten_Normal ───
         if (tenNormalLeftText  != null)
-            tenNormalLeftText.text  = $"{label10}{rareC}{above} <color={w}>{cardName}</color>";
+            tenNormalLeftText.text  = $"{label10x}{rareC}{above} <color={w}>{cardName}</color>";
         if (tenNormalRightText != null)
             tenNormalRightText.text = $"<color={w}>9{unit}</color>";
 
-        // ─── Row_Ten_Guarantee: + 전설 이상 [오리/아이템] 카드 ───
+        // ─── Row_Ten_Guarantee ───
         if (tenGuarLeftText  != null)
             tenGuarLeftText.text  = $"{labelPlus}{legendaryC}{above} <color={w}>{cardName}</color>";
         if (tenGuarRightText != null)
