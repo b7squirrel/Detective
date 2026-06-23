@@ -4,7 +4,7 @@ using System.Collections;
 
 /// <summary>
 /// 팩 구매 버튼
-/// 팩 구성 설명을 통합 텍스트 박스 하나로 표시합니다.
+/// 각 행을 Left / Dots / Right TMP 세 개로 분리해서 오른쪽 정렬을 처리합니다.
 /// LocalizationManager를 통해 다국어를 지원합니다.
 /// </summary>
 public class PackBuyButton : MonoBehaviour
@@ -18,15 +18,23 @@ public class PackBuyButton : MonoBehaviour
     [Header("가격 텍스트")]
     [SerializeField] private TextMeshProUGUI priceText;
 
-    [Header("팩 구성 설명 (통합 텍스트 박스 1개)")]
-    [Tooltip("Rich Text가 활성화되어 있어야 합니다.")]
-    [SerializeField] private TextMeshProUGUI descriptionText;
+    [Header("Row_Duck")]
+    [SerializeField] private TextMeshProUGUI duckLeftText;   // "고급 또는 전설 오리 카드"
+    [SerializeField] private TextMeshProUGUI duckDotsText;   // "····················"
+    [SerializeField] private TextMeshProUGUI duckRightText;  // "1 매"
 
-    [Header("텍스트 정렬 위치 (px) — 씬에서 조정")]
-    [Tooltip("점선 시작 위치")]
-    [SerializeField] private float posDots = 380f;
-    [Tooltip("수량 텍스트 위치")]
-    [SerializeField] private float posCount = 460f;
+    [Header("Row_Item")]
+    [SerializeField] private TextMeshProUGUI itemLeftText;
+    [SerializeField] private TextMeshProUGUI itemDotsText;
+    [SerializeField] private TextMeshProUGUI itemRightText;  // "2 매"
+
+    [Header("Row_Gold")]
+    [SerializeField] private TextMeshProUGUI goldLeftText;
+    [SerializeField] private TextMeshProUGUI goldDotsText;
+    [SerializeField] private TextMeshProUGUI goldRightText;  // "10,000개"
+
+    [Header("점선 문자 — 씬에서 길이 조정")]
+    [SerializeField] private string dotsString = "····················";
 
     [Header("화면 전환")]
     [SerializeField] GameObject fg;
@@ -83,8 +91,6 @@ public class PackBuyButton : MonoBehaviour
 
     void UpdateDescription(ProductData data)
     {
-        if (descriptionText == null) return;
-
         var g = LocalizationManager.Game;
         if (g == null) return;
 
@@ -103,37 +109,86 @@ public class PackBuyButton : MonoBehaviour
         string unit     = g.packCountUnit;  // " 매" 또는 ""
         string coinUnit = g.packCoinUnit;   // "개" 또는 ""
 
-        // ─── pos 태그 (인스펙터에서 조정) ───
-        string dots1 = $"<pos={posDots}>·····";
-        string dots2 = $"<pos={posDots}>··········";
-        string dots3 = $"<pos={posDots}>···············";
-        string cnt   = $"<pos={posCount}>";
-
-        string line1, line2, line3;
+        // ─── 점선 (모든 행 동일) ───
+        SetDots();
 
         if (data.ProductId == "pack_001") // 초보자 팩
         {
+            // Row_Duck
             string duckGrade = epicC + orC + legendaryC;
-            string duckLine  = string.Format(g.packDuckCardLine, duckGrade);
-            string itemLine  = string.Format(g.packItemCardLine, epicC);
+            SetRow(
+                duckLeftText,
+                string.Format(g.packDuckCardLine, duckGrade),
+                duckRightText,
+                $"1{unit}"
+            );
 
-            line1 = $"<color={COLOR_WHITE}>{duckLine}{dots1}{cnt}1{unit}</color>";
-            line2 = $"<color={COLOR_WHITE}>{itemLine}{dots2}{cnt}2{unit}</color>";
-            line3 = $"<color={COLOR_WHITE}>{g.coin}{dots3}{cnt}{data.RewardGold:N0}{coinUnit}</color>";
+            // Row_Item
+            SetRow(
+                itemLeftText,
+                string.Format(g.packItemCardLine, epicC),
+                itemRightText,
+                $"2{unit}"
+            );
+
+            // Row_Gold
+            SetRow(
+                goldLeftText,
+                g.coin,
+                goldRightText,
+                $"{data.RewardGold:N0}{coinUnit}"
+            );
         }
         else if (data.ProductId == "pack_003") // 전문가 팩
         {
+            // Row_Duck
             string duckGrade = legendaryC + orC + mythicC;
-            string duckLine  = string.Format(g.packDuckCardLine, duckGrade);
-            string itemLine  = string.Format(g.packItemCardLine, legendaryC);
+            SetRow(
+                duckLeftText,
+                string.Format(g.packDuckCardLine, duckGrade),
+                duckRightText,
+                $"1{unit}"
+            );
 
-            line1 = $"<color={COLOR_WHITE}>{duckLine}{dots1}{cnt}1{unit}</color>";
-            line2 = $"<color={COLOR_WHITE}>{itemLine}{dots2}{cnt}2{unit}</color>";
-            line3 = $"<color={COLOR_WHITE}>{g.coin}{dots3}{cnt}{data.RewardGold:N0}{coinUnit}</color>";
+            // Row_Item
+            SetRow(
+                itemLeftText,
+                string.Format(g.packItemCardLine, legendaryC),
+                itemRightText,
+                $"2{unit}"
+            );
+
+            // Row_Gold
+            SetRow(
+                goldLeftText,
+                g.coin,
+                goldRightText,
+                $"{data.RewardGold:N0}{coinUnit}"
+            );
         }
-        else return;
+    }
 
-        descriptionText.text = $"{line1}\n{line2}\n{line3}";
+    /// <summary>
+    /// Left/Right 텍스트를 한 번에 세팅합니다.
+    /// Left는 Rich Text(색상 태그 포함), Right는 흰색 단순 텍스트.
+    /// </summary>
+    void SetRow(TextMeshProUGUI left, string leftContent,
+                TextMeshProUGUI right, string rightContent)
+    {
+        if (left  != null) left.text  = leftContent;
+        if (right != null) right.text = $"<color={COLOR_WHITE}>{rightContent}</color>";
+    }
+
+    /// <summary>
+    /// 점선 텍스트를 모든 행에 동일하게 세팅합니다.
+    /// dotsString은 인스펙터에서 조정하세요.
+    /// </summary>
+    void SetDots()
+    {
+        string d = $"<color={COLOR_WHITE}>{dotsString}</color>";
+        if (duckDotsText != null) duckDotsText.text = d;
+        if (itemDotsText != null) itemDotsText.text = d;
+        if (goldDotsText != null) goldDotsText.text = d;
     }
 
     public void OnPurchaseButtonClicked()

@@ -5,13 +5,37 @@ using System.Collections;
 
 public enum ChestType { Duck, Item, Other }
 
+/// <summary>
+/// 상자 구매 버튼 (1뽑 / 10뽑)
+/// 설명은 1뽑 버튼에만 연결합니다.
+/// 10뽑 버튼은 가격(costText)만 연결하면 됩니다.
+/// </summary>
 public class ChestBuyButton : MonoBehaviour
 {
+    const string COLOR_RARE      = "#80FF00";
+    const string COLOR_LEGENDARY = "#B24CFF";
+    const string COLOR_WHITE     = "white";
+
     [Header("UI Components")]
     [SerializeField] Image productImage;
-    [SerializeField] TextMeshProUGUI rewardText;
-    [SerializeField] TextMeshProUGUI costText;
     [SerializeField] Sprite productSprite;
+    [SerializeField] TextMeshProUGUI costText;
+
+    [Header("설명 행 — 1뽑 버튼에만 연결")]
+    [Tooltip("Row_Single > LeftText  (예: 1회  희귀 이상 오리 카드)")]
+    [SerializeField] TextMeshProUGUI singleLeftText;
+    [Tooltip("Row_Single > RightText (예: 1매)")]
+    [SerializeField] TextMeshProUGUI singleRightText;
+
+    [Tooltip("Row_Ten_Normal > LeftText  (예: 10회  희귀 이상 오리 카드)")]
+    [SerializeField] TextMeshProUGUI tenNormalLeftText;
+    [Tooltip("Row_Ten_Normal > RightText (예: 9매)")]
+    [SerializeField] TextMeshProUGUI tenNormalRightText;
+
+    [Tooltip("Row_Ten_Guarantee > LeftText  (예: +  전설 이상 오리 카드)")]
+    [SerializeField] TextMeshProUGUI tenGuarLeftText;
+    [Tooltip("Row_Ten_Guarantee > RightText (예: 1매)")]
+    [SerializeField] TextMeshProUGUI tenGuarRightText;
 
     [Header("FX 위치")]
     [SerializeField] RectTransform gemPoint;
@@ -31,39 +55,82 @@ public class ChestBuyButton : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    void Start()
+    {
+        LocalizationManager.OnLanguageChanged += RefreshDescription;
+    }
+
+    void OnDestroy()
+    {
+        LocalizationManager.OnLanguageChanged -= RefreshDescription;
+    }
+
+    void RefreshDescription()
+    {
+        if (productData != null)
+            UpdateDescription(productData);
+    }
+
     public void SetInfo(ProductData data)
     {
         productData = data;
-        UpdateUI();
-    }
-
-    void UpdateUI()
-    {
-        if (productData == null)
-        {
-            Logger.LogWarning("[ChestBuyButton] ProductData가 null입니다.");
-            return;
-        }
-
-        Logger.Log($"[ChestBuyButton] 버튼 업데이트: {productData.ProductName}");
-        Logger.Log($"[ChestBuyButton] - PurchaseType: {productData.PurchaseType}");
-        Logger.Log($"[ChestBuyButton] - PurchaseCost: {productData.PurchaseCost}");
 
         if (productImage != null && productSprite != null)
             productImage.sprite = productSprite;
 
         if (costText != null)
         {
-            if (productData.PurchaseType == PurchaseType.IAP)
-            {
-                float dollars = productData.PurchaseCost / 100f;
-                costText.text = $"${dollars:F2}";
-            }
+            if (data.PurchaseType == PurchaseType.IAP)
+                costText.text = $"${data.PurchaseCost / 100f:F2}";
             else
-            {
-                costText.text = $"{productData.PurchaseCost:N0}";
-            }
+                costText.text = $"{data.PurchaseCost:N0}";
         }
+
+        UpdateDescription(data);
+        Logger.Log($"[ChestBuyButton] 설정 완료: {data.ProductId}");
+    }
+
+    void UpdateDescription(ProductData data)
+    {
+        // 설명 필드가 없으면 10뽑 버튼 — 가격만 처리
+        if (singleLeftText == null) return;
+
+        var g = LocalizationManager.Game;
+        if (g == null) return;
+
+        string unit       = g.packCountUnit;
+        string rareC      = $"<color={COLOR_RARE}>{g.gradeNames[MyGrade.Rare]}</color>";
+        string legendaryC = $"<color={COLOR_LEGENDARY}>{g.gradeNames[MyGrade.Legendary]}</color>";
+        string above      = $"<color={COLOR_WHITE}> 이상</color>";
+        string w          = COLOR_WHITE;
+
+        // 카드 이름
+        string cardName = (data.ProductId == "chest_001" || data.ProductId == "chest_002")
+            ? g.duckCard
+            : g.itemCard;
+
+        // 레이블
+        string label1  = $"<color={w}>1회  </color>";
+        string label10 = $"<color={w}>10회 </color>";
+        string labelPlus = $"<color={w}>     +  </color>";
+
+        // ─── Row_Single: 1회 희귀 이상 [오리/아이템] 카드 ───
+        if (singleLeftText  != null)
+            singleLeftText.text  = $"{label1}{rareC}{above} <color={w}>{cardName}</color>";
+        if (singleRightText != null)
+            singleRightText.text = $"<color={w}>1{unit}</color>";
+
+        // ─── Row_Ten_Normal: 10회 희귀 이상 [오리/아이템] 카드 ───
+        if (tenNormalLeftText  != null)
+            tenNormalLeftText.text  = $"{label10}{rareC}{above} <color={w}>{cardName}</color>";
+        if (tenNormalRightText != null)
+            tenNormalRightText.text = $"<color={w}>9{unit}</color>";
+
+        // ─── Row_Ten_Guarantee: + 전설 이상 [오리/아이템] 카드 ───
+        if (tenGuarLeftText  != null)
+            tenGuarLeftText.text  = $"{labelPlus}{legendaryC}{above} <color={w}>{cardName}</color>";
+        if (tenGuarRightText != null)
+            tenGuarRightText.text = $"<color={w}>1{unit}</color>";
     }
 
     public void OnPurchaseButtonClicked()
@@ -94,15 +161,10 @@ public class ChestBuyButton : MonoBehaviour
         }
 
         isProcessing = true;
-        Debug.Log($"[ChestBuy] PurchaseSequence 시작: {productData.ProductId}, Time: {Time.time}");
 
-        // 1. 버튼 눌림 애니메이션
         if (animator != null) animator.SetTrigger("Pressed");
-
-        // 2. FG 활성화 (터치 차단)
         if (fg != null) fg.SetActive(true);
 
-        // 3. 애니메이션 대기
         yield return new WaitForSeconds(0.1f);
 
         if (TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked
@@ -111,40 +173,30 @@ public class ChestBuyButton : MonoBehaviour
             ShopTutorialController.instance.OnGachaOpened(chestType);
         }
 
-        Debug.Log($"[ChestBuy] PurchaseProduct 호출: {Time.time}");
+        System.Action onWarningClosed = () => { isProcessing = false; };
 
-        // 경고 팝업이 닫힐 때 isProcessing을 해제하는 콜백
-        System.Action onWarningClosed = () =>
-        {
-            isProcessing = false;
-        };
-
-        bool success = ShopManager.Instance.PurchaseProduct(productData.ProductId, gemPoint, onWarningClosed);
+        bool success = ShopManager.Instance.PurchaseProduct(
+            productData.ProductId, gemPoint, onWarningClosed);
 
         if (!success)
         {
-            // FG는 다음 프레임에 끔
-            // (Warning BG가 켜진 후에 끄면 자연스러운 전환)
             StartCoroutine(DeactivateFGNextFrame());
-            isProcessing = false;  // 단, isProcessing은 바로 콜백으로 처리
-            // isProcessing은 경고 팝업이 닫힐 때 onWarningClosed 콜백에서 해제
+            isProcessing = false;
         }
-        // 성공 시: isProcessing과 FG 모두 GachaPanelManager가 닫힐 때 ResetState()에서 해제
     }
 
     IEnumerator DeactivateFGNextFrame()
     {
-        yield return null;  // Warning BG가 켜진 후 한 프레임 대기
+        yield return null;
         if (fg != null) fg.SetActive(false);
     }
 
-    // 가챠 패널이 닫힐 때 GachaPanelManager에서 호출
     public void ResetState()
     {
         isProcessing = false;
 
-        // ✅ 튜토리얼 중에는 fg를 ShopTutorialController가 관리하므로 건드리지 않음
-        bool inShopTutorial = TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked;
+        bool inShopTutorial =
+            TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked;
         if (fg != null && !inShopTutorial)
             fg.SetActive(false);
     }

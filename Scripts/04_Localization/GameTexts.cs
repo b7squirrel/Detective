@@ -53,7 +53,7 @@ public class GameTexts : ScriptableObject
     public string cristal = "크리스탈";
     public string singleDraw = "1회 뽑기";
     public string tenXDraw = "10회 뽑기";
-    public string watchAdToDraw = "광고 보고 뽑기";
+    public string watchAdToDraw = "광고 보고 행운 상자 뽑기";
     public string cardDeckFull = "오리 카드가 가득 찼어요!";
 
     [Header("Pack Description")]
