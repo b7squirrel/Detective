@@ -55,7 +55,19 @@ public class GameTexts : ScriptableObject
     public string tenXDraw = "10회 뽑기";
     public string watchAdToDraw = "광고 보고 뽑기";
     public string cardDeckFull = "오리 카드가 가득 찼어요!";
-    
+
+    [Header("Pack Description")]
+    // 오리 카드 라인: {0} = 등급명(들)
+    public string packDuckCardLine = "{0} 오리 카드";
+    // 아이템 카드 라인: {0} = 등급명
+    public string packItemCardLine = "{0} 아이템 카드";
+    // 코인 라인 (별도 표기 없이 coin 필드 재사용)
+    // 조합어
+    public string packOr = " 또는 ";
+    // 수량 단위
+    public string packCountUnit = " 매";
+    public string packCoinUnit = "개";
+
     [Header("Gacha")]
     public string newFriend = "새로운 아기 오리!";
     public string newFriends = "새로운 아기 오리들!";
