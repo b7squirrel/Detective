@@ -22,12 +22,13 @@ public class HapticManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        Load(); // ✅ 추가
     }
 
     void Start()
     {
         HapticController.Init();
-        Load(); // ✅ 추가
     }
 
     // ───────────────────────────────────────────

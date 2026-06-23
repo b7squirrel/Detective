@@ -71,6 +71,7 @@ public class PrefsManager : MonoBehaviour
     void InitHapticState(bool state)
     {
         // HapticManager는 Essential씬에만 있으므로 null 체크 필수
+        Debug.Log($"[PrefsManager] InitHapticState → {state}, HapticManager.Instance: {HapticManager.Instance}");
         HapticManager.Instance?.SetState(state);
         buttonToggleHaptic?.SetImage(state);
     }
@@ -93,6 +94,7 @@ public class PrefsManager : MonoBehaviour
     public void SetHapticState()
     {
         hapticState = !hapticState;
+        Debug.Log($"[PrefsManager] SetHapticState called → {hapticState}");
         InitHapticState(hapticState);
         Save();
     }

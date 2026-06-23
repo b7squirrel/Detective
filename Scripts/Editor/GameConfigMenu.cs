@@ -62,6 +62,7 @@ public static class GameConfigMenu
 
         config.hideFieldUI = !config.hideFieldUI;
         Save(config);
+        
         Debug.Log($"[GameConfig] Hide Field UI: {config.hideFieldUI}");
     }
 

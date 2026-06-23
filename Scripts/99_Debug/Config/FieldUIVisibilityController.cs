@@ -51,5 +51,9 @@ public class FieldUIVisibilityController : MonoBehaviour
                     target.anchoredPosition = original;
             }
         }
+
+        // // ⭐ 커서 숨기기 (에디터 Play Mode 녹화용)
+        Cursor.visible = !shouldHide;
+        Cursor.lockState = shouldHide ? CursorLockMode.Confined : CursorLockMode.None;
     }
 }

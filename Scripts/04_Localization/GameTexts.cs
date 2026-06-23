@@ -175,6 +175,7 @@ public class GameTexts : ScriptableObject
     public string language = "언어";
     public string sound = "사운드";
     public string music = "음악";
+    public string haptic = "진동";
     public string pause = "일시 정지";
     public string Continue = "계속 하기";
     // 헬퍼 메서드

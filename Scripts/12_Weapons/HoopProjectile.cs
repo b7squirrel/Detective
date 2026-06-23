@@ -40,6 +40,13 @@ public class HoopProjectile : ProjectileBase
 
         SetDamageStats();
         CastDamage();
+        // SetLinePositions(transform.position, hoopWeapon.transform.position);
+    }
+
+    // ✅ 모든 Update가 끝난 후, 최종 위치로 실을 그림
+    void LateUpdate()
+    {
+        if (hoopWeapon == null) return;
         SetLinePositions(transform.position, hoopWeapon.transform.position);
     }
 
