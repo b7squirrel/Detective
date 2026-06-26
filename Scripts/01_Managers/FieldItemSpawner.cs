@@ -27,11 +27,13 @@ public class FieldItemSpawner : MonoBehaviour
 
     [Header("Egg Box")]
     [SerializeField] GameObject EggBoxPrefab;
+    [SerializeField] int maxEggBoxCount = 5;
     float[] eggSpawnTime = { 10f, 50f, 90f, 60f, 230f };
     float eggSpawnCoolDown;
     int eggSpawnIndex;
     int eggBoxNums; // 알 상자에 아이디 부여
     int eggNums; // 알에 아이디 부여
+    GameConfig gameConfig;
 
     // 알 디버그
     int eggBugNums; // 알의 갯수 오류가 난 횟수
@@ -40,6 +42,7 @@ public class FieldItemSpawner : MonoBehaviour
     {
         itemBoxSpawnCounter = 0;
         MSBspawnCounter = 0;
+        gameConfig = Resources.Load<GameConfig>("GameConfig");
     }
     void Update()
     {
@@ -64,6 +67,9 @@ public class FieldItemSpawner : MonoBehaviour
 
         if (eggSpawnIndex > eggSpawnTime.Length - 1) return;
         eggSpawnCoolDown += Time.deltaTime;
+
+        if (gameConfig != null && gameConfig.hidePeriodicChest) return;
+
         if (eggSpawnCoolDown > eggSpawnTime[eggSpawnIndex] && GameManager.instance.IsBossStage == false)
         {
             SpawnEggBox(GetRandomSpawnPoint());
@@ -83,6 +89,8 @@ public class FieldItemSpawner : MonoBehaviour
     }
     public void SpawnEggBox(Vector2 spawnPos)
     {
+        if (eggBoxNums >= maxEggBoxCount) return;
+        
         Transform eggBox = GameManager.instance.poolManager.GetMisc(EggBoxPrefab).transform;
         if (eggBox != null)
         {

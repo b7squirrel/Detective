@@ -24,6 +24,10 @@ public class GameConfig : ScriptableObject
     [Header("Field UI")]
     public bool hideFieldUI = false;
 
+    [Header("필드에서 상자와 보석 제어")]
+    public bool hideFieldItems; // gem, chest 시작 배치 숨기기
+    public bool hidePeriodicChest; // 주기적 EggBox 스폰 숨기기
+
     private void OnEnable()
     {
         _instance = this;

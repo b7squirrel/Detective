@@ -41,21 +41,22 @@ public class SpawnGemsOnStart : MonoBehaviour
     IEnumerator SpawnGemsAndChestCo()
     {
         yield return new WaitForSeconds(.8f);
-        
         manager = FindObjectOfType<GameManager>();
-        for (int i = 0; i < numbersOfGemToSpawn; i++)
+
+        bool hideItems = GameConfig.Instance != null && GameConfig.Instance.hideFieldItems;
+
+        if (!hideItems)
         {
-            Vector2 posGem =
-                new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadius, innerRadius);
-            GameObject gem = manager.poolManager.GetMisc(gemToSpawn);
-            gem.transform.position = posGem;
+            for (int i = 0; i < numbersOfGemToSpawn; i++)
+            {
+                Vector2 posGem = new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadius, innerRadius);
+                GameObject gem = manager.poolManager.GetMisc(gemToSpawn);
+                gem.transform.position = posGem;
+            }
+
+            Vector2 posChest = new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadiusForChest, innerRadiusForChest);
+            GameManager.instance.fieldItemSpawner.SpawnEggBox(posChest);
+            CameraShake.instance.Shake();
         }
-
-        Vector2 posChest =
-            new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadiusForChest, innerRadiusForChest);
-
-        GameManager.instance.fieldItemSpawner.SpawnEggBox(posChest);
-
-        CameraShake.instance.Shake();
     }
 }

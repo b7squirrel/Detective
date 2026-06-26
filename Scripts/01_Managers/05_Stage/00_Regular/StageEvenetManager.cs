@@ -5,7 +5,7 @@ using UnityEngine;
 public class StageEvenetManager : MonoBehaviour, ISpawnController
 {
     [SerializeField] List<StageEvent> stageEvents;
-    private const int ENEMY_NUM_FOR_NEXT_EVENT = 30; // 다음 이벤트를 시작하기 위한 최대 적 수
+    private const int ENEMY_NUM_FOR_NEXT_EVENT = 500; // 다음 이벤트를 시작하기 위한 최대 적 수
     [SerializeField] StageMusicType stageMusicType;
 
     ReadStageData readStageData;

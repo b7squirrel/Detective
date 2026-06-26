@@ -7,6 +7,8 @@ public static class GameConfigMenu
     private const string DebugModePath = "Tools/QuackSurvivors/Config/Debug Mode";
     private const string IAPTestModePath = "Tools/QuackSurvivors/Config/IAP Test Mode";
     private const string HideFieldUIPath = "Tools/QuackSurvivors/Config/Hide Field UI";
+    private const string HideFieldItemsPath = "Tools/QuackSurvivors/Config/Hide Field Items On Start";
+    private const string HidePeriodicChestPath = "Tools/QuackSurvivors/Config/Hide Periodic Chest";
 
     // ── Debug Mode ──────────────────────────────
 
@@ -62,7 +64,7 @@ public static class GameConfigMenu
 
         config.hideFieldUI = !config.hideFieldUI;
         Save(config);
-        
+
         Debug.Log($"[GameConfig] Hide Field UI: {config.hideFieldUI}");
     }
 
@@ -72,6 +74,44 @@ public static class GameConfigMenu
         var config = LoadConfig();
         if (config == null) return false;
         Menu.SetChecked(HideFieldUIPath, config.hideFieldUI);
+        return true;
+    }
+
+    // ── Hide Field Items On Start ────────────────
+    [MenuItem(HideFieldItemsPath)]
+    private static void ToggleHideFieldItems()
+    {
+        var config = LoadConfig();
+        if (config == null) return;
+        config.hideFieldItems = !config.hideFieldItems;
+        Save(config);
+        Debug.Log($"[GameConfig] Hide Field Items On Start: {config.hideFieldItems}");
+    }
+    [MenuItem(HideFieldItemsPath, true)]
+    private static bool ValidateHideFieldItems()
+    {
+        var config = LoadConfig();
+        if (config == null) return false;
+        Menu.SetChecked(HideFieldItemsPath, config.hideFieldItems);
+        return true;
+    }
+
+    // ── Hide Periodic Chest ──────────────────────
+    [MenuItem(HidePeriodicChestPath)]
+    private static void ToggleHidePeriodicChest()
+    {
+        var config = LoadConfig();
+        if (config == null) return;
+        config.hidePeriodicChest = !config.hidePeriodicChest;
+        Save(config);
+        Debug.Log($"[GameConfig] Hide Periodic Chest: {config.hidePeriodicChest}");
+    }
+    [MenuItem(HidePeriodicChestPath, true)]
+    private static bool ValidateHidePeriodicChest()
+    {
+        var config = LoadConfig();
+        if (config == null) return false;
+        Menu.SetChecked(HidePeriodicChestPath, config.hidePeriodicChest);
         return true;
     }
 
