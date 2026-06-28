@@ -284,6 +284,10 @@ public class GameTexts : ScriptableObject
         "카드를 판매하거나 합성해서 공간을 정리해 주세요"
     };
 
+    [Header("All Clear Popup")]
+    public string allClearTitle = "모든 스테이지 클리어!";
+    public string allClearDescription = "더 많은 모험이 업데이트로 찾아올 예정이에요.\n\n그 전까지 무한 오리 모드에 도전해 보세요!";
+
     [Header("Game Hints")]
     [Tooltip("로딩 중 표시될 힌트들")]
     [TextArea]

@@ -23,6 +23,7 @@ public class GameConfig : ScriptableObject
 
     [Header("Field UI")]
     public bool hideFieldUI = false;
+    public bool hideCursor = false;
 
     [Header("필드에서 상자와 보석 제어")]
     public bool hideFieldItems; // gem, chest 시작 배치 숨기기

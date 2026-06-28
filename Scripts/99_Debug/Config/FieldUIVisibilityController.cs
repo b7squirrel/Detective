@@ -33,27 +33,28 @@ public class FieldUIVisibilityController : MonoBehaviour
             return;
         }
 
+        // ⭐ UI 숨기기
         bool shouldHide = config.hideFieldUI;
-
         foreach (var target in targets)
         {
             if (target == null) continue;
-
             if (shouldHide)
-            {
-                // ⭐ 화면 밖으로 이동
                 target.anchoredPosition = new Vector2(HIDE_OFFSET, HIDE_OFFSET);
-            }
             else
             {
-                // ⭐ 원래 위치로 복구
                 if (originalPositions.TryGetValue(target, out Vector2 original))
                     target.anchoredPosition = original;
             }
         }
 
-        // // ⭐ 커서 숨기기 (에디터 Play Mode 녹화용)
-        Cursor.visible = !shouldHide;
-        Cursor.lockState = shouldHide ? CursorLockMode.Confined : CursorLockMode.None;
+        // ⭐ 커서 숨기기 (별도 토글)
+        bool shouldHideCursor = config.hideCursor;
+        Cursor.visible = !shouldHideCursor;
+        Cursor.lockState = shouldHideCursor ? CursorLockMode.Confined : CursorLockMode.None;
+    }
+    private void OnDestroy()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }

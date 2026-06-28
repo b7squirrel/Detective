@@ -211,8 +211,12 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.cardDeckFull;
             case UITextKey.EnemiesIncoming:
                 return LocalizationManager.Game.enemiesIncoming;
-                case UITextKey.Haptic:
+            case UITextKey.Haptic:
                 return LocalizationManager.Game.haptic;
+            case UITextKey.AllClearTitle:
+                return LocalizationManager.Game.allClearTitle;
+            case UITextKey.AllClearDescription:
+                return LocalizationManager.Game.allClearDescription;
             default:
                 return key.ToString();
         }
@@ -317,5 +321,7 @@ public enum UITextKey
     Attack,
     CardDeckFull,
     EnemiesIncoming,
-    Haptic
+    Haptic,
+    AllClearTitle,
+    AllClearDescription
 }

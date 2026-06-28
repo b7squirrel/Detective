@@ -9,6 +9,7 @@ public static class GameConfigMenu
     private const string HideFieldUIPath = "Tools/QuackSurvivors/Config/Hide Field UI";
     private const string HideFieldItemsPath = "Tools/QuackSurvivors/Config/Hide Field Items On Start";
     private const string HidePeriodicChestPath = "Tools/QuackSurvivors/Config/Hide Periodic Chest";
+    private const string HideCursorPath = "Tools/QuackSurvivors/Config/Hide Cursor";
 
     // ── Debug Mode ──────────────────────────────
 
@@ -112,6 +113,34 @@ public static class GameConfigMenu
         var config = LoadConfig();
         if (config == null) return false;
         Menu.SetChecked(HidePeriodicChestPath, config.hidePeriodicChest);
+        return true;
+    }
+
+    // ── Hide Cursor ─────────────────────────────
+
+    [MenuItem(HideCursorPath)]
+    private static void ToggleHideCursor()
+    {
+        var config = LoadConfig();
+        if (config == null) return;
+
+        config.hideCursor = !config.hideCursor;
+        Save(config);
+
+        if (UnityEditor.EditorApplication.isPlaying)
+        {
+            var controller = Object.FindObjectOfType<FieldUIVisibilityController>();
+            controller?.Apply();
+        }
+
+        Debug.Log($"[GameConfig] Hide Cursor: {config.hideCursor}");
+    }
+    [MenuItem(HideCursorPath, true)]
+    private static bool ValidateHideCursor()
+    {
+        var config = LoadConfig();
+        if (config == null) return false;
+        Menu.SetChecked(HideCursorPath, config.hideCursor);
         return true;
     }
 
