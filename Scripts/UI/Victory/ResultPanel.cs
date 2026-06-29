@@ -25,7 +25,7 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] RectTransform stageNumRec;
     [SerializeField] TMPro.TextMeshProUGUI stageNumberText;
     [SerializeField] GameObject tearEmitters;
-    [SerializeField] Image faceExpressetion; // 눈물을 흘릴 때 우는 표정으로 교체하기 위해
+    [SerializeField] Image faceExpressetion;
     [SerializeField] Sprite cryingFaceSprite;
 
     [Header("무한 모드 요소")]
@@ -37,15 +37,15 @@ public class ResultPanel : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI bestRecordTitleText;
     [SerializeField] GameObject bestRecordCircle;
     [SerializeField] RectTransform shineEffect;
-    bool isNewRecord; // 웨이브 기록이 갱신이 되었는지
+    bool isNewRecord;
 
     [SerializeField] bool isDarkBG;
-    [SerializeField] CardDisp cardDisp; // 플레이어를 보여줄 cardDisp
-    [SerializeField] Animator charAnim; // 오리의 애니메이터
+    [SerializeField] CardDisp cardDisp;
+    [SerializeField] Animator charAnim;
 
     [Header("오리폭죽")]
-    [SerializeField] ImageBouncerManager bouncerManager; // 오리 폭죽
-    [SerializeField] int confettiNums; // 오리 수
+    [SerializeField] ImageBouncerManager bouncerManager;
+    [SerializeField] int confettiNums;
 
     [Header("사운드")]
     [SerializeField] AudioClip resultSoundSuccess;
@@ -62,18 +62,25 @@ public class ResultPanel : MonoBehaviour
     [Header("무한모드 사운드")]
     [SerializeField] AudioClip[] newRecordSound;
 
+    [Header("디버그")]
+    [SerializeField] bool debugOriOnly; // 촬영용: 오리만 표시
+    [SerializeField] GameObject panelFrame;
+
 
     public void InitAwards(int killNum, int coinNum, int stageNum, bool isWinningStage, int killGold, int clearBonus)
     {
         SetBG();
-        PlayRegularAwardsSequence(killNum, killGold, stageNum, isWinningStage, clearBonus); // clearBonus 추가
+        if (debugOriOnly) { StartCoroutine(PlayDebugOriOnly("Idle")); return; }
+        PlayRegularAwardsSequence(killNum, killGold, stageNum, isWinningStage, clearBonus);
     }
+
     public void InitInfiniteAwards(int killNum, int coinNum, int currentWave,
     string survivalTime, string bestRecord, bool isBestRecord,
-    int infiniteGold, int killGold, int waveBonus) // ★ killGold, waveBonus 추가
+    int infiniteGold, int killGold, int waveBonus)
     {
         SetBG();
         isNewRecord = isBestRecord;
+        if (debugOriOnly) { StartCoroutine(PlayDebugOriOnly("Idle")); return; }
         PlayInfiniteAwardsSequence(killNum, infiniteGold, killGold, waveBonus, currentWave, survivalTime, bestRecord);
     }
 
@@ -91,15 +98,34 @@ public class ResultPanel : MonoBehaviour
         }
     }
 
+    #region 디버그: 오리만 표시
+    IEnumerator PlayDebugOriOnly(string animTrigger)
+    {
+        ResetRecs();
+
+        // 패널 배경만 표시
+        panelRec.localScale = Vector3.one * 0.8f;
+        stageNumRec.gameObject.SetActive(false);
+        if (panelFrame != null) panelFrame.gameObject.SetActive(false);
+
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        // 오리만 등장
+        GenWeaponCards(animTrigger);
+        PlayUISound(popupSound);
+        oriRec.DOScale(1f, .18f).SetEase(Ease.OutBack, 1.7f).SetUpdate(true);
+    }
+    #endregion
+
     #region 레귤러 애니메이션
-    void PlayRegularAwardsSequence(int killNum, int killGold, int stageNum, bool isWinningStage, int clearBonus) // clearBonus 추가
+    void PlayRegularAwardsSequence(int killNum, int killGold, int stageNum, bool isWinningStage, int clearBonus)
     {
         if (isWinningStage)
             bouncerManager.JumpHappy(confettiNums);
         else
             bouncerManager.JumpSad(30);
 
-        ResetRecs(); // ← 여기서 카드 Hide도 같이 처리됨
+        ResetRecs();
 
         var g = LocalizationManager.Game;
         string title = isWinningStage ? g.congratulations : g.failed;
@@ -133,26 +159,17 @@ public class ResultPanel : MonoBehaviour
         titleRec.localScale = Vector2.one;
         seq.AppendCallback(() => PlayUISound(popupSound));
 
-        // Coin
-        // seq.AppendInterval(0.5f);
-        // seq.AppendCallback(() => PlayUISound(TitleSound));
-        // seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
-
         // ★ 보상 카드
         seq.AppendInterval(0.3f);
         seq.AppendCallback(() =>
         {
             Logger.Log($"[RewardCard] killGold={killGold}, clearBonus={clearBonus}, isWinning={isWinningStage}");
 
-            // if (killGold > 0)
-                killRewardCard.Initialize(g.killBonus, goldSprite, killGold, delay: 0f);
-
-            // if (isWinningStage)
-                clearRewardCard.Initialize(g.stageReward, goldSprite, clearBonus, delay: 0.2f);
+            killRewardCard.Initialize(g.killBonus, goldSprite, killGold, delay: 0f);
+            clearRewardCard.Initialize(g.stageReward, goldSprite, clearBonus, delay: 0.2f);
         });
 
         // Stamp
-        // 카드 애니메이션 완료 대기 (0.1f → 1.2f)
         seq.AppendInterval(.6f);
         seq.AppendCallback(() =>
         {
@@ -179,13 +196,13 @@ public class ResultPanel : MonoBehaviour
     void PlayInfiniteAwardsSequence(int killNum, int infiniteGold, int killGold, int waveBonus,
     int wave, string survivalTime, string bestRecord)
     {
-        bouncerManager.JumpHappy(confettiNums); // 150마리 폭죽
+        bouncerManager.JumpHappy(confettiNums);
 
         ResetRecs();
         var g = LocalizationManager.Game;
         titleText.text = g.challengeResult;
         killText.text = killNum.ToString();
-        coinText.text = infiniteGold.ToString(); // ← coinNum → infiniteGold
+        coinText.text = infiniteGold.ToString();
         survivalTimeTitleText.text = g.currentRecord;
         bestRecordTitleText.text = g.bestWave;
         stampText.text = g.greatJob;
@@ -204,7 +221,6 @@ public class ResultPanel : MonoBehaviour
         stageNumRec.gameObject.SetActive(false);
 
         Sequence seq = DOTween.Sequence();
-        // UI는 타임스케일 무시
         seq.SetUpdate(true);
 
         // panel
@@ -217,8 +233,6 @@ public class ResultPanel : MonoBehaviour
         seq.Append(panelRec.DOScale(.8f, .2f).SetEase(Ease.OutBack));
 
         // ori
-        // charAnim.SetTrigger("Idle");
-        // oriRec.localRotation = Quaternion.Euler(0f, 0f, 0f);
         GenWeaponCards("Idle");
 
         seq.AppendInterval(.01f);
@@ -240,14 +254,12 @@ public class ResultPanel : MonoBehaviour
         {
             PlayUISound(scribbleSound);
             survivalTimeTitle.Play();
-
         });
 
         seq.AppendInterval(.15f);
         seq.AppendCallback(() =>
         {
             survivalTimeContents.Play();
-
         });
 
         // 최고 기록
@@ -265,8 +277,7 @@ public class ResultPanel : MonoBehaviour
             bestRecordTimeContents.Play();
         });
 
-
-        /// ⭐ 신기록 연출 (핵심)
+        // ⭐ 신기록 연출
         seq.AppendInterval(0.3f);
         seq.AppendCallback(() =>
         {
@@ -277,19 +288,15 @@ public class ResultPanel : MonoBehaviour
 
                 bestRecordCircle.SetActive(true);
 
-                // ⭐ Shine Effect 추가
                 shineEffect.gameObject.SetActive(true);
-                // shineEffect.position = bestRecordRec.position;
                 shineEffect.localScale = Vector3.one;
 
-                // CanvasGroup이 있다면 alpha 조절용
                 CanvasGroup shineCanvas = shineEffect.GetComponent<CanvasGroup>();
                 if (shineCanvas != null)
                 {
                     shineCanvas.alpha = 1f;
                     shineCanvas.DOFade(0f, .6f).SetEase(Ease.OutQuad).SetUpdate(true);
                 }
-                // 또는 Image 컴포넌트가 있다면
                 else
                 {
                     Image shineImage = shineEffect.GetComponent<Image>();
@@ -302,15 +309,13 @@ public class ResultPanel : MonoBehaviour
                     }
                 }
 
-                // x축만 1.5배 스케일업 애니메이션
                 shineEffect.DOScale(new Vector3(1.5f, 2f, 1f), 0.4f)
                     .SetEase(Ease.OutQuad)
                     .SetUpdate(true)
                     .OnComplete(() => shineEffect.gameObject.SetActive(false));
 
-                // 텍스트 색상 반짝임 효과
                 Color originalColor = bestRecordTitleText.color;
-                Color flashColor = Color.white; // 원하는 색상으로 변경 가능 (예: Color.white, new Color(1f, 0.8f, 0f))
+                Color flashColor = Color.white;
 
                 bestRecordTitleText.DOColor(flashColor, 0.1f)
                     .SetEase(Ease.OutQuad)
@@ -338,30 +343,16 @@ public class ResultPanel : MonoBehaviour
             }
         });
 
-        // Coin
-        // seq.AppendInterval(0.5f);
-        // seq.AppendCallback(() => PlayUISound(TitleSound));
-        // seq.Append(coinRec.DOScale(1f, 0.15f).SetEase(Ease.OutBack));
-
-        // Kill
-        // seq.AppendInterval(0.01f);
-        // seq.AppendCallback(() => PlayUISound(TitleSound));
-        // seq.Append(killRec.DOScale(1f, 0.3f).SetEase(Ease.OutBack));
-
         // ★ 보상 카드
         seq.AppendInterval(0.3f);
         seq.AppendCallback(() =>
         {
             var g = LocalizationManager.Game;
-            // if (killGold > 0)
-                killRewardCard.Initialize(g.killBonus, goldSprite, killGold, delay: 0f);
-
-            // if (waveBonus > 0)
-                clearRewardCard.Initialize(g.waveBonus, goldSprite, waveBonus, delay: 0.4f);
+            killRewardCard.Initialize(g.killBonus, goldSprite, killGold, delay: 0f);
+            clearRewardCard.Initialize(g.waveBonus, goldSprite, waveBonus, delay: 0.4f);
         });
 
         // Stamp
-        // 카드 애니메이션 완료 대기 (0.1f → 1.2f)
         seq.AppendInterval(.6f);
         seq.AppendCallback(() =>
         {
@@ -370,7 +361,6 @@ public class ResultPanel : MonoBehaviour
 
             panelRec.DOShakePosition(.5f, strength: 20f, vibrato: 30, randomness: 30)
             .SetUpdate(true);
-
         });
 
         // Result Sound
@@ -391,7 +381,6 @@ public class ResultPanel : MonoBehaviour
 
     void ResetRecs()
     {
-        // 안전 처리
         DOTween.Kill(titleRec);
         DOTween.Kill(coinRec);
         DOTween.Kill(killRec);
@@ -399,7 +388,6 @@ public class ResultPanel : MonoBehaviour
         DOTween.Kill(bestRecordRec);
         DOTween.Kill(oriRec);
 
-        // 초기 상태
         panelRec.localScale = Vector2.zero;
         titleRec.localScale = Vector2.zero;
         coinRec.localScale = Vector2.zero;
@@ -409,7 +397,6 @@ public class ResultPanel : MonoBehaviour
         oriRec.localScale = Vector2.zero;
         stampRec.localScale = Vector2.zero;
 
-        // ★ 카드 초기화
         killRewardCard.Hide();
         clearRewardCard.Hide();
     }
@@ -418,7 +405,7 @@ public class ResultPanel : MonoBehaviour
     {
         WeaponData wd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         cardDisp.InitWeaponCardDisplay(wd, null);
-        cardDisp.InitSpriteRow(); // card sprite row의 이미지 참조들이 남지 않게 초기화
+        cardDisp.InitSpriteRow();
 
         for (int i = 0; i < 4; i++)
         {
@@ -426,7 +413,7 @@ public class ResultPanel : MonoBehaviour
 
             if (item == null)
             {
-                cardDisp.SetEquipCardDisplay(i, null, false, Vector2.zero); // 이미지 오브젝트를 비활성화
+                cardDisp.SetEquipCardDisplay(i, null, false, Vector2.zero);
                 continue;
             }
             SpriteRow equipmentSpriteRow = item.spriteRow;
@@ -435,10 +422,12 @@ public class ResultPanel : MonoBehaviour
             cardDisp.SetEquipCardDisplay(i, equipmentSpriteRow, item.needToOffset, offset);
         }
     }
+
     void PlayUISound(AudioClip audioClip)
     {
         SoundManager.instance.Play(audioClip);
     }
+
     void GenWeaponCards(string animTrigger)
     {
         GetComponent<ResultPanelUI>().ShowResults(animTrigger);
