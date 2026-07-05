@@ -126,6 +126,7 @@ public class GameTexts : ScriptableObject
     public string achievementsTitle = "업적";
     public string dailyQuestsTitle = "일일 임무";
     public string weeklyQuestsTitle = "주간 임무";
+    public string weeklyQuestsReward = "주간 임무 보상";
     public string tapToClaim = "탭 해서 보상 받기";
     public string minute = "분";
     // ⭐ 추가

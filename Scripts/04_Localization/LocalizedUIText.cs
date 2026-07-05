@@ -217,6 +217,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.allClearTitle;
             case UITextKey.AllClearDescription:
                 return LocalizationManager.Game.allClearDescription;
+            case UITextKey.WeeklyQuestReward:
+                return LocalizationManager.Game.weeklyQuestsReward;
             default:
                 return key.ToString();
         }
@@ -323,5 +325,6 @@ public enum UITextKey
     EnemiesIncoming,
     Haptic,
     AllClearTitle,
-    AllClearDescription
+    AllClearDescription,
+    WeeklyQuestReward
 }

@@ -45,13 +45,13 @@ public class DailyRewardPanel : MonoBehaviour
             // 7일 보상 데이터 직접 설정
             rewardData.rewards = new DailyRewardItem[7]
             {
-                new DailyRewardItem { day = 1, coinReward = 100, gemReward = 0, isSpecial = false },
+                new DailyRewardItem { day = 1, coinReward = 1000, gemReward = 0, isSpecial = false },
                 new DailyRewardItem { day = 2, coinReward = 0, gemReward = 10, isSpecial = false },
-                new DailyRewardItem { day = 3, coinReward = 200, gemReward = 0, isSpecial = false },
+                new DailyRewardItem { day = 3, coinReward = 4000, gemReward = 0, isSpecial = false },
                 new DailyRewardItem { day = 4, coinReward = 0, gemReward = 20, isSpecial = false },
-                new DailyRewardItem { day = 5, coinReward = 300, gemReward = 0, isSpecial = false },
+                new DailyRewardItem { day = 5, coinReward = 10000, gemReward = 0, isSpecial = false },
                 new DailyRewardItem { day = 6, coinReward = 0, gemReward = 30, isSpecial = false },
-                new DailyRewardItem { day = 7, coinReward = 500, gemReward = 50, isSpecial = true }
+                new DailyRewardItem { day = 7, coinReward = 30000, gemReward = 80, isSpecial = true }
             };
 
             Debug.Log("[DailyRewardPanel] v 런타임 rewardData 생성 완료");
