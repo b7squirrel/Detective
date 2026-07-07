@@ -60,8 +60,13 @@ public class GameInitializer : MonoBehaviour
     // 각 단계별 타임아웃 (초)
     private const float STEP_TIMEOUT = 10f;
 
+    // 디버그 모드
+    private GameConfig gameConfig;
+
     void Awake()
     {
+        gameConfig = Resources.Load<GameConfig>("GameConfig");
+
         // 씬 전환 시에도 유지 (선택사항)
         // DontDestroyOnLoad(gameObject);
         // ✅ 이미 실행 중이면 이 인스턴스는 즉시 파괴
@@ -313,6 +318,9 @@ public class GameInitializer : MonoBehaviour
     void OnGUI()
     {
         if (!showDebugLogs) return;
+
+        // ✅ 디버그 모드일 때는 화면 출력 스킵
+        if (gameConfig != null && !gameConfig.isDebugMode) return;
 
         GUIStyle style = new GUIStyle();
         style.fontSize = 20;
