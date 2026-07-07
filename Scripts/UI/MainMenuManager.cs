@@ -53,6 +53,13 @@ public class MainMenuManager : MonoBehaviour
     // 리드오리 카드 데이터
     CardData lead;
 
+    [Header("번개 소모")]
+    [SerializeField] int lightningCostPerStage = 5;
+    [SerializeField] GameObject lackOfEnergyWarningPanel; // "Lack of Energy Warning" 오브젝트 연결
+
+    [Header("Start 연출")]
+    [SerializeField] ImageBouncerManager imageBouncerManager; // Inspector에서 연결
+    [SerializeField] int jumpNums = 150; // 기존 OnClick에 있던 값(150)과 동일하게 맞춰주세요
 
 
     void Start()
@@ -205,7 +212,15 @@ public class MainMenuManager : MonoBehaviour
     // 스타트 버튼을 누르면 이벤트로 실행. 레귤러 스테이지
     public void StartTransition()
     {
-        // transition animation 이 끝나면 loading scene manager 호출
+        if (!PlayerDataManager.Instance.TryConsumeLightning(lightningCostPerStage))
+        {
+            if (lackOfEnergyWarningPanel != null)
+                lackOfEnergyWarningPanel.SetActive(true);
+            return;
+        }
+
+        imageBouncerManager.JumpWithDelay(jumpNums);
+
         loadingSwipe.gameObject.SetActive(true);
         loadingSwipe.SetTrigger("Close");
 

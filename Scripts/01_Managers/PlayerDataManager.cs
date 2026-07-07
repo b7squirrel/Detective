@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.IO;
+using System;
+using System.Collections;
 
 [System.Serializable]
 public class PlayerData
@@ -10,6 +12,7 @@ public class PlayerData
     public int currentCoinNumber;       // 기존 Candy → Coin
     public int currentCristalNumber;    // 기존 HighCoin → Cristal
     public int currentLightningNumber;
+    public long lastLightningUpdateTicks; // 마지막 번개 갱신 시각 (DateTime.Ticks)
     public int currentKillNumber;
 
     public int bestWave; // 무한모드 웨이브 최고 기록
@@ -42,6 +45,11 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     // 무한모드 해금
     public bool IsInfiniteModeUnlocked() => playerData.isInfiniteModeUnlocked;
 
+    [Header("번개 설정")]
+    [SerializeField] int maxLightningNumber = 25;
+    [SerializeField] int lightningRechargeSeconds = 300; // 5분
+    public int GetMaxLightningNumber() => maxLightningNumber;
+
     // ⭐ SingletonBehaviour의 Init()을 override하여 초기화
     protected override void Init()
     {
@@ -49,7 +57,10 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 
         filePath = Path.Combine(Application.persistentDataPath, "playerData.json");
         LoadPlayerData();
+        ApplyLightningRegen(); // ← 앱 시작 시 오프라인 동안 쌓인 회복분 반영
         IsDataLoaded = true;
+
+        StartCoroutine(LightningRegenLoop()); // ← 실행 중 매초 체크
 
         stageInfo = FindObjectOfType<StageInfo>();
         if (stageInfo == null)
@@ -92,7 +103,8 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         playerData = new PlayerData
         {
             currentStageNumber = 1,
-            currentLightningNumber = 60,
+            currentLightningNumber = maxLightningNumber,
+            lastLightningUpdateTicks = DateTime.UtcNow.Ticks,
             currentCoinNumber = 100,
             currentCristalNumber = 50
         };
@@ -206,6 +218,32 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         playerData.currentLightningNumber += amount;
         SavePlayerData();
         // NotifyCurrencyChanged() 호출 안 함
+    }
+
+    IEnumerator LightningRegenLoop()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            ApplyLightningRegen();
+        }
+    }
+
+    public bool TryConsumeLightning(int amount)
+    {
+        ApplyLightningRegen(); // 체크 직전에 최신 상태로 갱신
+        if (playerData.currentLightningNumber < amount) return false;
+
+        playerData.currentLightningNumber -= amount;
+        SavePlayerData();
+        NotifyCurrencyChanged();
+        return true;
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (!pauseStatus) // 백그라운드에서 돌아왔을 때
+            ApplyLightningRegen();
     }
 
     // Wave
@@ -379,6 +417,40 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     public GameMode GetGameMode()
     {
         return currentGameMode;
+    }
+
+    // 경과 시간만큼 번개 회복 계산 (오프라인 회복 포함)
+    void ApplyLightningRegen()
+    {
+        if (playerData.currentLightningNumber >= maxLightningNumber)
+        {
+            // 꽉 차 있을 땐 디스크에 안 쓰고 메모리에서만 시각 갱신
+            playerData.lastLightningUpdateTicks = DateTime.UtcNow.Ticks;
+            return;
+        }
+
+        DateTime lastTime = playerData.lastLightningUpdateTicks > 0
+            ? new DateTime(playerData.lastLightningUpdateTicks)
+            : DateTime.UtcNow;
+
+        TimeSpan elapsed = DateTime.UtcNow - lastTime;
+        int recoveredAmount = Mathf.FloorToInt((float)elapsed.TotalSeconds / lightningRechargeSeconds);
+
+        if (recoveredAmount > 0)
+        {
+            playerData.currentLightningNumber = Mathf.Min(
+                playerData.currentLightningNumber + recoveredAmount, maxLightningNumber);
+
+            // 나머지 시간(못 채운 초)은 버리지 않고 다음 회복에 이어지도록
+            int usedSeconds = recoveredAmount * lightningRechargeSeconds;
+            playerData.lastLightningUpdateTicks = lastTime.AddSeconds(usedSeconds).Ticks;
+
+            if (playerData.currentLightningNumber >= maxLightningNumber)
+                playerData.lastLightningUpdateTicks = DateTime.UtcNow.Ticks;
+
+            SavePlayerData();
+            NotifyCurrencyChanged();
+        }
     }
 
     // --- Daily System ---

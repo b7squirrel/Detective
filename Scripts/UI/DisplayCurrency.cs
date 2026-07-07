@@ -49,7 +49,8 @@ public class DisplayCurrency : MonoBehaviour
     {
         coinText.text = playerDataManager.GetCurrentCoinNumber().ToString();
         gemText.text = playerDataManager.GetCurrentCristalNumber().ToString();
-        lightningText.text = playerDataManager.GetCurrentLightningNumber().ToString() + "/ 60";
+        lightningText.text = playerDataManager.GetCurrentLightningNumber().ToString()
+            + " / " + playerDataManager.GetMaxLightningNumber();
     }
 
     public void AnimateTextChange(bool isGem)
@@ -103,7 +104,7 @@ public class DisplayCurrency : MonoBehaviour
         displayedLightning = newValue;
 
         DOTween.To(() => currentDisplay,
-                   x => { lightningText.text = x.ToString() + "/ 60"; },
+                   x => { lightningText.text = x.ToString() + " / " + playerDataManager.GetMaxLightningNumber(); },
                    newValue,
                    countUpDuration)
             .SetEase(Ease.OutQuad)
