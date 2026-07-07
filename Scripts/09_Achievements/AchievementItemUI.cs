@@ -20,10 +20,12 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] RectTransform effectStartPos; // 보상 이펙트가 나올 위치
     [SerializeField] GameObject postItYellow;
     [SerializeField] GameObject postItPink;
+    [SerializeField] GameObject postItGreen; 
 
     [Header("보상 아이콘")]
     [SerializeField] Sprite gemIcon; // 보석 아이콘
     [SerializeField] Sprite coinIcon; // 코인 아이콘
+    [SerializeField] Sprite lightningIcon;  // 에너지 아이콘
 
     [Header("진행도 아이콘")]
     [SerializeField] GameObject killIcon;   // Icons/Kill
@@ -115,11 +117,19 @@ public class AchievementItemUI : MonoBehaviour
                     rewardIcon.sprite = gemIcon;
                     postItPink.SetActive(true);
                     postItYellow.SetActive(false);
+                    if (postItGreen != null) postItGreen.SetActive(false);
                     break;
                 case RewardType.COIN:
                     rewardIcon.sprite = coinIcon;
                     postItPink.SetActive(false);
                     postItYellow.SetActive(true);
+                    if (postItGreen != null) postItGreen.SetActive(false);
+                    break;
+                case RewardType.ENERGY: // ← 추가
+                    rewardIcon.sprite = lightningIcon;
+                    postItPink.SetActive(false);
+                    postItYellow.SetActive(false);
+                    if (postItGreen != null) postItGreen.SetActive(true);
                     break;
             }
         }

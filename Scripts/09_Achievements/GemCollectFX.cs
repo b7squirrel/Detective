@@ -18,6 +18,10 @@ public class GemCollectFX : MonoBehaviour
     // ✅ 추가: 모든 보석 수집 완료 시 이벤트
     public static event System.Action OnAllGemsCollected;
 
+    [Header("번개(에너지)")]
+    public RectTransform lightningTargetIcon;
+    public GameObject lightningPrefab;
+
     [Header("설정값")]
     public float spreadRadius = 200f;
 
@@ -29,9 +33,15 @@ public class GemCollectFX : MonoBehaviour
     [SerializeField] AudioClip clipGemHit;
     [SerializeField] AudioClip clipCoinSpread;
     [SerializeField] AudioClip clipCoinHit;
+    [SerializeField] AudioClip clipLightningSpread;
+    [SerializeField] AudioClip clipLightningHit;
 
     bool hasPlayedCollectSound = false;
     int activeGemCount = 0; // ← 추가: 날아다니는 gem 추적
+
+    // ==========================
+    // 기존: 크리스탈 / 코인
+    // ==========================
 
     public void PlayGemCollectFX(RectTransform pos, int gemAmount, bool isGem)
     {
@@ -56,7 +66,7 @@ public class GemCollectFX : MonoBehaviour
         Vector2 uiStartPos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, uiCamera, out uiStartPos);
 
-        GameObject gemObj = Instantiate(isGem? gemPrefab : coinPrefab, canvasRect);
+        GameObject gemObj = Instantiate(isGem ? gemPrefab : coinPrefab, canvasRect);
         RectTransform gemRT = gemObj.GetComponent<RectTransform>();
         gemRT.anchoredPosition = uiStartPos;
 
@@ -111,27 +121,119 @@ public class GemCollectFX : MonoBehaviour
     }
 
     void UpdateUIOnly(bool isGem)
-{
-    RectTransform targetPoint = isGem ? gemTargetIcon : coinTargetIcon;
-
-    if (displayCurrency == null) displayCurrency = FindObjectOfType<DisplayCurrency>();
-
-    if (displayCurrency != null) 
     {
-        // UpdateUI() 호출 제거! AnimateTextChange()가 알아서 처리함
-        displayCurrency.AnimateTextChange(isGem); // 이것만 호출
-    }
+        RectTransform targetPoint = isGem ? gemTargetIcon : coinTargetIcon;
 
-    // 아이콘 펀치 애니메이션
-    if (targetPoint != null)
-    {
-        targetPoint.DOKill();
-        targetPoint.localScale = Vector3.one;
-        targetPoint.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 0.5f)
-        .OnComplete(() =>
+        if (displayCurrency == null) displayCurrency = FindObjectOfType<DisplayCurrency>();
+
+        if (displayCurrency != null)
         {
+            // UpdateUI() 호출 제거! AnimateTextChange()가 알아서 처리함
+            displayCurrency.AnimateTextChange(isGem); // 이것만 호출
+        }
+
+        // 아이콘 펀치 애니메이션
+        if (targetPoint != null)
+        {
+            targetPoint.DOKill();
             targetPoint.localScale = Vector3.one;
-        });
+            targetPoint.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 0.5f)
+            .OnComplete(() =>
+            {
+                targetPoint.localScale = Vector3.one;
+            });
+        }
     }
-}
+
+    // ==========================
+    // 추가: 번개(에너지)
+    // ==========================
+
+    public void PlayLightningCollectFX(RectTransform pos, int amount)
+    {
+        if (uiCamera == null) return;
+
+        hasPlayedCollectSound = false;
+        SoundManager.instance.Play(clipLightningSpread);
+
+        Vector3 screenPos = RectTransformUtility.WorldToScreenPoint(uiCamera, pos.position);
+
+        if (amount > 30) amount = 30; // 기존 gem 로직과 동일하게 연출 개수 상한
+
+        activeGemCount += amount;
+        if (fgBlocker != null) fgBlocker.SetActive(true);
+
+        for (int i = 0; i < amount; i++)
+            SpawnOneLightning(screenPos);
+    }
+
+    private void SpawnOneLightning(Vector3 screenPos)
+    {
+        Vector2 uiStartPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, uiCamera, out uiStartPos);
+
+        GameObject lightningObj = Instantiate(lightningPrefab, canvasRect);
+        RectTransform lightningRT = lightningObj.GetComponent<RectTransform>();
+        lightningRT.anchoredPosition = uiStartPos;
+
+        Vector2 randomOffset = Random.insideUnitCircle * spreadRadius;
+        Vector2 spreadPos = uiStartPos + randomOffset;
+
+        lightningRT.DOAnchorPos(spreadPos, 0.25f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() => FlyLightningToTarget(lightningRT));
+    }
+
+    private void FlyLightningToTarget(RectTransform lightningRT)
+    {
+        Vector3 worldTargetPos = lightningTargetIcon.position;
+
+        Vector2 localTargetPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            lightningRT.parent as RectTransform,
+            RectTransformUtility.WorldToScreenPoint(uiCamera, worldTargetPos),
+            uiCamera,
+            out localTargetPos);
+
+        float offset = Random.Range(-0.1f, 0.1f);
+
+        lightningRT.DOAnchorPos(localTargetPos, 0.35f + offset)
+            .SetEase(Ease.InQuad)
+            .OnComplete(() =>
+            {
+                Destroy(lightningRT.gameObject);
+
+                UpdateLightningUIOnly();
+
+                if (!hasPlayedCollectSound)
+                {
+                    hasPlayedCollectSound = true;
+                    SoundManager.instance.Play(clipLightningHit);
+                }
+
+                activeGemCount--;
+                if (activeGemCount <= 0)
+                {
+                    activeGemCount = 0;
+                    if (fgBlocker != null) fgBlocker.SetActive(false);
+                    OnAllGemsCollected?.Invoke();
+                }
+            });
+    }
+
+    void UpdateLightningUIOnly()
+    {
+        if (displayCurrency == null) displayCurrency = FindObjectOfType<DisplayCurrency>();
+
+        if (displayCurrency != null)
+            displayCurrency.AnimateEnergyTextChange();
+
+        if (lightningTargetIcon != null)
+        {
+            lightningTargetIcon.DOKill();
+            lightningTargetIcon.localScale = Vector3.one;
+            lightningTargetIcon.DOPunchScale(Vector3.one * 0.3f, 0.2f, 1, 0.5f)
+                .OnComplete(() => lightningTargetIcon.localScale = Vector3.one);
+        }
+    }
 }

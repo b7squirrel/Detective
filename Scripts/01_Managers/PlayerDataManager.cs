@@ -200,6 +200,14 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         NotifyCurrencyChanged();
     }
 
+    // UI 업데이트 없이 실제 값만 증가 (보상 이펙트용 - 오버캡 허용, 별도 제한 없음)
+    public void AddLightningSilent(int amount)
+    {
+        playerData.currentLightningNumber += amount;
+        SavePlayerData();
+        // NotifyCurrencyChanged() 호출 안 함
+    }
+
     // Wave
     public int GetBestWave() => playerData.bestWave;
     public void SetBestWave(int wave)

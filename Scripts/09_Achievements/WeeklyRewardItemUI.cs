@@ -11,6 +11,7 @@ public class WeeklyRewardItemUI : MonoBehaviour
     [Header("보상 아이콘")]
     [SerializeField] Sprite gemIcon;
     [SerializeField] Sprite coinIcon;
+    [SerializeField] Sprite lightningIcon;
 
     public void Bind(RuntimeAchievement ra)
     {
@@ -19,9 +20,18 @@ public class WeeklyRewardItemUI : MonoBehaviour
 
         if (rewardIcon != null)
         {
-            rewardIcon.sprite = ra.original.rewardType == RewardType.GEM
-                ? gemIcon
-                : coinIcon;
+            switch (ra.original.rewardType)
+            {
+                case RewardType.GEM:
+                    rewardIcon.sprite = gemIcon;
+                    break;
+                case RewardType.COIN:
+                    rewardIcon.sprite = coinIcon;
+                    break;
+                case RewardType.ENERGY: // ← 추가
+                    rewardIcon.sprite = lightningIcon;
+                    break;
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ public class DisplayCurrency : MonoBehaviour
     // 현재 화면에 표시 중인 값 (카운트업용)
     private int displayedCoin = 0;
     private int displayedGem = 0;
+    private int displayedLightning = 0;
 
     PlayerDataManager playerDataManager;
 
@@ -28,6 +29,7 @@ public class DisplayCurrency : MonoBehaviour
         // 초기값 설정
         displayedCoin = playerDataManager.GetCurrentCoinNumber();
         displayedGem = playerDataManager.GetCurrentCristalNumber();
+        displayedLightning = playerDataManager.GetCurrentLightningNumber();
 
         UpdateUI();
     }
@@ -83,5 +85,31 @@ public class DisplayCurrency : MonoBehaviour
         // 스케일 펀치
         targetText.transform.DOPunchScale(Vector3.one * 0.05f, 0.3f, 2, 1f)
             .OnComplete(() => targetText.transform.localScale = Vector3.one);
+    }
+    
+    // ← 추가: 번개 전용 카운트업
+    public void AnimateEnergyTextChange()
+    {
+        if (lightningText == null) return;
+
+        int currentDisplay = displayedLightning;
+        int newValue = playerDataManager.GetCurrentLightningNumber();
+
+        if (currentDisplay == newValue) return;
+
+        DOTween.Kill(lightningText);
+        DOTween.Kill(lightningText.transform);
+
+        displayedLightning = newValue;
+
+        DOTween.To(() => currentDisplay,
+                   x => { lightningText.text = x.ToString() + "/ 60"; },
+                   newValue,
+                   countUpDuration)
+            .SetEase(Ease.OutQuad)
+            .SetTarget(lightningText);
+
+        lightningText.transform.DOPunchScale(Vector3.one * 0.05f, 0.3f, 2, 1f)
+            .OnComplete(() => lightningText.transform.localScale = Vector3.one);
     }
 }

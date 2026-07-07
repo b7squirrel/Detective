@@ -212,7 +212,12 @@ public class AchievementManager : MonoBehaviour
             playerDataManager.SetCristalNumberAsSilent(currentValue + ra.original.rewardNum);
             gemCollectFX.PlayGemCollectFX(pos, ra.original.rewardNum, true);
         }
-        else
+        else if (rewardType == RewardType.ENERGY)
+        {
+            playerDataManager.AddLightningSilent(ra.original.rewardNum);
+            gemCollectFX.PlayLightningCollectFX(pos, ra.original.rewardNum);
+        }
+        else // COIN
         {
             int currentValue = playerDataManager.GetCurrentCoinNumber();
             playerDataManager.SetCoinNumberAsSilent(currentValue + ra.original.rewardNum);
