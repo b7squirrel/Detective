@@ -7,9 +7,13 @@ public class TimeBoxButton : MonoBehaviour
     [Header("UI Components")]
     [SerializeField] Button boxButton;
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] GameObject postIt;
+    [SerializeField] GameObject postItGrey;
     [SerializeField] GameObject lockIcon;
+    [SerializeField] GameObject circleDeco;
+    [SerializeField] GameObject circleDecoGrey;
     [SerializeField] RectTransform boxPoint;
-    
+
     [Header("디버그")]
     [SerializeField] private bool showDebugLogs = true;
     
@@ -76,6 +80,10 @@ public class TimeBoxButton : MonoBehaviour
             if (boxButton != null) boxButton.interactable = true;
             if (timerText != null) timerText.text = "광고 보고 열기!";
             if (lockIcon != null) lockIcon.SetActive(false);
+            if (circleDecoGrey != null) circleDecoGrey.SetActive(false);
+            if (postItGrey != null) postItGrey.SetActive(false);
+            if (circleDeco != null) circleDeco.SetActive(true);
+            if (postIt != null) postIt.SetActive(true);
         }
         else if (isReady && !adReady)
         {
@@ -83,6 +91,10 @@ public class TimeBoxButton : MonoBehaviour
             if (boxButton != null) boxButton.interactable = false;
             if (timerText != null) timerText.text = "광고 로딩 중...";
             if (lockIcon != null) lockIcon.SetActive(true);
+            if (circleDecoGrey != null) circleDecoGrey.SetActive(true);
+            if (postItGrey != null) postItGrey.SetActive(true);
+            if (circleDeco != null) circleDeco.SetActive(false);
+            if (postIt != null) postIt.SetActive(false);
         }
         else
         {
@@ -94,6 +106,10 @@ public class TimeBoxButton : MonoBehaviour
                 timerText.text = timeStr;
             }
             if (lockIcon != null) lockIcon.SetActive(true);
+            if (circleDecoGrey != null) circleDecoGrey.SetActive(true);
+            if (postItGrey != null) postItGrey.SetActive(true);
+            if (circleDeco != null) circleDeco.SetActive(false);
+            if (postIt != null) postIt.SetActive(false);
         }
     }
 
