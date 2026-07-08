@@ -271,7 +271,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     {
         Logger.Log($"[ShopManager] 광고 구매 시작: {productData.ProductName}");
 
-        // 쿨다운 확인
+        // 쿨다운 확인 - Box
         if (productData.ProductType == ProductType.Box)
         {
             if (TimeBasedBoxManager.Instance == null)
@@ -280,7 +280,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 return;
             }
 
-            // 서버 시간으로 쿨다운 확인
             bool canClaim = await TimeBasedBoxManager.Instance.CanClaimBoxAsync();
 
             if (!canClaim)
@@ -288,6 +287,33 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 string remainingTime = TimeBasedBoxManager.Instance.GetRemainingTimeFormatted();
                 Logger.Log($"[ShopManager] 상자 쿨다운 중: {remainingTime} 남음");
                 ShowCooldownPopup(remainingTime);
+                return;
+            }
+        }
+        // ⭐ 쿨다운 확인 - Energy (추가)
+        else if (productData.ProductType == ProductType.Energy)
+        {
+            if (EnergyAdRewardManager.Instance == null)
+            {
+                Logger.LogError("[ShopManager] EnergyAdRewardManager가 없습니다.");
+                return;
+            }
+
+            var (canClaim, reason) = await EnergyAdRewardManager.Instance.CanClaimAsync();
+
+            if (!canClaim)
+            {
+                if (reason == "daily_limit")
+                {
+                    Logger.Log("[ShopManager] 번개 광고 일일 횟수 초과");
+                    ShowDailyLimitPopup();
+                }
+                else
+                {
+                    string remainingTime = EnergyAdRewardManager.Instance.GetRemainingCooldownFormatted();
+                    Logger.Log($"[ShopManager] 번개 광고 쿨다운 중: {remainingTime} 남음");
+                    ShowCooldownPopup(remainingTime);
+                }
                 return;
             }
         }
@@ -308,20 +334,26 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
         Logger.Log($"[ShopManager] 광고 시청 시작: {productData.ProductName}");
 
-        // ⭐ ShowDailyFreeGemRewardedAd → ShowBoxRewardedAd 로 교체
-        // ShowBoxRewardedAd는 광고 시청 완료 시 AD_DRAW 업적을 자동으로 카운트합니다
         AdsManager.Instance.ShowBoxRewardedAd(async () =>
         {
             Logger.Log($"[ShopManager] 광고 시청 완료!");
 
             if (productData.ProductType == ProductType.Box)
             {
-                // 서버 시간으로 기록
                 await TimeBasedBoxManager.Instance.OnBoxClaimedAsync();
+            }
+            else if (productData.ProductType == ProductType.Energy) // ⭐ 추가
+            {
+                await EnergyAdRewardManager.Instance.OnAdClaimedAsync();
             }
 
             StartCoroutine(GiveProductRewardCo(productData, fxStartPoint));
         });
+    }
+
+    void ShowDailyLimitPopup()
+    {
+        Logger.Log("[ShopManager] 오늘 광고 시청 횟수를 모두 사용했습니다. 내일 다시 시도해주세요.");
     }
 
     void ShowAdLoadingPopup()
