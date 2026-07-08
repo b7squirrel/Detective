@@ -38,7 +38,7 @@ public class EnergyBuyButton : MonoBehaviour
 
         // 보상 텍스트 (번개 개수)
         if (rewardText != null)
-            rewardText.text = $"{productData.RewardEnergy:N0}";
+            rewardText.text = $"x{productData.RewardEnergy:N0}";
 
         // 비용 텍스트 (크리스탈)
         if (costText != null)
