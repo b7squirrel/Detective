@@ -55,6 +55,9 @@ public class GameTexts : ScriptableObject
     public string tenXDraw = "10회 뽑기";
     public string watchAdToDraw = "광고 보고 행운 상자 뽑기";
     public string cardDeckFull = "오리 카드가 가득 찼어요!";
+    public string energy;              // "에너지" / "Energy"
+    public string watchAdToEarnEnergy; // "광고 보고 획득" / "Watch Ad to Earn"
+    public string energyCooldownFormat; // "{0}분 후 가능" / "Available in {0}m"
 
     [Header("Pack Description")]
     // 오리 카드 라인: {0} = 등급명(들)

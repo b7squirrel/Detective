@@ -219,6 +219,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.allClearDescription;
             case UITextKey.WeeklyQuestReward:
                 return LocalizationManager.Game.weeklyQuestsReward;
+            case UITextKey.Energy:
+                return LocalizationManager.Game.energy;
             default:
                 return key.ToString();
         }
@@ -326,5 +328,6 @@ public enum UITextKey
     Haptic,
     AllClearTitle,
     AllClearDescription,
-    WeeklyQuestReward
+    WeeklyQuestReward,
+    Energy
 }

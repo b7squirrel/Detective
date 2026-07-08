@@ -299,21 +299,13 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 return;
             }
 
-            var (canClaim, reason) = await EnergyAdRewardManager.Instance.CanClaimAsync();
+            bool canClaim = await EnergyAdRewardManager.Instance.CanClaimAsync();
 
             if (!canClaim)
             {
-                if (reason == "daily_limit")
-                {
-                    Logger.Log("[ShopManager] 번개 광고 일일 횟수 초과");
-                    ShowDailyLimitPopup();
-                }
-                else
-                {
-                    string remainingTime = EnergyAdRewardManager.Instance.GetRemainingCooldownFormatted();
-                    Logger.Log($"[ShopManager] 번개 광고 쿨다운 중: {remainingTime} 남음");
-                    ShowCooldownPopup(remainingTime);
-                }
+                string remainingTime = EnergyAdRewardManager.Instance.GetRemainingCooldownFormatted();
+                Logger.Log($"[ShopManager] 번개 광고 쿨다운 중: {remainingTime} 남음");
+                ShowCooldownPopup(remainingTime);
                 return;
             }
         }
@@ -349,11 +341,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
             StartCoroutine(GiveProductRewardCo(productData, fxStartPoint));
         });
-    }
-
-    void ShowDailyLimitPopup()
-    {
-        Logger.Log("[ShopManager] 오늘 광고 시청 횟수를 모두 사용했습니다. 내일 다시 시도해주세요.");
     }
 
     void ShowAdLoadingPopup()
