@@ -435,6 +435,20 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 Logger.Log($"[ShopManager] 상자 보상 처리: {productData.ProductId}");
                 OpenBox(productData, fxStartPoint);
                 break;
+
+            case ProductType.Energy:
+                int rewardEnergyAmount = productData.RewardEnergy;
+                playerDataManager.AddLightningSilent(rewardEnergyAmount);
+
+                Logger.Log($"[ShopManager] 번개 지급: +{rewardEnergyAmount} (총: {playerDataManager.GetCurrentLightningNumber()})");
+
+                if (fxStartPoint != null)
+                    PlayEnergyCollectFX(fxStartPoint, rewardEnergyAmount);
+                else
+                    playerDataManager.AddLightning(0); // UI 즉시 갱신 트리거용 (0을 더해도 NotifyCurrencyChanged 호출됨)
+
+                ShowRewardPopup($"번개 {rewardEnergyAmount}개 획득!");
+                break;
         }
     }
 
@@ -491,6 +505,17 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
         if (gemCollectFX != null)
             gemCollectFX.PlayGemCollectFX(startPoint, amount, false);
+        else
+            Logger.LogWarning("[ShopManager] GemCollectFX를 찾을 수 없습니다.");
+    }
+
+    void PlayEnergyCollectFX(RectTransform startPoint, int amount)
+    {
+        if (gemCollectFX == null)
+            gemCollectFX = FindObjectOfType<GemCollectFX>();
+
+        if (gemCollectFX != null)
+            gemCollectFX.PlayLightningCollectFX(startPoint, amount);
         else
             Logger.LogWarning("[ShopManager] GemCollectFX를 찾을 수 없습니다.");
     }

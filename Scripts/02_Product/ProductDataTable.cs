@@ -91,10 +91,10 @@ public class ProductDataTable : SingletonBehaviour<ProductDataTable>
                 Logger.Log($"[ProductDataTable] 라인 {i}: {fields.Length}개 필드");
             }
 
-            // ⭐ 최소 12개 필드 필요 (11개 → 12개로 변경)
-            if (fields.Length < 12)
+            // ⭐ 최소 12개 필드 필요 (11개 → 13개로 변경)
+            if (fields.Length < 13)
             {
-                Logger.LogWarning($"[ProductDataTable] 라인 {i}: 필드 부족 ({fields.Length}/12) - '{line}'");
+                Logger.LogWarning($"[ProductDataTable] 라인 {i}: 필드 부족 ({fields.Length}/13) - '{line}'");
                 skippedCount++;
                 continue;
             }
@@ -114,7 +114,8 @@ public class ProductDataTable : SingletonBehaviour<ProductDataTable>
                     GachaTableId = GetField(fields, 8),
                     DrawCount = ParseInt(GetField(fields, 9)),           // ⭐ 올바른 인덱스
                     GuaranteedCount = ParseInt(GetField(fields, 10)),    // ⭐ 올바른 인덱스
-                    GuaranteedRarity = GetField(fields, 11)              // ⭐ 올바른 인덱스
+                    GuaranteedRarity = GetField(fields, 11),              // ⭐ 올바른 인덱스
+                    RewardEnergy = ParseInt(GetField(fields, 12)) 
                 };
 
                 productDataList.Add(data);

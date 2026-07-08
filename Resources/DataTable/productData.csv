@@ -1,18 +1,21 @@
-product_id,product_type,product_name,purchase_type,purchase_cost,reward_cristal,reward_gold,reward_item_id,gacha_table_id,draw_count,guaranteed_count,guaranteed_rarity
-pack_001,Pack,Starter Pack,Cristal,550,0,10000,starter_pack,single_starter,1,0,
-pack_003,Pack,Pro Pack,Cristal,1800,0,60000,pro_pack,ten_pro,1,1,Legendary
-chest_001,Box,Duck Box,Cristal,120,0,0,duck_weapon,single_duck,1,0,
-chest_002,Box,Duck Box 10,Cristal,1000,0,0,duck_weapon,ten_duck,10,1,Legendary
-chest_003,Box,Item Box,Cristal,80,0,0,item_equip,single_item,1,0,
-chest_004,Box,Item Box 10,Cristal,650,0,0,item_equip,ten_item,10,1,Epic
-chest_005,Box,Lucky Box,Ad,0,0,0,duck_weapon,daily_random,1,0,
-gold_001,Gold,Gold Small,Cristal,55,0,2000,,,,0,
-gold_002,Gold,Gold Medium,Cristal,380,0,15000,,,,0,
-gold_003,Gold,Gold Large,Cristal,1100,0,50000,,,,0,
-cristal_001,Cristal,Cristal Tiny,IAP,99,80,0,,,,0,
-cristal_002,Cristal,Cristal Small,IAP,299,400,0,,,,0,
-cristal_003,Cristal,Cristal Medium,IAP,499,850,0,,,,0,
-cristal_004,Cristal,Cristal Large,IAP,999,1900,0,,,,0,
-cristal_005,Cristal,Cristal Huge,IAP,1999,4200,0,,,,0,
-cristal_006,Cristal,Cristal Mega,IAP,4999,12000,0,,,,0,
-cristal_007,Cristal,Cristal Ultra,IAP,9999,26000,0,,,,0,
+product_id,product_type,product_name,purchase_type,purchase_cost,reward_cristal,reward_gold,reward_item_id,gacha_table_id,draw_count,guaranteed_count,guaranteed_rarity,reward_energy
+pack_001,Pack,Starter Pack,Cristal,550,0,10000,starter_pack,single_starter,1,0,,
+pack_003,Pack,Pro Pack,Cristal,1800,0,60000,pro_pack,ten_pro,1,1,Legendary,
+chest_001,Box,Duck Box,Cristal,120,0,0,duck_weapon,single_duck,1,0,,
+chest_002,Box,Duck Box 10,Cristal,1000,0,0,duck_weapon,ten_duck,10,1,Legendary,
+chest_003,Box,Item Box,Cristal,80,0,0,item_equip,single_item,1,0,,
+chest_004,Box,Item Box 10,Cristal,650,0,0,item_equip,ten_item,10,1,Epic,
+chest_005,Box,Lucky Box,Ad,0,0,0,duck_weapon,daily_random,1,0,,
+gold_001,Gold,Gold Small,Cristal,55,0,2000,,,,0,,
+gold_002,Gold,Gold Medium,Cristal,380,0,15000,,,,0,,
+gold_003,Gold,Gold Large,Cristal,1100,0,50000,,,,0,,
+cristal_001,Cristal,Cristal Tiny,IAP,99,80,0,,,,0,,
+cristal_002,Cristal,Cristal Small,IAP,299,400,0,,,,0,,
+cristal_003,Cristal,Cristal Medium,IAP,499,850,0,,,,0,,
+cristal_004,Cristal,Cristal Large,IAP,999,1900,0,,,,0,,
+cristal_005,Cristal,Cristal Huge,IAP,1999,4200,0,,,,0,,
+cristal_006,Cristal,Cristal Mega,IAP,4999,12000,0,,,,0,,
+cristal_007,Cristal,Cristal Ultra,IAP,9999,26000,0,,,,0,,
+energy_001,Energy,Energy Small,Cristal,15,0,0,,,0,0,,5
+energy_002,Energy,Energy Medium,Cristal,28,0,0,,,0,0,,10
+energy_ad,Energy,Energy Ad,Ad,0,0,0,,,0,0,,5
