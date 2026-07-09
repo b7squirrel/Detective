@@ -60,6 +60,7 @@ public class GameTexts : ScriptableObject
     public string energyCooldownFormat; // "{0}분 후 가능" / "Available in {0}m"
     public string watchAdToOpenBox;     // "광고 보고 열기!" / "Watch Ad to Open!"
     public string adLoading;            // "광고 로딩 중..." / "Ad Loading..."
+    public string free = "무료";
 
     [Header("Pack Description")]
     // 오리 카드 라인: {0} = 등급명(들)
