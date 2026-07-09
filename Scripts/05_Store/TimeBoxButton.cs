@@ -16,10 +16,10 @@ public class TimeBoxButton : MonoBehaviour
 
     [Header("디버그")]
     [SerializeField] private bool showDebugLogs = true;
-    
+
     private ProductData productData;
     private bool isReady = false;
-    
+
     void Start()
     {
         // Inspector의 OnClick 이벤트 무시하고 코드로 직접 연결
@@ -27,10 +27,10 @@ public class TimeBoxButton : MonoBehaviour
         {
             // 기존 이벤트 모두 제거
             boxButton.onClick.RemoveAllListeners();
-            
+
             // 새로 연결
             boxButton.onClick.AddListener(OnButtonClicked);
-            
+
             Debug.Log("========================================");
             Debug.Log("[TimeBoxButton] 버튼 이벤트 연결 완료!");
             Debug.Log("========================================");
@@ -41,20 +41,20 @@ public class TimeBoxButton : MonoBehaviour
             Debug.LogError("[TimeBoxButton] X boxButton이 NULL!");
             Debug.Log("========================================");
         }
-        
+
         // ⭐ 초기화 상태 로그
         Debug.Log($"[TimeBoxButton] TimeBasedBoxManager: {(TimeBasedBoxManager.Instance != null ? "OK" : "NULL")}");
         Debug.Log($"[TimeBoxButton] ShopManager: {(ShopManager.Instance != null ? "OK" : "NULL")}");
         Debug.Log($"[TimeBoxButton] ProductData: {(productData != null ? productData.ProductId : "NULL")}");
-        
+
         UpdateUI();
     }
-    
+
     void Update()
     {
         UpdateUI();
     }
-    
+
     public void SetInfo(ProductData data)
     {
         productData = data;
@@ -62,7 +62,7 @@ public class TimeBoxButton : MonoBehaviour
         Debug.Log($"[TimeBoxButton] SetInfo 호출: {(productData != null ? productData.ProductId : "NULL")}");
         Debug.Log("========================================");
     }
-    
+
     void UpdateUI()
     {
         if (TimeBasedBoxManager.Instance == null)
@@ -78,7 +78,7 @@ public class TimeBoxButton : MonoBehaviour
         if (isReady && adReady)
         {
             if (boxButton != null) boxButton.interactable = true;
-            if (timerText != null) timerText.text = "광고 보고 열기!";
+            if (timerText != null) timerText.text = LocalizationManager.Game.watchAdToOpenBox; // "광고 보고 열기!" / "Watch Ad to Open!"
             if (lockIcon != null) lockIcon.SetActive(false);
             if (circleDecoGrey != null) circleDecoGrey.SetActive(false);
             if (postItGrey != null) postItGrey.SetActive(false);
@@ -89,7 +89,7 @@ public class TimeBoxButton : MonoBehaviour
         {
             // 쿨다운은 끝났지만 광고 로딩 중
             if (boxButton != null) boxButton.interactable = false;
-            if (timerText != null) timerText.text = "광고 로딩 중...";
+            if (timerText != null) timerText.text = LocalizationManager.Game.adLoading; // "광고 로딩 중..." / "Ad Loading..."
             if (lockIcon != null) lockIcon.SetActive(true);
             if (circleDecoGrey != null) circleDecoGrey.SetActive(true);
             if (postItGrey != null) postItGrey.SetActive(true);
@@ -102,8 +102,8 @@ public class TimeBoxButton : MonoBehaviour
             if (boxButton != null) boxButton.interactable = false;
             if (timerText != null)
             {
-                string timeStr = TimeBasedBoxManager.Instance.GetRemainingTimeFormatted();
-                timerText.text = timeStr;
+                var (minutes, seconds) = TimeBasedBoxManager.Instance.GetRemainingMinutesSeconds();
+                timerText.text = string.Format(LocalizationManager.Game.energyCooldownFormat, minutes, seconds);
             }
             if (lockIcon != null) lockIcon.SetActive(true);
             if (circleDecoGrey != null) circleDecoGrey.SetActive(true);

@@ -58,6 +58,8 @@ public class GameTexts : ScriptableObject
     public string energy;              // "에너지" / "Energy"
     public string watchAdToEarnEnergy; // "광고 보고 획득" / "Watch Ad to Earn"
     public string energyCooldownFormat; // "{0}분 후 가능" / "Available in {0}m"
+    public string watchAdToOpenBox;     // "광고 보고 열기!" / "Watch Ad to Open!"
+    public string adLoading;            // "광고 로딩 중..." / "Ad Loading..."
 
     [Header("Pack Description")]
     // 오리 카드 라인: {0} = 등급명(들)

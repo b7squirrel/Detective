@@ -7,23 +7,23 @@ public class TimeBasedBoxManager : SingletonBehaviour<TimeBasedBoxManager>
     [Header("설정")]
     [SerializeField] private float cooldownMinutes = 60f;
     [SerializeField] private bool useServerTime = true; // ⭐ 서버 시간 사용 여부
-    
+
     [Header("디버그")]
     [SerializeField] private bool showDebugLogs = true;
-    
+
     private const string LAST_CLAIM_TIME_KEY = "LastTimeBoxClaimTime";
-    
+
     protected override void Init()
     {
         base.Init();
-        
+
         if (showDebugLogs)
         {
             Logger.Log("[TimeBasedBoxManager] 초기화 완료");
             Logger.Log($"[TimeBasedBoxManager] 서버 시간 사용: {useServerTime}");
         }
     }
-    
+
     /// <summary>
     /// 현재 시간 가져오기 (서버 또는 디바이스)
     /// </summary>
@@ -38,7 +38,7 @@ public class TimeBasedBoxManager : SingletonBehaviour<TimeBasedBoxManager>
             return DateTime.Now;
         }
     }
-    
+
     /// <summary>
     /// 상자를 열 수 있는지 확인 (비동기)
     /// </summary>
@@ -48,23 +48,23 @@ public class TimeBasedBoxManager : SingletonBehaviour<TimeBasedBoxManager>
         {
             return true;
         }
-        
+
         string lastClaimTimeStr = PlayerPrefs.GetString(LAST_CLAIM_TIME_KEY);
         DateTime lastClaimTime;
-        
+
         if (!DateTime.TryParse(lastClaimTimeStr, out lastClaimTime))
         {
             Logger.LogError($"[TimeBasedBoxManager] 시간 파싱 오류: {lastClaimTimeStr}");
             ResetCooldown();
             return true;
         }
-        
+
         DateTime currentTime = await GetCurrentTime();
         TimeSpan elapsed = currentTime - lastClaimTime;
-        
+
         return elapsed.TotalMinutes >= cooldownMinutes;
     }
-    
+
     /// <summary>
     /// 상자를 열 수 있는지 확인 (동기 - UI용)
     /// </summary>
@@ -74,22 +74,22 @@ public class TimeBasedBoxManager : SingletonBehaviour<TimeBasedBoxManager>
         {
             return true;
         }
-        
+
         string lastClaimTimeStr = PlayerPrefs.GetString(LAST_CLAIM_TIME_KEY);
         DateTime lastClaimTime;
-        
+
         if (!DateTime.TryParse(lastClaimTimeStr, out lastClaimTime))
         {
             return true;
         }
-        
+
         // ⭐ 동기 버전은 디바이스 시간 사용 (UI 업데이트용)
         DateTime currentTime = DateTime.Now;
         TimeSpan elapsed = currentTime - lastClaimTime;
-        
+
         return elapsed.TotalMinutes >= cooldownMinutes;
     }
-    
+
     /// <summary>
     /// 남은 시간 반환 (초 단위)
     /// </summary>
@@ -99,22 +99,22 @@ public class TimeBasedBoxManager : SingletonBehaviour<TimeBasedBoxManager>
         {
             return 0f;
         }
-        
+
         string lastClaimTimeStr = PlayerPrefs.GetString(LAST_CLAIM_TIME_KEY);
         DateTime lastClaimTime;
-        
+
         if (!DateTime.TryParse(lastClaimTimeStr, out lastClaimTime))
         {
             return 0f;
         }
-        
+
         DateTime currentTime = DateTime.Now;
         TimeSpan elapsed = currentTime - lastClaimTime;
         float remainingSeconds = (float)(cooldownMinutes * 60 - elapsed.TotalSeconds);
-        
+
         return Mathf.Max(0f, remainingSeconds);
     }
-    
+
     /// <summary>
     /// 상자를 열었을 때 호출 (서버 시간 기록)
     /// </summary>
@@ -122,28 +122,39 @@ public class TimeBasedBoxManager : SingletonBehaviour<TimeBasedBoxManager>
     {
         DateTime currentTime = await GetCurrentTime();
         string currentTimeStr = currentTime.ToString("o"); // ISO 8601 형식
-        
+
         PlayerPrefs.SetString(LAST_CLAIM_TIME_KEY, currentTimeStr);
         PlayerPrefs.Save();
-        
+
         Logger.Log($"[TimeBasedBoxManager] 상자 열림 시간 기록: {currentTime}");
         Logger.Log($"[TimeBasedBoxManager] 다음 가능 시간: {currentTime.AddMinutes(cooldownMinutes)}");
     }
-    
+
     public void ResetCooldown()
     {
         PlayerPrefs.DeleteKey(LAST_CLAIM_TIME_KEY);
         PlayerPrefs.Save();
         Logger.Log("[TimeBasedBoxManager] 쿨다운 리셋됨");
     }
-    
+
     public string GetRemainingTimeFormatted()
     {
         float seconds = GetRemainingSeconds();
         int hours = Mathf.FloorToInt(seconds / 3600);
         int minutes = Mathf.FloorToInt((seconds % 3600) / 60);
         int secs = Mathf.FloorToInt(seconds % 60);
-        
+
         return $"{hours:00}:{minutes:00}:{secs:00}";
+    }
+
+    /// <summary>
+    /// 남은 시간을 분/초로 분리해서 반환 (현지화용 - 포맷 문자열은 UI 쪽에서 채움)
+    /// </summary>
+    public (int minutes, int seconds) GetRemainingMinutesSeconds()
+    {
+        float totalSeconds = GetRemainingSeconds();
+        int minutes = Mathf.FloorToInt(totalSeconds / 60f);
+        int seconds = Mathf.FloorToInt(totalSeconds % 60f);
+        return (minutes, seconds);
     }
 }

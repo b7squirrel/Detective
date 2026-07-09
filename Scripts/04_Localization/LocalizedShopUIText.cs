@@ -15,7 +15,7 @@ public class LocalizedShopUIText : MonoBehaviour
     [SerializeField] TextMeshProUGUI cristal;
     [SerializeField] TextMeshProUGUI[] singleDraw;
     [SerializeField] TextMeshProUGUI[] tenxDraw;
-    [SerializeField] TextMeshProUGUI watchAdToDraw;
+    // [SerializeField] TextMeshProUGUI watchAdToDraw;
     [SerializeField] TextMeshProUGUI cardLimitWarningTitle;
     [SerializeField] TextMeshProUGUI cardLimitWarningDescription;
 
@@ -50,7 +50,7 @@ public class LocalizedShopUIText : MonoBehaviour
         {
             item.text = LocalizationManager.Game.tenXDraw;
         }
-        watchAdToDraw.text = LocalizationManager.Game.watchAdToDraw;
+        // watchAdToDraw.text = LocalizationManager.Game.watchAdToDraw;
 
         cardLimitWarningTitle.text = LocalizationManager.Game.cardLimitWarnings[0];
         cardLimitWarningDescription.text = LocalizationManager.Game.cardLimitWarnings[1];
