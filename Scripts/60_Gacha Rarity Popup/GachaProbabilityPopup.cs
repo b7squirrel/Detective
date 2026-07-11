@@ -28,22 +28,17 @@ public class GachaProbabilityPopup : SingletonBehaviour<GachaProbabilityPopup>
     /// </summary>
     public void ShowAll()
     {
-        if (ProductDataTable.Instance == null)
+        if (ProductDataTable.Instance == null || GachaRarityTable.Instance == null)
         {
-            Logger.LogError("[GachaProbabilityPopup] ProductDataTable을 찾을 수 없습니다.");
+            Logger.LogError("[GachaProbabilityPopup] 필요한 데이터 테이블을 찾을 수 없습니다.");
             return;
         }
 
-        if (GachaRarityTable.Instance == null)
-        {
-            Logger.LogError("[GachaProbabilityPopup] GachaRarityTable을 찾을 수 없습니다.");
-            return;
-        }
+        gameObject.SetActive(true);
 
         ClearSections();
 
         var allProducts = ProductDataTable.Instance.GetAllProducts();
-
         foreach (var product in allProducts)
         {
             if (string.IsNullOrEmpty(product.GachaTableId))
@@ -51,8 +46,6 @@ public class GachaProbabilityPopup : SingletonBehaviour<GachaProbabilityPopup>
 
             BuildSectionFor(product);
         }
-
-        gameObject.SetActive(true);
     }
 
     void BuildSectionFor(ProductData product)
