@@ -1708,10 +1708,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5984554558459288612}
   - component: {fileID: 7861396171679386954}
-  - component: {fileID: 1432338955901310677}
   - component: {fileID: 5129914218266862415}
   - component: {fileID: 330231703092752017}
   - component: {fileID: 2070582314193290934}
+  - component: {fileID: 3182588216710433424}
   m_Layer: 0
   m_Name: WeaponContainerPrefab
   m_TagString: Untagged
@@ -1789,27 +1789,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &1432338955901310677
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5917037707563365638}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: b096806e73929734fa3a674f69e86936, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &5129914218266862415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1875,6 +1854,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shadowDefault: {fileID: 2328471627292545952}
   shadowOnIce: {fileID: 4420849061033029178}
+--- !u!95 &3182588216710433424
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5917037707563365638}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: c21b78c7212f84885a76fd2ba38d4fb0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6466989767476504263
 GameObject:
   m_ObjectHideFlags: 0
@@ -2147,7 +2147,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7373752104618324
 Transform:
   m_ObjectHideFlags: 0
@@ -2204,7 +2204,7 @@ SpriteRenderer:
   m_SortingLayerID: -1556187351
   m_SortingLayer: 3
   m_SortingOrder: 16
-  m_Sprite: {fileID: 21300000, guid: f40438fda92f647339ea2de039d387dd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a61f18cdeb8874530bb4c14b6ba6861b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
