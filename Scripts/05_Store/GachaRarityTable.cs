@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GachaRarityTable : MonoBehaviour
+public class GachaRarityTable : SingletonBehaviour<GachaRarityTable>
 {
     [SerializeField] private TextAsset gachaRarityTableCSV;
-    
-    // ⭐ int로 변경
+
     private Dictionary<string, Dictionary<int, int>> rarityTableData = new Dictionary<string, Dictionary<int, int>>();
 
     public class RarityData
@@ -13,11 +12,13 @@ public class GachaRarityTable : MonoBehaviour
         public string GachaTableId;
         public string SlotType;
         public int Rarity;
-        public int Probability;  // ⭐ float → int
+        public int Probability;
     }
 
-    void Awake()
+    protected override void Init()
     {
+        base.Init();
+
         if (gachaRarityTableCSV != null)
         {
             ParseCSV(gachaRarityTableCSV.text);
@@ -46,7 +47,6 @@ public class GachaRarityTable : MonoBehaviour
         int parsedCount = 0;
         int skippedCount = 0;
 
-        // 첫 줄(헤더) 건너뛰기
         for (int i = 1; i < lines.Length; i++)
         {
             string line = lines[i].Trim();
@@ -73,13 +73,11 @@ public class GachaRarityTable : MonoBehaviour
                     GachaTableId = GetField(fields, 0),
                     SlotType = GetField(fields, 1),
                     Rarity = GetRarityValue(GetField(fields, 2)),
-                    Probability = ParseInt(GetField(fields, 3))  // ⭐ int로 파싱
+                    Probability = ParseInt(GetField(fields, 3))
                 };
 
-                // 테이블 키 생성
                 string key = $"{data.GachaTableId}_{data.SlotType}";
 
-                // 딕셔너리에 추가
                 if (!rarityTableData.ContainsKey(key))
                 {
                     rarityTableData[key] = new Dictionary<int, int>();
@@ -88,7 +86,6 @@ public class GachaRarityTable : MonoBehaviour
                 rarityTableData[key][data.Rarity] = data.Probability;
                 parsedCount++;
 
-                // ⭐ 디버깅용 로그 (처음 몇 개만)
                 if (i <= 5)
                 {
                     Logger.Log($"[GachaRarityTable] Parsed: {data.GachaTableId}/{data.SlotType}/{GetRarityName(data.Rarity)} = {data.Probability}");
@@ -105,7 +102,6 @@ public class GachaRarityTable : MonoBehaviour
         Logger.Log($"[GachaRarityTable] 총 {rarityTableData.Count}개 테이블 로드됨");
     }
 
-    // ⭐ 반환 타입을 Dictionary<int, int>로 변경
     public Dictionary<int, int> GetProbabilities(string gachaTableId, string slotType)
     {
         string key = $"{gachaTableId}_{slotType}";
@@ -116,6 +112,40 @@ public class GachaRarityTable : MonoBehaviour
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 등급별 확률을 %로 변환하여 반환합니다. (등급 순으로 정렬됨)
+    /// </summary>
+    public List<(int rarity, float percent)> GetProbabilityPercentages(string gachaTableId, string slotType)
+    {
+        var probs = GetProbabilities(gachaTableId, slotType);
+        if (probs == null || probs.Count == 0) return null;
+
+        int totalWeight = 0;
+        foreach (var weight in probs.Values)
+            totalWeight += weight;
+
+        if (totalWeight <= 0) return null;
+
+        var result = new List<(int rarity, float percent)>();
+        foreach (var kvp in probs)
+        {
+            float percent = (kvp.Value / (float)totalWeight) * 100f;
+            result.Add((kvp.Key, percent));
+        }
+
+        result.Sort((a, b) => a.rarity.CompareTo(b.rarity));
+        return result;
+    }
+
+    /// <summary>
+    /// 해당 상품/슬롯 조합의 확률 테이블이 존재하는지 확인합니다.
+    /// </summary>
+    public bool HasSlotType(string gachaTableId, string slotType)
+    {
+        string key = $"{gachaTableId}_{slotType}";
+        return rarityTableData.ContainsKey(key);
     }
 
     private string GetField(string[] fields, int index)
@@ -146,7 +176,7 @@ public class GachaRarityTable : MonoBehaviour
     {
         if (int.TryParse(value, out int result))
             return result;
-        
+
         Logger.LogWarning($"[GachaRarityTable] 정수 파싱 실패: '{value}'");
         return 0;
     }

@@ -61,6 +61,9 @@ public class GameTexts : ScriptableObject
     public string watchAdToOpenBox;     // "광고 보고 열기!" / "Watch Ad to Open!"
     public string adLoading;            // "광고 로딩 중..." / "Ad Loading..."
     public string free = "무료";
+    public string probabilityInfoTitle = "확률 정보";
+    public string probabilityNormalLabel = "일반 확률";
+    public string probabilityGuaranteeLabel = "보장 확률";
 
     [Header("Pack Description")]
     // 오리 카드 라인: {0} = 등급명(들)

@@ -221,8 +221,14 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.weeklyQuestsReward;
             case UITextKey.Energy:
                 return LocalizationManager.Game.energy;
-                case UITextKey.Free:
+            case UITextKey.Free:
                 return LocalizationManager.Game.free;
+            case UITextKey.ProbabilityInfoTitle:
+                return LocalizationManager.Game.probabilityInfoTitle;
+            case UITextKey.ProbabilityNormalLabel:
+                return LocalizationManager.Game.probabilityNormalLabel;
+            case UITextKey.ProbabilityGuaranteeLabel:
+                return LocalizationManager.Game.probabilityGuaranteeLabel;
             default:
                 return key.ToString();
         }
@@ -332,5 +338,8 @@ public enum UITextKey
     AllClearDescription,
     WeeklyQuestReward,
     Energy,
-    Free
+    Free,
+    ProbabilityInfoTitle,
+    ProbabilityNormalLabel,
+    ProbabilityGuaranteeLabel
 }
