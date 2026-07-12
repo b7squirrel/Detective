@@ -18,9 +18,14 @@ public class IncomingWarningPanel : MonoBehaviour
     {
         incomingText.text = "적들이 몰려옵니다!!!";
         tagColorImage.color = tagColor;
+        // ⭐ incomingWarningPanel.SetActive(true)는 여기서 호출하지 않음.
+        // 큐 처리 순서와 무관하게 패널이 먼저 보여버리는 문제를 막기 위해
+        // 실제 활성화는 ActivateWarning()(큐 차례가 왔을 때, PauseGame과 같은 타이밍)에서 수행.
+
         UIEvent incomingEvent = new UIEvent(() => ActivateWarning(), "Incoming");
         GameManager.instance.popupManager.EnqueueUIEvent(incomingEvent);
     }
+
     public void Close()
     {
         anim.SetTrigger("Close");
@@ -29,9 +34,10 @@ public class IncomingWarningPanel : MonoBehaviour
 
     public void ActivateWarning()
     {
-        incomingWarningPanel.SetActive(true);
+        incomingWarningPanel.SetActive(true); // ⭐ 여기서 패널 활성화 (PauseGame 호출과 같은 타이밍)
         StartCoroutine(ActivateIncomingWarning());
     }
+
     IEnumerator Deactivate()
     {
         yield return new WaitForSecondsRealtime(.5f);
@@ -39,6 +45,7 @@ public class IncomingWarningPanel : MonoBehaviour
         GameManager.instance.pauseManager.UnPauseGame();
         GameManager.instance.popupManager.IsUIDone = true;
     }
+
     IEnumerator ActivateIncomingWarning()
     {
         PauseManager pm = GameManager.instance.pauseManager;
