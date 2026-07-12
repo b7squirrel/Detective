@@ -107,6 +107,7 @@ public class AchievementPanel : MonoBehaviour
         }
 
         RefreshUI();
+        RebuildContentLayout(); // ⭐ 추가: 아이템 생성 완료 후 다시 한 번 강제 재계산
     }
 
     // ⭐ 탭 전환
@@ -124,6 +125,8 @@ public class AchievementPanel : MonoBehaviour
         // UI 갱신
         RefreshUI();
 
+        RebuildContentLayout(); // ⭐ 기존 두 줄을 함수로 분리
+
         // ⭐ 스크롤 최상단으로
         if (scrollRect != null)
             scrollRect.verticalNormalizedPosition = 1f;
@@ -137,6 +140,14 @@ public class AchievementPanel : MonoBehaviour
             else if (currentTab == TabType.Permanent)
                 panelOutlineAnimator.SetTrigger("Permanent");
         }
+    }
+
+    // ⭐ 새로 추가: 공통 레이아웃 재계산 함수
+    private void RebuildContentLayout()
+    {
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(content as RectTransform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
     }
 
     // ⭐ 탭 버튼 색상 업데이트

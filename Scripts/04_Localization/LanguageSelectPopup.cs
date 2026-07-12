@@ -4,26 +4,31 @@ using TMPro;
 public class LanguageSelectPopup : MonoBehaviour
 {
     private const string LANGUAGE_SELECTED_KEY = "LanguageSelected";
-    private const string LANGUAGE_INDEX_KEY = "LanguageIndex"; // SettingsUIPanel과 동일 키 공유
+    private const string LANGUAGE_INDEX_KEY = "LanguageIndex";
 
     [Header("UI References")]
     [SerializeField] TextMeshProUGUI languageText;
 
-    // SettingsUIPanel과 동일한 순서 (0 = English, 1 = 한국어)
     private readonly string[] languages = { "English", "한국어" };
     private int currentLanguageIndex = 0;
 
+    // ⭐ 추가: 다른 스크립트(GameInitializer)가 대기할 수 있는 정적 플래그
+    public static bool IsConfirmed { get; private set; } = false;
+
     void Awake()
     {
+        int savedValue = PlayerPrefs.GetInt(LANGUAGE_SELECTED_KEY, -1); // -1 = 키 자체가 없음
+        Logger.Log($"[LanguageSelectPopup] 저장된 LanguageSelected 값: {savedValue}");
+
         bool alreadySelected = PlayerPrefs.GetInt(LANGUAGE_SELECTED_KEY, 0) == 1;
 
         if (alreadySelected)
         {
+            IsConfirmed = true; // ⭐ 이미 선택된 유저는 즉시 통과
             gameObject.SetActive(false);
             return;
         }
 
-        // 시스템 언어 기준 기본값으로 시작 (SettingsUIPanel의 기본값 로직과 동일 기준)
         currentLanguageIndex = (Application.systemLanguage == SystemLanguage.Korean) ? 1 : 0;
         UpdateLanguageDisplay();
     }
@@ -63,17 +68,28 @@ public class LanguageSelectPopup : MonoBehaviour
             LocalizationManager.Instance.SetKorean();
     }
 
-    /// <summary>
-    /// 확인 버튼 클릭 — 선택을 확정하고 팝업을 닫습니다.
-    /// 이후로는 다시 뜨지 않습니다.
-    /// </summary>
     public void OnConfirmClick()
     {
-        // SettingsUIPanel이 나중에 읽을 값도 같이 저장 (일관성 유지)
         PlayerPrefs.SetInt(LANGUAGE_INDEX_KEY, currentLanguageIndex);
         PlayerPrefs.SetInt(LANGUAGE_SELECTED_KEY, 1);
         PlayerPrefs.Save();
 
+        IsConfirmed = true; // ⭐ 확인 버튼을 눌러야 비로소 통과
         gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 디버그용 — 언어 선택 기록을 초기화합니다.
+    /// 다음 앱 실행(또는 씬 재시작) 시 언어 선택 팝업이 다시 뜹니다.
+    /// </summary>
+    public void ResetLanguageSelection()
+    {
+        PlayerPrefs.DeleteKey(LANGUAGE_SELECTED_KEY);
+        PlayerPrefs.DeleteKey(LANGUAGE_INDEX_KEY);
+        PlayerPrefs.Save();
+
+        IsConfirmed = false;
+
+        Logger.Log("[LanguageSelectPopup] 언어 선택 기록 초기화 완료. 다음 실행 시 팝업이 다시 표시됩니다.");
     }
 }

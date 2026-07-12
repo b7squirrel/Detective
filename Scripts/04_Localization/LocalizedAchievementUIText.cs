@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class LocalizedAchievementUIText : MonoBehaviour
 {
-    [Header("Achievements Panel")]
-    [SerializeField] TextMeshProUGUI achievementsTitle;
+    // [Header("Achievements Panel")]
+    // [SerializeField] TextMeshProUGUI achievementsTitle;
     
 
     void Awake()
@@ -21,6 +21,6 @@ public class LocalizedAchievementUIText : MonoBehaviour
     }
     void UpdateText()
     {
-        achievementsTitle.text = LocalizationManager.Game.achievementsTitle;
+        // achievementsTitle.text = LocalizationManager.Game.achievementsTitle;
     }
 }

@@ -95,6 +95,11 @@ public class GameInitializer : MonoBehaviour
         IsInitialized = false;
         InitializationProgress = 0f;
 
+        // ⭐ 추가: 언어 선택이 확정될 때까지 대기
+        Log("0/7: 언어 선택 대기...");
+        yield return new WaitUntil(() => LanguageSelectPopup.IsConfirmed);
+        Log("v 언어 선택 확정됨, 초기화 계속 진행");
+
         // 0단계: 클라우드 로그인 및 동기화
         Debug.Log("[GameInitializer] 0/7: 클라우드 로그인 시도...");
         float cloudWait = 0f;

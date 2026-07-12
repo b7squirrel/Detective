@@ -229,6 +229,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.probabilityNormalLabel;
             case UITextKey.ProbabilityGuaranteeLabel:
                 return LocalizationManager.Game.probabilityGuaranteeLabel;
+            case UITextKey.LanguageSelection:
+                return LocalizationManager.Game.languageSelection;
             default:
                 return key.ToString();
         }
@@ -341,5 +343,6 @@ public enum UITextKey
     Free,
     ProbabilityInfoTitle,
     ProbabilityNormalLabel,
-    ProbabilityGuaranteeLabel
+    ProbabilityGuaranteeLabel,
+    LanguageSelection
 }
