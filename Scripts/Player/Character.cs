@@ -35,8 +35,8 @@ public class Character : MonoBehaviour
 
     [SerializeField] AudioClip hurtSound;
 
-    [SerializeField] ParticleSystem wallCollisionParticle;
-    [SerializeField] float wallColParticleDuration; // 벽 충돌 파티클이 보여지는 시간
+    // [SerializeField] ParticleSystem wallCollisionParticle;
+    // [SerializeField] float wallColParticleDuration; // 벽 충돌 파티클이 보여지는 시간
 
     bool isHurtSoundPlaying; // hurt sound가 재생 중이면 재생하지 않기 위한 플래그
 
@@ -67,8 +67,8 @@ public class Character : MonoBehaviour
         healEffect.SetActive(false);
         tearEffect.SetActive(false);
 
-        wallCollisionParticle = GetComponentInChildren<ParticleSystem>();
-        wallCollisionParticle.Stop();
+        // wallCollisionParticle = GetComponentInChildren<ParticleSystem>();
+        // wallCollisionParticle.Stop();
     }
 
     void Update()

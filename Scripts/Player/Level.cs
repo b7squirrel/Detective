@@ -78,7 +78,7 @@ public class Level : MonoBehaviour
         GameMode gameMode = PlayerDataManager.Instance.GetGameMode();
         if (bossDead && gameMode == GameMode.Regular)
         {
-            Logger.LogError($"[Level] 보스가 죽어서 경험치 증가를 막습니다.");
+            Logger.Log($"[Level] 보스가 죽어서 경험치 증가를 막습니다.");
             return;
         }
         if (GameManager.instance.IsPlayerDead)
