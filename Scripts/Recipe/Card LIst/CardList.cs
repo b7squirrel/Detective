@@ -41,23 +41,25 @@ public class EquipmentCard
     public bool IsEquipped;
 }
 
-public class CardList : MonoBehaviour
+public class CardList : SingletonBehaviour<CardList>
 {
     [SerializeField] List<CharCard> charCards;
     [SerializeField] List<EquipmentCard> equipmentCards;
     Dictionary<int, CharCard> charCardDict;
     Dictionary<int, EquipmentCard> equipCardDict;
 
-    CardDataManager cardDataManager;
-    EquipmentDataManager equipmentDataManager;
+    // ⭐ 캐싱 대신 항상 살아있는 인스턴스를 조회하도록 변경 (Awake 순서 문제 방지)
+    CardDataManager cardDataManager => CardDataManager.Instance;
+    EquipmentDataManager equipmentDataManager => EquipmentDataManager.Instance;
 
     Convert converter;
     SetBonusChecker setBonusChecker;
 
-    void Awake()
+    protected override void Init()
     {
-        cardDataManager = GetComponent<CardDataManager>();
-        equipmentDataManager = GetComponent<EquipmentDataManager>();
+        base.Init();
+        if (Instance != this) return;
+
         converter = new Convert();
         setBonusChecker = GetComponent<SetBonusChecker>();
     }
@@ -66,13 +68,12 @@ public class CardList : MonoBehaviour
     public void AddCardImmediately(CardData cardData)
     {
         if (cardData == null) return;
-        
-        // Dictionary 초기화 확인
+
         if (charCardDict == null) charCardDict = new Dictionary<int, CharCard>();
         if (equipCardDict == null) equipCardDict = new Dictionary<int, EquipmentCard>();
         if (charCards == null) charCards = new List<CharCard>();
         if (equipmentCards == null) equipmentCards = new List<EquipmentCard>();
-        
+
         if (cardData.Type == CardType.Weapon.ToString())
         {
             CharCard _charCard = new CharCard(cardData);
@@ -117,9 +118,9 @@ public class CardList : MonoBehaviour
 
         EquipStats(charCard, equipData);
         equipmentDataManager.UpdateEquipment(charCard, index);
-        setBonusChecker?.CheckSetBonus(charCard); 
+        setBonusChecker?.CheckSetBonus(charCard);
     }
-    
+
     public void UnEquip(CardData charData, EquipmentCard _equipmentCard)
     {
         CharCard charCard = FindCharCard(charData);
@@ -133,7 +134,7 @@ public class CardList : MonoBehaviour
         UnEquipStats(charCard, _equipmentCard.CardData);
 
         equipmentDataManager.UpdateEquipment(charCard, index);
-        setBonusChecker?.CheckSetBonus(charCard); 
+        setBonusChecker?.CheckSetBonus(charCard);
     }
 
     public CharCard FindCharCard(CardData charCardData)
@@ -144,7 +145,7 @@ public class CardList : MonoBehaviour
         Logger.Log("Can't find ID " + charCardData.ID);
         return null;
     }
-    
+
     public EquipmentCard FindEquipmentCard(CardData equipCardData)
     {
         if (equipCardDict != null && equipCardDict.TryGetValue(equipCardData.ID, out EquipmentCard card))
@@ -153,7 +154,7 @@ public class CardList : MonoBehaviour
         Logger.Log("Can't find ID " + equipCardData.ID);
         return null;
     }
-    
+
     public EquipmentCard[] GetEquipmentsCardData(CardData charCardData)
     {
         CharCard charCard = FindCharCard(charCardData);
@@ -190,10 +191,10 @@ public class CardList : MonoBehaviour
         {
             LoadEquipmentData(charCards[i]);
         }
-        
+
         DelayedSaveEquipments();
     }
-    
+
     void LoadEquipmentData(CharCard _charCard)
     {
         if (_charCard == null)
@@ -228,7 +229,7 @@ public class CardList : MonoBehaviour
             }
         }
     }
-    
+
     EquipmentCard FindCardDataByID(int cardID)
     {
         if (equipCardDict != null && equipCardDict.TryGetValue(cardID, out EquipmentCard card))
@@ -242,7 +243,7 @@ public class CardList : MonoBehaviour
         _charCard.totalHp += _equipCard.Hp;
         _charCard.totalAtk += _equipCard.Atk;
     }
-    
+
     void UnEquipStats(CharCard _charCard, CardData _equipCard)
     {
         _charCard.totalHp -= _equipCard.Hp;
@@ -258,7 +259,7 @@ public class CardList : MonoBehaviour
     {
         equipmentDataManager.ImmediateSave();
     }
-    
+
     public void DelayedSaveEquipments()
     {
         equipmentDataManager.DelayedSave();
@@ -273,15 +274,15 @@ public class CardList : MonoBehaviour
             Logger.LogWarning($"[CardList] CharCard not found for {oriCardData.Name}");
             return new List<CardData>();
         }
-        
+
         Logger.Log($"{charCard.cardName}");
         List<CardData> equipCardDatas = new();
         for (int i = 0; i < 4; i++)
         {
-            if(charCard.equipmentCards[i] == null) continue;
+            if (charCard.equipmentCards[i] == null) continue;
             equipCardDatas.Add(charCard.equipmentCards[i].CardData);
         }
 
         return equipCardDatas;
-    } 
+    }
 }

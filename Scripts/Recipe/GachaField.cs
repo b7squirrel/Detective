@@ -4,7 +4,7 @@ using UnityEngine;
 public class GachaField : MonoBehaviour
 {
     #region 참조 변수
-    [SerializeField] CardDataManager cardDataManager;
+    CardDataManager cardDataManager => CardDataManager.Instance;
     [SerializeField] SetCardDataOnSlot displayCardOnSlot;
     #endregion
 

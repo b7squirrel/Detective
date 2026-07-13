@@ -3,10 +3,10 @@ using UnityEngine;
 public class EquipmentSlotsManager : MonoBehaviour
 {
     [SerializeField] CardSlot[] equipSlots; // 4개의 장비 슬롯
-    [SerializeField] CardsDictionary cardDictionary;
+    CardsDictionary cardsDictionary => CardsDictionary.Instance;
     [SerializeField] EquipDisplayUI equipDisplayUI;
-    [SerializeField] CardList cardList;
-    [SerializeField] CardDataManager cardDataManager;
+    CardList cardList => CardList.Instance;
+    CardDataManager cardDataManager => CardDataManager.Instance;
     OriAttribute currentAttribute;
 
     CardData instantCharCard; // 현재 display 되고 있는 charCard 임시 저장
@@ -35,7 +35,7 @@ public class EquipmentSlotsManager : MonoBehaviour
                 continue;
 
             CardData cardData = equips[i].CardData;
-            WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
+            WeaponItemData weaponItemData = cardsDictionary.GetWeaponItemData(cardData);
             if (weaponItemData.itemData == null) continue;
             SetEquipSlot(i, weaponItemData.itemData, cardData);
         }
@@ -68,7 +68,7 @@ public class EquipmentSlotsManager : MonoBehaviour
             addingFactor * Hp + currentAttribute.Hp
         );
 
-        equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute, cardDictionary.GetDisplayName(instantCharCard));
+        equipDisplayUI.SetWeaponDisplay(instantCharCard, currentAttribute, cardsDictionary.GetDisplayName(instantCharCard));
     }
 
     public OriAttribute GetCurrentAttribute() => currentAttribute;

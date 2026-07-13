@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LaunchPanelDebug : MonoBehaviour
 {
-    [SerializeField] CardDataManager cardDataManager;
+    CardDataManager cardDataManager => CardDataManager.Instance;
     [SerializeField] TMPro.TextMeshProUGUI oriNum;
     [SerializeField] TMPro.TextMeshProUGUI itemNum;
     

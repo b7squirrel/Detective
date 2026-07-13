@@ -13,10 +13,11 @@ public class WeaponItemData
     public Item itemData;
 }
 
+
 // 모든 weaponData, item 들을 모아놓고
 // cardData로 weaponData와 Item을 반환한다.
 // GatchaSystem 과 upgradeSlot 두 클래스가 접근해서 값을 얻어간다. 
-public class CardsDictionary : MonoBehaviour
+public class CardsDictionary : SingletonBehaviour<CardsDictionary>
 {
     [SerializeField] TextAsset itemPoolDataBase;
     List<CardData> CardPool;
@@ -30,12 +31,22 @@ public class CardsDictionary : MonoBehaviour
     [Header("자동 로드 설정")]
     [SerializeField] string itemSOFolderPath = "03_Equipment"; // Resources/ 이후 경로
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
-        IsDataLoaded = false;
+        bool wasRealInstance = (Instance == this);
+        base.OnDestroy();
+        if (wasRealInstance)
+        {
+            IsDataLoaded = false;
+        }
     }
-    void Awake()
+    // ⭐ 기존 void Awake() 제거하고 Init()으로 대체
+    protected override void Init()
     {
+        base.Init(); // 중복 체크 + DontDestroyOnLoad 처리
+
+        if (Instance != this) return; // 가짜(중복) 인스턴스면 아래 로직 스킵
+
         // ★ 1. SO 자동 로드
         LoadItemScriptableObjects();
 

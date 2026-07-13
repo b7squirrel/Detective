@@ -103,43 +103,46 @@ public class ReadEquipmentsData
     }
 }
 
-public class EquipmentDataManager : MonoBehaviour
+public class EquipmentDataManager : SingletonBehaviour<EquipmentDataManager>
 {
     public List<CardEquipmentData> MyEquipmentsList;
-    
+
     string filePath;
     string myEquips = "MyEquipments.txt";
     bool isSaving = false;
-    
-    // ⭐ 추가: 데이터 로드 완료 플래그
+
     public static bool IsDataLoaded { get; private set; } = false;
 
-    void Awake()
+    protected override void Init()
     {
+        base.Init();
+
+        if (Instance != this) return;
+
         InitializeDataDirectory();
-    }
-    
-    void Start()
-    {
         Load();
-        
-        // ⭐ 로드 완료 표시
+
         IsDataLoaded = true;
         Logger.Log("[EquipmentDataManager] 데이터 로드 완료");
-        
-        InitializeCardList();
+
+        // ⭐ InitializeCardList() 호출 제거 - GameInitializer가 순서를 보장한 뒤 명시적으로 호출함
     }
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
-        IsDataLoaded = false;
+        bool wasRealInstance = (Instance == this);
+        base.OnDestroy();
+        if (wasRealInstance)
+        {
+            IsDataLoaded = false;
+        }
     }
-    
+
     void OnApplicationQuit()
     {
         IsDataLoaded = false;
     }
-    
+
     void InitializeDataDirectory()
     {
         try
@@ -150,28 +153,12 @@ public class EquipmentDataManager : MonoBehaviour
                 Directory.CreateDirectory(dataDir);
                 Logger.Log($"장비 데이터 디렉토리 생성: {dataDir}");
             }
-            
+
             filePath = Path.Combine(dataDir, myEquips);
         }
         catch (Exception e)
         {
             Logger.LogError($"데이터 디렉토리 초기화 오류: {e.Message}");
-        }
-    }
-    
-    void InitializeCardList()
-    {
-        try
-        {
-            var cardListComponent = GetComponent<CardList>();
-            if (cardListComponent != null)
-            {
-                cardListComponent.InitCardList();
-            }
-        }
-        catch (Exception e)
-        {
-            Logger.LogError($"카드 리스트 초기화 오류: {e.Message}");
         }
     }
     
@@ -309,10 +296,7 @@ public class EquipmentDataManager : MonoBehaviour
         }
     }
 
-    public void ImmediateSave()
-    {
-        Save();
-    }
+    public void ImmediateSave() => Save();
 
     public void DelayedSave()
     {

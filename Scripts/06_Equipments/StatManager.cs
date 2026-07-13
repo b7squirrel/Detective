@@ -15,10 +15,10 @@ public class OriAttribute
 /// </summary>
 public class StatManager : MonoBehaviour
 {
-    [SerializeField] CardDataManager cardDataManager;
+    CardDataManager cardDataManager => CardDataManager.Instance;
     [SerializeField] EquipmentSlotsManager equipmentSlotManager;
     [SerializeField] EquipInfoPanel equipInfoPanel;
-    [SerializeField] CardList cardList;
+    CardList cardList => CardList.Instance;
     [SerializeField] StartingDataContainer statContainer;
     OriAttribute leadAttribute;
 

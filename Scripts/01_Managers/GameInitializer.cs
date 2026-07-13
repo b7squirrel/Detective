@@ -14,9 +14,8 @@ using UnityEngine;
 /// </summary>
 public class GameInitializer : MonoBehaviour
 {
-    [Header("초기화할 매니저들")]
     [Tooltip("ScriptableObject 데이터 관리")]
-    [SerializeField] CardsDictionary cardsDictionary;
+    CardsDictionary cardsDictionary => CardsDictionary.Instance;
 
     [Tooltip("상품 데이터 테이블")]
     [SerializeField] ProductDataTable productDataTable;
@@ -29,12 +28,6 @@ public class GameInitializer : MonoBehaviour
 
     [Tooltip("주간 퀘스트 리셋 관리")]
     [SerializeField] WeeklyResetManager weeklyResetManager;
-
-    [Tooltip("플레이어 카드 데이터 관리")]
-    [SerializeField] CardDataManager cardDataManager;
-
-    [Tooltip("장비 장착 데이터 관리")]
-    [SerializeField] EquipmentDataManager equipmentDataManager;
 
     [Header("초기화 상태")]
     [SerializeField] private bool showDebugLogs = true;
@@ -191,7 +184,7 @@ public class GameInitializer : MonoBehaviour
         Log("v CardDataManager 로드 완료");
         InitializationProgress = 0.66f;
 
-        // 7단계: EquipmentDataManager 초기화 대기 (Start에서 실행됨)
+        // 7단계: EquipmentDataManager 초기화 대기 (Init에서 실행됨)
         Log("7/7: EquipmentDataManager 초기화 대기...");
         float t7 = 0f;
         while (!EquipmentDataManager.IsDataLoaded && t7 < STEP_TIMEOUT)
@@ -203,11 +196,9 @@ public class GameInitializer : MonoBehaviour
         Log("v EquipmentDataManager 로드 완료");
         InitializationProgress = 0.83f;
 
-        // 8단계: CardList 초기화 확인 (EquipmentDataManager.Start에서 실행됨)
-        Log("8/8: CardList 초기화 확인...");
-        // CardList는 EquipmentDataManager.Start()에서 InitCardList()가 호출되므로
-        // 추가 대기 없이 다음 프레임만 기다림
-        yield return null;
+        // 8단계: CardList 초기화 - ⭐ 이제 명시적으로 직접 호출
+        Log("8/8: CardList 초기화...");
+        CardList.Instance.InitCardList();
         Log("v CardList 초기화 완료");
         InitializationProgress = 1f;
 

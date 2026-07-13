@@ -21,7 +21,7 @@ public class EquipDisplayUI : MonoBehaviour
     SetCardDataOnSlot setCardDataOnSlot; // 카드 데이터와 슬롯을 넘겨 받아서 슬롯에 카드를 표시
 
     [SerializeField] TextMeshProUGUI atk, hp;
-    [SerializeField] CardsDictionary cardDictionary;
+    CardsDictionary cardsDictionary => CardsDictionary.Instance;
     [SerializeField] GameObject atkLabel, hpLabel;
     [SerializeField] GameObject charButton;
     [SerializeField] GameObject backButton;

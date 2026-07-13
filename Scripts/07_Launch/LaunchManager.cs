@@ -5,7 +5,7 @@ using UnityEngine;
 public class LaunchManager : MonoBehaviour
 {
     [SerializeField] CardSlot leadOriSlot;
-    [SerializeField] CardDataManager cardDataManager;
+    CardDataManager cardDataManager => CardDataManager.Instance;
     [SerializeField] SetCardDataOnSlot setCardDataOnSlot;
     [SerializeField] StatManager statManager;
     [SerializeField] StartingDataContainer startingDataContainer;

@@ -150,7 +150,7 @@ public class ReadCardData
     }
 }
 
-public class CardDataManager : MonoBehaviour
+public class CardDataManager : SingletonBehaviour<CardDataManager>
 {
     public TextAsset startingCardData;
     public List<CardData> MyCardsList;
@@ -164,13 +164,29 @@ public class CardDataManager : MonoBehaviour
     private bool isBatchMode = false;
     private bool needsSave = false;
 
-    void OnDestroy()
+    // ⭐ 기존 void OnDestroy() 제거하고 아래로 대체
+    protected override void OnDestroy()
     {
-        IsDataLoaded = false;
+        // base.OnDestroy() 호출 전에, 내가 '진짜' 인스턴스였는지 미리 확인
+        bool wasRealInstance = (Instance == this);
+
+        base.OnDestroy(); // SingletonBehaviour의 Dispose() 호출 (m_Instance 정리)
+
+        // 가짜(중복) 인스턴스였다면 static 플래그를 건드리지 않음
+        if (wasRealInstance)
+        {
+            IsDataLoaded = false;
+        }
     }
 
-    void Start()
+    // ⭐ 기존 void Start() 제거하고 Init()으로 이동
+    protected override void Init()
     {
+        base.Init(); // 여기서 중복 체크 + DontDestroyOnLoad 처리됨
+
+        // 내가 실제 싱글톤 인스턴스가 아니라면(중복이라 곧 파괴될 예정) 아래 로직 스킵
+        if (Instance != this) return;
+
         InitializeDataDirectory();
         Logger.Log(Application.persistentDataPath);
         Load();

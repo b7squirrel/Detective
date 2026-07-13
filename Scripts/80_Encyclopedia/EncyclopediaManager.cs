@@ -42,7 +42,7 @@ public class EncyclopediaManager : MonoBehaviour
     [Header("Data")]
     [SerializeField] TextAsset itemPoolDataBase;
     [SerializeField] List<SetBonusDefinition> setDefinitions = new List<SetBonusDefinition>();
-    [SerializeField] CardsDictionary cardsDictionary;
+    CardsDictionary cardsDictionary => CardsDictionary.Instance;
     List<EncyclopediaSetEntry> spawnedEntries = new List<EncyclopediaSetEntry>();
 
     [Header("Set Bonus SO 폴더 경로 (Resources/ 이후)")]
@@ -73,9 +73,6 @@ public class EncyclopediaManager : MonoBehaviour
         yield return new WaitUntil(() =>
             CardDataManager.IsDataLoaded &&
             CardsDictionary.IsDataLoaded);
-
-        if (cardsDictionary == null)
-            cardsDictionary = FindObjectOfType<CardsDictionary>();
 
         LoadSetBonusDefinitions();
         BuildAcquiredSet();

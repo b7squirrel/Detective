@@ -24,7 +24,7 @@ public class EquipInfoPanel : MonoBehaviour
     [SerializeField] GameObject equipButton, unEquipButton;
     [SerializeField] GameObject[] itemCardBase;
 
-    [SerializeField] CardsDictionary cardDictionary;
+    CardsDictionary cardsDictionary => CardsDictionary.Instance;
     public CardDisp cardDisp;
 
     float initLevelFontSize, initAttributeFontSize;
@@ -122,7 +122,7 @@ public class EquipInfoPanel : MonoBehaviour
             attributeHPText.text = "+ " + cardData.Hp.ToString();
         }
 
-        WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(cardData);
+        WeaponItemData weaponItemData = cardsDictionary.GetWeaponItemData(cardData);
         itemImage.sprite = weaponItemData.itemData.charImage;
         anim.enabled = false;
 

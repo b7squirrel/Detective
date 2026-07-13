@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class SetCardDataOnSlot : MonoBehaviour
 {
-    [SerializeField] CardsDictionary cardDictionary;
-    [SerializeField] CardList cardList;
+    CardsDictionary cardsDictionary => CardsDictionary.Instance;
+    CardList cardList => CardList.Instance;
     
 
     /// <summary>
@@ -13,14 +13,14 @@ public class SetCardDataOnSlot : MonoBehaviour
     {
         if (targetCardData.Type == CardType.Weapon.ToString())
         {
-            WeaponData wData = cardDictionary.GetWeaponItemData(targetCardData).weaponData;
+            WeaponData wData = cardsDictionary.GetWeaponItemData(targetCardData).weaponData;
 
             targetSlot.SetWeaponCard(targetCardData, wData);
             SetEquipSpriteRow(targetCardData, targetSlot);
         }
         else
         {
-            Item iData = cardDictionary.GetWeaponItemData(targetCardData).itemData;
+            Item iData = cardsDictionary.GetWeaponItemData(targetCardData).itemData;
 
             bool onEquipment = cardList.FindEquipmentCard(targetCardData).IsEquipped;
             targetSlot.SetItemCard(targetCardData, iData, onEquipment);
@@ -44,7 +44,7 @@ public class SetCardDataOnSlot : MonoBehaviour
             }
 
             CardData equipCardData = equipCards[i].CardData;
-            WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(equipCardData);
+            WeaponItemData weaponItemData = cardsDictionary.GetWeaponItemData(equipCardData);
 
             if (weaponItemData.itemData == null)
                 continue;
