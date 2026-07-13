@@ -32,6 +32,11 @@ public class DailyRewardPanel : MonoBehaviour
     private bool hasSubscribed = false;
     private bool hasGameInitialized = false;
 
+    // ⭐ 추가: 보상 수령 코루틴 중복 실행 방지 플래그
+    // 빠른 연타로 ClaimReward가 여러 번 호출되어도 코루틴이 중복 실행되지 않도록 막음
+    // try-finally로 감싸서 코루틴이 어떤 경로(정상 종료/조기 종료/에러)로 빠져나가든 반드시 해제됨
+    private bool isClaiming = false;
+
     void OnEnable()
     {
         Debug.Log("[DailyRewardPanel] OnEnable 시작");
@@ -235,149 +240,165 @@ public class DailyRewardPanel : MonoBehaviour
         }
 
         // ⭐ hand 위치 설정 (아직 수령하지 않은 경우에만)
-if (hand != null)
-{
-    if (!hasClaimed && currentDay >= 1 && currentDay <= dailyButtons.Length)
-    {
-        // 현재 날짜의 버튼
-        DailyRewardButton currentButton = dailyButtons[currentDay - 1];
-        RectTransform currentButtonRect = currentButton.GetComponent<RectTransform>();
-        
-        if (currentButtonRect != null)
+        if (hand != null)
         {
-            // ⭐ hand를 버튼의 직접적인 자식으로 설정
-            hand.SetParent(currentButtonRect, false);
-            
-            // ⭐ 로컬 위치를 0,0,0으로 (부모 버튼의 중앙)
-            hand.anchoredPosition = Vector2.zero;
-            hand.localPosition = Vector3.zero;
-            
-            // ⭐ 버튼보다 앞에 보이도록
-            hand.SetAsLastSibling();
-            
-            hand.gameObject.SetActive(true);
-            Debug.Log($"[DailyRewardPanel] hand를 {currentDay}일차 버튼의 자식으로 설정");
+            if (!hasClaimed && currentDay >= 1 && currentDay <= dailyButtons.Length)
+            {
+                // 현재 날짜의 버튼
+                DailyRewardButton currentButton = dailyButtons[currentDay - 1];
+                RectTransform currentButtonRect = currentButton.GetComponent<RectTransform>();
+
+                if (currentButtonRect != null)
+                {
+                    // ⭐ hand를 버튼의 직접적인 자식으로 설정
+                    hand.SetParent(currentButtonRect, false);
+
+                    // ⭐ 로컬 위치를 0,0,0으로 (부모 버튼의 중앙)
+                    hand.anchoredPosition = Vector2.zero;
+                    hand.localPosition = Vector3.zero;
+
+                    // ⭐ 버튼보다 앞에 보이도록
+                    hand.SetAsLastSibling();
+
+                    hand.gameObject.SetActive(true);
+                    Debug.Log($"[DailyRewardPanel] hand를 {currentDay}일차 버튼의 자식으로 설정");
+                }
+            }
+            else
+            {
+                // 이미 수령했으면 hand 숨김
+                hand.gameObject.SetActive(false);
+                Debug.Log("[DailyRewardPanel] 보상 수령 완료, hand 숨김");
+            }
         }
-    }
-    else
-    {
-        // 이미 수령했으면 hand 숨김
-        hand.gameObject.SetActive(false);
-        Debug.Log("[DailyRewardPanel] 보상 수령 완료, hand 숨김");
-    }
-}
         Debug.Log("[DailyRewardPanel] v UpdateUI 완료!");
     }
 
-    // ClaimReward 메서드를 코루틴으로 변경
+    // ⭐ 수정: 중복 클릭 방지 플래그 체크 후 코루틴 시작
     void ClaimReward()
     {
+        // 이미 보상 처리 코루틴이 진행 중이면 무시 (빠른 연타로 인한 중복 지급 방지)
+        if (isClaiming)
+        {
+            Debug.LogWarning("[DailyRewardPanel] 이미 보상 처리 중입니다. 클릭 무시.");
+            return;
+        }
+
+        isClaiming = true;
         StartCoroutine(ClaimRewardCoroutine());
     }
 
+    // ⭐ 수정: try-finally로 감싸서 코루틴이 어떤 경로로 종료되든 isClaiming이 반드시 해제되도록 함
     IEnumerator ClaimRewardCoroutine()
     {
-        Debug.Log("[DailyRewardPanel] ⭐ ClaimReward 호출!");
-
-        // ⭐ 클릭 즉시 hand 숨김
-        if (hand != null)
+        try
         {
-            hand.gameObject.SetActive(false);
-            Debug.Log("[DailyRewardPanel] hand 즉시 숨김");
-        }
+            Debug.Log("[DailyRewardPanel] ⭐ ClaimReward 호출!");
 
-        if (playerDataManager == null || rewardData == null)
-        {
-            Debug.LogError("[DailyRewardPanel] X ClaimReward: manager가 null!");
-            yield break;
-        }
-
-        if (playerDataManager == null || rewardData == null)
-        {
-            Debug.LogError("[DailyRewardPanel] X ClaimReward: manager가 null!");
-            yield break;
-        }
-
-        if (playerDataManager.HasTakenDailyReward())
-        {
-            Debug.LogWarning("[DailyRewardPanel] 이미 오늘 출석 보상을 받았습니다.");
-            yield break;
-        }
-
-        int currentDay = playerDataManager.GetConsecutiveDays();
-        DailyRewardItem reward = rewardData.GetReward(currentDay);
-
-        if (reward == null)
-        {
-            Debug.LogError("[DailyRewardPanel] X ClaimReward: reward가 null!");
-            yield break;
-        }
-
-        Debug.Log($"[DailyRewardPanel] {currentDay}일차 보상 수령 시작");
-
-        // ⭐ 1. 현재 버튼 가져오기 및 이펙트 위치 설정
-        DailyRewardButton currentButton = dailyButtons[currentDay - 1];
-        if (currentButton != null)
-        {
-            // ⭐ 버튼의 RectTransform을 이펙트 위치로 설정
-            RectTransform buttonRect = currentButton.GetComponent<RectTransform>();
-            if (buttonRect != null)
+            // ⭐ 클릭 즉시 hand 숨김
+            if (hand != null)
             {
-                rewardEffectPos = buttonRect;
-                Debug.Log($"[DailyRewardPanel] 이펙트 위치를 {currentDay}일차 버튼으로 설정");
+                hand.gameObject.SetActive(false);
+                Debug.Log("[DailyRewardPanel] hand 즉시 숨김");
             }
 
-            // 포스트잇 떨어지는 애니메이션 재생
-            yield return StartCoroutine(currentButton.PlayClaimAnimation());
+            if (playerDataManager == null || rewardData == null)
+            {
+                Debug.LogError("[DailyRewardPanel] X ClaimReward: manager가 null!");
+                yield break;
+            }
+
+            if (playerDataManager.HasTakenDailyReward())
+            {
+                Debug.LogWarning("[DailyRewardPanel] 이미 오늘 출석 보상을 받았습니다.");
+                yield break;
+            }
+
+            int currentDay = playerDataManager.GetConsecutiveDays();
+            DailyRewardItem reward = rewardData.GetReward(currentDay);
+
+            if (reward == null)
+            {
+                Debug.LogError("[DailyRewardPanel] X ClaimReward: reward가 null!");
+                yield break;
+            }
+
+            Debug.Log($"[DailyRewardPanel] {currentDay}일차 보상 수령 시작");
+
+            // ⭐ 1. 현재 버튼 가져오기 및 이펙트 위치 설정
+            DailyRewardButton currentButton = dailyButtons[currentDay - 1];
+            if (currentButton != null)
+            {
+                // ⭐ 버튼의 RectTransform을 이펙트 위치로 설정
+                RectTransform buttonRect = currentButton.GetComponent<RectTransform>();
+                if (buttonRect != null)
+                {
+                    rewardEffectPos = buttonRect;
+                    Debug.Log($"[DailyRewardPanel] 이펙트 위치를 {currentDay}일차 버튼으로 설정");
+                }
+
+                // 포스트잇 떨어지는 애니메이션 재생
+                yield return StartCoroutine(currentButton.PlayClaimAnimation());
+            }
+
+            // ⭐ 2. 애니메이션 후 사운드 재생
+            if (clipClaimReward != null)
+                SoundManager.instance?.Play(clipClaimReward);
+
+            // 3. 코인 보상
+            if (reward.coinReward > 0)
+            {
+                int currentCoin = playerDataManager.GetCurrentCoinNumber();
+                playerDataManager.SetCoinNumberAsSilent(currentCoin + reward.coinReward);
+                Debug.Log($"[DailyRewardPanel] 코인 {reward.coinReward} 지급");
+
+                if (gemCollectFX != null && rewardEffectPos != null)
+                    gemCollectFX.PlayGemCollectFX(rewardEffectPos, reward.coinReward, false);
+            }
+
+            // 4. 크리스탈 보상
+            if (reward.gemReward > 0)
+            {
+                int currentGem = playerDataManager.GetCurrentCristalNumber();
+                playerDataManager.SetCristalNumberAsSilent(currentGem + reward.gemReward);
+                Debug.Log($"[DailyRewardPanel] 크리스탈 {reward.gemReward} 지급");
+
+                if (gemCollectFX != null && rewardEffectPos != null)
+                    gemCollectFX.PlayGemCollectFX(rewardEffectPos, reward.gemReward, true);
+            }
+
+            // 5. 보상 수령 기록
+            playerDataManager.SetHasTakenDailyReward(true);
+            Debug.Log("[DailyRewardPanel] 보상 수령 기록 저장");
+
+            // 6. UI 갱신
+            UpdateUI();
+
+            // 7. 론치 패널 뱃지 갱신
+            LaunchManager launchManager = FindObjectOfType<LaunchManager>();
+            if (launchManager != null)
+            {
+                launchManager.UpdateDailyRewardBadge();
+            }
         }
-
-        // ⭐ 2. 애니메이션 후 사운드 재생
-        if (clipClaimReward != null)
-            SoundManager.instance?.Play(clipClaimReward);
-
-        // 3. 코인 보상
-        if (reward.coinReward > 0)
+        finally
         {
-            int currentCoin = playerDataManager.GetCurrentCoinNumber();
-            playerDataManager.SetCoinNumberAsSilent(currentCoin + reward.coinReward);
-            Debug.Log($"[DailyRewardPanel] 코인 {reward.coinReward} 지급");
-
-            if (gemCollectFX != null && rewardEffectPos != null)
-                gemCollectFX.PlayGemCollectFX(rewardEffectPos, reward.coinReward, false);
-        }
-
-        // 4. 크리스탈 보상
-        if (reward.gemReward > 0)
-        {
-            int currentGem = playerDataManager.GetCurrentCristalNumber();
-            playerDataManager.SetCristalNumberAsSilent(currentGem + reward.gemReward);
-            Debug.Log($"[DailyRewardPanel] 크리스탈 {reward.gemReward} 지급");
-
-            if (gemCollectFX != null && rewardEffectPos != null)
-                gemCollectFX.PlayGemCollectFX(rewardEffectPos, reward.gemReward, true);
-        }
-
-        // 5. 보상 수령 기록
-        playerDataManager.SetHasTakenDailyReward(true);
-        Debug.Log("[DailyRewardPanel] 보상 수령 기록 저장");
-
-        // 6. UI 갱신
-        UpdateUI();
-
-        // 7. 론치 패널 뱃지 갱신
-        LaunchManager launchManager = FindObjectOfType<LaunchManager>();
-        if (launchManager != null)
-        {
-            launchManager.UpdateDailyRewardBadge();
+            // ⭐ try 블록이 정상 종료되든, yield break로 조기 종료되든 항상 실행됨
+            // 단, 아래의 "8. 닫기 버튼 활성화" 대기 코드는 finally보다 먼저 끝나야 하므로
+            // 닫기 버튼 로직은 finally 바깥, try 블록 마지막 줄로 옮기지 않고
+            // 여기서 isClaiming만 해제한다 (닫기 버튼 활성화는 아래 별도 처리)
+            isClaiming = false;
         }
 
         // ⭐ 8. 잠시 대기 후 닫기 버튼 활성화 (보상 이펙트를 볼 시간 확보)
+        // finally 이후에 실행되어도 안전함: isClaiming은 이미 해제되어 다음 클릭이 가능한 상태이고,
+        // 이 시점부터는 playerDataManager.HasTakenDailyReward()가 true이므로 중복 지급되지 않음
         yield return new WaitForSeconds(0.5f);
 
         if (closeButton != null)
             closeButton.SetActive(true);
 
-        Debug.Log($"[DailyRewardPanel] ✓ {currentDay}일차 출석 보상 수령 완료!");
+        Debug.Log("[DailyRewardPanel] ✓ 출석 보상 수령 완료!");
     }
 
     // ⭐ 패널 닫기 (버튼에 연결)
