@@ -7,20 +7,24 @@ public class ShowDebugPanel : MonoBehaviour
 
     void OnEnable()
     {
-        isActive = false;
+        var config = Resources.Load<GameConfig>("GameConfig");
+        isActive = config != null && config.isDebugMode;
+
         ToggleDebugPanel(isActive);
     }
+
     public void ToggleDebugPanel()
     {
         isActive = !isActive;
         ToggleDebugPanel(isActive);
     }
+
     void ToggleDebugPanel(bool active)
     {
-        // transform.localScale = active ? Vector2.one : Vector2.zero;
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = active ? 1 : 0;
         canvasGroup.interactable = active;
         canvasGroup.blocksRaycasts = active;
+        gameObject.SetActive(active);
     }
 }
