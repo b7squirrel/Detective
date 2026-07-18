@@ -60,9 +60,6 @@ public class GameInitializer : MonoBehaviour
     {
         gameConfig = Resources.Load<GameConfig>("GameConfig");
 
-        // 씬 전환 시에도 유지 (선택사항)
-        // DontDestroyOnLoad(gameObject);
-        // ✅ 이미 실행 중이면 이 인스턴스는 즉시 파괴
         if (isRunning)
         {
             Debug.LogWarning("[GameInitializer] 중복 인스턴스 감지 - 파괴합니다.");
@@ -73,6 +70,7 @@ public class GameInitializer : MonoBehaviour
         isRunning = true;
 
         StartCoroutine(InitializeGame());
+        StartCoroutine(FirebaseManager.Initialize()); // ⭐ 추가: 기존 초기화와 완전히 독립적으로 병렬 실행
     }
 
     void OnApplicationQuit()
