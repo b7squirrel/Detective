@@ -10,9 +10,16 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     {
         base.Init();
 
+        // ★ 테스트 기기 등록 - 반드시 InitAdsService()보다 먼저!
+        RequestConfiguration requestConfiguration = new RequestConfiguration
+        {
+            TestDeviceIds = new List<string> { "BE85D1491E3B0ACC8E8996B7C3BC6C0F" }
+        };
+        MobileAds.SetRequestConfiguration(requestConfiguration);
+
         InitAdsService();
-        InitBannerAds();
-        InitInterstitialAds();
+        // InitBannerAds();
+        // InitInterstitialAds();
         InitRewardedAds();
     }
 
@@ -242,7 +249,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     private string m_DailyFreeGemRewardedAdId = string.Empty;
     private const string AOS_REWARDED_AD_TEST_AD_ID = "ca-app-pub-3940256099942544/5224354917";
     private const string IOS_REWARDED_AD_TEST_AD_ID = "ca-app-pub-3940256099942544/1712485313";
-    private const string AOS_DAILY_FREE_GEM_REWARDED_AD_ID = "";
+    private const string AOS_DAILY_FREE_GEM_REWARDED_AD_ID = "ca-app-pub-2314769566037824/2782705229";
     private const string IOS_DAILY_FREE_GEM_REWARDED_AD_ID = "";
 
     // ★ 광고창이 완전히 닫힐 때 호출되는 콜백
