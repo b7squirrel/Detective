@@ -104,6 +104,17 @@ public class GameInitializer : MonoBehaviour
         {
             yield return StartCoroutine(CloudSaveManager.Instance.SignInAndSync());
             Debug.Log("[GameInitializer] 클라우드 초기화 완료");
+
+            // ⭐ 추가
+            if (CloudSaveManager.PendingSceneReload)
+            {
+                Debug.Log("[GameInitializer] 클라우드 데이터 적용됨 - 씬을 안전하게 리로드합니다");
+                CloudSaveManager.ClearPendingSceneReload();  // ⭐ 추가: 리로드 전에 반드시 리셋
+                yield return new WaitForSeconds(0.1f);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(
+                    UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+                yield break;
+            }
         }
         else
         {

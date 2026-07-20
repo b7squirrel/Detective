@@ -11,17 +11,24 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     protected override void Init()
     {
         base.Init();
+        Logger.Log("[AdsManager] Init() 시작");  // ⭐ 추가
 
         // ★ 테스트 기기 등록 - 반드시 InitAdsService()보다 먼저!
         RequestConfiguration requestConfiguration = new RequestConfiguration
         {
-            TestDeviceIds = new List<string> { "BE85D1491E3B0ACC8E8996B7C3BC6C0F" }
+            TestDeviceIds = new List<string> { 
+                "BE85D1491E3B0ACC8E8996B7C3BC6C0F",
+                "B40200ED0A5B5557E8BE2910D0A87FB2"
+                }
         };
         MobileAds.SetRequestConfiguration(requestConfiguration);
+
+        Logger.Log("[AdsManager] InitConsent 호출 직전");  // ⭐ 추가
 
         // ★ 동의 절차 먼저 진행 후, 완료되면 광고 SDK 초기화
         InitConsent(() =>
         {
+            Logger.Log("[AdsManager] InitConsent 콜백 도착 - 광고 초기화 시작");  // ⭐ 추가
             InitAdsService();
             InitRewardedAds();
         });
@@ -420,11 +427,13 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     #region ConsentManagement
     public void InitConsent(Action onConsentReady)
     {
+        Logger.Log("[AdsManager] ConsentInformation.Update 호출 시작");  // ⭐ 추가
         var request = new ConsentRequestParameters();
         // 필요하다면 테스트 기기용 디버그 설정 추가 가능
 
         ConsentInformation.Update(request, (FormError updateError) =>
         {
+            Logger.Log($"[AdsManager] ConsentInformation.Update 콜백 도착. error={updateError}");  // ⭐ 추가
             if (updateError != null)
             {
                 Logger.LogError($"[AdsManager] 동의 정보 업데이트 실패: {updateError}");
@@ -434,6 +443,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
             ConsentForm.LoadAndShowConsentFormIfRequired((FormError formError) =>
             {
+                Logger.Log($"[AdsManager] LoadAndShowConsentFormIfRequired 콜백 도착. error={formError}");  // ⭐ 추가
                 if (formError != null)
                 {
                     Logger.LogError($"[AdsManager] 동의 폼 표시 실패: {formError}");

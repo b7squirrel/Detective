@@ -61,6 +61,7 @@ public class CloudSaveManager : MonoBehaviour
 
     // 초기화 및 로그인 상태
     public static bool IsInitialized { get; private set; } = false;
+    public static bool PendingSceneReload { get; private set; } = false;
 
     public bool IsAuthenticated
     {
@@ -318,16 +319,21 @@ public class CloudSaveManager : MonoBehaviour
             );
 
             PlayerPrefs.Save();
-            Debug.Log("[CloudSaveManager] 모든 클라우드 데이터 적용 완료 - 씬 리로드");
+            Debug.Log("[CloudSaveManager] 모든 클라우드 데이터 적용 완료 - 리로드 필요 플래그 설정");
 
-            // 클라우드 데이터 적용 후 씬 리로드하여 모든 매니저 재초기화
-            UnityEngine.SceneManagement.SceneManager.LoadScene(
-                UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            // ⭐ 변경: 여기서 직접 SceneManager.LoadScene() 호출하지 않음
+            PendingSceneReload = true;
         }
         catch (Exception e)
         {
             Debug.LogError($"[CloudSaveManager] 로컬 적용 오류: {e.Message}");
         }
+    }
+
+    // ⭐ 추가: GameInitializer가 리로드를 소비한 후 호출
+    public static void ClearPendingSceneReload()
+    {
+        PendingSceneReload = false;
     }
 
     // ─────────────────────────────────────────────────────────
