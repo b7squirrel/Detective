@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using GoogleMobileAds.Ump.Api;
 
 public class SettingsUIPanel : MonoBehaviour
 {
@@ -7,6 +9,7 @@ public class SettingsUIPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI languageText;
     [SerializeField] GameObject leftArrow;
     [SerializeField] GameObject rightArrow;
+    [SerializeField] GameObject adConsentButton; // ★ 추가: "Ad Consent" 버튼 오브젝트
     LocalizationManager localicationManager;
 
     // 지원하는 언어 목록
@@ -17,6 +20,11 @@ public class SettingsUIPanel : MonoBehaviour
     {
         LoadLanguage();
         UpdateLanguageDisplay();
+    }
+
+    private void OnEnable()
+    {
+        UpdateAdConsentButtonVisibility();
     }
 
     // 왼쪽 화살표 버튼 이벤트
@@ -124,12 +132,15 @@ public class SettingsUIPanel : MonoBehaviour
     public void OnPrivacyPolicyClick()
     {
         Application.OpenURL("https://sites.google.com/view/quacksurvivors/english");
+        Logger.Log("[SettingsUIPanel] 개인보호정책");
     }
 
     // Terms of Policy(이용약관) 버튼 클릭 시 — 아직 페이지가 없다면 임시로 주석 처리하거나, 만드신 후 연결
     public void OnTermsOfServiceClick()
     {
         Application.OpenURL("https://b7squirrel.com/terms.html"); // 아직 없으면 나중에 채우기
+        Logger.Log("[SettingsUIPanel] 이용약관");
+
     }
 
     // Ad Consent 버튼 클릭 시
@@ -142,7 +153,17 @@ public class SettingsUIPanel : MonoBehaviour
         else
         {
             Logger.LogError("[SettingsUIPanel] AdsManager.Instance가 null입니다.");
+            Logger.Log("[SettingsUIPanel] 광고 동의");
+
         }
+    }
+
+    private void UpdateAdConsentButtonVisibility()
+    {
+        if (adConsentButton == null) return;
+
+        bool isRequired = AdsManager.Instance != null && AdsManager.Instance.IsPrivacyOptionsRequired();
+        adConsentButton.SetActive(isRequired);
     }
     #endregion
 }

@@ -1,3 +1,4 @@
+
 using GoogleMobileAds.Api;
 using System;
 using System.Collections;
@@ -417,7 +418,6 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     }
 
     #region ConsentManagement
-
     public void InitConsent(Action onConsentReady)
     {
         var request = new ConsentRequestParameters();
@@ -463,5 +463,11 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         });
     }
 
+    // ★ 추가: 개인정보 설정 폼이 현재 필요한 상태인지 확인 (EEA/영국/스위스 사용자에게만 true)
+    public bool IsPrivacyOptionsRequired()
+    {
+        return ConsentInformation.PrivacyOptionsRequirementStatus
+            == PrivacyOptionsRequirementStatus.Required;
+    }
     #endregion
 }
