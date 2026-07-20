@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GoogleMobileAds.Ump.Api;
 
 public class AdsManager : SingletonBehaviour<AdsManager>
 {
@@ -17,10 +18,12 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         };
         MobileAds.SetRequestConfiguration(requestConfiguration);
 
-        InitAdsService();
-        // InitBannerAds();
-        // InitInterstitialAds();
-        InitRewardedAds();
+        // ★ 동의 절차 먼저 진행 후, 완료되면 광고 SDK 초기화
+        InitConsent(() =>
+        {
+            InitAdsService();
+            InitRewardedAds();
+        });
     }
 
     private void InitAdsService()
@@ -412,4 +415,53 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
         base.Dispose();
     }
+
+    #region ConsentManagement
+
+    public void InitConsent(Action onConsentReady)
+    {
+        var request = new ConsentRequestParameters();
+        // 필요하다면 테스트 기기용 디버그 설정 추가 가능
+
+        ConsentInformation.Update(request, (FormError updateError) =>
+        {
+            if (updateError != null)
+            {
+                Logger.LogError($"[AdsManager] 동의 정보 업데이트 실패: {updateError}");
+                onConsentReady?.Invoke(); // 실패해도 게임 진행은 막지 않음
+                return;
+            }
+
+            ConsentForm.LoadAndShowConsentFormIfRequired((FormError formError) =>
+            {
+                if (formError != null)
+                {
+                    Logger.LogError($"[AdsManager] 동의 폼 표시 실패: {formError}");
+                }
+                else
+                {
+                    Logger.Log("[AdsManager] 동의 절차 완료");
+                }
+                onConsentReady?.Invoke();
+            });
+        });
+    }
+
+    // 설정 화면의 "개인정보 보호 설정" 버튼에서 호출할 함수
+    public void ShowPrivacyOptionsForm()
+    {
+        ConsentForm.ShowPrivacyOptionsForm((FormError formError) =>
+        {
+            if (formError != null)
+            {
+                Logger.LogError($"[AdsManager] 개인정보 설정 폼 표시 실패: {formError}");
+            }
+            else
+            {
+                Logger.Log("[AdsManager] 개인정보 설정 폼 닫힘");
+            }
+        });
+    }
+
+    #endregion
 }

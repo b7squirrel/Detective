@@ -101,12 +101,6 @@ public class SettingsUIPanel : MonoBehaviour
         {
             case SystemLanguage.Korean:
                 return 1; // 한국어
-            case SystemLanguage.Japanese:
-                return 2; // 日本語
-            case SystemLanguage.Chinese:
-            case SystemLanguage.ChineseSimplified:
-            case SystemLanguage.ChineseTraditional:
-                return 3; // 中文
             default:
                 return 0; // English
         }
@@ -124,4 +118,31 @@ public class SettingsUIPanel : MonoBehaviour
         PlayerPrefs.DeleteKey("LanguageIndex");
         Debug.Log("Language preference has been deleted.");
     }
+
+    #region Policy
+    // Privacy Policy 버튼 클릭 시
+    public void OnPrivacyPolicyClick()
+    {
+        Application.OpenURL("https://sites.google.com/view/quacksurvivors/english");
+    }
+
+    // Terms of Policy(이용약관) 버튼 클릭 시 — 아직 페이지가 없다면 임시로 주석 처리하거나, 만드신 후 연결
+    public void OnTermsOfServiceClick()
+    {
+        Application.OpenURL("https://b7squirrel.com/terms.html"); // 아직 없으면 나중에 채우기
+    }
+
+    // Ad Consent 버튼 클릭 시
+    public void OnAdConsentClick()
+    {
+        if (AdsManager.Instance != null)
+        {
+            AdsManager.Instance.ShowPrivacyOptionsForm();
+        }
+        else
+        {
+            Logger.LogError("[SettingsUIPanel] AdsManager.Instance가 null입니다.");
+        }
+    }
+    #endregion
 }
