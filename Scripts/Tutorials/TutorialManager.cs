@@ -16,6 +16,10 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager instance;
 
+    [Header("⚠️ 테스트용 - 튜토리얼 강제 스킵")]
+    [SerializeField] bool forceSkipTutorial = false;   // ⭐ 추가: 인스펙터에서 체크 한 번으로 on/off
+
+
     [Header("Tutorial Panels")]
     [SerializeField] Transform tutorialParent;
     [SerializeField] List<TutorialData> tutorials = new List<TutorialData>();
@@ -130,6 +134,16 @@ public class TutorialManager : MonoBehaviour
 
     void LoadTutorialState()
     {
+        // ⭐ 추가: 테스트 중 튜토리얼을 완전히 끄고 싶을 때
+        if (forceSkipTutorial)
+        {
+            CurrentStep = TutorialStep.Completed;
+            PlayerPrefs.SetInt(STEP_KEY, (int)CurrentStep);
+            PlayerPrefs.Save();
+            Debug.Log("[Tutorial] forceSkipTutorial 활성화됨 - 튜토리얼 강제 완료 처리");
+            return;
+        }
+
         foreach (var t in tutorials)
             t.hasShown = PlayerPrefs.GetInt(t.Name, 0) == 1;
 
@@ -187,7 +201,7 @@ public class TutorialManager : MonoBehaviour
         PlayerPrefs.DeleteKey("TutorialCrystalGiven");
         PlayerPrefs.DeleteKey("TutorialShopPhase");
         CurrentStep = TutorialStep.Step0_OnlyBattle;
-        PlayerPrefs.DeleteKey("TutorialMove_Shown"); 
+        PlayerPrefs.DeleteKey("TutorialMove_Shown");
         PlayerPrefs.Save();
 
         OnStepChanged?.Invoke(CurrentStep);
@@ -195,35 +209,35 @@ public class TutorialManager : MonoBehaviour
     }
 
     [ContextMenu("다음 단계로 강제 진행")]
-	public void DebugAdvanceStep()
-	{
-		AdvanceStep();
-		Debug.Log($"[Tutorial] 강제 진행 → {CurrentStep}");
-	}
+    public void DebugAdvanceStep()
+    {
+        AdvanceStep();
+        Debug.Log($"[Tutorial] 강제 진행 → {CurrentStep}");
+    }
 
-	[ContextMenu("Step0 - OnlyBattle")]
-	public void DebugSetStep0() => SetStep(TutorialStep.Step0_OnlyBattle);
+    [ContextMenu("Step0 - OnlyBattle")]
+    public void DebugSetStep0() => SetStep(TutorialStep.Step0_OnlyBattle);
 
-	[ContextMenu("Step1 - ShopUnlocked")]
-	public void DebugSetStep1() => SetStep(TutorialStep.Step1_ShopUnlocked);
+    [ContextMenu("Step1 - ShopUnlocked")]
+    public void DebugSetStep1() => SetStep(TutorialStep.Step1_ShopUnlocked);
 
-	[ContextMenu("Step2 - GearUnlocked")]
-	public void DebugSetStep2() => SetStep(TutorialStep.Step2_GearUnlocked);
+    [ContextMenu("Step2 - GearUnlocked")]
+    public void DebugSetStep2() => SetStep(TutorialStep.Step2_GearUnlocked);
 
-	[ContextMenu("Step3 - MergeUnlocked")]
-	public void DebugSetStep3() => SetStep(TutorialStep.Step3_MergeUnlocked);
+    [ContextMenu("Step3 - MergeUnlocked")]
+    public void DebugSetStep3() => SetStep(TutorialStep.Step3_MergeUnlocked);
 
-	[ContextMenu("Step4 - AchievementUnlocked")]
-	public void DebugSetStep4() => SetStep(TutorialStep.Step4_AchievementUnlocked);
+    [ContextMenu("Step4 - AchievementUnlocked")]
+    public void DebugSetStep4() => SetStep(TutorialStep.Step4_AchievementUnlocked);
 
-	[ContextMenu("Step5 - Completed")]
-	public void DebugSetStepCompleted() => SetStep(TutorialStep.Completed);
+    [ContextMenu("Step5 - Completed")]
+    public void DebugSetStepCompleted() => SetStep(TutorialStep.Completed);
 
-	public void SetStep(TutorialStep step)
-	{
-		CurrentStep = step;
-		SaveTutorialState();
-		OnStepChanged?.Invoke(CurrentStep);
-		Debug.Log($"[Tutorial] 강제 설정 → {CurrentStep}");
-	}
+    public void SetStep(TutorialStep step)
+    {
+        CurrentStep = step;
+        SaveTutorialState();
+        OnStepChanged?.Invoke(CurrentStep);
+        Debug.Log($"[Tutorial] 강제 설정 → {CurrentStep}");
+    }
 }
