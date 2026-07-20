@@ -36,6 +36,16 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         LoadTutorialState();
+
+        // ⭐ 추가: 튜토리얼을 처음 시작하는 순간만 기록
+        if (CurrentStep == TutorialStep.Step0_OnlyBattle &&
+            PlayerPrefs.GetInt("TutorialStartLogged", 0) == 0)
+        {
+            FirebaseManager.LogEvent("tutorial_start");
+            PlayerPrefs.SetInt("TutorialStartLogged", 1);
+            PlayerPrefs.Save();
+        }
+
         StartCoroutine(InitWithDelay());
     }
 
@@ -66,6 +76,12 @@ public class TutorialManager : MonoBehaviour
 
         Debug.Log($"[Tutorial] Step Advanced → {CurrentStep}");
         OnStepChanged?.Invoke(CurrentStep);
+
+        // ⭐ 추가: 방금 Completed에 도달했다면 기록
+        if (CurrentStep == TutorialStep.Completed)
+        {
+            FirebaseManager.LogEvent("tutorial_complete");
+        }
     }
 
     // ✅ 신규: 특정 단계인지 확인 (탭 버튼에서 사용)

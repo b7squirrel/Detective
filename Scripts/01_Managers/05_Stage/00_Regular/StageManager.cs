@@ -39,6 +39,9 @@ public class StageManager : MonoBehaviour
         int currentStageNum = playerDataManager.GetCurrentStageNumber();
         StageContents contents = stageContents[currentStageNum - 1];
 
+        // ⭐ 추가: 스테이지 시작 이벤트
+        FirebaseManager.LogEvent("stage_start", "stage_number", currentStageNum.ToString());
+
         wallManager.SetWallSize(contents.startPositions);
 
         poolManager.InitPools();

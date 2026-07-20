@@ -20,6 +20,9 @@ public class WinStage : MonoBehaviour
         GetComponent<PauseManager>().PauseGame();
         Logger.Log("윈 스테이지");
 
+        // ⭐ 추가: 범용 스테이지 클리어 이벤트 (스테이지 번호 파라미터 포함)
+        FirebaseManager.LogEvent("stage_clear", "stage_number", clearedStageNum.ToString());
+
         // ⭐ 업적 추가
         if (AchievementManager.Instance != null)
         {
