@@ -122,6 +122,13 @@ public class LaunchManager : MonoBehaviour
         startingDataContainer.SetLead(lead, currentAttr);
     }
 
+    // ⭐ 추가: 외부(GameInitializer 등)에서 장비 지급 완료 후 launch panel을 다시 그리기 위해 호출
+    public void RefreshLeadDisplay()
+    {
+        if (currentLead == null) return;
+        SetLead(currentLead);   // ⭐ PutCardDataIntoSlot만이 아니라 startingDataContainer.SetLead()까지 함께 갱신
+    }
+
     // ⭐ 개선된 UpdateLead - 배치 모드 적용
     public void UpdateLead(CardData newLead)
     {

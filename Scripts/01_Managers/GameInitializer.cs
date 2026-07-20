@@ -242,6 +242,9 @@ public class GameInitializer : MonoBehaviour
                 // 슬롯들이 장비 없이 렌더링된 상태 → 강제로 재렌더링
                 CardSlotManager.instance?.UpdateAllCardSlotDisplay();
 
+                // ⭐ 추가: launch panel의 리드 오리 디스플레이도 갱신
+                FindObjectOfType<LaunchManager>()?.RefreshLeadDisplay();
+
                 Debug.Log("[GameInitializer] ✅ 첫 설치 장비 초기화 완료");
             }
             else
