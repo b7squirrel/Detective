@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GachaSystem : MonoBehaviour
 {
-    CardDataManager cardDataManager;
-    CardList cardList;
+    CardDataManager cardDataManager => CardDataManager.Instance;   // ⭐ 프로퍼티로 변경
+    CardList cardList => CardList.Instance;                         // ⭐ 프로퍼티로 변경
     CardsDictionary cardDictionary;
     CardSlotManager cardSlotManager;
 
@@ -29,7 +29,7 @@ public class GachaSystem : MonoBehaviour
     public static bool IsInitialized { get; private set; } = false;
 
     StatManager statManager;
-
+    
     List<CardData> tutorialDuckPool;
     List<CardData> tutorialItemPool;
 
@@ -51,14 +51,12 @@ public class GachaSystem : MonoBehaviour
 
     void Awake()
     {
-        cardDataManager = GetComponent<CardDataManager>();
-        cardList = GetComponent<CardList>();
         raritySystem = GetComponent<GachaRaritySystem>();
 
         cardsPicked = new List<CardData>();
         mainMenuManager = FindObjectOfType<MainMenuManager>();
 
-        statManager = GetComponent<StatManager>();
+        statManager = GetComponent<StatManager>();  // 이것도 같은 오브젝트에 옮겨야 함
     }
 
     void Start()
@@ -332,7 +330,7 @@ public class GachaSystem : MonoBehaviour
         cardDataManager.BeginBatchOperation();
         cardsPicked.Clear();
 
-        StatManager statManager = GetComponent<StatManager>();
+        // StatManager statManager = GetComponent<StatManager>();
 
         try
         {
@@ -736,51 +734,87 @@ public class GachaSystem : MonoBehaviour
     }
 
     public void AddDefaultEquip(CardData _oriCardData)
+{
+    if (_oriCardData == null)
     {
-        if (itemPools == null)
+        Debug.LogError("[AddDefaultEquip] _oriCardData가 null입니다.");
+        return;
+    }
+
+    if (itemPools == null)
+    {
+        itemPools = new List<CardData>();
+        itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
+    }
+
+    if (cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
+    if (cardDictionary == null)
+    {
+        Debug.LogError("[AddDefaultEquip] cardDictionary를 찾을 수 없습니다.");
+        return;
+    }
+
+    WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
+    if (weaponItemData == null)
+    {
+        Debug.LogError($"[AddDefaultEquip] weaponItemData가 null입니다. 카드: {_oriCardData.Name}");
+        return;
+    }
+
+    WeaponData wd = weaponItemData.weaponData;
+    if (wd == null)
+    {
+        Debug.LogError($"[AddDefaultEquip] wd(WeaponData)가 null입니다. 카드: {_oriCardData.Name}");
+        return;
+    }
+
+    if (wd.defaultItems == null)
+    {
+        Debug.LogError($"[AddDefaultEquip] wd.defaultItems가 null입니다. WeaponData: {wd.name}");
+        return;
+    }
+
+    Debug.Log($"[AddDefaultEquip] cardDataManager={(cardDataManager == null ? "NULL" : "OK")}, cardList={(cardList == null ? "NULL" : "OK")}");
+
+    Dictionary<(string Name, int Grade), CardData> itemLookup = new Dictionary<(string, int), CardData>();
+    foreach (var item in itemPools)
+    {
+        itemLookup[(item.Name, item.Grade)] = item;
+    }
+
+    CardData[] defaultEquips = new CardData[4];
+    for (int equipIndex = 0; equipIndex < 4; equipIndex++)
+    {
+        if (wd.defaultItems[equipIndex] == null)
         {
-            itemPools = new List<CardData>();
-            itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
+            defaultEquips[equipIndex] = null;
+            continue;
         }
 
-        if (cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
-        WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
-        WeaponData wd = weaponItemData.weaponData;
-
-        Dictionary<(string Name, int Grade), CardData> itemLookup = new Dictionary<(string, int), CardData>();
-        foreach (var item in itemPools)
+        var searchKey = (wd.defaultItems[equipIndex].Name, wd.defaultItems[equipIndex].grade);
+        if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
         {
-            itemLookup[(item.Name, item.Grade)] = item;
-        }
-
-        CardData[] defaultEquips = new CardData[4];
-        for (int equipIndex = 0; equipIndex < 4; equipIndex++)
-        {
-            if (wd.defaultItems[equipIndex] == null)
+            defaultEquips[equipIndex] = CloneCardData(matchingItem);
+            if (defaultEquips[equipIndex] != null)
             {
-                defaultEquips[equipIndex] = null;
-                continue;
-            }
-
-            var searchKey = (wd.defaultItems[equipIndex].Name, wd.defaultItems[equipIndex].grade);
-            if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
-            {
-                defaultEquips[equipIndex] = CloneCardData(matchingItem);
-                if (defaultEquips[equipIndex] != null)
+                try
                 {
-                    try
-                    {
-                        cardDataManager.AddNewCardToMyCardsList(defaultEquips[equipIndex]);
-                        cardList.Equip(_oriCardData, defaultEquips[equipIndex]);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError($"Error adding default equipment: {e.Message}");
-                    }
+                    Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} AddNewCardToMyCardsList 호출 직전");
+                    cardDataManager.AddNewCardToMyCardsList(defaultEquips[equipIndex]);
+
+                    Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} cardList.Equip 호출 직전");
+                    cardList.Equip(_oriCardData, defaultEquips[equipIndex]);
+
+                    Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} 완료");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Error adding default equipment (equipIndex={equipIndex}): {e.Message}\n{e.StackTrace}");
                 }
             }
         }
     }
+}
 
     // ─────────────────────────────────────────────────────────
     //  레거시 / 디버그용 뽑기 메서드
@@ -794,7 +828,7 @@ public class GachaSystem : MonoBehaviour
         if (weaponCount > totalMaxCardLimit)
         {
             Logger.Log($"[GachaSystem] 오리 카드의 갯수가 {totalMaxCardLimit}개를 넘습니다.");
-            GetComponent<CardLimitWarningDialog>().SetWarningText("오리", weaponCount, totalMaxCardLimit);
+            FindObjectOfType<CardLimitWarningDialog>().SetWarningText("오리", weaponCount, totalMaxCardLimit);
             return;
         }
 
@@ -855,7 +889,7 @@ public class GachaSystem : MonoBehaviour
         if (itemCount > maxTotalCardLimit)
         {
             Logger.Log($"아이템 카드의 갯수가 {maxTotalCardLimit}개를 넘습니다.");
-            GetComponent<CardLimitWarningDialog>().SetWarningText("아이템", itemCount, maxTotalCardLimit);
+            FindObjectOfType<CardLimitWarningDialog>().SetWarningText("아이템", itemCount, maxTotalCardLimit);
             return;
         }
 

@@ -14,7 +14,16 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         GameConfig.Instance != null && GameConfig.Instance.enableIAPTestMode;
 
     [Header("카드 제한 경고")]
-    [SerializeField] private CardLimitWarningDialog cardLimitWarningDialog;
+    [SerializeField] private CardLimitWarningDialog _cardLimitWarningDialog;
+    CardLimitWarningDialog cardLimitWarningDialog
+    {
+        get
+        {
+            if (_cardLimitWarningDialog == null)
+                _cardLimitWarningDialog = FindObjectOfType<CardLimitWarningDialog>();
+            return _cardLimitWarningDialog;
+        }
+    }
 
     [Header("재화 부족 경고")]
     [SerializeField] GameObject lackOfCristalWarningPanelPrefab;
@@ -28,12 +37,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     protected override void Init()
     {
         base.Init();
-
-        // CardLimitWarningDialog 자동 찾기
-        if (cardLimitWarningDialog == null)
-        {
-            cardLimitWarningDialog = FindObjectOfType<CardLimitWarningDialog>();
-        }
 
         // ⭐ 경고 패널 생성
         CreateWarningPanels();
@@ -187,10 +190,10 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
         if (currentCardCount + drawCount > maxCardCount)
         {
-            if (cardLimitWarningDialog != null)
+            if (cardLimitWarningDialog != null) // ⭐ 프로퍼티 사용
             {
                 string cardTypeName = cardType == "Weapon" ? "오리" : "아이템";
-                cardLimitWarningDialog.SetWarningText(
+                cardLimitWarningDialog.SetWarningText(   // ⭐ 프로퍼티 사용
                     cardTypeName,
                     currentCardCount + drawCount,
                     maxCardCount,
