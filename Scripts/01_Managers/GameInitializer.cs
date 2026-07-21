@@ -235,6 +235,24 @@ public class GameInitializer : MonoBehaviour
 
             if (leadCard != null)
             {
+                // ⭐ 추가: 시작 오리를 목표 레벨까지 올림 (합성 튜토리얼과 동일 등급/레벨을 맞추기 위해)
+                if (CardDataManager.PendingStartingCardTargetLevel > 1)
+                {
+                    StatManager statManagerForLevelUp = FindObjectOfType<StatManager>();
+                    if (statManagerForLevelUp != null)
+                    {
+                        int levelsToApply = CardDataManager.PendingStartingCardTargetLevel - leadCard.Level;
+                        for (int j = 0; j < levelsToApply; j++)
+                            statManagerForLevelUp.LevelUp(leadCard);
+
+                        Debug.Log($"[GameInitializer] 시작 오리 레벨업 완료: Level {leadCard.Level}, HP {leadCard.Hp}, Atk {leadCard.Atk}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[GameInitializer] StatManager를 찾을 수 없어 시작 오리 레벨업을 건너뜁니다.");
+                    }
+                }
+
                 gachaSys.AddDefaultEquip(leadCard);
 
                 // ✅ 추가: 첫 설치 장비 설정 완료 후 CardSlot 디스플레이 갱신

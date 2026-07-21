@@ -164,6 +164,10 @@ public class CardDataManager : SingletonBehaviour<CardDataManager>
     private bool isBatchMode = false;
     private bool needsSave = false;
 
+    // ⭐ 추가: 첫 설치 시 시작 카드에 적용해야 할 목표 레벨 (0이면 처리할 필요 없음)
+    public static int PendingStartingCardTargetLevel { get; private set; } = 0;
+
+
     // ⭐ 기존 void OnDestroy() 제거하고 아래로 대체
     protected override void OnDestroy()
     {
@@ -364,23 +368,22 @@ public class CardDataManager : SingletonBehaviour<CardDataManager>
                 {
                     int targetLevel = startingCards[0].Level;
                     startingCards[0].Level = 1;
-
-                    // ✅ 수정: StartingMember를 먼저 설정한 뒤 추가
                     startingCards[0].StartingMember = StartingMember.Zero.ToString();
+
+                    // ⭐ 1. 예외 발생 여부와 무관하게 목표 레벨을 먼저 안전하게 기록
+                    PendingStartingCardTargetLevel = targetLevel;
+
+                    // ⭐ 2. 배치 모드로 감싸서 이 이른 시점의 CardList.InitCardList() 호출 자체를 방지
+                    //    (CardList는 GameInitializer 8단계에서 나중에 안전하게 다시 초기화됨)
+                    BeginBatchOperation();
                     AddNewCardToMyCardsList(startingCards[0]);
-
-                    StatManager statManager = FindObjectOfType<StatManager>();
-                    if (statManager != null)
-                    {
-                        int levelsToApply = targetLevel - 1;
-                        for (int j = 0; j < levelsToApply; j++)
-                            statManager.LevelUp(startingCards[0]);
-                    }
-
-                    // ✅ 수정: GachaSystem 호출 완전 제거 (GameInitializer로 이동)
+                    EndBatchOperation();
                 }
             }
-            Save();
+            else
+            {
+                Save();
+            }
         }
         catch (Exception e)
         {
