@@ -27,6 +27,13 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    // ⭐ 추가
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+
     defaultConfig {
         minSdkVersion **MINSDKVERSION**
         targetSdkVersion **TARGETSDKVERSION**
