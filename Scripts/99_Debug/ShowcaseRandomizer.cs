@@ -36,6 +36,8 @@ public class ShowcaseRandomizer : MonoBehaviour
     [SerializeField] TextAsset itemPoolCsv;
 
     [Header("전환 주기 (초)")]
+    [Tooltip("체크 해제하면 오리+장비 조합을 딱 한 번만 랜덤으로 뽑고 그 뒤로는 계속 그대로 유지한다 (전환 없음).")]
+    [SerializeField] bool loopForever = true;
     [SerializeField] float startInterval = 0.3f;
     [SerializeField] float minInterval = 0.08f;
     [Tooltip("startInterval에서 minInterval까지 가속되는 데 걸리는 시간")]
@@ -72,7 +74,15 @@ public class ShowcaseRandomizer : MonoBehaviour
             return;
         }
 
-        loopRoutine = StartCoroutine(RunShowcase());
+        if (loopForever)
+        {
+            loopRoutine = StartCoroutine(RunShowcase());
+        }
+        else
+        {
+            // 한 번만 뽑고 고정: 같은 필수템/랜덤 로직을 그대로 타되, 반복 전환은 하지 않는다.
+            Randomize();
+        }
     }
 
     void OnDisable()
@@ -228,6 +238,7 @@ public class ShowcaseRandomizer : MonoBehaviour
         }
     }
 
+    [ContextMenu("다시 뽑기")]
     void Randomize()
     {
         // ---- 오리 ----
