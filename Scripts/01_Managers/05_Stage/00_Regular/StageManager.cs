@@ -5,6 +5,9 @@ public class StageManager : MonoBehaviour
 {
     public StageContents[] stageContents;
 
+    // ⭐ 추가: 이번 세션에서 실제로 시작한 스테이지 번호 (다른 스크립트에서 참조용)
+    public static int CurrentSessionStageNum { get; private set; }
+
     StageEvenetManager stageEventManager;
     StageAssetManager stageAssetManager;
     SpawnGemsOnStart spawnGemsOnStart;
@@ -37,6 +40,10 @@ public class StageManager : MonoBehaviour
         stageTime = FindObjectOfType<StageTime>();
 
         int currentStageNum = playerDataManager.GetCurrentStageNumber();
+
+        // ⭐ 추가: static 값에 기록
+        CurrentSessionStageNum = currentStageNum;
+        
         StageContents contents = stageContents[currentStageNum - 1];
 
         // ⭐ 추가: 스테이지 시작 이벤트

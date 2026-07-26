@@ -13,7 +13,10 @@ public class WinStage : MonoBehaviour
         winStage.SetActive(true);
         int killNum = GetComponent<KillManager>().GetCurrentKills();
         int coinNum = GetComponent<CoinManager>().GetCoinNumPickedup();
-        clearedStageNum = FindObjectOfType<PlayerDataManager>().GetCurrentStageNumber();
+
+        // ⭐ 변경: PlayerDataManager 대신 StageManager의 세션 값 사용
+        clearedStageNum = StageManager.CurrentSessionStageNum;
+
         int killGold = GoldRewardManager.Instance.GetKillGold();
         int clearBonus = GoldRewardManager.Instance.GetClearBonus(clearedStageNum);
         winStage.GetComponent<ResultPanel>().InitAwards(killNum, coinNum, clearedStageNum, true, killGold, clearBonus);

@@ -547,7 +547,7 @@ public class CardDataManager : SingletonBehaviour<CardDataManager>
         List<CardData> cards = GetMyCardList();
         if (cards == null) return;
 
-        StatManager statManager = GetComponent<StatManager>();
+        StatManager statManager = FindObjectOfType<StatManager>();
 
         for (int i = 0; i < cards.Count; i++)
         {
