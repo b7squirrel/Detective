@@ -38,6 +38,7 @@ public class EquipDisplayUI : MonoBehaviour
 
     float initAtkFontSize, initHpFontSize;
     Tween atkPopTween, hpPopTween;
+    Tween levelMaxPopTween; // ⭐ 추가: 최고레벨 도달 팝 연출
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
     {
@@ -141,6 +142,20 @@ public class EquipDisplayUI : MonoBehaviour
         LevelShadow.text = Level.text;
     }
 
+    // ⭐ 추가: 최고 레벨 도달 시 레벨 텍스트 팝 연출
+    public void PlayMaxLevelPop()
+    {
+        levelMaxPopTween?.Kill();
+        Level.transform.localScale = Vector3.one;
+        LevelShadow.transform.localScale = Vector3.one;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(Level.transform.DOPunchScale(Vector3.one * 0.8f, 0.5f, 6, 1f));
+        seq.Join(LevelShadow.transform.DOPunchScale(Vector3.one * 0.8f, 0.5f, 6, 1f));
+
+        levelMaxPopTween = seq;
+    }
+
     protected virtual void SetNumStar(int numStars)
     {
         if (stars == null)
@@ -202,6 +217,10 @@ public class EquipDisplayUI : MonoBehaviour
         // Tween 정리
         atkPopTween?.Kill();
         hpPopTween?.Kill();
+
+        levelMaxPopTween?.Kill();          // ⭐ 추가
+        Level.transform.localScale = Vector3.one;      // ⭐ 추가
+        LevelShadow.transform.localScale = Vector3.one; // ⭐ 추가
 
         charPopTween?.Kill();
         charImage.localScale = Vector3.one;
