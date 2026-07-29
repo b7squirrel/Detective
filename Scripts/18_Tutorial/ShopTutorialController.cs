@@ -19,6 +19,7 @@ public class ShopTutorialController : MonoBehaviour
     [SerializeField] GameObject shopOpenPopup;
     [SerializeField] GameObject crystalGivenPopup;
     [SerializeField] TextMeshProUGUI crystalGivenText;
+    [SerializeField] TextMeshProUGUI crystalGivenTextShd;
 
     [Header("보석 지급량")]
     [SerializeField] int crystalAmount = 1650;
@@ -306,6 +307,11 @@ public class ShopTutorialController : MonoBehaviour
         {
             string coloredAmount = $"<color=#FFE600>{crystalAmount}</color>";
             crystalGivenText.text = string.Format(LocalizationManager.Game.crystalGiven, coloredAmount);
+        }
+        if (crystalGivenTextShd != null)
+        {
+            string coloredAmount = $"<color=#000000>{crystalAmount}</color>";
+            crystalGivenTextShd.text = string.Format(LocalizationManager.Game.crystalGiven, coloredAmount);
         }
         ShowPopup(crystalGivenPopup);
         PlayerPrefs.SetInt(CRYSTAL_GIVEN_KEY, 1);

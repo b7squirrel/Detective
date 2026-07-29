@@ -13,25 +13,7 @@ public class AllField : MonoBehaviour
     {
         ClearSlots();
 
-        // List<CardData> cardDatas = new();
-
-        // cardDatas.AddRange(cardList); // 재료가 될 수 있는 카드들의 리스트
-
-        // // 카드 데이터 정렬
-        // List<CardData> cardDataSorted = SortByGrade(cardDatas);
-
-        // // 목록에 리드 오리가 있다면 리드 오리를 가장 앞에 배치
-        // if (startingDataContainer == null) startingDataContainer = FindObjectOfType<StartingDataContainer>();
-        // CardData lead = startingDataContainer.GetPlayerCardData();
-        // foreach (var item in cardList)
-        // {
-        //     if (item.ID == lead.ID)
-        //     {
-        //         cardDataSorted.Remove(lead);
-        //         cardDataSorted.Insert(0, lead);
-        //         break;
-        //     }
-        // }
+        Debug.Log($"[AllField] GenerateAllCardsOfType 호출됨. tab={tab}, cardList.Count={cardList.Count}, IDs=[{string.Join(",", cardList.ConvertAll(c => c.ID))}]");
 
         foreach (var item in cardList)
         {

@@ -456,6 +456,8 @@ public class UpPanelManager : MonoBehaviour
         CardToUpgrade.Grade = newCardGrade;
         CardToUpgrade.EvoStage = newCardEvoStage;
 
+        Debug.Log($"[UpPanelManager] EvoStage 설정 직후: {CardToUpgrade.Name} (ID:{CardToUpgrade.ID}) EvoStage={CardToUpgrade.EvoStage}");
+
         // 최고 상태일 때는 레벨 리셋 안 함
         if (!isMaxState)
             CardToUpgrade.Level = 1;
@@ -468,10 +470,15 @@ public class UpPanelManager : MonoBehaviour
         // 합성 연출 후 강화 성공 패널로
         matField.gameObject.SetActive(false);
 
-        // ✅ 수정: 연출 전, 합성 완료 직후 업적 추가
-        if (TutorialManager.instance?.CurrentStep == TutorialStep.Step3_MergeUnlocked)
-            AchievementManager.Instance?.AddProgressByID("tutorial_merge", 1);
-
+        try
+        {
+            if (TutorialManager.instance?.CurrentStep == TutorialStep.Step3_MergeUnlocked)
+                AchievementManager.Instance?.AddProgressByID("tutorial_merge", 1);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"[UpPanelManager] 업적 처리 중 오류, 합성 로직은 계속 진행: {e}");
+        }
         StartCoroutine(UpgradeUICo(CardToUpgrade, isGradeUp));
     }
 

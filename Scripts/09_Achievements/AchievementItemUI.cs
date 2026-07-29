@@ -195,10 +195,10 @@ public class AchievementItemUI : MonoBehaviour
     {
         if (CompletedPanel != null) CompletedPanel.SetActive(isActive);
         if (checkImage != null) checkImage.SetActive(isActive);
-        rewardButton.enabled = isActive;
+        if (rewardButton != null) rewardButton.enabled = isActive;   // ← null 체크 추가 (핵심 수정)
 
         if (anim == null) anim = GetComponent<Animator>();
-        if (anim != null && isActive) // ← null 체크 추가
+        if (anim != null && isActive)
             anim.Play("AchievementItem Completed", 0, 0f);
     }
 

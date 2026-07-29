@@ -226,6 +226,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
     protected virtual void SetNumStar(int numStars)
     {
+        Debug.Log($"[CardDisp:{gameObject.name}] SetNumStar 호출됨. numStars={numStars}, InstanceID={GetInstanceID()}");
         if (stars == null)
         {
             stars = new GameObject[StaticValues.MaxEvoStage];

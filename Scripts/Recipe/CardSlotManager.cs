@@ -99,6 +99,7 @@ public class CardSlotManager : MonoBehaviour
         if (mySlots.TryGetValue(cardID, out CardSlot slot))
         {
             slot.gameObject.SetActive(_active);
+            Debug.Log($"[CardSlotManager] SetSlotActive: ID {cardID} → {_active}");
         }
         else
         {

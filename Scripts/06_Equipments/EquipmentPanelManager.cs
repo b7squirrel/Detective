@@ -12,10 +12,10 @@ public class EquipmentPanelManager : MonoBehaviour
     int index; // 어떤 장비 슬롯인지
     bool isEquipped; // 장비 정보창에 띄워진 장비가 착용중인지 아닌지 판단. 레벨업을 할 때 오리에게 attr을 적용할지 말지를 결정하기 위해
 
-    CardDataManager cardDataManager;
-    CardsDictionary cardDictionary;
+    CardDataManager cardDataManager => CardDataManager.Instance;
+    CardsDictionary cardDictionary => CardsDictionary.Instance;
     EquipmentSlotsManager equipmentSlotsManager;
-    CardList cardList;
+    CardList cardList => CardList.Instance;
     StatManager statManager;
     CardDisp cardDisp; // Equip info panel이 활성화 되면 클릭한 카드의 disp클래스를 저장(equipped Text 표시를 위해)
     SetCardDataOnSlot setCardDataOnSlot;
@@ -71,11 +71,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
     void Awake()
     {
-        cardDataManager = FindObjectOfType<CardDataManager>();
         equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
         setCardDataOnSlot = GetComponent<SetCardDataOnSlot>();
-        cardList = FindAnyObjectByType<CardList>();
-        cardDictionary = FindAnyObjectByType<CardsDictionary>();
         equipmentSlotsManager = GetComponent<EquipmentSlotsManager>();
         statManager = FindAnyObjectByType<StatManager>();
         equation = new Equation();
@@ -169,7 +166,11 @@ public class EquipmentPanelManager : MonoBehaviour
         }
         else if (cardType == CardType.Item.ToString())
         {
-            foreach (var item in cardList.GetEquipmentCardsList())
+            var allItems = cardList.GetEquipmentCardsList();
+            Debug.Log($"[EquipmentPanelManager] GetEquipmentCardsList().Count = {allItems.Count}");
+            foreach (var i in allItems)
+                Debug.Log($"[EquipmentPanelManager]   - ID:{i.CardData.ID} Name:{i.CardData.Name} IsEquipped:{i.IsEquipped} BindingTo:{i.CardData.BindingTo}");
+            foreach (var item in allItems)
             {
                 if (item.IsEquipped) // 다른 오리에 장착된 카드는 보여주지 않음
                 {
@@ -183,11 +184,15 @@ public class EquipmentPanelManager : MonoBehaviour
                     if (item.CardData.EquipmentType == CardOnDisplay.EssentialEquip
                         && item.CardData.BindingTo != CardOnDisplay.Name)
                         continue;
+
+                    Debug.Log($"[EquipmentPanelManager] Item 후보 추가: {item.CardData.Name} (ID:{item.CardData.ID}), IsEquipped={item.IsEquipped}, BindingTo={item.CardData.BindingTo}, CardOnDisplay={CardOnDisplay.Name}");
                     card.Add(item.CardData);
+                    
                     continue;
                 }
                 if (item.CardData.BindingTo == CardOnDisplay.Name)
                 {
+                    Debug.Log($"[EquipmentPanelManager] Item 후보 추가: {item.CardData.Name} (ID:{item.CardData.ID}), IsEquipped={item.IsEquipped}, BindingTo={item.CardData.BindingTo}, CardOnDisplay={CardOnDisplay.Name}");
                     card.Add(item.CardData);
                     continue;
                 }

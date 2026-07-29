@@ -164,13 +164,14 @@ public class CardList : SingletonBehaviour<CardList>
 
     public void InitCardList()
     {
+        List<CardData> myCardList = cardDataManager.GetMyCardList();
+        Debug.Log($"[CardList] InitCardList 호출. MyCardList.Count={myCardList.Count}, ItemCount={myCardList.FindAll(c => c.Type == "Item").Count}, WeaponCount={myCardList.FindAll(c => c.Type == "Weapon").Count}");
+        
         charCards = new();
         equipmentCards = new();
         charCardDict = new();
         equipCardDict = new();
-
-        List<CardData> myCardList = cardDataManager.GetMyCardList();
-
+        
         for (int i = 0; i < myCardList.Count; i++)
         {
             if (myCardList[i].Type == CardType.Weapon.ToString())
