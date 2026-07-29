@@ -118,7 +118,8 @@ public class RevivalPanel : MonoBehaviour
                     Hide(resumeSounds: false);
                     character.ProcessDeath();
                 }
-            }
+            },
+            placement: "revival" // ⭐ 추가: 이 광고 시청이 부활 시나리오에서 발생했음을 표시
         );
     }
 

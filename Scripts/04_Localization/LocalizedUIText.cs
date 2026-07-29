@@ -231,6 +231,20 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.probabilityGuaranteeLabel;
             case UITextKey.LanguageSelection:
                 return LocalizationManager.Game.languageSelection;
+            case UITextKey.CanUseShop:
+                return LocalizationManager.Game.canUseShop;
+            case UITextKey.CanUseEquip:
+                return LocalizationManager.Game.canUseEquip;
+            case UITextKey.CanUseMerge:
+                return LocalizationManager.Game.canUseMerge;
+            case UITextKey.CanUseAchievement:
+                return LocalizationManager.Game.canUseAchievement;
+            case UITextKey.CanLeadArmy:
+                return LocalizationManager.Game.canLeadArmy;
+            case UITextKey.WeAreReady:
+                return LocalizationManager.Game.weAreReady;
+            case UITextKey.CrystalGiven:
+                return LocalizationManager.Game.crystalGiven;
             default:
                 return key.ToString();
         }
@@ -344,5 +358,12 @@ public enum UITextKey
     ProbabilityInfoTitle,
     ProbabilityNormalLabel,
     ProbabilityGuaranteeLabel,
-    LanguageSelection
+    LanguageSelection,
+    CanUseShop,
+    CanUseEquip,
+    CanUseMerge,
+    CanUseAchievement,
+    CanLeadArmy,
+    WeAreReady,
+    CrystalGiven
 }

@@ -303,7 +303,10 @@ public class ShopTutorialController : MonoBehaviour
 
         PlayerDataManager.Instance.AddCristal(crystalAmount);
         if (crystalGivenText != null)
-            crystalGivenText.text = $"보석 {crystalAmount}개를 지급했습니다!";
+        {
+            string coloredAmount = $"<color=#FFE600>{crystalAmount}</color>";
+            crystalGivenText.text = string.Format(LocalizationManager.Game.crystalGiven, coloredAmount);
+        }
         ShowPopup(crystalGivenPopup);
         PlayerPrefs.SetInt(CRYSTAL_GIVEN_KEY, 1);
         PlayerPrefs.Save();

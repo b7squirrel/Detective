@@ -16,7 +16,7 @@ public class IncomingWarningPanel : MonoBehaviour
 
     public void Init()
     {
-        incomingText.text = "적들이 몰려옵니다!!!";
+        incomingText.text = LocalizationManager.Game.enemiesIncoming;
         tagColorImage.color = tagColor;
         // ⭐ incomingWarningPanel.SetActive(true)는 여기서 호출하지 않음.
         // 큐 처리 순서와 무관하게 패널이 먼저 보여버리는 문제를 막기 위해

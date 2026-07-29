@@ -64,6 +64,13 @@ public class GameTexts : ScriptableObject
     public string probabilityInfoTitle = "확률 정보";
     public string probabilityNormalLabel = "일반 확률";
     public string probabilityGuaranteeLabel = "보장 확률";
+    public string canUseShop = "상점을 이용할 수 있어요!";
+    public string canUseEquip = "장비를 장착해 보세요!";
+    public string canUseMerge = "카드를 합성해 보세요!";
+    public string canUseAchievement = "업적 보상을 받으세요!";
+    public string canLeadArmy = "오리 군단을 이끌 준비가 되었습니다!";
+    public string weAreReady = "준비 완료!";
+    public string crystalGiven = "보석 {0}개를 지급했습니다!";
 
     [Header("Pack Description")]
     // 오리 카드 라인: {0} = 등급명(들)
