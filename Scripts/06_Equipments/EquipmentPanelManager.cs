@@ -385,8 +385,8 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
             equipDisplayUI.PlayMaxLevelPop();          // ⭐ 추가: 레벨 텍스트 팝 연출
+            equipDisplayUI.PlayCharDispMaxPop();       // ⭐ 추가: Char Disp 전체 팝 연출
         }
-
         UpdateButtonState(charUpgradeButton, true);
 
         // 필드의 해당 카드도 업데이트

@@ -31,6 +31,7 @@ public class EquipDisplayUI : MonoBehaviour
 
     [SerializeField] RectTransform charImage; // Char Disp 하위의 Char Image Transform
     [SerializeField] GameObject whiteFlash;
+    [SerializeField] RectTransform charDispRoot; // ⭐ 추가: 최고레벨 팝을 걸 Char Disp 루트
     Tween charPopTween;
 
     [Header("Debug")]
@@ -38,7 +39,8 @@ public class EquipDisplayUI : MonoBehaviour
 
     float initAtkFontSize, initHpFontSize;
     Tween atkPopTween, hpPopTween;
-    Tween levelMaxPopTween; // ⭐ 추가: 최고레벨 도달 팝 연출
+    Tween levelMaxPopTween;     // ⭐ 추가: 최고레벨 도달 시 레벨 텍스트 팝 연출
+    Tween charDispMaxPopTween;  // ⭐ 추가: 최고레벨 도달 시 Char Disp 전체 팝 연출
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
     {
@@ -150,10 +152,22 @@ public class EquipDisplayUI : MonoBehaviour
         LevelShadow.transform.localScale = Vector3.one;
 
         Sequence seq = DOTween.Sequence();
-        seq.Append(Level.transform.DOPunchScale(Vector3.one * 0.8f, 0.5f, 6, 1f));
+        seq.Append(Level.transform.DOPunchScale(Vector3.one * 0.8f, 0.2f, 6, 1f));
         seq.Join(LevelShadow.transform.DOPunchScale(Vector3.one * 0.8f, 0.5f, 6, 1f));
 
         levelMaxPopTween = seq;
+    }
+
+    // ⭐ 추가: 최고 레벨 도달 시 Char Disp 전체 팝 연출
+    // ⭐ 수정: Vector3.one을 기준으로 고정 (캐싱 대신)
+    public void PlayCharDispMaxPop()
+    {
+        if (charDispRoot == null) return;
+
+        charDispMaxPopTween?.Kill();
+        charDispRoot.localScale = Vector3.one;
+
+        charDispMaxPopTween = charDispRoot.DOPunchScale(Vector3.one * 0.2f, 0.2f, 6, 1f);
     }
 
     protected virtual void SetNumStar(int numStars)
@@ -218,12 +232,17 @@ public class EquipDisplayUI : MonoBehaviour
         atkPopTween?.Kill();
         hpPopTween?.Kill();
 
-        levelMaxPopTween?.Kill();          // ⭐ 추가
-        Level.transform.localScale = Vector3.one;      // ⭐ 추가
-        LevelShadow.transform.localScale = Vector3.one; // ⭐ 추가
-
         charPopTween?.Kill();
         charImage.localScale = Vector3.one;
+
+        // ⭐ 추가: 최고레벨 팝 연출 정리 (패널을 나갈 때 찌그러진 채로 남지 않도록)
+        levelMaxPopTween?.Kill();
+        Level.transform.localScale = Vector3.one;
+        LevelShadow.transform.localScale = Vector3.one;
+
+        charDispMaxPopTween?.Kill();
+        if (charDispRoot != null)
+            charDispRoot.localScale = Vector3.one; // ⭐ 수정: charDispOriginalScale → Vector3.one
 
         whiteFlash.SetActive(false);
 
