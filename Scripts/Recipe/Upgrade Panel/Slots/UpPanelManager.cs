@@ -31,6 +31,7 @@ public class UpPanelManager : MonoBehaviour
     [SerializeField] CardSlot upCardSlot;
     [SerializeField] CardSlot matCardSlot;
     [SerializeField] CardSlot upSuccessSlot;
+    [SerializeField] UnityEngine.UI.Button mergeButton; // 합성 확인 버튼 - 중복 클릭 방지용
 
     // 다른 카드에 장착되어 있거나, 이미 장착을 하고 있을 때
     [SerializeField] GameObject askUnequipPopup;
@@ -183,6 +184,8 @@ public class UpPanelManager : MonoBehaviour
 
         cardSlotManager.SettrigerAnim("Off");
 
+        if (mergeButton != null) mergeButton.interactable = true; // 확인 패널이 새로 열릴 때 다시 활성화
+
         upPanelUI.UpgradeConfirmationUI();
 
         // ✅ 추가: 재료 카드 선택 완료 → 합성 확인 버튼 하이라이트
@@ -199,6 +202,8 @@ public class UpPanelManager : MonoBehaviour
         StartCoroutine(GenMatCardListCo());
 
         matCardSlot.EmptySlot();
+
+        if (mergeButton != null) mergeButton.interactable = true; // 혹시 모를 잠금 상태 방지
 
         upPanelUI.OffUpgradeConfirmationUI();
         upPanelUI.MatSlotCanceled();
@@ -424,6 +429,7 @@ public class UpPanelManager : MonoBehaviour
     public void UpgradeCard()
     {
         // isGradeUp이 필요하지 않은 것 같다. 정리할 것. 등급이 올라갈 일은 없음. 다른 등급은 뽑기로만 획득 가능함.
+        if (mergeButton != null) mergeButton.interactable = false; // 처리 시작하자마자 즉시 비활성화
 
         bool isGradeUp = false; // 등급이 올라갔다면 타이틀 리본에 반짝 이펙트를 주기 위해
         int newCardGrade = CardToUpgrade.Grade;
