@@ -13,8 +13,8 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] TextAsset weaponPoolDatabase;
     [SerializeField] TextAsset itemPoolDatabase;
     List<CardData> weaponPools;
-    List<CardData> itemPools;
 
+    List<CardData> itemPools;
     [Header("버튼 클릭 시 UI 관련 제어")]
     [SerializeField] GameObject content;
     [SerializeField] GameObject darkBG;
@@ -29,7 +29,7 @@ public class GachaSystem : MonoBehaviour
     public static bool IsInitialized { get; private set; } = false;
 
     StatManager statManager;
-    
+
     List<CardData> tutorialDuckPool;
     List<CardData> tutorialItemPool;
 
@@ -734,87 +734,158 @@ public class GachaSystem : MonoBehaviour
     }
 
     public void AddDefaultEquip(CardData _oriCardData)
-{
-    if (_oriCardData == null)
     {
-        Debug.LogError("[AddDefaultEquip] _oriCardData가 null입니다.");
-        return;
-    }
-
-    if (itemPools == null)
-    {
-        itemPools = new List<CardData>();
-        itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
-    }
-
-    if (cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
-    if (cardDictionary == null)
-    {
-        Debug.LogError("[AddDefaultEquip] cardDictionary를 찾을 수 없습니다.");
-        return;
-    }
-
-    WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
-    if (weaponItemData == null)
-    {
-        Debug.LogError($"[AddDefaultEquip] weaponItemData가 null입니다. 카드: {_oriCardData.Name}");
-        return;
-    }
-
-    WeaponData wd = weaponItemData.weaponData;
-    if (wd == null)
-    {
-        Debug.LogError($"[AddDefaultEquip] wd(WeaponData)가 null입니다. 카드: {_oriCardData.Name}");
-        return;
-    }
-
-    if (wd.defaultItems == null)
-    {
-        Debug.LogError($"[AddDefaultEquip] wd.defaultItems가 null입니다. WeaponData: {wd.name}");
-        return;
-    }
-
-    Debug.Log($"[AddDefaultEquip] cardDataManager={(cardDataManager == null ? "NULL" : "OK")}, cardList={(cardList == null ? "NULL" : "OK")}");
-
-    Dictionary<(string Name, int Grade), CardData> itemLookup = new Dictionary<(string, int), CardData>();
-    foreach (var item in itemPools)
-    {
-        itemLookup[(item.Name, item.Grade)] = item;
-    }
-
-    CardData[] defaultEquips = new CardData[4];
-    for (int equipIndex = 0; equipIndex < 4; equipIndex++)
-    {
-        if (wd.defaultItems[equipIndex] == null)
+        if (_oriCardData == null)
         {
-            defaultEquips[equipIndex] = null;
-            continue;
+            Debug.LogError("[AddDefaultEquip] _oriCardData가 null입니다.");
+            return;
         }
 
-        var searchKey = (wd.defaultItems[equipIndex].Name, wd.defaultItems[equipIndex].grade);
-        if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
+        if (itemPools == null)
         {
-            defaultEquips[equipIndex] = CloneCardData(matchingItem);
-            if (defaultEquips[equipIndex] != null)
+            itemPools = new List<CardData>();
+            itemPools = new ReadCardData().GetCardsList(itemPoolDatabase);
+        }
+
+        if (cardDictionary == null) cardDictionary = FindObjectOfType<CardsDictionary>();
+        if (cardDictionary == null)
+        {
+            Debug.LogError("[AddDefaultEquip] cardDictionary를 찾을 수 없습니다.");
+            return;
+        }
+
+        WeaponItemData weaponItemData = cardDictionary.GetWeaponItemData(_oriCardData);
+        if (weaponItemData == null)
+        {
+            Debug.LogError($"[AddDefaultEquip] weaponItemData가 null입니다. 카드: {_oriCardData.Name}");
+            return;
+        }
+
+        WeaponData wd = weaponItemData.weaponData;
+        if (wd == null)
+        {
+            Debug.LogError($"[AddDefaultEquip] wd(WeaponData)가 null입니다. 카드: {_oriCardData.Name}");
+            return;
+        }
+
+        if (wd.defaultItems == null)
+        {
+            Debug.LogError($"[AddDefaultEquip] wd.defaultItems가 null입니다. WeaponData: {wd.name}");
+            return;
+        }
+
+        Debug.Log($"[AddDefaultEquip] cardDataManager={(cardDataManager == null ? "NULL" : "OK")}, cardList={(cardList == null ? "NULL" : "OK")}");
+
+        Dictionary<(string Name, int Grade), CardData> itemLookup = new Dictionary<(string, int), CardData>();
+        foreach (var item in itemPools)
+        {
+            itemLookup[(item.Name, item.Grade)] = item;
+        }
+
+        CardData[] defaultEquips = new CardData[4];
+        for (int equipIndex = 0; equipIndex < 4; equipIndex++)
+        {
+            if (wd.defaultItems[equipIndex] == null)
             {
-                try
-                {
-                    Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} AddNewCardToMyCardsList 호출 직전");
-                    cardDataManager.AddNewCardToMyCardsList(defaultEquips[equipIndex]);
+                defaultEquips[equipIndex] = null;
+                continue;
+            }
 
-                    Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} cardList.Equip 호출 직전");
-                    cardList.Equip(_oriCardData, defaultEquips[equipIndex]);
-
-                    Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} 완료");
-                }
-                catch (Exception e)
+            var searchKey = (wd.defaultItems[equipIndex].Name, wd.defaultItems[equipIndex].grade);
+            if (itemLookup.TryGetValue(searchKey, out CardData matchingItem))
+            {
+                defaultEquips[equipIndex] = CloneCardData(matchingItem);
+                if (defaultEquips[equipIndex] != null)
                 {
-                    Debug.LogError($"Error adding default equipment (equipIndex={equipIndex}): {e.Message}\n{e.StackTrace}");
+                    try
+                    {
+                        Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} AddNewCardToMyCardsList 호출 직전");
+                        cardDataManager.AddNewCardToMyCardsList(defaultEquips[equipIndex]);
+
+                        Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} cardList.Equip 호출 직전");
+                        cardList.Equip(_oriCardData, defaultEquips[equipIndex]);
+
+                        Debug.Log($"[AddDefaultEquip] equipIndex={equipIndex} 완료");
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Error adding default equipment (equipIndex={equipIndex}): {e.Message}\n{e.StackTrace}");
+                    }
                 }
             }
         }
     }
-}
+
+    // ─────────────────────────────────────────────────────────
+    //  튜토리얼 완료 보상 — Duck Box 10과 동일한 확률, 오리 5마리
+    //  확정 슬롯 1마리는 Guarantee 확률(Legendary 99% / Mythic 1%), 나머지 4마리는 Normal 확률
+    //  각 오리는 자신의 등급에 맞는 장비 4종(필수+3종)을 모두 장착한 채로 지급됨
+    // ─────────────────────────────────────────────────────────
+    // 카드 생성 + 장비 장착 + 저장까지만. 연출은 호출하지 않음
+    public void PrepareTutorialReward(int count = 5, int guaranteedCount = 1)
+    {
+        const string gachaTableId = "ten_duck";
+
+        Logger.Log($"[GachaSystem] 튜토리얼 완료 보상 시작 - {count}마리 (확정 {guaranteedCount}마리)");
+
+        if (raritySystem == null)
+        {
+            Logger.LogError("[GachaSystem] GachaRaritySystem이 없습니다.");
+            return;
+        }
+
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
+
+        cardDataManager.BeginBatchOperation();
+        cardsPicked.Clear();
+
+        try
+        {
+            int normalCount = count - guaranteedCount;
+
+            for (int i = 0; i < normalCount; i++)
+            {
+                int rarity = raritySystem.GetRandomRarity(gachaTableId, false);
+                CardData duckCard = DrawDuckCardWithRarity(rarity);
+                if (duckCard == null) continue;
+
+                GivePackEquipments(duckCard, 3, duckCard.Grade);
+                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{normalCount} (일반): {duckCard.Name} (Grade {duckCard.Grade})");
+            }
+
+            for (int i = 0; i < guaranteedCount; i++)
+            {
+                int rarity = raritySystem.GetRandomRarity(gachaTableId, true);
+                CardData duckCard = DrawDuckCardWithRarity(rarity);
+                if (duckCard == null) continue;
+
+                GivePackEquipments(duckCard, 3, duckCard.Grade);
+                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{guaranteedCount} (확정): {duckCard.Name} (Grade {duckCard.Grade})");
+            }
+
+            cardDataManager.EndBatchOperation();
+            cardDataManager.RefreshCardList();
+            ImmediateSaveEquipmentData();
+            CloudSaveManager.Instance?.SaveToCloud();
+
+            Logger.Log("[GachaSystem] 튜토리얼 완료 보상 지급 완료 (연출 대기 중)");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[GachaSystem] 튜토리얼 보상 오류: {e.Message}");
+            cardDataManager.EndBatchOperation();
+            throw;
+        }
+
+        // ⭐ ShowGachaResult() 호출 없음 — 여기서 함수 종료
+    }
+
+    // 두 번째 팝업에서 "탭해서 계속하기"를 누를 때 호출
+    public void RevealTutorialReward()
+    {
+        ShowGachaResult(); // 이 시점에 비로소 가챠 연출 시작
+    }
 
     // ─────────────────────────────────────────────────────────
     //  레거시 / 디버그용 뽑기 메서드
