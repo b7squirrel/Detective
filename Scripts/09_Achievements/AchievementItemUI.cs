@@ -146,11 +146,13 @@ public class AchievementItemUI : MonoBehaviour
     }
     void OnProgressChanged(RuntimeAchievement r)
     {
+        if (this == null) return; // ⭐ 파괴된 오브젝트면 조용히 무시
         Refresh();
     }
 
     void OnCompleted(RuntimeAchievement r)
     {
+        if (this == null) return; // ⭐ 동일
         SetCompleted(true);
         Refresh();
     }

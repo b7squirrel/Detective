@@ -2,20 +2,16 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
 public class LoadingSceneManager : MonoBehaviour
 {
     GameMode currentMode = GameMode.Regular;
-
     [SerializeField] Slider progressBar;
     [SerializeField] TMPro.TextMeshProUGUI progressText;
-
     // 레귤러 모드용
     public void LoadScenes()
     {
         LoadScenes(GameMode.Regular);
     }
-
     // 게임 모드 선택 가능
     public void LoadScenes(GameMode mode = GameMode.Regular)
     {
@@ -24,17 +20,13 @@ public class LoadingSceneManager : MonoBehaviour
         SetProgressText();
         StartCoroutine(LoadSceneCo());
     }
-
     // 최소한 3초간은 로딩되도록
     IEnumerator LoadSceneCo()
     {
         string stageToPlay = currentMode == GameMode.Infinite ? "InfiniteStage" : "Stage";
-
         AsyncOperation op1 = SceneManager.LoadSceneAsync("Essential", LoadSceneMode.Single);
         op1.allowSceneActivation = false;
-
         float timer = 0f; // 로딩 시간 측정용
-
         while (!op1.isDone)
         {
             // 90%까지는 실제 로딩이 진행됨
@@ -60,7 +52,6 @@ public class LoadingSceneManager : MonoBehaviour
             yield return null;
         }
     }
-
     void SetProgressText()
     {
         float progress = progressBar.value * 100f;
