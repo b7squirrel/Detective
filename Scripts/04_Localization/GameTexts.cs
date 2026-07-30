@@ -71,6 +71,7 @@ public class GameTexts : ScriptableObject
     public string canLeadArmy = "오리 군단을 이끌 준비가 되었습니다!";
     public string weAreReady = "준비 완료!";
     public string crystalGiven = "보석 {0}개를 지급했습니다!";
+    
 
     [Header("Pack Description")]
     // 오리 카드 라인: {0} = 등급명(들)
@@ -115,6 +116,10 @@ public class GameTexts : ScriptableObject
     public string tabToSelectLead = "탭해서 리드 오리 선택.";
     public string startButton = "시작!";
     public string hint = "힌트";
+    public string notEnoughEnergy = "에너지가 부족합니다!";
+    public string notEnoughGold = "골드가 부족합니다!";
+    public string notEnoughCristal = "크리스탈이 부족합니다!";
+    public string infiniteLocked = "6번째 스테이지의 보스\n뽀글뽀글 여왕을 처치하면\n무한 스테이지, \"오리 도전\"이\n해금됩니다!";
 
     [Header("Equip Panel")]
     public string duck = "오리";

@@ -21,6 +21,12 @@ public class PackPurchaseManager : SingletonBehaviour<PackPurchaseManager>
     // 예: 10 = 스테이지 10 이상 도달 시 해금
     [SerializeField] int proPackUnlockStageNumber = 10;
 
+    protected override void Init()
+    {
+        m_IsDestroyOnLoad = true;
+        base.Init();
+    }
+    
     // ───────────────────────────────────────────
     //  외부에서 호출하는 주요 메서드
     // ───────────────────────────────────────────

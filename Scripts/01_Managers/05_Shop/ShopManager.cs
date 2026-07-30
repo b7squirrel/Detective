@@ -36,10 +36,25 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
     protected override void Init()
     {
+        m_IsDestroyOnLoad = true;
         base.Init();
 
-        // ⭐ 경고 패널 생성
+        Debug.Log($"[ShopManager] Init() 호출됨. InstanceID={GetInstanceID()}, m_Instance==this? {m_Instance == this}, Frame={Time.frameCount}");
+    }
+
+    void Start()
+    {
+        Debug.Log($"[ShopManager] Start() 호출됨. InstanceID={GetInstanceID()}, m_Instance==this? {m_Instance == this}, Frame={Time.frameCount}");
+
+        if (m_Instance != this)
+        {
+            Debug.Log($"[ShopManager] 중복 인스턴스라 Start()에서 스킵. InstanceID={GetInstanceID()}");
+            return;
+        }
+
+        Debug.Log($"[ShopManager] CreateWarningPanels 호출 직전. 현재 lackOfCristalWarningPanel == null? {lackOfCristalWarningPanel == null}");
         CreateWarningPanels();
+        Debug.Log($"[ShopManager] CreateWarningPanels 호출 완료. 결과 lackOfCristalWarningPanel == null? {lackOfCristalWarningPanel == null}");
     }
 
     /// <summary>
@@ -47,7 +62,6 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     /// </summary>
     void CreateWarningPanels()
     {
-        // Canvas 찾기 (UI는 Canvas 아래에 있어야 함)
         Canvas canvas = FindObjectOfType<Canvas>();
         if (canvas == null)
         {
@@ -55,17 +69,11 @@ public class ShopManager : SingletonBehaviour<ShopManager>
             return;
         }
 
-        // ⭐ 크리스탈 부족 경고 패널 생성
         if (lackOfCristalWarningPanelPrefab != null && lackOfCristalWarningPanel == null)
         {
             lackOfCristalWarningPanel = Instantiate(lackOfCristalWarningPanelPrefab, canvas.transform);
             lackOfCristalWarningPanel.SetActive(false);
-            DontDestroyOnLoad(lackOfCristalWarningPanel);
-        }
-        if (lackOfCristalWarningPanel != null)
-        {
-            lackOfCristalWarningPanel.SetActive(false);
-            DontDestroyOnLoad(lackOfCristalWarningPanel);
+            // DontDestroyOnLoad 불필요 — 씬과 함께 파괴되는 게 맞음
         }
     }
 
@@ -565,6 +573,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
     void ShowInsufficientCurrencyPopup(string currencyType)
     {
+        Logger.Log($"[ShopManager] ShowInsufficientCurrencyPopup 호출. InstanceID={GetInstanceID()}, lackOfCristalWarningPanel == null? {lackOfCristalWarningPanel == null}");
         bool isCristal = currencyType == "Cristal";
 
         if (isCristal)
@@ -585,6 +594,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
 
     protected override void OnDestroy()
     {
+        Debug.Log($"[ShopManager] OnDestroy() 호출됨. InstanceID={GetInstanceID()}, Frame={Time.frameCount}");
         base.OnDestroy();
     }
 

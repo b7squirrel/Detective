@@ -245,6 +245,14 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.weAreReady;
             case UITextKey.CrystalGiven:
                 return LocalizationManager.Game.crystalGiven;
+            case UITextKey.NotEnoughEnergy:
+                return LocalizationManager.Game.notEnoughEnergy;
+            case UITextKey.NotEnoughCristal:
+                return LocalizationManager.Game.notEnoughCristal;
+            case UITextKey.NotEnoughGold:
+                return LocalizationManager.Game.notEnoughGold;
+            case UITextKey.InfiniteLocked:
+                return LocalizationManager.Game.infiniteLocked;
             default:
                 return key.ToString();
         }
@@ -365,5 +373,9 @@ public enum UITextKey
     CanUseAchievement,
     CanLeadArmy,
     WeAreReady,
-    CrystalGiven
+    CrystalGiven,
+    NotEnoughEnergy,
+    NotEnoughGold,
+    NotEnoughCristal,
+    InfiniteLocked
 }
