@@ -7,14 +7,13 @@ public class TutorialPopupSound : MonoBehaviour
 
     void OnEnable()
     {
-        if (openSound != null)
+        if (openSound != null && SoundManager.instance != null)
             SoundManager.instance.Play(openSound);
     }
 
-    // 닫기 버튼 OnClick()에 연결
     public void PlayCloseSound()
     {
-        if (closeSound != null)
+        if (closeSound != null && SoundManager.instance != null)
             SoundManager.instance.Play(closeSound);
     }
 }

@@ -26,6 +26,7 @@ public class CloudSaveData
     public long savedAtTicks = 0; // 저장 시각 (DateTime.Ticks)
     public bool starterPackPurchased = false;  // 초보자 팩 1회 구매 기록
     public bool proPackPurchased = false;      // 전문가 팩 1회 구매 기록
+    public bool tutorialGiftCompleted = false; // ⭐ 추가: 튜토리얼 보상(오리 5마리) 수령 완료 여부
 
     // ─── 나중에 추가할 데이터는 아래에 필드만 추가하면 됩니다 ───
     // public List<string> collectedEquipmentIds = new List<string>();  // 장비 도감 (출시 후 추가 예정)
@@ -308,11 +309,18 @@ public class CloudSaveManager : MonoBehaviour
                 Debug.Log($"[CloudSaveManager] 튜토리얼 단계 적용: {cloudData.tutorialStep}");
             }
 
-            // 5. 영구 업적
+            // 5. 튜토리얼 보상 수령 여부 적용 (한번 true가 됐으면 계속 true로 유지)
+            if (cloudData.tutorialGiftCompleted)
+            {
+                PlayerPrefs.SetInt("TutorialGiftCompleted", 1);
+                Debug.Log("[CloudSaveManager] 튜토리얼 보상 수령 완료 상태 적용");
+            }
+
+            // 6. 영구 업적
             if (!string.IsNullOrEmpty(cloudData.achievementsJson))
                 ApplyAchievements(cloudData.achievementsJson);
 
-            // 6. 팩 구매 기록 복원
+            // 7. 팩 구매 기록 복원
             PackPurchaseManager.Instance?.ApplyFromCloud(
                 cloudData.starterPackPurchased,
                 cloudData.proPackPurchased
@@ -447,7 +455,11 @@ public class CloudSaveManager : MonoBehaviour
             // 5. 영구 업적
             data.achievementsJson = BuildAchievementsJson();
 
-            // 6. 팩 구매
+            // 6. 튜토리얼 보상 수령 여부
+            data.tutorialGiftCompleted = PlayerPrefs.GetInt("TutorialGiftCompleted", 0) == 1;
+
+
+            // 7. 팩 구매
             if (PackPurchaseManager.Instance != null)
             {
                 var (starter, pro) = PackPurchaseManager.Instance.GetPurchaseStateForCloud();
@@ -455,7 +467,7 @@ public class CloudSaveManager : MonoBehaviour
                 data.proPackPurchased = pro;
             }
 
-            // 7. 저장 시각 기록 (클라우드/로컬 최신 판단용)
+            // 8. 저장 시각 기록 (클라우드/로컬 최신 판단용)
             data.savedAtTicks = DateTime.Now.Ticks;
             PlayerPrefs.SetString("CloudSavedAt", data.savedAtTicks.ToString());
             PlayerPrefs.Save();

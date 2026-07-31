@@ -24,11 +24,15 @@ public class GachaSystem : MonoBehaviour
     [SerializeField] TextAsset tutorialItemPoolDatabase;
     // 튜토리얼 보상 뽑기 중인지 여부 (탭 이동 등 후속 처리 분기용)
     public bool IsTutorialRewardInProgress { get; private set; } = false;
+    private const string GIFT_PENDING_KEY = "TutorialGiftPending";       // 카드는 생성됨, 아직 리빌 연출 못 봄
+    private const string GIFT_COMPLETED_KEY = "TutorialGiftCompleted";   // 리빌 연출까지 완전히 끝남
+
+    [Header("튜토리얼 보상 팝업 (재시작 복구용)")]
+    [SerializeField] GameObject tutorialCompleteGiftPopup; // "오리 친구들이 도착했어요!" 팝업
+    [SerializeField] GameObject tutorialFG; // Tutorial Complete Popup Button Close가 끄는 FG와 동일한 오브젝트
 
     [Header("가챠 제외 카드")]
     [SerializeField] List<string> excludedCardNames = new List<string>();
-
-
 
     public static bool IsInitialized { get; private set; } = false;
 
@@ -84,6 +88,45 @@ public class GachaSystem : MonoBehaviour
 
         IsInitialized = true;
         Logger.Log("[GachaSystem] 초기화 완료");
+
+        // ⭐ 추가: 재시작 복구 체크
+        CheckPendingTutorialReward();
+    }
+
+    // ⭐ 추가: 두 팝업 사이에 앱이 종료됐던 경우, 선물 팝업을 다시 띄움
+    void CheckPendingTutorialReward()
+    {
+        // 이미 완전히 받은 유저는 건드리지 않음
+        if (PlayerPrefs.GetInt(GIFT_COMPLETED_KEY, 0) == 1) return;
+
+        // 튜토리얼이 아직 Completed에 도달하지 않았다면, 아직 이 보상을 줄 시점이 아님
+        if (TutorialManager.instance == null || TutorialManager.instance.CurrentStep != TutorialStep.Completed)
+            return;
+
+        Logger.Log($"[GachaSystem] Completed 상태이나 보상 미완료 감지. GIFT_PENDING={PlayerPrefs.GetInt(GIFT_PENDING_KEY, 0)}");
+
+        // 카드가 아직 생성 안 됐다면 (버튼을 아예 안 눌렀던 경우) 지금 생성부터 진행
+        if (PlayerPrefs.GetInt(GIFT_PENDING_KEY, 0) != 1)
+        {
+            Logger.Log("[GachaSystem] 카드 미생성 상태 - 지금 생성합니다");
+            PrepareTutorialReward(5, 1);
+        }
+
+        // 카드는 이미 있든 방금 생성했든, 이제 선물 팝업을 띄움
+        Logger.Log("[GachaSystem] 선물 팝업 재표시");
+
+        if (tutorialCompleteGiftPopup != null)
+        {
+            tutorialCompleteGiftPopup.SetActive(true);
+            PanelTween tween = tutorialCompleteGiftPopup.GetComponent<PanelTween>();
+            if (tween != null) tween.ShowWithScale();
+        }
+        else
+        {
+            Logger.LogError("[GachaSystem] tutorialCompleteGiftPopup이 null입니다!");
+        }
+
+        if (tutorialFG != null) tutorialFG.SetActive(true);
     }
 
     // ─────────────────────────────────────────────────────────
@@ -844,7 +887,7 @@ public class GachaSystem : MonoBehaviour
             Logger.LogError("[GachaSystem] GachaRaritySystem이 없습니다.");
             return;
         }
-        
+
         cardDataManager.BeginBatchOperation();
         cardsPicked.Clear();
 
@@ -877,6 +920,10 @@ public class GachaSystem : MonoBehaviour
             ImmediateSaveEquipmentData();
             CloudSaveManager.Instance?.SaveToCloud();
 
+            // ⭐ 추가: 카드는 이미 지급됐지만 아직 리빌(연출)을 못 본 상태를 기록
+            PlayerPrefs.SetInt(GIFT_PENDING_KEY, 1);
+            PlayerPrefs.Save();
+
             Logger.Log("[GachaSystem] 튜토리얼 완료 보상 지급 완료 (연출 대기 중)");
         }
         catch (Exception e)
@@ -892,6 +939,11 @@ public class GachaSystem : MonoBehaviour
     // 두 번째 팝업에서 "탭해서 계속하기"를 누를 때 호출
     public void RevealTutorialReward()
     {
+        // ⭐ 추가: 이제 연출을 실제로 보여줬으니 플래그 해제
+        PlayerPrefs.SetInt(GIFT_PENDING_KEY, 0);
+        PlayerPrefs.SetInt(GIFT_COMPLETED_KEY, 1); // ⭐ 추가: 이제 완전히 끝났음을 기록
+        PlayerPrefs.Save();
+
         mainMenuManager.SetActiveTopTabs(false);
         mainMenuManager.SetActiveBottomTabs(false);
 
