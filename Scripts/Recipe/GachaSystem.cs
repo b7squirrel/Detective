@@ -22,9 +22,13 @@ public class GachaSystem : MonoBehaviour
     [Header("튜토리얼 카드 풀")]
     [SerializeField] TextAsset tutorialDuckPoolDatabase;
     [SerializeField] TextAsset tutorialItemPoolDatabase;
+    // 튜토리얼 보상 뽑기 중인지 여부 (탭 이동 등 후속 처리 분기용)
+    public bool IsTutorialRewardInProgress { get; private set; } = false;
 
     [Header("가챠 제외 카드")]
     [SerializeField] List<string> excludedCardNames = new List<string>();
+
+
 
     public static bool IsInitialized { get; private set; } = false;
 
@@ -822,8 +826,15 @@ public class GachaSystem : MonoBehaviour
     //  각 오리는 자신의 등급에 맞는 장비 4종(필수+3종)을 모두 장착한 채로 지급됨
     // ─────────────────────────────────────────────────────────
     // 카드 생성 + 장비 장착 + 저장까지만. 연출은 호출하지 않음
+    // UnityEvent(On Click 등)에 연결하기 위한 매개변수 없는 버전
+    public void PrepareTutorialReward()
+    {
+        PrepareTutorialReward(5, 1);
+    }
+
     public void PrepareTutorialReward(int count = 5, int guaranteedCount = 1)
     {
+        IsTutorialRewardInProgress = true; // ⭐ 추가
         const string gachaTableId = "ten_duck";
 
         Logger.Log($"[GachaSystem] 튜토리얼 완료 보상 시작 - {count}마리 (확정 {guaranteedCount}마리)");
@@ -833,10 +844,7 @@ public class GachaSystem : MonoBehaviour
             Logger.LogError("[GachaSystem] GachaRaritySystem이 없습니다.");
             return;
         }
-
-        mainMenuManager.SetActiveTopTabs(false);
-        mainMenuManager.SetActiveBottomTabs(false);
-
+        
         cardDataManager.BeginBatchOperation();
         cardsPicked.Clear();
 
@@ -884,7 +892,21 @@ public class GachaSystem : MonoBehaviour
     // 두 번째 팝업에서 "탭해서 계속하기"를 누를 때 호출
     public void RevealTutorialReward()
     {
+        mainMenuManager.SetActiveTopTabs(false);
+        mainMenuManager.SetActiveBottomTabs(false);
+
         ShowGachaResult(); // 이 시점에 비로소 가챠 연출 시작
+    }
+
+    // 가챠 결과 패널이 닫힐 때 호출 (탭해서 계속하기 버튼에 항상 연결해두기)
+    // 튜토리얼 보상이었을 경우에만 Launch 탭(인덱스 2)으로 이동
+    public void OnGachaResultClosed()
+    {
+        if (!IsTutorialRewardInProgress) return;
+
+        IsTutorialRewardInProgress = false;
+        if (mainMenuManager == null) mainMenuManager = FindObjectOfType<MainMenuManager>();
+        mainMenuManager.SetTabPos(2);
     }
 
     // ─────────────────────────────────────────────────────────
