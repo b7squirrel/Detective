@@ -58,6 +58,7 @@ public class SellPanelManager : MonoBehaviour
     [SerializeField] GameObject equippedItemPopup;
     [SerializeField] PanelTween equippedItemPopupTween;
     [SerializeField] TextMeshProUGUI equippedItemPopupText;
+    [SerializeField] TextMeshProUGUI equippedItemPopupTextShadow;
     [SerializeField] Button equippedItemConfirmButton;  // "해제 후 판매"
     [SerializeField] Button equippedItemCancelButton;   // "취소"
 
@@ -67,6 +68,7 @@ public class SellPanelManager : MonoBehaviour
     [SerializeField] PanelTween duckWithEquipPopupTween;
     [SerializeField] GemCollectFX gemCollectFX;
     [SerializeField] TextMeshProUGUI duckWithEquipPopupText;
+    [SerializeField] TextMeshProUGUI duckWithEquipPopupTextShadow;
     [SerializeField] Button sellWithEquipButton;    // "장비도 함께 판매"
     [SerializeField] Button sellWithoutEquipButton; // "장비는 해제 후 보관"
     [SerializeField] Button duckWithEquipCancelButton; // "취소"
@@ -383,10 +385,11 @@ public class SellPanelManager : MonoBehaviour
         pendingSellSlots = new List<SellCardSlot>(selectedSlots);
 
         string msg = count == 1
-            ? "선택한 장비가 오리에게 장착 중입니다.\n해제 후 판매할까요?"
-            : $"선택한 장비 중 {count}개가 장착 중입니다.\n모두 해제 후 판매할까요?";
+            ? LocalizationManager.Game.sellEquippedItemSingle
+            : string.Format(LocalizationManager.Game.sellEquippedItemMultiple, count);
 
         equippedItemPopupText.text = msg;
+        equippedItemPopupTextShadow.text = msg;
         equippedItemPopupTween.ShowWithScale();
     }
 
@@ -413,10 +416,11 @@ public class SellPanelManager : MonoBehaviour
         pendingSellSlots = new List<SellCardSlot>(selectedSlots);
 
         string msg = duckCount == 1
-            ? $"선택한 오리에 장비가 {equipCount}개 장착되어 있습니다."
-            : $"선택한 오리 {duckCount}마리에 장비가 총 {equipCount}개 장착되어 있습니다.";
+            ? string.Format(LocalizationManager.Game.sellDuckWithEquipSingle, equipCount)
+            : string.Format(LocalizationManager.Game.sellDuckWithEquipMultiple, duckCount, equipCount);
 
         duckWithEquipPopupText.text = msg;
+        duckWithEquipPopupTextShadow.text = msg;
         duckWithEquipPopupTween.ShowWithScale();
     }
 

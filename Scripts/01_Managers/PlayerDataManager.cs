@@ -50,6 +50,10 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     [SerializeField] int lightningRechargeSeconds = 300; // 5분
     public int GetMaxLightningNumber() => maxLightningNumber;
 
+    [Header("초기 재화 설정")]
+    [SerializeField] int defaultCoinNumber = 10000;
+    [SerializeField] int defaultCristalNumber = 250;
+
     // ⭐ SingletonBehaviour의 Init()을 override하여 초기화
     protected override void Init()
     {
@@ -105,8 +109,8 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             currentStageNumber = 1,
             currentLightningNumber = maxLightningNumber,
             lastLightningUpdateTicks = DateTime.UtcNow.Ticks,
-            currentCoinNumber = 100,
-            currentCristalNumber = 50
+            currentCoinNumber = defaultCoinNumber,
+            currentCristalNumber = defaultCristalNumber
         };
 
         SavePlayerData();

@@ -253,6 +253,18 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.notEnoughGold;
             case UITextKey.InfiniteLocked:
                 return LocalizationManager.Game.infiniteLocked;
+            case UITextKey.DragToMove:
+                return LocalizationManager.Game.DragToMove;
+            case UITextKey.Ability:
+                return LocalizationManager.Game.ability;
+            case UITextKey.Sell:
+                return LocalizationManager.Game.sell;
+            case UITextKey.SellWithGear:
+                return LocalizationManager.Game.SellWithGear;
+            case UITextKey.KeepGear:
+                return LocalizationManager.Game.KeepGear;
+                case UITextKey.EssentialGear:
+                return LocalizationManager.Game.essentialGear;
             default:
                 return key.ToString();
         }
@@ -377,5 +389,11 @@ public enum UITextKey
     NotEnoughEnergy,
     NotEnoughGold,
     NotEnoughCristal,
-    InfiniteLocked
+    InfiniteLocked,
+    DragToMove,
+    Ability,
+    Sell,
+    SellWithGear,
+    KeepGear,
+    EssentialGear
 }

@@ -130,6 +130,7 @@ public class GameTexts : ScriptableObject
     public string equipped = "장착 중";
     public string maxLevel = "최고 레벨";
     public string noItemsToEquip = "장착할 아이템이 없어요!";
+    public string ability ="특기";
 
     [Header("Merge Panel")]
     [TextArea(2, 4)]
@@ -173,6 +174,24 @@ public class GameTexts : ScriptableObject
 
     [Header("Sell Cards")]
     public string sellCards = "카드 판매";
+    public string warningItemEquipped = "장착 상태인 카드가 있습니다!";
+    public string warnDuckHasEquipment = "아이템이 장착된 카드가 있습니다!";
+    public string warnNoCardSelected = "판매할 카드를 1장 이상 선택해 주세요!";
+    [TextArea(1, 3)]
+    public string warnEssentialGearCannotBeSold = "오리의 필수 장비는\n판매할 수 없습니다!";
+    [TextArea(1, 3)]
+    public string sellEquippedItemSingle = "선택한 장비가 오리에게 장착 중입니다.\n해제 후 판매할까요?";
+    [TextArea(1, 3)]
+    public string sellEquippedItemMultiple = "선택한 장비 중 {0}개가 장착 중입니다.\n모두 해제 후 판매할까요?";
+    [TextArea(1, 3)]
+    public string sellDuckWithEquipSingle = "선택한 오리에 장비가 {0}개 장착되어 있습니다.";
+    [TextArea(1, 3)]
+    public string sellDuckWithEquipMultiple = "선택한 오리 {0}마리에 장비가 총 {1}개 장착되어 있습니다.";
+    public string sell = "팔기";
+    public string SellWithGear = "장비도 함께 판매";
+    public string KeepGear = "장비는 해제 후 보관";
+    public string essentialGear = "필수 장비";
+
     [Header("Encyclopedia")]
     public string encyclopedia = "카드 도감";
 
@@ -237,6 +256,9 @@ public class GameTexts : ScriptableObject
             default: return $"{day}일차";
         }
     }
+
+    [Header("Tutorial")]
+    public string DragToMove = "화면을 드래그해서 오리를 움직여보세요.";
 
     [Header("Stage Name")]
     public string[] stageBossName = new string[]
