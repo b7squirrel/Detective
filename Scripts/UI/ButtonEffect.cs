@@ -11,6 +11,7 @@ public class ButtonEffect : MonoBehaviour
     [SerializeField] AudioClip buttonSoundAlt;
     [SerializeField] GameObject buttonEffect; // 버튼이 눌러지면 이펙트 발생
     [SerializeField] bool shouldBeLocked;
+    [SerializeField] bool autoLockOnClick = true; // ⭐ 추가: false면 onClick에서 자동 잠금 안 함, 외부에서 Lock() 직접 호출해야 함
     [SerializeField] bool ignoreButtonEffectAnim;
 
     // ⭐ 추가: 외부에서 사운드를 직접 제어할 때 자동 재생을 스킵하기 위한 플래그
@@ -32,7 +33,10 @@ public class ButtonEffect : MonoBehaviour
     {
         if (myButton != null)
         {
-            myButton.onClick.AddListener(LockButton);
+            // ⭐ 수정: autoLockOnClick이 true일 때만 자동 등록 (기존 버튼들은 기본값 true라 동작 그대로)
+            if (autoLockOnClick)
+                myButton.onClick.AddListener(LockButton);
+
             myButton.onClick.AddListener(PlayAnimation);
             myButton.onClick.AddListener(PlayButtonSound);
         }
@@ -41,6 +45,14 @@ public class ButtonEffect : MonoBehaviour
     }
 
     public void LockButton()
+    {
+        if (shouldBeLocked == false) { return; }
+        Logger.Log($"[ButtonEffect] {name} 잠김! interactable=false 처리됨. StackTrace 확인용");
+        GetComponent<Button>().interactable = false;
+    }
+
+    // ⭐ 추가: autoLockOnClick = false인 버튼을 외부에서 명시적으로 잠글 때 호출
+    public void Lock()
     {
         if (shouldBeLocked == false) { return; }
         GetComponent<Button>().interactable = false;

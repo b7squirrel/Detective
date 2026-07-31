@@ -5046,6 +5046,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!1 &19929439
@@ -9207,6 +9208,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &38775680
@@ -15784,10 +15786,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1157006684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 115.24834, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &62794034
 MonoBehaviour:
@@ -18721,6 +18723,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &76219670
@@ -23730,7 +23733,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &100704226
 RectTransform:
   m_ObjectHideFlags: 0
@@ -32534,8 +32537,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291403856
-  m_fontColor: {r: 0.3137255, g: 0.627451, b: 0.7882353, a: 1}
+    rgba: 4281325311
+  m_fontColor: {r: 1, g: 0.8381475, b: 0.18396229, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -33924,10 +33927,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1010869179}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 201.18, y: -50}
-  m_SizeDelta: {x: 402.36, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &118012530
 CanvasRenderer:
@@ -40179,6 +40182,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &139178018
@@ -45955,6 +45959,7 @@ GameObject:
   - component: {fileID: 161964857}
   - component: {fileID: 161964859}
   - component: {fileID: 161964858}
+  - component: {fileID: 161964860}
   m_Layer: 5
   m_Name: Title Text
   m_TagString: Untagged
@@ -46003,15 +46008,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uCE74\uB4DC \uB3C4\uAC10"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a4f764a7db9a7457f93a47178c308043, type: 2}
-  m_sharedMaterial: {fileID: 1895388158987429389, guid: a4f764a7db9a7457f93a47178c308043, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
+  m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283295626
-  m_fontColor: {r: 0.5430911, g: 0.9056604, b: 0.3033108, a: 1}
+    rgba: 4284350365
+  m_fontColor: {r: 0.61544347, g: 1, b: 0.36320752, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -46034,7 +46039,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 2
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -46078,6 +46083,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 161964856}
   m_CullTransparentMesh: 1
+--- !u!114 &161964860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161964856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 62
 --- !u!1 &162497517
 GameObject:
   m_ObjectHideFlags: 0
@@ -47826,6 +47844,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &167804535
@@ -53029,6 +53048,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 1580166943}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &194631789
@@ -53611,6 +53631,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 1205885924}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &197534662
@@ -56873,6 +56894,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &211271941
@@ -66547,6 +66569,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &254035730
@@ -67949,6 +67972,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &259832380
@@ -73703,10 +73727,10 @@ RectTransform:
   - {fileID: 384508095}
   m_Father: {fileID: 1151552535}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 635.5, y: -193.5}
-  m_SizeDelta: {x: 227, y: 387}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &281614012
 Animator:
@@ -76850,6 +76874,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &295705422
@@ -77285,6 +77310,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 63281231}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &296101990
@@ -80425,7 +80451,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBB34\uD55C \uBAA8\uB4DC \uBCF4\uC0C1"
+  m_text: "\uC624\uB9AC \uB3C4\uC804 \uBCF4\uC0C1"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
@@ -80434,8 +80460,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291403856
-  m_fontColor: {r: 0.3137255, g: 0.627451, b: 0.7882353, a: 1}
+    rgba: 4294950981
+  m_fontColor: {r: 0.2688679, g: 0.7522611, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -81090,6 +81116,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &313975793
@@ -83167,6 +83194,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 506324397}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &322996856
@@ -83531,6 +83559,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1257003709}
   - {fileID: 561064292}
   m_Father: {fileID: 1666225244}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
@@ -84954,10 +84983,10 @@ RectTransform:
   - {fileID: 1539171546}
   m_Father: {fileID: 1528997463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -105}
-  m_SizeDelta: {x: 657.31, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &329057119
 MonoBehaviour:
@@ -96330,6 +96359,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &384508097
@@ -97542,10 +97572,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1157006684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 542.0617, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &388182282
 MonoBehaviour:
@@ -105574,6 +105604,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &428614639
@@ -113183,6 +113214,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!95 &462746537
@@ -124152,8 +124184,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291403856
-  m_fontColor: {r: 0.3137255, g: 0.627451, b: 0.7882353, a: 1}
+    rgba: 4294955383
+  m_fontColor: {r: 0.4669811, g: 0.81939036, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -124474,6 +124506,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!95 &524267496
@@ -130547,10 +130580,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2019180898}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 115.24834, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &550984182
 MonoBehaviour:
@@ -132449,7 +132482,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC00\uCC60 \uD655\uB960 \uC815\uBCF4"
+  m_text: "\uD655\uB960 \uC815\uBCF4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
@@ -134339,6 +134372,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &567732729
@@ -135971,6 +136005,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 0d4daf248c55dde409224bb3fc18175d, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &572447767
@@ -138173,6 +138208,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
   buttonEffect: {fileID: 228013768}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &580588397
@@ -142010,10 +142046,10 @@ RectTransform:
   - {fileID: 853936906}
   m_Father: {fileID: 1528997463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -160}
-  m_SizeDelta: {x: 657.31, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &597649752
 MonoBehaviour:
@@ -152739,6 +152775,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &628260412
@@ -157866,6 +157903,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &650373720
@@ -158040,10 +158078,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2019180898}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 542.0617, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &650724818
 MonoBehaviour:
@@ -166581,6 +166619,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
   buttonEffect: {fileID: 1676894838}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &691260079
@@ -185329,6 +185368,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 876463346}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &763464916
@@ -186659,10 +186699,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 968615847}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -50}
-  m_SizeDelta: {x: 196.31667, y: 42.34}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &768545803
 MonoBehaviour:
@@ -189872,6 +189912,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 1006098051}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &781162099
@@ -193699,10 +193740,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 597649751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -50}
-  m_SizeDelta: {x: 196.31667, y: 42.34}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &798187760
 MonoBehaviour:
@@ -200884,10 +200925,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1053242723}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 201.18, y: -50}
-  m_SizeDelta: {x: 402.36, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &831399531
 CanvasRenderer:
@@ -204839,10 +204880,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 597649751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 542.0617, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &853936907
 MonoBehaviour:
@@ -205264,10 +205305,10 @@ RectTransform:
   - {fileID: 1978739710}
   m_Father: {fileID: 1905203053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 374.5, y: -193.5}
-  m_SizeDelta: {x: 227, y: 387}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &855824580
 MonoBehaviour:
@@ -210105,6 +210146,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!114 &872309344
@@ -211460,6 +211502,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &875090582
@@ -212883,10 +212926,10 @@ RectTransform:
   - {fileID: 1246975933}
   m_Father: {fileID: 1689812084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -50}
-  m_SizeDelta: {x: 657.31, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &881206250
 MonoBehaviour:
@@ -214137,6 +214180,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &885082178
@@ -214847,10 +214891,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1956390859}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 201.18, y: -50}
-  m_SizeDelta: {x: 402.36, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &887222867
 CanvasRenderer:
@@ -219943,10 +219987,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 881206249}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -50}
-  m_SizeDelta: {x: 196.31667, y: 42.34}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &909111849
 MonoBehaviour:
@@ -223679,6 +223723,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &929112874
@@ -225035,6 +225080,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 83dd5852c628d1b4dbef8a670fbe675f, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &935064963
@@ -232893,10 +232939,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1248050983}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 201.18, y: -50}
-  m_SizeDelta: {x: 402.36, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &949447256
 MonoBehaviour:
@@ -237767,10 +237813,10 @@ RectTransform:
   - {fileID: 1976978227}
   m_Father: {fileID: 1689812084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -160}
-  m_SizeDelta: {x: 657.31, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &968615848
 MonoBehaviour:
@@ -248401,6 +248447,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &994505757
@@ -252128,10 +252175,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 968615847}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 115.24834, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1009191595
 MonoBehaviour:
@@ -252494,10 +252541,10 @@ RectTransform:
   - {fileID: 1601407192}
   m_Father: {fileID: 1937207327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 349.81, y: -160}
-  m_SizeDelta: {x: 699.62, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1010869180
 MonoBehaviour:
@@ -258604,6 +258651,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
   buttonEffect: {fileID: 2006341753}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &1038247033
@@ -261200,6 +261248,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1048829074
@@ -261276,6 +261325,155 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048829074}
+  m_CullTransparentMesh: 1
+--- !u!1 &1049645616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1049645617}
+  - component: {fileID: 1049645620}
+  - component: {fileID: 1049645619}
+  - component: {fileID: 1049645618}
+  m_Layer: 5
+  m_Name: Description Text (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1049645617
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049645616}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1582869452}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -282}
+  m_SizeDelta: {x: 904.92, y: 110.3}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1049645618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049645616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 47
+--- !u!114 &1049645619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049645616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "\uC7AC\uB8CC \uCE74\uB4DC\uC5D0 \uC7A5\uCC29\uB41C \uC7A5\uBE44\uAC00
+    \uC790\uB3D9\uC73C\uB85C \uD574\uC81C\uB429\uB2C8\uB2E4."
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 1e3b4f376c9a844e9b399ee2da02cd4e, type: 2}
+  m_sharedMaterial: {fileID: 8542653752763670082, guid: 1e3b4f376c9a844e9b399ee2da02cd4e, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 40
+  m_fontSizeBase: 40
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 95.25
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1049645620
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049645616}
   m_CullTransparentMesh: 1
 --- !u!1 &1050065129
 GameObject:
@@ -262500,10 +262698,10 @@ RectTransform:
   - {fileID: 2043022316}
   m_Father: {fileID: 1937207327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 349.81, y: -105}
-  m_SizeDelta: {x: 699.62, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1053242724
 MonoBehaviour:
@@ -263659,6 +263857,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1057756740
@@ -264161,10 +264360,10 @@ RectTransform:
   - {fileID: 1688247083}
   m_Father: {fileID: 389673205}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 349.81, y: -105}
-  m_SizeDelta: {x: 699.62, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1060579885
 MonoBehaviour:
@@ -270068,10 +270267,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1248050983}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 550.99, y: -50}
-  m_SizeDelta: {x: 297.26, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1089327122
 MonoBehaviour:
@@ -272061,10 +272260,10 @@ RectTransform:
   - {fileID: 1436232624}
   m_Father: {fileID: 389673205}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 349.81, y: -50}
-  m_SizeDelta: {x: 699.62, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1095772575
 MonoBehaviour:
@@ -274954,10 +275153,10 @@ RectTransform:
   - {fileID: 2023138278}
   m_Father: {fileID: 1905203053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 113.5, y: -193.5}
-  m_SizeDelta: {x: 227, y: 387}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1110662068
 MonoBehaviour:
@@ -276081,10 +276280,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1157006684}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -50}
-  m_SizeDelta: {x: 196.31667, y: 42.34}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1118291199
 MonoBehaviour:
@@ -282761,10 +282960,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 881206249}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 115.24834, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1152039549
 MonoBehaviour:
@@ -284052,10 +284251,10 @@ RectTransform:
   - {fileID: 388182281}
   m_Father: {fileID: 1689812084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -105}
-  m_SizeDelta: {x: 657.31, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1157006685
 MonoBehaviour:
@@ -294128,6 +294327,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!95 &1198532030
@@ -294998,6 +295198,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 675067113}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1200987958
@@ -296685,8 +296886,8 @@ MonoBehaviour:
   currentGameMode: 0
   maxLightningNumber: 25
   lightningRechargeSeconds: 300
-  defaultCoinNumber: 10000
-  defaultCristalNumber: 250
+  defaultCoinNumber: 20000
+  defaultCristalNumber: 2000
 --- !u!4 &1209765631
 Transform:
   m_ObjectHideFlags: 0
@@ -298490,6 +298691,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1215698653
@@ -300621,6 +300823,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 2139584815}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &1224546783
@@ -303367,6 +303570,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 1182537975}
   shouldBeLocked: 1
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &1236617233
@@ -305415,10 +305619,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 881206249}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 542.0617, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1246975934
 MonoBehaviour:
@@ -305857,10 +306061,10 @@ RectTransform:
   - {fileID: 1089327121}
   m_Father: {fileID: 389673205}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 349.81, y: -160}
-  m_SizeDelta: {x: 699.62, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1248050984
 MonoBehaviour:
@@ -307462,6 +307666,154 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1257003708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1257003709}
+  - component: {fileID: 1257003712}
+  - component: {fileID: 1257003711}
+  - component: {fileID: 1257003710}
+  m_Layer: 5
+  m_Name: Title Text (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1257003709
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257003708}
+  m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 323438846}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 5.2}
+  m_SizeDelta: {x: 590.27, y: 97.62}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1257003710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257003708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 100
+--- !u!114 &1257003711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257003708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "\uD655\uB960 \uC815\uBCF4"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
+  m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 60
+  m_fontSizeBase: 60
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1257003712
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257003708}
+  m_CullTransparentMesh: 1
 --- !u!1 &1258613063
 GameObject:
   m_ObjectHideFlags: 0
@@ -307580,10 +307932,10 @@ RectTransform:
   - {fileID: 1041109738}
   m_Father: {fileID: 1905203053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 635.5, y: -193.5}
-  m_SizeDelta: {x: 227, y: 387}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1258739806
 MonoBehaviour:
@@ -314502,6 +314854,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
   buttonEffect: {fileID: 1837210035}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &1284890775
@@ -314880,6 +315233,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1285949634
@@ -322827,6 +323181,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 715158428}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1331249456
@@ -327576,6 +327931,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1356496949
@@ -329774,10 +330130,10 @@ RectTransform:
   - {fileID: 428614637}
   m_Father: {fileID: 1151552535}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 374.5, y: -193.5}
-  m_SizeDelta: {x: 227, y: 387}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1367272671
 Animator:
@@ -335172,6 +335528,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1389220141
@@ -346311,10 +346668,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1095772574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 550.99, y: -50}
-  m_SizeDelta: {x: 297.26, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1436232625
 MonoBehaviour:
@@ -359808,6 +360165,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &1456446819
@@ -369973,10 +370331,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 329057118}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -50}
-  m_SizeDelta: {x: 196.31667, y: 42.34}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1501627110
 MonoBehaviour:
@@ -370584,6 +370942,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 1079181652}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &1504268284
@@ -378368,10 +378727,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 329057118}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 542.0617, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1539171547
 MonoBehaviour:
@@ -380767,6 +381126,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 2095560060}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1548964465
@@ -381425,6 +381785,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!95 &1551109342
@@ -386807,6 +387168,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1575654061
@@ -387178,6 +387540,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1577207761
@@ -388431,6 +388794,7 @@ RectTransform:
   m_Children:
   - {fileID: 1669467461}
   - {fileID: 888025624}
+  - {fileID: 1049645617}
   - {fileID: 153354493}
   - {fileID: 572447765}
   - {fileID: 1456446817}
@@ -389465,6 +389829,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
   buttonEffect: {fileID: 485455059}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &1586027473
@@ -390456,6 +390821,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1589582205
@@ -393131,10 +393497,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1010869179}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 550.99, y: -50}
-  m_SizeDelta: {x: 297.26, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1601407193
 MonoBehaviour:
@@ -403349,7 +403715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.36209506, g: 0.76665, b: 0.9716981, a: 0.7607843}
+  m_Color: {r: 0.36209506, g: 0.76665, b: 0.9716981, a: 0.6117647}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -403656,6 +404022,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4607126629488b74f87df5b143cd7b7a, type: 3}
   buttonEffect: {fileID: 546540526}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &1648519618
@@ -413006,10 +413373,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1060579884}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 550.99, y: -50}
-  m_SizeDelta: {x: 297.26, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1688247084
 MonoBehaviour:
@@ -414617,6 +414984,8 @@ MonoBehaviour:
   - {fileID: 918157408}
   lightningCostPerStage: 5
   lackOfEnergyWarningPanel: {fileID: 2749688439001826515}
+  lackOfEnergyWarningPanelTween: {fileID: 7049845132830264399}
+  startButtonEffect: {fileID: 1101676687274090352}
   imageBouncerManager: {fileID: 1644625361}
   jumpNums: 150
 --- !u!114 &1696358906
@@ -428017,10 +428386,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1060579884}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 201.18, y: -50}
-  m_SizeDelta: {x: 402.36, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1752838799
 MonoBehaviour:
@@ -434572,6 +434941,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4607126629488b74f87df5b143cd7b7a, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1783210928
@@ -435693,10 +436063,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1095772574}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 201.18, y: -50}
-  m_SizeDelta: {x: 402.36, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1789697037
 MonoBehaviour:
@@ -442481,6 +442851,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1817343293
@@ -443432,6 +443803,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &1822394355
@@ -445539,10 +445911,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 329057118}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 115.24834, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1830915372
 MonoBehaviour:
@@ -451480,6 +451852,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!95 &1851376485
@@ -452916,6 +453289,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!95 &1857192228
@@ -456410,6 +456784,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &1870105764
@@ -461145,6 +461520,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1891560954
@@ -474931,6 +475307,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 998153442}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1951789674
@@ -476017,10 +476394,10 @@ RectTransform:
   - {fileID: 2100377424}
   m_Father: {fileID: 1937207327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 349.81, y: -50}
-  m_SizeDelta: {x: 699.62, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1956390860
 MonoBehaviour:
@@ -480518,10 +480895,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 968615847}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 542.0617, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1977202628
 GameObject:
@@ -482633,6 +483010,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1983784798
@@ -484136,6 +484514,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &1992653050
@@ -486084,7 +486463,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 8.8, y: -15.53}
-  m_SizeDelta: {x: 331.16, y: 166.32}
+  m_SizeDelta: {x: 420.27, y: 166.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1999236706
 MonoBehaviour:
@@ -495757,10 +496136,10 @@ RectTransform:
   - {fileID: 650724817}
   m_Father: {fileID: 1528997463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -50}
-  m_SizeDelta: {x: 657.31, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2019180899
 MonoBehaviour:
@@ -496509,6 +496888,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!95 &2021465800
@@ -498817,7 +499197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textKey: 109
+  textKey: 121
 --- !u!114 &2029491346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498838,7 +499218,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New duck friends are here!
+  m_text: "\uC624\uB9AC \uCE5C\uAD6C\uB4E4\uC774 \uB3C4\uCC29\uD588\uC5B4\uC694!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
@@ -502476,10 +502856,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1053242723}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 550.99, y: -50}
-  m_SizeDelta: {x: 297.26, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2043022317
 CanvasRenderer:
@@ -503016,6 +503396,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 902585304}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &2045528150
@@ -503151,6 +503532,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!95 &2045615730
@@ -503843,10 +504225,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 597649751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 115.24834, y: -50}
-  m_SizeDelta: {x: 230.49667, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2048272058
 MonoBehaviour:
@@ -504005,10 +504387,10 @@ RectTransform:
   - {fileID: 38775678}
   m_Father: {fileID: 1151552535}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 113.5, y: -193.5}
-  m_SizeDelta: {x: 227, y: 387}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &2048813947
 Animator:
@@ -509098,6 +509480,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4607126629488b74f87df5b143cd7b7a, type: 3}
   buttonEffect: {fileID: 767066079}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &2074311645
@@ -509855,6 +510238,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &2076475019
@@ -511968,10 +512352,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2019180898}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 328.655, y: -50}
-  m_SizeDelta: {x: 196.31667, y: 42.34}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2086449206
 MonoBehaviour:
@@ -512493,6 +512877,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &2089549158
@@ -515470,10 +515855,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1956390859}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 550.99, y: -50}
-  m_SizeDelta: {x: 297.26, y: 46.92}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2100377425
 CanvasRenderer:
@@ -520569,6 +520954,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &2122225212
@@ -530072,8 +530458,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291403856
-  m_fontColor: {r: 0.3137255, g: 0.627451, b: 0.7882353, a: 1}
+    rgba: 4294953828
+  m_fontColor: {r: 0.3915094, g: 0.79546535, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -531797,6 +532183,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &540119606915410291
@@ -543386,6 +543773,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 451053345}
   shouldBeLocked: 1
+  autoLockOnClick: 0
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!224 &1101676687274090353
@@ -543582,6 +543970,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 677ec999efa885e42aa24d133aeadd46, type: 3}
   buttonEffect: {fileID: 1632321429}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1101676687830659739
@@ -543916,6 +544305,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 114199803651372840}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &1101676687866972011
@@ -546625,6 +547015,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &1379733963267934411
@@ -546643,6 +547034,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &1379733963999585061
@@ -546661,6 +547053,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &1379733964014379221
@@ -546679,6 +547072,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!224 &1392772900901483131
@@ -569874,6 +570268,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4aa1f73d3001fd649b89df34987ba2b7, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 1
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!224 &1791538590416063502
@@ -570813,6 +571208,7 @@ GameObject:
   - component: {fileID: 6175414334270385006}
   - component: {fileID: 4289650726428745419}
   - component: {fileID: 5176880801034734500}
+  - component: {fileID: 6175414334270385007}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -571735,6 +572131,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1001 &2030835683355362083
@@ -573325,6 +573722,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 1195691424223592088}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &2183042964131876571
@@ -582972,6 +583370,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 2610852781239650986}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!95 &3091674707356662508
@@ -584479,6 +584878,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &3307560685276134195
@@ -585072,6 +585472,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4aa1f73d3001fd649b89df34987ba2b7, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 1
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!222 &3362878293295862057
@@ -586018,6 +586419,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &3493963331895604210
@@ -586036,6 +586438,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &3494775255354479075
@@ -587259,6 +587662,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 4359331485473104043}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!224 &3648828164884402411
@@ -589651,6 +590055,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &3902588596503879396
@@ -590939,6 +591344,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &4062445023720685882
@@ -593545,6 +593951,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4aa1f73d3001fd649b89df34987ba2b7, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 1
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &4340600280506834399
@@ -593685,8 +594092,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 323.57, y: 161.27}
+  m_AnchoredPosition: {x: -2.37, y: -0}
+  m_SizeDelta: {x: 410.64, y: 161.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4354141693750967118
 MonoBehaviour:
@@ -612867,8 +613274,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291403856
-  m_fontColor: {r: 0.3137255, g: 0.627451, b: 0.7882353, a: 1}
+    rgba: 4294952792
+  m_fontColor: {r: 0.3443396, g: 0.779071, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -615413,6 +615820,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &5288877368017170740
@@ -615473,6 +615881,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 2886188799888053450}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &5318511509676318342
@@ -615589,6 +615998,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4aa1f73d3001fd649b89df34987ba2b7, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 1
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!224 &5329928649198055339
@@ -627928,8 +628338,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291403856
-  m_fontColor: {r: 0.3137255, g: 0.627451, b: 0.7882353, a: 1}
+    rgba: 4294952275
+  m_fontColor: {r: 0.3254717, g: 0.7714409, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -628278,6 +628688,19 @@ RectTransform:
   m_AnchoredPosition: {x: -0, y: 0}
   m_SizeDelta: {x: 843.82, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6175414334270385007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1961382717464056902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 33
 --- !u!222 &6177093482799253703
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -630669,7 +631092,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New duck friends are here!
+  m_text: "\uC624\uB9AC \uCE5C\uAD6C\uB4E4\uC774 \uB3C4\uCC29\uD588\uC5B4\uC694!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
@@ -631355,6 +631778,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!1 &6579474550328546193
@@ -633558,6 +633982,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!222 &6862223586015420514
@@ -635239,6 +635664,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4aa1f73d3001fd649b89df34987ba2b7, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 1
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7113574675625389340
@@ -637908,6 +638334,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 3902039170397818281, guid: 7fa3459adf07cc440a0aacc80b95b9fa, type: 3}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 1
   ignoreSoundOnce: 0
 --- !u!1 &7458821522343915199
@@ -638046,6 +638473,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 1
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!224 &7475343018531943395
@@ -638508,7 +638936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textKey: 109
+  textKey: 121
 --- !u!224 &7508494648307138365
 RectTransform:
   m_ObjectHideFlags: 0
@@ -638643,6 +639071,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7537584093452313259
@@ -638661,6 +639090,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7537584093491594189
@@ -638679,6 +639109,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7537584094068826581
@@ -638697,6 +639128,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7537584094410300588
@@ -638715,6 +639147,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7537584094569249990
@@ -638733,6 +639166,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7537584094717142118
@@ -638751,6 +639185,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7537584095017848994
@@ -638769,6 +639204,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 0}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 0
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &7542253490366565982
@@ -647742,6 +648178,7 @@ MonoBehaviour:
   buttonSoundAlt: {fileID: 8300000, guid: 4aa1f73d3001fd649b89df34987ba2b7, type: 3}
   buttonEffect: {fileID: 0}
   shouldBeLocked: 1
+  autoLockOnClick: 1
   ignoreButtonEffectAnim: 0
   ignoreSoundOnce: 0
 --- !u!114 &8725169020227028426

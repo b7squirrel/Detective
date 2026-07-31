@@ -56,11 +56,12 @@ public class MainMenuManager : MonoBehaviour
     [Header("번개 소모")]
     [SerializeField] int lightningCostPerStage = 5;
     [SerializeField] GameObject lackOfEnergyWarningPanel; // "Lack of Energy Warning" 오브젝트 연결
+    [SerializeField] PanelTween lackOfEnergyWarningPanelTween; // ⭐ 추가: 같은 오브젝트의 PanelTween 컴포넌트 연결
+    [SerializeField] ButtonEffect startButtonEffect; // Inspector에서 Start Button 오브젝트 연결
 
     [Header("Start 연출")]
     [SerializeField] ImageBouncerManager imageBouncerManager; // Inspector에서 연결
     [SerializeField] int jumpNums = 150; // 기존 OnClick에 있던 값(150)과 동일하게 맞춰주세요
-
 
     void Start()
     {
@@ -214,10 +215,25 @@ public class MainMenuManager : MonoBehaviour
     {
         if (!PlayerDataManager.Instance.TryConsumeLightning(lightningCostPerStage))
         {
-            if (lackOfEnergyWarningPanel != null)
-                lackOfEnergyWarningPanel.SetActive(true);
-            return;
+            if (!PlayerDataManager.Instance.TryConsumeLightning(lightningCostPerStage))
+            {
+                if (lackOfEnergyWarningPanelTween != null)
+                {
+                    lackOfEnergyWarningPanelTween.ShowWithScale(); // ⭐ 수정: 단순 SetActive 대신 PanelTween으로 열기
+                    Logger.Log("[MainMenuManager] 에너지 부족으로 StartTransition 실패");
+                }
+                else if (lackOfEnergyWarningPanel != null) // PanelTween 연결 안 됐을 때 대비한 폴백
+                {
+                    lackOfEnergyWarningPanel.SetActive(true);
+                    Logger.Log("[MainMenuManager] 에너지 부족으로 StartTransition 실패 (PanelTween 미연결, 폴백 사용)");
+                }
+                return;
+            }
         }
+
+        // ⭐ 추가: 에너지 소모에 성공했을 때만 명시적으로 버튼 잠금
+        if (startButtonEffect != null)
+            startButtonEffect.Lock();
 
         imageBouncerManager.JumpWithDelay(jumpNums);
 

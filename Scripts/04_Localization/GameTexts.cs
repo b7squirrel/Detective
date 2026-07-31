@@ -259,6 +259,7 @@ public class GameTexts : ScriptableObject
 
     [Header("Tutorial")]
     public string DragToMove = "화면을 드래그해서 오리를 움직여보세요.";
+    public string lookWhoShowedUp = "오리 친구들이 도착했어요!";
 
     [Header("Stage Name")]
     public string[] stageBossName = new string[]
