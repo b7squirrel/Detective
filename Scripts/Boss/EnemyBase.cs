@@ -373,7 +373,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         Stats.damageReduction = 0f;
         anim.speed = 1f;
 
-        // config 참조
         EnemyScalingConfig config = GameManager.instance.enemyStatCalculator
             .GetScalingConfig();
 
@@ -382,16 +381,22 @@ public class EnemyBase : MonoBehaviour, Idamageable
             case EnemyVariantType.Madness:
                 attackFrameInterval = config.madnessAttackFrameInterval;
                 anim.speed = config.madnessAnimSpeed;
+                Stats.damage = Mathf.RoundToInt(Stats.damage * config.madnessDamageMultiplier);
+                Stats.rangedDamage = Mathf.RoundToInt(Stats.rangedDamage * config.madnessDamageMultiplier);
                 break;
 
             case EnemyVariantType.Helmet:
                 Stats.damageReduction = config.helmetDamageReduction;
+                Stats.hp = Mathf.RoundToInt(Stats.hp * config.helmetHPMultiplier);
                 break;
 
             case EnemyVariantType.MadnessHelmet:
                 attackFrameInterval = config.madnessAttackFrameInterval;
                 anim.speed = config.madnessAnimSpeed;
                 Stats.damageReduction = config.helmetDamageReduction;
+                Stats.damage = Mathf.RoundToInt(Stats.damage * config.madnessDamageMultiplier);
+                Stats.rangedDamage = Mathf.RoundToInt(Stats.rangedDamage * config.madnessDamageMultiplier);
+                Stats.hp = Mathf.RoundToInt(Stats.hp * config.helmetHPMultiplier);
                 break;
 
             case EnemyVariantType.Explosive:

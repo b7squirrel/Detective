@@ -25,6 +25,8 @@ MonoBehaviour:
   damageExponent: 1
   experienceGrowth: 0.2
   madnessAnimSpeed: 1.5
+  madnessDamageMultiplier: 1.3
+  helmetHPMultiplier: 2
   madnessAttackFrameInterval: 1
   helmetDamageReduction: 0.4
   explosiveDamageMultiplier: 5
@@ -39,9 +41,16 @@ MonoBehaviour:
   tankHPBonus: 0.2
   attackerDamageBonus: 0.15
   normalEnemyCycleGrowth: 0.12
-  subBossMultiplier: 20
+  subBossMultiplier: 10
   stageBossMultiplier: 2.5
   queenBossMultiplier: 80
   bossSpeedBonus: 1.5
   cycleGrowth: 0.3
-  stageModifiers: []
+  stageModifiers:
+  - stageNumber: 1
+    hpOverride: 2500
+    speedOverride: 0
+    damageOverride: 0
+    experienceOverride: 0
+    dodgeChanceOverride: -1
+    onlyAffectsBoss: 1

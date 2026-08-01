@@ -41,7 +41,7 @@ public class EnemyStatCalculator : MonoBehaviour
         // ⭐ 회피 확률 계산 추가
         stats.dodgeChance = CalculateDodgeChance(stage, baseData);
 
-        ApplyManualOverrides(stage, ref stats);
+        ApplyManualOverrides(stage, ref stats, baseData);
 
         return stats;
     }
@@ -227,7 +227,7 @@ public class EnemyStatCalculator : MonoBehaviour
         return scalingConfig;
     }
 
-    void ApplyManualOverrides(int stage, ref EnemyStats stats)
+    void ApplyManualOverrides(int stage, ref EnemyStats stats, EnemyData baseData)
     {
         if (scalingConfig.stageModifiers == null) return;
 
@@ -235,6 +235,10 @@ public class EnemyStatCalculator : MonoBehaviour
         {
             if (modifier.stageNumber == stage)
             {
+                // 보스 전용 오버라이드인데 일반 몹이면 건너뜀
+                if (modifier.onlyAffectsBoss && baseData.bossType == BossType.Normal)
+                    continue;
+
                 if (modifier.hpOverride > 0)
                     stats.hp = modifier.hpOverride;
                 if (modifier.speedOverride > 0)

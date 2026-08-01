@@ -235,21 +235,38 @@ public class GameInitializer : MonoBehaviour
 
             if (leadCard != null)
             {
-                // ⭐ 추가: 시작 오리를 목표 레벨까지 올림 (합성 튜토리얼과 동일 등급/레벨을 맞추기 위해)
-                if (CardDataManager.PendingStartingCardTargetLevel > 1)
+                // ⭐ 수정: static 캐시 대신 매번 원본 데이터에서 직접 목표 레벨을 읽음 (세션 타이밍 이슈 방지)
+                int targetLevel = cdm.GetStartingCardTargetLevel();
+
+                if (leadCard.Level < targetLevel)
                 {
-                    StatManager statManagerForLevelUp = FindObjectOfType<StatManager>();
+                    // StatManager를 못 찾으면 최대 3초간 재시도 (씬 로딩 타이밍 이슈 방지)
+                    StatManager statManagerForLevelUp = null;
+                    float statWaitTime = 0f;
+                    const float STAT_MANAGER_TIMEOUT = 3f;
+
+                    while (statManagerForLevelUp == null && statWaitTime < STAT_MANAGER_TIMEOUT)
+                    {
+                        statManagerForLevelUp = FindObjectOfType<StatManager>();
+                        if (statManagerForLevelUp == null)
+                        {
+                            statWaitTime += Time.deltaTime;
+                            yield return null;
+                        }
+                    }
+
                     if (statManagerForLevelUp != null)
                     {
-                        int levelsToApply = CardDataManager.PendingStartingCardTargetLevel - leadCard.Level;
+                        int levelsToApply = targetLevel - leadCard.Level;
                         for (int j = 0; j < levelsToApply; j++)
                             statManagerForLevelUp.LevelUp(leadCard);
 
-                        Debug.Log($"[GameInitializer] 시작 오리 레벨업 완료: Level {leadCard.Level}, HP {leadCard.Hp}, Atk {leadCard.Atk}");
+                        Debug.Log($"[GameInitializer] 시작 오리 레벨업 완료: Level {leadCard.Level}, HP {leadCard.Hp}, Atk {leadCard.Atk} (대기 시간: {statWaitTime:F2}s)");
                     }
                     else
                     {
-                        Debug.LogWarning("[GameInitializer] StatManager를 찾을 수 없어 시작 오리 레벨업을 건너뜁니다.");
+                        Debug.LogError($"[GameInitializer] StatManager를 {STAT_MANAGER_TIMEOUT}초간 찾지 못해 시작 오리 레벨업 실패! 리드 카드가 Level {leadCard.Level}로 남습니다. (목표: {targetLevel})");
+                        FirebaseManager.LogEvent("starting_card_levelup_failed");
                     }
                 }
 

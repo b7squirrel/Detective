@@ -391,6 +391,17 @@ public class CardDataManager : SingletonBehaviour<CardDataManager>
         }
     }
 
+    // ⭐ 추가: 세션 상태(static 캐시)와 무관하게 항상 startingCardData에서 직접 목표 레벨을 읽어옴
+    public int GetStartingCardTargetLevel()
+    {
+        if (startingCardData == null) return 1;
+
+        List<CardData> startingCards = new ReadCardData().GetCardsList(startingCardData);
+        if (startingCards.Count == 0) return 1;
+
+        return startingCards[0].Level;
+    }
+
     public List<CardData> GetMyCardList()
     {
         if (MyCardsList == null)

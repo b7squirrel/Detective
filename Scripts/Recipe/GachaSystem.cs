@@ -907,12 +907,12 @@ public class GachaSystem : MonoBehaviour
 
             for (int i = 0; i < guaranteedCount; i++)
             {
-                int rarity = raritySystem.GetRandomRarity(gachaTableId, true);
-                CardData duckCard = DrawDuckCardWithRarity(rarity);
+                // ⭐ 변경: 확률 계산 없이 확정 슬롯은 항상 Mythic
+                CardData duckCard = DrawDuckCardWithRarity(MyGrade.Mythic);
                 if (duckCard == null) continue;
 
                 GivePackEquipments(duckCard, 3, duckCard.Grade);
-                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{guaranteedCount} (확정): {duckCard.Name} (Grade {duckCard.Grade})");
+                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{guaranteedCount} (확정 Mythic): {duckCard.Name} (Grade {duckCard.Grade})");
             }
 
             cardDataManager.EndBatchOperation();

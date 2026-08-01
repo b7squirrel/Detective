@@ -81,7 +81,9 @@ public class TutorialManager : MonoBehaviour
         Debug.Log($"[Tutorial] Step Advanced → {CurrentStep}");
         OnStepChanged?.Invoke(CurrentStep);
 
-        // ⭐ 추가: 방금 Completed에 도달했다면 기록
+        // ⭐ 추가: 도달한 스텝 번호 기록
+        FirebaseManager.LogEvent("tutorial_step_reached", "step_number", (long)CurrentStep);
+
         if (CurrentStep == TutorialStep.Completed)
         {
             FirebaseManager.LogEvent("tutorial_complete");

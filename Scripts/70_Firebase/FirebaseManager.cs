@@ -16,7 +16,6 @@ public static class FirebaseManager
     {
         var dependencyTask = FirebaseApp.CheckAndFixDependenciesAsync();
 
-        // 비동기 작업이 끝날 때까지 대기 (Task를 코루틴에서 기다리는 표준 패턴)
         yield return new WaitUntil(() => dependencyTask.IsCompleted);
 
         if (dependencyTask.Exception != null)
@@ -53,6 +52,13 @@ public static class FirebaseManager
     }
 
     public static void LogEvent(string eventName, string paramName, string paramValue)
+    {
+        if (!IsInitialized) return;
+        FirebaseAnalytics.LogEvent(eventName, paramName, paramValue);
+    }
+
+    // ⭐ 신규 추가: 숫자(long) 파라미터 오버로드 — step_number 등 정수 값 기록용
+    public static void LogEvent(string eventName, string paramName, long paramValue)
     {
         if (!IsInitialized) return;
         FirebaseAnalytics.LogEvent(eventName, paramName, paramValue);

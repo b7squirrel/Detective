@@ -27,6 +27,14 @@ public class EnemyScalingConfig : ScriptableObject
     [Range(1f, 3f)]
     public float madnessAnimSpeed = 1.5f;
 
+    [Tooltip("광기 variant의 데미지 증가 배율 (1.3 = 30% 증가)")]
+    [Range(1f, 3f)]
+    public float madnessDamageMultiplier = 1.3f;
+
+    [Tooltip("헬멧 variant의 체력 증가 배율 (1.3 = 30% 증가, 방어율과 별개로 맷집도 늘림)")]
+    [Range(1f, 3f)]
+    public float helmetHPMultiplier = 1.3f;
+
     [Tooltip("광기 variant의 공격 프레임 간격 (낮을수록 빠름)")]
     [Range(1, 5)]
     public int madnessAttackFrameInterval = 1;
@@ -124,4 +132,8 @@ public class StageStatModifier
     [Tooltip("회피 확률 수동 설정 (-1이면 공식 사용)")]
     [Range(-1f, 1f)]
     public float dodgeChanceOverride = -1f;
+
+    // ⭐ 추가
+    [Tooltip("체크하면 보스/서브보스에게만 이 오버라이드가 적용됨 (일반 몹은 영향 없음)")]
+    public bool onlyAffectsBoss = true;
 }
