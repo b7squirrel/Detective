@@ -87,9 +87,11 @@ public enum StageMusicType
     [Description("Towel Defence Splash Screen")]
     TowelDefenceSplashScreen,
     [Description("Ori March")]
-    OriMarch
-
-
+    OriMarch,
+    [Description("Arcade DarkTerror")]
+    DarkTerror,
+    [Description("GameOtoon")]
+    GameOtoon
 }
 #endregion
 
