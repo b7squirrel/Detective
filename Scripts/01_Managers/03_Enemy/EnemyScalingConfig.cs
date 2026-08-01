@@ -72,6 +72,11 @@ public class EnemyScalingConfig : ScriptableObject
     public float tankHPBonus = 0.3f;
     public float attackerDamageBonus = 0.2f;
 
+    [Header("Normal Enemy Cycle Scaling")]
+    [Tooltip("일반 몹(보스 아님)이 사이클마다 추가로 강해지는 비율. 사이클1(1~6스테이지)엔 보너스 없음, 사이클2(7~12)부터 누적 증가")]
+    [Range(0f, 1f)]
+    public float normalEnemyCycleGrowth = 0.15f; // 원하는 강도로 조절 가능
+
     [Header("Boss Multipliers")]
     [Tooltip("중간 보스 배율 (기존 데이터 기준: 15~25배)")]
     public float subBossMultiplier = 20.0f; // 평균 20배

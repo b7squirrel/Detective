@@ -30,11 +30,12 @@ public class EnemyStatCalculator : MonoBehaviour
         float roleHPBonus = GetRoleHPBonus(baseData.enemyRole);
         float roleDamageBonus = GetRoleDamageBonus(baseData.enemyRole);
         float bossMultiplier = GetBossMultiplier(stage, baseData);
+        float normalCycleMultiplier = GetNormalEnemyCycleMultiplier(stage, baseData); // ⭐ 추가
 
-        stats.hp = CalculateHP(stage, baseData, roleHPBonus, bossMultiplier);
+        stats.hp = CalculateHP(stage, baseData, roleHPBonus, bossMultiplier, normalCycleMultiplier);
         stats.speed = CalculateSpeed(stage, baseData);
-        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier);
-        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier);
+        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier, normalCycleMultiplier);
+        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier, normalCycleMultiplier);
         stats.experience_reward = CalculateExperience(stage, baseData, bossMultiplier);
 
         // ⭐ 회피 확률 계산 추가
@@ -54,7 +55,7 @@ public class EnemyStatCalculator : MonoBehaviour
             rangedDamage = 10,
             experience_reward = 50,
             dodgeChance = 0.05f
-            
+
         };
     }
 
@@ -62,22 +63,22 @@ public class EnemyStatCalculator : MonoBehaviour
     float CalculateDodgeChance(int stage, EnemyData baseData)
     {
         // 기본 회피 확률 + 스테이지당 증가량
-        float dodgeChance = scalingConfig.baseDodgeChance + 
+        float dodgeChance = scalingConfig.baseDodgeChance +
                            (scalingConfig.dodgeGrowthPerStage * stage);
-        
+
         // 보스 배율 적용
         if (baseData.bossType != BossType.Normal)
         {
             dodgeChance *= scalingConfig.bossDodgeMultiplier;
         }
-        
+
         // 모드별 상한선 적용
-        float cap = isInfiniteMode ? 
-            scalingConfig.dodgeCapInfinite : 
+        float cap = isInfiniteMode ?
+            scalingConfig.dodgeCapInfinite :
             scalingConfig.dodgeCapRegular;
-        
+
         dodgeChance = Mathf.Min(dodgeChance, cap);
-        
+
         return dodgeChance;
     }
 
@@ -89,17 +90,17 @@ public class EnemyStatCalculator : MonoBehaviour
         // 기본 적이면 1.0
         if (baseData.bossType == BossType.Normal)
             return 1.0f;
-        
+
         // 여왕 슬라임은 특별 배율
         if (baseData.bossType == BossType.QueenBoss)
             return scalingConfig.queenBossMultiplier;
-        
+
         // 중간 보스와 스테이지 보스는 스테이지에 따라 동적으로 계산
         int cycleStage = ((stage - 1) % 6) + 1; // 1-6으로 순환
         int cycleNumber = (stage - 1) / 6; // 몇 번째 사이클인지 (0부터 시작)
-        
+
         float baseMultiplier = 1.0f;
-        
+
         if (baseData.bossType == BossType.SubBoss)
         {
             // 중간 보스 배율
@@ -107,16 +108,30 @@ public class EnemyStatCalculator : MonoBehaviour
         }
         else if (baseData.bossType == BossType.StageBoss)
         {
-            // 스테이지 보스 배율 (중간 보스보다 강함)
-            baseMultiplier = scalingConfig.stageBossMultiplier;
+            // 스테이지 보스 배율 = 서브보스 배율 × 추가 배율 (서브보스보다 강해야 함)
+            baseMultiplier = scalingConfig.subBossMultiplier * scalingConfig.stageBossMultiplier;
         }
-        
+
         // 사이클이 반복될수록 더 강해짐
         float cycleBonus = 1.0f + (cycleNumber * scalingConfig.cycleGrowth);
-        
+
         return baseMultiplier * cycleBonus;
     }
-    
+
+    /// <summary>
+    /// 일반 몹(보스 아님) 전용 - 사이클마다 누적되는 강화 배율
+    /// 사이클1(스테이지 1~6)은 보너스 없음, 사이클2(7~12)부터 누적 증가
+    /// </summary>
+    float GetNormalEnemyCycleMultiplier(int stage, EnemyData baseData)
+    {
+        // 보스류는 이미 GetBossMultiplier에서 별도로 강화되므로 여기선 1.0
+        if (baseData.bossType != BossType.Normal)
+            return 1f;
+
+        int cycleNumber = (stage - 1) / 6; // 0부터 시작 (사이클1 = 0)
+        return 1f + (cycleNumber * scalingConfig.normalEnemyCycleGrowth);
+    }
+
     float GetRoleHPBonus(EnemyRole role)
     {
         switch (role)
@@ -131,7 +146,7 @@ public class EnemyStatCalculator : MonoBehaviour
                 return 0f;
         }
     }
-    
+
     float GetRoleDamageBonus(EnemyRole role)
     {
         switch (role)
@@ -145,62 +160,62 @@ public class EnemyStatCalculator : MonoBehaviour
                 return 0f;
         }
     }
-    
-    int CalculateHP(int stage, EnemyData baseData, float roleBonus, float bossMultiplier)
+
+    int CalculateHP(int stage, EnemyData baseData, float roleBonus, float bossMultiplier, float normalCycleMultiplier)
     {
         float stageMultiplier = Mathf.Pow(
-            1 + scalingConfig.hpGrowth * stage, 
+            1 + scalingConfig.hpGrowth * stage,
             scalingConfig.hpExponent
         );
-        
+
         float typeMultiplier = baseData.hpScalingMultiplier;
         float roleFactor = 1f + roleBonus;
-        
+
         int finalHP = Mathf.RoundToInt(
-            scalingConfig.baseHP * stageMultiplier * typeMultiplier * roleFactor * bossMultiplier
+            scalingConfig.baseHP * stageMultiplier * typeMultiplier * roleFactor * bossMultiplier * normalCycleMultiplier
         );
-        
+
         return finalHP;
     }
-    
+
     float CalculateSpeed(int stage, EnemyData baseData)
     {
         float speed = scalingConfig.baseSpeed * (1 + scalingConfig.speedGrowth * stage);
         speed *= baseData.speedScalingMultiplier;
-        
+
         return Mathf.Min(speed, scalingConfig.speedCap);
     }
-    
-    int CalculateDamage(int stage, EnemyData baseData, float roleBonus, bool isMelee, float bossMultiplier)
+
+    int CalculateDamage(int stage, EnemyData baseData, float roleBonus, bool isMelee, float bossMultiplier, float normalCycleMultiplier)
     {
-        float baseDamage = isMelee ? 
-            scalingConfig.baseMeleeDamage : 
+        float baseDamage = isMelee ?
+            scalingConfig.baseMeleeDamage :
             scalingConfig.baseRangedDamage;
-        
+
         float stageMultiplier = Mathf.Pow(
-            1 + scalingConfig.damageGrowth * stage, 
+            1 + scalingConfig.damageGrowth * stage,
             scalingConfig.damageExponent
         );
-        
+
         float typeMultiplier = baseData.damageScalingMultiplier;
         float roleFactor = 1f + roleBonus;
         float rangedBonus = isMelee ? 1f : 1.2f;
-        
+
         int finalDamage = Mathf.RoundToInt(
-            baseDamage * stageMultiplier * typeMultiplier * roleFactor * rangedBonus * bossMultiplier
+            baseDamage * stageMultiplier * typeMultiplier * roleFactor * rangedBonus * bossMultiplier * normalCycleMultiplier
         );
-        
+
         return finalDamage;
     }
-    
+
     int CalculateExperience(int stage, EnemyData baseData, float bossMultiplier)
     {
-        float difficultyMultiplier = 
+        float difficultyMultiplier =
             (baseData.hpScalingMultiplier + baseData.damageScalingMultiplier) / 2f;
-        
+
         int exp = Mathf.RoundToInt(
-            scalingConfig.baseExperience * 
-            (1 + scalingConfig.experienceGrowth * stage) * 
+            scalingConfig.baseExperience *
+            (1 + scalingConfig.experienceGrowth * stage) *
             difficultyMultiplier *
             bossMultiplier
         );
@@ -215,18 +230,18 @@ public class EnemyStatCalculator : MonoBehaviour
     void ApplyManualOverrides(int stage, ref EnemyStats stats)
     {
         if (scalingConfig.stageModifiers == null) return;
-        
+
         foreach (var modifier in scalingConfig.stageModifiers)
         {
             if (modifier.stageNumber == stage)
             {
-                if (modifier.hpOverride > 0) 
+                if (modifier.hpOverride > 0)
                     stats.hp = modifier.hpOverride;
-                if (modifier.speedOverride > 0) 
+                if (modifier.speedOverride > 0)
                     stats.speed = modifier.speedOverride;
-                if (modifier.damageOverride > 0) 
+                if (modifier.damageOverride > 0)
                     stats.damage = modifier.damageOverride;
-                if (modifier.experienceOverride > 0) 
+                if (modifier.experienceOverride > 0)
                     stats.experience_reward = modifier.experienceOverride;
                 break;
             }
