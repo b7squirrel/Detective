@@ -11,7 +11,6 @@ public class PackBuyButton : MonoBehaviour
 {
     // ─── MyGrade.GradeColors 기준 hex ───
     const string COLOR_EPIC      = "#00CCFF";
-    const string COLOR_LEGENDARY = "#B24CFF";
     const string COLOR_MYTHIC    = "#FFCC00";
     const string COLOR_WHITE     = "white";
 
@@ -95,15 +94,13 @@ public class PackBuyButton : MonoBehaviour
         if (g == null) return;
 
         // ─── 등급명 ───
-        string epic      = g.gradeNames[MyGrade.Epic];
-        string legendary = g.gradeNames[MyGrade.Legendary];
-        string mythic    = g.gradeNames[MyGrade.Mythic];
+        string epic   = g.gradeNames[MyGrade.Epic];
+        string mythic = g.gradeNames[MyGrade.Mythic];
 
         // ─── 색상 태그 적용 ───
-        string epicC      = $"<color={COLOR_EPIC}>{epic}</color>";
-        string legendaryC = $"<color={COLOR_LEGENDARY}>{legendary}</color>";
-        string mythicC    = $"<color={COLOR_MYTHIC}>{mythic}</color>";
-        string orC        = $"<color={COLOR_WHITE}>{g.packOr}</color>";
+        string epicC   = $"<color={COLOR_EPIC}>{epic}</color>";
+        string mythicC = $"<color={COLOR_MYTHIC}>{mythic}</color>";
+        string orC     = $"<color={COLOR_WHITE}>{g.packOr}</color>";
 
         // ─── 단위 ───
         string unit     = g.packCountUnit;  // " 매" 또는 ""
@@ -114,11 +111,10 @@ public class PackBuyButton : MonoBehaviour
 
         if (data.ProductId == "pack_001") // 초보자 팩
         {
-            // Row_Duck
-            string duckGrade = epicC + orC + legendaryC;
+            // Row_Duck — Legendary 제거로 Epic 확정이라 "또는" 표현 없이 단독 표기
             SetRow(
                 duckLeftText,
-                string.Format(g.packDuckCardLine, duckGrade),
+                string.Format(g.packDuckCardLine, epicC),
                 duckRightText,
                 $"1{unit}"
             );
@@ -141,8 +137,8 @@ public class PackBuyButton : MonoBehaviour
         }
         else if (data.ProductId == "pack_003") // 전문가 팩
         {
-            // Row_Duck
-            string duckGrade = legendaryC + orC + mythicC;
+            // Row_Duck — 보장 확률이 Epic 8500 / Mythic 1500이므로 "Epic 또는 Mythic"
+            string duckGrade = epicC + orC + mythicC;
             SetRow(
                 duckLeftText,
                 string.Format(g.packDuckCardLine, duckGrade),
@@ -153,7 +149,7 @@ public class PackBuyButton : MonoBehaviour
             // Row_Item
             SetRow(
                 itemLeftText,
-                string.Format(g.packItemCardLine, legendaryC),
+                string.Format(g.packItemCardLine, epicC),
                 itemRightText,
                 $"2{unit}"
             );

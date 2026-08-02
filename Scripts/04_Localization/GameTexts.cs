@@ -13,9 +13,9 @@ public class GameTexts : ScriptableObject
 
     [Header("Grade Names")]
     public string[] gradeNames = new string[]
-    {
-        "일반", "희귀", "고급", "전설", "신화"
-    };
+{
+    "일반", "희귀", "고급", "신화"
+};
 
     [Header("UI Labels")]
     public string level = "레벨";

@@ -13,7 +13,7 @@ public enum ChestType { Duck, Item, Other }
 public class ChestBuyButton : MonoBehaviour
 {
     const string COLOR_RARE      = "#80FF00";
-    const string COLOR_LEGENDARY = "#B24CFF";
+    const string COLOR_EPIC = "#00CCFF"; // MyGrade.GradeColors 기준 Epic 색상
     const string COLOR_WHITE     = "white";
 
     [Header("UI Components")]
@@ -100,7 +100,7 @@ public class ChestBuyButton : MonoBehaviour
 
         string unit       = g.packCountUnit;                    // " 매" / ""
         string rareC      = $"<color={COLOR_RARE}>{g.gradeNames[MyGrade.Rare]}</color>";
-        string legendaryC = $"<color={COLOR_LEGENDARY}>{g.gradeNames[MyGrade.Legendary]}</color>";
+        string epicC      = $"<color={COLOR_EPIC}>{g.gradeNames[MyGrade.Epic]}</color>";
         string above      = $"<color={COLOR_WHITE}>{g.chestAbove}</color>";
         string w          = COLOR_WHITE;
 
@@ -128,7 +128,7 @@ public class ChestBuyButton : MonoBehaviour
 
         // ─── Row_Ten_Guarantee ───
         if (tenGuarLeftText  != null)
-            tenGuarLeftText.text  = $"{labelPlus}{legendaryC}{above} <color={w}>{cardName}</color>";
+            tenGuarLeftText.text  = $"{labelPlus}{epicC}{above} <color={w}>{cardName}</color>";
         if (tenGuarRightText != null)
             tenGuarRightText.text = $"<color={w}>1{unit}</color>";
     }

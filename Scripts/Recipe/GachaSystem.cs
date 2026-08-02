@@ -278,7 +278,7 @@ public class GachaSystem : MonoBehaviour
 
     // ─────────────────────────────────────────────────────────
     //  초보자 팩 전용 뽑기
-    //  - 오리 1장 (Epic 90% / Legendary 10%)
+    //  - 오리 1장 (Epic 100%)
     //  - 필수 슬롯 제외 나머지 중 오리 세트 Epic 장비 2개
     //  - 골드는 ShopManager.GiveProductReward()에서 처리
     // ─────────────────────────────────────────────────────────
@@ -323,8 +323,8 @@ public class GachaSystem : MonoBehaviour
 
     // ─────────────────────────────────────────────────────────
     //  전문가 팩 전용 뽑기
-    //  - 오리 1장 (Legendary 85% / Mythic 15% 확정)
-    //  - 필수 슬롯 제외 나머지 중 오리 세트 Legendary 장비 2개
+    //  - 오리 1장 (Epic 85% / Mythic 15% 확정)
+    //  - 필수 슬롯 제외 나머지 중 오리 세트 장비 2개 (오리와 같은 등급)
     //  - 골드는 ShopManager.GiveProductReward()에서 처리
     // ─────────────────────────────────────────────────────────
     void OpenBoxForProPack(string gachaTableId)
@@ -347,7 +347,7 @@ public class GachaSystem : MonoBehaviour
                 return;
             }
 
-            GivePackEquipments(duckCard, 2, MyGrade.Legendary);
+            GivePackEquipments(duckCard, 2, duckCard.Grade);
 
             cardDataManager.EndBatchOperation();
             cardDataManager.RefreshCardList();

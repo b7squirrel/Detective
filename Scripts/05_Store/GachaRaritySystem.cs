@@ -56,8 +56,7 @@ public class GachaRaritySystem : MonoBehaviour
             case 0: return "Common";
             case 1: return "Rare";
             case 2: return "Epic";
-            case 3: return "Legendary";
-            case 4: return "Mythic";
+            case 3: return "Mythic";
             default: return "Unknown";
         }
     }

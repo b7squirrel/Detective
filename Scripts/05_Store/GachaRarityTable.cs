@@ -164,8 +164,7 @@ public class GachaRarityTable : SingletonBehaviour<GachaRarityTable>
             case "common": return 0;
             case "rare": return 1;
             case "epic": return 2;
-            case "legendary": return 3;
-            case "mythic": return 4;
+            case "mythic": return 3;
             default:
                 Logger.LogWarning($"[GachaRarityTable] 알 수 없는 등급: {rarityName}");
                 return 0;
@@ -188,8 +187,7 @@ public class GachaRarityTable : SingletonBehaviour<GachaRarityTable>
             case 0: return "Common";
             case 1: return "Rare";
             case 2: return "Epic";
-            case 3: return "Legendary";
-            case 4: return "Mythic";
+            case 3: return "Mythic";
             default: return "Unknown";
         }
     }

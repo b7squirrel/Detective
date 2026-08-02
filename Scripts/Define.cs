@@ -14,7 +14,7 @@ public enum TargetSlot { UpField, MatField, UpSlot, MatSlot } // Target Slot to 
 
 // Card Data
 public enum CardType { Weapon, Item, none }
-public enum Grade { Common, Rare, Epic, Legendary, Mythic }
+public enum Grade { Common, Rare, Epic, Mythic }
 public enum EquipmentType { Head, Chest, Face, Hand, Ori }
 public enum EssentialEquip { Head, Chest, Face, Hand, Essential }
 public enum StartingMember { Zero, First, Second, Third, Forth, Fifth }
@@ -146,29 +146,26 @@ public class MyGrade
     public static int Common = 0;
     public static int Rare = 1;
     public static int Epic = 2;
-    public static int Legendary = 3;
-    public static int Mythic = 4;
+    public static int Mythic = 3;
 
-    public static string[] mGrades = { "일반", "희귀", "고급", "전설", "신화" };
+    public static string[] mGrades = { "일반", "희귀", "고급", "신화" };
 
     public static Color[] GradeColors = new Color[]
     {
-        new Color(.6f,.6f,.6f), // common white #999999
-        new Color(0.5f,1,0), // rare green #80FF00
-        new Color(0,0.8f,1), // epic blue #00CCFF
-        new Color(.7f,0.3f,1), // unique purple #B34DFF
-        new Color(1,0.8f,0) // legendary yellow  #FFCC00
+    new Color(.6f,.6f,.6f), // common white #999999
+    new Color(0.5f,1,0), // rare green #80FF00
+    new Color(0,0.8f,1), // epic blue #00CCFF
+    new Color(1,0.8f,0) // mythic yellow #FFCC00
     };
 
     public static Color[] GradeGlowColors = new Color[]
     {
-        new Color(1f,1f,1f,0.25f), // white
-        new Color(1,0.9f,0.7f, 0.25f), // green
-        new Color(0.5f,0.9f,0.7f,0.25f), // blue
-        new Color(1,0.5f,0.9f, 0.25f), // purple
-        new Color(1,0.9f,0.6f,0.25f) // yellow
+    new Color(1f,1f,1f,0.25f), // white
+    new Color(1,0.9f,0.7f, 0.25f), // green
+    new Color(0.5f,0.9f,0.7f,0.25f), // blue
+    new Color(1,0.9f,0.6f,0.25f) // yellow
     };
-    
+
     // 알 전용 등급 (3단계)
     public static string[] EggGrades = { "신병", "고참", "정예" };
 
@@ -253,7 +250,7 @@ public class StaticValues
 
     public static int MaxLevel = 30;
     public static int MaxEvoStage = 3; // evo stage 0, 1, 2
-    public static int MaxGrade = 5; // grade 0, 1, 2, 3, 4
+    public static int MaxGrade = 4; // grade 0, 1, 2, 3
     public static int MaxItemGrade = 3; // grade 0, 1, 2
     public static int MaxSkillNumbers = 5; // skill 1, 2, 3, 4, 5 : 3자리수의 백자리가 0이 될 수 없음
     public static int MaxItemSkillNumbers = 4; // skill 1, 2, 3, 4
@@ -295,11 +292,7 @@ public class Equation
                 baseCost = 1600;
                 perLevelCost = 240;
                 break;
-            case 3: // 전설
-                baseCost = 4000;
-                perLevelCost = 600;
-                break;
-            case 4: // 신화
+            case 3: // 신화
                 baseCost = 10000;
                 perLevelCost = 1500;
                 break;
