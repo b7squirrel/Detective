@@ -12,6 +12,7 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] GameObject upgradeSuccessPanel;
     [SerializeField] RectTransform scrollContent;
     [SerializeField] RectTransform UpPanelBG;
+    [SerializeField] NewCardStatsDisplay newCardStatsDisplay; // New Card Stats 하위 Additional Stats 오브젝트 연결
 
     [SerializeField] RectTransform upSlot, matSlot, plus, upSuccess;
 
@@ -195,12 +196,12 @@ public class UpPanelUI : MonoBehaviour
     }
 
     // 강화 성공 패널
-    public void OpenUpgradeSuccessPanel(CardData cardData, bool isGradeUp)
-    {
-        StartCoroutine(OpenSuccessPanelCo(cardData, isGradeUp));
-    }
+    public void OpenUpgradeSuccessPanel(CardData cardData, bool isGradeUp, int atkGain, int hpGain)
+{
+    StartCoroutine(OpenSuccessPanelCo(cardData, isGradeUp, atkGain, hpGain));
+}
 
-    IEnumerator OpenSuccessPanelCo(CardData cardData, bool isGradeUp)
+    IEnumerator OpenSuccessPanelCo(CardData cardData, bool isGradeUp, int atkGain, int hpGain)
     {
         fieldSlotPanel.SetActive(false);
         // 합성 성공 패널 활성화. 그러나 아직 합성된 카드, 새로운 스탯 패널, 탭해서 계속하기는 숨김 
@@ -232,7 +233,11 @@ public class UpPanelUI : MonoBehaviour
 
         yield return new WaitForSeconds(.6f);
         blingBlingEffect.SetActive(true);
+
+        // ★ 실제 증가량 반영 후 패널 표시
+        if (newCardStatsDisplay != null) newCardStatsDisplay.SetStats(atkGain, hpGain);
         newStatPanel.SetActive(true);
+
         tabToContinue.SetActive(true);
         upgradeEffect.SetActive(false);
 

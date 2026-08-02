@@ -8,6 +8,7 @@ public class UpPanelManager : MonoBehaviour
     [field: SerializeField]
     CardData CardToUpgrade { get; set; } // 업그레이드 슬롯에 올라가 있는 카드
     CardData cardToFeed; // 재료로 쓸 카드. 지금 드래그 하는 카드
+    StatManager statManager;
 
     bool isMergeDone; // 머지 된 후에는 OnEnable에서 강제로 Weapon으로 초기화 되는 것을 피하려고
     bool activated; // 다른 탭에 갔다가 오는지 체크하기 위해
@@ -55,6 +56,7 @@ public class UpPanelManager : MonoBehaviour
         mainMenuManager = FindObjectOfType<MainMenuManager>();
         // upTabManager = FindObjectOfType<UpTabManager>();
         cardSlotManager = FindObjectOfType<CardSlotManager>();
+        statManager = FindObjectOfType<StatManager>();
 
         upCardSlot.EmptySlot();
         matCardSlot.EmptySlot();
@@ -415,6 +417,10 @@ public class UpPanelManager : MonoBehaviour
         // 추가: 최고 등급 & 최고 EvoStage 여부 체크 (레벨 리셋 방지용)
         bool isMaxState = false;
 
+        // ★ 합성 전 스탯 저장 (증가량 계산용)
+        int oldAtk = CardToUpgrade.Atk;
+        int oldHp = CardToUpgrade.Hp;
+
         if (newCardEvoStage > StaticValues.MaxEvoStage - 1) // Evo 레벨이 최고 레벨을 초과하면
         {
             newCardGrade++; // 다음 등급으로
@@ -434,7 +440,6 @@ public class UpPanelManager : MonoBehaviour
         }
 
         // 생성된 카드를 내 카드 리스트에 저장
-        //CardData newCardData = GenUpgradeCardData(CardToUpgrade.Name, newCardGrade);
         CardToUpgrade.Grade = newCardGrade;
         CardToUpgrade.EvoStage = newCardEvoStage;
 
@@ -443,6 +448,17 @@ public class UpPanelManager : MonoBehaviour
         // 최고 상태일 때는 레벨 리셋 안 함
         if (!isMaxState)
             CardToUpgrade.Level = 1;
+
+        // ★ 실제 스탯 증가 적용 (기존에 존재했지만 호출되지 않던 로직)
+        //   이미 최고 등급/최고 진화 상태였다면(isMaxState) 스탯 증가 없이 스킬만 재부여
+        if (!isMaxState)
+        {
+            statManager.ApplyEvoStats(CardToUpgrade, 1);
+        }
+
+        // ★ 증가량 계산
+        int atkGain = CardToUpgrade.Atk - oldAtk;
+        int hpGain = CardToUpgrade.Hp - oldHp;
 
         RemoveCard(cardToFeed);
         UpdateCardSlotDisplay(CardToUpgrade);
@@ -461,7 +477,7 @@ public class UpPanelManager : MonoBehaviour
         {
             Debug.LogError($"[UpPanelManager] 업적 처리 중 오류, 합성 로직은 계속 진행: {e}");
         }
-        StartCoroutine(UpgradeUICo(CardToUpgrade, isGradeUp));
+        StartCoroutine(UpgradeUICo(CardToUpgrade, isGradeUp, atkGain, hpGain));
     }
 
     void RemoveCard(CardData cardData)
@@ -495,7 +511,7 @@ public class UpPanelManager : MonoBehaviour
         cardSlotManager.UpdateCardDisplay(cardData);
     }
 
-    IEnumerator UpgradeUICo(CardData upgradedCardData, bool isGradeUp)
+    IEnumerator UpgradeUICo(CardData upgradedCardData, bool isGradeUp, int atkGain, int hpGain)
     {
         // 합성 연출 동안 터치가 안되도록 하기
         blockTouchPanel.SetActive(true);
@@ -516,7 +532,7 @@ public class UpPanelManager : MonoBehaviour
         matCardSlot.EmptySlot();
         ClearAllFieldSlots();
         upPanelUI.DeactivateSpecialSlots();
-        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, isGradeUp); // 강조되어야 할 부분들. 별의 갯수 등을 강조해 주는 연출
+        upPanelUI.OpenUpgradeSuccessPanel(upgradedCardData, isGradeUp, atkGain, hpGain); // ★ atkGain, hpGain 전달// 강조되어야 할 부분들. 별의 갯수 등을 강조해 주는 연출
 
         // 다시 터치가 가능하도록
         blockTouchPanel.SetActive(false);
