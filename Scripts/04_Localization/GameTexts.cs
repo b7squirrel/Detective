@@ -142,6 +142,7 @@ public class GameTexts : ScriptableObject
     public string Warning = "주의!!";
     public string tapACardToMerge = "합성할 카드를 선택하세요!";
     public string chooseYourMaterial = "재료 카드를 선택하세요!";
+    public string onlyMaxLevelCanBeMerged = "최고 레벨 카드만 합성할 수 있습니다!";
 
     [Header("기타 패널 제목")]
     public string Gear = "장비";

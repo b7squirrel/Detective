@@ -19,6 +19,8 @@ public class UpPanelUI : MonoBehaviour
     [Header("합성 안내 문구")]
     [SerializeField] GameObject messageTapCardText;         // "message tap a card to merge"
     [SerializeField] GameObject messageChooseMaterialText;  // "message choose your material"
+    [SerializeField] GameObject messageOnlyMaxLevelText; // ⭐ 추가: "message only max level"
+    Coroutine onlyMaxLevelCoroutine; // ⭐ 추가
 
     [Header("합성 이펙트")]
     [SerializeField] Transform stars; // 합성된 카드의 별을 반짝이게 하기 위해서
@@ -331,4 +333,22 @@ public class UpPanelUI : MonoBehaviour
         scrollContent.anchoredPosition = new Vector2(scrollContent.anchoredPosition.x, 150f);
         scrollContent.DOAnchorPosY(0, .15f).SetEase(Ease.OutBack);
     }
+
+    // ⭐ 추가: 최고 레벨이 아닌 카드를 클릭했을 때 잠시 경고 문구 표시
+    // ⭐ 추가: 최고 레벨이 아닌 카드를 클릭했을 때 잠시 경고 문구 표시
+    public void ShowOnlyMaxLevelWarning()
+    {
+        if (messageOnlyMaxLevelText == null) return;
+
+        if (onlyMaxLevelCoroutine != null) StopCoroutine(onlyMaxLevelCoroutine);
+        onlyMaxLevelCoroutine = StartCoroutine(ShowOnlyMaxLevelWarningCo());
+    }
+
+    IEnumerator ShowOnlyMaxLevelWarningCo()
+    {
+        messageOnlyMaxLevelText.SetActive(true);
+        yield return new WaitForSeconds(1.5f); // 원하시는 시간으로 조절 가능
+        messageOnlyMaxLevelText.SetActive(false);
+    }
+
 }

@@ -222,6 +222,7 @@ public class UpPanelManager : MonoBehaviour
         if (_cardData.Level != StaticValues.MaxLevel) // 최고 레벨이 아니면 합성 불가
         {
             Debug.Log("최고 레벨의 카드만 합성이 가능합니다");
+            upPanelUI.ShowOnlyMaxLevelWarning(); // ⭐ 추가
             return;
         }
 

@@ -273,6 +273,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.tapACardToMerge;
             case UITextKey.ChooseYourMaterial:
                 return LocalizationManager.Game.chooseYourMaterial;
+            case UITextKey.OnlyMaxLevelCanBeMerged:
+                return LocalizationManager.Game.onlyMaxLevelCanBeMerged;
             default:
                 return key.ToString();
         }
@@ -407,5 +409,6 @@ public enum UITextKey
     LookWhoShowedUp,
     TabToCheckGear,
     TapACardToMerge,
-    ChooseYourMaterial
+    ChooseYourMaterial,
+    OnlyMaxLevelCanBeMerged
 }
