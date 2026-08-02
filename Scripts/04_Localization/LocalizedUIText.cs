@@ -267,6 +267,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.essentialGear;
             case UITextKey.LookWhoShowedUp:
                 return LocalizationManager.Game.lookWhoShowedUp;
+            case UITextKey.TabToCheckGear:
+                return LocalizationManager.Game.tabToCheckGear;
             default:
                 return key.ToString();
         }
@@ -398,5 +400,6 @@ public enum UITextKey
     SellWithGear,
     KeepGear,
     EssentialGear,
-    LookWhoShowedUp
+    LookWhoShowedUp,
+    TabToCheckGear
 }

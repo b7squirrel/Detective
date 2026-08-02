@@ -33,6 +33,7 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] Button upgradeButton;
     [SerializeField] GameObject EquipCoinImage;
     [SerializeField] GameObject warningNoItemToEquip; // 장착 가능한 장비가 없을 때 경고
+    [SerializeField] GameObject selectCardGuideText; // "카드를 선택해서 장비를 확인해 보세요!" 문구 오브젝트
     PlayerDataManager playerDataManager;
     Tween warningLack;
     Tween warningMax;
@@ -107,6 +108,10 @@ public class EquipmentPanelManager : MonoBehaviour
         charUpgradeButton.gameObject.SetActive(false);
         ClearAllEquipmentSlots(); // logic, UI 모두 처리
 
+        // ⭐ 추가: 탭에 들어올 때마다 안내 문구 활성화
+        if (selectCardGuideText != null)
+            selectCardGuideText.SetActive(true);
+
         if (hideCoroutine != null) StopCoroutine(hideCoroutine); // 경고 메시지 표시 도중 패널을 나갔다면, 돌아왔을 때 메시지를 없애기
 
         warningLackCanvasGroup.alpha = 0;
@@ -134,6 +139,10 @@ public class EquipmentPanelManager : MonoBehaviour
         equipDisplayUI.SetWeaponDisplay(oriCardDataToDisplay,
             equipmentSlotsManager.GetCurrentAttribute(),
             cardDictionary.GetDisplayName(oriCardDataToDisplay)); // 오리 카드 및 Attr
+
+        // ⭐ 추가: 카드가 디스플레이에 올라가면 안내 문구 숨기기
+        if (selectCardGuideText != null)
+            selectCardGuideText.SetActive(false);
 
         // 나중에는 이 항목들을 EquipDispUI에 옮겨야 한다. SetWeaponDisplay에 포함되도록
         int level = CardOnDisplay.Level;

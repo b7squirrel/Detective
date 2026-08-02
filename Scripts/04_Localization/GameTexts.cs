@@ -131,6 +131,7 @@ public class GameTexts : ScriptableObject
     public string maxLevel = "최고 레벨";
     public string noItemsToEquip = "장착할 아이템이 없어요!";
     public string ability ="특기";
+    public string tabToCheckGear = "카드를 선택해서 장비를 확인해 보세요!";
 
     [Header("Merge Panel")]
     [TextArea(2, 4)]
