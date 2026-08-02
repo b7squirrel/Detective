@@ -255,11 +255,16 @@ public class UpPanelManager : MonoBehaviour
             Debug.Log("같은 등급을 합쳐줘야 합니다");
             return;
         }
-        if (CardToUpgrade.Name != _cardData.Name)
+        if (CardToUpgrade.Type != _cardData.Type)
         {
-            Debug.Log("같은 이름의 카드를 합쳐줘야 합니다.");
+            Debug.Log("같은 종류(오리/아이템)의 카드만 합성할 수 있습니다.");
             return;
         }
+        // if (CardToUpgrade.Name != _cardData.Name)
+        // {
+        //     Debug.Log("같은 이름의 카드를 합쳐줘야 합니다.");
+        //     return;
+        // }
         if (CardToUpgrade.Level != StaticValues.MaxLevel)
         {
             Debug.Log("최고 레벨의 카드만 합성이 가능합니다");
@@ -341,8 +346,6 @@ public class UpPanelManager : MonoBehaviour
             AcquireCard(_cardData);
             return;
         }
-
-
     }
     void AcquireCard(CardData cardData)
     {

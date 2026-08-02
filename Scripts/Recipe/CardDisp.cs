@@ -28,8 +28,13 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
     [Header("MergedCard")]
     [SerializeField] bool isMergedCard;
     [SerializeField] Transform ribbon;
+    [SerializeField] GameObject additionalSkillPanel; // ★ New Card Stats > Additional Skill 오브젝트 연결
     GameObject[] stars;
     MergedCardDescription mergedCardDescription;
+
+    [Header("Ribbon Auto Width")]
+    [SerializeField] float ribbonPadding = 60f;  // 리본 양 끝 장식 여백 (실제로 보면서 조절)
+    [SerializeField] float ribbonMinWidth = 200f; // 텍스트가 짧을 때 리본 최소 너비
 
     // ★ 현재 표시 중인 데이터 저장
     private WeaponData currentWeaponData;
@@ -55,7 +60,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         {
             // 무기 카드 텍스트 업데이트
             Title.text = LocalizationManager.Char.GetWeaponDisplayName(currentWeaponData.Name);
-            
+
             if (currentCardData != null)
             {
                 Level.text = LocalizationManager.Game.level + " " + currentCardData.Level;
@@ -65,12 +70,15 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         {
             // 아이템 카드 텍스트 업데이트
             Title.text = LocalizationManager.Item.GetItemDisplayName(currentItemData.Name);
-            
+
             if (currentCardData != null)
             {
                 Level.text = LocalizationManager.Game.level + " " + currentCardData.Level;
             }
         }
+
+        // ★ 언어가 바뀌면 텍스트 길이도 바뀌므로 리본 너비도 다시 계산
+        UpdateRibbonWidth();
     }
 
     public void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
@@ -95,6 +103,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         // ★ 다국어 적용
         Title.text = LocalizationManager.Char.GetWeaponDisplayName(weaponData.Name);
+        UpdateRibbonWidth(); // ★ 리본 너비를 타이틀 텍스트에 맞게 조절
 
         // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
         if (cardData == null) return;
@@ -137,6 +146,9 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
             ribbon.gameObject.SetActive(true);
 
+            // ★ 무기 카드는 스킬 설명 패널 표시
+            if (additionalSkillPanel != null) additionalSkillPanel.SetActive(true);
+
             if (mergedCardDescription == null) mergedCardDescription = GetComponent<MergedCardDescription>();
             mergedCardDescription.UpdateSkillDescription(cardData);
         }
@@ -163,6 +175,10 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
 
         // ★ 다국어 적용
         Title.text = LocalizationManager.Item.GetItemDisplayName(itemData.Name);
+        UpdateRibbonWidth(); // ★ 리본 너비를 타이틀 텍스트에 맞게 조절
+
+        // ★ 아이템은 스킬이 없으므로 스킬 설명 패널 숨김
+        if (additionalSkillPanel != null) additionalSkillPanel.SetActive(false);
 
         charImage.gameObject.SetActive(true);
         charImage.sprite = itemData.charImage;
@@ -185,6 +201,24 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         }
         cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
 
+        // ★ 오리카드(isMergedCard)와 동일하게 리본 처리
+        if (isMergedCard)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                if (i == intGrade)
+                {
+                    cardBaseContainer.GetChild(intGrade).gameObject.SetActive(true);
+                    ribbon.GetChild(intGrade).gameObject.SetActive(true);
+                    continue;
+                }
+                cardBaseContainer.GetChild(i).gameObject.SetActive(false);
+                ribbon.GetChild(i).gameObject.SetActive(false);
+            }
+
+            ribbon.gameObject.SetActive(true);
+        }
+
         // ★ 다국어 적용
         Level.text = LocalizationManager.Game.level + " " + cardData.Level;
 
@@ -203,7 +237,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         if (cardSpriteAnim == null) cardSpriteAnim = GetComponentInChildren<CardSpriteAnim>();
         cardSpriteAnim.Init(equipmentImages);
     }
-    
+
     public void SetEquipCardDisplay(int index, SpriteRow spriteRow, bool needToOffset, Vector2 offset)
     {
         this.needToOffset = this.needToOffset ? true : needToOffset;
@@ -223,6 +257,21 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         }
     }
     #endregion
+
+    // ★ 리본 너비를 Title 텍스트 길이에 맞게 자동 조절
+    void UpdateRibbonWidth()
+    {
+        if (ribbon == null || Title == null) return;
+
+        RectTransform ribbonRect = ribbon as RectTransform;
+        if (ribbonRect == null) return;
+
+        // 현재 폭 제약 없이 텍스트가 필요로 하는 실제 너비 계산
+        Vector2 preferredSize = Title.GetPreferredValues(Title.text, 0, 0);
+
+        float newWidth = Mathf.Max(preferredSize.x + ribbonPadding, ribbonMinWidth);
+        ribbonRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newWidth);
+    }
 
     protected virtual void SetNumStar(int numStars)
     {
@@ -264,7 +313,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         if (haloSelected == null) return;
         haloSelected.SetActive(_isActive);
     }
-    
+
     public void EmptyCardDisplay()
     {
         // ★ 데이터 초기화
@@ -277,6 +326,8 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         Level.text = "";
         Title.text = "";
         if (isMergedCard) ribbon.gameObject.SetActive(false);
+
+        if (additionalSkillPanel != null) additionalSkillPanel.SetActive(false); // ★ 카드 비울 때 스킬 패널도 숨김
 
         if (cardBaseContainer != null) cardBaseContainer.gameObject.SetActive(false);
         if (charImage != null) charImage.gameObject.SetActive(false);

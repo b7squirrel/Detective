@@ -12,7 +12,7 @@ public class DebugPanelToggle : MonoBehaviour
         var config = Resources.Load<GameConfig>("GameConfig");
         isActive = config != null && config.isDebugMode;
 
-        ToggleDebugPanel(isActive);
+        // ToggleDebugPanel(isActive);
     }
 
     public void ToggleDebugPanel()
