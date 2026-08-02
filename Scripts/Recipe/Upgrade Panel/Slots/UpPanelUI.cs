@@ -20,6 +20,7 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] GameObject messageTapCardText;         // "message tap a card to merge"
     [SerializeField] GameObject messageChooseMaterialText;  // "message choose your material"
     [SerializeField] GameObject messageOnlyMaxLevelText; // ⭐ 추가: "message only max level"
+    [SerializeField] AudioClip onlyMaxLevelWarningSound; // ⭐ 추가: 띵! 경고음
     Coroutine onlyMaxLevelCoroutine; // ⭐ 추가
 
     [Header("합성 이펙트")]
@@ -339,6 +340,8 @@ public class UpPanelUI : MonoBehaviour
     public void ShowOnlyMaxLevelWarning()
     {
         if (messageOnlyMaxLevelText == null) return;
+
+        SoundManager.instance.Play(onlyMaxLevelWarningSound); 
 
         if (onlyMaxLevelCoroutine != null) StopCoroutine(onlyMaxLevelCoroutine);
         onlyMaxLevelCoroutine = StartCoroutine(ShowOnlyMaxLevelWarningCo());

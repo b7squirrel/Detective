@@ -21,7 +21,7 @@ public class DebugDrawCards : MonoBehaviour
     int weaponIndex, itemIndex;
     int weaponGrade, itemGrade;
     int weaponEvoIndex, itemEvoIndex;
-    string[] cardGrade = { "일반", "희귀", "고급", "전설", "신화" };
+    string[] cardGrade = { "일반", "희귀", "고급", "신화" };
     int weaponSkillIndex, itemSkillIndex;
 
     [Header("UI")]
@@ -95,49 +95,45 @@ public class DebugDrawCards : MonoBehaviour
     public void SetWeaponGrade(int steps)
     {
         weaponGrade += steps;
-        int addition = steps > 0 ? 1 : -1; // 0에서 4 범위 안에 있다면 1 혹은 -1씩 이동
-        if (steps == 0) addition = 0; // 초기화 때 변화를 원치 않을 경우 0을 입력
+        int addition = steps > 0 ? 1 : -1;
+        if (steps == 0) addition = 0;
 
-        // 0~4 범위로 제한하고 순환되도록 설정
         if (weaponGrade < 0)
         {
-            weaponGrade = 4;
-            addition = 4; // 4칸 올려서 해당 오리의 최고 등급으로 이동하도록 해서 순회하는 것처럼 보이게 하기
+            weaponGrade = StaticValues.MaxGrade - 1;
+            addition = StaticValues.MaxGrade - 1;
         }
-        if (weaponGrade > 4)
+        if (weaponGrade > StaticValues.MaxGrade - 1)
         {
             weaponGrade = 0;
-            addition = -4; // 4칸 내려서 해당 오리의 최고 등급으로 이동하도록 해서 순회하는 것처럼 보이게 하기
+            addition = -(StaticValues.MaxGrade - 1);
         }
 
         weaponGradeText.text = cardGrade[weaponGrade];
-        weaponGradeText.color = MyGrade.GradeColors[weaponGrade]; // 등급별 색상 적용
+        weaponGradeText.color = MyGrade.GradeColors[weaponGrade];
 
-        // 등급이 올라가거나 내려가면 한 칸씩 이동. 범위를 벗어나면 순회
         SetWeaponCard(addition);
     }
     public void SetItemGrade(int steps)
     {
         itemGrade += steps;
-        int addition = steps > 0 ? 1 : -1; // 0에서 4 범위 안에 있다면 1 혹은 -1씩 이동
-        if (steps == 0) addition = 0; // 초기화 때 변화를 원치 않을 경우 0을 입력
+        int addition = steps > 0 ? 1 : -1;
+        if (steps == 0) addition = 0;
 
-        // 0~4 범위로 제한하고 순환되도록 설정
         if (itemGrade < 0)
         {
-            itemGrade = 4;
-            addition = 4; // 4칸 올려서 해당 오리의 최고 등급으로 이동하도록 해서 순회하는 것처럼 보이게 하기
+            itemGrade = StaticValues.MaxGrade - 1;
+            addition = StaticValues.MaxGrade - 1;
         }
-        if (itemGrade > 4)
+        if (itemGrade > StaticValues.MaxGrade - 1)
         {
             itemGrade = 0;
-            addition = -4; // 4칸 내려서 해당 오리의 최고 등급으로 이동하도록 해서 순회하는 것처럼 보이게 하기
+            addition = -(StaticValues.MaxGrade - 1);
         }
 
         itemGradeText.text = cardGrade[itemGrade];
-        itemGradeText.color = MyGrade.GradeColors[itemGrade]; // 등급별 색상 적용
+        itemGradeText.color = MyGrade.GradeColors[itemGrade];
 
-        // 등급이 올라가거나 내려가면 한 칸씩 이동. 범위를 벗어나면 순회
         SetItemCard(addition);
     }
     #endregion
