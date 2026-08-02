@@ -17,8 +17,38 @@ using TMPro;
 public class ShadowedText : MonoBehaviour
 {
     [Header("References")]
+    [Tooltip("비워두면 자식 오브젝트 순서로 자동 연결됩니다. (0번째 자식 = 그림자, 1번째 자식 = 메인)")]
     [SerializeField] private TextMeshProUGUI mainText;
     [SerializeField] private TextMeshProUGUI shadowText;
+
+    void Awake()
+    {
+        AutoAssignFromChildren();
+    }
+
+    // ★ 오브젝트가 처음엔 비활성화 상태였다가 나중에 활성화되는 경우
+    //    (예: 장비 패널처럼 게임 시작 시 꺼져있는 UI) Awake가 그 시점까지 실행되지 않으므로
+    //    OnEnable에서도 한 번 더 시도해서 확실히 연결되도록 함
+    void OnEnable()
+    {
+        AutoAssignFromChildren();
+    }
+
+    /// <summary>
+    /// 인스펙터에서 수동으로 연결하지 않은 경우, 자식 순서를 기준으로 자동 연결합니다.
+    /// 규칙: 0번째 자식 = shadowText, 1번째 자식 = mainText
+    /// (그림자를 먼저 그려야 메인 텍스트가 그 위에 덮이므로 하이어라키상 그림자가 위에 옵니다)
+    /// </summary>
+    void AutoAssignFromChildren()
+    {
+        if (transform.childCount < 2) return;
+
+        if (shadowText == null)
+            shadowText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        if (mainText == null)
+            mainText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+    }
 
     // ───────────────────────────────
     // 자주 쓰는 속성 프로퍼티
@@ -158,7 +188,8 @@ public class ShadowedText : MonoBehaviour
 #if UNITY_EDITOR
     void OnValidate()
     {
-        if (mainText == null) mainText = GetComponent<TextMeshProUGUI>();
+        // 에디터에서 오브젝트 구성 시 바로바로 인스펙터에 반영되도록
+        AutoAssignFromChildren();
     }
 #endif
 }

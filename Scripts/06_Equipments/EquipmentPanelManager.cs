@@ -26,7 +26,7 @@ public class EquipmentPanelManager : MonoBehaviour
     [SerializeField] AllField field; // 모든 카드
 
     [Header("Equipment Slots")]
-    [SerializeField] TMPro.TextMeshProUGUI upgradeCost;
+    [SerializeField] ShadowedText upgradeCost;
     [SerializeField] GameObject itemMaxLevel;
     [SerializeField] GameObject itemUpgradeText; // 최고 레벨일 때 업그레이드 텍스트 숨기기
     [SerializeField] CanvasGroup warningLackCanvasGroup; // 아이템 업그레이드 코인 부족 경고 메시지
@@ -39,7 +39,7 @@ public class EquipmentPanelManager : MonoBehaviour
 
     [Header("Char Card Slot")]
     [SerializeField] CardSlot oriSlot;
-    [SerializeField] TMPro.TextMeshProUGUI charUpgradeCost;
+    [SerializeField] ShadowedText charUpgradeCost;
     [SerializeField] GameObject charMaxLevel;
     [SerializeField] GameObject charUpgradeText; // 최고 레벨일 때 업그레이드 텍스트 숨기기
     [SerializeField] CanvasGroup charWarningLackCanvasGroup; // 오리 업그레이드 코인 부족 경고 메시지
@@ -162,7 +162,24 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             ClearAllEquipmentSlots(); // logic, UI 모두 처리
 
-            card = cardDataManager.GetMyCardList().FindAll(x => x.Type == cardType); // field에는 오리만 보여줌
+            // ★ 진단용 방어 코드: cardDataManager 또는 카드 리스트가 아직 준비되지 않았을 때
+            //    정확히 어느 쪽이 null인지 로그로 알려주고 조용히 리턴 (이후 데이터 로드 완료 시 다시 호출되어야 함)
+            if (cardDataManager == null)
+            {
+                Debug.LogError("[EquipmentPanelManager] cardDataManager(CardDataManager.Instance)가 null입니다. " +
+                    "CardDataManager가 아직 초기화되지 않은 시점에 SetAllFieldTypeOf가 호출됐습니다.");
+                return;
+            }
+
+            var myCardList = cardDataManager.GetMyCardList();
+            if (myCardList == null)
+            {
+                Debug.LogError("[EquipmentPanelManager] cardDataManager.GetMyCardList()가 null입니다. " +
+                    "카드 데이터(세이브 로드)가 아직 준비되지 않았을 수 있습니다.");
+                return;
+            }
+
+            card = myCardList.FindAll(x => x.Type == cardType); // field에는 오리만 보여줌
         }
         else if (cardType == CardType.Item.ToString())
         {
@@ -443,7 +460,7 @@ public class EquipmentPanelManager : MonoBehaviour
     /// <summary>
     /// 업그레이드 비용을 UI에 표시
     /// </summary>
-    void UpdateUpgradeCost(CardData cardData, TMPro.TextMeshProUGUI _upgradeCost)
+    void UpdateUpgradeCost(CardData cardData, ShadowedText _upgradeCost)
     {
         _upgradeCost.text = "X " + GetAmountToUpgrade(cardData).ToString();
     }
