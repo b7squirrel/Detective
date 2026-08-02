@@ -90,14 +90,11 @@ public class StatManager : MonoBehaviour
         {
             // 오리 레벨, 속성 UI 업데이트 - 이걸 equipment panel manager의 UpgradeCardOnDisplay에서 해주고 있음
         }
-        // 필수 무기라면 Atk을 info UI에 보여줌
-        else if (_cardData.EssentialEquip == EssentialEquip.Essential.ToString())
+        else
         {
-            equipInfoPanel.UpdatePanel(_level, _atk);
-        }
-        else // 방어구 카드라면
-        {
-            equipInfoPanel.UpdatePanel(_level, _hp);
+            // ★ ATK/HP를 둘 다 보내서, EquipInfoPanel이 실제로 활성화된 텍스트(들)를 알아서 갱신하도록 함
+            //   (필수무기=ATK만, 방어구=HP만 이라는 기존 가정이 ATK+HP를 동시에 가진 장비에서 깨졌었음)
+            equipInfoPanel.UpdatePanel(_level, _atk, _hp);
         }
     }
     /// <summary>

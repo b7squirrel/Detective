@@ -242,37 +242,10 @@ public class UpPanelManager : MonoBehaviour
         if (matCardSlot.IsEmpty == false)
             return;
 
-        // 재료 카드의 경우
-        // 리드 오리는 무조건 재료가 될 수 없음
-        if (_cardData.StartingMember == StartingMember.Zero.ToString())
+        // 재료 카드로 유효한지 공통 조건으로 검사 (GetCardsAvailableForMat과 동일 기준)
+        if (!MergeConditions.IsValidMaterial(_cardData, CardToUpgrade, out string reason))
         {
-            Debug.Log("리드 오리는 재료 카드로 사용할 수 없습니다.");
-            return;
-        }
-
-        if (CardToUpgrade.Grade != _cardData.Grade)
-        {
-            Debug.Log("같은 등급을 합쳐줘야 합니다");
-            return;
-        }
-        if (CardToUpgrade.Type != _cardData.Type)
-        {
-            Debug.Log("같은 종류(오리/아이템)의 카드만 합성할 수 있습니다.");
-            return;
-        }
-        // if (CardToUpgrade.Name != _cardData.Name)
-        // {
-        //     Debug.Log("같은 이름의 카드를 합쳐줘야 합니다.");
-        //     return;
-        // }
-        if (CardToUpgrade.Level != StaticValues.MaxLevel)
-        {
-            Debug.Log("최고 레벨의 카드만 합성이 가능합니다");
-            return;
-        }
-        if (CardToUpgrade.EvoStage != _cardData.EvoStage)
-        {
-            Debug.Log("같은 합성 등급의 카드만 합성이 가능합니다.");
+            Debug.Log(reason);
             return;
         }
 
