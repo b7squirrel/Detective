@@ -431,17 +431,33 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 break;
 
             case ProductType.Cristal:
-                int currentCristal = playerDataManager.GetCurrentCristalNumber();
-                playerDataManager.SetCristalNumberAsSilent(currentCristal + productData.RewardCristal);
+                int cristalToGive = productData.RewardCristal;
 
-                Logger.Log($"[ShopManager] 크리스탈 지급: +{productData.RewardCristal} (총: {playerDataManager.GetCurrentCristalNumber()})");
+                // ⭐ 첫 크리스탈 구매 2배 보너스 (실제 현금 결제 시에만 적용)
+                bool isFirstCristalPurchase =
+                    productData.PurchaseType == PurchaseType.IAP &&
+                    !playerDataManager.HasClaimedFirstCristalBonus();
+
+                if (isFirstCristalPurchase)
+                {
+                    cristalToGive *= 2;
+                    playerDataManager.SetFirstCristalBonusClaimed(true);
+                    Logger.Log($"[ShopManager] 첫 크리스탈 구매 2배 보너스 적용! {productData.RewardCristal} → {cristalToGive}");
+                }
+
+                int currentCristal = playerDataManager.GetCurrentCristalNumber();
+                playerDataManager.SetCristalNumberAsSilent(currentCristal + cristalToGive);
+
+                Logger.Log($"[ShopManager] 크리스탈 지급: +{cristalToGive} (총: {playerDataManager.GetCurrentCristalNumber()})");
 
                 if (fxStartPoint != null)
-                    PlayCristalCollectFX(fxStartPoint, productData.RewardCristal);
+                    PlayCristalCollectFX(fxStartPoint, cristalToGive);
                 else
                     playerDataManager.SetCristalNumberAs(playerDataManager.GetCurrentCristalNumber());
 
-                ShowRewardPopup($"크리스탈 {productData.RewardCristal}개 획득!");
+                ShowRewardPopup(isFirstCristalPurchase
+                    ? $"첫 구매 2배! 크리스탈 {cristalToGive}개 획득!"
+                    : $"크리스탈 {cristalToGive}개 획득!");
                 break;
 
             case ProductType.Pack:

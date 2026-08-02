@@ -128,6 +128,13 @@ public class EquipmentPanelManager : MonoBehaviour
         GearTutorialController.instance?.OnGearPanelEntered();
     }
 
+    void OnDisable()
+    {
+        // ⭐ 추가: 장비 탭을 벗어나면 안내 문구 무조건 비활성화
+        if (selectCardGuideText != null)
+            selectCardGuideText.SetActive(false);
+    }
+
     // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출
     // 오리 카드를 equip display에 보여준다
     public void InitDisplay(CardData oriCardDataToDisplay)

@@ -140,6 +140,8 @@ public class GameTexts : ScriptableObject
     public string UseForMerge = "사용";
     public string Cancel = "취소";
     public string Warning = "주의!!";
+    public string tapACardToMerge = "합성할 카드를 선택하세요!";
+    public string chooseYourMaterial = "재료 카드를 선택하세요!";
 
     [Header("기타 패널 제목")]
     public string Gear = "장비";

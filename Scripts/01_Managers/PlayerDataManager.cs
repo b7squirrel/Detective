@@ -25,6 +25,9 @@ public class PlayerData
 
     // 무한모드 해금
     public bool isInfiniteModeUnlocked;
+
+    // ⭐ 추가: 첫 크리스탈 구매 2배 보너스 수령 여부
+    public bool firstCristalBonusClaimed;
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -491,5 +494,13 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         playerData.isInfiniteModeUnlocked = true;
         SavePlayerData();
         Logger.Log("[PlayerDataManager] 무한모드 해금 완료");
+    }
+
+    // --- 첫 크리스탈 구매 보너스 ---
+    public bool HasClaimedFirstCristalBonus() => playerData.firstCristalBonusClaimed;
+    public void SetFirstCristalBonusClaimed(bool claimed)
+    {
+        playerData.firstCristalBonusClaimed = claimed;
+        SavePlayerData();
     }
 }

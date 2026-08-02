@@ -269,6 +269,10 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.lookWhoShowedUp;
             case UITextKey.TabToCheckGear:
                 return LocalizationManager.Game.tabToCheckGear;
+            case UITextKey.TapACardToMerge:
+                return LocalizationManager.Game.tapACardToMerge;
+            case UITextKey.ChooseYourMaterial:
+                return LocalizationManager.Game.chooseYourMaterial;
             default:
                 return key.ToString();
         }
@@ -401,5 +405,7 @@ public enum UITextKey
     KeepGear,
     EssentialGear,
     LookWhoShowedUp,
-    TabToCheckGear
+    TabToCheckGear,
+    TapACardToMerge,
+    ChooseYourMaterial
 }

@@ -16,6 +16,10 @@ public class UpPanelUI : MonoBehaviour
 
     [SerializeField] RectTransform upSlot, matSlot, plus, upSuccess;
 
+    [Header("합성 안내 문구")]
+    [SerializeField] GameObject messageTapCardText;         // "message tap a card to merge"
+    [SerializeField] GameObject messageChooseMaterialText;  // "message choose your material"
+
     [Header("합성 이펙트")]
     [SerializeField] Transform stars; // 합성된 카드의 별을 반짝이게 하기 위해서
     [SerializeField] Animator upEffectAnim; // 합성이 성공한 순간 번쩍하는 이펙트의 animator
@@ -53,10 +57,15 @@ public class UpPanelUI : MonoBehaviour
         blingBlingEffect.SetActive(false);
         starBlingEffect.gameObject.SetActive(false);
 
+        // ⭐ 추가: Up 패널 진입 시 안내 문구 초기 상태
+        if (messageTapCardText != null) messageTapCardText.SetActive(true);
+        if (messageChooseMaterialText != null) messageChooseMaterialText.SetActive(false);
+
+
         upgradeButtonsContainer.localScale = Vector2.zero; // 추가: Buttons 컨테이너 초기화
         fieldSlotPanel.transform.localScale = Vector2.one;
 
-        if(mainMenuManager == null) mainMenuManager = FindObjectOfType<MainMenuManager>();
+        if (mainMenuManager == null) mainMenuManager = FindObjectOfType<MainMenuManager>();
 
         BGInitAnimation();
     }
@@ -140,10 +149,17 @@ public class UpPanelUI : MonoBehaviour
         matSlot.gameObject.SetActive(true);
         plus.gameObject.SetActive(true);
         plus.DOScale(.48f, .05f).SetEase(Ease.OutBack);
+
+        // ⭐ 추가: 안내 문구 전환
+        if (messageTapCardText != null) messageTapCardText.SetActive(false);
+        if (messageChooseMaterialText != null) messageChooseMaterialText.SetActive(true);
     }
     public void MatCardAcquiredUI() // 재료 슬롯 위에 카드 올렸을 때 UI
     {
         MatCardAcquiredAnimation();
+
+        // ⭐ 추가: 안내 문구 비활성화
+        if (messageChooseMaterialText != null) messageChooseMaterialText.SetActive(false);
     }
     public void UpSlotCanceled() // 업그레이드 슬롯 탭해서 취소
     {
@@ -151,6 +167,10 @@ public class UpPanelUI : MonoBehaviour
 
         matSlot.gameObject.SetActive(false);
         plus.gameObject.SetActive(false);
+
+        // ⭐ 추가: Up 슬롯 취소 시 다시 처음 안내 문구로 되돌리기
+        if (messageTapCardText != null) messageTapCardText.SetActive(true);
+        if (messageChooseMaterialText != null) messageChooseMaterialText.SetActive(false);
     }
 
     public void UpgradeConfirmationUI() // 강화 확인 UI
@@ -174,6 +194,9 @@ public class UpPanelUI : MonoBehaviour
     public void MatSlotCanceled()
     {
         OffUpgradeConfirmationUI();
+
+        // ⭐ 추가: 확인 단계에서 취소 → 재료 카드만 내려가고 Up 슬롯은 유지되는 상태
+        if (messageChooseMaterialText != null) messageChooseMaterialText.SetActive(true);
     }
     public void OffUpgradeConfirmationUI() // 강화를 승인하면 강화 연출을 위해 확인 창을 없애기
     {
