@@ -8,7 +8,7 @@ using TMPro;
 public class AchievementItemUI : MonoBehaviour
 {
     [Header("그래픽")]
-    [SerializeField] TextMeshProUGUI titleText;        // 업적 제목 (추가)
+    [SerializeField] ShadowedText titleText;        // 업적 제목 (그림자 텍스트 적용)
     [SerializeField] TextMeshProUGUI descriptionText;  // 업적 설명
     [SerializeField] Slider progressSlider;
     [SerializeField] TextMeshProUGUI progressText;
