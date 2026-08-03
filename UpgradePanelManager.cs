@@ -36,6 +36,7 @@ public class UpgradePanelManager : MonoBehaviour
 
     public void OpenPanel(List<UpgradeData> upgradeData)
     {
+        Logger.Log($"[UpgradePanelManager] OpenPanel 호출됨. 현재 Time.timeScale={Time.timeScale}"); // ⭐ 추가
         // GameManager.instance.joystick.SetActive(false);
 
         for (int i = 0; i < LevelUpSounds.Length; i++)

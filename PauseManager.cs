@@ -23,6 +23,7 @@ public class PauseManager : MonoBehaviour
 
     public void PauseGame()
     {
+        Logger.Log($"[PauseManager] PauseGame 호출됨. Stack: {System.Environment.StackTrace}"); // ⭐ 추가
         Time.timeScale = 0;
         GameManager.instance.SetPauseState(true);
         StartTimeScaleWatchdog();
@@ -70,6 +71,7 @@ public class PauseManager : MonoBehaviour
             if (Time.timeScale != 0f)
             {
                 Time.timeScale = 0f;
+                Logger.Log($"[PauseManager] watchdog이 timeScale을 0으로 강제함. 이전 값 확인 필요"); // ⭐ 주석 해제
             }
             yield return null;
         }

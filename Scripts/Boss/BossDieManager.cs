@@ -44,19 +44,18 @@ public class BossDieManager : MonoBehaviour
 
     IEnumerator DieEventCo(float desiredTimeScale, float waitingTime)
     {
-        Debug.Log("보스 다이 매니져에서 호출");
-
         MusicManager.instance.Stop();
         SoundManager.instance.StopAllSounds();
 
-        PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
-        playerData.SetCurrentStageCleared();
-        playerData.SaveResourcesBeforeQuitting();
-
+        // 1) 슬로우모션으로 처치 순간 강조
         Time.timeScale = desiredTimeScale;
-
         yield return new WaitForSecondsRealtime(waitingTime);
-        FindObjectOfType<PauseManager>().UnPauseGame();
+
+        // 2) 정상 속도로 복귀
+        PauseManager pauseManager = FindObjectOfType<PauseManager>();
+        Time.timeScale = pauseManager.NormalTimeScale;
+
+        // 3) 사망 애니메이션 + 필드 정리
         if (anim != null) anim.SetTrigger("Die");
 
         RemoveAllEnemies();
@@ -66,11 +65,18 @@ public class BossDieManager : MonoBehaviour
         if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();
 
         yield return new WaitForSeconds(4f);
-        if (playerData.GetGameMode() == GameMode.Regular) //일반 모드일 때만 스테이지 클리어 관련 연산
+
+        // 4) ⭐ 몇 초 후 저장 + 클리어 패널 표시 (내부에서 PauseGame() 호출됨)
+        PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
+        playerData.SetCurrentStageCleared();
+        playerData.SaveResourcesBeforeQuitting();
+
+        if (playerData.GetGameMode() == GameMode.Regular) // 일반 모드일 때만 스테이지 클리어 관련 연산
         {
             FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
         }
     }
+
 
     public void DieEventInfinite(float desiredTimeScale, float waitingTime)
     {
@@ -91,7 +97,6 @@ public class BossDieManager : MonoBehaviour
     {
     }
 
-    // ⭐ 수정: 원래 timeScale 저장 후 복구
     public void SlowMo(float _desiredTimeScale, float _duration)
     {
         StartCoroutine(SlowMoCo(_desiredTimeScale, _duration));
@@ -103,8 +108,6 @@ public class BossDieManager : MonoBehaviour
 
         PauseManager pauseManager = FindObjectOfType<PauseManager>();
 
-        // ⭐ 추가: 패널이 소유한 정지 상태라면 슬로모 값을 세팅하지 않음
-        //    (watchdog이 어차피 0으로 유지시키고 있으므로 건드릴 필요 없음)
         if (pauseManager == null || !pauseManager.IsPausedByPanel)
         {
             Time.timeScale = _desiredTimeScale;
@@ -117,17 +120,9 @@ public class BossDieManager : MonoBehaviour
         if (slowMoActiveCount <= 0)
         {
             slowMoActiveCount = 0;
-
-            // ⭐ 추가: 패널이 열려 있는 동안이라면 UnPauseGame()을 호출하지 않음
-            //    패널이 스스로 닫힐 때(VanishPanel, Revive 등) 정상적으로 복구함
             if (pauseManager != null && !pauseManager.IsPausedByPanel)
             {
                 pauseManager.UnPauseGame();
-                Logger.Log("[BossDieManager] 모든 SlowMo 종료");
-            }
-            else
-            {
-                Logger.Log("[BossDieManager] 패널이 열려있어 SlowMo 복구를 건너뜀 (패널이 처리함)");
             }
         }
     }

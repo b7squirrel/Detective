@@ -851,12 +851,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
         {
+            Logger.Log($"[Die] DieEvent 호출 (Regular) - {gameObject.name}, Time.timeScale={Time.timeScale}");
             BossDieManager.instance.SetIsBossDead(true);
-            BossDieManager.instance.DieEvent(.1f, 2f);
+            BossDieManager.instance.DieEvent(.5f, 1.5f);
         }
         else if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
         {
-            BossDieManager.instance.DieEventInfinite(.1f, 2f);
+            Logger.Log($"[Die] DieEventInfinite 호출 (Infinite) - {gameObject.name}, Time.timeScale={Time.timeScale}");
+            BossDieManager.instance.DieEventInfinite(.5f, 1.5f);
         }
 
         if (isSubBoss)
@@ -866,7 +868,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
             wave.GetComponent<Shockwave>().Init(0, 10f, shockwaveEnemyLayer, transform.position);
-            BossDieManager.instance.SlowMo(.5f, .5f);
+
+            // ⭐ 추가: 보스는 DieEvent/DieEventInfinite가 이미 2초짜리 슬로우모션을 관리하므로
+            //         SlowMo를 중복 실행하지 않음 (안 그러면 0.5초만에 UnPauseGame이 호출되어 충돌)
+            if (!IsBoss)
+            {
+                Logger.Log($"[Die] SlowMo 호출 - {gameObject.name}");
+                BossDieManager.instance.SlowMo(.5f, .5f);
+            }
+            else
+            {
+                Logger.Log($"[Die] IsBoss=true → SlowMo 스킵됨 - {gameObject.name}"); // ⭐ 확인용
+            }
         }
 
         // ⭐ 이펙트는 여기 한 군데만 처리
