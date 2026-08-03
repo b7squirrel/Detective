@@ -52,7 +52,7 @@ public class GachaField : MonoBehaviour
             return new Sort().ByGrade(a, b);
         });
 
-        cardDataSorted.Reverse();
+        // cardDataSorted.Reverse();
 
         // 카드 Display
         for (int i = 0; i < numSlots; i++)
