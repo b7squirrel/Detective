@@ -126,7 +126,7 @@ public class UpgradeButton : MonoBehaviour
         if (upgradeData.upgradeType == UpgradeType.WeaponUpgrade)
         {
             if (weaponContainer == null) weaponContainer = Player.instance.GetComponent<WeaponContainer>();
-            SetLevelStarAlpha(weaponContainer.GetWeaponLevel(upgradeData.weaponData), StaticValues.MaxGrade);
+            SetLevelStarAlpha(weaponContainer.GetWeaponLevel(upgradeData.weaponData), StaticValues.MaxSkillNumbers); // ⭐ MaxGrade → MaxSkillNumbers
             panel_item.SetActive(false);
             panel_synergy.SetActive(false);
             panel_weapon.SetActive(true);

@@ -29,6 +29,9 @@ public class LaunchManager : MonoBehaviour
     [Header("일일 보상 버튼")]
     [SerializeField] ButtonBadgeUI dailyButtonUI;
 
+    [Header("리드 오리 안내 문구")]
+    [SerializeField] GameObject messageLeadOri; // ⭐ 추가: "message Lead ori" 오브젝트
+
     [Header("판매 패널")]
     [SerializeField] SellPanelManager sellPanelManager;
     [SerializeField] GameObject sellPanelObject;
@@ -40,19 +43,27 @@ public class LaunchManager : MonoBehaviour
         // ⭐ 초기화 대기
         StartCoroutine(InitLead());
 
-        if (cardSlotManager == null) 
+        if (cardSlotManager == null)
             cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.SettrigerAnim("Off");
 
-        if(panelAnim == null) panelAnim = sellPanelObject.GetComponent<Animator>();
+        if (panelAnim == null) panelAnim = sellPanelObject.GetComponent<Animator>();
         panelAnim.SetTrigger("Up");
+
+        // ⭐ 추가: 튜토리얼 단계 구독 및 현재 상태 즉시 반영
+        TutorialManager.OnStepChanged += OnTutorialStepChanged;
+        if (TutorialManager.instance != null)
+            UpdateLeadOriMessageVisibility(TutorialManager.instance.CurrentStep);
     }
-    
+
     void OnDisable()
     {
         BgToExitField.SetActive(false);
         startButton.SetActive(false);
         backButton.SetActive(false);
+
+        // ⭐ 추가: 구독 해제
+        TutorialManager.OnStepChanged -= OnTutorialStepChanged;
     }
 
     public void UpdateStageInfo()
@@ -207,6 +218,21 @@ public class LaunchManager : MonoBehaviour
         cardSlotManager.SettrigerAnim("Off");
         startButton.SetActive(true);
         backButton.SetActive(false);
+    }
+
+    // ⭐ 추가: 튜토리얼 완료 전엔 숨기고, 완료된 순간부터는 계속 표시
+    void OnTutorialStepChanged(TutorialStep step)
+    {
+        UpdateLeadOriMessageVisibility(step);
+    }
+
+    void UpdateLeadOriMessageVisibility(TutorialStep step)
+    {
+        if (messageLeadOri == null) return;
+
+        if (step == TutorialStep.Completed)
+            messageLeadOri.SetActive(true);
+        // Completed가 아니면 아무것도 하지 않음 → 한 번 켜지면 계속 유지되고, 완료 전에는 계속 꺼진 상태
     }
 
     #region 판매 패널 연결

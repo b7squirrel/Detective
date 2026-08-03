@@ -244,19 +244,22 @@ public class GachaSystem : MonoBehaviour
         {
             int normalSlots = drawCount - guaranteedCount;
             string cardType = GetCardTypeFromTableId(gachaTableId);
+            bool randomizeType = gachaTableId == "daily_random"; // ⭐ 광고 상자는 매 뽑기마다 오리/아이템 랜덤
 
             for (int i = 0; i < normalSlots; i++)
             {
                 int rarity = raritySystem.GetRandomRarity(gachaTableId, false);
-                DrawWithRarity(cardType, rarity);
-                Logger.Log($"[GachaSystem] 일반 슬롯 #{i + 1}/{normalSlots}: Grade {rarity}");
+                string drawType = randomizeType ? GetRandomCardType() : cardType;
+                DrawWithRarity(drawType, rarity);
+                Logger.Log($"[GachaSystem] 일반 슬롯 #{i + 1}/{normalSlots}: {drawType} Grade {rarity}");
             }
 
             for (int i = 0; i < guaranteedCount; i++)
             {
                 int rarity = raritySystem.GetRandomRarity(gachaTableId, true);
-                DrawWithRarity(cardType, rarity);
-                Logger.Log($"[GachaSystem] 확정 슬롯 #{i + 1}/{guaranteedCount}: Grade {rarity}");
+                string drawType = randomizeType ? GetRandomCardType() : cardType;
+                DrawWithRarity(drawType, rarity);
+                Logger.Log($"[GachaSystem] 확정 슬롯 #{i + 1}/{guaranteedCount}: {drawType} Grade {rarity}");
             }
 
             cardDataManager.EndBatchOperation();
@@ -629,6 +632,12 @@ public class GachaSystem : MonoBehaviour
 
         Logger.LogWarning($"[GachaSystem] 알 수 없는 테이블 ID: {gachaTableId}, Weapon으로 처리");
         return "Weapon";
+    }
+
+    // ⭐ 광고 상자처럼 오리/아이템이 랜덤으로 섞여 나와야 하는 테이블용
+    string GetRandomCardType()
+    {
+        return UnityEngine.Random.value < 0.5f ? "Weapon" : "Item";
     }
 
     // ─────────────────────────────────────────────────────────

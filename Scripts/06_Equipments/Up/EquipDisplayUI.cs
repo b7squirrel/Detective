@@ -53,13 +53,13 @@ public class EquipDisplayUI : MonoBehaviour
         SetNumStar(intEvoStage + 1);
 
         SkillDescriptionPanel.SetActive(true);
-        
+
         // 스킬 이름 및 설명 (CharTexts 사용)
         SkillName.text = LocalizationManager.Char.skillNames[charCardData.PassiveSkill - 1];
         SkillName.color = MyGrade.GradeColors[charCardData.Grade];
         SkillDescription.text = LocalizationManager.Char.skillDescriptions[charCardData.PassiveSkill - 1];
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < StaticValues.MaxGrade; i++)
         {
             if (i == intGrade)
             {
