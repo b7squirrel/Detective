@@ -16,8 +16,7 @@ public class LocalizedShopUIText : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] singleDraw;
     [SerializeField] TextMeshProUGUI[] tenxDraw;
     // [SerializeField] TextMeshProUGUI watchAdToDraw;
-    [SerializeField] TextMeshProUGUI cardLimitWarningTitle;
-    [SerializeField] TextMeshProUGUI cardLimitWarningDescription;
+    [SerializeField] ShadowedText cardLimitWarningDescription;
 
     void Awake()
     {
@@ -52,7 +51,6 @@ public class LocalizedShopUIText : MonoBehaviour
         }
         // watchAdToDraw.text = LocalizationManager.Game.watchAdToDraw;
 
-        cardLimitWarningTitle.text = LocalizationManager.Game.cardLimitWarnings[0];
         cardLimitWarningDescription.text = LocalizationManager.Game.cardLimitWarnings[1];
     }
 }

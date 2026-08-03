@@ -12,7 +12,7 @@ public class CardLimitWarningDialog : MonoBehaviour
     [SerializeField] GameObject warningPanel;
     [SerializeField] float warningDuration;
     [SerializeField] TMPro.TextMeshProUGUI warningText;
-    [SerializeField] TMPro.TextMeshProUGUI currentNumMaxNum;
+    [SerializeField] ShadowedText currentNumMaxNum;
     [SerializeField] GameObject BG;
     [SerializeField] AudioClip warningSound; // 경고 사운드
     [SerializeField] int maxOriCard;
@@ -25,12 +25,16 @@ public class CardLimitWarningDialog : MonoBehaviour
 
     public void SetWarningText(string cardType, int cardCount, int maxCardCount, System.Action onClosedCallback = null)
     {
-        onClosed = onClosedCallback; 
+        // 코루틴 실행하려면 이 스크립트가 붙은 오브젝트 자체가 활성화 상태여야 함
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
+
+        onClosed = onClosedCallback;
         int maxCardNum = cardType == "오리" ? maxOriCard : maxItemCard;
         // string warning = $"{cardType} 카드가 {maxCardNum}장을 넘겼어요! ({cardCount}/{maxCardNum})\n\n" +
         //                 "카드를 판매하거나 합성해서\n" +
         //                 "공간을 정리해 주세요.";
-        
+
         // warningText.text = warning;
 
         string nums = $"(<color=red>{cardCount}</color>/{maxCardCount})";

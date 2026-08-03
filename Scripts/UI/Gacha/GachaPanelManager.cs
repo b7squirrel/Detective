@@ -9,13 +9,15 @@ public class GachaPanelManager : MonoBehaviour
 
     // ⭐ 골드 FX 관련
     [Header("골드 FX")]
-    [SerializeField] float goldFXDelay = 0.3f; // 카드 등장 후 FX 재생 딜레이
+    [SerializeField] float goldFXDelay = 0.3f;
 
     MainMenuManager mainMenuManager;
 
-    // ⭐ 골드 FX 파라미터 (PackBuyButton에서 설정)
     private RectTransform pendingGemPoint;
     private int pendingGoldAmount;
+
+    // ⭐ 알 깨짐 연출까지 대기할 카드 데이터
+    private List<CardData> pendingCards;
 
     [Header("타이틀")]
     [SerializeField] TMPro.TextMeshProUGUI titleText;
@@ -36,7 +38,9 @@ public class GachaPanelManager : MonoBehaviour
             titleText.text = cards.Count == 1 ? g.newFriend : g.newFriends;
         }
 
-        gachaField.GenerateAllCardsOfType(cards);
+        // ⭐ 카드 데이터는 저장만 해두고, 생성은 알 깨짐 애니메이션 이벤트로 미룸
+        pendingCards = cards;
+
         ActivateButtonTapToCon(true);
 
         // ⭐ 골드 FX 예약 실행
@@ -49,18 +53,27 @@ public class GachaPanelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ⭐ PackBuyButton에서 골드 FX 파라미터를 미리 등록합니다.
-    /// GachaSystem.OpenBox() 호출 전에 호출해야 합니다.
+    /// ⭐ Animation Event 전용: 알이 깨지고 폭발 이펙트가 나오는 타이밍에 호출됨
+    /// GachaEgg Init 클립에 이 메서드를 이벤트로 등록해주세요.
     /// </summary>
+    public void OnEggBrokenAnimEvent()
+    {
+        if (pendingCards == null)
+        {
+            Logger.LogWarning("[GachaPanelManager] OnEggBrokenAnimEvent 호출되었지만 pendingCards가 없습니다.");
+            return;
+        }
+
+        gachaField.GenerateAllCardsOfType(pendingCards);
+        pendingCards = null;
+    }
+
     public void RegisterGoldFX(RectTransform gemPoint, int goldAmount)
     {
         pendingGemPoint = gemPoint;
         pendingGoldAmount = goldAmount;
     }
 
-    /// <summary>
-    /// ⭐ 딜레이 후 골드 FX 재생
-    /// </summary>
     IEnumerator PlayGoldFXDelayed(RectTransform gemPoint, int goldAmount)
     {
         yield return new WaitForSeconds(goldFXDelay);
@@ -84,9 +97,9 @@ public class GachaPanelManager : MonoBehaviour
             foreach (var btn in FindObjectsOfType<PackBuyButton>())
                 btn.ResetState();
 
-            // ⭐ 패널 닫힐 때 FX 파라미터 초기화
             pendingGemPoint = null;
             pendingGoldAmount = 0;
+            pendingCards = null; // ⭐ 패널 닫힐 때 대기 중이던 카드 데이터도 초기화
         }
     }
 }
