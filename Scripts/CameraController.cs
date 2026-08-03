@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float startSize = 15f;
     [SerializeField] float endSize = 28f;
     [SerializeField] float zoomDuration = 1.2f;
+    [SerializeField] float zoomStartDelay = 0.1f; // 줌아웃 시작 전 대기 시간
 
     WallManager wallManager;
     float spawnConst;
@@ -36,6 +37,8 @@ public class CameraController : MonoBehaviour
 
     IEnumerator ZoomOutRoutine()
     {
+        yield return new WaitForSeconds(zoomStartDelay); // 0.1초 대기 후 시작
+        
         float elapsed = 0f;
         Camera cam = Camera.main;
 
