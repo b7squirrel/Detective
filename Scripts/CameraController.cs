@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
@@ -10,6 +11,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] float offset; // 이 값만큼 y축 카메라 바운드 조절
     [SerializeField] float offsetUpperWall; // 윗벽은 경험치바에 가려지지 않게 따로 바운드 조절
 
+    [Header("Zoom In-Out")]
+    [SerializeField] float startSize = 15f;
+    [SerializeField] float endSize = 28f;
+    [SerializeField] float zoomDuration = 1.2f;
+
     WallManager wallManager;
     float spawnConst;
 
@@ -17,8 +23,40 @@ public class CameraController : MonoBehaviour
     {
         player = FindObjectOfType<Player>();
 
+        Camera.main.orthographicSize = startSize;
+
         halfHeight = Camera.main.orthographicSize;
         halfWidth = Camera.main.aspect * halfHeight;
+    }
+
+    void Start()
+    {
+        StartCoroutine(ZoomOutRoutine());
+    }
+
+    IEnumerator ZoomOutRoutine()
+    {
+        float elapsed = 0f;
+        Camera cam = Camera.main;
+
+        while (elapsed < zoomDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / zoomDuration);
+            float easedT = Mathf.SmoothStep(0f, 1f, t); // 감속하며 부드럽게 멈춤
+
+            cam.orthographicSize = Mathf.Lerp(startSize, endSize, easedT);
+
+            // Gizmo용 값도 매 프레임 갱신
+            halfHeight = cam.orthographicSize;
+            halfWidth = cam.aspect * halfHeight;
+
+            yield return null;
+        }
+
+        cam.orthographicSize = endSize;
+        halfHeight = endSize;
+        halfWidth = cam.aspect * halfHeight;
     }
 
     void Update()
@@ -30,13 +68,13 @@ public class CameraController : MonoBehaviour
 
         if (player != null)
         {
-            //transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
             transform.position = new Vector3(
                 Mathf.Clamp(player.transform.position.x, boxCol.bounds.min.x, boxCol.bounds.max.x),
                 Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y + offset, boxCol.bounds.max.y - offsetUpperWall),
                 transform.position.z);
         }
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = new Color(1, 0, 0, .3f);

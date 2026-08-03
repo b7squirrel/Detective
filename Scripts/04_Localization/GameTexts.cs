@@ -71,8 +71,8 @@ public class GameTexts : ScriptableObject
     public string canLeadArmy = "오리 군단을 이끌 준비가 되었습니다!";
     public string weAreReady = "준비 완료!";
     public string crystalGiven = "보석 {0}개를 지급했습니다!";
+    public string firstPurchase = "첫 구매 2배!";
     
-
     [Header("Pack Description")]
     // 오리 카드 라인: {0} = 등급명(들)
     public string packDuckCardLine = "{0} 오리 카드";
@@ -245,6 +245,8 @@ public class GameTexts : ScriptableObject
     public string pause = "일시 정지";
     public string Continue = "계속 하기";
     public string languageSelection = "언어 선택";
+    public string quitTheGame = "정말로 종료할까요?";
+    public string quit = "종료";
     // 헬퍼 메서드
     public string GetDayText(int day)
     {

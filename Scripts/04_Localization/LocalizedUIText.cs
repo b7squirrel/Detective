@@ -275,6 +275,12 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.chooseYourMaterial;
             case UITextKey.OnlyMaxLevelCanBeMerged:
                 return LocalizationManager.Game.onlyMaxLevelCanBeMerged;
+            case UITextKey.QuitTheGame:
+                return LocalizationManager.Game.quitTheGame;
+            case UITextKey.Quit:
+                return LocalizationManager.Game.quit;
+            case UITextKey.FirstPurchase:
+                return LocalizationManager.Game.firstPurchase;
             default:
                 return key.ToString();
         }
@@ -410,5 +416,8 @@ public enum UITextKey
     TabToCheckGear,
     TapACardToMerge,
     ChooseYourMaterial,
-    OnlyMaxLevelCanBeMerged
+    OnlyMaxLevelCanBeMerged,
+    QuitTheGame,
+    Quit,
+    FirstPurchase
 }
