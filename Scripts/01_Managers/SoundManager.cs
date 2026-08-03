@@ -292,6 +292,52 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 피치를 직접 지정해서 재생 (동시 재생 개수 제한도 커스텀 가능)
+    /// </summary>
+    public void PlaySoundWith(AudioClip _audioClip, float _volume, float _pitch, float _coolDown, int _maxSimultaneous = 3)
+    {
+        if (_audioClip == null)
+        {
+            Logger.LogWarning("재생할 AudioClip이 null입니다.");
+            return;
+        }
+
+        string clipName = _audioClip.name;
+        if (lastPlayedTime == null) lastPlayedTime = new Dictionary<string, float>();
+
+        if (lastPlayedTime.ContainsKey(clipName) && Time.time - lastPlayedTime[clipName] < _coolDown)
+            return;
+
+        if (GetPlayingCount(_audioClip) >= _maxSimultaneous)
+        {
+            return;
+        }
+
+        AudioSource audioSource = GetAudioSourceFromPool();
+        if (audioSource == null)
+        {
+            Logger.LogWarning("사용 가능한 AudioSource를 찾을 수 없습니다.");
+            return;
+        }
+
+        try
+        {
+            audioSource.clip = _audioClip;
+            audioSource.volume = Mathf.Clamp01(_volume);
+            audioSource.pitch = _pitch; // ⭐ 지정된 피치 그대로 사용
+            audioSource.loop = false;
+            audioSource.mute = isMuted;
+            audioSource.Play();
+
+            lastPlayedTime[clipName] = Time.time;
+        }
+        catch (System.Exception e)
+        {
+            Logger.LogError($"사운드 재생 중 오류: {e.Message}");
+        }
+    }
+
     public AudioSource PlayLoop(AudioClip audioClip, float volume = 1f)
     {
         if (audioClip == null)

@@ -18,10 +18,25 @@ public class GachaField : MonoBehaviour
 
     #region 연출 관련 변수
     [Header("팝업 연출")]
-    [SerializeField] float popInterval = 0.08f;      // 카드 간 팝 간격
-    [SerializeField] float popDuration = 0.3f;        // 팝 애니메이션 길이
-    [SerializeField] float lastCardExtraDelay = 0.5f; // 마지막 카드 추가 딜레이
+    [SerializeField] float popInterval = 0.08f;
+    [SerializeField] float popDuration = 0.3f;
+    [SerializeField] float lastCardExtraDelay = 0.5f;
     [SerializeField] Ease popEase = Ease.OutBack;
+
+    [Header("사운드")]
+    [SerializeField] AudioClip cardPopSound;
+    [SerializeField] float cardPopPitchStart = 0.95f; // 첫 카드 피치
+    [SerializeField] float cardPopPitchEnd = 1.25f;    // 마지막 직전 카드 피치
+
+    [Header("마지막 카드 (Mythic 아닐 때)")]
+    [SerializeField] AudioClip[] lastCardPopSounds;
+    [SerializeField] GameObject lastCardEffectPrefab;
+    [SerializeField] float lastCardEffectLifetime = 2f;
+
+    [Header("마지막 카드 (Mythic일 때)")]
+    [SerializeField] AudioClip[] mythicCardPopSounds;
+    [SerializeField] GameObject mythicCardEffectPrefab;
+    [SerializeField] float mythicCardEffectLifetime = 2f;
 
     Sequence popSequence;
     #endregion
@@ -41,62 +56,134 @@ public class GachaField : MonoBehaviour
         cardDatas.AddRange(cardList);
         numSlots = cardDatas.Count;
 
-        Debug.Log($"[GachaField] GenerateAllCardsOfType 시작. numSlots={numSlots}");
-
-        // 슬롯 생성
         for (int i = 0; i < numSlots; i++)
         {
             var slot = Instantiate(slotPrefab, transform);
             slot.transform.position = Vector3.zero;
             slot.transform.localScale = Vector3.zero;
             slots.Add(slot);
-
-            Debug.Log($"[GachaField] 슬롯 {i} 생성 직후 localScale = {slot.transform.localScale}, activeInHierarchy = {slot.activeInHierarchy}");
         }
 
-        // 카드 데이터 정렬
         List<CardData> cardDataSorted = new();
         cardDataSorted.AddRange(cardDatas);
         cardDataSorted.Sort((a, b) => new Sort().ByGrade(a, b));
 
-        // 카드 Display
         for (int i = 0; i < numSlots; i++)
         {
             displayCardOnSlot.PutCardDataIntoSlot(cardDataSorted[i], slots[i].GetComponent<CardSlot>());
-            Debug.Log($"[GachaField] 슬롯 {i} PutCardDataIntoSlot 이후 localScale = {slots[i].transform.localScale}");
         }
 
-        PlayPopSequence(slots);
+        // ⭐ 마지막 카드가 Mythic 등급인지 판별
+        bool isLastCardMythic = numSlots > 0 && cardDataSorted[numSlots - 1].Grade == MyGrade.Mythic;
+
+        PlayPopSequence(slots, isLastCardMythic);
     }
 
-    void PlayPopSequence(List<GameObject> slots)
+    void PlayPopSequence(List<GameObject> slots, bool isLastCardMythic)
     {
-        Debug.Log($"[GachaField] PlayPopSequence 시작. this.transform.localScale={transform.localScale}, this.transform.lossyScale={transform.lossyScale}");
-        Debug.Log($"[GachaField] PlayPopSequence 시작. slots.Count={slots.Count}, this.activeInHierarchy={gameObject.activeInHierarchy}, timeScale={Time.timeScale}");
-
         popSequence?.Kill();
         popSequence = DOTween.Sequence();
+
+        int lastIndex = slots.Count - 1;
 
         for (int i = 0; i < slots.Count; i++)
         {
             float delay = i * popInterval;
-            if (i == slots.Count - 1)
+            bool isLastCard = (i == lastIndex);
+
+            if (isLastCard)
             {
                 delay += lastCardExtraDelay;
             }
 
-            int index = i; // 클로저 캡처용
             Transform slotTransform = slots[i].transform;
-
-            Debug.Log($"[GachaField] 슬롯 {index} 트윈 예약. delay={delay}, 현재 scale={slotTransform.localScale}, target={slotSize}, targetActive={slotTransform.gameObject.activeInHierarchy}");
+            int index = i;
 
             popSequence.Insert(delay, slotTransform.DOScale(slotSize, popDuration)
                 .SetEase(popEase)
-                .OnStart(() => Debug.Log($"[GachaField] 슬롯 {index} 트윈 OnStart 호출됨. 현재시각={Time.time}"))
-                .OnComplete(() => Debug.Log($"[GachaField] 슬롯 {index} 트윈 OnComplete. 최종 scale={slotTransform.localScale}")));
+                .OnStart(() =>
+                {
+                    if (isLastCard)
+                    {
+                        if (isLastCardMythic)
+                        {
+                            PlayMythicCardSounds();
+                            PlayMythicCardEffect(slotTransform);
+                        }
+                        else
+                        {
+                            PlayLastCardSounds();
+                            PlayLastCardEffect(slotTransform);
+                        }
+                    }
+                    else if (cardPopSound != null && SoundManager.instance != null)
+                    {
+                        float t = lastIndex > 1 ? (float)index / (lastIndex - 1) : 0f;
+                        float pitch = Mathf.Lerp(cardPopPitchStart, cardPopPitchEnd, t);
+                        SoundManager.instance.PlaySoundWith(cardPopSound, 1f, pitch, 0f, 10);
+                    }
+                }));
+        }
+    }
+
+    // ⭐ 마지막 카드용 사운드 배열을 전부 동시 재생 (Mythic 아닐 때)
+    void PlayLastCardSounds()
+    {
+        if (lastCardPopSounds == null || lastCardPopSounds.Length == 0) return;
+        if (SoundManager.instance == null) return;
+
+        foreach (var clip in lastCardPopSounds)
+        {
+            if (clip == null) continue;
+            SoundManager.instance.PlaySoundWith(clip, 1f, 1f, 0f, 10);
+        }
+    }
+
+    void PlayLastCardEffect(Transform slotTransform)
+    {
+        if (lastCardEffectPrefab == null) return;
+
+        GameObject effect = Instantiate(lastCardEffectPrefab, slotTransform.position, Quaternion.identity, slotTransform);
+
+        Animator effectAnimator = effect.GetComponent<Animator>();
+        if (effectAnimator != null)
+        {
+            effectAnimator.SetTrigger("On");
+        }
+        else
+        {
+            Logger.LogWarning("[GachaField] lastCardEffectPrefab에 Animator 컴포넌트가 없습니다.");
         }
 
-        Debug.Log($"[GachaField] Sequence 생성 완료. popSequence.IsActive()={popSequence.IsActive()}, popSequence.IsPlaying()={popSequence.IsPlaying()}");
+        Destroy(effect, lastCardEffectLifetime);
+    }
+
+    // ⭐ Mythic 전용 사운드 배열 전부 동시 재생
+    void PlayMythicCardSounds()
+    {
+        if (mythicCardPopSounds == null || mythicCardPopSounds.Length == 0) return;
+        if (SoundManager.instance == null) return;
+
+        foreach (var clip in mythicCardPopSounds)
+        {
+            if (clip == null) continue;
+            SoundManager.instance.PlaySoundWith(clip, 1f, 1f, 0f, 10);
+        }
+    }
+
+    void PlayMythicCardEffect(Transform slotTransform)
+    {
+        if (mythicCardEffectPrefab == null) return;
+
+        GameObject effect = Instantiate(mythicCardEffectPrefab, slotTransform.position, Quaternion.identity, slotTransform);
+
+        Animator effectAnimator = effect.GetComponent<Animator>();
+        if (effectAnimator == null)
+        {
+            Logger.LogWarning("[GachaField] mythicCardEffectPrefab에 Animator 컴포넌트가 없습니다.");
+        }
+
+        Destroy(effect, mythicCardEffectLifetime);
     }
     #endregion
 
