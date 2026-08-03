@@ -338,20 +338,36 @@ public class ShopManager : SingletonBehaviour<ShopManager>
         Logger.Log($"[ShopManager] 광고 시청 시작: {productData.ProductName}");
 
         AdsManager.Instance.ShowBoxRewardedAd(async () =>
+{
+    Logger.Log($"[ShopManager] 광고 시청 완료!");
+
+    if (productData.ProductType == ProductType.Box)
+    {
+        await TimeBasedBoxManager.Instance.OnBoxClaimedAsync();
+    }
+    else if (productData.ProductType == ProductType.Energy) // ⭐ 추가
+    {
+        await EnergyAdRewardManager.Instance.OnAdClaimedAsync();
+    }
+
+    // ⭐ 럭키 박스(chest_005)는 실제 지급 상품을 무작위로 재추첨
+    ProductData rewardData = productData;
+    if (productData.ProductId == "chest_005")
+    {
+        ProductData rolledProduct = LuckyBoxTable.Instance.RollProduct();
+        if (rolledProduct != null)
         {
-            Logger.Log($"[ShopManager] 광고 시청 완료!");
+            rewardData = rolledProduct;
+            Logger.Log($"[ShopManager] 럭키 박스 당첨: {rewardData.ProductId} ({rewardData.ProductName})");
+        }
+        else
+        {
+            Logger.LogError("[ShopManager] 럭키 박스 추첨 실패, 원래 productData로 진행");
+        }
+    }
 
-            if (productData.ProductType == ProductType.Box)
-            {
-                await TimeBasedBoxManager.Instance.OnBoxClaimedAsync();
-            }
-            else if (productData.ProductType == ProductType.Energy) // ⭐ 추가
-            {
-                await EnergyAdRewardManager.Instance.OnAdClaimedAsync();
-            }
-
-            StartCoroutine(GiveProductRewardCo(productData, fxStartPoint));
-        });
+    StartCoroutine(GiveProductRewardCo(rewardData, fxStartPoint));
+});
     }
 
     void ShowAdLoadingPopup()

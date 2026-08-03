@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class InfiniteStagePanel : MonoBehaviour
 {
     [Header("최고 기록")]
-    [SerializeField] TextMeshProUGUI bestWave;
-    [SerializeField] TextMeshProUGUI bestTime;
+    [SerializeField] ShadowedText bestWave;
+    [SerializeField] ShadowedText bestTime;
 
     [Header("무한 모드 패널")]
     [SerializeField] Animator infiniteModePanelAnim;
@@ -52,13 +52,13 @@ public class InfiniteStagePanel : MonoBehaviour
         infiniteModePanelAnim.gameObject.SetActive(true);
         infiniteModePanelAnim.SetTrigger("Up");
         infinitePanelOpenerAnim.SetTrigger("Off");
-        if(co != null) StopCoroutine(co);
+        if (co != null) StopCoroutine(co);
         DeactivateStartButton();
 
         InitInfinitePanel();
 
         if (clipPanelUp != null)
-            SoundManager.instance?.Play(clipPanelUp);     
+            SoundManager.instance?.Play(clipPanelUp);
     }
     public void DeactivateInfinitePanel()
     {
@@ -68,6 +68,6 @@ public class InfiniteStagePanel : MonoBehaviour
         ActivateStartButton();
 
         if (clipPanelDown != null)
-            SoundManager.instance?.Play(clipPanelDown);     
+            SoundManager.instance?.Play(clipPanelDown);
     }
 }

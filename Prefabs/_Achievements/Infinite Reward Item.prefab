@@ -70,7 +70,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 189, y: -2.9000244}
+  m_AnchoredPosition: {x: 189, y: 1.5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &320530826227634741
@@ -287,6 +287,7 @@ MonoBehaviour:
   rewardIcon: {fileID: 34289933630164430}
   gemIcon: {fileID: 21300000, guid: 6803184bcc108416483e481771695427, type: 3}
   coinIcon: {fileID: 21300000, guid: 520f1b9aa4cb6d24aa8de0320688e44b, type: 3}
+  lightningIcon: {fileID: 0}
 --- !u!114 &5604292965327122737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,8 +312,10 @@ MonoBehaviour:
   effectStartPos: {fileID: 8839954253655953936}
   postItYellow: {fileID: 8706858416001246012}
   postItPink: {fileID: 5439251229241109454}
+  postItGreen: {fileID: 0}
   gemIcon: {fileID: 21300000, guid: 6803184bcc108416483e481771695427, type: 3}
   coinIcon: {fileID: 21300000, guid: 520f1b9aa4cb6d24aa8de0320688e44b, type: 3}
+  lightningIcon: {fileID: 0}
   killIcon: {fileID: 0}
   chestIcon: {fileID: 0}
   timeIcon: {fileID: 0}
@@ -372,7 +375,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 240.59958, y: 0}
+  m_AnchoredPosition: {x: 240.59958, y: 4.4000244}
   m_SizeDelta: {x: 173.1608, y: 63.1941}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7227886510145364262
@@ -412,7 +415,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1.6
+  m_PixelsPerUnitMultiplier: 1.2
 --- !u!1 &3247841723554057918
 GameObject:
   m_ObjectHideFlags: 0
@@ -822,8 +825,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 281.6, y: 0.1}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 267.20004, y: 4.5000243}
+  m_SizeDelta: {x: 105.9202, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2964888321186920220
 CanvasRenderer:
@@ -880,8 +883,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -916,7 +919,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 43.352478, y: 0, z: 65.22363, w: 0}
+  m_margin: {x: -0.465271, y: 0, z: 10.663574, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
