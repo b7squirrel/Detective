@@ -100,18 +100,35 @@ public class BossDieManager : MonoBehaviour
     IEnumerator SlowMoCo(float _desiredTimeScale, float _duration)
     {
         slowMoActiveCount++;
-        Time.timeScale = _desiredTimeScale;
+
+        PauseManager pauseManager = FindObjectOfType<PauseManager>();
+
+        // ⭐ 추가: 패널이 소유한 정지 상태라면 슬로모 값을 세팅하지 않음
+        //    (watchdog이 어차피 0으로 유지시키고 있으므로 건드릴 필요 없음)
+        if (pauseManager == null || !pauseManager.IsPausedByPanel)
+        {
+            Time.timeScale = _desiredTimeScale;
+        }
 
         yield return new WaitForSecondsRealtime(_duration);
 
         slowMoActiveCount--;
 
-        // 모든 SlowMo가 끝났을 때만 복구
         if (slowMoActiveCount <= 0)
         {
             slowMoActiveCount = 0;
-            Time.timeScale = 1f;
-            Logger.Log("[BossDieManager] 모든 SlowMo 종료, timeScale 1로 복구");
+
+            // ⭐ 추가: 패널이 열려 있는 동안이라면 UnPauseGame()을 호출하지 않음
+            //    패널이 스스로 닫힐 때(VanishPanel, Revive 등) 정상적으로 복구함
+            if (pauseManager != null && !pauseManager.IsPausedByPanel)
+            {
+                pauseManager.UnPauseGame();
+                Logger.Log("[BossDieManager] 모든 SlowMo 종료");
+            }
+            else
+            {
+                Logger.Log("[BossDieManager] 패널이 열려있어 SlowMo 복구를 건너뜀 (패널이 처리함)");
+            }
         }
     }
 

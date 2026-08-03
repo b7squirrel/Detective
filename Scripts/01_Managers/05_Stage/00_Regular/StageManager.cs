@@ -8,6 +8,10 @@ public class StageManager : MonoBehaviour
     // ⭐ 추가: 이번 세션에서 실제로 시작한 스테이지 번호 (다른 스크립트에서 참조용)
     public static int CurrentSessionStageNum { get; private set; }
 
+    [Header("Speed Settings")] // ⭐ 추가
+    [SerializeField] float gameSpeedMultiplier = 1.25f; // ⭐ 추가: 일반모드 배속
+    float originalFixedDeltaTime; // ⭐ 추가
+
     StageEvenetManager stageEventManager;
     StageAssetManager stageAssetManager;
     SpawnGemsOnStart spawnGemsOnStart;
@@ -23,6 +27,8 @@ public class StageManager : MonoBehaviour
 
     void Awake()
     {
+        originalFixedDeltaTime = Time.fixedDeltaTime; // ⭐ 추가: 원본 저장
+
         stageEventManager = GetComponent<StageEvenetManager>();
         stageAssetManager = GetComponent<StageAssetManager>();
         spawnGemsOnStart = GetComponent<SpawnGemsOnStart>();
@@ -72,7 +78,47 @@ public class StageManager : MonoBehaviour
         // poolManager가 stageAssetManager를 참조하니까 먼저 초기화하면 안 됨
         WarmUpPoolsByStage(currentStageNum);
 
+        ApplyGameSpeed(); // ⭐ 추가: 일반모드 배속 적용
+
         StartCoroutine(UpdateTimeUI());
+    }
+
+    // ⭐ 추가: 무한모드의 ApplyGameSpeed와 동일한 패턴
+    void ApplyGameSpeed()
+    {
+        Time.timeScale = gameSpeedMultiplier;
+        Time.fixedDeltaTime = originalFixedDeltaTime * gameSpeedMultiplier;
+
+        PauseManager pauseManager = FindObjectOfType<PauseManager>();
+        if (pauseManager != null)
+        {
+            pauseManager.SetNormalTimeScale(gameSpeedMultiplier);
+        }
+
+        Logger.Log($"[StageManager] Game speed: {gameSpeedMultiplier}x");
+    }
+
+    // ⭐ 추가: 씬을 나갈 때 원래 배속으로 복구 (무한모드의 ResetGameSpeed와 동일)
+    void OnDisable()
+    {
+        ResetGameSpeed();
+    }
+
+    void OnDestroy()
+    {
+        ResetGameSpeed();
+    }
+
+    void ResetGameSpeed()
+    {
+        Time.timeScale = 1f;
+        Time.fixedDeltaTime = originalFixedDeltaTime;
+
+        PauseManager pauseManager = FindObjectOfType<PauseManager>();
+        if (pauseManager != null)
+        {
+            pauseManager.SetNormalTimeScale(1.0f);
+        }
     }
 
     void WarmUpPoolsByStage(int stageNum)

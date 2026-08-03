@@ -86,7 +86,7 @@ public class EggPanelManager : MonoBehaviour
         rawImage.SetActive(true);
         flashEffect.SetActive(true);
         anim.SetTrigger("Idle");
-        float animationSpeed = PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite ? 1.5f : 1f;
+        float animationSpeed = pauseManager.NormalTimeScale;
         anim.speed = animationSpeed;
     }
     void CloseNewKidImage()
