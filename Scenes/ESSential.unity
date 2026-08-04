@@ -23040,11 +23040,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1340339945}
+  m_Father: {fileID: 1470290333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -275}
+  m_AnchoredPosition: {x: 0, y: -240.46506}
   m_SizeDelta: {x: 642.3, y: 110.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &351249273
@@ -23107,8 +23107,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -32434,10 +32434,10 @@ MonoBehaviour:
   dot: {fileID: 3346168019641469629, guid: a18d6881fa492ac44b1f7c71440de18e, type: 3}
   offset: 10
   offsetUpperWall: 10
-  startSize: 10
+  startSize: 15
   endSize: 28
   zoomDuration: 0.3
-  zoomStartDelay: 0.8
+  zoomStartDelay: 0.7
 --- !u!114 &519420035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61173,8 +61173,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 3.3624878}
+  m_SizeDelta: {x: 0, y: -141.2245}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &954517709
 MonoBehaviour:
@@ -86521,19 +86521,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 316.59
+      value: 265.1115
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 163.92993
+      value: 163.9299
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -86636,9 +86636,17 @@ PrefabInstance:
       value: "\uC885\uB8CC\n"
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686722033886, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
+      propertyPath: m_fontSize
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101676686722033886, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
+    - target: {fileID: 1101676686722033886, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 1101676686722033886, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
@@ -87819,7 +87827,6 @@ RectTransform:
   m_Children:
   - {fileID: 954517708}
   - {fileID: 587349974}
-  - {fileID: 351249272}
   m_Father: {fileID: 1470290333}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -93650,8 +93657,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -95864,6 +95871,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1340339945}
+  - {fileID: 351249272}
   - {fileID: 2035102502}
   - {fileID: 742091111}
   - {fileID: 316098101}
@@ -101650,19 +101658,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 316.59
+      value: 265.1115
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 163.92993
+      value: 163.9299
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686708560200, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -101761,9 +101769,17 @@ PrefabInstance:
       value: "\uCDE8\uC18C"
       objectReference: {fileID: 0}
     - target: {fileID: 1101676686722033886, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
+      propertyPath: m_fontSize
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 1101676686722033886, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
+    - target: {fileID: 1101676686722033886, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 1101676686722033886, guid: 548f486ba950f9b43a7f94e5599476a0, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
@@ -138289,8 +138305,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -140979,8 +140995,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
