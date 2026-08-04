@@ -873,8 +873,7 @@ public class GachaSystem : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────
-    //  튜토리얼 완료 보상 — Duck Box 10과 동일한 확률, 오리 5마리
-    //  확정 슬롯 1마리는 Guarantee 확률(Legendary 99% / Mythic 1%), 나머지 4마리는 Normal 확률
+    //  튜토리얼 완료 보상 — 오리 5마리, 전부 Rare 등급 고정 지급
     //  각 오리는 자신의 등급에 맞는 장비 4종(필수+3종)을 모두 장착한 채로 지급됨
     // ─────────────────────────────────────────────────────────
     // 카드 생성 + 장비 장착 + 저장까지만. 연출은 호출하지 않음
@@ -887,41 +886,21 @@ public class GachaSystem : MonoBehaviour
     public void PrepareTutorialReward(int count = 5, int guaranteedCount = 1)
     {
         IsTutorialRewardInProgress = true; // ⭐ 추가
-        const string gachaTableId = "ten_duck";
 
-        Logger.Log($"[GachaSystem] 튜토리얼 완료 보상 시작 - {count}마리 (확정 {guaranteedCount}마리)");
-
-        if (raritySystem == null)
-        {
-            Logger.LogError("[GachaSystem] GachaRaritySystem이 없습니다.");
-            return;
-        }
+        Logger.Log($"[GachaSystem] 튜토리얼 완료 보상 시작 - {count}마리 (전부 Rare 고정)");
 
         cardDataManager.BeginBatchOperation();
         cardsPicked.Clear();
 
         try
         {
-            int normalCount = count - guaranteedCount;
-
-            for (int i = 0; i < normalCount; i++)
+            for (int i = 0; i < count; i++)
             {
-                int rarity = raritySystem.GetRandomRarity(gachaTableId, false);
-                CardData duckCard = DrawDuckCardWithRarity(rarity);
+                CardData duckCard = DrawDuckCardWithRarity(MyGrade.Rare);
                 if (duckCard == null) continue;
 
                 GivePackEquipments(duckCard, 3, duckCard.Grade);
-                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{normalCount} (일반): {duckCard.Name} (Grade {duckCard.Grade})");
-            }
-
-            for (int i = 0; i < guaranteedCount; i++)
-            {
-                // ⭐ 변경: 확률 계산 없이 확정 슬롯은 항상 Mythic
-                CardData duckCard = DrawDuckCardWithRarity(MyGrade.Mythic);
-                if (duckCard == null) continue;
-
-                GivePackEquipments(duckCard, 3, duckCard.Grade);
-                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{guaranteedCount} (확정 Mythic): {duckCard.Name} (Grade {duckCard.Grade})");
+                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{count} (Rare 고정): {duckCard.Name} (Grade {duckCard.Grade})");
             }
 
             cardDataManager.EndBatchOperation();

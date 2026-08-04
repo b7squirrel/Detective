@@ -12,20 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91c4f1f2b759543ff8998f6292c800ca, type: 3}
   m_Name: DefaultEnemyScaling
   m_EditorClassIdentifier: 
-  baseHP: 20
+  baseHP: 25
   baseSpeed: 4
   baseMeleeDamage: 5
   baseRangedDamage: 100
   baseExperience: 130
-  hpGrowth: 0.15
+  hpGrowth: 0.17
   hpExponent: 1.1
   speedGrowth: 0.05
   speedCap: 15
-  damageGrowth: 0.12
+  damageGrowth: 0.14
   damageExponent: 1
   experienceGrowth: 0.2
   madnessAnimSpeed: 1.5
-  madnessDamageMultiplier: 1.2
+  madnessDamageMultiplier: 1.25
   helmetHPMultiplier: 2
   madnessAttackFrameInterval: 2
   helmetDamageReduction: 0.4
@@ -40,7 +40,7 @@ MonoBehaviour:
   bossDodgeMultiplier: 1.3
   tankHPBonus: 0.2
   attackerDamageBonus: 0.15
-  normalEnemyCycleGrowth: 0.09
+  normalEnemyCycleGrowth: 0.1
   subBossMultiplier: 10
   stageBossMultiplier: 2.5
   queenBossMultiplier: 80
