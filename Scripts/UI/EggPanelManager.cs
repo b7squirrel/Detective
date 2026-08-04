@@ -24,6 +24,10 @@ public class EggPanelManager : MonoBehaviour
     EggButton eggButton; // Egg Button에 접근해서 레어오리 확률을 초기화 시키기 위해
     RectTransform eggImageRecTransform; // 알 이미지를 비활성화 시키면 코루틴들이 의도하지 않게 작동하므로 위치를 화면 밖으로 이동시키기 위해
 
+    [Header("Atk 표시")]
+    [SerializeField] GameObject atkLabelText; // "공격력" / "ATK" - 로컬라이제이션 컴포넌트가 처리
+    [SerializeField] GameObject atkValueText; // 숫자만 표시
+
     Coroutine Close;
 
     [Header("임시 오브젝트 비활성화")]
@@ -177,6 +181,15 @@ public class EggPanelManager : MonoBehaviour
 
         // 이름 반영
         oriName.GetComponent<TMPro.TextMeshProUGUI>().text = LocalizationManager.Char.GetWeaponDisplayName(newWd.weaponData.Name);
+
+        Debug.Log($"[Egg DPS Debug] weaponData={newWd.weaponData.name}, damage={newWd.weaponData.stats.damage}, numberOfAttacks={newWd.weaponData.stats.numberOfAttacks}, timeToAttack={newWd.weaponData.stats.timeToAttack}");
+
+        // Atk(1타 데미지) 반영
+        Character wielder = GameManager.instance.character;
+        int damageBonus = wielder != null ? wielder.DamageBonus : 0;
+        int effectiveDamage = newWd.weaponData.stats.damage + damageBonus;
+
+        atkValueText.GetComponent<TMPro.TextMeshProUGUI>().text = effectiveDamage.ToString();
 
         // 장비 스프라이트 설정
         Init(newWd.weaponData);

@@ -281,6 +281,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.quit;
             case UITextKey.FirstPurchase:
                 return LocalizationManager.Game.firstPurchase;
+            case UITextKey.ATK:
+                return LocalizationManager.Game.atk;
             default:
                 return key.ToString();
         }
@@ -419,5 +421,6 @@ public enum UITextKey
     OnlyMaxLevelCanBeMerged,
     QuitTheGame,
     Quit,
-    FirstPurchase
+    FirstPurchase,
+    ATK
 }
