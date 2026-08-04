@@ -66,7 +66,7 @@ public class EnemyVariantHandler : MonoBehaviour
         if (overlayFuse != null) overlayFuse.SetActive(false);
 
         // ⭐ 초기화 시 왕관 다시 활성화
-    if (crown != null) crown.SetActive(true);
+        if (crown != null) crown.SetActive(true);
     }
 
     // 스테이지 번호로 variant 결정 (EnemyBase에서 호출)
@@ -76,12 +76,12 @@ public class EnemyVariantHandler : MonoBehaviour
 
         switch (cycle)
         {
-            case 0: return EnemyVariantType.Normal;
-            case 1: return EnemyVariantType.Madness;
-            case 2: return EnemyVariantType.Helmet;
-            case 3: return EnemyVariantType.MadnessHelmet;
-            case 4: return EnemyVariantType.Explosive;
-            default: return EnemyVariantType.Explosive; // 30스테이지 이후
+            case 0: return EnemyVariantType.Normal;         // 1~6스테이지
+            case 1: return EnemyVariantType.Helmet;          // 7~12스테이지 (기존 Madness → Helmet)
+            case 2: return EnemyVariantType.Madness;         // 13~18스테이지 (기존 Helmet → Madness)
+            case 3: return EnemyVariantType.MadnessHelmet;   // 19~24스테이지 (변경 없음)
+            case 4: return EnemyVariantType.Explosive;       // 25~30스테이지
+            default: return EnemyVariantType.Explosive;
         }
     }
 }
