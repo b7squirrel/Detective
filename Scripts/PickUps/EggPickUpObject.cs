@@ -55,7 +55,7 @@ public class EggPickUpObject : Collectable, IPickUpObject
         Character character = collision.GetComponent<Character>();
         if (character != null)
         {
-            UIEvent eggEvent = new UIEvent(() => OnPickUp(character), "Egg");
+            UIEvent eggEvent = new UIEvent(() => OnPickUp(character), "Egg", GameManager.instance.eggPanelManager.ForceClose); // ⭐ ForceClose 연결
             GameManager.instance.popupManager.EnqueueUIEvent(eggEvent);
             SoundManager.instance.Play(pickup);
             StartCoroutine(DeactivateNextFrame());

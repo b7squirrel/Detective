@@ -151,4 +151,15 @@ public class UpgradePanelManager : MonoBehaviour
         }
 
     }
+
+    // ForceClose 메서드만 추가, 나머지는 기존과 동일
+    public void ForceClose()
+    {
+        StopAllCoroutines();
+        if (confetti != null) confetti.SetActive(false);
+        HideButtons();
+        greyBase.SetActive(false);
+        panel.SetActive(false);
+        // UnPauseGame 호출 안 함 - 부활 패널이 Pause 관리 중
+    }
 }

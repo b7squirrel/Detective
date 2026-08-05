@@ -105,7 +105,7 @@ public class Level : MonoBehaviour
             }
             else
             {
-                UIEvent upgradeEvent = new UIEvent(() => LevelUp(), "Upgrade");
+                UIEvent upgradeEvent = new UIEvent(() => LevelUp(), "Upgrade", upgradeManager.ForceClose); // ⭐ ForceClose 연결
                 GameManager.instance.popupManager.EnqueueUIEvent(upgradeEvent);
                 break; // 패널을 열 때는 한 번만
             }

@@ -51,17 +51,15 @@ public class RevivalPanel : MonoBehaviour
         panelTween.ShowWithScale();
         adButton.interactable = AdsManager.IsRewardedAdReady;
 
-        // 여기서 반드시 정지 보장
+        GameManager.instance.popupManager.BlockForRevival(); // ⭐ 추가: 다른 팝업 차단 + 떠 있던 팝업 강제 종료
+
         GameManager.instance.pauseManager.PauseGame();
 
         countdownCoroutine = StartCoroutine(CountdownCo());
 
-        // 패널 효과음은 먼저 재생한 뒤 나머지 사운드를 멈춤
-        // (효과음을 Pause 후에 재생하면 Pause 상태에 걸리기 때문)
         if (revivalPanelSound != null)
             SoundManager.instance.Play(revivalPanelSound);
 
-        // ── 부활 팝업 등장 시 모든 사운드 일시 정지 ──
         SoundManager.instance.PauseAllSounds();
     }
 
@@ -168,8 +166,8 @@ public class RevivalPanel : MonoBehaviour
             countdownCoroutine = null;
         }
 
-        // 부활 시에만 사운드 재개
         Hide(resumeSounds: true);
+        GameManager.instance.popupManager.UnblockAfterRevival(); // ⭐ 추가: 게임 계속되므로 팝업 차단 해제
         character.Revive();
     }
 

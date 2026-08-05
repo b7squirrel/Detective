@@ -18,11 +18,8 @@ public class IncomingWarningPanel : MonoBehaviour
     {
         incomingText.text = LocalizationManager.Game.enemiesIncoming;
         tagColorImage.color = tagColor;
-        // ⭐ incomingWarningPanel.SetActive(true)는 여기서 호출하지 않음.
-        // 큐 처리 순서와 무관하게 패널이 먼저 보여버리는 문제를 막기 위해
-        // 실제 활성화는 ActivateWarning()(큐 차례가 왔을 때, PauseGame과 같은 타이밍)에서 수행.
 
-        UIEvent incomingEvent = new UIEvent(() => ActivateWarning(), "Incoming");
+        UIEvent incomingEvent = new UIEvent(() => ActivateWarning(), "Incoming", ForceClose); // ⭐ ForceClose 연결
         GameManager.instance.popupManager.EnqueueUIEvent(incomingEvent);
     }
 
@@ -34,7 +31,7 @@ public class IncomingWarningPanel : MonoBehaviour
 
     public void ActivateWarning()
     {
-        incomingWarningPanel.SetActive(true); // ⭐ 여기서 패널 활성화 (PauseGame 호출과 같은 타이밍)
+        incomingWarningPanel.SetActive(true);
         StartCoroutine(ActivateIncomingWarning());
     }
 
@@ -51,11 +48,16 @@ public class IncomingWarningPanel : MonoBehaviour
         PauseManager pm = GameManager.instance.pauseManager;
         pm.PauseGame();
         yield return new WaitForSecondsRealtime(2f);
-        Debug.Log("CLOSE");
         Close();
     }
 
-    // 애니메이션 이벤트
+    // ⭐ 추가: 강제 종료 (UnPauseGame 호출 안 함)
+    public void ForceClose()
+    {
+        StopAllCoroutines();
+        incomingWarningPanel.SetActive(false);
+    }
+
     public void PlayStartingSound()
     {
         SoundManager.instance.Play(startingSound);

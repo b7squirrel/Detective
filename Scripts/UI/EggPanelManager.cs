@@ -279,6 +279,27 @@ public class EggPanelManager : MonoBehaviour
         StopCoroutine(Close);
     }
 
+    // ForceClose 메서드만 추가, 나머지는 기존과 동일
+    public void ForceClose()
+    {
+        StopAllCoroutines();
+        Close = null;
+
+        EggImageUp(false);
+        eggPanel.SetActive(false);
+        blackBGPanel.SetActive(false);
+        whiteBGPanel.SetActive(false);
+        newKidText.SetActive(false);
+        oriNameGroup.SetActive(false);
+        oriName.SetActive(false);
+        nameBar.SetActive(false);
+        birdFlock.SetActive(false);
+        twinkleStarsParticle.Stop();
+        comicsLines.SetActive(false);
+        CloseNewKidImage();
+        // UnPauseGame 호출 안 함 - 부활 패널이 Pause 관리 중
+    }
+
     // 알에 아이디 부여
     public void SetEggID()
     {

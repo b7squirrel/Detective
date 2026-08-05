@@ -18,9 +18,10 @@ public class BossWarningPanel : MonoBehaviour
     {
         bossName.text = _name + " !";
         tagColorImage.color = tagColor;
-        UIEvent bossEvent = new UIEvent(() => ActivateWarning(), "Boss");
+        UIEvent bossEvent = new UIEvent(() => ActivateWarning(), "Boss", ForceClose); // ⭐ ForceClose 연결
         GameManager.instance.popupManager.EnqueueUIEvent(bossEvent);
     }
+
     public void Close()
     {
         anim.SetTrigger("Close");
@@ -32,6 +33,7 @@ public class BossWarningPanel : MonoBehaviour
         bossWarningPanel.SetActive(true);
         StartCoroutine(ActivateBossWarning());
     }
+
     IEnumerator Deactivate()
     {
         yield return new WaitForSecondsRealtime(.5f);
@@ -39,6 +41,7 @@ public class BossWarningPanel : MonoBehaviour
         GameManager.instance.popupManager.IsUIDone = true;
         GameManager.instance.pauseManager.UnPauseGame();
     }
+
     IEnumerator ActivateBossWarning()
     {
         PauseManager pm = GameManager.instance.pauseManager;
@@ -47,7 +50,13 @@ public class BossWarningPanel : MonoBehaviour
         Close();
     }
 
-    // 애니메이션 이벤트
+    // ⭐ 추가: 사망으로 부활 패널이 최우선일 때 강제 종료 (UnPauseGame 호출 안 함 - 부활 패널이 Pause 관리 중)
+    public void ForceClose()
+    {
+        StopAllCoroutines();
+        bossWarningPanel.SetActive(false);
+    }
+
     public void PlayStartingSound()
     {
         SoundManager.instance.Play(startingSound);
