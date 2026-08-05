@@ -49,10 +49,11 @@ public class RevivalPanel : MonoBehaviour
         character = _character;
         isRevived = false;
         panelTween.ShowWithScale();
-        adButton.interactable = AdsManager.IsRewardedAdReady;
 
-        GameManager.instance.popupManager.BlockForRevival(); // ⭐ 추가: 다른 팝업 차단 + 떠 있던 팝업 강제 종료
+        adButton.interactable = AdsManager.IsRewardedAdReady; // 최초 상태는 여전히 여기서 세팅
+        AdsManager.OnRewardedAdReadyChanged += OnRewardedAdReadyChanged; // ⭐ 추가: 실시간 구독 시작
 
+        GameManager.instance.popupManager.BlockForRevival(); // 다른 팝업 차단
         GameManager.instance.pauseManager.PauseGame();
 
         countdownCoroutine = StartCoroutine(CountdownCo());
@@ -61,6 +62,13 @@ public class RevivalPanel : MonoBehaviour
             SoundManager.instance.Play(revivalPanelSound);
 
         SoundManager.instance.PauseAllSounds();
+    }
+
+    // ⭐ 추가: 광고 준비 상태가 바뀔 때마다 버튼에 실시간 반영
+    void OnRewardedAdReadyChanged(bool isReady)
+    {
+        if (adButton != null)
+            adButton.interactable = isReady;
     }
 
     IEnumerator CountdownCo()
@@ -176,10 +184,17 @@ public class RevivalPanel : MonoBehaviour
     /// </summary>
     void Hide(bool resumeSounds)
     {
+        AdsManager.OnRewardedAdReadyChanged -= OnRewardedAdReadyChanged; // ⭐ 추가: 구독 해제
+
         countdownText.color = Color.yellow;
         panelTween.HideWithScale();
 
         if (resumeSounds)
             SoundManager.instance.ResumeAllSounds();
+    }
+
+    void OnDestroy() // ⭐ 추가
+    {
+        AdsManager.OnRewardedAdReadyChanged -= OnRewardedAdReadyChanged;
     }
 }

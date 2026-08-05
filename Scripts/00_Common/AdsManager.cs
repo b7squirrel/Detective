@@ -15,7 +15,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         // ★ 테스트 기기 등록 - 반드시 InitAdsService()보다 먼저!
         RequestConfiguration requestConfiguration = new RequestConfiguration
         {
-            TestDeviceIds = new List<string> { 
+            TestDeviceIds = new List<string> {
                 "BE85D1491E3B0ACC8E8996B7C3BC6C0F",
                 "B40200ED0A5B5557E8BE2910D0A87FB2"
                 }
@@ -262,6 +262,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
 
     #region RewardedAd
     public static bool IsRewardedAdReady { get; private set; } = false;
+    public static event Action<bool> OnRewardedAdReadyChanged; // ⭐ 추가: 상태 변경 알림
 
     private RewardedAd m_DailyFreeGemRewardedAd;
     private string m_DailyFreeGemRewardedAdId = string.Empty;
@@ -277,10 +278,24 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     //         OnAdImpressionRecorded 콜백에서도 placement를 함께 로깅하기 위함
     private string m_CurrentRewardedAdPlacement = "unknown";
 
+    // ⭐ 추가: 로드 실패 시 재시도 관리
+    private Coroutine m_RewardedAdRetryCoroutine;
+    private int m_RewardedAdRetryCount = 0;
+    private const int REWARDED_AD_MAX_RETRY = 5;
+    private const float REWARDED_AD_BASE_RETRY_DELAY = 2f;
+
     private void InitRewardedAds()
     {
         SetDailyFreeGemRewardedAdId();
         LoadDailyFreeGemRewardedAd();
+    }
+
+    // ⭐ 추가: IsRewardedAdReady 값을 바꾸는 유일한 통로. 값이 실제로 달라질 때만 이벤트 발행.
+    private static void SetRewardedAdReady(bool value)
+    {
+        if (IsRewardedAdReady == value) return;
+        IsRewardedAdReady = value;
+        OnRewardedAdReadyChanged?.Invoke(value);
     }
 
     private void SetDailyFreeGemRewardedAdId()
@@ -311,17 +326,46 @@ public class AdsManager : SingletonBehaviour<AdsManager>
                 if (error != null || ad == null)
                 {
                     Logger.LogError($"[AdsManager] 보상형 광고 로드 실패. Error: {error}");
-                    IsRewardedAdReady = false;
-                    FirebaseManager.LogEvent("ad_load_fail", "ad_type", "rewarded"); // ⭐ 추가
+                    SetRewardedAdReady(false); // ⭐ 변경
+                    FirebaseManager.LogEvent("ad_load_fail", "ad_type", "rewarded");
+                    ScheduleRewardedAdRetry(); // ⭐ 추가: 실패 시 자동 재시도 예약
                     return;
                 }
 
                 Logger.Log($"[AdsManager] 보상형 광고 로드 성공! Response: {ad.GetResponseInfo()}");
                 m_DailyFreeGemRewardedAd = ad;
-                IsRewardedAdReady = true;
-                FirebaseManager.LogEvent("ad_load_success", "ad_type", "rewarded"); // ⭐ 추가
+                SetRewardedAdReady(true); // ⭐ 변경
+                m_RewardedAdRetryCount = 0; // ⭐ 추가: 성공했으니 재시도 카운트 초기화
+                FirebaseManager.LogEvent("ad_load_success", "ad_type", "rewarded");
                 ListenToDailyFreeGemRewardedAdEvents();
             });
+    }
+
+    // ⭐ 추가: 지수 백오프로 재로드 예약
+    private void ScheduleRewardedAdRetry()
+    {
+        if (m_RewardedAdRetryCoroutine != null)
+            return; // 이미 예약된 재시도가 있으면 중복 예약 방지
+
+        if (m_RewardedAdRetryCount >= REWARDED_AD_MAX_RETRY)
+        {
+            Logger.LogError($"[AdsManager] 보상형 광고 재시도 {REWARDED_AD_MAX_RETRY}회 모두 실패. 재시도를 중단합니다.");
+            FirebaseManager.LogEvent("ad_retry_exhausted", "ad_type", "rewarded"); // ⭐ 추가: 분석용
+            return;
+        }
+
+        float delay = REWARDED_AD_BASE_RETRY_DELAY * Mathf.Pow(2, m_RewardedAdRetryCount);
+        m_RewardedAdRetryCount++;
+
+        Logger.Log($"[AdsManager] {delay}초 후 보상형 광고 재로드 시도 ({m_RewardedAdRetryCount}/{REWARDED_AD_MAX_RETRY})");
+        m_RewardedAdRetryCoroutine = StartCoroutine(RewardedAdRetryCo(delay));
+    }
+
+    private IEnumerator RewardedAdRetryCo(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        m_RewardedAdRetryCoroutine = null;
+        LoadDailyFreeGemRewardedAd();
     }
 
     private void ListenToDailyFreeGemRewardedAdEvents()
@@ -352,7 +396,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         m_DailyFreeGemRewardedAd.OnAdFullScreenContentClosed += () =>
         {
             Logger.Log($"m_DailyFreeGemRewardedAd full screen content closed.");
-            IsRewardedAdReady = false;
+            SetRewardedAdReady(false); // ⭐ 변경
             m_OnDailyFreeGemRewardedAdClosed?.Invoke();
             m_OnDailyFreeGemRewardedAdClosed = null;
             LoadDailyFreeGemRewardedAd();
@@ -361,7 +405,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         m_DailyFreeGemRewardedAd.OnAdFullScreenContentFailed += (AdError error) =>
         {
             Logger.LogError($"m_DailyFreeGemRewardedAd failed to open full screen content with error: {error}");
-            IsRewardedAdReady = false;
+            SetRewardedAdReady(false); // ⭐ 변경
             FirebaseManager.LogEvent("ad_show_fail_content_error", "placement", m_CurrentRewardedAdPlacement); // ⭐ 추가
             m_OnDailyFreeGemRewardedAdClosed?.Invoke();
             m_OnDailyFreeGemRewardedAdClosed = null;
@@ -395,6 +439,7 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         {
             Logger.LogError($"m_DailyFreeGemRewardedAd is not ready yet.");
             FirebaseManager.LogEvent("ad_show_fail_not_ready", "placement", placement); // ⭐ 추가
+            ScheduleRewardedAdRetry(); // ⭐ 추가
         }
     }
 
@@ -425,12 +470,19 @@ public class AdsManager : SingletonBehaviour<AdsManager>
         {
             Logger.LogError($"[AdsManager] 광고가 준비되지 않았습니다.");
             FirebaseManager.LogEvent("ad_show_fail_not_ready", "placement", placement); // ⭐ 추가
+            ScheduleRewardedAdRetry(); // ⭐ 추가
         }
     }
     #endregion
 
     protected override void Dispose()
     {
+        if (m_RewardedAdRetryCoroutine != null) // ⭐ 추가
+        {
+            StopCoroutine(m_RewardedAdRetryCoroutine);
+            m_RewardedAdRetryCoroutine = null;
+        }
+
         if (m_TopBannerView != null)
         {
             m_TopBannerView.Destroy();
