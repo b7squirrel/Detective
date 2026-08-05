@@ -39,7 +39,7 @@ public class PopupManager : MonoBehaviour
             {
                 if (debugMode)
                 {
-                    Debug.Log($"현재 사이클에서 최대 업그레이드 개수에 도달했습니다. ({currentUpgradeCount}/5) - 새로운 Upgrade 이벤트를 무시합니다.");
+                    Debug.Log($"현재 사이클에서 최대 업그레이드 개수에 도달했습니다. ({currentUpgradeCount}/{maxUpgradeQueue}) - 새로운 Upgrade 이벤트를 무시합니다.");
                 }
                 return;
             }
@@ -55,7 +55,7 @@ public class PopupManager : MonoBehaviour
             {
                 if (debugMode)
                 {
-                    Debug.Log($"현재 사이클에서 최대 Egg 개수에 도달했습니다. ({currentEggCount}/2) - 새로운 Egg 이벤트를 무시합니다.");
+                    Debug.Log($"현재 사이클에서 최대 Egg 개수에 도달했습니다. ({currentEggCount}/1) - 새로운 Egg 이벤트를 무시합니다.");
                 }
                 return;
             }
