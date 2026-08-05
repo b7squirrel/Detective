@@ -10,19 +10,23 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     protected override void Init()
     {
         base.Init();
+
+        if (Instance != this) // ⭐ 추가: 중복 인스턴스면 여기서 즉시 중단 (base.Init()이 이미 Destroy를 예약했음)
+            return;
+
         Debug.Log("[AdsManager] Init() 시작");
 
         RequestConfiguration requestConfiguration = new RequestConfiguration
         {
             TestDeviceIds = new List<string> {
-                "BE85D1491E3B0ACC8E8996B7C3BC6C0F",
-                "B40200ED0A5B5557E8BE2910D0A87FB2"
-                }
+            "BE85D1491E3B0ACC8E8996B7C3BC6C0F",
+            "B40200ED0A5B5557E8BE2910D0A87FB2"
+            }
         };
         MobileAds.SetRequestConfiguration(requestConfiguration);
 
         Debug.Log("[AdsManager] InitConsent 호출 직전");
-        Debug.Log($"[AdsManager] 네트워크 연결 상태: {Application.internetReachability}"); // ⭐ 추가: 진단용
+        Debug.Log($"[AdsManager] 네트워크 연결 상태: {Application.internetReachability}");
 
         InitConsent(() =>
         {
