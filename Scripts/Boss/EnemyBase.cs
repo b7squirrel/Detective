@@ -620,14 +620,15 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return;
 
         // ✅ 추가: 모든 적이 동일 프레임에 처리되지 않도록 분산
-        if (Time.frameCount % attackFrameInterval != (GetInstanceID() & 3)) return;
+        int enemyOffset = Mathf.Abs(GetInstanceID()) % attackFrameInterval;
+        if (Time.frameCount % attackFrameInterval != enemyOffset) return;
 
         if (GameManager.instance.player == null)
             return;
 
         if (collision.gameObject == Target.gameObject)
         {
-            if (enemyType == EnemyType.Melee && Time.frameCount % attackFrameInterval == 0) // Melee는 attackFrameInterval 프레임에 한 번 공격
+            if (enemyType == EnemyType.Melee)
             {
                 Attack(EnemyType.Melee);
             }
