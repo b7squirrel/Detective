@@ -16,8 +16,8 @@ public class TitleLoadingUI : MonoBehaviour
 
     [Header("진행바 방식 (선택사항)")]
     [SerializeField] Slider progressBar;
-    [SerializeField] TextMeshProUGUI progressText;
-    [SerializeField] TextMeshProUGUI statusText;
+    [SerializeField] protected ShadowedText progressText;
+    [SerializeField] protected ShadowedText statusText;
     [SerializeField] float minLoadingTime = 2f; // 최소 로딩 시간
     [SerializeField] float fakeProgressStartPoint = 0.7f; // 페이크 진행 시작 지점 (70%)
 

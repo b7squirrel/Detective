@@ -133,10 +133,12 @@ public class MainMenuManager : MonoBehaviour
                 tabAnims[i].SetBool("Up", true);
                 tabAnims[i].SetBool("Idle", false);
                 BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(true); // 선택된 탭만 텍스트 보이기
+                BtnImageRect[i].transform.GetChild(1).gameObject.SetActive(true); // 선택된 탭만 텍스트 보이기
             }
             else
             {
                 BtnImageRect[i].transform.GetChild(0).gameObject.SetActive(false); // 다른 탭은 텍스트 숨기기
+                BtnImageRect[i].transform.GetChild(1).gameObject.SetActive(false); // 다른 탭은 텍스트 숨기기
             }
 
             BtnImageRect[i].anchoredPosition3D = Vector3.Lerp(BtnImageRect[i].anchoredPosition3D, BtnTargetPos, 1f);

@@ -11,11 +11,11 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject titleRibbon;
     [SerializeField] GameObject titleRibbonShadow;
     [SerializeField] GameObject SkillDescriptionPanel;
-    [SerializeField] protected TextMeshProUGUI Title;
-    [SerializeField] protected TextMeshProUGUI Level;
-    [SerializeField] protected TextMeshProUGUI LevelShadow;
-    [SerializeField] protected TextMeshProUGUI SkillName;
-    [SerializeField] protected TextMeshProUGUI SkillDescription;
+    [SerializeField] protected ShadowedText Title;
+    [SerializeField] protected ShadowedText Level;
+    [SerializeField] protected ShadowedText SkillLabel;       // ⭐ 신규 추가
+    [SerializeField] protected ShadowedText SkillName;
+    [SerializeField] protected ShadowedText SkillDescription;
     [SerializeField] protected GameObject starPrefab;
     GameObject[] stars;
     SetCardDataOnSlot setCardDataOnSlot; // 카드 데이터와 슬롯을 넘겨 받아서 슬롯에 카드를 표시
@@ -55,8 +55,11 @@ public class EquipDisplayUI : MonoBehaviour
         SkillDescriptionPanel.SetActive(true);
 
         // 스킬 이름 및 설명 (CharTexts 사용)
+        SkillLabel.Main.color = MyGrade.GradeColors[charCardData.Grade];  // ⭐ SkillLabel도 SkillName과 같은 색
+
         SkillName.text = LocalizationManager.Char.skillNames[charCardData.PassiveSkill - 1];
-        SkillName.color = MyGrade.GradeColors[charCardData.Grade];
+        SkillName.Main.color = MyGrade.GradeColors[charCardData.Grade];   // color → Main.color
+
         SkillDescription.text = LocalizationManager.Char.skillDescriptions[charCardData.PassiveSkill - 1];
 
         for (int i = 0; i < StaticValues.MaxGrade; i++)
@@ -75,10 +78,9 @@ public class EquipDisplayUI : MonoBehaviour
         titleRibbon.SetActive(true);
         titleRibbonShadow.SetActive(true);
         Title.text = dispName;
-        
+
         // 카드 레벨 텍스트 (GameTexts 사용)
         Level.text = LocalizationManager.Game.level + " " + charCardData.Level;
-        LevelShadow.text = Level.text;
 
         // 디버그
         if (testParts != null)
@@ -131,17 +133,16 @@ public class EquipDisplayUI : MonoBehaviour
         float targetSize = originalSize + 12f;
         return DOTween.To(() => text.fontSize, x => text.fontSize = x, targetSize, 0.1f)
             .SetEase(Ease.OutBack)
-            .OnComplete(() => 
+            .OnComplete(() =>
             {
                 text.fontSize = originalSize;
             });
     }
-    
+
     public void SetLevelUI(CardData cardOnDisplay)
     {
         // GameTexts 사용
         Level.text = LocalizationManager.Game.level + " " + cardOnDisplay.Level;
-        LevelShadow.text = Level.text;
     }
 
     // ⭐ 추가: 최고 레벨 도달 시 레벨 텍스트 팝 연출
@@ -149,11 +150,9 @@ public class EquipDisplayUI : MonoBehaviour
     {
         levelMaxPopTween?.Kill();
         Level.transform.localScale = Vector3.one;
-        LevelShadow.transform.localScale = Vector3.one;
 
         Sequence seq = DOTween.Sequence();
         seq.Append(Level.transform.DOPunchScale(Vector3.one * 0.8f, 0.2f, 6, 1f));
-        seq.Join(LevelShadow.transform.DOPunchScale(Vector3.one * 0.8f, 0.5f, 6, 1f));
 
         levelMaxPopTween = seq;
     }
@@ -219,7 +218,6 @@ public class EquipDisplayUI : MonoBehaviour
         titleRibbonShadow.SetActive(false);
 
         Level.text = "";
-        LevelShadow.text = "";
         Title.text = "";
 
         atkLabel.SetActive(false);
@@ -238,7 +236,6 @@ public class EquipDisplayUI : MonoBehaviour
         // ⭐ 추가: 최고레벨 팝 연출 정리 (패널을 나갈 때 찌그러진 채로 남지 않도록)
         levelMaxPopTween?.Kill();
         Level.transform.localScale = Vector3.one;
-        LevelShadow.transform.localScale = Vector3.one;
 
         charDispMaxPopTween?.Kill();
         if (charDispRoot != null)
@@ -294,8 +291,8 @@ public class EquipDisplayUI : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         // 세로로 줄고 가로로 늘어남 (스쿼시)
         seq.Append(charImage.DOScale(new Vector3(1.2f, 0.2f, 1f), 0.1f).SetEase(Ease.InSine));
-        
-        
+
+
         seq.Join(charRect.DOAnchorPosY(-30f, 0.09f).SetEase(Ease.OutExpo));
 
         // 원래대로 복귀
