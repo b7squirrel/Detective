@@ -63,10 +63,9 @@ public class TitleLoadingUI : MonoBehaviour
         float startTime = Time.time;
 
         // 텍스트를 "집으로 돌아가는 중..."으로 변경
-        TextMeshProUGUI loadingText = loadingPanel.GetComponentInChildren<TextMeshProUGUI>();
-        if (loadingText != null)
+        if (statusText != null)
         {
-            loadingText.text = LocalizationManager.Game.loadingBackToLobby;
+            statusText.text = LocalizationManager.Game.loadingBackToLobby;
         }
 
         // 슬라이더 초기화

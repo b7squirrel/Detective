@@ -9,6 +9,7 @@ public class RevivalPanel : MonoBehaviour
     [SerializeField] GameObject panel;
     [SerializeField] TextMeshProUGUI countdownText;
     [SerializeField] TextMeshProUGUI cristalCostText;
+    [SerializeField] TextMeshProUGUI adButtonLabel; // ⭐ 추가: 광고 버튼 안의 텍스트
     [SerializeField] Button adButton;
     [SerializeField] Button cristalButton;
     [SerializeField] Button giveUpButton;
@@ -20,11 +21,16 @@ public class RevivalPanel : MonoBehaviour
     [SerializeField] int countdownSeconds = 8;
     [SerializeField] int cristalCost = 30;
 
+    const string AD_LOADING_TEXT = "광고 로드 중..."; // ⭐ 추가
+
     Character character;
     Coroutine countdownCoroutine;
     bool isRevived = false;
     bool hasUsedRevival = false;
     PanelTween panelTween;
+
+    string adButtonDefaultText; // ⭐ 추가
+    int remainingCountdown; // ⭐ 추가: 카운트다운을 필드로 관리 (재개 시 이어서 진행)
 
     void Start()
     {
@@ -32,6 +38,9 @@ public class RevivalPanel : MonoBehaviour
         panelTween = panel.GetComponent<PanelTween>();
 
         cristalCostText.text = $"{cristalCost}개로 부활";
+
+        if (adButtonLabel != null)
+            adButtonDefaultText = adButtonLabel.text; // ⭐ 추가
 
         adButton.onClick.AddListener(OnAdButtonClicked);
         cristalButton.onClick.AddListener(OnCristalButtonClicked);
@@ -46,14 +55,26 @@ public class RevivalPanel : MonoBehaviour
             return;
         }
 
+        // ⭐ 추가: 광고가 준비 안 되어 있으면 패널 자체를 띄우지 않고 즉시 사망 처리
+        if (!AdsManager.IsRewardedAdReady)
+        {
+            Debug.Log("[RevivalPanel] 광고 미준비 - 부활 패널 스킵, 즉시 게임오버 처리");
+            FirebaseManager.LogEvent("revival_panel_skipped_ad_not_ready");
+            AdsManager.Instance.RequestRewardedAdLoad(); // 다음 기회를 위해 재로드 트리거
+            _character.ProcessDeath();
+            return;
+        }
+
         character = _character;
         isRevived = false;
+        remainingCountdown = countdownSeconds; // ⭐ 추가
         panelTween.ShowWithScale();
 
-        adButton.interactable = AdsManager.IsRewardedAdReady; // 최초 상태는 여전히 여기서 세팅
-        AdsManager.OnRewardedAdReadyChanged += OnRewardedAdReadyChanged; // ⭐ 추가: 실시간 구독 시작
+        SyncAdButtonState(AdsManager.IsRewardedAdReady); // ⭐ 변경
+        AdsManager.OnRewardedAdReadyChanged += SyncAdButtonState; // ⭐ 추가: 실시간 구독
 
-        GameManager.instance.popupManager.BlockForRevival(); // 다른 팝업 차단
+        GameManager.instance.popupManager.BlockForRevival();
+
         GameManager.instance.pauseManager.PauseGame();
 
         countdownCoroutine = StartCoroutine(CountdownCo());
@@ -64,35 +85,36 @@ public class RevivalPanel : MonoBehaviour
         SoundManager.instance.PauseAllSounds();
     }
 
-    // ⭐ 추가: 광고 준비 상태가 바뀔 때마다 버튼에 실시간 반영
-    void OnRewardedAdReadyChanged(bool isReady)
+    // ⭐ 추가: 광고 버튼의 interactable 상태와 텍스트를 함께 동기화
+    void SyncAdButtonState(bool isReady)
     {
         if (adButton != null)
             adButton.interactable = isReady;
+
+        if (adButtonLabel != null)
+            adButtonLabel.text = isReady ? adButtonDefaultText : AD_LOADING_TEXT;
     }
 
     IEnumerator CountdownCo()
     {
-        int remaining = countdownSeconds;
-        while (remaining > 0)
+        while (remainingCountdown > 0) // ⭐ 변경: 필드 기반으로 동작 (멈췄다 재개해도 값 유지)
         {
-            countdownText.text = $"{remaining}";
+            countdownText.text = $"{remainingCountdown}";
 
-            if (remaining > 5)
+            if (remainingCountdown > 5)
                 countdownText.color = Color.yellow;
-            else if (remaining > 2)
+            else if (remainingCountdown > 2)
                 countdownText.color = new Color(1f, 0.5f, 0f);
             else
                 countdownText.color = Color.red;
 
             yield return new WaitForSecondsRealtime(1f);
-            remaining--;
+            remainingCountdown--;
         }
 
-        // 타임아웃 → 게임오버 (사운드 재개 없음)
         if (isRevived == false)
         {
-            Logger.Log("[RevivalPanel] 카운트다운 종료 → 게임오버");
+            Debug.Log("[RevivalPanel] 카운트다운 종료 → 게임오버");
             Hide(resumeSounds: false);
             character.ProcessDeath();
         }
@@ -115,17 +137,22 @@ public class RevivalPanel : MonoBehaviour
             {
                 if (rewarded)
                 {
-                    Logger.Log("[RevivalPanel] 광고 닫힘 → 부활");
+                    Debug.Log("[RevivalPanel] 광고 닫힘 → 부활");
                     DoRevive();
                 }
                 else
                 {
-                    Logger.Log("[RevivalPanel] 광고 미완료 → 게임오버");
+                    Debug.Log("[RevivalPanel] 광고 미완료 → 게임오버");
                     Hide(resumeSounds: false);
                     character.ProcessDeath();
                 }
             },
-            placement: "revival" // ⭐ 추가: 이 광고 시청이 부활 시나리오에서 발생했음을 표시
+            onAdNotReady: () => // ⭐ 추가
+            {
+                Debug.LogWarning("[RevivalPanel] 광고 재생 불가 → 카운트다운 이어서 재개");
+                countdownCoroutine = StartCoroutine(CountdownCo()); // remainingCountdown 값 그대로 이어서 진행
+            },
+            placement: "revival"
         );
     }
 
@@ -138,8 +165,8 @@ public class RevivalPanel : MonoBehaviour
         int currentCristal = PlayerDataManager.Instance.GetCurrentCristalNumber();
         if (currentCristal < cristalCost)
         {
-            Logger.LogWarning("[RevivalPanel] 크리스탈 부족");
-            cristalButton.interactable = true; // 부족하면 다시 활성화
+            Debug.LogWarning("[RevivalPanel] 크리스탈 부족");
+            cristalButton.interactable = true;
             return;
         }
 
@@ -149,7 +176,7 @@ public class RevivalPanel : MonoBehaviour
 
     void OnGiveUpButtonClicked()
     {
-        Logger.Log("[RevivalPanel] 포기 선택 → 게임오버");
+        Debug.Log("[RevivalPanel] 포기 선택 → 게임오버");
 
         if (countdownCoroutine != null)
         {
@@ -157,7 +184,6 @@ public class RevivalPanel : MonoBehaviour
             countdownCoroutine = null;
         }
 
-        // 게임오버이므로 사운드 재개 없이 패널만 닫음
         Hide(resumeSounds: false);
         character.ProcessDeath();
     }
@@ -175,7 +201,7 @@ public class RevivalPanel : MonoBehaviour
         }
 
         Hide(resumeSounds: true);
-        GameManager.instance.popupManager.UnblockAfterRevival(); // ⭐ 추가: 게임 계속되므로 팝업 차단 해제
+        GameManager.instance.popupManager.UnblockAfterRevival();
         character.Revive();
     }
 
@@ -184,7 +210,7 @@ public class RevivalPanel : MonoBehaviour
     /// </summary>
     void Hide(bool resumeSounds)
     {
-        AdsManager.OnRewardedAdReadyChanged -= OnRewardedAdReadyChanged; // ⭐ 추가: 구독 해제
+        AdsManager.OnRewardedAdReadyChanged -= SyncAdButtonState; // ⭐ 추가: 구독 해제
 
         countdownText.color = Color.yellow;
         panelTween.HideWithScale();
@@ -193,8 +219,8 @@ public class RevivalPanel : MonoBehaviour
             SoundManager.instance.ResumeAllSounds();
     }
 
-    void OnDestroy() // ⭐ 추가
+    void OnDestroy() // ⭐ 추가: 오브젝트 파괴 시 안전장치
     {
-        AdsManager.OnRewardedAdReadyChanged -= OnRewardedAdReadyChanged;
+        AdsManager.OnRewardedAdReadyChanged -= SyncAdButtonState;
     }
 }
