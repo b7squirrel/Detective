@@ -51514,7 +51514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &790871837
 RectTransform:
   m_ObjectHideFlags: 0
@@ -106675,6 +106675,7 @@ MonoBehaviour:
   - Name: Move
     tutorialObject: {fileID: 1808785985470594601, guid: 31179c5b8fa664bf7bc34109d836fd0c, type: 3}
     hasShown: 0
+  confettiEffect: {fileID: 0}
 --- !u!4 &1607790395
 Transform:
   m_ObjectHideFlags: 0
@@ -126777,7 +126778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isProcessing: 0
-  maxUpgradeQueue: 5
+  maxUpgradeQueue: 3
   debugMode: 0
   debugPanel: {fileID: 1910771177}
   queueContents: []

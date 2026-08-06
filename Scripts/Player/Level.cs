@@ -29,7 +29,7 @@ public class Level : MonoBehaviour
     CoinManager coinManager;
 
     [Header("연속 레벨업 제한")]
-    [SerializeField] int maxConsecutivePanels = 3; // 최대 몇 번까지 패널을 띄울지
+    [SerializeField] int maxConsecutivePanels = 3; // 최대 몇 번까지 패널을 띄울지. 지금은 사용안함. Popup manager에서 담당
     int consecutiveLevelUpCount = 0; // 현재 연속 레벨업 횟수
 
     [Header("Debug")]
