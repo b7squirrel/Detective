@@ -3,7 +3,7 @@ using TMPro;
 
 public class LoadingSwipeHint : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI hintText;
+    [SerializeField] private ShadowedText hintText;
 
     [Header("디버깅")]
     [SerializeField] private bool isDebugging;

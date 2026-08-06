@@ -20923,6 +20923,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7220505907840290314, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+      propertyPath: hintText
+      value: 
+      objectReference: {fileID: 308984944}
     - target: {fileID: 7407264732060088541, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       propertyPath: trailDustPrefab
       value: 
@@ -21046,7 +21050,51 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2140723021726043028, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
       insertIndex: -1
       addedObject: {fileID: 777008691}
+    - targetCorrespondingSourceObject: {fileID: 8399760424460223640, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 308984944}
   m_SourcePrefab: {fileID: 100100000, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+--- !u!114 &308984941 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4617535409012300998, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+  m_PrefabInstance: {fileID: 308984940}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &308984942 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2381246333664652331, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+  m_PrefabInstance: {fileID: 308984940}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &308984943 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8399760424460223640, guid: e00b15f92ce1a644dad7223e47ade536, type: 3}
+  m_PrefabInstance: {fileID: 308984940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &308984944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308984943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ebf410d7d4a4accbacf0e23a993097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainText: {fileID: 308984941}
+  shadowText: {fileID: 308984942}
 --- !u!1 &309187635
 GameObject:
   m_ObjectHideFlags: 0
@@ -44902,7 +44950,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyGroupShape: {fileID: 4525072272467478360, guid: 8a5aab02958ecb44d87d618a6e5d9437, type: 3}
-  maxEnemyInScene: 150
+  maxEnemyInScene: 100
   currentEnemyNumbers: 0
   BossLandingDoodleIndicator: {fileID: 7198432278835588730, guid: bae365300aeb8e14ba6c97ce0ded657c, type: 3}
 --- !u!1 &684018020
