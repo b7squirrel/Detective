@@ -103,6 +103,7 @@ public class ShadowHeightProjectile : MonoBehaviour
         IsDone = false;
         isGrounded = false;
         bounceCounter = 0;
+
         trnsBody.position = Vector2.zero;
         this.verticalVelocity = verticalVelocity;
 

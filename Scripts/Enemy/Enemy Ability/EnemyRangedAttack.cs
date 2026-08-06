@@ -162,7 +162,12 @@ public class EnemyRangedAttack : MonoBehaviour
         GameObject cannonBall = GameManager.instance.poolManager.GetMisc(projectilePrefab);
         cannonBall.transform.position = transform.position;
 
-        cannonBall.GetComponentInChildren<TriggerEnemyProjHeightShadow>()?.Init();
+        Logger.Log($"[FireProjectile] 적 위치={transform.position} / 루트(Re) 설정 후 position={cannonBall.transform.position}");
+
+        var childTrigger = cannonBall.GetComponentInChildren<TriggerEnemyProjHeightShadow>();
+        Logger.Log($"[FireProjectile] Init 호출 직전 자식 position={childTrigger.transform.position} / localPosition={childTrigger.transform.localPosition}");
+
+        childTrigger?.Init();
 
         var projectile = cannonBall.GetComponentInChildren<IEnemyProjectile>();
         if (projectile == null)

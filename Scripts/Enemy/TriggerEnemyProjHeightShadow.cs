@@ -11,14 +11,26 @@ public class TriggerEnemyProjHeightShadow : MonoBehaviour
             Debug.LogError("GameManager 또는 Player가 없습니다!");
             return;
         }
+
+        Logger.Log($"[Init] 진입 시 transform.position(자식)={transform.position}, transform.localPosition={transform.localPosition}, parent={transform.parent?.name}");
+
+        // ⭐ 부모(루트, 적 위치로 설정된 오브젝트)에 아직 붙어있는 상태에서 리셋
+        // → 부모 기준 0,0,0 = 정확히 적의 현재 위치로 스냅됨
+        transform.localPosition = Vector3.zero;
+
         Transform originalParent = transform.parent;
         transform.SetParent(null);
 
         Vector2 targetPosition = GameManager.instance.player.transform.position;
         Vector2 startPosition = transform.position;
 
+        Logger.Log($"[Init] startPosition={startPosition} / targetPosition={targetPosition}");
+
         float horizontalVelociy = GetHorizontalVelocity(startPosition, targetPosition);
         Vector2 direction = (targetPosition - startPosition).normalized;
+
+        Logger.Log($"[Init] horizontalVelocity={horizontalVelociy} / direction={direction}");
+
 
         Vector2 groundVelocity;
         float verticalVel;
@@ -27,7 +39,12 @@ public class TriggerEnemyProjHeightShadow : MonoBehaviour
         verticalVel = 50f;
 
         shadowHeightProj.Initialize(groundVelocity, verticalVel);
+
+        Logger.Log($"[Init] Initialize 호출 후 transform.position={transform.position}");
+
         transform.SetParent(originalParent);
+
+        Logger.Log($"[Init] 재부모화 후 transform.position={transform.position} / localPosition={transform.localPosition}");
     }
 
     public float GetHorizontalVelocity(Vector2 startPos, Vector2 targetPos)
