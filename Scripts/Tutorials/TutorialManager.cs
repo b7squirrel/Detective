@@ -24,6 +24,10 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] Transform tutorialParent;
     [SerializeField] List<TutorialData> tutorials = new List<TutorialData>();
 
+    [Header("Confetti")]
+    [SerializeField] ParticleSystem confettiEffect;
+
+
     // ✅ 신규 추가: 현재 튜토리얼 단계
     public TutorialStep CurrentStep { get; private set; }
 

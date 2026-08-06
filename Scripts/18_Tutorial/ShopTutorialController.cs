@@ -21,6 +21,9 @@ public class ShopTutorialController : MonoBehaviour
     [SerializeField] TextMeshProUGUI crystalGivenText;
     [SerializeField] TextMeshProUGUI crystalGivenTextShd;
 
+    [Header("최고레벨 카드 안내 말풍선")]
+    [SerializeField] GameObject topCardHintBubble;
+
     [Header("보석 지급량")]
     [SerializeField] int crystalAmount = 1650;
 
@@ -124,6 +127,7 @@ public class ShopTutorialController : MonoBehaviour
         Debug.Log($"[ShopTutorial] OnShopTabEntered - phase: {phase}");
 
         tutorialHighlight.Hide();
+        HideTopCardHint();   // ⭐ 추가
         if (fg != null) fg.SetActive(true);
 
         switch (phase)
@@ -170,6 +174,7 @@ public class ShopTutorialController : MonoBehaviour
         // ✅ 하이라이트 표시 후 스크롤 잠금
         LockScroll();
         tutorialHighlight.HighlightUI(duckCardButton, fg);
+        ShowTopCardHint();   // ⭐ 추가
     }
 
     IEnumerator ScrollThenHighlightItem()
@@ -240,6 +245,7 @@ public class ShopTutorialController : MonoBehaviour
     public void OnGachaOpened(ChestType chestType)
     {
         tutorialHighlight.Hide();
+        HideTopCardHint();   // ⭐ 추가
         if (fg != null) fg.SetActive(true);
 
         // ✅ 가챠 화면 열릴 때 스크롤 복구
@@ -340,9 +346,40 @@ public class ShopTutorialController : MonoBehaviour
         _activeScrollCoroutine = null; // 레퍼런스 초기화
         StopAllCoroutines();
         tutorialHighlight?.Hide();
+        HideTopCardHint();   // ⭐ 추가
         if (fg != null) fg.SetActive(false);
         UnlockScroll();
         phase = ShopTutorialPhase.None;
         Debug.Log("[ShopTutorial] HideAll 호출됨 - 호출 스택 확인 필요");
+    }
+
+    void ShowTopCardHint()
+    {
+        if (topCardHintBubble == null) return;
+
+        PanelTween tween = topCardHintBubble.GetComponent<PanelTween>();
+        if (tween != null)
+        {
+            tween.ShowWithScale();
+        }
+        else
+        {
+            topCardHintBubble.SetActive(true);
+        }
+    }
+
+    void HideTopCardHint()
+    {
+        if (topCardHintBubble == null || !topCardHintBubble.activeSelf) return;
+
+        PanelTween tween = topCardHintBubble.GetComponent<PanelTween>();
+        if (tween != null)
+        {
+            tween.HideWithScale();
+        }
+        else
+        {
+            topCardHintBubble.SetActive(false);
+        }
     }
 }
