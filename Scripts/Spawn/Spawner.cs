@@ -11,6 +11,9 @@ public class Spawner : MonoBehaviour
     [SerializeField] int maxEnemyInScene; // 적의 수 최대치 설정
     [SerializeField] int currentEnemyNumbers; // 현재 스폰되어 있는 적의 수
 
+    // ⭐ 추가: StageEvenetManager 등 다른 곳에서 같은 기준값을 참조하도록 공개
+    public int MaxEnemyInScene => maxEnemyInScene;
+
     [Header("보스 랜딩 두들 이펙트")]
     [SerializeField] GameObject BossLandingDoodleIndicator;
 
@@ -53,12 +56,10 @@ public class Spawner : MonoBehaviour
     #region 스폰
     public void Spawn(EnemyData enemyToSpawn, int index, bool forceSpawn)
     {
-        // 적들이 몰려옵니다의 경우 강제로 스폰
-        if (forceSpawn == false)
-        {
-            if (currentEnemyNumbers >= maxEnemyInScene) // 최대 적 수 제한
-                return;
-        }
+        // ⭐ 수정: forceSpawn이어도 maxEnemyInScene(하드 캡)은 절대 넘지 않도록 함.
+        // forceSpawn은 이제 "이벤트 진행을 막지 않는다"는 의미만 가짐 (StageEvenetManager 참고).
+        if (currentEnemyNumbers >= maxEnemyInScene)
+            return;
 
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
         Vector2 spawnPoint = GetAvailablePoints();
@@ -74,7 +75,8 @@ public class Spawner : MonoBehaviour
     /// </summary>
     public void SpawnSubBossEnemy(EnemyData enemyToSpawn, bool forceSpawn)
     {
-        if (!forceSpawn && currentEnemyNumbers >= maxEnemyInScene)
+        // ⭐ 수정: forceSpawn이어도 하드 캡(maxEnemyInScene)은 절대 넘지 않도록 함.
+        if (currentEnemyNumbers >= maxEnemyInScene)
             return;
 
         // ✅ 이름 매칭 제거, 항상 index 0 사용

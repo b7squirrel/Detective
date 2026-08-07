@@ -5,7 +5,7 @@ using UnityEngine;
 public class StageEvenetManager : MonoBehaviour, ISpawnController
 {
     [SerializeField] List<StageEvent> stageEvents;
-    private const int ENEMY_NUM_FOR_NEXT_EVENT = 200; // 다음 이벤트를 시작하기 위한 최대 적 수
+    // private const int ENEMY_NUM_FOR_NEXT_EVENT = 200; // 다음 이벤트를 시작하기 위한 최대 적 수
     [SerializeField] StageMusicType stageMusicType;
 
     ReadStageData readStageData;
@@ -95,7 +95,8 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         // 적들이 몰려옵니다 이벤트가 아닐 때만 적의 수에 따라 이벤트 실행
         if (forceSpawnIndex <= 0)
         {
-            if (enemyNums > ENEMY_NUM_FOR_NEXT_EVENT) return; // 적이 너무 많이 남아 있다면 이벤트 없음.
+            // ⭐ 수정: Spawner의 하드 캡(150)과 같은 값을 참조. 두 곳에 서로 다른 숫자를 두지 않기 위함.
+            if (enemyNums >= spawner.MaxEnemyInScene) return; // 적이 최대치에 가까우면 다음 이벤트 보류.
         }
 
 
