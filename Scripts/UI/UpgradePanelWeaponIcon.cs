@@ -64,6 +64,10 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         charAnim.enabled = true;
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
+
+        charAnim.Rebind();   // ⭐ 추가: 새 컨트롤러의 기본 상태로 강제 리바인드
+        charAnim.Update(0f); // ⭐ 추가: 리바인드된 상태를 즉시 이 프레임에 적용
+
         charFaceExpression.gameObject.SetActive(true);
         if (charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
         charFaceImage.sprite = weaponData.faceImage;
