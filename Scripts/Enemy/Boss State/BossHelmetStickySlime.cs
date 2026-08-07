@@ -107,7 +107,7 @@ public class BossHelmetStickySlime : MonoBehaviour
     #endregion
 
     #region 애니메이션 이벤트
-    public void PlayShootAnticSound()
+    public void PlayBubbleSound()
     {
         SoundManager.instance.Play(shootAnticSound);
     }

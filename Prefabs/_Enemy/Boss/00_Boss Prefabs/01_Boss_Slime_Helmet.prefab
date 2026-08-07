@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4950187712645278829
 Transform:
   m_ObjectHideFlags: 0
@@ -762,7 +762,7 @@ MonoBehaviour:
   DropOnLandingPrefab: {fileID: 5212130134811567006, guid: 76b94dd649a2c437b887f3b5523ef208, type: 3}
   dropDamage: 8
   slowDownFactor: 0.7
-  dropSFX: {fileID: 8300000, guid: c5e47d0d4b855e64ab31a8fce5298419, type: 3}
+  dropSFX: {fileID: 8300000, guid: 4bf935b65b709274b8fd0dcb0bf97c5e, type: 3}
 --- !u!114 &856374984649581830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -808,8 +808,8 @@ MonoBehaviour:
   jellyDamage: 0
   timeToDropSlime: 3
   stateDuration: 2
-  shootAnticSound: {fileID: 0}
-  shootSound: {fileID: 0}
+  shootAnticSound: {fileID: 8300000, guid: 2a3314c653df0104e862ed51dcb91946, type: 3}
+  shootSound: {fileID: 8300000, guid: 61476958115f1aa4199e7d45635db6d8, type: 3}
 --- !u!114 &335978064760732970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -963,7 +963,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4981348839196772281
 Transform:
   m_ObjectHideFlags: 0
