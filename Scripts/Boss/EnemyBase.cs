@@ -53,7 +53,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
     int goldReward; // 처치 시 지급할 골드
     protected bool suppressDieEffect = false;
-    protected bool isDying = false; 
+    protected bool isDying = false;
 
     // static (모든 적이 공유)
     static InfiniteStageManager infiniteStageManager;
@@ -614,7 +614,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 닿으면 player HP 감소
     protected void OnCollisionStay2D(Collision2D collision)
     {
-         if (isDying) return; 
+        if (isDying) return;
 
         if (anim.speed == 0) // 스톱워치로 멈춘 상태라면 
             return;
@@ -921,7 +921,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         IsSlowed = false;
         finishedSpawn = false;
-        DestroyHPbar(); 
+        DestroyHPbar();
         Spawner.instance.SubtractEnemyNumber(); // ⭐ 추가
         gameObject.SetActive(false);
     }
@@ -994,6 +994,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (currentSpeed < 1f) currentSpeed = 1f;
 
         anim.SetBool("Hypnotized", true);
+        SetGrayTint(true); // ⭐ 추가
 
         // 애니메이터 속도 감소 (느린 모션 효과)
         anim.speed = 1f - _slownessFactor;
@@ -1026,6 +1027,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         currentSpeed = DefaultSpeed;
 
         anim.SetBool("Hypnotized", false);
+        SetGrayTint(false); // ⭐ 추가
 
         // 애니메이터 속도 복구
         anim.speed = 1f;
@@ -1075,6 +1077,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
         return (Vector2)transform.position + new Vector2(
             UnityEngine.Random.Range(-0.2f, 0.2f),
             UnityEngine.Random.Range(.3f, .8f));
+    }
+
+    // 보스의 스프라이트를 창백하게(회색으로) 만들기 위한 훅.
+    // 일반 Enemy는 별도 hyp 애니메이션 클립으로 처리하므로 여기서는 아무 동작도 하지 않음.
+    // EnemyBoss에서 override하여 MaterialPropertyBlock으로 _GrayAmount를 조절함.
+    protected virtual void SetGrayTint(bool isGray)
+    {
+        // 기본 구현 없음 (일반 Enemy는 사용 안 함)
     }
     #endregion
 }

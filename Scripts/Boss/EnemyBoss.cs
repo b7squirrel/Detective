@@ -24,6 +24,11 @@ public class EnemyBoss : EnemyBase, Idamageable
     [SerializeField] int maxProjectile;
     [SerializeField] float timeToAttack;
     [SerializeField] Transform slimeDropPos; // 슬라임 점액을 떨어트리는 위치
+
+    [Header("느림보 최면술")]
+    static readonly int GrayAmountID = Shader.PropertyToID("_GrayAmount");
+    MaterialPropertyBlock tintPropertyBlock;
+
     float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터. 주기는 각 상태에서 정함
     SlimeDropManager slimeDropManager;
 
@@ -302,6 +307,27 @@ public class EnemyBoss : EnemyBase, Idamageable
         }
 
         gameObject.SetActive(false);
+    }
+    #endregion
+
+    #region 회색 틴트 (느림 효과)
+    protected override void SetGrayTint(bool isGray)
+    {
+        if (srFlash == null) return;
+
+        if (tintPropertyBlock == null)
+            tintPropertyBlock = new MaterialPropertyBlock();
+
+        float amount = isGray ? 1f : 0f;
+
+        for (int i = 0; i < srFlash.Length; i++)
+        {
+            if (srFlash[i] == null) continue;
+
+            srFlash[i].GetPropertyBlock(tintPropertyBlock);
+            tintPropertyBlock.SetFloat(GrayAmountID, amount);
+            srFlash[i].SetPropertyBlock(tintPropertyBlock);
+        }
     }
     #endregion
 

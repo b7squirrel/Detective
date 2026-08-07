@@ -14,11 +14,22 @@ public class BossHelmetDash : MonoBehaviour
     [SerializeField] float dashSpeed;
     [SerializeField] float timeToDropSlime; // 슬라임을 떨어트릴 주기
 
+    [Header("사운드")]
+    [SerializeField] AudioClip dashAnticSound;
+    [SerializeField] AudioClip dashSound;
+
+    
+
+    static int noColWithPlayerLayer = -1; // 캐싱해서 매번 LayerMask.NameToLayer 호출하지 않도록
+
     void OnEnable()
     {
         EnemyBoss.OnState3Enter += InitState3Enter;
         EnemyBoss.OnState3Update += InitState3Update;
         EnemyBoss.OnState3Exit += InitState3Exit;
+
+        if (noColWithPlayerLayer == -1)
+            noColWithPlayerLayer = LayerMask.NameToLayer("NoColWithPlayer");
     }
     void OnDisable()
     {
@@ -79,7 +90,7 @@ public class BossHelmetDash : MonoBehaviour
             return;
         }
 
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.layer == noColWithPlayerLayer)
         {
             Debug.Log("Player Hit");
 
@@ -90,6 +101,17 @@ public class BossHelmetDash : MonoBehaviour
             enemyBoss.GetComponent<Animator>().SetTrigger("Settle");
             return;
         }
+    }
+    #endregion
+
+    #region 애니메이션 이벤트
+    public void PlayDashAnticSound()
+    {
+        SoundManager.instance.Play(dashAnticSound);
+    }
+    public void PlayDashSound()
+    {
+        SoundManager.instance.Play(dashSound);
     }
     #endregion
 }

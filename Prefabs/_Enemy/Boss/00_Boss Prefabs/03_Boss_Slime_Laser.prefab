@@ -53,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: bbc9207e760a64e989c6097f996eddd9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -404,19 +404,18 @@ MonoBehaviour:
   dieExplosionPrefeab: {fileID: 0}
   knockbackEffect: {fileID: 0}
   hitEffectPoint: {fileID: 6583341376114269217}
-  whiteFlashDuration: 0.08
   knockBackSpeed: 12
   knockBackDelay: 0
   srFlash:
   - {fileID: 5816325655161946822}
   - {fileID: 2234098111436634184}
-  whiteMat: {fileID: 2100000, guid: 0ca536b1c0ac1864ca2e06376b4a9509, type: 2}
   targetDir: {x: 0, y: 0}
   hits:
   - {fileID: 8300000, guid: 4943bddbc3e4ed04eace1c38788bc4ec, type: 3}
   dies:
   - {fileID: 8300000, guid: d6803d991c4734c469e4f125b1afce42, type: 3}
   - {fileID: 8300000, guid: 7d46c451f538db542a125be6a07bcb73, type: 3}
+  subBossAlarm: {fileID: 0}
   HPbarPrefab: {fileID: 1204063749920938591, guid: 91fa4b694ce3f9a48bc3d11aa4f8785e, type: 3}
   HpBarPos: {fileID: 3340056263910422459}
   hpBar: {fileID: 0}
@@ -502,6 +501,7 @@ MonoBehaviour:
   DropOnLandingPrefab: {fileID: 1082128691456396947, guid: feb260728947c4699b3cdc7361ca1c23, type: 3}
   dropDamage: 8
   slowDownFactor: 0.7
+  dropSFX: {fileID: 0}
 --- !u!114 &3403393055940210562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -629,6 +629,9 @@ MonoBehaviour:
   specialDropRate: 0
   dropAllItemList: 0
   exp: 0
+  coinPrefab: {fileID: 0}
+  bonusCoinMin: 3
+  bonusCoinMax: 5
 --- !u!1 &2760832794399453502
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,7 +924,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: bbc9207e760a64e989c6097f996eddd9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

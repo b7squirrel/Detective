@@ -11,6 +11,20 @@ public class WeaponContainer : MonoBehaviour
     List<WeaponContainerAnim> weaponContainerAnims; // 아이들의 방향에 접근하기 위해
     List<Collider2D> colliders; // 아이들의 콜라이더에 접근하기 위해
 
+    // 보스가 IgnoreCollision을 걸 때 사용하는 "동료" 콜라이더 명단
+    // index 0은 대장 오리(플레이어 본체에 붙는 무기)이므로 제외
+    public List<Collider2D> GetCompanionColliders()
+    {
+        List<Collider2D> result = new List<Collider2D>();
+        if (colliders == null) return result;
+
+        for (int i = 1; i < colliders.Count; i++)
+        {
+            if (colliders[i] != null) result.Add(colliders[i]);
+        }
+        return result;
+    }
+
     private void Awake()
     {
         player = GetComponent<Player>();

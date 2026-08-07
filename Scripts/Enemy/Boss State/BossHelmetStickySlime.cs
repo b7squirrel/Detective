@@ -14,6 +14,10 @@ public class BossHelmetStickySlime : MonoBehaviour
     [SerializeField] float stateDuration; // 상태 지속 시간
     float stateTimer;
 
+    [Header("사운드")]
+    [SerializeField] AudioClip shootAnticSound;
+    [SerializeField] AudioClip shootSound;
+
     Transform shootPoint;
     Coroutine co;
     bool isAttackDone;
@@ -99,6 +103,17 @@ public class BossHelmetStickySlime : MonoBehaviour
         Vector2 randomDirection = randomRotation * directionToPlayer;
 
         return randomDirection;
+    }
+    #endregion
+
+    #region 애니메이션 이벤트
+    public void PlayShootAnticSound()
+    {
+        SoundManager.instance.Play(shootAnticSound);
+    }
+    public void PlayShootSound()
+    {
+        SoundManager.instance.Play(shootSound);
     }
     #endregion
 }
