@@ -9,6 +9,10 @@ public class FireBallWeapon : WeaponBase
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
 
+    [Header("대기 자세 각도")]
+    [SerializeField] float idleAngleMain = 30f;   // 2시 방향
+    [SerializeField] float idleAngleExtra = 150f; // 10시 방향
+
     // 런타임에 결정되는 프로젝타일
     GameObject currentWeaponPrefab;
 
@@ -104,6 +108,37 @@ public class FireBallWeapon : WeaponBase
                     projectileEx.WeaponName = weaponData.DisplayName;
                 }
             }
+        }
+    }
+
+    protected override void SetAngle()
+    {
+        EnemyFinder.instance.GetEnemies(2, angleQueryBuffer);
+
+        bool hasMainTarget = angleQueryBuffer.Count > 0 && angleQueryBuffer[0] != Vector2.zero;
+
+        if (hasMainTarget)
+        {
+            dir = GetDirection(angleQueryBuffer[0]);
+            angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        }
+        else
+        {
+            angle = idleAngleMain;
+            dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+        }
+
+        bool hasExtraTarget = angleQueryBuffer.Count > 1 && angleQueryBuffer[1] != Vector2.zero;
+
+        if (hasExtraTarget)
+        {
+            dirExtra = GetDirection(angleQueryBuffer[1]);
+            angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
+        }
+        else
+        {
+            angleExtra = idleAngleExtra;
+            dirExtra = new Vector2(Mathf.Cos(angleExtra * Mathf.Deg2Rad), Mathf.Sin(angleExtra * Mathf.Deg2Rad));
         }
     }
 

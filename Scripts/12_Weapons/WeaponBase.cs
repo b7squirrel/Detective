@@ -51,7 +51,7 @@ public class WeaponBase : MonoBehaviour
     #endregion
 
     // SetAngle에서 매 프레임 new List 하지 않도록 필드로 캐싱
-    private List<Vector2> angleQueryBuffer = new List<Vector2>(2);
+    protected List<Vector2> angleQueryBuffer = new List<Vector2>(2);
 
     #region Weapon Anim Bridge
     public virtual void OnAnimEvent() { }

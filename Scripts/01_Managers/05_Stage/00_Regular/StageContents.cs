@@ -11,7 +11,6 @@ public class StageContents
     public StageGroundType stageGroundType;
 
     [Header("Stage Events")]
-    public int enemyNumForNextEvent;
     public StageMusicType stageMusicType;
 
     [Header("Stage Data")]
