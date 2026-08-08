@@ -65,13 +65,14 @@ public class PrefsManager : MonoBehaviour
     {
         musicManager.SetState(state);
         buttonToggleMusic.SetImage(state);
+        Logger.Log($"[PrefsManager] InitMusicState 완료, musicState = {state}, Time.frameCount = {Time.frameCount}");
     }
 
     // ✅ 추가
     void InitHapticState(bool state)
     {
         // HapticManager는 Essential씬에만 있으므로 null 체크 필수
-        Debug.Log($"[PrefsManager] InitHapticState → {state}, HapticManager.Instance: {HapticManager.Instance}");
+        Logger.Log($"[PrefsManager] InitHapticState → {state}, HapticManager.Instance: {HapticManager.Instance}");
         HapticManager.Instance?.SetState(state);
         buttonToggleHaptic?.SetImage(state);
     }
@@ -94,7 +95,7 @@ public class PrefsManager : MonoBehaviour
     public void SetHapticState()
     {
         hapticState = !hapticState;
-        Debug.Log($"[PrefsManager] SetHapticState called → {hapticState}");
+        Logger.Log($"[PrefsManager] SetHapticState called → {hapticState}");
         InitHapticState(hapticState);
         Save();
     }

@@ -170,11 +170,16 @@ public class MusicCreditManager : MonoBehaviour
 
     IEnumerator ShowCreditUI(string _title, string _credit, int _index, bool isInfiniteMode = false, bool showCredit = true)
     {
+        Logger.Log($"[MusicCreditManager] ShowCreditUI 시작, Time.frameCount = {Time.frameCount}");
+
         PlayBGM(_index, isInfiniteMode);
 
         yield return new WaitForSeconds(.5f);
 
-        if (showCredit)
+        // 음악이 꺼져 있으면 크레딧 UI를 띄우지 않음
+        bool musicOn = MusicManager.instance != null && MusicManager.instance.IsMusicOn();
+
+        if (showCredit && musicOn)   // ← 수정된 부분
         {
             yield return new WaitForSeconds(1f);
             creditUI.CreditFadeIn(_title, _credit);

@@ -251,9 +251,9 @@ public class Character : MonoBehaviour
         HapticManager.PlayDamage();
 
         // 임시 테스트용 기본 진동
-#if UNITY_ANDROID && !UNITY_EDITOR
-Handheld.Vibrate();
-#endif
+// #if UNITY_ANDROID && !UNITY_EDITOR
+// Handheld.Vibrate();
+// #endif
 
         MessageSystem.instance.PostMessagePlayer(damage.ToString());
 
