@@ -228,6 +228,13 @@ public class CardSlotManager : MonoBehaviour
             cards.Add(item.Value.GetCardData());
         }
 
+        // 리드 오리(StartingMember.Zero)는 정렬 대상에서 제외하고 따로 보관
+        CardData leadCard = cards.Find(x => x.StartingMember == StartingMember.Zero.ToString());
+        if (leadCard != null)
+        {
+            cards.Remove(leadCard);
+        }
+
         switch (sortType)
         {
             case SortType.Level:
@@ -244,6 +251,12 @@ public class CardSlotManager : MonoBehaviour
                     ? string.Compare(a.Name, b.Name, System.StringComparison.Ordinal)
                     : string.Compare(b.Name, a.Name, System.StringComparison.Ordinal));
                 break;
+        }
+
+        // 리드 오리를 맨 앞에 다시 삽입 (정렬 기준과 무관하게 항상 최상단)
+        if (leadCard != null)
+        {
+            cards.Insert(0, leadCard);
         }
 
         for (int i = 0; i < cards.Count; i++)
