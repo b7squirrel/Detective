@@ -9,15 +9,28 @@ public class FireBallWeapon : WeaponBase
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
 
+    [Header("FireBall 전용 감지 범위")]
+    [SerializeField] float fireballDetectRange = 8f;
+
     [Header("대기 자세 각도")]
     [SerializeField] float idleAngleMain = 30f;   // 2시 방향
     [SerializeField] float idleAngleExtra = 150f; // 10시 방향
+    [SerializeField] float aimHoldDuration = 0.3f; // 공격 후 조준 각도 유지 시간
+    float lastAttackTime = -999f;
 
     // 런타임에 결정되는 프로젝타일
     GameObject currentWeaponPrefab;
 
-    // Attack에서 매번 new List 하지 않도록 필드로 캐싱
-    private List<Vector2> enemyQueryBuffer = new List<Vector2>(1);
+    // 대기 방향값 캐싱 (매 프레임 삼각함수 재계산 방지)
+    Vector2 idleDirMain;
+    Vector2 idleDirExtra;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        idleDirMain = new Vector2(Mathf.Cos(idleAngleMain * Mathf.Deg2Rad), Mathf.Sin(idleAngleMain * Mathf.Deg2Rad));
+        idleDirExtra = new Vector2(Mathf.Cos(idleAngleExtra * Mathf.Deg2Rad), Mathf.Sin(idleAngleExtra * Mathf.Deg2Rad));
+    }
 
     public override void Init(WeaponStats stats, bool isLead)
     {
@@ -39,13 +52,81 @@ public class FireBallWeapon : WeaponBase
         }
     }
 
+    protected override void Update()
+    {
+        if (GameManager.instance.IsPaused) return;
+
+        timer -= Time.deltaTime;
+        bool willAttack = timer < 0f;
+
+        if (willAttack)
+        {
+            EnemyFinder.instance.GetEnemiesInRange(2, fireballDetectRange, angleQueryBuffer);
+            UpdateAimFromBuffer();
+            lastAttackTime = Time.time; // 공격 시점 기록
+        }
+        else if (Time.time - lastAttackTime >= aimHoldDuration)
+        {
+            // 공격 후 유지 시간이 지났을 때만 대기 각도로 복귀
+            SetIdleAngle();
+        }
+        // else: 유지 시간 중이면 아무것도 안 함 → 방금 조준했던 각도 그대로 유지
+
+        RotateWeapon();
+        RotateExtraWeapon();
+
+        FlipWeaponTools();
+        LockFlip();
+
+        if (willAttack)
+        {
+            Attack();
+            timer = weaponStats.timeToAttack;
+        }
+    }
+
+    void SetIdleAngle()
+    {
+        angle = idleAngleMain;
+        dir = idleDirMain;
+        angleExtra = idleAngleExtra;
+        dirExtra = idleDirExtra;
+    }
+
+    void UpdateAimFromBuffer()
+    {
+        bool hasMainTarget = angleQueryBuffer.Count > 0 && angleQueryBuffer[0] != Vector2.zero;
+        if (hasMainTarget)
+        {
+            dir = GetDirection(angleQueryBuffer[0]);
+            angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        }
+        else
+        {
+            angle = idleAngleMain;
+            dir = idleDirMain;
+        }
+
+        bool hasExtraTarget = angleQueryBuffer.Count > 1 && angleQueryBuffer[1] != Vector2.zero;
+        if (hasExtraTarget)
+        {
+            dirExtra = GetDirection(angleQueryBuffer[1]);
+            angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
+        }
+        else
+        {
+            angleExtra = idleAngleExtra;
+            dirExtra = idleDirExtra;
+        }
+    }
+
     protected override void Attack()
     {
         base.Attack();
 
-        // 버퍼 재사용으로 new List 방지
-        EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
-        if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
+        // 같은 프레임에 이미 갱신된 angleQueryBuffer를 재사용
+        bool hasTarget = angleQueryBuffer.Count > 0 && angleQueryBuffer[0] != Vector2.zero;
+        if (!hasTarget)
             return;
 
         AttackCo();
@@ -108,37 +189,6 @@ public class FireBallWeapon : WeaponBase
                     projectileEx.WeaponName = weaponData.DisplayName;
                 }
             }
-        }
-    }
-
-    protected override void SetAngle()
-    {
-        EnemyFinder.instance.GetEnemies(2, angleQueryBuffer);
-
-        bool hasMainTarget = angleQueryBuffer.Count > 0 && angleQueryBuffer[0] != Vector2.zero;
-
-        if (hasMainTarget)
-        {
-            dir = GetDirection(angleQueryBuffer[0]);
-            angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        }
-        else
-        {
-            angle = idleAngleMain;
-            dir = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
-        }
-
-        bool hasExtraTarget = angleQueryBuffer.Count > 1 && angleQueryBuffer[1] != Vector2.zero;
-
-        if (hasExtraTarget)
-        {
-            dirExtra = GetDirection(angleQueryBuffer[1]);
-            angleExtra = Mathf.Atan2(dirExtra.y, dirExtra.x) * Mathf.Rad2Deg;
-        }
-        else
-        {
-            angleExtra = idleAngleExtra;
-            dirExtra = new Vector2(Mathf.Cos(angleExtra * Mathf.Deg2Rad), Mathf.Sin(angleExtra * Mathf.Deg2Rad));
         }
     }
 

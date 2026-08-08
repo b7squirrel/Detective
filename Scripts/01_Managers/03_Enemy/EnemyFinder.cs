@@ -37,6 +37,8 @@ public class EnemyFinder : MonoBehaviour
 
         // 화면 대각선 길이를 반지름으로 사용
         searchRadius = Mathf.Sqrt(halfWidth * halfWidth + halfHeight * halfHeight) * 0.6f;
+
+        Debug.Log($"searchRadius: {searchRadius}"); // ← 이 줄 추가
     }
 
     void Update()
@@ -99,6 +101,36 @@ public class EnemyFinder : MonoBehaviour
         int count = Mathf.Min(numberOfEnemies, cachedEnemyPositions.Count);
         for (int i = 0; i < count; i++)
             result.Add(cachedEnemyPositions[i]);
+
+        // 부족한 개수만큼 Vector2.zero로 채움
+        while (result.Count < numberOfEnemies)
+            result.Add(Vector2.zero);
+    }
+
+    /// <summary>
+    /// 이미 캐싱된(거리순 정렬된) 적 리스트에서 지정 반경 이내의 적만 필터링합니다.
+    /// 별도 물리 쿼리 없이 기존 캐시를 재사용하므로 비용이 매우 낮습니다.
+    /// ※ radius는 반드시 전역 searchRadius 이하여야 정확합니다.
+    /// (searchRadius보다 큰 값을 넣으면, 캐시에 애초에 없는 더 먼 적은 찾지 못합니다.)
+    /// </summary>
+    public void GetEnemiesInRange(int numberOfEnemies, float radius, List<Vector2> result)
+    {
+        result.Clear();
+        Vector2 playerPosition = transform.position;
+        float sqrRadius = radius * radius;
+
+        // cachedEnemyPositions는 이미 거리순 정렬되어 있으므로
+        // 반경을 벗어나는 순간 더 볼 필요 없이 종료 가능
+        for (int i = 0; i < cachedEnemyPositions.Count && result.Count < numberOfEnemies; i++)
+        {
+            Vector2 pos = cachedEnemyPositions[i];
+            float sqrDist = (pos - playerPosition).sqrMagnitude;
+
+            if (sqrDist > sqrRadius)
+                break; // 정렬되어 있으므로 이후는 전부 더 멀다
+
+            result.Add(pos);
+        }
 
         // 부족한 개수만큼 Vector2.zero로 채움
         while (result.Count < numberOfEnemies)
