@@ -25,6 +25,7 @@ public class EnemyDashAbility : MonoBehaviour
     EnemyBase enemyBase;
     Rigidbody2D rb;
     Animator anim;
+    ShadowHeightEnemy shadowHeightEnemy; // ⭐ 추가
     #endregion
 
     #region Unity Callbacks
@@ -33,6 +34,7 @@ public class EnemyDashAbility : MonoBehaviour
         enemyBase = GetComponent<EnemyBase>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        shadowHeightEnemy = GetComponent<ShadowHeightEnemy>(); // ⭐ 추가
     }
 
     void OnEnable()
@@ -44,21 +46,22 @@ public class EnemyDashAbility : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isInitialized)
-            return;
-
-        if (enemyBase == null)
-            return;
+        if (!isInitialized) return;
+        if (enemyBase == null) return;
 
         // 시간 정지 체크 추가
         if (enemyBase.isTimeStopped())
         {
             // 대시 중이었다면 중단
-            if (isDashing)
-            {
-                EndDash();
-            }
+            if (isDashing) EndDash();
             return; // 시간 정지 중에는 대시 로직 실행 안 함
+        }
+
+        // ⭐ 대시 도중 점프가 시작되면(공중 상태가 되면) 즉시 대시 중단
+        if (isDashing && shadowHeightEnemy != null && shadowHeightEnemy.IsAirborne)
+        {
+            EndDash();
+            return;
         }
 
         if (isDashing)
@@ -119,11 +122,11 @@ public class EnemyDashAbility : MonoBehaviour
     #region Dash Logic
     void DashCoolDown()
     {
-        if (!finishedSpawn)
-            return;
-
-        if (isDashing)
-            return;
+        if (!finishedSpawn) return;
+        if (isDashing) return;
+            
+        // ⭐ 점프 중(공중)이면 대시 시작하지 않음
+        if (shadowHeightEnemy != null && shadowHeightEnemy.IsAirborne) return;
 
         if (Time.time >= nextDashTime)
         {

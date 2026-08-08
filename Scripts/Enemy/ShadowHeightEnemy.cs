@@ -31,6 +31,8 @@ public class ShadowHeightEnemy : MonoBehaviour
     [Header("착지 범위 인디케이터")]
     [SerializeField] SpriteRenderer landingRangeIndicator;
     [SerializeField] float indicatorBlinkSpeed = 30f; // 깜빡임 속도 (높을수록 빠름)
+                                                      // 다른 컴포넌트(EnemyDashAbility 등)에서 "현재 점프 중(공중)"인지 확인하기 위해
+    public bool IsAirborne => isJumper && !isGrounded;
 
     [Header("Slow Effect")]
     bool isSlowed; // 현재 느림 상태인지
