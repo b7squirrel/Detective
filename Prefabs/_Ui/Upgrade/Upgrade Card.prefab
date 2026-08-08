@@ -488,7 +488,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4798740374257944539}
   - component: {fileID: 6392869088153820630}
-  - component: {fileID: 8194438590847809945}
   - component: {fileID: 315903683976980508}
   - component: {fileID: 1211928865613122249}
   m_Layer: 5
@@ -526,18 +525,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1312637132370552205}
   m_CullTransparentMesh: 1
---- !u!225 &8194438590847809945
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312637132370552205}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &315903683976980508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,6 +562,7 @@ MonoBehaviour:
   - {fileID: 1791082546895854139}
   - {fileID: 6577180053274393746}
   headMain: {fileID: 4274155270705418110}
+  iconCanvasGroup: {fileID: 8151054737662047804}
 --- !u!1 &1313537805492313635
 GameObject:
   m_ObjectHideFlags: 0
@@ -3017,6 +3005,7 @@ GameObject:
   - component: {fileID: 3163430858017476124}
   - component: {fileID: 4718828422616060818}
   - component: {fileID: 1320035479120698735}
+  - component: {fileID: 8151054737662047804}
   m_Layer: 5
   m_Name: Char Image
   m_TagString: Untagged
@@ -3134,6 +3123,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipSprites: []
+--- !u!225 &8151054737662047804
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5179494902297593085}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &5278530617438758440
 GameObject:
   m_ObjectHideFlags: 0

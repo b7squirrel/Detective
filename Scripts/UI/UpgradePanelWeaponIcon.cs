@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,32 +10,32 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     [SerializeField] Animator charAnim;
     [SerializeField] Image[] equipmentImages;
     [SerializeField] RectTransform headMain;
+    [SerializeField] CanvasGroup iconCanvasGroup;
     bool needToOffset;
-    WeaponData leadWeaponData; //리드 오리 데이터 저장해서 사용 
+    WeaponData leadWeaponData;
 
     CardSpriteAnim cardSpriteAnim;
+    Coroutine revealRoutine;
+
     public void InitWeaponIcon(WeaponData wd)
     {
-        // ⭐ 초기화 추가
+        if (iconCanvasGroup != null) iconCanvasGroup.alpha = 0f;
+
+        // 이전 카드 세팅 도중이었다면 중복 실행 방지
+        if (revealRoutine != null) StopCoroutine(revealRoutine);
+
         needToOffset = false;
         headMain.anchoredPosition = Vector2.zero;
-        Debug.Log($"[UpgradeIcon] === InitWeaponIcon 시작: {wd.Name}, headMain reset 후 = {headMain.anchoredPosition}");
 
         if (leadWeaponData == null) leadWeaponData = GameManager.instance.startingDataContainer.GetLeadWeaponData();
 
-        bool isLead = false;
-        if (wd.Name == leadWeaponData.Name)
-        {
-            InitWeaponCardDisplay(leadWeaponData, null);
-            isLead = true;
-        }
-        else
-        {
-            InitWeaponCardDisplay(wd, null);
-            isLead = false;
-        }
+        bool isLead = wd.Name == leadWeaponData.Name;
+        WeaponData dataToShow = isLead ? leadWeaponData : wd;
 
-        InitSpriteRow(); // card sprite row의 이미지 참조들이 남지 않게 초기화
+        // ⭐ 컨트롤러 교체까지만 즉시 진행 (Rebind는 아직 안 함)
+        SetWeaponVisualData(dataToShow);
+
+        InitSpriteRow();
 
         for (int i = 0; i < 4; i++)
         {
@@ -42,38 +43,40 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
 
             if (item == null)
             {
-                Debug.Log($"[UpgradeIcon] 슬롯 {i} ({equipmentImages[i].name}): item = null");
                 SetEquipCardDisplay(i, null, false, Vector2.zero);
                 continue;
             }
 
-            Debug.Log($"[UpgradeIcon] 슬롯 {i} ({equipmentImages[i].name}): item = {item.name}, needToOffset = {item.needToOffset}, posHead = {item.posHead}");
-
             SpriteRow equipmentSpriteRow = item.spriteRow;
             Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
-
             SetEquipCardDisplay(i, equipmentSpriteRow, item.needToOffset, offset);
         }
-    }
-    void InitWeaponCardDisplay(WeaponData weaponData, CardData cardData)
-    {
-        needToOffset = false;
 
-        // 캐릭터 이미지
-        //charImage.sprite = weaponData.charImage;
+        revealRoutine = StartCoroutine(RebindThenReveal());
+    }
+
+    void SetWeaponVisualData(WeaponData weaponData)
+    {
         charAnim.enabled = true;
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
 
-        charAnim.Rebind();   // ⭐ 추가: 새 컨트롤러의 기본 상태로 강제 리바인드
-        charAnim.Update(0f); // ⭐ 추가: 리바인드된 상태를 즉시 이 프레임에 적용
-
         charFaceExpression.gameObject.SetActive(true);
         if (charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
         charFaceImage.sprite = weaponData.faceImage;
+    }
 
-        // 데이터로 카드를 display할 때가 아닌 경우라면 여기까지만 진행
-        if (cardData == null) return;
+    IEnumerator RebindThenReveal()
+    {
+        yield return null; // ⭐ 카드(부모) 활성화 직후 Animator가 완전히 준비될 시간을 줌
+
+        charAnim.Rebind();
+        charAnim.Update(0f);
+
+        yield return null; // ⭐ Rebind 결과가 실제로 트랜스폼에 반영되고 안정될 시간
+
+        if (iconCanvasGroup != null) iconCanvasGroup.alpha = 1f;
+        revealRoutine = null;
     }
 
     #region Card Sprite Anim 참조
@@ -92,12 +95,10 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         {
             equipmentImages[index].gameObject.SetActive(true);
 
-            // needToOffset이 true인 아이템이 있으면 offset 적용
             if (needToOffset && !this.needToOffset)
             {
                 this.needToOffset = true;
                 headMain.anchoredPosition += offset;
-                Debug.Log($"[UpgradeIcon] 오프셋 적용됨 (슬롯 {index}): offset = {offset}, headMain = {headMain.anchoredPosition}");
             }
 
             cardSpriteAnim.StoreItemSpriteRow(index, spriteRow);
@@ -105,19 +106,8 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     }
     #endregion
 
-    void EmptyCardDisplay()
+    public void HideInstant()
     {
-
-        // 캐릭터 이미지
-        charImage.rectTransform.localScale = .7f * Vector3.one;
-        charImage.gameObject.SetActive(false);
-
-        // 장비 이미지
-        for (int i = 0; i < 4; i++)
-        {
-            if (equipmentImages[i] == null)
-                continue;
-            equipmentImages[i].gameObject.SetActive(false);
-        }
+        if (iconCanvasGroup != null) iconCanvasGroup.alpha = 0f;
     }
 }

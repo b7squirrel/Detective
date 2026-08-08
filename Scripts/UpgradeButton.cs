@@ -45,7 +45,8 @@ public class UpgradeButton : MonoBehaviour
         ClearLevelstars();
         levelBar.SetActive(false);
         unSelectionPanel.SetActive(false);
-        upgradePanelWeaponIcon.gameObject.SetActive(false);
+        // upgradePanelWeaponIcon.gameObject.SetActive(false); // ⭐ 삭제: 더 이상 끄지 않음
+    upgradePanelWeaponIcon.HideInstant(); // ⭐ 대신 alpha만 0으로 (아래 2번에서 추가)
     }
 
     public void Set(UpgradeData upgradeData)
@@ -67,7 +68,7 @@ public class UpgradeButton : MonoBehaviour
         {
             iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 0);
 
-            upgradePanelWeaponIcon.gameObject.SetActive(true);
+            // upgradePanelWeaponIcon.gameObject.SetActive(true);
             upgradePanelWeaponIcon.InitWeaponIcon(upgradeData.weaponData);
 
             if (oriIconAnim == null) oriIconAnim = upgradePanelWeaponIcon.GetComponentInChildren<Animator>();
@@ -81,27 +82,27 @@ public class UpgradeButton : MonoBehaviour
                 upgradeName.text = LocalizationManager.Char.GetWeaponSynergyName(upgradeData.weaponData.Name);
         }
         else // 오리가 아닌 카드들이라면
-        {
-            if (upgradeData.item == null)
-            {
-                Debug.LogError("[UpgradeButton] upgradeData.item이 null입니다!");
-                return;
-            }
+{
+    if (upgradeData.item == null)
+    {
+        Debug.LogError("[UpgradeButton] upgradeData.item이 null입니다!");
+        return;
+    }
 
-            Debug.Log($"[UpgradeButton] item.name = {upgradeData.item.name}");
+    Debug.Log($"[UpgradeButton] item.name = {upgradeData.item.name}");
 
-            if (upgradeData.item.charImage == null)
-                Debug.Log("upgrade Data의 item의 charImage가 Null입니다...");
+    if (upgradeData.item.charImage == null)
+        Debug.Log("upgrade Data의 item의 charImage가 Null입니다...");
 
-            iconItem.sprite = upgradeData.item.charImage;
-            iconItem.preserveAspect = true;
-            iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 1f);
-            upgradePanelWeaponIcon.gameObject.SetActive(false);
-            iconItem.SetNativeSize();
+    iconItem.sprite = upgradeData.item.charImage;
+    iconItem.preserveAspect = true;
+    iconItem.color = new Color(iconItem.color.r, iconItem.color.g, iconItem.color.b, 1f);
+    upgradePanelWeaponIcon.HideInstant(); // ⭐ SetActive(false) 대신 alpha만 0으로
+    iconItem.SetNativeSize();
 
-            if (upgradeData.item.DisplayName != "")
-                upgradeName.text = LocalizationManager.Upgrade.GetItemName(upgradeData.item.name);
-        }
+    if (upgradeData.item.DisplayName != "")
+        upgradeName.text = LocalizationManager.Upgrade.GetItemName(upgradeData.item.name);
+}
 
         description.text = LocalizationManager.Upgrade.GetDescription(upgradeData.name);
 
