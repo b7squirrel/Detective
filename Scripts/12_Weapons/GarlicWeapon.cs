@@ -5,7 +5,6 @@ public class GarlicWeapon : WeaponBase
     ParticleSystem note;
     float effectRadius;
     [SerializeField] float[] effectArea = new float[4];
-    [SerializeField] AudioClip shootSound;
 
     // ✅ 캐싱: Awake에서 한 번만 GetComponent
     HitEffects hitEffects;
