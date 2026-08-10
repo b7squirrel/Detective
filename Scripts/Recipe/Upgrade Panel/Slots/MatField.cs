@@ -7,6 +7,7 @@ public class MatField : MonoBehaviour
     CardDataManager cardDataManager;
     CardList cardList;
     CardSlotManager cardSlotManager;
+    UpPanelUI upPanelUI; // ✅ 추가: 후보 없음 안내를 위해
     #endregion
 
     #region 슬롯 생성 관련 변수
@@ -19,6 +20,7 @@ public class MatField : MonoBehaviour
         cardDataManager = FindObjectOfType<CardDataManager>();
         cardList = FindObjectOfType<CardList>();
         cardSlotManager = FindObjectOfType<CardSlotManager>();
+        upPanelUI = FindObjectOfType<UpPanelUI>(); // ✅ 추가
     }
     #endregion
 
@@ -52,7 +54,16 @@ public class MatField : MonoBehaviour
             }
         }
 
+        // ✅ 추가: 재료로 쓸 수 있는 카드가 없으면 안내문구 표시
+        if (upPanelUI != null) upPanelUI.SetNoCandidateWarning(picked.Count == 0);
+
         if (picked == null) return;
+        foreach (var item in picked)
+        {
+            slotsOnField.Add(item);
+            cardSlotManager.SetSlotActive(item.ID, true);
+        }
+
         foreach (var item in picked)
         {
             slotsOnField.Add(item);

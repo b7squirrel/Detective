@@ -20,6 +20,7 @@ public class UpPanelUI : MonoBehaviour
     [SerializeField] GameObject messageTapCardText;         // "message tap a card to merge"
     [SerializeField] GameObject messageChooseMaterialText;  // "message choose your material"
     [SerializeField] GameObject messageOnlyMaxLevelText; // ⭐ 추가: "message only max level"
+    [SerializeField] GameObject messageNoCandidateText;  // ✅ 추가: 후보가 없을 때 계속 떠있는 안내문구
     [SerializeField] AudioClip onlyMaxLevelWarningSound; // ⭐ 추가: 띵! 경고음
     Coroutine onlyMaxLevelCoroutine; // ⭐ 추가
 
@@ -352,6 +353,19 @@ public class UpPanelUI : MonoBehaviour
         messageOnlyMaxLevelText.SetActive(true);
         yield return new WaitForSeconds(1.5f); // 원하시는 시간으로 조절 가능
         messageOnlyMaxLevelText.SetActive(false);
+    }
+
+    // ✅ 추가: 후보 카드가 없을 때 안내문구 표시/숨김
+    public void SetNoCandidateWarning(bool show)
+    {
+        if (messageNoCandidateText != null) messageNoCandidateText.SetActive(show);
+
+        // 후보가 없으면 기존 안내문구는 숨겨서 겹치지 않도록
+        if (show)
+        {
+            if (messageTapCardText != null) messageTapCardText.SetActive(false);
+            if (messageChooseMaterialText != null) messageChooseMaterialText.SetActive(false);
+        }
     }
 
 }

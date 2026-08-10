@@ -125,12 +125,15 @@ public class UpPanelManager : MonoBehaviour
         upPanelUI.UpSlotCanceled();
         upPanelUI.ResetScrollContent();
 
+        List<CardData> cardsToShow; // ✅ 추가: 후보 개수 체크용
+
         // 카드타입 인자를 비워 놓는다면 up slot에 올라가 있는 카드 타입들만 필드에 진열하기
         // 머지에 성공하면 항상 ""를 인자로 가지고 온다. 오리를 합성했다면 오리필드로, 아이템을 합성했다면 아이템 필드로
         if (_thisCardType == "")
         {
             string typeToPresent = upCardSlot.GetCardData().Type;
-            allField.GenerateAllCardsOfType(GetMyCardsListOnCardType(typeToPresent), "Up");
+            cardsToShow = GetMyCardsListOnCardType(typeToPresent); // ✅ 변수로 저장
+            allField.GenerateAllCardsOfType(cardsToShow, "Up");
             upTabManager.SetTab(typeToPresent);
             SetMergeDoneState(false);
 
@@ -139,8 +142,8 @@ public class UpPanelManager : MonoBehaviour
         }
         else
         {
-            List<CardData> cards = GetMyCardsListOnCardType(_thisCardType);
-            allField.GenerateAllCardsOfType(cards, "Up");
+            cardsToShow = GetMyCardsListOnCardType(_thisCardType); // ✅ 변수명 cards → cardsToShow
+            allField.GenerateAllCardsOfType(cardsToShow, "Up");
             upTabManager.SetTab(_thisCardType);
 
             string fieldType = _thisCardType == "Weapon" ? "MergeW" : "MergeI";
@@ -150,6 +153,9 @@ public class UpPanelManager : MonoBehaviour
         }
 
         upPanelUI.Init();
+
+        // ✅ 추가: 후보 카드가 없으면 안내문구 표시 (Init() 다음에 호출해야 덮어써지지 않음)
+        upPanelUI.SetNoCandidateWarning(cardsToShow.Count == 0);
     }
 
     public void SetUpSlotCanceled(bool _isCanceled)
@@ -172,7 +178,8 @@ public class UpPanelManager : MonoBehaviour
         List<CardData> pickedCardsList = new();
         for (int i = 0; i < myCardsList.Count; i++)
         {
-            if (myCardsList[i].Type == _cardType)
+            if (myCardsList[i].Type == _cardType &&
+                myCardsList[i].Level == StaticValues.MaxLevel) // ✅ 최고 레벨 카드만 노출
             {
                 pickedCardsList.Add(myCardsList[i]);
             }
