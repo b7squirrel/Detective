@@ -66,7 +66,7 @@ public class CameraController : MonoBehaviour
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
         spawnConst = wallManager.GetSpawnAreaConstant();
-        spawnConst += .5f * spawnConst;
+        spawnConst += .8f * spawnConst;
         boxCol.transform.localScale = Vector3.one * spawnConst;
 
         if (player != null)

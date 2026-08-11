@@ -38,9 +38,17 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject[] testParts;
 
     float initAtkFontSize, initHpFontSize;
+    Vector3 initCharImageScale; // ⭐ 추가: Inspector에 세팅된 charImage의 원본 localScale 캐싱
     Tween atkPopTween, hpPopTween;
     Tween levelMaxPopTween;     // ⭐ 추가: 최고레벨 도달 시 레벨 텍스트 팝 연출
     Tween charDispMaxPopTween;  // ⭐ 추가: 최고레벨 도달 시 Char Disp 전체 팝 연출
+
+    // ⭐ 추가: Awake는 오브젝트 생성 시 딱 한 번만 호출되므로,
+    // SetActive로 껐다 켜도 재실행되지 않아 원본 값을 안전하게 보존합니다.
+    void Awake()
+    {
+        initCharImageScale = charImage.localScale;
+    }
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
     {
@@ -231,7 +239,7 @@ public class EquipDisplayUI : MonoBehaviour
         hpPopTween?.Kill();
 
         charPopTween?.Kill();
-        charImage.localScale = Vector3.one;
+        charImage.localScale = initCharImageScale;
 
         // ⭐ 추가: 최고레벨 팝 연출 정리 (패널을 나갈 때 찌그러진 채로 남지 않도록)
         levelMaxPopTween?.Kill();
@@ -263,17 +271,18 @@ public class EquipDisplayUI : MonoBehaviour
     public void PopCharImage()
     {
         charPopTween?.Kill();
-        charImage.localScale = Vector3.one;
+        charImage.localScale = initCharImageScale;
         charImage.localPosition = Vector3.zero;
 
         Sequence seq = DOTween.Sequence();
         seq.OnStart(() => whiteFlash.SetActive(true));  // 시작 시 활성화
 
-        seq.Append(charImage.DOScale(new Vector3(1.1f, 0.75f, 1f), 0.07f).SetEase(Ease.InSine));
-        seq.Append(charImage.DOScale(new Vector3(0.9f, 1.2f, 1f), 0.09f).SetEase(Ease.OutExpo));
+        // ⭐ 초기 스케일에 배율을 곱해서 목표값 계산
+        seq.Append(charImage.DOScale(Vector3.Scale(initCharImageScale, new Vector3(1.1f, 0.75f, 1f)), 0.07f).SetEase(Ease.InSine));
+        seq.Append(charImage.DOScale(Vector3.Scale(initCharImageScale, new Vector3(0.9f, 1.2f, 1f)), 0.09f).SetEase(Ease.OutExpo));
         RectTransform charRect = charImage as RectTransform;
         seq.Join(charRect.DOAnchorPosY(30f, 0.09f).SetEase(Ease.OutExpo));
-        seq.Append(charImage.DOScale(Vector3.one, 0.1f).SetEase(Ease.OutExpo));
+        seq.Append(charImage.DOScale(initCharImageScale, 0.1f).SetEase(Ease.OutExpo)); // ⭐ 최종 복귀도 기준값으로
         seq.Join(charRect.DOAnchorPosY(0f, 0.1f).SetEase(Ease.OutExpo));
 
         seq.OnComplete(() => whiteFlash.SetActive(false)); // 끝날 때 비활성화
@@ -283,21 +292,17 @@ public class EquipDisplayUI : MonoBehaviour
     public void UnEquipCharImage()
     {
         charPopTween?.Kill();
-        charImage.localScale = Vector3.one;
+        charImage.localScale = initCharImageScale; // ⭐ 기준값으로 리셋
         charImage.localPosition = Vector3.zero;
 
         RectTransform charRect = charImage as RectTransform;
 
         Sequence seq = DOTween.Sequence();
-        // 세로로 줄고 가로로 늘어남 (스쿼시)
-        seq.Append(charImage.DOScale(new Vector3(1.2f, 0.2f, 1f), 0.1f).SetEase(Ease.InSine));
-
+        seq.Append(charImage.DOScale(Vector3.Scale(initCharImageScale, new Vector3(1.2f, 0.2f, 1f)), 0.1f).SetEase(Ease.InSine)); // ⭐
 
         seq.Join(charRect.DOAnchorPosY(-30f, 0.09f).SetEase(Ease.OutExpo));
 
-        // 원래대로 복귀
-        seq.Append(charImage.DOScale(Vector3.one, 0.15f).SetEase(Ease.OutExpo));
-
+        seq.Append(charImage.DOScale(initCharImageScale, 0.15f).SetEase(Ease.OutExpo)); // ⭐ 최종 복귀
         seq.Join(charRect.DOAnchorPosY(0f, 0.1f).SetEase(Ease.OutExpo));
 
         charPopTween = seq;
