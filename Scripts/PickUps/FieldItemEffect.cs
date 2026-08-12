@@ -355,36 +355,35 @@ public class FieldItemEffect : MonoBehaviour
     }
     #endregion
 
-    #region 모든 보석 제거
+    #region 모든 보석/필드 아이템(버프 아이템 포함) 제거
+    // ⭐ 이름은 RemoveAllGems이지만, Collectable을 상속하는 모든 필드 픽업
+    //    (보석, StopWatch 같은 버프 아이템 등)을 전부 제거합니다.
     public void RemoveAllGems()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 200f);
-        foreach (var item in hits)
+        Collectable[] collectables = FindObjectsOfType<Collectable>(); // ⭐ 변경: 콜라이더 비활성 상태(착지 전)도 놓치지 않도록
+        foreach (var collectable in collectables)
         {
-            Collectable collectable = item.GetComponent<Collectable>();
-            if (collectable != null)
-            {
-                GameObject effect = GameManager.instance.poolManager.GetMisc(itemDieEffect);
-                if (effect != null) effect.transform.position = collectable.transform.position;
-                collectable.gameObject.SetActive(false);
-            }
+            if (collectable == null || !collectable.gameObject.activeSelf) continue;
+
+            GameObject effect = GameManager.instance.poolManager.GetMisc(itemDieEffect);
+            if (effect != null) effect.transform.position = collectable.transform.position;
+            collectable.gameObject.SetActive(false);
         }
     }
     #endregion
 
+
     #region 모든 상자 제거
     public void RemoveAllChests()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 200f);
-        foreach (var item in hits)
+        DestructableObject[] destructables = FindObjectsOfType<DestructableObject>(); // ⭐ 변경
+        foreach (var destructable in destructables)
         {
-            DestructableObject destructableObject = item.GetComponent<DestructableObject>();
-            if (destructableObject != null)
-            {
-                GameObject effect = GameManager.instance.poolManager.GetMisc(itemDieEffect);
-                if (effect != null) effect.transform.position = destructableObject.transform.position;
-                destructableObject.gameObject.SetActive(false);
-            }
+            if (destructable == null || !destructable.gameObject.activeSelf) continue;
+
+            GameObject effect = GameManager.instance.poolManager.GetMisc(itemDieEffect);
+            if (effect != null) effect.transform.position = destructable.transform.position;
+            destructable.gameObject.SetActive(false);
         }
     }
     #endregion

@@ -3266,15 +3266,22 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.3833333
-    functionName: SetDamageable
+  - time: 1.4
+    functionName: OnDieAnimationFinished
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.4
+    functionName: TriggerPlayerCamera
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1.45
-    functionName: TriggerPlayerCamera
+    functionName: SetDamageable
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -6,6 +6,7 @@ public class BossDieManager : MonoBehaviour
     public static BossDieManager instance;
     public bool IsBossDead { get; private set; }
     GameObject deadBody;
+    BossDeadBody deadBodyScript; // ⭐ 추가: 이벤트 구독/해제를 위해 캐싱
     int amountOfCoins;
     Animator anim;
     DropCoins dropCoins;
@@ -23,6 +24,7 @@ public class BossDieManager : MonoBehaviour
         SetIsBossDead(true);
         this.deadBody = Instantiate(deadBody, boss.position, boss.rotation);
         anim = this.deadBody.GetComponent<Animator>();
+        deadBodyScript = this.deadBody.GetComponent<BossDeadBody>(); // ⭐ 추가
     }
 
     // IsBossDead 없이 deadBody만 생성
@@ -30,6 +32,7 @@ public class BossDieManager : MonoBehaviour
     {
         this.deadBody = Instantiate(deadBody, boss.position, boss.rotation);
         anim = this.deadBody.GetComponent<Animator>();
+        deadBodyScript = this.deadBody.GetComponent<BossDeadBody>(); // ⭐ 추가
     }
 
     public void SetIsBossDead(bool isDead)
@@ -55,18 +58,35 @@ public class BossDieManager : MonoBehaviour
         PauseManager pauseManager = FindObjectOfType<PauseManager>();
         Time.timeScale = pauseManager.NormalTimeScale;
 
-        // 3) 사망 애니메이션 + 필드 정리
+        // 3) 사망 애니메이션 재생
+        //    텔레포트 연출(OnDieAnimationFinished → TeleportOutEffect)은
+        //    Die 애니메이션 클립의 Animation Event가 자동으로 트리거함.
+        //    텔레포트 연출이 "완전히" 끝나면 OnTeleportOutFinished 이벤트가 발생하고,
+        //    HandleTeleportOutFinished에서 이어서 처리함.
+        if (deadBodyScript != null)
+        {
+            deadBodyScript.OnTeleportOutFinished += HandleTeleportOutFinished;
+        }
         if (anim != null) anim.SetTrigger("Die");
 
         RemoveAllEnemies();
         RemoveAllWalls();
 
-        yield return new WaitForSeconds(3f);
-        if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();
+        FieldItemEffect.instance.RemoveAllGems();   // ⭐ 추가: 보석 + 버프 아이템(시간정지 등) 제거
+        FieldItemEffect.instance.RemoveAllChests(); // ⭐ 추가: 파괴 가능한 상자 제거
 
-        yield return new WaitForSeconds(4f);
+        // ⭐ 매직넘버 대기(3f, 4f) 완전히 제거됨
+    }
 
-        // 4) ⭐ 몇 초 후 저장 + 클리어 패널 표시 (내부에서 PauseGame() 호출됨)
+    // ⭐ 추가: 텔레포트 연출이 실제로 끝났을 때만 호출됨
+    void HandleTeleportOutFinished()
+    {
+        if (deadBodyScript != null)
+        {
+            deadBodyScript.OnTeleportOutFinished -= HandleTeleportOutFinished; // 중복 구독 방지
+        }
+
+        // 4) 저장 + 클리어 패널 표시 (내부에서 PauseGame() 호출됨)
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
         playerData.SetCurrentStageCleared();
         playerData.SaveResourcesBeforeQuitting();
@@ -89,8 +109,8 @@ public class BossDieManager : MonoBehaviour
         FindObjectOfType<PauseManager>().UnPauseGame(); // timeScale 복구
 
         if (anim != null) anim.SetTrigger("Die");
-        yield return new WaitForSeconds(3f);
-        if (deadBody != null) deadBody.GetComponent<BossDeadBody>().TeleportOutEffect();
+        // ⭐ 텔레포트 연출은 Die 애니메이션 이벤트가 자동으로 처리하므로
+        //    무한 모드에서는 별도로 기다리거나 스테이지 클리어 처리를 할 필요가 없음
     }
 
     public void BossCameraOff()

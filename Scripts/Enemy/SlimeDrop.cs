@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public enum SlimeAttackType {None, Slime, Electricity, Fire}
+public enum SlimeAttackType { None, Slime, Electricity, Fire }
 public class SlimeDrop : MonoBehaviour
 {
     [Header("Drop")]
@@ -21,8 +21,9 @@ public class SlimeDrop : MonoBehaviour
     [SerializeField] GameObject electricityPrefab;
 
     #region 초기화
-    public void InitDrop()
+    public void InitDrop(SlimeDropManager manager)
     {
+        slimeDropManager = manager;
         CachingReferences();
     }
     #endregion
@@ -42,13 +43,10 @@ public class SlimeDrop : MonoBehaviour
     }
     void CachingReferences()
     {
+        // FindObjectOfType 제거 - manager는 InitDrop에서 직접 전달받음
         if (slimeDropManager == null)
         {
-            slimeDropManager = FindObjectOfType<SlimeDropManager>();
-            if (slimeDropManager == null)
-            {
-                Debug.LogError("SlimeDropManager를 찾을 수 없습니다!");
-            }
+            Debug.LogError("SlimeDropManager가 전달되지 않았습니다!");
         }
         if (anim == null) anim = GetComponentInParent<Animator>();
     }

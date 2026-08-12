@@ -28,7 +28,7 @@ public class SlimeDropManager : MonoBehaviour
     {
         // 보스의 현재 위치에 바로 점액을 떨어트림
         GameObject drop = Instantiate(dropPrefab, dropPos, Quaternion.identity);
-        drop.GetComponentInChildren<SlimeDrop>().InitDrop();
+        drop.GetComponentInChildren<SlimeDrop>().InitDrop(this);
         if (slimeDropType == SlimeAttackType.None) slimeDropType = drop.GetComponentInChildren<SlimeDrop>().GetSlimeDropType();
         AddDrop(drop);
         // ⭐ 사운드 재생
@@ -38,7 +38,7 @@ public class SlimeDropManager : MonoBehaviour
     {
         // 보스의 현재 위치에 바로 점액을 떨어트림
         GameObject drop = Instantiate(DropOnLandingPrefab, dropPos, Quaternion.identity);
-        drop.GetComponentInChildren<SlimeDrop>().InitDrop();
+        drop.GetComponentInChildren<SlimeDrop>().InitDrop(this);
         if (slimeDropType == SlimeAttackType.None) slimeDropType = drop.GetComponentInChildren<SlimeDrop>().GetSlimeDropType();
         AddDrop(drop);
         // ⭐ 사운드 재생
