@@ -197,6 +197,8 @@ public class Spawner : MonoBehaviour
         enemyBase.InitEnemy(enemyToSpawn);
         enemyBase.IsBoss = true;
 
+        Debug.Log($"[Spawner] IsBoss 설정됨 - {enemy.name}");
+
         // 보스 등장 시 다른 모든 적, 아이템 제거
         GameManager.instance.fieldItemEffect.RemoveAllEnemy();
         GameManager.instance.fieldItemEffect.RemoveAllGems();

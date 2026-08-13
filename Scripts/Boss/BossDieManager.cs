@@ -67,13 +67,20 @@ public class BossDieManager : MonoBehaviour
         {
             deadBodyScript.OnTeleportOutFinished += HandleTeleportOutFinished;
         }
+        else
+        {
+            // ⭐ 추가: 서브보스가 스테이지 보스로 등장한 경우 deadBody가 생성되지 않으므로
+            //         deadBodyScript가 null. 텔레포트 대기 없이 바로 스테이지 클리어 처리로 진행.
+            Logger.Log("[BossDieManager] deadBodyScript가 없음 (서브보스 케이스) - 텔레포트 대기 없이 바로 스테이지 클리어 처리");
+            HandleTeleportOutFinished();
+        }
         if (anim != null) anim.SetTrigger("Die");
 
         RemoveAllEnemies();
         RemoveAllWalls();
 
-        FieldItemEffect.instance.RemoveAllGems();   // ⭐ 추가: 보석 + 버프 아이템(시간정지 등) 제거
-        FieldItemEffect.instance.RemoveAllChests(); // ⭐ 추가: 파괴 가능한 상자 제거
+        FieldItemEffect.instance.RemoveAllGems();
+        FieldItemEffect.instance.RemoveAllChests();
 
         // ⭐ 매직넘버 대기(3f, 4f) 완전히 제거됨
     }
