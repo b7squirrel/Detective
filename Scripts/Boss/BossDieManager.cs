@@ -97,11 +97,20 @@ public class BossDieManager : MonoBehaviour
         StartCoroutine(WaitCoinsThenFinalizeCo()); // ⭐ 변경: 즉시 처리 대신 코인 대기 후 처리
     }
 
-    // ⭐ 추가: 화면에 날아가는 중인 코인/크리스탈이 모두 도착할 때까지 대기한 후 스테이지 클리어 처리
+    // 화면에 날아가는 중인 코인/크리스탈이 모두 도착할 때까지 대기한 후 스테이지 클리어 처리
     IEnumerator WaitCoinsThenFinalizeCo()
     {
+        float maxWaitTime = 5f; // ⭐ 추가: 코인 연출이 비정상적으로 안 끝날 경우를 대비한 최대 대기 시간
+        float elapsed = 0f;
+
         while (MoveToUI.ActiveFlyingCount > 0)
         {
+            elapsed += Time.deltaTime;
+            if (elapsed >= maxWaitTime)
+            {
+                Logger.LogWarning($"[BossDieManager] 코인 UI 이동 대기 타임아웃({maxWaitTime}초) - ActiveFlyingCount={MoveToUI.ActiveFlyingCount}로 강제 진행");
+                break;
+            }
             yield return null;
         }
 
