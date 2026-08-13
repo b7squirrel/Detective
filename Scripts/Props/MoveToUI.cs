@@ -9,6 +9,9 @@ using UnityEngine;
 enum TypeOfMoveToUI { None, Coin, Cristal }
 public class MoveToUI : MonoBehaviour
 {
+    // ⭐ 추가: 현재 화면에서 UI로 날아가는 중인 오브젝트(코인/크리스탈)의 총 개수
+    public static int ActiveFlyingCount { get; private set; }
+
     [Header("오브젝트 타입")]
     [SerializeField] TypeOfMoveToUI typeOfMoveToUI;
 
@@ -58,6 +61,14 @@ public class MoveToUI : MonoBehaviour
         {
             cristalManager = GameManager.instance.GetComponent<CristalManager>();
         }
+        ActiveFlyingCount++; // ⭐ 추가: 스폰될 때 카운트 증가
+    }
+
+    void OnDisable()
+    {
+        // ⭐ 추가: 오브젝트가 비활성화될 때(정상 도착이든, 풀 반환이든) 카운트 감소
+        //         Trigger() 코루틴 끝에서 SetActive(false)를 호출하므로 여기서 자동으로 잡힘
+        ActiveFlyingCount = Mathf.Max(0, ActiveFlyingCount - 1);
     }
 
     IEnumerator Trigger()
@@ -96,7 +107,7 @@ public class MoveToUI : MonoBehaviour
             lastCoinSoundTime = Time.time;
         }
 
-        gameObject.SetActive(false);
+        gameObject.SetActive(false); // ← 이 줄, 이미 원래 있던 코드입니다. 여기에 새로 추가할 건 없습니다.
     }
 
     void SetTargetPos()

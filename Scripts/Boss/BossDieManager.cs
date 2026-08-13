@@ -72,7 +72,7 @@ public class BossDieManager : MonoBehaviour
             // ⭐ 추가: 서브보스가 스테이지 보스로 등장한 경우 deadBody가 생성되지 않으므로
             //         deadBodyScript가 null. 텔레포트 대기 없이 바로 스테이지 클리어 처리로 진행.
             Logger.Log("[BossDieManager] deadBodyScript가 없음 (서브보스 케이스) - 텔레포트 대기 없이 바로 스테이지 클리어 처리");
-            HandleTeleportOutFinished();
+            StartCoroutine(WaitCoinsThenFinalizeCo()); // ⭐ 변경: HandleTeleportOutFinished() 직접 호출 대신
         }
         if (anim != null) anim.SetTrigger("Die");
 
@@ -86,6 +86,7 @@ public class BossDieManager : MonoBehaviour
     }
 
     // ⭐ 추가: 텔레포트 연출이 실제로 끝났을 때만 호출됨
+    // 텔레포트 연출이 실제로 끝났을 때만 호출됨
     void HandleTeleportOutFinished()
     {
         if (deadBodyScript != null)
@@ -93,12 +94,28 @@ public class BossDieManager : MonoBehaviour
             deadBodyScript.OnTeleportOutFinished -= HandleTeleportOutFinished; // 중복 구독 방지
         }
 
-        // 4) 저장 + 클리어 패널 표시 (내부에서 PauseGame() 호출됨)
+        StartCoroutine(WaitCoinsThenFinalizeCo()); // ⭐ 변경: 즉시 처리 대신 코인 대기 후 처리
+    }
+
+    // ⭐ 추가: 화면에 날아가는 중인 코인/크리스탈이 모두 도착할 때까지 대기한 후 스테이지 클리어 처리
+    IEnumerator WaitCoinsThenFinalizeCo()
+    {
+        while (MoveToUI.ActiveFlyingCount > 0)
+        {
+            yield return null;
+        }
+
+        FinalizeStageClear();
+    }
+
+    // ⭐ 추가: 기존 HandleTeleportOutFinished 안에 있던 로직을 분리
+    void FinalizeStageClear()
+    {
         PlayerDataManager playerData = FindObjectOfType<PlayerDataManager>();
         playerData.SetCurrentStageCleared();
         playerData.SaveResourcesBeforeQuitting();
 
-        if (playerData.GetGameMode() == GameMode.Regular) // 일반 모드일 때만 스테이지 클리어 관련 연산
+        if (playerData.GetGameMode() == GameMode.Regular)
         {
             FindObjectOfType<StageEvenetManager>().IsWinningStage = true;
         }
