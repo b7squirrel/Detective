@@ -8,6 +8,7 @@ public class BeamProjectile : ProjectileBase
     [SerializeField] LayerMask walls;
     [SerializeField] LayerMask screenEdges;
     [SerializeField] Transform hitWallEffect;
+    
     Transform assignedMuzzlePoint;
 
     Transform startPoint;
@@ -86,6 +87,7 @@ public class BeamProjectile : ProjectileBase
             : new Vector2(transform.position.x, transform.position.y + .5f);
 
         LayerMask allLayers = destructables | walls | screenEdges;
+        LayerMask blockingLayers = walls | screenEdges; // ✅ 레이저의 "끝점" 판정은 벽/화면 경계만
 
         // ✅ LinecastNonAlloc으로 GC 방지
         int hitCount = Physics2D.LinecastNonAlloc(startPos, endPoint.position, linecastBuffer, allLayers);
@@ -95,6 +97,10 @@ public class BeamProjectile : ProjectileBase
 
         for (int i = 0; i < hitCount; i++)
         {
+            // 슬라임 등 destructables 레이어는 레이저를 시각적으로 막지 않도록 제외
+            if (((1 << linecastBuffer[i].collider.gameObject.layer) & blockingLayers) == 0)
+                continue;
+
             float distance = Vector2.Distance(startPos, linecastBuffer[i].point);
             if (distance < closestDistance)
             {
