@@ -109,7 +109,7 @@ public class GachaSystem : MonoBehaviour
         if (PlayerPrefs.GetInt(GIFT_PENDING_KEY, 0) != 1)
         {
             Logger.Log("[GachaSystem] 카드 미생성 상태 - 지금 생성합니다");
-            PrepareTutorialReward(5, 1);
+            PrepareTutorialReward(10, 1);
         }
 
         // 카드는 이미 있든 방금 생성했든, 이제 선물 팝업을 띄움
@@ -880,7 +880,7 @@ public class GachaSystem : MonoBehaviour
     // UnityEvent(On Click 등)에 연결하기 위한 매개변수 없는 버전
     public void PrepareTutorialReward()
     {
-        PrepareTutorialReward(5, 1);
+        PrepareTutorialReward(10, 1);
     }
 
     public void PrepareTutorialReward(int count = 5, int guaranteedCount = 1)

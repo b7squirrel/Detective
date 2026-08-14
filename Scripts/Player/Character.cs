@@ -416,38 +416,11 @@ public class Character : MonoBehaviour
         StartCoroutine(InvincibleCo());
         Logger.Log("[Character] 부활 완료. 풀체력 + 무적 3초");
     }
-    IEnumerator ReviveCo()
-    {
-        GameManager.instance.pauseManager.PauseGame();
-        yield return new WaitForSeconds(1f);
-
-        // IsPlayerDead 초기화
-        GameManager.instance.IsPlayerDead = false;
-
-        // Player.Die()에서 변경된 mass 복구
-        GetComponent<Rigidbody2D>().mass = 100000f;
-
-        currentHealth = MaxHealth;
-        hpBar.gameObject.SetActive(true);
-        hpBar.SetStatus(currentHealth, MaxHealth);
-        GameManager.instance.pauseManager.UnPauseGame();
-
-        // ⭐ 부활 쇼크웨이브 - 데미지 0, 범위 10, 적 레이어만 타겟
-        GameObject wave = GameManager.instance.poolManager.GetMisc(shockwavePrefab);
-        if (wave != null)
-        {
-            wave.GetComponent<Shockwave>().Init(0, 10f, LayerMask.GetMask("Enemy"), transform.position);
-            SoundManager.instance.Play(shockWaveSound);
-        }
-
-        StartCoroutine(InvincibleCo());
-        Logger.Log("[Character] 부활 완료. 풀체력 + 무적 3초");
-    }
 
     IEnumerator InvincibleCo()
     {
         GameManager.instance.IsPlayerInvincible = true;
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(6f);
         GameManager.instance.IsPlayerInvincible = false;
         Logger.Log("[Character] 무적 종료");
     }
