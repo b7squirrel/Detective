@@ -317,5 +317,49 @@ public class PoolManager : MonoBehaviour
 
         return null;
     }
+
+    /// <summary>
+    /// GetMisc()로 관리되는 프리팹(젬, 상자 등)을 미리 생성해서 비활성 상태로 풀에 채워둠.
+    /// 스테이지 시작 시 WarmUpEnemyPools()와 같은 타이밍에 호출해야 함.
+    /// </summary>
+    public void WarmUpMiscPool(GameObject prefab, int count)
+    {
+        if (prefab == null) return;
+
+        if (miscPools == null) miscPools = new Dictionary<string, List<GameObject>>();
+
+        PoolingKey key = prefab.GetComponent<PoolingKey>();
+        if (key == null)
+        {
+            Logger.LogError($"[PoolManager] {prefab.name}에 PoolingKey가 없습니다!");
+            return;
+        }
+        string poolingTag = key.Key;
+
+        if (!miscPools.ContainsKey(poolingTag))
+        {
+            GameObject folder = new GameObject();
+            folder.transform.position = Vector3.zero;
+            folder.transform.parent = transform;
+            folder.name = poolingTag;
+            itemFolders.Add(folder);
+            folderDict[poolingTag] = folder;
+            miscPools[poolingTag] = new List<GameObject>();
+        }
+
+        List<GameObject> pool = miscPools[poolingTag];
+        GameObject targetFolder = folderDict[poolingTag];
+
+        // 이미 채워진 개수는 제외하고 부족한 만큼만 추가 생성
+        int alreadyPooled = pool.Count;
+        for (int i = alreadyPooled; i < count; i++)
+        {
+            GameObject obj = Instantiate(prefab, targetFolder.transform);
+            obj.SetActive(false);
+            pool.Add(obj);
+        }
+
+        Logger.Log($"[PoolManager] Misc WarmUp 완료: {poolingTag} x{count}");
+    }
     #endregion
 }

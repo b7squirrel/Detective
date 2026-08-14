@@ -5,12 +5,11 @@ public class StageManager : MonoBehaviour
 {
     public StageContents[] stageContents;
 
-    // ⭐ 추가: 이번 세션에서 실제로 시작한 스테이지 번호 (다른 스크립트에서 참조용)
     public static int CurrentSessionStageNum { get; private set; }
 
-    [Header("Speed Settings")] // ⭐ 추가
-    [SerializeField] float gameSpeedMultiplier = 1.25f; // ⭐ 추가: 일반모드 배속
-    float originalFixedDeltaTime; // ⭐ 추가
+    [Header("Speed Settings")]
+    [SerializeField] float gameSpeedMultiplier = 1.25f;
+    float originalFixedDeltaTime;
 
     StageEvenetManager stageEventManager;
     StageAssetManager stageAssetManager;
@@ -23,11 +22,11 @@ public class StageManager : MonoBehaviour
     PlayerDataManager playerDataManager;
     TimeWaveUI timeWaveUI;
     StageTime stageTime;
-    GeneralFuctions generalFuctions = new GeneralFuctions(); // 필드로 선언
+    GeneralFuctions generalFuctions = new GeneralFuctions();
 
     void Awake()
     {
-        originalFixedDeltaTime = Time.fixedDeltaTime; // ⭐ 추가: 원본 저장
+        originalFixedDeltaTime = Time.fixedDeltaTime;
 
         stageEventManager = GetComponent<StageEvenetManager>();
         stageAssetManager = GetComponent<StageAssetManager>();
@@ -47,12 +46,10 @@ public class StageManager : MonoBehaviour
 
         int currentStageNum = playerDataManager.GetCurrentStageNumber();
 
-        // ⭐ 추가: static 값에 기록
         CurrentSessionStageNum = currentStageNum;
-        
+
         StageContents contents = stageContents[currentStageNum - 1];
 
-        // ⭐ 추가: 스테이지 시작 이벤트
         FirebaseManager.LogEvent("stage_start", "stage_number", currentStageNum.ToString());
 
         wallManager.SetWallSize(contents.startPositions);
@@ -60,15 +57,15 @@ public class StageManager : MonoBehaviour
         poolManager.InitPools();
 
         stageEventManager.Init(contents.stageDataText,
-    contents.enemyData,
-    contents.stageMusicType);
+            contents.enemyData,
+            contents.stageMusicType);
 
         spawnGemsOnStart.InitGemData(contents.gemToSpawn,
                                                    contents.numbersOfGemToSpawn,
                                                    contents.innerRadius, contents.outerRadius);
         spawnGemsOnStart.InitChestData(contents.chestPrefab,
                                                     contents.innerRadiusForChest, contents.outerRadiusForChest);
-        spawnGemsOnStart.GenGemsAndChest();
+        // GenGemsAndChest()는 StageStartEvents의 애니메이션 이벤트(프레임 151)에서 호출됨
 
         stageAssetManager.Init(contents.bossPrefab, contents.effects, contents.bossEffects);
 
@@ -76,14 +73,13 @@ public class StageManager : MonoBehaviour
         stageGroundEffectManager.Init(contents.stageGroundType);
 
         // poolManager가 stageAssetManager를 참조하니까 먼저 초기화하면 안 됨
-        WarmUpPoolsByStage(currentStageNum);
+        WarmUpPoolsByStage(currentStageNum, contents); // ⭐ contents 추가
 
-        ApplyGameSpeed(); // ⭐ 추가: 일반모드 배속 적용
+        ApplyGameSpeed();
 
         StartCoroutine(UpdateTimeUI());
     }
 
-    // ⭐ 추가: 무한모드의 ApplyGameSpeed와 동일한 패턴
     void ApplyGameSpeed()
     {
         Time.timeScale = gameSpeedMultiplier;
@@ -98,7 +94,6 @@ public class StageManager : MonoBehaviour
         Logger.Log($"[StageManager] Game speed: {gameSpeedMultiplier}x");
     }
 
-    // ⭐ 추가: 씬을 나갈 때 원래 배속으로 복구 (무한모드의 ResetGameSpeed와 동일)
     void OnDisable()
     {
         ResetGameSpeed();
@@ -121,7 +116,8 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    void WarmUpPoolsByStage(int stageNum)
+    // ⭐ 파라미터에 StageContents contents 추가
+    void WarmUpPoolsByStage(int stageNum, StageContents contents)
     {
         // ✅ 이 두 줄이 반드시 WarmUp보다 먼저 와야 함
         poolManager.InitEnemyPools();
@@ -141,15 +137,17 @@ public class StageManager : MonoBehaviour
 
         poolManager.WarmUpEnemyPools(warmUpCount);
         poolManager.WarmUpSubBossPools(2);
+
+        // ⭐ 추가: 젬/상자도 미리 워밍업 (Instantiate 비용을 여기서 미리 지불)
+        poolManager.WarmUpMiscPool(contents.gemToSpawn, contents.numbersOfGemToSpawn);
+        poolManager.WarmUpMiscPool(contents.chestPrefab, 1);
     }
 
     IEnumerator UpdateTimeUI()
     {
-        // 스테이지
         int stageNum = playerDataManager.GetCurrentStageNumber();
         timeWaveUI.InitStageUI(stageNum.ToString());
 
-        // 시간
         while (true)
         {
             if (timeWaveUI != null)
@@ -158,7 +156,7 @@ public class StageManager : MonoBehaviour
                 string timeFormatted = generalFuctions.FormatTime(currentTime);
                 timeWaveUI.InitTimeUI(timeFormatted);
             }
-            yield return new WaitForSeconds(.1f); // 0.1초마다 업데이트
+            yield return new WaitForSeconds(.1f);
         }
     }
 }

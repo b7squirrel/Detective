@@ -21,6 +21,7 @@ public class StageStartEvents : MonoBehaviour
     [SerializeField] GameObject waveTextGroup;
     [SerializeField] GameObject[] wobbleImages;
     [SerializeField] GameObject[] swipeImages;
+    [SerializeField] SpawnGemsOnStart spawnGemsOnStart; // 인스펙터에서 연결
     PlayerDataManager PlayerDataManager;
     void Start()
     {
@@ -31,6 +32,9 @@ public class StageStartEvents : MonoBehaviour
     {
         if (PlayerDataManager == null)
             PlayerDataManager = FindObjectOfType<PlayerDataManager>();
+
+        if (spawnGemsOnStart == null)
+            spawnGemsOnStart = FindObjectOfType<SpawnGemsOnStart>();
 
         int currentStageIndex = PlayerDataManager.GetCurrentStageNumber();
 
@@ -58,46 +62,68 @@ public class StageStartEvents : MonoBehaviour
     {
         InitUI();
 
-        yield return new WaitForSecondsRealtime(.1f);
+        // ⭐ 추가: 시퀀스 시작부터 플레이어 조작을 잠금
+        if (Player.instance != null)
+            Player.instance.ShouldBeStill = true;
 
+        yield return new WaitForSecondsRealtime(.1f);
 
         GameManager.instance.pauseManager.PauseGame();
 
         GetComponent<Animator>().SetTrigger("Init");
-        // SoundManager.instance.Play(stageTextSwipeInSound);
+    }
 
+    // ⭐ 애니메이션 이벤트로 재생 - 프레임 151 (UI 이탈 시작 시점)
+    public void SpawnFieldItems()
+    {
+        if (spawnGemsOnStart != null)
+            spawnGemsOnStart.GenGemsAndChest();
+    }
 
-        yield return new WaitForSecondsRealtime(1.5f);
+    // ⭐ 애니메이션 이벤트로 재생 - 프레임 153 (UI 완전히 벗어난 시점)
+    // ⭐ 애니메이션 이벤트로 재생 - 프레임 153 (UI 완전히 벗어난 시점)
+    // 시간 재개 + 스폰 + 조작 허용까지 한 번에 순서대로 처리
+    public void OnStageStartSequenceEnd()
+    {
         SoundManager.instance.Play(stageStartSound);
 
+        // 1단계: 시간(애니메이션)은 다시 흐르게 함
         GameManager.instance.pauseManager.UnPauseGame();
+
+        // 2단계: 젬/상자 스폰 (ShouldBeStill은 아직 true라서 이 순간엔 조작 불가)
+        if (spawnGemsOnStart != null)
+            spawnGemsOnStart.GenGemsAndChest();
+
+        // 3단계: 스폰이 끝난 직후 조작 허용
+        if (Player.instance != null)
+            Player.instance.ShouldBeStill = false;
     }
 
     // 애니메이션 이벤트로 재생
     public void PlayTextOutSound()
     {
-        if(stageTextSwipeOutSound != null)
-        SoundManager.instance.Play(stageTextSwipeOutSound);
+        if (stageTextSwipeOutSound != null)
+            SoundManager.instance.Play(stageTextSwipeOutSound);
     }
     public void PlayGetReadySound()
     {
-        if(getReadySound != null)
-        SoundManager.instance.Play(getReadySound);
+        if (getReadySound != null)
+            SoundManager.instance.Play(getReadySound);
     }
     public void PlayGoSound()
     {
-        if(goSound != null)
-        SoundManager.instance.Play(goSound);
+        if (goSound != null)
+            SoundManager.instance.Play(goSound);
     }
     public void PlayStageStartVoice()
     {
-        if(stageStartVoice != null)
-        SoundManager.instance.Play(stageStartVoice);
+        if (stageStartVoice != null)
+            SoundManager.instance.Play(stageStartVoice);
     }
     public void PlayStageStartUISwooshSound()
     {
-        if(stageStartUISwooshSound != null)
-        SoundManager.instance.Play(stageStartUISwooshSound);
+        if (stageStartUISwooshSound != null)
+            SoundManager.instance.Play(stageStartUISwooshSound);
     }
     public void SetWobbleImageActive(int active)
     {
@@ -109,8 +135,8 @@ public class StageStartEvents : MonoBehaviour
     }
     public void PlayNotificationSound()
     {
-        if(notificationSound != null)
-        SoundManager.instance.Play(notificationSound);
+        if (notificationSound != null)
+            SoundManager.instance.Play(notificationSound);
     }
     public void SetSwipeImageActive(int active)
     {
@@ -119,5 +145,10 @@ public class StageStartEvents : MonoBehaviour
         {
             item.SetActive(isActive);
         }
+    }
+    // 애니메이션 이벤트로 재생
+    public void DeactivateStartUI()
+    {
+        gameObject.SetActive(false);
     }
 }

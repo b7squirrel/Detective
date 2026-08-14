@@ -83485,14 +83485,13 @@ GameObject:
   - component: {fileID: 1276851708}
   - component: {fileID: 1276851710}
   - component: {fileID: 1276851709}
-  - component: {fileID: 1276851711}
   m_Layer: 5
   m_Name: Start UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1276851708
 RectTransform:
   m_ObjectHideFlags: 0
@@ -83544,6 +83543,7 @@ MonoBehaviour:
   swipeImages:
   - {fileID: 1282294281}
   - {fileID: 1103769121}
+  spawnGemsOnStart: {fileID: 0}
 --- !u!95 &1276851710
 Animator:
   serializedVersion: 5
@@ -83565,19 +83565,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1276851711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1276851707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 213d3de5d25554a5099d7c2b68e3d0c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeTime: 2.6
 --- !u!1 &1277552639
 GameObject:
   m_ObjectHideFlags: 0

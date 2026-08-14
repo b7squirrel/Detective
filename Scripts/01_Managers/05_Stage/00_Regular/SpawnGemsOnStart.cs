@@ -1,6 +1,6 @@
 using UnityEngine;
+using UnityEngine.Profiling;
 using System.Collections;
-
 
 public class SpawnGemsOnStart : MonoBehaviour
 {
@@ -19,44 +19,43 @@ public class SpawnGemsOnStart : MonoBehaviour
     {
         gemToSpawn = _gemToSpawn;
         numbersOfGemToSpawn = _gemNums;
-        // innerRadius = _innerR;
-        // outerRadius = _outerR;
         innerRadius = 11.9f;
         outerRadius = 12f;
     }
+
     public void InitChestData(GameObject _chestPrefab, float _innerR, float _outerR)
     {
         chestPrefab = _chestPrefab;
-        // innerRadiusForChest = _innerR;
-        // outerRadiusForChest = _outerR;
         innerRadiusForChest = 11f;
         outerRadiusForChest = 13f;
     }
 
+    // ⭐ 코루틴 제거 - 애니메이션 이벤트가 정확한 프레임에 직접 호출하므로
+    // 별도의 딜레이 없이 즉시 실행
     public void GenGemsAndChest()
-    {
-        StartCoroutine(SpawnGemsAndChestCo());
-    }
+{
+    var sw = System.Diagnostics.Stopwatch.StartNew();
 
-    IEnumerator SpawnGemsAndChestCo()
-    {
-        yield return new WaitForSeconds(.8f);
+    if (manager == null)
         manager = FindObjectOfType<GameManager>();
 
-        bool hideItems = GameConfig.Instance != null && GameConfig.Instance.hideFieldItems;
+    bool hideItems = GameConfig.Instance != null && GameConfig.Instance.hideFieldItems;
 
-        if (!hideItems)
+    if (!hideItems)
+    {
+        for (int i = 0; i < numbersOfGemToSpawn; i++)
         {
-            for (int i = 0; i < numbersOfGemToSpawn; i++)
-            {
-                Vector2 posGem = new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadius, innerRadius);
-                GameObject gem = manager.poolManager.GetMisc(gemToSpawn);
-                gem.transform.position = posGem;
-            }
-
-            Vector2 posChest = new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadiusForChest, innerRadiusForChest);
-            GameManager.instance.fieldItemSpawner.SpawnEggBox(posChest);
-            CameraShake.instance.Shake();
+            Vector2 posGem = new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadius, innerRadius);
+            GameObject gem = manager.poolManager.GetMisc(gemToSpawn);
+            gem.transform.position = posGem;
         }
+
+        Vector2 posChest = new GeneralFuctions().GetRandomPointInRing(Vector2.zero, outerRadiusForChest, innerRadiusForChest);
+        GameManager.instance.fieldItemSpawner.SpawnEggBox(posChest);
+        CameraShake.instance.Shake();
     }
+
+    sw.Stop();
+    Logger.Log($"[SpawnGemsOnStart] GenGemsAndChest 소요 시간: {sw.Elapsed.TotalMilliseconds:F2}ms");
+}
 }
