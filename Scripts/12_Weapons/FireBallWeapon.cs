@@ -9,8 +9,10 @@ public class FireBallWeapon : WeaponBase
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
 
-    [Header("FireBall 전용 감지 범위")]
-    [SerializeField] float fireballDetectRange = 8f;
+    [Header("FireBall 감지 범위 (sizeOfArea 연동)")]
+    [SerializeField] float baseDetectRange = 5f;            // sizeOfArea 업그레이드 전 기본 범위
+    [SerializeField] float detectRangePerSizeOfArea = 1.5f; // sizeOfArea 1당 증가량
+    [SerializeField] float maxDetectRange = 9.5f;            // EnemyFinder.searchRadius(약 10) 이하로 안전마진
 
     [Header("대기 자세 각도")]
     [SerializeField] float idleAngleMain = 30f;   // 2시 방향
@@ -52,6 +54,13 @@ public class FireBallWeapon : WeaponBase
         }
     }
 
+    // sizeOfArea 업그레이드에 따라 커지는 감지 범위
+    float GetCurrentDetectRange()
+    {
+        float range = baseDetectRange + weaponStats.sizeOfArea * detectRangePerSizeOfArea;
+        return Mathf.Min(range, maxDetectRange);
+    }
+
     protected override void Update()
     {
         if (GameManager.instance.IsPaused) return;
@@ -61,7 +70,8 @@ public class FireBallWeapon : WeaponBase
 
         if (willAttack)
         {
-            EnemyFinder.instance.GetEnemiesInRange(2, fireballDetectRange, angleQueryBuffer);
+            // 공격 시점에만 탐색: 동적 범위 + 화면 안 적만
+            EnemyFinder.instance.GetEnemiesInRangeOnScreen(2, GetCurrentDetectRange(), angleQueryBuffer);
             UpdateAimFromBuffer();
             lastAttackTime = Time.time; // 공격 시점 기록
         }

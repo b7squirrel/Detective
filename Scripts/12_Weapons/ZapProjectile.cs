@@ -6,10 +6,14 @@ public class ZapProjectile : ProjectileBase
     [Header("Zap Settings")]
     [SerializeField] float switchTargetTime = 0.3f;
     [SerializeField] float damageInterval = 0.5f;
-    [SerializeField] float maxTargetDistance = 15f;
     [SerializeField] float switchTargetTimeSynergy = 0.3f;
     [SerializeField] float damageIntervalSynergy = 0.5f;
     Transform assignedMuzzlePoint;
+
+    [Header("Zap 감지 범위 (sizeOfArea 연동)")]
+    [SerializeField] float baseTargetRange = 6f;             // sizeOfArea 업그레이드 전 기본 범위
+    [SerializeField] float targetRangePerSizeOfArea = 1.5f;  // sizeOfArea 1당 증가량
+    [SerializeField] float maxTargetDistance = 15f;           // 상한선 (EnemyFinder.searchRadius 이하로)
 
     [Header("Visual")]
     [SerializeField] LineRenderer laserLineOuter;
@@ -104,9 +108,22 @@ public class ZapProjectile : ProjectileBase
         return true;
     }
 
+    // sizeOfArea 업그레이드에 따라 커지는 감지 범위
+    float GetCurrentTargetRange()
+    {
+        if (cachedWeapon == null || cachedWeapon.weaponStats == null)
+            return baseTargetRange;
+
+        float range = baseTargetRange + cachedWeapon.weaponStats.sizeOfArea * targetRangePerSizeOfArea;
+        return Mathf.Min(range, maxTargetDistance);
+    }
+
     void FindNewTarget()
     {
-        EnemyFinder.instance.GetEnemies(5, enemyQueryBuffer);
+        float currentRange = GetCurrentTargetRange();
+
+        // 화면 안 + 현재 범위 이내의 적만 후보로 조회
+        EnemyFinder.instance.GetEnemiesInRangeOnScreen(5, currentRange, enemyQueryBuffer);
 
         int validCount = 0;
         for (int i = 0; i < enemyQueryBuffer.Count; i++)
@@ -129,6 +146,8 @@ public class ZapProjectile : ProjectileBase
             }
         }
 
+        // 이 투사체(muzzle) 위치 기준 최종 거리 안전 체크
+        // (EnemyFinder의 범위 판정은 플레이어 위치 기준이라, 투사체 발사 지점과는 약간 다를 수 있음)
         if (Vector2.Distance(transform.position, randomEnemy) > maxTargetDistance)
         {
             currentTarget = null;

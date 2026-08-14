@@ -16,6 +16,9 @@ public class EnemyFinder : MonoBehaviour
     private float halfHeight, halfWidth;
     private float searchRadius;
 
+    // 카메라 캐싱 (Camera.main 반복 호출 방지)
+    private Camera mainCam;
+
     // 버퍼 (재사용으로 GC 제거)
     private Collider2D[] hitBuffer = new Collider2D[250];
     private Collider2D[] overlapBuffer = new Collider2D[10]; // GetClosestEnemyTransform용 버퍼
@@ -32,13 +35,12 @@ public class EnemyFinder : MonoBehaviour
     {
         instance = this;
 
-        halfHeight = Camera.main.orthographicSize;
-        halfWidth = Camera.main.aspect * halfHeight;
+        mainCam = Camera.main;
+        halfHeight = mainCam.orthographicSize;
+        halfWidth = mainCam.aspect * halfHeight;
 
         // 화면 대각선 길이를 반지름으로 사용
         searchRadius = Mathf.Sqrt(halfWidth * halfWidth + halfHeight * halfHeight) * 0.6f;
-
-        Debug.Log($"searchRadius: {searchRadius}"); // ← 이 줄 추가
     }
 
     void Update()
@@ -108,31 +110,37 @@ public class EnemyFinder : MonoBehaviour
     }
 
     /// <summary>
-    /// 이미 캐싱된(거리순 정렬된) 적 리스트에서 지정 반경 이내의 적만 필터링합니다.
+    /// 이미 캐싱된(거리순 정렬된) 적 리스트에서, 지정 반경 이내 + 화면에 실제로 보이는 적만 필터링합니다.
     /// 별도 물리 쿼리 없이 기존 캐시를 재사용하므로 비용이 매우 낮습니다.
     /// ※ radius는 반드시 전역 searchRadius 이하여야 정확합니다.
-    /// (searchRadius보다 큰 값을 넣으면, 캐시에 애초에 없는 더 먼 적은 찾지 못합니다.)
     /// </summary>
-    public void GetEnemiesInRange(int numberOfEnemies, float radius, List<Vector2> result)
+    public void GetEnemiesInRangeOnScreen(int numberOfEnemies, float radius, List<Vector2> result)
     {
         result.Clear();
         Vector2 playerPosition = transform.position;
         float sqrRadius = radius * radius;
 
-        // cachedEnemyPositions는 이미 거리순 정렬되어 있으므로
-        // 반경을 벗어나는 순간 더 볼 필요 없이 종료 가능
         for (int i = 0; i < cachedEnemyPositions.Count && result.Count < numberOfEnemies; i++)
         {
             Vector2 pos = cachedEnemyPositions[i];
             float sqrDist = (pos - playerPosition).sqrMagnitude;
 
+            // 정렬되어 있으므로 반경을 벗어나는 순간 이후는 전부 더 멀다 → 종료
             if (sqrDist > sqrRadius)
-                break; // 정렬되어 있으므로 이후는 전부 더 멀다
+                break;
+
+            // 화면 안에 실제로 보이는지 체크 (뷰포트 0~1 범위 + 카메라 앞쪽)
+            Vector3 viewPos = mainCam.WorldToViewportPoint(pos);
+            bool onScreen = viewPos.z > 0f &&
+                             viewPos.x >= 0f && viewPos.x <= 1f &&
+                             viewPos.y >= 0f && viewPos.y <= 1f;
+
+            if (!onScreen)
+                continue; // 반경 안이지만 화면 밖 → 건너뛰고 다음 후보 확인
 
             result.Add(pos);
         }
 
-        // 부족한 개수만큼 Vector2.zero로 채움
         while (result.Count < numberOfEnemies)
             result.Add(Vector2.zero);
     }
@@ -157,7 +165,6 @@ public class EnemyFinder : MonoBehaviour
         if (closestPos == Vector2.zero)
             return null;
 
-        // NonAlloc으로 배열 재사용
         int count = Physics2D.OverlapCircleNonAlloc(closestPos, 0.5f, overlapBuffer, enemy);
         for (int i = 0; i < count; i++)
         {
@@ -185,11 +192,9 @@ public class EnemyFinder : MonoBehaviour
         {
             Vector2 enemyPos = cachedEnemyPositions[i];
 
-            // 같은 위치면 스킵 (같은 적)
             if (Vector2.Distance(enemyPos, excludePos) < 0.1f)
                 continue;
 
-            // NonAlloc으로 배열 재사용
             int count = Physics2D.OverlapCircleNonAlloc(enemyPos, 0.5f, overlapBuffer, enemy);
             for (int j = 0; j < count; j++)
             {
@@ -206,9 +211,7 @@ public class EnemyFinder : MonoBehaviour
 
     /// <summary>
     /// 화면 범위 내 모든 적 반환. NonAlloc 버퍼를 사용합니다.
-    /// count를 반환하므로 호출부에서 배열 크기를 직접 제어할 수 있습니다.
     /// </summary>
-    // 기존 GetAllEnemies()를 이렇게 변경
     public Collider2D[] GetAllEnemies(out int count)
     {
         Vector2 center = GameManager.instance.player.transform.position;
@@ -229,7 +232,6 @@ public class EnemyFinder : MonoBehaviour
         public float sqrDistance;
     }
 
-    // 람다 대신 캐싱된 Comparer 사용으로 정렬 시 GC 방지
     private class EnemyDistanceComparer : IComparer<EnemyDistance>
     {
         public int Compare(EnemyDistance a, EnemyDistance b)
