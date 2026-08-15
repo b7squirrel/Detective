@@ -43,11 +43,14 @@ public class ScreenCollision : MonoBehaviour
         EdgeCollider2D edgeCollider = GetComponent<EdgeCollider2D>();
 
         float zDistance = -cam.transform.position.z;
+        Vector2 camPos = cam.transform.position; // 현재 카메라 위치
 
-        Vector2 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, zDistance));
-        Vector2 topLeft = cam.ViewportToWorldPoint(new Vector3(0, 1, zDistance));
-        Vector2 topRight = cam.ViewportToWorldPoint(new Vector3(1, 1, zDistance));
-        Vector2 bottomRight = cam.ViewportToWorldPoint(new Vector3(1, 0, zDistance));
+        // world 좌표에서 camPos를 빼서 '진짜' 로컬 오프셋으로 변환
+        Vector2 bottomLeft = (Vector2)cam.ViewportToWorldPoint(new Vector3(0, 0, zDistance)) - camPos;
+        Vector2 topLeft = (Vector2)cam.ViewportToWorldPoint(new Vector3(0, 1, zDistance)) - camPos;
+        Vector2 topRight = (Vector2)cam.ViewportToWorldPoint(new Vector3(1, 1, zDistance)) - camPos;
+        Vector2 bottomRight = (Vector2)cam.ViewportToWorldPoint(new Vector3(1, 0, zDistance)) - camPos;
+
 
         Vector2[] points = new Vector2[]
         {
