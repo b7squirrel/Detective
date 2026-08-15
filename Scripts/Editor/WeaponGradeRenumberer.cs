@@ -23,6 +23,7 @@ public class WeaponGradeRenumberer : EditorWindow
 {
     string rootFolder = "Assets/Data/Weapons_Items/01_Weapon";
     bool dryRun = true;
+    bool autoDeleteGradeZero = false;
     Vector2 scroll;
     List<string> lastLog = new List<string>();
 
@@ -37,12 +38,15 @@ public class WeaponGradeRenumberer : EditorWindow
     {
         public string path;
         public string prefix;
+        public char separator; // '_' 또는 ' ' — 원래 쓰인 구분자를 그대로 유지하기 위해 기록
         public int grade;
-        public string suffix; // "" 이면 본체 에셋 (WeaponData 혹은 Item)
+        public string suffix; // "" 이면 본체 에셋 (WeaponData 혹은 Item). 남은 문자열은 그대로 보존.
     }
 
-    // 이름_숫자(_접미사) 패턴. prefix는 non-greedy로 가장 먼저 나오는 "_숫자" 앞부분을 잡는다.
-    static readonly Regex NamePattern = new Regex(@"^(.+?)_(\d+)(_.*)?$");
+    // "이름<구분자><숫자><나머지>" 패턴. 구분자는 '_' 또는 ' ' 둘 다 지원.
+    // 예: "Bomb_1_More_Damage_01" → prefix=Bomb, sep=_, grade=1, suffix=_More_Damage_01
+    //     "Arc Baby Raptor 0"     → prefix=Arc Baby Raptor, sep=(공백), grade=0, suffix=(없음)
+    static readonly Regex NamePattern = new Regex(@"^(.+?)([ _])(\d+)(.*)$");
 
     void OnGUI()
     {
@@ -55,6 +59,11 @@ public class WeaponGradeRenumberer : EditorWindow
         EditorGUILayout.Space();
         rootFolder = EditorGUILayout.TextField("대상 폴더", rootFolder);
         dryRun = EditorGUILayout.Toggle("Dry Run (미리보기만, 실제 변경 없음)", dryRun);
+        autoDeleteGradeZero = EditorGUILayout.Toggle("grade 0 에셋 자동 삭제", autoDeleteGradeZero);
+        if (autoDeleteGradeZero)
+        {
+            EditorGUILayout.HelpBox("체크됨: 각 그룹의 grade 0 에셋을 먼저 삭제한 뒤 1→0, 2→1, 3→2, 4→3 재번호를 이어서 진행합니다.", MessageType.Warning);
+        }
 
         EditorGUILayout.Space();
         using (new EditorGUI.DisabledScope(!AssetDatabase.IsValidFolder(rootFolder)))
@@ -107,8 +116,9 @@ public class WeaponGradeRenumberer : EditorWindow
             {
                 path = path,
                 prefix = m.Groups[1].Value,
-                grade = int.Parse(m.Groups[2].Value),
-                suffix = m.Groups[3].Success ? m.Groups[3].Value : ""
+                separator = m.Groups[2].Value[0],
+                grade = int.Parse(m.Groups[3].Value),
+                suffix = m.Groups[4].Value // 비어있으면 본체 에셋
             });
         }
 
@@ -124,6 +134,7 @@ public class WeaponGradeRenumberer : EditorWindow
         int renamedCount = 0;
         int gradeFieldUpdated = 0;
         int skippedGroups = 0;
+        int deletedCount = 0;
 
         foreach (var group in groups)
         {
@@ -132,14 +143,33 @@ public class WeaponGradeRenumberer : EditorWindow
 
             if (gradesPresent.Contains(0))
             {
-                lastLog.Add($"⚠ [건너뜀] '{prefix}': grade 0이 아직 남아있습니다. 0번을 먼저 삭제한 뒤 다시 실행하세요.");
-                skippedGroups++;
-                continue;
+                var gradeZeroAssets = group.Where(i => i.grade == 0).ToList();
+
+                if (!autoDeleteGradeZero)
+                {
+                    lastLog.Add($"⚠ [건너뜀] '{prefix}': grade 0이 아직 남아있습니다. 0번을 먼저 삭제하거나 'grade 0 에셋 자동 삭제' 옵션을 켜세요.");
+                    skippedGroups++;
+                    continue;
+                }
+
+                lastLog.Add($"— '{prefix}' grade 0 삭제 ({gradeZeroAssets.Count}개) —");
+                foreach (var zeroAsset in gradeZeroAssets)
+                {
+                    lastLog.Add($"  🗑 삭제: {zeroAsset.path}");
+                    if (!dryRun)
+                    {
+                        bool deleted = AssetDatabase.DeleteAsset(zeroAsset.path);
+                        if (deleted) deletedCount++;
+                        else lastLog.Add($"    ✗ 삭제 실패: {zeroAsset.path}");
+                    }
+                }
+
+                gradesPresent.Remove(0);
             }
 
             if (gradesPresent.Count == 0) continue;
 
-            lastLog.Add($"— '{prefix}' 그룹 처리 (등급 {string.Join(",", gradesPresent)}) —");
+            lastLog.Add($"— '{prefix}' 그룹 재번호 (등급 {string.Join(",", gradesPresent)}) —");
 
             // 오름차순으로 처리해야 이름 충돌이 안 생김 (1→0 먼저 비운 뒤 2→1 진행)
             foreach (int oldGrade in gradesPresent)
@@ -157,7 +187,7 @@ public class WeaponGradeRenumberer : EditorWindow
                 {
                     string dir = Path.GetDirectoryName(info.path).Replace("\\", "/");
                     string ext = Path.GetExtension(info.path);
-                    string newName = $"{prefix}_{newGrade}{info.suffix}";
+                    string newName = $"{prefix}{info.separator}{newGrade}{info.suffix}";
                     string newPath = $"{dir}/{newName}{ext}";
 
                     lastLog.Add($"  {info.path}  →  {newPath}");
@@ -192,7 +222,7 @@ public class WeaponGradeRenumberer : EditorWindow
 
         string summary = dryRun
             ? $"[미리보기 완료] 총 {infos.Count}개 대상, {skippedGroups}개 그룹 건너뜀. 실제로는 아무것도 변경되지 않았습니다."
-            : $"[변경 완료] 이름 변경 {renamedCount}개, grade 필드 갱신 {gradeFieldUpdated}개, 건너뛴 그룹 {skippedGroups}개";
+            : $"[변경 완료] grade 0 삭제 {deletedCount}개, 이름 변경 {renamedCount}개, grade 필드 갱신 {gradeFieldUpdated}개, 건너뛴 그룹 {skippedGroups}개";
 
         lastLog.Add("");
         lastLog.Add(summary);

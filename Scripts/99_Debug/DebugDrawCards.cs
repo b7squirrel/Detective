@@ -202,7 +202,9 @@ public class DebugDrawCards : MonoBehaviour
     public void SetWeaponCard(int steps)
     {
         weaponIndex += steps;
-        if (weaponIndex < 0) weaponIndex = weaponPools.Count - 1 - 4; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록 (다시 4를 빼서 일반 그레이드로 가도록)
+        // 등급이 StaticValues.MaxGrade(현재 4)단계이므로, 한 무기당 블록 크기는 (MaxGrade - 1)만큼 빼서
+        // 최소값 아래로 내려갔을 때 이전 무기의 '일반' 등급 위치로 정렬되도록 한다.
+        if (weaponIndex < 0) weaponIndex = weaponPools.Count - 1 - (StaticValues.MaxGrade - 1); // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록 (다시 MaxGrade-1을 빼서 일반 그레이드로 가도록)
         if (weaponIndex > weaponPools.Count - 1) weaponIndex = 0; // 최대값을 넘어가면 0으로 가서 루프가 되도록
 
         weaponPools[weaponIndex].EvoStage = weaponEvoIndex;
@@ -212,7 +214,9 @@ public class DebugDrawCards : MonoBehaviour
     public void SetItemCard(int steps)
     {
         itemIndex += steps;
-        if (itemIndex < 0) itemIndex = itemPools.Count - 1 - 4; // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록 (다시 4를 빼서 일반 그레이드로 가도록)
+        // 등급이 StaticValues.MaxGrade(현재 4)단계이므로, 한 아이템당 블록 크기는 (MaxGrade - 1)만큼 빼서
+        // 최소값 아래로 내려갔을 때 이전 아이템의 '일반' 등급 위치로 정렬되도록 한다.
+        if (itemIndex < 0) itemIndex = itemPools.Count - 1 - (StaticValues.MaxGrade - 1); // 최소값 아래로 내려가면 최대값으로 가서 루프가 되도록 (다시 MaxGrade-1을 빼서 일반 그레이드로 가도록)
         if (itemIndex > itemPools.Count - 1) itemIndex = 0; // 최대값을 넘어가면 0으로 가서 루프가 되도록
 
         itemPools[itemIndex].EvoStage = itemEvoIndex;
