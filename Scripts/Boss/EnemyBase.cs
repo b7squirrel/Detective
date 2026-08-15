@@ -262,13 +262,18 @@ public class EnemyBase : MonoBehaviour, Idamageable
         IsSlowed = false;
 
         // 공격 프레임 간격 설정 (모드별 분기)
+        if (calculator == null)
+            calculator = GameManager.instance.enemyStatCalculator;
+
+        EnemyScalingConfig config = calculator != null ? calculator.GetScalingConfig() : null;
+
         if (isInfiniteMode && infiniteStageManager != null)
         {
-            attackFrameInterval = 4; // 무한 모드: 4프레임에 한 번
+            attackFrameInterval = config != null ? config.infiniteAttackFrameInterval : 4; // 무한 모드
         }
         else
         {
-            attackFrameInterval = 3; // 일반 모드: 3프레임에 한 번
+            attackFrameInterval = config != null ? config.normalAttackFrameInterval : 3; // 일반 모드
         }
 
         // 무한 모드와 레귤러 모드 분기

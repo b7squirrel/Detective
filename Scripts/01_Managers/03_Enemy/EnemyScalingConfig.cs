@@ -22,6 +22,15 @@ public class EnemyScalingConfig : ScriptableObject
     public float damageExponent = 1.1f;
     public float experienceGrowth = 0.3f;
 
+    [Header("Base Attack Frame Interval")]
+    [Tooltip("일반 모드에서 Normal/Helmet/Explosive variant 몹의 공격 프레임 간격 (낮을수록 빠름)")]
+    [Range(1, 5)]
+    public int normalAttackFrameInterval = 3;
+
+    [Tooltip("무한 모드에서 Normal/Helmet/Explosive variant 몹의 공격 프레임 간격 (낮을수록 빠름)")]
+    [Range(1, 5)]
+    public int infiniteAttackFrameInterval = 4;
+
     [Header("Variant Effects")]
     [Tooltip("광기 variant의 애니메이션 속도 배율")]
     [Range(1f, 3f)]

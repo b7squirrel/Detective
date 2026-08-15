@@ -90,16 +90,31 @@ public class StageStartEvents : MonoBehaviour
         // 1단계: 시간(애니메이션)은 다시 흐르게 함
         GameManager.instance.pauseManager.UnPauseGame();
 
-        // 2단계: 젬/상자 스폰 (ShouldBeStill은 아직 true라서 이 순간엔 조작 불가)
-        if (spawnGemsOnStart != null)
-            spawnGemsOnStart.GenGemsAndChest();
+        // // 2단계: 젬/상자 스폰 (ShouldBeStill은 아직 true라서 이 순간엔 조작 불가)
+        // if (spawnGemsOnStart != null)
+        //     spawnGemsOnStart.GenGemsAndChest();
 
         // 3단계: 스폰이 끝난 직후 조작 허용
-        if (Player.instance != null)
-            Player.instance.ShouldBeStill = false;
+        // if (Player.instance != null)
+        //     Player.instance.ShouldBeStill = false;
     }
 
     // 애니메이션 이벤트로 재생
+    public void SpawnGemOnStart()
+    {
+        if (spawnGemsOnStart != null)
+            spawnGemsOnStart.GenGemsAndChest();
+    }
+    public void CanControlplayer()
+    {
+        if (Player.instance != null)
+            Player.instance.ShouldBeStill = false;
+    }
+    public void CameraZoomIn()
+    {
+        CameraController cameraController = FindObjectOfType<CameraController>();
+        if (cameraController !=null) cameraController.ZoomInOnStart();
+    }
     public void PlayTextOutSound()
     {
         if (stageTextSwipeOutSound != null)

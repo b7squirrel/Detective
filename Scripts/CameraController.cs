@@ -32,12 +32,12 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(ZoomOutRoutine());
+        // StartCoroutine(ZoomOutRoutine());
     }
 
     IEnumerator ZoomOutRoutine()
     {
-        yield return new WaitForSeconds(zoomStartDelay); // 0.1초 대기 후 시작
+        yield return new WaitForSeconds(0); // 0.1초 대기 후 시작
         
         float elapsed = 0f;
         Camera cam = Camera.main;
@@ -60,6 +60,10 @@ public class CameraController : MonoBehaviour
         cam.orthographicSize = endSize;
         halfHeight = endSize;
         halfWidth = cam.aspect * halfHeight;
+    }
+    public void ZoomInOnStart()
+    {
+        StartCoroutine(ZoomOutRoutine());
     }
 
     void Update()
