@@ -39,13 +39,13 @@ public class LaunchManager : MonoBehaviour
     void OnEnable()
     {
         // stageInfoUi.PlayFromStart();
-        
+        Debug.Log($"[LaunchManager] OnEnable 호출됨. 프레임={Time.frameCount}\n{System.Environment.StackTrace}");
         // ⭐ 초기화 대기
         StartCoroutine(InitLead());
 
         if (cardSlotManager == null)
             cardSlotManager = FindObjectOfType<CardSlotManager>();
-        cardSlotManager.SettrigerAnim("Off");
+        // cardSlotManager.SettrigerAnim("Off");
 
         if (panelAnim == null) panelAnim = sellPanelObject.GetComponent<Animator>();
         panelAnim.SetTrigger("Up");
@@ -171,23 +171,54 @@ public class LaunchManager : MonoBehaviour
     }
 
     public void SetAllFieldTypeOf(string oriType, CardData currentLeadOri)
+{
+    Debug.Log($"[LaunchManager] SetAllFieldTypeOf 시작. oriType={oriType}, currentLeadOri={(currentLeadOri == null ? "NULL" : currentLeadOri.Name)}");
+
+    List<CardData> card = new();
+
+    // ⭐ cardDataManager null 체크 추가
+    if (cardDataManager == null)
     {
-        List<CardData> card = new();
-
-        card = cardDataManager.GetMyCardList().FindAll(x => x.Type == oriType);
-
-        if (cardSlotManager == null) 
-            cardSlotManager = FindObjectOfType<CardSlotManager>();
-        cardSlotManager.SettrigerAnim("Launch");
-
-        field.GenerateAllCardsOfType(card, "Launch");
-
-        BgToExitField.SetActive(true);
-        startButton.SetActive(false);
-        backButton.SetActive(true);
-
-        cardSlotManager.InitialSortingByGrade();
+        Debug.LogError("[LaunchManager] cardDataManager가 null입니다!");
+        return;
     }
+
+    var myCardList = cardDataManager.GetMyCardList();
+    if (myCardList == null)
+    {
+        Debug.LogError("[LaunchManager] cardDataManager.GetMyCardList()가 null입니다!");
+        return;
+    }
+
+    card = myCardList.FindAll(x => x.Type == oriType);
+    Debug.Log($"[LaunchManager] 필터링된 card.Count = {card.Count}");
+
+    if (cardSlotManager == null)
+        cardSlotManager = FindObjectOfType<CardSlotManager>();
+
+    Debug.Log("[LaunchManager] SettrigerAnim(\"Launch\") 호출 직전");
+    cardSlotManager.SettrigerAnim("Launch");
+    Debug.Log("[LaunchManager] SettrigerAnim(\"Launch\") 호출 완료");
+
+    // ⭐ field null 체크 추가
+    if (field == null)
+    {
+        Debug.LogError("[LaunchManager] field(AllField)가 null입니다!");
+        return;
+    }
+
+    Debug.Log("[LaunchManager] GenerateAllCardsOfType 호출 직전");
+    field.GenerateAllCardsOfType(card, "Launch");
+    Debug.Log("[LaunchManager] GenerateAllCardsOfType 호출 완료");
+
+    BgToExitField.SetActive(true);
+    startButton.SetActive(false);
+    backButton.SetActive(true);
+
+    cardSlotManager.InitialSortingByGrade();
+
+    Debug.Log("[LaunchManager] SetAllFieldTypeOf 끝까지 도달함");
+}
 
     public void SetHalo(bool _isActive)
     {

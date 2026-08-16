@@ -54,7 +54,7 @@ public class AchievementPanel : MonoBehaviour
         LocalizationManager.OnLanguageChanged += RefreshAllText;
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        cardSlotManager?.SettrigerAnim("Off");
+        // cardSlotManager?.SettrigerAnim("Off");
 
         foreach (var ra in pendingRemoveList.ToList())
         {

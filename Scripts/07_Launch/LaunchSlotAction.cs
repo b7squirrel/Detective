@@ -8,6 +8,7 @@ public class LaunchSlotAction : MonoBehaviour
 
     public void Onclick()
     {
+        Debug.Log($"[LaunchSlotAction] Onclick 호출됨. gameObject={gameObject.name}, currentSlotType={currentSlotType}");
         StartCoroutine(OnClickCo());
     }
     IEnumerator OnClickCo()
@@ -31,22 +32,32 @@ public class LaunchSlotAction : MonoBehaviour
 
     void ActionType()
     {
+        Debug.Log($"[LaunchSlotAction] ActionType 실행. currentSlotType={currentSlotType}");
+
         if (currentSlotType == LaunchSlotType.Up)
-        {
-            CardData cardData = GetComponent<CardSlot>().GetCardData();
-            LaunchManager launchManager = GetComponentInParent<LaunchManager>();
-            launchManager.SetAllFieldTypeOf("Weapon", cardData);
-            return;
-        }
+    {
+        CardData cardData = GetComponent<CardSlot>().GetCardData();
+        Debug.Log($"[LaunchSlotAction] Up 분기 진입. cardData={(cardData == null ? "NULL" : cardData.Name)}");
+
+        LaunchManager launchManager = GetComponentInParent<LaunchManager>();
+        Debug.Log($"[LaunchSlotAction] GetComponentInParent<LaunchManager> 결과: {(launchManager == null ? "NULL!!" : "찾음")}");
+
+        launchManager.SetAllFieldTypeOf("Weapon", cardData);
+        return;
+    }
         if (currentSlotType == LaunchSlotType.Field)
         {
+            Debug.Log("[LaunchSlotAction] Field 분기 진입");
             CardData cardData = GetComponent<CardSlot>().GetCardData();
             LaunchManager launchManager = GetComponentInParent<LaunchManager>();
             launchManager.UpdateLead(cardData);
             return;
         }
         if (currentSlotType == LaunchSlotType.None)
-            return;
+    {
+        Debug.LogWarning("[LaunchSlotAction] currentSlotType이 None입니다. 아무 동작도 하지 않습니다.");
+        return;
+    }
     }
     public void SetSlotType(LaunchSlotType launchSlotType)
     {

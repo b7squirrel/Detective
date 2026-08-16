@@ -203,6 +203,7 @@ public class CardSlotManager : MonoBehaviour
 
     public void SettrigerAnim(string trigger)
     {
+        Debug.Log($"[CardSlotManager] SettrigerAnim(\"{trigger}\") 호출됨. 프레임={Time.frameCount}\n{System.Environment.StackTrace}");
         fieldAnim.SetTrigger(trigger);
         SortSlots(currentSortType, ascending); // 현재 상태 유지하며 재정렬
         scrollRect.verticalNormalizedPosition = 1f;

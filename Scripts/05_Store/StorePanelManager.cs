@@ -19,7 +19,7 @@ public class StorePanelManager : MonoBehaviour
     void OnEnable()
     {
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        cardSlotManager.SettrigerAnim("Off");
+        // cardSlotManager.SettrigerAnim("Off");
         if (scrollRect == null) scrollRect = GetComponentInChildren<ScrollRect>();
 
         if (pendingSection != ShopSectionType.None)
