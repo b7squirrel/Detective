@@ -32,6 +32,10 @@ public class Level : MonoBehaviour
     [SerializeField] int maxConsecutivePanels = 3; // 최대 몇 번까지 패널을 띄울지. 지금은 사용안함. Popup manager에서 담당
     int consecutiveLevelUpCount = 0; // 현재 연속 레벨업 횟수
 
+    [Header("리드 오리 가중치")]
+    [SerializeField] float leadWeaponWeightMultiplier = 2f;
+    WeaponData leadWeaponData;
+
     [Header("Debug")]
     [SerializeField] float Exp;
     [SerializeField] float ExpToLevelUp;
@@ -66,6 +70,9 @@ public class Level : MonoBehaviour
     void Start()
     {
         coinManager = GameManager.instance.GetComponent<CoinManager>();
+
+        // 리드 오리 정보 캐싱 (스테이지 중에는 바뀌지 않음)
+        leadWeaponData = GameManager.instance.startingDataContainer.GetLeadWeaponData();
 
         experienceBar.UpdateExperienceSlider(experience, To_Level_Up);
         experienceBar.SetLevelText(level);
@@ -203,14 +210,23 @@ public class Level : MonoBehaviour
 
     void ShuffleRandomPool(List<UpgradeData> randomPool)
     {
-        // 업그레이드 목록을 뒤섞고 나서 GetUpgrads에서 차례로 빼냄.
-        // GetUpgrades에서 섞으면 목록이 중복될 수 있음.
-        for (int i = randomPool.Count - 1; i > 0; i--)
+        // 가중치 기반 정렬 (Efraimidis-Spirakis weighted sampling)
+        // 가중치가 높을수록 key 값이 커질 확률이 높아져 앞쪽에 위치하기 쉬워짐
+        List<KeyValuePair<float, UpgradeData>> keyed = new List<KeyValuePair<float, UpgradeData>>(randomPool.Count);
+
+        for (int i = 0; i < randomPool.Count; i++)
         {
-            int x = Random.Range(0, i + 1);
-            UpgradeData shuffleElement = randomPool[i];
-            randomPool[i] = randomPool[x];
-            randomPool[x] = shuffleElement;
+            float weight = GetWeightForUpgrade(randomPool[i]);
+            float key = Mathf.Pow(Random.value, 1f / weight);
+            keyed.Add(new KeyValuePair<float, UpgradeData>(key, randomPool[i]));
+        }
+
+        keyed.Sort((a, b) => b.Key.CompareTo(a.Key)); // 내림차순 정렬
+
+        randomPool.Clear();
+        for (int i = 0; i < keyed.Count; i++)
+        {
+            randomPool.Add(keyed[i].Value);
         }
     }
 
@@ -315,6 +331,21 @@ public class Level : MonoBehaviour
             return;
 
         this.upgrades.AddRange(upgradesToAdd);
+    }
+
+    float GetWeightForUpgrade(UpgradeData data)
+    {
+        float weight = 1f;
+
+        if (data.upgradeType == UpgradeType.WeaponUpgrade
+            && data.weaponData != null
+            && leadWeaponData != null
+            && data.weaponData.Name == leadWeaponData.Name)
+        {
+            weight = leadWeaponWeightMultiplier;
+        }
+
+        return weight;
     }
 
     // =====================================================
