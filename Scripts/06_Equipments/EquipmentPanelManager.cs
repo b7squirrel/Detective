@@ -70,10 +70,14 @@ public class EquipmentPanelManager : MonoBehaviour
 
     [SerializeField] AudioClip maxLevelSound;
 
+    // ⭐ SetAllFieldTypeOf 재시도 코루틴 중복 실행 방지용
+    Coroutine retrySetAllFieldTypeOfCoroutine;
+
     void Awake()
     {
         equipDisplayUI = GetComponentInChildren<EquipDisplayUI>();
         setCardDataOnSlot = GetComponent<SetCardDataOnSlot>();
+        cardSlotManager = FindObjectOfType<CardSlotManager>();
         equipmentSlotsManager = GetComponent<EquipmentSlotsManager>();
         statManager = FindAnyObjectByType<StatManager>();
         equation = new Equation();
@@ -101,14 +105,14 @@ public class EquipmentPanelManager : MonoBehaviour
     void OnEnable()
     {
         cardToEquip = null;
-        SetAllFieldTypeOf("Weapon");
-        DeActivateEquipInfoPanel();
+        SetAllFieldTypeOf("Weapon"); // 내부적으로 EquipW 트리거를 세팅함
+        DeActivateEquipInfoPanel(false); // ⭐ false: 위에서 이미 EquipW를 세팅했으므로 트리거 재발동(EquipI) 방지
         CardOnDisplay = null;
 
         charUpgradeButton.gameObject.SetActive(false);
         ClearAllEquipmentSlots(); // logic, UI 모두 처리
 
-        // ⭐ 추가: 탭에 들어올 때마다 안내 문구 활성화
+        // ⭐ 탭에 들어올 때마다 안내 문구 활성화
         if (selectCardGuideText != null)
             selectCardGuideText.SetActive(true);
 
@@ -117,12 +121,13 @@ public class EquipmentPanelManager : MonoBehaviour
         warningLackCanvasGroup.alpha = 0;
         charWarningLackCanvasGroup.alpha = 0;
 
-        // ⭐ null 체크 추가
+        // ⭐ null 체크
         if (lackOfCoinWarningPopup != null)
         {
             lackOfCoinWarningPopup.SetActive(false);
         }
 
+        if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
         cardSlotManager.InitialSortingByGrade();
 
         GearTutorialController.instance?.OnGearPanelEntered();
@@ -130,9 +135,22 @@ public class EquipmentPanelManager : MonoBehaviour
 
     void OnDisable()
     {
-        // ⭐ 추가: 장비 탭을 벗어나면 안내 문구 무조건 비활성화
+        // ⭐ 장비 탭을 벗어나면 안내 문구 무조건 비활성화
         if (selectCardGuideText != null)
             selectCardGuideText.SetActive(false);
+
+        // ⭐ 주의: 여기서 ForceFieldOff()를 호출하지 않습니다.
+        //    Slot Containers의 Off 리셋은 MainMenuManager.SetTabPos()에서
+        //    탭 전환 시점에 중앙집중적으로 한 번만 처리합니다.
+        //    여기서 다시 호출하면 ActivatePanel()의 반복문 순서에 따라
+        //    다른 탭이 방금 세팅한 "위로 올라오는" 트리거를 덮어써버리는 문제가 생깁니다.
+
+        // ⭐ 탭을 나갈 때 재시도 코루틴이 대기 중이면 정리
+        if (retrySetAllFieldTypeOfCoroutine != null)
+        {
+            StopCoroutine(retrySetAllFieldTypeOfCoroutine);
+            retrySetAllFieldTypeOfCoroutine = null;
+        }
     }
 
     // 장비 필드에서 오리 카드를 클릭하면 equip Slot Action에서 호출
@@ -147,7 +165,7 @@ public class EquipmentPanelManager : MonoBehaviour
             equipmentSlotsManager.GetCurrentAttribute(),
             cardDictionary.GetDisplayName(oriCardDataToDisplay)); // 오리 카드 및 Attr
 
-        // ⭐ 추가: 카드가 디스플레이에 올라가면 안내 문구 숨기기
+        // ⭐ 카드가 디스플레이에 올라가면 안내 문구 숨기기
         if (selectCardGuideText != null)
             selectCardGuideText.SetActive(false);
 
@@ -178,20 +196,22 @@ public class EquipmentPanelManager : MonoBehaviour
         {
             ClearAllEquipmentSlots(); // logic, UI 모두 처리
 
-            // ★ 진단용 방어 코드: cardDataManager 또는 카드 리스트가 아직 준비되지 않았을 때
-            //    정확히 어느 쪽이 null인지 로그로 알려주고 조용히 리턴 (이후 데이터 로드 완료 시 다시 호출되어야 함)
+            // ★ cardDataManager 또는 카드 리스트가 아직 준비되지 않았을 때
+            //   경고 로그를 남기고, 준비될 때까지 기다렸다가 재시도
             if (cardDataManager == null)
             {
-                Debug.LogError("[EquipmentPanelManager] cardDataManager(CardDataManager.Instance)가 null입니다. " +
-                    "CardDataManager가 아직 초기화되지 않은 시점에 SetAllFieldTypeOf가 호출됐습니다.");
+                Debug.LogWarning("[EquipmentPanelManager] cardDataManager(CardDataManager.Instance)가 아직 null입니다. " +
+                    "초기화가 끝나는 대로 SetAllFieldTypeOf를 재시도합니다.");
+                StartRetrySetAllFieldTypeOf(cardType);
                 return;
             }
 
             var myCardList = cardDataManager.GetMyCardList();
             if (myCardList == null)
             {
-                Debug.LogError("[EquipmentPanelManager] cardDataManager.GetMyCardList()가 null입니다. " +
-                    "카드 데이터(세이브 로드)가 아직 준비되지 않았을 수 있습니다.");
+                Debug.LogWarning("[EquipmentPanelManager] cardDataManager.GetMyCardList()가 아직 null입니다. " +
+                    "카드 데이터(세이브 로드)가 준비되는 대로 SetAllFieldTypeOf를 재시도합니다.");
+                StartRetrySetAllFieldTypeOf(cardType);
                 return;
             }
 
@@ -246,6 +266,30 @@ public class EquipmentPanelManager : MonoBehaviour
         cardSlotManager.SettrigerAnim(fieldAnimTrigger); // 오리 혹은 아이템 필드를 보여주기.
     }
 
+    // ⭐ 재시도 코루틴 시작 (중복 실행 방지)
+    void StartRetrySetAllFieldTypeOf(string cardType)
+    {
+        if (retrySetAllFieldTypeOfCoroutine != null)
+            StopCoroutine(retrySetAllFieldTypeOfCoroutine);
+
+        retrySetAllFieldTypeOfCoroutine = StartCoroutine(RetrySetAllFieldTypeOfCo(cardType));
+    }
+
+    // ⭐ 데이터가 준비될 때까지 기다렸다가 같은 요청을 다시 실행
+    IEnumerator RetrySetAllFieldTypeOfCo(string cardType)
+    {
+        yield return new WaitUntil(() =>
+            GameInitializer.IsInitialized &&
+            cardDataManager != null &&
+            cardDataManager.GetMyCardList() != null);
+
+        retrySetAllFieldTypeOfCoroutine = null;
+
+        // 이 시점엔 데이터가 준비되어 있으므로,
+        // 정상적으로 카드 목록 생성 + 애니메이션 트리거까지 처리됨
+        SetAllFieldTypeOf(cardType);
+    }
+
     void ClearAllEquipmentSlots()
     {
         // Display의 장비 슬롯들을 모두 비우기
@@ -290,7 +334,7 @@ public class EquipmentPanelManager : MonoBehaviour
         cardList.DelayedSaveEquipments();
         DeActivateEquipInfoPanel();
 
-        // ✅ 추가: Step2일 때만 진행
+        // ✅ Step2일 때만 진행
         if (TutorialManager.instance != null &&
             TutorialManager.instance.CurrentStep == TutorialStep.Step2_GearUnlocked)
         {
@@ -382,7 +426,10 @@ public class EquipmentPanelManager : MonoBehaviour
     {
         equipInfoPanel.gameObject.SetActive(false);
         if (triggerAnim)
+        {
+            if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
             cardSlotManager.SettrigerAnim("EquipI"); // 필드 끄기, 인포는 무조건 아이템이니까 아이템으로 돌아감
+        }
 
         this.cardDisp = null;
     }
@@ -422,8 +469,8 @@ public class EquipmentPanelManager : MonoBehaviour
         if (CheckIfMaxLevel(CardOnDisplay))
         {
             SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
-            equipDisplayUI.PlayMaxLevelPop();          // ⭐ 추가: 레벨 텍스트 팝 연출
-            equipDisplayUI.PlayCharDispMaxPop();       // ⭐ 추가: Char Disp 전체 팝 연출
+            equipDisplayUI.PlayMaxLevelPop();          // ⭐ 레벨 텍스트 팝 연출
+            equipDisplayUI.PlayCharDispMaxPop();       // ⭐ Char Disp 전체 팝 연출
         }
         UpdateButtonState(charUpgradeButton, true);
 

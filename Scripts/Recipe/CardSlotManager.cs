@@ -203,11 +203,6 @@ public class CardSlotManager : MonoBehaviour
 
     public void SettrigerAnim(string trigger)
     {
-        // 오름차순, 내림차순 토글
-        // fieldAnim.SetTrigger(trigger);
-        // SortByGrade();
-        // scrollRect.verticalNormalizedPosition = 1f;
-
         fieldAnim.SetTrigger(trigger);
         SortSlots(currentSortType, ascending); // 현재 상태 유지하며 재정렬
         scrollRect.verticalNormalizedPosition = 1f;
@@ -217,6 +212,33 @@ public class CardSlotManager : MonoBehaviour
     {
         mySlots.TryGetValue(cardID, out CardSlot slot);
         return slot;
+    }
+
+    // ⭐ 트리거만 세팅 (정렬/스크롤 부수효과 없이)
+    public void SetFieldAnimTriggerOnly(string trigger)
+    {
+        fieldAnim.SetTrigger(trigger);
+    }
+
+    // ⭐ 탭 전환 시점에 호출: Slot Containers를 즉시 "Off" 상태로 강제 스냅
+    //    SetTrigger 방식이 아니라 Play()로 직접 상태를 지정하므로
+    //    다른 트리거와의 경합(race condition) 없이 항상 확실하게 Off로 리셋됨
+    public void ForceFieldOff()
+    {
+        if (fieldAnim == null) return;
+
+        // 혹시 armed 상태로 남아있을 수 있는 다른 트리거들을 모두 리셋
+        // (경합으로 인해 나중에 다시 엉뚱한 상태로 튕기는 것을 방지)
+        fieldAnim.ResetTrigger("Launch");
+        fieldAnim.ResetTrigger("MergeW");
+        fieldAnim.ResetTrigger("MergeI");
+        fieldAnim.ResetTrigger("EquipW");
+        fieldAnim.ResetTrigger("EquipI");
+        fieldAnim.ResetTrigger("Off");
+
+        // 트랜지션 평가를 거치지 않고 즉시 Off 상태(내려간 포즈)로 스냅
+        fieldAnim.Play("Slot Containers Off", 0, 1f);
+        fieldAnim.Update(0f);
     }
 
     #region 정렬
@@ -270,9 +292,6 @@ public class CardSlotManager : MonoBehaviour
 
     public void InitialSortingByGrade()
     {
-        // SortSlots(SortType.Grade, false);
-        // ascending = false;
-
         currentSortType = SortType.Grade; // ✅ 동기화
         ascending = false;
         SortSlots(SortType.Grade, false);

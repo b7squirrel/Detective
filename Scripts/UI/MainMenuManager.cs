@@ -56,7 +56,7 @@ public class MainMenuManager : MonoBehaviour
     [Header("번개 소모")]
     [SerializeField] int lightningCostPerStage = 5;
     [SerializeField] GameObject lackOfEnergyWarningPanel; // "Lack of Energy Warning" 오브젝트 연결
-    [SerializeField] PanelTween lackOfEnergyWarningPanelTween; // ⭐ 추가: 같은 오브젝트의 PanelTween 컴포넌트 연결
+    [SerializeField] PanelTween lackOfEnergyWarningPanelTween; // ⭐ 같은 오브젝트의 PanelTween 컴포넌트 연결
     [SerializeField] ButtonEffect startButtonEffect; // Inspector에서 Start Button 오브젝트 연결
 
     [Header("Start 연출")]
@@ -87,18 +87,18 @@ public class MainMenuManager : MonoBehaviour
 
         PlayBGM(); // awake에서 Music Manager가 준비가 안되어 있을 수 있으므로 코루틴으로 약간 기다린 후 재생
 
-        // ✅ 추가: 튜토리얼 단계에 따라 초기 탭 상태 설정
+        // ✅ 튜토리얼 단계에 따라 초기 탭 상태 설정
         InitTabsByTutorialStep();
     }
     void OnEnable()
     {
-        // ✅ 추가: 단계 변경 이벤트 구독
+        // ✅ 단계 변경 이벤트 구독
         TutorialManager.OnStepChanged += OnTutorialStepChanged;
     }
 
     void OnDisable()
     {
-        // ✅ 추가: 구독 해제
+        // ✅ 구독 해제
         TutorialManager.OnStepChanged -= OnTutorialStepChanged;
     }
 
@@ -151,6 +151,13 @@ public class MainMenuManager : MonoBehaviour
 
     public void SetTabPos(int pressBtnID)
     {
+        // ⭐ 탭이 바뀌는 시점에 무조건 한 번 Slot Containers를 Off로 리셋
+        //    (어떤 탭에서 오든, 그 탭의 매니저가 Off를 안 쐈어도 여기서 확실히 정리됨.
+        //     이 프레임에 Off로 스냅해두면, 다음 프레임에 ActivatePanel()이
+        //     새 탭 패널을 활성화하면서 세팅하는 트리거가 항상 깨끗한 상태에서 평가됨)
+        if (CardSlotManager.instance != null)
+            CardSlotManager.instance.ForceFieldOff();
+
         tabSlider.value = pos[pressBtnID];
         targetIndex = pressBtnID;
 
@@ -221,7 +228,7 @@ public class MainMenuManager : MonoBehaviour
             {
                 if (lackOfEnergyWarningPanelTween != null)
                 {
-                    lackOfEnergyWarningPanelTween.ShowWithScale(); // ⭐ 수정: 단순 SetActive 대신 PanelTween으로 열기
+                    lackOfEnergyWarningPanelTween.ShowWithScale(); // ⭐ 단순 SetActive 대신 PanelTween으로 열기
                     Logger.Log("[MainMenuManager] 에너지 부족으로 StartTransition 실패");
                 }
                 else if (lackOfEnergyWarningPanel != null) // PanelTween 연결 안 됐을 때 대비한 폴백
@@ -233,7 +240,7 @@ public class MainMenuManager : MonoBehaviour
             }
         }
 
-        // ⭐ 추가: 에너지 소모에 성공했을 때만 명시적으로 버튼 잠금
+        // ⭐ 에너지 소모에 성공했을 때만 명시적으로 버튼 잠금
         if (startButtonEffect != null)
             startButtonEffect.Lock();
 
@@ -375,13 +382,11 @@ public class MainMenuManager : MonoBehaviour
             }
             bool isSRHand = indexToActivate == 4 ? false : true;
             GetComponent<TutorialMainMenuUI>().GenerateHand(BtnImageRect[indexToActivate], isSRHand);
-            // ✅ bgTutorial.SetActive(true); 제거
         }
         else
         {
             Tab_Base.sprite = Tab_BaseSprites[0];
             tabSliderHandleAnim.runtimeAnimatorController = defaultTabSlideHandleCon;
-            // ✅ bgTutorial.SetActive(false); 제거
 
             for (int i = 0; i < BtnImageRect.Length; i++)
             {
@@ -391,20 +396,20 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    // ✅ 추가: TutorialManager 단계 → 탭 인덱스 변환
+    // ✅ TutorialManager 단계 → 탭 인덱스 변환
     private void InitTabsByTutorialStep()
     {
         if (TutorialManager.instance == null) return;
         OnTutorialStepChanged(TutorialManager.instance.CurrentStep);
     }
 
-    // ✅ 추가: 단계가 바뀔 때마다 자동 호출
+    // ✅ 단계가 바뀔 때마다 자동 호출
     private void OnTutorialStepChanged(TutorialStep step)
     {
         // ✅ Completed도 SetTabsByStep으로 처리 (button.interactable 복구 포함)
         SetTabsByStep(step); // ← 수정된 메서드 호출
     }
-    // ✅ 추가: 현재 단계에서 몇 번 탭까지 활성화할지 결정
+    // ✅ 현재 단계에서 몇 번 탭까지 활성화할지 결정
     private int GetUnlockedTabCount(TutorialStep step)
     {
         switch (step)
@@ -418,7 +423,7 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    // ✅ 추가: 기존 SetTutorialMode를 단계 기반으로 확장
+    // ✅ 기존 SetTutorialMode를 단계 기반으로 확장
     private void SetTabsByStep(TutorialStep step)
     {
         bool[] unlocked = GetUnlockedTabs(step);
@@ -433,7 +438,7 @@ public class MainMenuManager : MonoBehaviour
                 ? defaultTabControllers[i]
                 : tutorialTabControllers[i];
 
-            // ✅ 추가: 자물쇠 아이콘 활성/비활성
+            // ✅ 자물쇠 아이콘 활성/비활성
             if (lockIcons != null && i < lockIcons.Length && lockIcons[i] != null)
                 lockIcons[i].SetActive(!isUnlocked);
         }
