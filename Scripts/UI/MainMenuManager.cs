@@ -151,6 +151,11 @@ public class MainMenuManager : MonoBehaviour
 
     public void SetTabPos(int pressBtnID)
     {
+        // ⭐ 이미 선택된 탭을 다시 누른 경우, 아무 연산도 하지 않고 종료
+        //    (사운드는 OnClick()에 별도로 등록된 PlayClickSound()가 처리하므로 그대로 재생됨)
+        if (pressBtnID == targetIndex)
+            return;
+
         // ⭐ 탭이 바뀌는 시점에 무조건 한 번 Slot Containers를 Off로 리셋
         //    (어떤 탭에서 오든, 그 탭의 매니저가 Off를 안 쐈어도 여기서 확실히 정리됨.
         //     이 프레임에 Off로 스냅해두면, 다음 프레임에 ActivatePanel()이
