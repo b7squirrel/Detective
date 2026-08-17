@@ -8,11 +8,16 @@ public class ShadowHeight : MonoBehaviour
     [SerializeField] bool noHeightShadow;
     [SerializeField] string onLandingMask = "Shadow";
     public bool IsDone { get; private set; }
+    public bool IsGrounded => isGrounded; // ✅ 추가: 외부에서 착지 여부를 읽을 수 있는 공개 프로퍼티
     public UnityEvent onGroundHitEvent;
 
     Transform trnsObject; // 부모 물체
     Transform trnsBody; // 공중에 뜨는 스프라이트 오브젝트
     Transform trnsShadow; // 그림자 스프라이트 오브젝트
+
+    // 필드 추가
+    float bowMaxHeight;
+    bool isBowArc;
 
     SpriteRenderer sprRndBody;
     SpriteRenderer sprRndshadow;
@@ -39,10 +44,13 @@ public class ShadowHeight : MonoBehaviour
 
     void FixedUpdate()
     {
-        // ✅ 초기화되지 않았으면 실행하지 않음
         if (!isInitialized) return;
 
-        if (useTargetBasedTrajectory)
+        if (isBowArc)
+        {
+            UpdateBowArcPosition();
+        }
+        else if (useTargetBasedTrajectory)
         {
             UpdateTargetBasedPosition();
         }
@@ -110,7 +118,7 @@ public class ShadowHeight : MonoBehaviour
 
             trnsBody = sprRndBody.transform;
 
-            originalBodyScale = trnsBody.localScale; 
+            originalBodyScale = trnsBody.localScale;
 
             if (noHeightShadow == false)
             {
@@ -130,7 +138,62 @@ public class ShadowHeight : MonoBehaviour
 
         IsDone = false;
         isGrounded = false;
+        isBowArc = false; // ✅ 재사용 시 이전 상태 초기화
         anim = GetComponent<Animator>();
+    }
+
+    // ✅ 활 전용 초기화 함수 (다른 무기와 완전히 독립)
+    public void InitializeBowArc(Vector2 targetPosition, float maxHeight)
+    {
+        InitializeCommon();
+
+        this.startPosition = trnsObject.position;
+        this.targetPosition = targetPosition;
+        this.bowMaxHeight = maxHeight;
+
+        // 기존 InitializeWithHeight와 동일한 방식으로 비행 시간 산출 (체감 속도 유지)
+        float timeToMaxHeight = Mathf.Sqrt(2f * maxHeight / Mathf.Abs(gravity));
+        this.trajectoryTime = timeToMaxHeight * 2f;
+        this.currentTime = 0f;
+
+        // 착지 후 Bounce/SlowDownGroundVelocity가 참조할 수 있도록 실제 이동 속도로 설정
+        this.groundVelocity = (targetPosition - startPosition) / trajectoryTime;
+
+        isBowArc = true;
+        useTargetBasedTrajectory = false;
+    }
+
+    // ✅ 활 전용 위치 갱신: 실제 이동과 높이감을 완전히 분리
+    void UpdateBowArcPosition()
+    {
+        if (!isGrounded && currentTime < trajectoryTime)
+        {
+            currentTime += Time.fixedDeltaTime;
+            float p = Mathf.Clamp01(currentTime / trajectoryTime);
+
+            // 실제 이동: 순수 직선 보간 (높이 개념 없음)
+            Vector2 realPos = Vector2.Lerp(startPosition, targetPosition, p);
+            trnsObject.position = realPos;
+
+            // 시각적 높이감: 실제 위치 위에 얹는 표준 포물선 (p=0, p=1에서 항상 0)
+            float heightOffset = 4f * bowMaxHeight * p * (1f - p);
+            trnsBody.position = new Vector2(realPos.x, realPos.y + heightOffset);
+
+            Debug.Log($"p={p:F2}, bowMaxHeight={bowMaxHeight}, heightOffset={heightOffset:F2}, trnsBody.y={trnsBody.position.y:F2}, trnsObject.y={trnsObject.position.y:F2}");
+
+            if (p >= 1f)
+            {
+                trnsObject.position = targetPosition;
+                trnsBody.position = targetPosition;
+                isGrounded = true;
+                GroundHit();
+            }
+        }
+        // else if (!IsDone && isGrounded)
+        // {
+        //     trnsObject.position += (Vector3)groundVelocity * Time.fixedDeltaTime;
+        // }
+        Debug.DrawLine(trnsObject.position, trnsBody.position, Color.red, 0f, false);
     }
 
     void CalculateTrajectoryVelocities()
@@ -251,8 +314,8 @@ public class ShadowHeight : MonoBehaviour
 
     void CheckGroundHit()
     {
-        // 목표 기반 궤적을 사용하지 않을 때만 기존 방식으로 체크
-        if (!useTargetBasedTrajectory && trnsBody.position.y < trnsObject.position.y && !isGrounded)
+        // ✅ 활 전용 경로는 자체적으로 착지 판정을 하므로 여기서 제외
+        if (!useTargetBasedTrajectory && !isBowArc && trnsBody.position.y < trnsObject.position.y && !isGrounded)
         {
             trnsBody.position = trnsObject.position;
             isGrounded = true;

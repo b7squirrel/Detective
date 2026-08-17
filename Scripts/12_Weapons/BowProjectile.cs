@@ -16,8 +16,10 @@ public class BowProjectile : MonoBehaviour
     public string WeaponName { get; set; }
     public float SizeOfArea { get; set; }
 
+    bool isFirstFrameAfterLaunch = true; // ✅ 추가
+
     [Header("Ground Settings")]
-    [SerializeField] float groundDuration = .3f;  // 지면에 남아있는 시간
+    [SerializeField] float groundDuration = .15f;  // 지면에 남아있는 시간
     [SerializeField] float damageInterval = 0.5f; // 데미지 간격
 
     [Header("Target")]
@@ -28,6 +30,10 @@ public class BowProjectile : MonoBehaviour
 
     [Header("Arrow Sprite")]
     [SerializeField] SpriteRenderer spriteRenderer;
+
+    [Header("Landing Settings")]
+    [SerializeField] float landingVerticalAngle = 90f; // 착지 시 고정 각도 (수직으로 서는 각도)
+
 
     [Header("Sound")]
     [SerializeField] AudioClip hitGroundSound;
@@ -52,7 +58,7 @@ public class BowProjectile : MonoBehaviour
     void Awake()
     {
         shadowHeight = GetComponent<ShadowHeight>();
-        hitEffects = GetComponent<HitEffects>(); // ✅ 캐싱
+        hitEffects = GetComponent<HitEffects>();
 
         if (spriteRenderer != null)
         {
@@ -63,16 +69,14 @@ public class BowProjectile : MonoBehaviour
     void OnEnable()
     {
         isGrounded = false;
+        isFirstFrameAfterLaunch = true;
 
         if (bodyTransform != null)
         {
             previousBodyPosition = bodyTransform.position;
         }
 
-        // 공중 그림자 다시 보이기
         shadowHeight?.ShowHeightShadow();
-
-        // 지면 그림자 비활성화
         ActivateGroundShadow(false);
     }
 
@@ -80,19 +84,9 @@ public class BowProjectile : MonoBehaviour
     {
         if (shadowHeight == null) return;
 
-        // 착지 전에만 회전
         if (!isGrounded)
         {
-            // 회전하기 전에 현재 각도를 저장
-            if (bodyTransform != null)
-            {
-                previousRotation = bodyTransform.localRotation;
-            }
-
-            RotateArrow();
-
-            // 착지 체크
-            if (shadowHeight.IsDone)
+            if (shadowHeight.IsGrounded) // ✅ IsDone 대신 IsGrounded 사용
             {
                 OnGrounded();
             }
@@ -101,10 +95,24 @@ public class BowProjectile : MonoBehaviour
 
     void LateUpdate()
     {
-        // 착지 후에는 착지 각도로 고정
-        if (isGrounded && bodyTransform != null)
+        if (isGrounded)
         {
-            bodyTransform.localRotation = landingRotation;
+            if (bodyTransform != null)
+            {
+                bodyTransform.localRotation = landingRotation;
+            }
+        }
+        else if (bodyTransform != null)
+        {
+            if (isFirstFrameAfterLaunch)
+            {
+                previousBodyPosition = bodyTransform.position;
+                isFirstFrameAfterLaunch = false;
+            }
+            else
+            {
+                RotateArrow();
+            }
         }
     }
 
@@ -131,10 +139,9 @@ public class BowProjectile : MonoBehaviour
     {
         isGrounded = true;
 
-        // 직전 프레임의 회전 각도 사용 (착지 순간의 급격한 변화 방지)
         if (bodyTransform != null)
         {
-            landingRotation = previousRotation;
+            landingRotation = Quaternion.Euler(0, 0, landingVerticalAngle);
             bodyTransform.localRotation = landingRotation;
         }
 
@@ -143,9 +150,17 @@ public class BowProjectile : MonoBehaviour
         if (hitGroundSound != null)
             PlayGroundHitSound();
 
+        // ✅ 착지 즉시 데미지 1회만 주고, groundDuration 후 사라짐
+        CastGroundDamage();
+
         if (groundDamageCo != null)
             StopCoroutine(groundDamageCo);
-        groundDamageCo = StartCoroutine(GroundDamageCo());
+        groundDamageCo = StartCoroutine(DeactivateAfterDelay(groundDuration));
+    }
+    IEnumerator DeactivateAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Deactivate();
     }
 
     IEnumerator GroundDamageCo()
@@ -226,5 +241,14 @@ public class BowProjectile : MonoBehaviour
     public void ActivateGroundShadow(bool activate)
     {
         shadowObject.SetActive(activate);
+    }
+
+    // ✅ OnEnable 재실행 여부와 무관하게, 매 발사마다 반드시 호출해서 상태를 강제 초기화
+    public void PrepareForLaunch()
+    {
+        isGrounded = false;
+        isFirstFrameAfterLaunch = true;
+        // previousBodyPosition은 실제 텔레포트 이후 위치를 잡아야 하므로
+        // isFirstFrameAfterLaunch 로직이 LateUpdate에서 알아서 갱신함
     }
 }

@@ -15,12 +15,6 @@ public class TennisWeapon : WeaponBase
 
     GameObject currentTennisBallPrefab;
     private List<Vector2> enemyQueryBuffer = new List<Vector2>(1);
-    private static readonly float[] angleOffsets =
-    {
-        0f, -15f, 15f, -30f, 30f, -45f, 45f, -60f, 60f,
-        -75f, 75f, -90f, 90f, -105f, 105f, -120f, 120f,
-        -135f, 135f, -150f, 150f
-    };
 
     public override void Init(WeaponStats stats, bool isLead)
     {
@@ -57,8 +51,10 @@ public class TennisWeapon : WeaponBase
         Transform muzzleEffect = GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;
         muzzleEffect.transform.position = ShootPoint.position;
 
-        // ✅ 시너지 여부에 따라 반사 횟수 결정
         int deflectionCount = isSynergyWeaponActivated ? SYNERGY_DEFLECTION : BASE_DEFLECTION;
+
+        // ✅ 발사 개수에 맞춰 360도를 균일하게 나눔
+        float angleStep = 360f / weaponStats.numberOfAttacks;
 
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
@@ -67,7 +63,7 @@ public class TennisWeapon : WeaponBase
 
             tennisBall.transform.position = ShootPoint.position;
 
-            float index = i < angleOffsets.Length ? angleOffsets[i] : 0f;
+            float index = angleStep * i;
             Vector3 direction = Quaternion.AngleAxis(index, Vector3.forward) * dir;
 
             ProjectileBase projectile = tennisBall.GetComponent<ProjectileBase>();
@@ -79,10 +75,9 @@ public class TennisWeapon : WeaponBase
             projectile.TimeToLive = 1.5f;
             projectile.WeaponName = weaponData.DisplayName;
 
-            // ✅ 발사할 때마다 deflection 명시적으로 초기화
             TennisBallProjectile tennisBallProj = tennisBall.GetComponent<TennisBallProjectile>();
             if (tennisBallProj != null)
-            tennisBallProj.SetDeflection(deflectionCount); // ✅ 시너지 반영
+                tennisBallProj.SetDeflection(deflectionCount);
         }
     }
 

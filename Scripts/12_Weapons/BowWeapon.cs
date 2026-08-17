@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BowWeapon : WeaponBase
@@ -8,22 +7,17 @@ public class BowWeapon : WeaponBase
     [SerializeField] GameObject synergyProjectilePrefab;
     [SerializeField] AudioClip shoot;
 
-    [Header("Offset Settings")]
-    [SerializeField] float positionOffsetRange = 0.5f; // 타겟 위치 주변 반경
-    [SerializeField] float directionOffsetAngle = 5f;  // 방향 각도 offset
-    [SerializeField] float shotDelay = 0.1f;           // 화살 간 발사 간격
+    [Header("Timing")]
+    [SerializeField] float shotDelay = 0.1f; // 화살 간 발사 간격
 
     [Header("Projectile Settings")]
-    [SerializeField] float verticalVelocity = 15f; // 초기 수직 속도 (높을수록 높이 올라감)
+    [SerializeField] float maxHeight = 3f; // 포물선 최고 높이
 
-    [Header("No Target Settings")]
-    [SerializeField] float randomShotRadius = 5f; // 적이 없을 때 발사 반경
+    [Header("Ground Damage Settings")]
+    [SerializeField] float groundDamageRadius = 0.5f; // 착지 후 데미지 범위 (고정값)
 
     [Header("Effects")]
     [SerializeField] GameObject muzzleFlash;
-
-    // SelectRandomTarget에서 매번 new List 하지 않도록 필드로 캐싱
-    private List<Vector2> enemyQueryBuffer = new List<Vector2>(5);
 
     protected override void Attack()
     {
@@ -35,24 +29,29 @@ public class BowWeapon : WeaponBase
     {
         GameObject projectilePrefab = isSynergyWeaponActivated ? synergyProjectilePrefab : arrowProjectilePrefab;
 
+        // ✅ 이번 공격(volley) 전체가 공유할 중심점과 반경을 한 번만 계산
+        Vector2 volleyCenter = transform.position;
+        float landingRadius = weaponStats.sizeOfArea;
+        // float landingRadius = 0f; // ✅ 임시: 반경 0으로 고정 (착지 위치 = 발사 위치, 순수 수직 포물선만 확인)
+        Debug.Log($"[BowWeapon] landingRadius(sizeOfArea) = {landingRadius}"); // ✅ 추가
+
         for (int i = 0; i < weaponStats.numberOfAttacks; i++)
         {
             AnimShoot();
             GetAttackParameters();
             SoundManager.instance.Play(shoot);
 
-            // 각 화살마다 새로운 타겟 선택
-            Vector2 targetPosition = SelectRandomTarget();
-
-            // 랜덤 offset 적용된 타겟 위치 계산
-            Vector2 randomOffset = Random.insideUnitCircle * positionOffsetRange;
-            Vector2 offsetTargetPosition = targetPosition + randomOffset;
+            Vector2 landingPosition = GetRandomPointInCircle(volleyCenter, landingRadius);
+            Debug.Log($"[BowWeapon] shot {i}: landingPosition = {landingPosition}, offset from center = {landingPosition - volleyCenter}"); // ✅ 추가
 
             GameObject projectileObj = GameManager.instance.poolManager.GetMisc(projectilePrefab);
 
             if (projectileObj != null)
             {
-                projectileObj.transform.position = transform.position;
+                BowProjectile projectile = projectileObj.GetComponent<BowProjectile>();
+                projectile?.PrepareForLaunch(); // ✅ 트레일 + 회전 기준점 모두 강제 리셋
+
+                projectileObj.transform.position = transform.position; // 텔레포트
 
                 SpriteRenderer sprite = projectileObj.GetComponentInChildren<SpriteRenderer>();
                 if (sprite != null)
@@ -60,18 +59,6 @@ public class BowWeapon : WeaponBase
                     sprite.transform.localPosition = Vector3.zero;
                 }
 
-                // 타겟 방향 계산
-                Vector2 direction = (offsetTargetPosition - (Vector2)transform.position).normalized;
-
-                // 방향에 랜덤 각도 offset 적용
-                float randomAngle = Random.Range(-directionOffsetAngle, directionOffsetAngle);
-                Vector2 offsetDirection = Quaternion.Euler(0, 0, randomAngle) * direction;
-
-                float offsetSpeedFactor = weaponStats.projectileSpeed * .2f;
-                float speed = weaponStats.projectileSpeed + UnityEngine.Random.Range(-offsetSpeedFactor, offsetSpeedFactor);
-                Vector2 groundVelocity = offsetDirection * speed;
-
-                BowProjectile projectile = projectileObj.GetComponent<BowProjectile>();
                 if (projectile != null)
                 {
                     projectile.Damage = damage;
@@ -79,17 +66,13 @@ public class BowWeapon : WeaponBase
                     projectile.KnockBackSpeedFactor = knockbackSpeedFactor;
                     projectile.IsCriticalDamageProj = isCriticalDamage;
                     projectile.WeaponName = weaponData.DisplayName;
-                    projectile.SizeOfArea = weaponStats.sizeOfArea;
+                    projectile.SizeOfArea = groundDamageRadius;
                 }
 
                 ShadowHeight shadowHeight = projectileObj.GetComponent<ShadowHeight>();
                 if (shadowHeight != null)
                 {
-                    shadowHeight.Initialize(groundVelocity, verticalVelocity);
-                }
-                else
-                {
-                    Debug.LogError("BowWeapon: ShadowHeight component not found on projectile!");
+                    shadowHeight.InitializeBowArc(landingPosition, maxHeight);
                 }
             }
 
@@ -97,33 +80,28 @@ public class BowWeapon : WeaponBase
         }
     }
 
-    // 타겟 선택 로직. 필드 버퍼 재사용으로 new List 방지
-    Vector2 SelectRandomTarget()
+    // center를 기준으로 반경 radius 안에서 면적 기준 균등한 랜덤 위치 리턴
+    Vector2 GetRandomPointInCircle(Vector2 center, float radius)
     {
-        EnemyFinder.instance.GetEnemies(5, enemyQueryBuffer);
-
-        // 유효한 적(Vector2.zero가 아닌) 중에서 랜덤 선택
-        int validCount = 0;
-        for (int i = 0; i < enemyQueryBuffer.Count; i++)
-        {
-            if (enemyQueryBuffer[i] != Vector2.zero)
-                validCount++;
-        }
-
-        if (validCount > 0)
-        {
-            int randomIndex = Random.Range(0, validCount);
-            return enemyQueryBuffer[randomIndex];
-        }
-
-        // 적이 없으면 주변 랜덤 위치로 발사
-        Vector2 randomDirection = Random.insideUnitCircle.normalized;
-        float randomDistance = Random.Range(0f, randomShotRadius);
-        return (Vector2)transform.position + randomDirection * randomDistance;
+        return center + Random.insideUnitCircle * radius;
     }
 
     public override void ActivateSynergyWeapon()
     {
         base.ActivateSynergyWeapon();
+    }
+
+    protected override void RotateWeapon()
+    {
+        if (GameManager.instance.IsPaused) return;
+        if (weaponTools == null) return;
+
+        // 활은 특정 적을 조준하지 않으므로 항상 위(수직)를 보도록 고정
+        weaponTools.transform.rotation = Quaternion.Euler(0, 0, 90f);
+    }
+
+    protected override void FlipWeaponTools()
+    {
+        // 활은 적 방향에 따른 좌우 반전이 필요 없으므로 아무 것도 하지 않음
     }
 }
