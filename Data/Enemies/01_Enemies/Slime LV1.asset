@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Slime LV1
   animController: {fileID: 9100000, guid: b78ac7cd770d00c4082c79e7c3c595c1, type: 2}
-  stats:
-    hp: 60
-    speed: 4
-    damage: 9
-    rangedDamage: 100
-    experience_reward: 130
   enemyType: 0
   enemyRole: 0
   bossType: 0
-  hpScalingMultiplier: 1
+  specialAbility: 0
+  hpScalingMultiplier: 2.67
   speedScalingMultiplier: 1
   damageScalingMultiplier: 1
-  canDash: 0
   dashCooldown: 3
   dashSpeed: 15
-  hasJumpAttack: 0
+  dashDuration: 0.5
+  laserCooldown: 5
+  laserAnticipationTime: 1
+  laserFireDuration: 0.3
+  laserDamage: 20
+  laserRange: 100
+  laserWidth: 0.2
   projectilePrefab: {fileID: 9133637884860939391, guid: a8001084231a6b84d9be7c344aac8946, type: 3}
   splitDieEffectPrefab: {fileID: 0}
   enemyColor: {r: 0.9490197, g: 0.6745098, b: 0.3019608, a: 1}
@@ -43,3 +43,4 @@ MonoBehaviour:
   splitNum: 0
   hitSound: {fileID: 0}
   dieSound: {fileID: 0}
+  goldReward: 1

@@ -6,7 +6,7 @@ public class HapticManager : MonoBehaviour
     public static HapticManager Instance { get; private set; }
 
     // ✅ 수정: SerializeField 제거 — PlayerPrefs에서 로드
-    private bool hapticsEnabled = true;
+    private bool hapticsEnabled = false;
 
     // ⭐ 추가: 이 기기가 Lofelt의 advanced haptics(정밀 진동)를 지원하는지 캐싱
     private static bool isAdvancedHapticsSupported = false;
@@ -42,7 +42,7 @@ public class HapticManager : MonoBehaviour
 
     void Load()
     {
-        hapticsEnabled = PlayerPrefs.GetInt(KEY_HAPTICS, 1) == 1;
+        hapticsEnabled = PlayerPrefs.GetInt(KEY_HAPTICS, 0) == 1;
     }
 
     public void SetState(bool state)

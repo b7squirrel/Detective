@@ -50,7 +50,7 @@ public class PrefsManager : MonoBehaviour
 
         // ✅ 추가 — 기존 패턴 동일하게 유지
         if (!PlayerPrefs.HasKey("HapticsState"))
-            hapticState = true;
+            hapticState = false;   // 기본값 off로 변경
         else
             hapticState = PlayerPrefs.GetInt("HapticsState") != 0;
     }
