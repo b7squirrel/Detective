@@ -50,6 +50,11 @@ public class ShadowHeightEnemy : MonoBehaviour
 
     EnemyBase enemyBase;
 
+    void Awake()
+    {
+        enemyBase = GetComponent<EnemyBase>();
+    }
+
     void OnEnable()
     {
         if (landingRangeIndicator != null)
@@ -105,13 +110,20 @@ public class ShadowHeightEnemy : MonoBehaviour
         }
     }
 
+    // public void SetIsJumper(bool isJumper, float jumpInterval)
+    // {
+    //     // Debug.LogError($"Is Jumper = {isJumper}");
+    //     this.isJumper = isJumper;
+    //     if (isJumper && jumpInterval == 0) this.isJumper = false; // 실수로 점프 가능이면서 인터벌이 0일 때는 그냥 점프불가로
+    //     this.jumpFrequency = jumpInterval + UnityEngine.Random.Range(-1f, 1f);
+    //     isFirstJump = true; // 점프 캐릭터로 설정될 때 첫 번째 점프 플래그 초기화
+    // }
     public void SetIsJumper(bool isJumper, float jumpInterval)
     {
-        // Debug.LogError($"Is Jumper = {isJumper}");
         this.isJumper = isJumper;
-        if (isJumper && jumpInterval == 0) this.isJumper = false; // 실수로 점프 가능이면서 인터벌이 0일 때는 그냥 점프불가로
-        this.jumpFrequency = jumpInterval + UnityEngine.Random.Range(-1f, 1f);
-        isFirstJump = true; // 점프 캐릭터로 설정될 때 첫 번째 점프 플래그 초기화
+        if (isJumper && jumpInterval == 0) this.isJumper = false;
+        this.jumpFrequency = Mathf.Max(0.8f, jumpInterval + UnityEngine.Random.Range(-1f, 1f));
+        isFirstJump = true;
     }
     #endregion
 
@@ -121,7 +133,7 @@ public class ShadowHeightEnemy : MonoBehaviour
         if (isGrounded)
         {
             jumpCounter += Time.deltaTime;
-            if (enemyBase == null) enemyBase = GetComponent<EnemyBase>();
+            // if (enemyBase == null) enemyBase = GetComponent<EnemyBase>();
             enemyBase.SetGrounded(isGrounded);
         }
         if (jumpCounter >= jumpFrequency)
