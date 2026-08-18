@@ -277,18 +277,20 @@ public class Level : MonoBehaviour
             if (upgradeList.Count == 3)
             {
                 // 가능한 시너지 업그레이드가 있다면 추가
-                if (synergyManager.GetSynergyUpgrade() != null)
+                UpgradeData synergyUpgrade = synergyManager.GetSynergyUpgrade(); // ⭐ 한 번만 호출
+                if (synergyUpgrade != null)
                 {
                     upgradeList.Remove(upgradeList[0]); // 그냥 첫번째 슬롯의 업그레이드를 빼고
-                    UpgradeData picked = synergyManager.GetSynergyUpgrade();
-                    upgradeList.Add(picked); // 시너지 업그레이드 추가
+                    upgradeList.Add(synergyUpgrade); // 시너지 업그레이드 추가
                 }
                 return upgradeList;
             }
         }
-        if (synergyManager.GetSynergyUpgrade() != null)
+
+        UpgradeData fallbackSynergyUpgrade = synergyManager.GetSynergyUpgrade(); // ⭐ 한 번만 호출
+        if (fallbackSynergyUpgrade != null)
         {
-            upgradeList.Add(synergyManager.GetSynergyUpgrade());// 업그레이드 리스트가 3보다 부족하다면 그냥 추가
+            upgradeList.Add(fallbackSynergyUpgrade); // 업그레이드 리스트가 3보다 부족하다면 그냥 추가
         }
 
         // 랜덤풀을 비교? upgradeList를 비교해야 하지 않나?

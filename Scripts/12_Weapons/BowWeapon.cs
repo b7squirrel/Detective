@@ -102,6 +102,17 @@ public class BowWeapon : WeaponBase
 
     protected override void FlipWeaponTools()
     {
-        // 활은 적 방향에 따른 좌우 반전이 필요 없으므로 아무 것도 하지 않음
+        if (GameManager.instance.IsPaused) return;
+        if (weaponTools == null) return;
+
+        // ✅ 기존 로직 재사용: dir.x 기준으로 좌우 반전
+        if (dir.x < 0)
+        {
+            weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = true;
+        }
+        else
+        {
+            weaponTools.GetComponentInChildren<SpriteRenderer>().flipY = false;
+        }
     }
 }
