@@ -112,8 +112,10 @@ public class SlotAction : MonoBehaviour
         }
         if (currentSlotType == SlotType.L_Field)
         {
+            // ⭐ 변경: 리드로 무조건 고정하지 않고, LaunchManager가 기억하고 있는
+            // 현재 편집 중인 스쿼드 슬롯(리드 또는 동료)에 배정되도록 위임
             CardData cardData = GetComponent<CardSlot>().GetCardData();
-            launchManager.UpdateLead(cardData);
+            launchManager.AssignPickedCard(cardData);
             return;
         }
 

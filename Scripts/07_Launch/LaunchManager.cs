@@ -36,6 +36,40 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] SellPanelManager sellPanelManager;
     [SerializeField] GameObject sellPanelObject;
 
+    // ⭐ 추가: 동료 오리 슬롯 (최대 4마리). 인스펙터에서 크기 4로 만들고 각 슬롯 오브젝트를 순서대로 드래그
+    [Header("동료 오리 슬롯 (최대 4마리)")]
+    [SerializeField] CardSlot[] companionSlots = new CardSlot[4];
+
+    // ⭐ 추가: 각 동료 슬롯에 배정된 카드. companionSlots와 인덱스가 1:1로 대응 (빈 슬롯은 null 허용)
+    CardData[] companionCardData = new CardData[4];
+
+    // ⭐ 추가: 현재 필드가 열려서 카드를 고르는 중인 슬롯 번호 (0=리드, 1~4=동료, -1=편집 중 아님)
+    int editingSlotIndex = -1;
+
+    // ⭐ 추가: 필드 후보 카드의 종(weaponData.Name) 조회용
+    CardsDictionary cardsDictionary => CardsDictionary.Instance;
+
+    void Awake()
+    {
+        // ⭐ 추가: 시작 시 동료 슬롯을 모두 빈 상태로 초기화
+        for (int i = 0; i < companionSlots.Length; i++)
+        {
+            SetCompanionSlotEmptyButClickable(i);
+        }
+    }
+
+    // ⭐ 추가: EmptySlot()은 카드 그림뿐 아니라 클릭 버튼까지 꺼버리므로,
+    // 스쿼드 슬롯(리드/동료)은 비어있어도 항상 탭 가능하도록 버튼을 다시 켜준다.
+    void SetCompanionSlotEmptyButClickable(int companionIndex)
+    {
+        if (companionSlots[companionIndex] == null) return;
+
+        companionSlots[companionIndex].EmptySlot();
+
+        CardDisp disp = companionSlots[companionIndex].GetComponent<CardDisp>();
+        if (disp != null) disp.SetButtonActive(true);
+    }
+
     void OnEnable()
     {
         // stageInfoUi.PlayFromStart();
@@ -193,6 +227,10 @@ public class LaunchManager : MonoBehaviour
     card = myCardList.FindAll(x => x.Type == oriType);
     Debug.Log($"[LaunchManager] 필터링된 card.Count = {card.Count}");
 
+    // ⭐ 추가: 이미 스쿼드(리드+동료)에 있는 종은 후보에서 제외
+    card = FilterOutSquadDuplicates(card);
+    Debug.Log($"[LaunchManager] 스쿼드 중복 제외 후 card.Count = {card.Count}");
+
     if (cardSlotManager == null)
         cardSlotManager = FindObjectOfType<CardSlotManager>();
 
@@ -279,5 +317,104 @@ public class LaunchManager : MonoBehaviour
         sellPanelManager.gameObject.SetActive(false);
         panelAnim.SetTrigger("Down");
     }
+    #endregion
+
+    // ⭐ 추가: 스쿼드 슬롯 (리드 + 동료 4마리) 관련 로직
+    #region 스쿼드 슬롯
+
+    /// <summary>
+    /// LaunchSlotAction(Up 타입 - 리드/동료 슬롯)을 탭했을 때 호출됨.
+    /// slotIndex: 0=리드, 1~4=동료 1~4번
+    /// </summary>
+    public void OpenPickerForSlot(int slotIndex, CardData currentCardInSlot)
+    {
+        editingSlotIndex = slotIndex;
+        Debug.Log($"[LaunchManager] OpenPickerForSlot 호출됨. slotIndex={slotIndex}");
+        SetAllFieldTypeOf("Weapon", currentCardInSlot);
+    }
+
+    /// <summary>
+    /// LaunchSlotAction(Field 타입 - 필드 안의 카드)에서 카드를 선택했을 때 호출됨.
+    /// editingSlotIndex에 따라 리드 또는 동료 슬롯에 배정한다.
+    /// </summary>
+    public void AssignPickedCard(CardData cardData)
+    {
+        Debug.Log($"[LaunchManager] AssignPickedCard 호출됨. editingSlotIndex={editingSlotIndex}, cardData={(cardData == null ? "NULL" : cardData.Name)}");
+
+        if (editingSlotIndex == 0)
+        {
+            UpdateLead(cardData);
+        }
+        else if (editingSlotIndex >= 1 && editingSlotIndex <= companionSlots.Length)
+        {
+            AssignCompanion(editingSlotIndex - 1, cardData);
+        }
+        else
+        {
+            Logger.LogWarning($"[LaunchManager] 잘못된 editingSlotIndex: {editingSlotIndex}");
+        }
+
+        editingSlotIndex = -1;
+    }
+
+    void AssignCompanion(int companionIndex, CardData cardData)
+    {
+        companionCardData[companionIndex] = cardData;
+        setCardDataOnSlot.PutCardDataIntoSlot(cardData, companionSlots[companionIndex]);
+
+        RefreshCompanionsInContainer();
+        StartCoroutine(AssignCompanionCo());
+    }
+
+    IEnumerator AssignCompanionCo()
+    {
+        yield return new WaitForSeconds(.2f);
+        CloseField();
+        BgToExitField.SetActive(false);
+        backButton.SetActive(false);
+    }
+
+    /// <summary>
+    /// 동료 슬롯을 비움 (선택 취소용). 필요 시 슬롯의 "제거" 버튼 등에 연결해서 사용.
+    /// </summary>
+    public void ClearCompanionSlot(int companionIndex)
+    {
+        if (companionIndex < 0 || companionIndex >= companionCardData.Length) return;
+
+        companionCardData[companionIndex] = null;
+        SetCompanionSlotEmptyButClickable(companionIndex);
+        RefreshCompanionsInContainer();
+    }
+
+    void RefreshCompanionsInContainer()
+    {
+        List<CardData> validCompanions = new List<CardData>();
+        for (int i = 0; i < companionCardData.Length; i++)
+        {
+            if (companionCardData[i] != null) validCompanions.Add(companionCardData[i]);
+        }
+        startingDataContainer.SetCompanions(validCompanions);
+    }
+
+    /// <summary>
+    /// 이미 스쿼드(리드+동료)에 포함된 종(weaponData.Name)을 후보 목록에서 제외한다.
+    /// </summary>
+    List<CardData> FilterOutSquadDuplicates(List<CardData> cards)
+    {
+        if (startingDataContainer == null || cardsDictionary == null) return cards;
+
+        HashSet<string> squadNames = startingDataContainer.GetSquadWeaponNames();
+        if (squadNames == null || squadNames.Count == 0) return cards;
+
+        List<CardData> filtered = new List<CardData>();
+        for (int i = 0; i < cards.Count; i++)
+        {
+            WeaponData wd = cardsDictionary.GetWeaponItemData(cards[i]).weaponData;
+            if (wd != null && squadNames.Contains(wd.Name)) continue; // 이미 스쿼드에 있는 종은 숨김
+            filtered.Add(cards[i]);
+        }
+        return filtered;
+    }
+
     #endregion
 }

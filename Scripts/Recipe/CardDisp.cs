@@ -314,6 +314,15 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         haloSelected.SetActive(_isActive);
     }
 
+    // ⭐ 추가: 슬롯이 비어있어도 클릭은 가능해야 하는 경우(예: 로비 리드/동료 슬롯)를 위해
+    // 버튼 활성 상태만 별도로 강제 설정. EmptyCardDisplay()가 button도 함께 꺼버리므로,
+    // 빈 상태에서도 탭 가능하게 하려면 EmptyCardDisplay() 이후에 이 메서드로 다시 켜줘야 함.
+    public void SetButtonActive(bool active)
+    {
+        if (button == null) return;
+        button.SetActive(active);
+    }
+
     public void EmptyCardDisplay()
     {
         // ★ 데이터 초기화
