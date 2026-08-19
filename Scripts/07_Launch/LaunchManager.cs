@@ -54,6 +54,12 @@ public class LaunchManager : MonoBehaviour
     // ⭐ 추가: 필드 후보 카드의 종(weaponData.Name) 조회용
     CardsDictionary cardsDictionary => CardsDictionary.Instance;
 
+    // ⭐ 추가: 동료 슬롯 인덱스(0~3) ↔ StartingMember 플래그 매핑. 리드가 Zero를 쓰는 것과 같은 방식으로 저장/복원에 사용
+    static readonly StartingMember[] CompanionStartingMembers =
+    {
+        StartingMember.First, StartingMember.Second, StartingMember.Third, StartingMember.Forth
+    };
+
     void Awake()
     {
         // ⭐ 추가: 시작 시 동료 슬롯을 모두 빈 상태로 초기화
@@ -152,6 +158,10 @@ public class LaunchManager : MonoBehaviour
         }
         
         SetLead(lead);
+
+        // ⭐ 추가: 저장된 동료 오리들도 함께 복원 (StartingMember.First~Forth 플래그로 카드 재조회)
+        // 패널이 열릴 때마다 다시 실행되므로, 다른 곳에서 동료의 장비를 바꿨어도 여기서 항상 최신 상태로 갱신됨
+        LoadCompanionsFromSave();
         
         // UI 업데이트 대기
         yield return new WaitForSeconds(.03f);
@@ -173,6 +183,35 @@ public class LaunchManager : MonoBehaviour
         dailyButtonUI.ActivateBadge(shouldShow);
     }
     
+    /// <summary>
+    /// StartingMember.First~Forth 플래그로 저장된 동료 카드를 다시 찾아서 4개 슬롯에 복원한다.
+    /// 리드처럼 패널이 열릴 때마다 호출되므로, 장비가 바뀐 뒤에도 항상 최신 상태를 보여준다.
+    /// 저장된 카드가 없거나(최초 실행) 판매되어 사라졌다면 해당 슬롯은 자동으로 빈 상태가 된다.
+    /// </summary>
+    void LoadCompanionsFromSave()
+    {
+        var myCardList = cardDataManager.GetMyCardList();
+
+        for (int i = 0; i < companionSlots.Length; i++)
+        {
+            string flag = CompanionStartingMembers[i].ToString();
+            CardData savedCard = myCardList.Find(x => x.StartingMember == flag);
+
+            if (savedCard == null)
+            {
+                companionCardData[i] = null;
+                SetCompanionSlotEmptyButClickable(i);
+                continue;
+            }
+
+            companionCardData[i] = savedCard;
+            setCardDataOnSlot.PutCardDataIntoSlot(savedCard, companionSlots[i]);
+            SetCompanionClearButtonActive(i, true);
+        }
+
+        RefreshCompanionsInContainer();
+    }
+
     void SetLead(CardData lead)
     {
         currentLead = lead;
@@ -377,6 +416,18 @@ public class LaunchManager : MonoBehaviour
 
     void AssignCompanion(int companionIndex, CardData cardData)
     {
+        // ⭐ 추가: 리드와 동일한 방식으로 StartingMember 플래그를 갱신해서 저장/복원되게 함
+        CardData previousCard = companionCardData[companionIndex];
+
+        cardDataManager.BeginBatchOperation();
+        if (previousCard != null)
+        {
+            cardDataManager.UpdateStartingmemberOfCard(previousCard, "N");
+        }
+        cardDataManager.UpdateStartingmemberOfCard(cardData, CompanionStartingMembers[companionIndex].ToString());
+        cardDataManager.EndBatchOperation();
+        cardDataManager.RefreshCardList();
+
         companionCardData[companionIndex] = cardData;
         setCardDataOnSlot.PutCardDataIntoSlot(cardData, companionSlots[companionIndex]);
 
@@ -402,9 +453,40 @@ public class LaunchManager : MonoBehaviour
     {
         if (companionIndex < 0 || companionIndex >= companionCardData.Length) return;
 
+        // ⭐ 추가: 슬롯을 비울 때 카드에 남아있는 StartingMember 플래그도 함께 해제
+        CardData cardToRemove = companionCardData[companionIndex];
+        if (cardToRemove != null)
+        {
+            cardDataManager.UpdateStartingmemberOfCard(cardToRemove, "N");
+            cardDataManager.RefreshCardList();
+        }
+
         companionCardData[companionIndex] = null;
         SetCompanionSlotEmptyButClickable(companionIndex);
         RefreshCompanionsInContainer();
+    }
+
+    /// <summary>
+    /// SellPanelManager가 오리 카드를 판매 처리한 직후 호출.
+    /// 판매된 카드가 동료 슬롯에 있었다면 즉시 비운다.
+    /// (StartingMember 플래그는 카드 자체가 삭제되면서 함께 사라지므로 별도로 해제할 필요 없음)
+    /// </summary>
+    public void HandleCardSold(CardData soldCard)
+    {
+        if (soldCard == null) return;
+
+        bool changed = false;
+        for (int i = 0; i < companionCardData.Length; i++)
+        {
+            if (companionCardData[i] == null) continue;
+            if (companionCardData[i].ID != soldCard.ID) continue;
+
+            companionCardData[i] = null;
+            SetCompanionSlotEmptyButClickable(i);
+            changed = true;
+        }
+
+        if (changed) RefreshCompanionsInContainer();
     }
 
     void RefreshCompanionsInContainer()

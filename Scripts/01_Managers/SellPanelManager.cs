@@ -93,6 +93,7 @@ public class SellPanelManager : MonoBehaviour
     List<SellCardSlot> pendingSellSlots = new List<SellCardSlot>();
     bool pendingSellEquipmentsToo = false; // 오리의 장비도 함께 판매할지
 
+
     // ─────────────────────────────────────────
     #region 초기화
     // ─────────────────────────────────────────
@@ -147,6 +148,7 @@ public class SellPanelManager : MonoBehaviour
 
     #endregion
 
+
     // ─────────────────────────────────────────
     #region 탭 전환
     // ─────────────────────────────────────────
@@ -179,6 +181,7 @@ public class SellPanelManager : MonoBehaviour
     }
 
     #endregion
+
 
     // ─────────────────────────────────────────
     #region 슬롯 생성
@@ -217,6 +220,7 @@ public class SellPanelManager : MonoBehaviour
 
         Logger.Log($"[SellPanelManager] {cardType} 슬롯 {activeSlots.Count}개 생성");
     }
+
 
     void CreateSlot(CardData data, string cardType, Transform content)
     {
@@ -262,6 +266,7 @@ public class SellPanelManager : MonoBehaviour
     }
 
     #endregion
+
 
     // ─────────────────────────────────────────
     #region 선택 관리
@@ -376,6 +381,7 @@ public class SellPanelManager : MonoBehaviour
     }
     #endregion
 
+
     // ─────────────────────────────────────────
     #region 팝업: 장착 중인 아이템
     // ─────────────────────────────────────────
@@ -438,6 +444,7 @@ public class SellPanelManager : MonoBehaviour
 
     #endregion
 
+
     // ─────────────────────────────────────────
     #region 오리 1마리 경고
     // ─────────────────────────────────────────
@@ -466,6 +473,7 @@ public class SellPanelManager : MonoBehaviour
         Logger.Log($"[SellPanelManager] 필수 장비 {count}개는 판매할 수 없습니다.");
     }
     #endregion 
+
 
     // ─────────────────────────────────────────
     #region 판매 실행
@@ -546,6 +554,7 @@ public class SellPanelManager : MonoBehaviour
         Logger.Log($"[SellPanelManager] 판매 완료: {slotsToSell.Count}장, +{earnedGold}골드");
     }
 
+
     void SellDuck(CardData duckData, bool sellEquipmentsToo, ref int earnedGold)
     {
         EquipmentCard[] equips = cardList.GetEquipmentsCardData(duckData);
@@ -580,6 +589,11 @@ public class SellPanelManager : MonoBehaviour
 
         cardDataManager.RemoveCardFromMyCardList(duckData);
         cardSlotManager.DestroySlot(duckData.ID);
+
+        // ⭐ 추가: 이 오리가 로비 동료 슬롯에 배정되어 있었다면 즉시 슬롯을 비움
+        // Launch 패널이 지금 비활성 상태일 수도 있으므로 includeInactive=true로 찾음
+        LaunchManager launchManager = FindObjectOfType<LaunchManager>(true);
+        launchManager?.HandleCardSold(duckData);
     }
 
     void SellItem(CardData itemData)
@@ -597,6 +611,7 @@ public class SellPanelManager : MonoBehaviour
     }
 
     #endregion
+
 
     // ─────────────────────────────────────────
     #region 유틸
@@ -653,6 +668,7 @@ public class SellPanelManager : MonoBehaviour
             return ec != null && ec.IsEquipped;
         }
     }
+
 
     /// <summary>
     /// 판매 후 filler를 재정리합니다.

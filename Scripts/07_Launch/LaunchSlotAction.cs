@@ -10,13 +10,27 @@ public class LaunchSlotAction : MonoBehaviour
     // 0 = 리드, 1~4 = 동료 1~4번. 인스펙터에서 슬롯마다 직접 지정.
     [SerializeField] int squadSlotIndex = 0;
 
+    // ⭐ 추가: 애니메이션 중복 클릭 방지 (SlotAction.cs와 동일한 패턴)
+    // 이게 없으면 연타/터치 중복 시 OnClickCo()가 여러 번 겹쳐 시작되어
+    // SetAllFieldTypeOf()가 중복 호출되면서 필드 애니메이터 상태가 꼬여
+    // 카드 선택/Back을 눌러도 필드가 안 닫히는 문제가 발생할 수 있음
+    bool isAnimating = false;
+
     public void Onclick()
     {
+        if (isAnimating)
+        {
+            Debug.Log("[LaunchSlotAction] 애니메이션 진행 중이라 클릭 무시");
+            return;
+        }
+
         Debug.Log($"[LaunchSlotAction] Onclick 호출됨. gameObject={gameObject.name}, currentSlotType={currentSlotType}, squadSlotIndex={squadSlotIndex}");
         StartCoroutine(OnClickCo());
     }
     IEnumerator OnClickCo()
     {
+        isAnimating = true;
+
         RectTransform slotRec = GetComponent<RectTransform>();
         float initialValue = slotRec.transform.localScale.x;
 
@@ -30,6 +44,8 @@ public class LaunchSlotAction : MonoBehaviour
 
         // 전체 애니메이션 완료까지 대기
         yield return new WaitForSeconds(0.2f);
+
+        isAnimating = false;
 
         ActionType();
     }
