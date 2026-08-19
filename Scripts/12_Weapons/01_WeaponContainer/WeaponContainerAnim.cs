@@ -63,7 +63,10 @@ public class WeaponContainerAnim : MonoBehaviour
         anim.runtimeAnimatorController = animCon;
     }
   
-    void StoreSpriteRows(WeaponData _wd, bool _isInitialWeapon)
+    // ⭐ 변경: _companionEquippedItems 파라미터 추가
+    // 동료(_isInitialWeapon == false)일 때, 로비에서 선택한 스쿼드 동료라면 실제 장착 카드의 아이템을,
+    // 필드에서 얻은 일반 동료(획득 시 companionEquippedItems가 null로 전달됨)라면 기존처럼 weaponData.defaultItems를 사용
+    void StoreSpriteRows(WeaponData _wd, bool _isInitialWeapon, List<Item> _companionEquippedItems = null)
     {
         if (_isInitialWeapon) // 플레이어
         {
@@ -96,10 +99,21 @@ public class WeaponContainerAnim : MonoBehaviour
         {
             for (int i = 0; i < 4; i++)
             {
-                if (_wd.defaultItems[i] != null && _wd.defaultItems[i].spriteRow.sprites.Length > 0)
+                // ⭐ 변경: 스쿼드 동료의 실제 장착 아이템이 있으면 그것을, 없으면 기존처럼 defaultItems를 사용
+                Item equipItem = null;
+                if (_companionEquippedItems != null && i < _companionEquippedItems.Count)
+                {
+                    equipItem = _companionEquippedItems[i];
+                }
+                if (equipItem == null)
+                {
+                    equipItem = _wd.defaultItems[i];
+                }
+
+                if (equipItem != null && equipItem.spriteRow.sprites.Length > 0)
                 {
                     sr[i + 1].gameObject.SetActive(true);
-                    equipSprites[i] = _wd.defaultItems[i].spriteRow;
+                    equipSprites[i] = equipItem.spriteRow;
                     // Debug.Log($"{_wd.Name}의 {i}스프라이트가 있습니다.");
                     // Debug.Log($"{_wd.Name}의 {equipSprites[i].sprites[0].name}스프라이트가 있습니다.");
 
@@ -107,7 +121,7 @@ public class WeaponContainerAnim : MonoBehaviour
                     //offset
                     if (i == 1) //가슴 부위의 아이템이라면
                     {
-                        headOffset = _wd.defaultItems[i].needToOffset ? _wd.defaultItems[i].worldPosHead : Vector2.zero; 
+                        headOffset = equipItem.needToOffset ? equipItem.worldPosHead : Vector2.zero; 
                         if(headMain != null) headMain.position += (Vector3)headOffset;
                     }
                 }
@@ -129,12 +143,13 @@ public class WeaponContainerAnim : MonoBehaviour
         face.sprite = isDefault == 1 ? faceDefaultSprite : hurtExpressionSprite;
     }
 
-    // 따라다니는 아이들의 sprite는 모두 default로
-    public void SetEquipmentSprites(WeaponData wd)
+    // ⭐ 변경: companionEquippedItems 파라미터 추가 - 스쿼드 동료의 실제 장착 아이템 전달용
+    // 따라다니는 아이들의 sprite는 스쿼드 동료면 실제 장착 아이템, 아니면 기존처럼 default로
+    public void SetEquipmentSprites(WeaponData wd, List<Item> companionEquippedItems = null)
     {
         InitAnimController(wd.Animators.InGamePlayerAnim);
         // SetFollwersEquipSprites(wd);
-        StoreSpriteRows(wd, false);
+        StoreSpriteRows(wd, false, companionEquippedItems);
         initWeapon = false;
 
         // 1-head, 2-chest, 3-face, 4-hand (expression, 2chest, 1head, 3face, 4hand 순서로 배열하기)

@@ -48,6 +48,11 @@ public class Character : MonoBehaviour
     [SerializeField] GameObject shockwavePrefab;
     [SerializeField] AudioClip shockWaveSound;
 
+    // ⭐ 추가: 동료 오리 Hp 합계를 Armor로 환산할 때 사용하는 나눗값 (Hp N당 Armor 1)
+    [Header("동료 오리 스탯 반영")]
+    [SerializeField] bool applyCompanionHpToArmor = false; // 일시적으로 비활성화 (밸런스 조정 중)
+    [SerializeField] float companionHpToArmorDivisor = 100f;
+
     // public event Action OnDie;
     public UnityEvent OnDie;
     Animator anim;
@@ -136,6 +141,22 @@ public class Character : MonoBehaviour
         }
         DamageBonus = GameManager.instance.startingDataContainer.GetLeadAttr().Atk;
         Logger.Log("In Character, Damage Bonus = " + DamageBonus);
+
+        // ⭐ 추가: 로비에서 선택한 동료 오리들의 스탯 반영
+        // Atk는 그대로 합산 (모든 무기가 공유하는 Wielder.DamageBonus를 통해 리드+동료 무기 전부에 자동 반영됨)
+        int companionAtkTotal = GameManager.instance.startingDataContainer.GetCompanionAtkTotal();
+        DamageBonus += companionAtkTotal;
+
+        // Hp는 그대로 더하면 스쿼드가 커질수록 체력이 과도하게 커지므로, Armor로 완만하게 환산해서 반영
+        int companionHpTotal = GameManager.instance.startingDataContainer.GetCompanionHpTotal();
+        int companionArmorBonus = 0;
+        if (applyCompanionHpToArmor)
+        {
+            companionArmorBonus = Mathf.RoundToInt(companionHpTotal / companionHpToArmorDivisor);
+            Armor += companionArmorBonus;
+        }
+
+        Logger.Log($"[Character] 동료 스탯 반영: AtkTotal={companionAtkTotal}, HpTotal={companionHpTotal} → ArmorBonus={companionArmorBonus} (적용여부={applyCompanionHpToArmor}, 최종 DamageBonus={DamageBonus}, Armor={Armor})");
 
         ApplySetBonus();
     }

@@ -94,8 +94,18 @@ public class WeaponContainer : MonoBehaviour
         }
     }
 
-    public Transform CreateContainer(WeaponData wd, bool isInitialWeapon)
+    // ⭐ 변경: companionEquippedItems 파라미터 추가 - 스쿼드 동료의 실제 장착 아이템을 WeaponContainerAnim까지 전달하기 위함
+    public Transform CreateContainer(WeaponData wd, bool isInitialWeapon, List<Item> companionEquippedItems = null)
     {
+        // ⭐ 추가: WeaponManager.Start()가 WeaponContainer.Start()보다 먼저 실행될 수 있어
+        // weaponContainerGroup이 아직 생성되지 않았을 수 있으므로 여기서도 지연 초기화
+        if (weaponContainerGroup == null)
+        {
+            weaponContainerGroup = new GameObject();
+            weaponContainerGroup.transform.position = Vector3.zero;
+            weaponContainerGroup.name = "WeaponContainerGroup";
+        }
+
         // weapon container 생성하고 컨테이너 관리 리스트에 추가함
         Transform container = Instantiate(containerPrefab, transform.position, Quaternion.identity);
         container.gameObject.name = wd.Name;
@@ -126,7 +136,8 @@ public class WeaponContainer : MonoBehaviour
             container.SetParent(weaponContainerGroup.transform);
             container.transform.localScale = .8f * Vector2.one;
             //container.transform.localScale = Vector2.one;
-            wa.SetEquipmentSprites(wd);
+            // ⭐ 변경: 스쿼드 동료의 실제 장착 아이템(companionEquippedItems)을 함께 전달
+            wa.SetEquipmentSprites(wd, companionEquippedItems);
 
             // col.enabled = false;
         }

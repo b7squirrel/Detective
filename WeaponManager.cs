@@ -24,9 +24,28 @@ public class WeaponManager : MonoBehaviour
     {
         startingWeapon = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         AddWeapon(startingWeapon, true);
+
+        // ⭐ 추가: 로비에서 선택한 동료 오리들도 순회하며 필드에 추가
+        List<CompanionData> companions = GameManager.instance.startingDataContainer.GetCompanions();
+        if (companions != null)
+        {
+            for (int i = 0; i < companions.Count; i++)
+            {
+                if (companions[i]?.weaponData == null)
+                {
+                    Logger.LogWarning($"[WeaponManager] 동료 {i}의 weaponData가 null입니다. 건너뜁니다.");
+                    continue;
+                }
+
+                AddWeapon(companions[i].weaponData, false, companions[i].equippedItems);
+                Logger.Log($"[WeaponManager] 동료 오리 추가: {companions[i].weaponData.Name}");
+            }
+        }
     }
 
-    public void AddWeapon(WeaponData weaponData, bool isInitialWeapon)
+    // ⭐ 변경: companionEquippedItems 파라미터 추가
+    // 로비에서 선택한 스쿼드 동료라면 실제 장착 카드의 아이템을, 필드에서 얻은 일반 동료라면 기존처럼 weaponData.defaultItems를 사용
+    public void AddWeapon(WeaponData weaponData, bool isInitialWeapon, List<Item> companionEquippedItems = null)
     {
         WeaponData wd = null;
         List<Item> item = new();
@@ -43,7 +62,8 @@ public class WeaponManager : MonoBehaviour
         else
         {
             wd = weaponData;
-            container = weaponContainer.CreateContainer(weaponData, isInitialWeapon);
+            // ⭐ 변경: 스쿼드 동료의 실제 장착 아이템을 CreateContainer까지 전달
+            container = weaponContainer.CreateContainer(weaponData, isInitialWeapon, companionEquippedItems);
             // Logger.LogError($"[WeaponManager] {wd.DisplayName} 컨테이너를 생성합니다.");
 
             // Pause Panel에서 동료 오리들의 장비 상태를 보여줌
@@ -115,15 +135,32 @@ public class WeaponManager : MonoBehaviour
             }
             else
             {
-                // ⭐ 동료 오리: 기존대로 defaultItems 스프라이트 사용
-                if (wd.defaultItems != null &&
-                                _index < wd.defaultItems.Length &&
-                                wd.defaultItems[_index] != null &&
-                                wd.defaultItems[_index].spriteRow != null &&
-                                wd.defaultItems[_index].spriteRow.sprites != null &&
-                                wd.defaultItems[_index].spriteRow.sprites.Length > 0)
+                // ⭐ 변경: 동료 오리 - 스쿼드 동료라면 실제 장착 아이템, 아니라면(필드 획득 등) 기존처럼 defaultItems
+                Item companionItem = null;
+
+                if (companionEquippedItems != null &&
+                    _index < companionEquippedItems.Count &&
+                    companionEquippedItems[_index] != null &&
+                    companionEquippedItems[_index].spriteRow != null &&
+                    companionEquippedItems[_index].spriteRow.sprites != null &&
+                    companionEquippedItems[_index].spriteRow.sprites.Length > 0)
                 {
-                    sprite = wd.defaultItems[_index].spriteRow.sprites[0];
+                    companionItem = companionEquippedItems[_index];
+                    Logger.Log($"[WeaponManager] 동료 오리 실제 장착 아이템 스프라이트 사용: {companionItem.Name}");
+                }
+                else if (wd.defaultItems != null &&
+                    _index < wd.defaultItems.Length &&
+                    wd.defaultItems[_index] != null &&
+                    wd.defaultItems[_index].spriteRow != null &&
+                    wd.defaultItems[_index].spriteRow.sprites != null &&
+                    wd.defaultItems[_index].spriteRow.sprites.Length > 0)
+                {
+                    companionItem = wd.defaultItems[_index];
+                }
+
+                if (companionItem != null)
+                {
+                    sprite = companionItem.spriteRow.sprites[0];
                 }
             }
 
