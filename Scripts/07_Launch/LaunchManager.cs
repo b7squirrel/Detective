@@ -40,6 +40,11 @@ public class LaunchManager : MonoBehaviour
     [Header("동료 오리 슬롯 (최대 4마리)")]
     [SerializeField] CardSlot[] companionSlots = new CardSlot[4];
 
+    // ⭐ 추가: 각 동료 슬롯 아래에 배치한 "비우기" 버튼. companionSlots와 인덱스가 1:1로 대응.
+    // 슬롯이 비어있을 땐 숨기고, 카드가 배정되면 보여준다.
+    [Header("동료 오리 슬롯 비우기 버튼 (최대 4개)")]
+    [SerializeField] GameObject[] companionClearButtons = new GameObject[4];
+
     // ⭐ 추가: 각 동료 슬롯에 배정된 카드. companionSlots와 인덱스가 1:1로 대응 (빈 슬롯은 null 허용)
     CardData[] companionCardData = new CardData[4];
 
@@ -60,6 +65,7 @@ public class LaunchManager : MonoBehaviour
 
     // ⭐ 추가: EmptySlot()은 카드 그림뿐 아니라 클릭 버튼까지 꺼버리므로,
     // 스쿼드 슬롯(리드/동료)은 비어있어도 항상 탭 가능하도록 버튼을 다시 켜준다.
+    // 비어있는 상태이므로 "비우기" 버튼도 함께 숨긴다.
     void SetCompanionSlotEmptyButClickable(int companionIndex)
     {
         if (companionSlots[companionIndex] == null) return;
@@ -68,6 +74,18 @@ public class LaunchManager : MonoBehaviour
 
         CardDisp disp = companionSlots[companionIndex].GetComponent<CardDisp>();
         if (disp != null) disp.SetButtonActive(true);
+
+        SetCompanionClearButtonActive(companionIndex, false);
+    }
+
+    // ⭐ 추가: 동료 슬롯 "비우기" 버튼 표시/숨김
+    void SetCompanionClearButtonActive(int companionIndex, bool active)
+    {
+        if (companionClearButtons == null) return;
+        if (companionIndex < 0 || companionIndex >= companionClearButtons.Length) return;
+        if (companionClearButtons[companionIndex] == null) return;
+
+        companionClearButtons[companionIndex].SetActive(active);
     }
 
     void OnEnable()
@@ -361,6 +379,9 @@ public class LaunchManager : MonoBehaviour
     {
         companionCardData[companionIndex] = cardData;
         setCardDataOnSlot.PutCardDataIntoSlot(cardData, companionSlots[companionIndex]);
+
+        // ⭐ 추가: 카드가 배정됐으니 "비우기" 버튼 표시
+        SetCompanionClearButtonActive(companionIndex, true);
 
         RefreshCompanionsInContainer();
         StartCoroutine(AssignCompanionCo());
