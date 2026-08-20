@@ -70,6 +70,10 @@ public class LaunchManager : MonoBehaviour
 
     int pendingUnlockCompanionIndex = -1; // 확인 팝업에서 "확인"을 눌렀을 때 해금할 슬롯 번호
 
+    // ⭐ 추가: 동료 "기능" 전체 해금 (특정 스테이지 클리어 시 WinStage에서 PlayerDataManager에 저장)
+    [Header("동료 기능 해금 (스테이지 클리어)")]
+    [SerializeField] GameObject companionsRootObject; // "Companions" 오브젝트 (Companion Slots + Clear Buttons 포함). 해금 전엔 통째로 비활성화
+
     void Awake()
     {
         // ⭐ 추가: 시작 시 동료 슬롯을 모두 빈 상태로 초기화
@@ -80,6 +84,9 @@ public class LaunchManager : MonoBehaviour
 
         // ⭐ 추가: 저장된 해금 상태에 맞춰 잠금 오버레이/클릭 가능 여부 반영
         RefreshCompanionLockOverlays();
+
+        // ⭐ 추가: 6스테이지 클리어 전에는 Companions 오브젝트 자체를 숨김
+        RefreshCompanionFeatureVisibility();
     }
 
     // ⭐ 추가: EmptySlot()은 카드 그림뿐 아니라 클릭 버튼까지 꺼버리므로,
@@ -178,6 +185,9 @@ public class LaunchManager : MonoBehaviour
 
         // ⭐ 추가: 해금 상태에 맞춰 잠금 오버레이도 함께 갱신 (LoadCompanionsFromSave가 버튼 상태를 되돌릴 수 있으므로 그 다음에 실행)
         RefreshCompanionLockOverlays();
+
+        // ⭐ 추가: 패널이 열릴 때마다 동료 기능 해금 여부도 다시 확인 (스테이지 클리어 직후 최초 진입 시 바로 반영되도록)
+        RefreshCompanionFeatureVisibility();
         
         // UI 업데이트 대기
         yield return new WaitForSeconds(.03f);
@@ -616,6 +626,20 @@ public class LaunchManager : MonoBehaviour
                 companionLockedPriceTexts[i].text = price.ToString("N0");
             }
         }
+    }
+
+    /// <summary>
+    /// 6스테이지 클리어 여부(PlayerDataManager에 영구 저장됨)에 맞춰 Companions 오브젝트 전체를 표시/숨김.
+    /// 해금 전에는 동료 슬롯 UI 자체가 아예 보이지 않아야 하므로 통째로 SetActive 처리.
+    /// </summary>
+    void RefreshCompanionFeatureVisibility()
+    {
+        if (companionsRootObject == null) return;
+
+        if (playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
+        bool unlocked = playerDataManager != null && playerDataManager.IsCompanionFeatureUnlocked();
+
+        companionsRootObject.SetActive(unlocked);
     }
 
     #endregion

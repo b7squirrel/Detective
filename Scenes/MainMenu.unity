@@ -145389,6 +145389,9 @@ MonoBehaviour:
   buttonImage: {fileID: 2140386992}
   lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   unlockedColor: {r: 1, g: 0.53333336, b: 0.84705883, a: 1}
+  labelText: {fileID: 807190359}
+  labelLockedColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+  labelUnlockedColor: {r: 1, g: 1, b: 1, a: 1}
   badge: {fileID: 1615909560}
   lockedPopup: {fileID: 2617255670786996798}
   infiniteStagePanel: {fileID: 1166561496}
@@ -246739,6 +246742,7 @@ MonoBehaviour:
   - {fileID: 1566869212}
   companionUnlockConfirmPopup: {fileID: 74922205}
   lackOfCrystalWarning: {fileID: 2617255670309466849}
+  companionsRootObject: {fileID: 651451820}
 --- !u!114 &958746582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310890,6 +310894,7 @@ MonoBehaviour:
     isInfiniteModeUnlocked: 0
     firstCristalBonusClaimed: 0
     companionSlotUnlocked: 00000000
+    isCompanionFeatureUnlocked: 0
   currentGameMode: 0
   maxLightningNumber: 25
   lightningRechargeSeconds: 300

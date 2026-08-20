@@ -5,6 +5,9 @@ public class WinStage : MonoBehaviour
     [SerializeField] GameObject winStage;
     [SerializeField] GameObject allClearPopup;
 
+    // ⭐ 추가: 이 스테이지를 클리어하면 동료 오리 기능(슬롯 UI 전체)이 해금됨
+    [SerializeField] int companionFeatureUnlockStage = 8;
+
     StageInfo stageInfo;
     int clearedStageNum;
 
@@ -51,6 +54,14 @@ public class WinStage : MonoBehaviour
             {
                 FindObjectOfType<InfiniteModeButton>()?.OnInfiniteModeJustUnlocked();
             }
+        }
+
+        // ⭐ 추가: 동료 오리 기능 해금 (지정한 스테이지를 클리어하면 1회성으로 영구 해금)
+        if (clearedStageNum >= companionFeatureUnlockStage &&
+            PlayerDataManager.Instance != null &&
+            !PlayerDataManager.Instance.IsCompanionFeatureUnlocked())
+        {
+            PlayerDataManager.Instance.UnlockCompanionFeature();
         }
 
         stageInfo = FindObjectOfType<StageInfo>();

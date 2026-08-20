@@ -31,6 +31,9 @@ public class PlayerData
 
     // ⭐ 추가: 동료 오리 슬롯 해금 여부 (인덱스 0~3, companionIndex와 대응). 새 게임/재설치 시 전부 false(잠김)
     public bool[] companionSlotUnlocked = new bool[4];
+
+    // ⭐ 추가: 동료 오리 "기능" 자체의 해금 여부 (6스테이지 클리어 시 true). 이게 false면 동료 슬롯 UI 전체를 숨김
+    public bool isCompanionFeatureUnlocked;
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -541,5 +544,16 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         playerData.companionSlotUnlocked[companionIndex] = true;
         SavePlayerData();
         Logger.Log($"[PlayerDataManager] 동료 슬롯 {companionIndex} 해금 완료");
+    }
+
+    // ⭐ 추가: 동료 오리 "기능" 자체의 해금 (6스테이지 클리어 시 WinStage에서 호출)
+    public bool IsCompanionFeatureUnlocked() => playerData.isCompanionFeatureUnlocked;
+
+    public void UnlockCompanionFeature()
+    {
+        if (playerData.isCompanionFeatureUnlocked) return;
+        playerData.isCompanionFeatureUnlocked = true;
+        SavePlayerData();
+        Logger.Log("[PlayerDataManager] 동료 오리 기능 해금 완료");
     }
 }

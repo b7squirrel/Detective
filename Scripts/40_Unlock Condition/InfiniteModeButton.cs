@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // 추가
 
 public class InfiniteModeButton : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class InfiniteModeButton : MonoBehaviour
     [SerializeField] Image buttonImage;
     [SerializeField] Color lockedColor = new Color(0.5f, 0.5f, 0.5f, 1f);
     [SerializeField] Color unlockedColor = new Color(1f, 0.4f, 0.6f, 1f); // 기존 핑크색
+
+    [Header("라벨 텍스트 (Duck Challenge!!)")]
+    [SerializeField] TMP_Text labelText;
+    [SerializeField] Color labelLockedColor = new Color(0.6f, 0.6f, 0.6f, 1f);
+    [SerializeField] Color labelUnlockedColor = Color.white;
 
     [Header("배지 (빨간 점)")]
     [SerializeField] GameObject badge;
@@ -35,6 +41,10 @@ public class InfiniteModeButton : MonoBehaviour
         // 버튼 색상
         if (buttonImage != null)
             buttonImage.color = unlocked ? unlockedColor : lockedColor;
+
+        // 라벨 텍스트 색상
+        if (labelText != null)
+            labelText.color = unlocked ? labelUnlockedColor : labelLockedColor;
 
         // 배지: 해금됐고 아직 안 봤을 때만 표시
         if (badge != null)
