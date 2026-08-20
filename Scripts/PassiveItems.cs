@@ -73,34 +73,19 @@ public class PassiveItems : MonoBehaviour
 
     public void CheckIfMaxLevel(Item item)
     {
-        // if (item.stats.currentLevel == item.upgrades.Count + 1) // acquired에서 이미 레벨1이 되니까
-        if (item.stats.currentLevel >= 1) // 아이템을 획득하기만 하면
+        if (item.stats.currentLevel >= 1)
         {
-            WeaponData wd = null;
-
-            // SynergyWeapons 리스트를 순회하며 해당하는 무기 데이터 찾기
+            // 모든 시너지 후보 무기를 순회하며 만렙인 것을 찾음
             foreach (string synergyWeapon in item.SynergyWeapons)
             {
-                wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(synergyWeapon);
-                if (wd != null)
+                WeaponData wd = character.GetComponent<WeaponContainer>().GetCoupleWeaponData(synergyWeapon);
+                if (wd == null) continue; // 이 후보는 보유 안 함, 다음 후보 확인
+
+                if (character.GetComponent<WeaponContainer>().IsWeaponMaxLevel(wd))
                 {
-                    break; // 유효한 무기를 찾으면 루프를 나감
+                    character.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(wd);
+                    // 여러 개가 동시에 만렙일 수도 있으니 break 없이 계속 순회
                 }
-            }
-
-            if (wd == null)
-            {
-                // Debug.Log("시너지 커플 웨폰이 없습니다");
-                return;
-            }
-
-            if (character.GetComponent<WeaponContainer>().IsWeaponMaxLevel(wd))
-            {
-                character.GetComponent<SynergyManager>().AddSynergyUpgradeToPool(wd);
-            }
-            else
-            {
-                // Debug.Log("시너지 커플 웨폰이 최고레벨이 아닙니다");
             }
         }
     }

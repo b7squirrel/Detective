@@ -225,6 +225,7 @@ public class WeaponBase : MonoBehaviour
                 return;
             }
 
+            Logger.Log($"[WeaponBase] 시너지 커플 아이템 발견: {item.Name}, currentLevel={item.stats.currentLevel}"); // ⭐ 추가
             if (item.stats.currentLevel >= 1)
             {
                 Logger.Log($"[WeaponBase]{weaponData.DisplayName}시너지 웨폰 활성화");
