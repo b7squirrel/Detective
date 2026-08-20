@@ -28,6 +28,9 @@ public class PlayerData
 
     // ⭐ 추가: 첫 크리스탈 구매 2배 보너스 수령 여부
     public bool firstCristalBonusClaimed;
+
+    // ⭐ 추가: 동료 오리 슬롯 해금 여부 (인덱스 0~3, companionIndex와 대응). 새 게임/재설치 시 전부 false(잠김)
+    public bool[] companionSlotUnlocked = new bool[4];
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -82,6 +85,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         IsDataLoaded = false;
     }
 
+
     void LoadPlayerData()
     {
         if (File.Exists(filePath))
@@ -102,6 +106,12 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         {
             Logger.Log("[PlayerDataManager] 저장된 데이터 없음, 기본값 생성");
             CreateDefaultPlayerData();
+        }
+
+        // ⭐ 추가: 기존 세이브 파일(이 필드가 없던 버전)을 로드했을 때 null 방지
+        if (playerData.companionSlotUnlocked == null || playerData.companionSlotUnlocked.Length < 4)
+        {
+            playerData.companionSlotUnlocked = new bool[4];
         }
     }
 
@@ -151,6 +161,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         playerData.currentStageNumber = stageNumber;
         SavePlayerData();
     }
+
 
     public bool IsNewStage() => playerData.isNewStage;
     public void SetIsNewStage(bool isNew)
@@ -236,6 +247,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         }
     }
 
+
     public bool TryConsumeLightning(int amount)
     {
         ApplyLightningRegen(); // 체크 직전에 최신 상태로 갱신
@@ -269,6 +281,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         SavePlayerData();
     }
 
+
     // --- 게임 종료 전 저장 ---
     // 최고 스테이지, 골드, 크리스탈 기록 저장
     public void SaveResourcesBeforeQuitting()
@@ -297,6 +310,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
                 isStageCleared = false;
             }
         }
+
 
         // CoinManager 값 + GoldRewardManager 보상 합산
         int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
@@ -365,6 +379,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         tracker?.OnGameEnd();
     }
 
+
     // 패배 시 생존 시간만 업적에 누적 (코인/크리스탈 저장 없음)
     public void SaveSurviveTimeOnGameOver()
     {
@@ -391,6 +406,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             }
         }
     }
+
 
     void SaveCoinsAndCristals()
     {
@@ -425,6 +441,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     {
         return currentGameMode;
     }
+
 
     // 경과 시간만큼 번개 회복 계산 (오프라인 회복 포함)
     void ApplyLightningRegen()
@@ -475,6 +492,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         SavePlayerData();
     }
 
+
     public bool HasTakenDailyReward() => playerData.hasTakenDailyReward;
     public void SetHasTakenDailyReward(bool taken)
     {
@@ -502,5 +520,26 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     {
         playerData.firstCristalBonusClaimed = claimed;
         SavePlayerData();
+    }
+
+    // --- ⭐ 추가: 동료 오리 슬롯 해금 ---
+    // companionIndex: 0~3 (LaunchManager의 동료 슬롯 인덱스와 동일)
+    public bool IsCompanionSlotUnlocked(int companionIndex)
+    {
+        if (playerData.companionSlotUnlocked == null) return false;
+        if (companionIndex < 0 || companionIndex >= playerData.companionSlotUnlocked.Length) return false;
+        return playerData.companionSlotUnlocked[companionIndex];
+    }
+
+    public void UnlockCompanionSlot(int companionIndex)
+    {
+        if (playerData.companionSlotUnlocked == null || playerData.companionSlotUnlocked.Length < 4)
+            playerData.companionSlotUnlocked = new bool[4];
+
+        if (companionIndex < 0 || companionIndex >= playerData.companionSlotUnlocked.Length) return;
+
+        playerData.companionSlotUnlocked[companionIndex] = true;
+        SavePlayerData();
+        Logger.Log($"[PlayerDataManager] 동료 슬롯 {companionIndex} 해금 완료");
     }
 }
