@@ -28,12 +28,6 @@ public class PlayerData
 
     // ⭐ 추가: 첫 크리스탈 구매 2배 보너스 수령 여부
     public bool firstCristalBonusClaimed;
-
-    // ⭐ 추가: 동료 오리 슬롯 해금 여부 (인덱스 0~3, companionIndex와 대응). 새 게임/재설치 시 전부 false(잠김)
-    public bool[] companionSlotUnlocked = new bool[4];
-
-    // ⭐ 추가: 동료 오리 "기능" 자체의 해금 여부 (6스테이지 클리어 시 true). 이게 false면 동료 슬롯 UI 전체를 숨김
-    public bool isCompanionFeatureUnlocked;
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -109,12 +103,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         {
             Logger.Log("[PlayerDataManager] 저장된 데이터 없음, 기본값 생성");
             CreateDefaultPlayerData();
-        }
-
-        // ⭐ 추가: 기존 세이브 파일(이 필드가 없던 버전)을 로드했을 때 null 방지
-        if (playerData.companionSlotUnlocked == null || playerData.companionSlotUnlocked.Length < 4)
-        {
-            playerData.companionSlotUnlocked = new bool[4];
         }
     }
 
@@ -523,37 +511,5 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     {
         playerData.firstCristalBonusClaimed = claimed;
         SavePlayerData();
-    }
-
-    // --- ⭐ 추가: 동료 오리 슬롯 해금 ---
-    // companionIndex: 0~3 (LaunchManager의 동료 슬롯 인덱스와 동일)
-    public bool IsCompanionSlotUnlocked(int companionIndex)
-    {
-        if (playerData.companionSlotUnlocked == null) return false;
-        if (companionIndex < 0 || companionIndex >= playerData.companionSlotUnlocked.Length) return false;
-        return playerData.companionSlotUnlocked[companionIndex];
-    }
-
-    public void UnlockCompanionSlot(int companionIndex)
-    {
-        if (playerData.companionSlotUnlocked == null || playerData.companionSlotUnlocked.Length < 4)
-            playerData.companionSlotUnlocked = new bool[4];
-
-        if (companionIndex < 0 || companionIndex >= playerData.companionSlotUnlocked.Length) return;
-
-        playerData.companionSlotUnlocked[companionIndex] = true;
-        SavePlayerData();
-        Logger.Log($"[PlayerDataManager] 동료 슬롯 {companionIndex} 해금 완료");
-    }
-
-    // ⭐ 추가: 동료 오리 "기능" 자체의 해금 (6스테이지 클리어 시 WinStage에서 호출)
-    public bool IsCompanionFeatureUnlocked() => playerData.isCompanionFeatureUnlocked;
-
-    public void UnlockCompanionFeature()
-    {
-        if (playerData.isCompanionFeatureUnlocked) return;
-        playerData.isCompanionFeatureUnlocked = true;
-        SavePlayerData();
-        Logger.Log("[PlayerDataManager] 동료 오리 기능 해금 완료");
     }
 }

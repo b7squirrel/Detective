@@ -60,19 +60,11 @@ public class LaunchManager : MonoBehaviour
         StartingMember.First, StartingMember.Second, StartingMember.Third, StartingMember.Forth
     };
 
-    // ⭐ 추가: 동료 슬롯 해금
-    [Header("동료 슬롯 해금")]
-    [SerializeField] int[] companionSlotUnlockPrices = { 100, 200, 400, 800 }; // companionIndex 순서. 뒤로 갈수록 비싸게 해서 순차 해금 유도
-    [SerializeField] GameObject[] companionLockedOverlays = new GameObject[4]; // 자물쇠+크리스탈 아이콘+가격 UI. companionSlots와 1:1 대응
-    [SerializeField] ShadowedText[] companionLockedPriceTexts = new ShadowedText[4]; // 잠금 오버레이 위 가격 숫자 (메인+그림자 텍스트 자동 동기화)
-    [SerializeField] GameObject companionUnlockConfirmPopup; // "동료 슬롯을 구매하시겠습니까?" 확인 팝업 (내용/버튼 연결은 별도 작업)
-    [SerializeField] GameObject lackOfCrystalWarning; // 기존에 쓰던 크리스탈 부족 경고 오브젝트
-
-    int pendingUnlockCompanionIndex = -1; // 확인 팝업에서 "확인"을 눌렀을 때 해금할 슬롯 번호
-
-    // ⭐ 추가: 동료 "기능" 전체 해금 (특정 스테이지 클리어 시 WinStage에서 PlayerDataManager에 저장)
-    [Header("동료 기능 해금 (스테이지 클리어)")]
-    [SerializeField] GameObject companionsRootObject; // "Companions" 오브젝트 (Companion Slots + Clear Buttons 포함). 해금 전엔 통째로 비활성화
+    // ⭐ 변경: 동료 슬롯을 3스테이지마다 하나씩 활성화 (크리스탈 구매 방식은 제거)
+    // 하이어라키에서 슬롯 하나(카드+비우기 버튼 포함)를 통째로 감싼 wrapper 오브젝트를 순서대로 연결
+    [Header("동료 슬롯 스테이지 해금")]
+    [SerializeField] GameObject[] companionSlotWrappers = new GameObject[4]; // companionSlots와 1:1 대응하는 상위 wrapper
+    [SerializeField] int[] companionSlotUnlockStages = { 3, 6, 9, 12 }; // 이 스테이지를 클리어하면 해당 슬롯이 나타남 (companionIndex 순서)
 
     void Awake()
     {
@@ -82,11 +74,8 @@ public class LaunchManager : MonoBehaviour
             SetCompanionSlotEmptyButClickable(i);
         }
 
-        // ⭐ 추가: 저장된 해금 상태에 맞춰 잠금 오버레이/클릭 가능 여부 반영
-        RefreshCompanionLockOverlays();
-
-        // ⭐ 추가: 6스테이지 클리어 전에는 Companions 오브젝트 자체를 숨김
-        RefreshCompanionFeatureVisibility();
+        // ⭐ 변경: 클리어한 스테이지 수에 맞춰 동료 슬롯을 순차적으로 활성화
+        RefreshCompanionSlotStageUnlocks();
     }
 
     // ⭐ 추가: EmptySlot()은 카드 그림뿐 아니라 클릭 버튼까지 꺼버리므로,
@@ -183,11 +172,8 @@ public class LaunchManager : MonoBehaviour
         // 패널이 열릴 때마다 다시 실행되므로, 다른 곳에서 동료의 장비를 바꿨어도 여기서 항상 최신 상태로 갱신됨
         LoadCompanionsFromSave();
 
-        // ⭐ 추가: 해금 상태에 맞춰 잠금 오버레이도 함께 갱신 (LoadCompanionsFromSave가 버튼 상태를 되돌릴 수 있으므로 그 다음에 실행)
-        RefreshCompanionLockOverlays();
-
-        // ⭐ 추가: 패널이 열릴 때마다 동료 기능 해금 여부도 다시 확인 (스테이지 클리어 직후 최초 진입 시 바로 반영되도록)
-        RefreshCompanionFeatureVisibility();
+        // ⭐ 변경: 패널이 열릴 때마다 클리어 스테이지 수를 다시 확인해서 동료 슬롯을 갱신 (새로 클리어했으면 바로 반영됨)
+        RefreshCompanionSlotStageUnlocks();
         
         // UI 업데이트 대기
         yield return new WaitForSeconds(.03f);
@@ -411,18 +397,6 @@ public class LaunchManager : MonoBehaviour
     /// </summary>
     public void OpenPickerForSlot(int slotIndex, CardData currentCardInSlot)
     {
-        // ⭐ 추가: 잠긴 동료 슬롯은 피커를 열지 않음 (버튼이 꺼져있어 보통 여기까지 안 오지만, 방어적으로 한 번 더 체크)
-        if (slotIndex >= 1 && slotIndex <= companionSlots.Length)
-        {
-            int companionIndex = slotIndex - 1;
-            if (playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
-            if (playerDataManager != null && !playerDataManager.IsCompanionSlotUnlocked(companionIndex))
-            {
-                Logger.LogWarning($"[LaunchManager] 잠긴 동료 슬롯입니다: {companionIndex}");
-                return;
-            }
-        }
-
         editingSlotIndex = slotIndex;
         Debug.Log($"[LaunchManager] OpenPickerForSlot 호출됨. slotIndex={slotIndex}");
         SetAllFieldTypeOf("Weapon", currentCardInSlot);
@@ -527,119 +501,26 @@ public class LaunchManager : MonoBehaviour
         if (changed) RefreshCompanionsInContainer();
     }
 
-    // ⭐ 추가: 동료 슬롯 해금
-    #region 동료 슬롯 해금
+    // ⭐ 변경: 동료 슬롯 스테이지 해금 (크리스탈 구매 방식에서 변경)
+    #region 동료 슬롯 스테이지 해금
 
     /// <summary>
-    /// 잠금 오버레이(자물쇠+크리스탈+가격) 클릭 시 CompanionUnlockButton에서 호출됨.
+    /// 클리어한 최고 스테이지(GetCurrentStageNumber() - 1)를 기준으로,
+    /// 각 동료 슬롯 wrapper 오브젝트를 통째로 활성화/비활성화한다.
+    /// 별도 저장값 없이 항상 현재 진행도로 계산하므로 상태가 어긋날 일이 없다.
     /// </summary>
-    public void OnCompanionLockClicked(int companionIndex)
+    void RefreshCompanionSlotStageUnlocks()
     {
-        Debug.Log($"[LaunchManager] OnCompanionLockClicked 호출됨. companionIndex={companionIndex}, 표시가격={GetCompanionSlotUnlockPrice(companionIndex)}");
-
-        pendingUnlockCompanionIndex = companionIndex;
-
-        if (companionUnlockConfirmPopup != null)
-            companionUnlockConfirmPopup.SetActive(true);
-    }
-
-    /// <summary>
-    /// 확인 팝업의 "확인" 버튼에 연결. 크리스탈이 부족하면 부족 경고를 띄우고, 충분하면 차감 후 영구 해금한다.
-    /// </summary>
-    public void ConfirmCompanionSlotUnlock()
-    {
-        if (pendingUnlockCompanionIndex < 0) return;
-
         if (playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
+        int clearedStage = playerDataManager != null ? playerDataManager.GetCurrentStageNumber() - 1 : 0;
 
-        int index = pendingUnlockCompanionIndex;
-        int price = (index >= 0 && index < companionSlotUnlockPrices.Length) ? companionSlotUnlockPrices[index] : 0;
-
-        if (companionUnlockConfirmPopup != null) companionUnlockConfirmPopup.SetActive(false);
-
-        int currentCristal = playerDataManager != null ? playerDataManager.GetCurrentCristalNumber() : -1;
-        Debug.Log($"[LaunchManager] ConfirmCompanionSlotUnlock 실행. index={index}, 필요가격={price}, 보유크리스탈={currentCristal}");
-
-        if (playerDataManager == null || currentCristal < price)
+        for (int i = 0; i < companionSlotWrappers.Length; i++)
         {
-            if (lackOfCrystalWarning != null) lackOfCrystalWarning.SetActive(true);
-            pendingUnlockCompanionIndex = -1;
-            return;
+            bool unlocked = i < companionSlotUnlockStages.Length && clearedStage >= companionSlotUnlockStages[i];
+
+            if (companionSlotWrappers[i] != null)
+                companionSlotWrappers[i].SetActive(unlocked);
         }
-
-        playerDataManager.AddCristal(-price);
-        playerDataManager.UnlockCompanionSlot(index);
-
-        RefreshCompanionLockOverlays();
-
-        pendingUnlockCompanionIndex = -1;
-    }
-
-    /// <summary>
-    /// 확인 팝업의 "취소" 버튼에 연결.
-    /// </summary>
-    public void CancelCompanionSlotUnlock()
-    {
-        pendingUnlockCompanionIndex = -1;
-        if (companionUnlockConfirmPopup != null) companionUnlockConfirmPopup.SetActive(false);
-    }
-
-    /// <summary>
-    /// 해금하려는 슬롯의 크리스탈 가격 조회 (확인 팝업의 안내 문구 등에서 사용 가능)
-    /// </summary>
-    public int GetCompanionSlotUnlockPrice(int companionIndex)
-    {
-        if (companionIndex < 0 || companionIndex >= companionSlotUnlockPrices.Length) return 0;
-        return companionSlotUnlockPrices[companionIndex];
-    }
-
-    /// <summary>
-    /// 저장된 해금 상태에 맞춰 잠금 오버레이 표시/숨김, 가격 텍스트, 클릭 가능 여부를 갱신한다.
-    /// </summary>
-    void RefreshCompanionLockOverlays()
-    {
-        if (playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
-
-        for (int i = 0; i < companionSlots.Length; i++)
-        {
-            bool unlocked = playerDataManager != null && playerDataManager.IsCompanionSlotUnlocked(i);
-
-            if (companionLockedOverlays != null && i < companionLockedOverlays.Length && companionLockedOverlays[i] != null)
-                companionLockedOverlays[i].SetActive(!unlocked);
-
-            if (companionSlots[i] != null)
-            {
-                CardDisp disp = companionSlots[i].GetComponent<CardDisp>();
-                // ⭐ 잠긴 슬롯은 카드 클릭 자체를 막음. 해금되면 다시 클릭 가능(빈 슬롯이어도 탭해서 고를 수 있어야 함)
-                if (disp != null) disp.SetButtonActive(unlocked);
-            }
-
-            if (!unlocked)
-            {
-                // 잠긴 슬롯엔 "비우기" 버튼도 보일 이유가 없음
-                SetCompanionClearButtonActive(i, false);
-            }
-
-            if (companionLockedPriceTexts != null && i < companionLockedPriceTexts.Length && companionLockedPriceTexts[i] != null)
-            {
-                int price = i < companionSlotUnlockPrices.Length ? companionSlotUnlockPrices[i] : 0;
-                companionLockedPriceTexts[i].text = price.ToString("N0");
-            }
-        }
-    }
-
-    /// <summary>
-    /// 6스테이지 클리어 여부(PlayerDataManager에 영구 저장됨)에 맞춰 Companions 오브젝트 전체를 표시/숨김.
-    /// 해금 전에는 동료 슬롯 UI 자체가 아예 보이지 않아야 하므로 통째로 SetActive 처리.
-    /// </summary>
-    void RefreshCompanionFeatureVisibility()
-    {
-        if (companionsRootObject == null) return;
-
-        if (playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
-        bool unlocked = playerDataManager != null && playerDataManager.IsCompanionFeatureUnlocked();
-
-        companionsRootObject.SetActive(unlocked);
     }
 
     #endregion
