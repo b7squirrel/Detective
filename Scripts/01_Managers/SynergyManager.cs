@@ -30,19 +30,23 @@ public class SynergyManager : MonoBehaviour
 
     public UpgradeData GetSynergyUpgrade()
     {
-        if (synergyUpgrades.Count == 0) return null;
+        if (synergyUpgrades == null || synergyUpgrades.Count == 0) return null;
 
-        int index = Random.Range(0, synergyUpgrades.Count);
-        UpgradeData pickedUpgrade = synergyUpgrades[index];
-
-        // 이미 시너지무기가 활성화 되어 있다면 null 반환
-        if (GetComponent<WeaponContainer>().CheckSynergyWeaponActivated(pickedUpgrade))
+        // 풀을 순회하며 아직 활성화되지 않은 첫 번째 시너지를 반환
+        // (랜덤이 아니라 확정적으로 찾음 — 유효한 후보가 있다면 반드시 걸림)
+        for (int i = 0; i < synergyUpgrades.Count; i++)
         {
-            upgradeToRemove = null;
-            return null;
+            UpgradeData candidate = synergyUpgrades[i];
+            if (!GetComponent<WeaponContainer>().CheckSynergyWeaponActivated(candidate))
+            {
+                upgradeToRemove = candidate;
+                return candidate;
+            }
         }
-        upgradeToRemove = pickedUpgrade;
-        return pickedUpgrade;
+
+        // 풀에 있는 모든 항목이 이미 활성화된 경우에만 null
+        upgradeToRemove = null;
+        return null;
     }
 
     // 시너지웨폰 키워드로 무기를 찾아 시너지웨폰 활성화
