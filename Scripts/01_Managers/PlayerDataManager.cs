@@ -28,6 +28,9 @@ public class PlayerData
 
     // ⭐ 추가: 첫 크리스탈 구매 2배 보너스 수령 여부
     public bool firstCristalBonusClaimed;
+
+    // ⭐ 추가: 첫 번째 동료 슬롯 해금 안내 오버레이를 이미 보여줬는지 (한 번만 표시하기 위함)
+    public bool firstCompanionSlotAnnouncementShown;
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -510,6 +513,15 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     public void SetFirstCristalBonusClaimed(bool claimed)
     {
         playerData.firstCristalBonusClaimed = claimed;
+        SavePlayerData();
+    }
+
+    // ⭐ 추가: 첫 번째 동료 슬롯 해금 안내
+    public bool HasShownFirstCompanionSlotAnnouncement() => playerData.firstCompanionSlotAnnouncementShown;
+
+    public void SetFirstCompanionSlotAnnouncementShown(bool shown)
+    {
+        playerData.firstCompanionSlotAnnouncementShown = shown;
         SavePlayerData();
     }
 }

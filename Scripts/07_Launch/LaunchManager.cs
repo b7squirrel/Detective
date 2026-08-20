@@ -65,6 +65,7 @@ public class LaunchManager : MonoBehaviour
     [Header("동료 슬롯 스테이지 해금")]
     [SerializeField] GameObject[] companionSlotWrappers = new GameObject[4]; // companionSlots와 1:1 대응하는 상위 wrapper
     [SerializeField] int[] companionSlotUnlockStages = { 3, 6, 9, 12 }; // 이 스테이지를 클리어하면 해당 슬롯이 나타남 (companionIndex 순서)
+    [SerializeField] GameObject companionSlotUnlockAnnouncement; // 첫 번째 동료 슬롯이 해금됐을 때 딱 한 번 보여주는 안내 오버레이
 
     void Awake()
     {
@@ -520,7 +521,28 @@ public class LaunchManager : MonoBehaviour
 
             if (companionSlotWrappers[i] != null)
                 companionSlotWrappers[i].SetActive(unlocked);
+
+            // ⭐ 추가: 첫 번째 동료 슬롯이 해금된 상태라면, 아직 안 보여줬을 때 딱 한 번 안내 오버레이를 띄움
+            if (i == 0 && unlocked)
+            {
+                ShowFirstCompanionSlotAnnouncementIfNeeded();
+            }
         }
+    }
+
+    /// <summary>
+    /// 첫 번째 동료 슬롯 해금 안내를 아직 한 번도 보여준 적 없다면 표시하고, 영구적으로 "봤음" 처리한다.
+    /// </summary>
+    void ShowFirstCompanionSlotAnnouncementIfNeeded()
+    {
+        if (playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
+        if (playerDataManager == null) return;
+        if (playerDataManager.HasShownFirstCompanionSlotAnnouncement()) return;
+
+        if (companionSlotUnlockAnnouncement != null)
+            companionSlotUnlockAnnouncement.SetActive(true);
+
+        playerDataManager.SetFirstCompanionSlotAnnouncementShown(true);
     }
 
     #endregion
