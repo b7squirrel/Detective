@@ -13,7 +13,9 @@ public class PausePanel : MonoBehaviour
     List<PauseCardDisp> itemCards;
     Dictionary<string, PauseCardDisp> pauseCardDisps = new Dictionary<string, PauseCardDisp>();
 
-    public void InitWeaponSlot(WeaponData wd, bool isLead)
+    // ⭐ 변경: 스쿼드 동료의 실제 장착 아이템을 전달받기 위해 companionEquippedItems 파라미터 추가
+    // 로비에서 선택한 스쿼드 동료라면 실제 장착 카드의 아이템을, 필드에서 얻은 일반 동료라면 기존처럼 defaultItems 사용
+    public void InitWeaponSlot(WeaponData wd, bool isLead, List<Item> companionEquippedItems = null)
     {
         if (weaponCards == null) weaponCards = new();
 
@@ -29,7 +31,7 @@ public class PausePanel : MonoBehaviour
 
         pauseDisp.InitWeaponCardDisplay(wd);
 
-        SetEquipSpriteRow(slot, wd, isLead);
+        SetEquipSpriteRow(slot, wd, isLead, companionEquippedItems);
 
         // // 시너지 아이템이 있다면 선으로 연결
     }
@@ -86,7 +88,8 @@ public class PausePanel : MonoBehaviour
         return null;
     }
 
-    void SetEquipSpriteRow(CardSlot targetSlot, WeaponData wd, bool isLead)
+    // ⭐ 변경: companionEquippedItems 파라미터 추가
+    void SetEquipSpriteRow(CardSlot targetSlot, WeaponData wd, bool isLead, List<Item> companionEquippedItems)
     {
         CardDisp cardDisp = targetSlot.GetComponent<CardDisp>();
         cardDisp.InitWeaponCardDisplay(wd, null);
@@ -94,9 +97,21 @@ public class PausePanel : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            Item item = isLead ?
-                GameManager.instance.startingDataContainer.GetItemDatas()[i] :
-                wd.defaultItems[i];
+            Item item;
+
+            if (isLead)
+            {
+                item = GameManager.instance.startingDataContainer.GetItemDatas()[i];
+            }
+            else
+            {
+                // ⭐ 변경: 스쿼드 동료라면 실제 장착 아이템, 없으면(필드 획득 등) 기존처럼 defaultItems로 폴백
+                item = (companionEquippedItems != null && i < companionEquippedItems.Count)
+                    ? companionEquippedItems[i]
+                    : null;
+
+                if (item == null) item = wd.defaultItems[i];
+            }
 
             if (item == null)
             {

@@ -72,7 +72,7 @@ public class WeaponManager : MonoBehaviour
             // Logger.LogError($"[WeaponManager] {wd.DisplayName} 컨테이너를 생성합니다.");
 
             // Pause Panel에서 동료 오리들의 장비 상태를 보여줌
-            GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, false);
+            GameManager.instance.GetComponent<PausePanel>().InitWeaponSlot(wd, false, companionEquippedItems);
         }
 
         // WeaponBase Prefab - 특정 오리 (Punch, Tesla..)
