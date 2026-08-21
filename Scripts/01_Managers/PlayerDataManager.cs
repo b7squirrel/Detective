@@ -31,6 +31,9 @@ public class PlayerData
 
     // ⭐ 추가: 첫 번째 동료 슬롯 해금 안내 오버레이를 이미 보여줬는지 (한 번만 표시하기 위함)
     public bool firstCompanionSlotAnnouncementShown;
+
+    // ⭐ 추가: 동료 슬롯별로 "새로 해금됨" 빨간 점 배지를 이미 확인했는지 (인덱스 0~3). false면 아직 안 봄 = 배지 표시
+    public bool[] companionSlotBadgeSeen = new bool[4];
 }
 
 public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
@@ -522,6 +525,25 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     public void SetFirstCompanionSlotAnnouncementShown(bool shown)
     {
         playerData.firstCompanionSlotAnnouncementShown = shown;
+        SavePlayerData();
+    }
+
+    // ⭐ 추가: 동료 슬롯별 "새로 해금됨" 배지 확인 여부
+    public bool IsCompanionSlotBadgeSeen(int companionIndex)
+    {
+        if (playerData.companionSlotBadgeSeen == null) return false;
+        if (companionIndex < 0 || companionIndex >= playerData.companionSlotBadgeSeen.Length) return false;
+        return playerData.companionSlotBadgeSeen[companionIndex];
+    }
+
+    public void SetCompanionSlotBadgeSeen(int companionIndex)
+    {
+        if (playerData.companionSlotBadgeSeen == null || playerData.companionSlotBadgeSeen.Length < 4)
+            playerData.companionSlotBadgeSeen = new bool[4];
+
+        if (companionIndex < 0 || companionIndex >= playerData.companionSlotBadgeSeen.Length) return;
+
+        playerData.companionSlotBadgeSeen[companionIndex] = true;
         SavePlayerData();
     }
 }

@@ -66,6 +66,7 @@ public class LaunchManager : MonoBehaviour
     [SerializeField] GameObject[] companionSlotWrappers = new GameObject[4]; // companionSlots와 1:1 대응하는 상위 wrapper
     [SerializeField] int[] companionSlotUnlockStages = { 3, 6, 9, 12 }; // 이 스테이지를 클리어하면 해당 슬롯이 나타남 (companionIndex 순서)
     [SerializeField] GameObject companionSlotUnlockAnnouncement; // 첫 번째 동료 슬롯이 해금됐을 때 딱 한 번 보여주는 안내 오버레이
+    [SerializeField] GameObject[] companionSlotBadges = new GameObject[4]; // 슬롯별 "새로 해금됨" 빨간 점(Badge Image). companionSlotWrappers와 1:1 대응
 
     void Awake()
     {
@@ -398,6 +399,21 @@ public class LaunchManager : MonoBehaviour
     /// </summary>
     public void OpenPickerForSlot(int slotIndex, CardData currentCardInSlot)
     {
+        // ⭐ 추가: 동료 슬롯을 탭해서 열면, 새로 해금됐다는 배지를 확인한 것으로 처리해서 지움
+        if (slotIndex >= 1 && slotIndex <= companionSlotBadges.Length)
+        {
+            int companionIndex = slotIndex - 1;
+            if (playerDataManager == null) playerDataManager = PlayerDataManager.Instance;
+
+            if (playerDataManager != null && !playerDataManager.IsCompanionSlotBadgeSeen(companionIndex))
+            {
+                playerDataManager.SetCompanionSlotBadgeSeen(companionIndex);
+
+                if (companionSlotBadges[companionIndex] != null)
+                    companionSlotBadges[companionIndex].SetActive(false);
+            }
+        }
+
         editingSlotIndex = slotIndex;
         Debug.Log($"[LaunchManager] OpenPickerForSlot 호출됨. slotIndex={slotIndex}");
         SetAllFieldTypeOf("Weapon", currentCardInSlot);
@@ -526,6 +542,13 @@ public class LaunchManager : MonoBehaviour
             if (i == 0 && unlocked)
             {
                 ShowFirstCompanionSlotAnnouncementIfNeeded();
+            }
+
+            // ⭐ 추가: 해금됐지만 아직 확인 안 한 슬롯엔 빨간 점 배지 표시
+            if (companionSlotBadges != null && i < companionSlotBadges.Length && companionSlotBadges[i] != null)
+            {
+                bool showBadge = unlocked && playerDataManager != null && !playerDataManager.IsCompanionSlotBadgeSeen(i);
+                companionSlotBadges[i].SetActive(showBadge);
             }
         }
     }
