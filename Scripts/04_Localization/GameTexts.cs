@@ -120,6 +120,9 @@ public class GameTexts : ScriptableObject
     public string notEnoughGold = "골드가 부족합니다!";
     public string notEnoughCristal = "크리스탈이 부족합니다!";
     public string infiniteLocked = "6번째 스테이지의 보스\n뽀글뽀글 여왕을 처치하면\n무한 스테이지, \"오리 도전\"이\n해금됩니다!";
+    public string newCompanionSlot = "새로운 동료 슬롯 오픈!\n나만의 덱을 만들어 보세요!";
+    public string newInifiniteModeReleased = "오리 도전 모드가 열렸어요!\n나골드와 크리스탈을 모아보세요!";
+    public string clear = "해제";
 
     [Header("Equip Panel")]
     public string duck = "오리";

@@ -5,9 +5,9 @@ public class LocalizedUIText : MonoBehaviour
 {
     [Header("Text Key")]
     [SerializeField] private UITextKey textKey;
-    
+
     private TMP_Text textComponent;
-    
+
     void Start()
     {
         textComponent = GetComponent<TMP_Text>();
@@ -16,25 +16,25 @@ public class LocalizedUIText : MonoBehaviour
             Debug.LogError($"TextMeshProUGUI component not found on {gameObject.name}");
             return;
         }
-        
+
         // 언어 변경 이벤트 구독
         LocalizationManager.OnLanguageChanged += UpdateText;
 
         UpdateText();
     }
-    
+
     void OnDestroy()
     {
         LocalizationManager.OnLanguageChanged -= UpdateText;
     }
-    
+
     void UpdateText()
     {
         if (textComponent == null || LocalizationManager.Game == null) return;
-        
+
         textComponent.text = GetLocalizedText(textKey);
     }
-    
+
     private string GetLocalizedText(UITextKey key)
     {
         switch (key)
@@ -283,8 +283,14 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.firstPurchase;
             case UITextKey.ATK:
                 return LocalizationManager.Game.atk;
-                case UITextKey.MaxLevelForNow:
+            case UITextKey.MaxLevelForNow:
                 return LocalizationManager.Game.maxLevelForNow;
+            case UITextKey.NewCompanionSlot:
+                return LocalizationManager.Game.newCompanionSlot;
+            case UITextKey.NewInifiniteModeReleased:
+                return LocalizationManager.Game.newInifiniteModeReleased;
+            case UITextKey.Clear:
+                return LocalizationManager.Game.clear;
             default:
                 return key.ToString();
         }
@@ -425,5 +431,8 @@ public enum UITextKey
     Quit,
     FirstPurchase,
     ATK,
-    MaxLevelForNow
+    MaxLevelForNow,
+    NewCompanionSlot,
+    NewInifiniteModeReleased,
+    Clear
 }
