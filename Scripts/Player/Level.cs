@@ -317,13 +317,23 @@ public class Level : MonoBehaviour
         WeaponData leadWd = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         if (weaponData.Name == leadWd.Name) return true;
 
+        // ⭐ 스쿼드 동료도 검사
+        List<CompanionData> companions = GameManager.instance.startingDataContainer.GetCompanions();
+        if (companions != null)
+        {
+            for (int i = 0; i < companions.Count; i++)
+            {
+                if (companions[i]?.weaponData != null && companions[i].weaponData.Name == weaponData.Name)
+                    return true;
+            }
+        }
+
         List<UpgradeData> weaponUpgrades = new();
         for (int i = 0; i < acquiredUpgrades.Count; i++)
         {
             if (acquiredUpgrades[i].weaponData != null)
                 weaponUpgrades.Add(acquiredUpgrades[i]);
         }
-
         return weaponUpgrades.Find(x => x.weaponData.Name == weaponData.Name) != null;
     }
 
