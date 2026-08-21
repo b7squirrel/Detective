@@ -7,6 +7,11 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] WeaponData startingWeapon;
     [SerializeField] Transform faceGroupToFollow;
 
+    // ⭐ 추가: 로비에서 데려온 동료 + 필드에서 얻은 동료를 합쳐서 최대 몇 마리까지 허용할지
+    [Header("동료 최대 인원")]
+    [SerializeField] int maxCompanions = 8;
+    public int MaxCompanions => maxCompanions;
+
     Character character;
 
     List<WeaponBase> weapons;
@@ -226,5 +231,13 @@ public class WeaponManager : MonoBehaviour
     {
         if (weapons == null) return new List<WeaponBase>();
         return weapons;
+    }
+
+    // ⭐ 추가: 현재 동료 수 (weapons 리스트엔 리드도 포함되어 있으므로 -1)
+    // 로비 스쿼드 동료 + 필드 획득 동료가 전부 이 리스트 하나에 누적되므로, 이 값 하나로 총 동료 수를 정확히 알 수 있음
+    public int GetCompanionCount()
+    {
+        if (weapons == null) return 0;
+        return Mathf.Max(0, weapons.Count - 1);
     }
 }

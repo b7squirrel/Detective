@@ -17,6 +17,14 @@ public class EggPickUpObject : Collectable, IPickUpObject
 
     public void OnPickUp(Character character)
     {
+        // ⭐ 추가: 동료가 이미 최대 인원(로비 스쿼드 + 필드 획득 합산)이면 알을 써도 아무것도 주지 않음
+        WeaponManager weaponManager = character.GetComponent<WeaponManager>();
+        if (weaponManager != null && weaponManager.GetCompanionCount() >= weaponManager.MaxCompanions)
+        {
+            Logger.LogWarning($"[EggPickUpObject] 동료가 이미 최대 인원({weaponManager.MaxCompanions})입니다. 알 보상을 지급하지 않습니다.");
+            return;
+        }
+
         // 플레이어가 이미 가진 무기 제거
         List<WeaponData> checks = new List<WeaponData>(weaponsToPick);
         for (int i = 0; i < checks.Count; i++)
