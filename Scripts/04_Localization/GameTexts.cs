@@ -99,6 +99,7 @@ public class GameTexts : ScriptableObject
     public string newFriends = "새로운 아기 오리들!";
     public string newItem = "새로운 아이템!";
     public string newItems = "새로운 아이템!";
+    public string newDuck = "새로운 오리!";
 
     [Header("Egg")]
     public string tap = "탭";
@@ -250,6 +251,10 @@ public class GameTexts : ScriptableObject
     public string languageSelection = "언어 선택";
     public string quitTheGame = "정말로 종료할까요?";
     public string quit = "종료";
+    public string english = "English";
+    public string korean = "Korean";
+    public string japanese = "Japanese";
+
     // 헬퍼 메서드
     public string GetDayText(int day)
     {

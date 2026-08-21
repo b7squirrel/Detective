@@ -9,11 +9,14 @@ public class SettingsUIPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI languageText;
     [SerializeField] GameObject leftArrow;
     [SerializeField] GameObject rightArrow;
-    [SerializeField] GameObject adConsentButton; // ★ 추가: "Ad Consent" 버튼 오브젝트
-    LocalizationManager localicationManager;
+    [SerializeField] GameObject adConsentButton;
 
-    // 지원하는 언어 목록
-    private string[] languages = { "English", "한국어"};
+    LocalizationManager localizationManager;
+
+    // 지원하는 언어 목록 — 언어 이름은 항상 원어로 표시
+    private readonly string[] languageDisplayNames = { "English", "한국어" };
+    private readonly Language[] languageValues = { Language.English, Language.Korean };
+
     private int currentLanguageIndex = 0;
 
     private void Start()
@@ -31,13 +34,13 @@ public class SettingsUIPanel : MonoBehaviour
     public void OnLeftArrowClick()
     {
         currentLanguageIndex--;
-        
+
         // 첫 번째 언어에서 왼쪽을 누르면 마지막 언어로
         if (currentLanguageIndex < 0)
         {
-            currentLanguageIndex = languages.Length - 1;
+            currentLanguageIndex = languageDisplayNames.Length - 1;
         }
-        
+
         UpdateLanguageDisplay();
         SaveLanguage();
     }
@@ -46,32 +49,25 @@ public class SettingsUIPanel : MonoBehaviour
     public void OnRightArrowClick()
     {
         currentLanguageIndex++;
-        
+
         // 마지막 언어에서 오른쪽을 누르면 첫 번째 언어로
-        if (currentLanguageIndex >= languages.Length)
+        if (currentLanguageIndex >= languageDisplayNames.Length)
         {
             currentLanguageIndex = 0;
         }
-        
+
         UpdateLanguageDisplay();
         SaveLanguage();
     }
 
     private void UpdateLanguageDisplay()
     {
-        languageText.text = languages[currentLanguageIndex];
+        languageText.text = languageDisplayNames[currentLanguageIndex];
 
-        // TODO: 실제 게임 언어 변경 로직
-        // LocalizationManager.SetLanguage(languages[currentLanguageIndex]);
-        if (localicationManager == null) localicationManager = FindObjectOfType<LocalizationManager>();
-        if (currentLanguageIndex == 0)
-        {
-            localicationManager.SetEnglish();
-        }
-        else if (currentLanguageIndex == 1)
-        {
-            localicationManager.SetKorean();
-        }
+        if (localizationManager == null)
+            localizationManager = FindObjectOfType<LocalizationManager>();
+
+        localizationManager.SetLanguage(languageValues[currentLanguageIndex]);
     }
 
     private void SaveLanguage()
@@ -85,9 +81,9 @@ public class SettingsUIPanel : MonoBehaviour
         if (PlayerPrefs.HasKey("LanguageIndex"))
         {
             currentLanguageIndex = PlayerPrefs.GetInt("LanguageIndex");
-            
+
             // 인덱스 범위 검증
-            if (currentLanguageIndex < 0 || currentLanguageIndex >= languages.Length)
+            if (currentLanguageIndex < 0 || currentLanguageIndex >= languageDisplayNames.Length)
             {
                 currentLanguageIndex = 0;
             }
@@ -104,7 +100,7 @@ public class SettingsUIPanel : MonoBehaviour
     private int GetDefaultLanguageIndex()
     {
         SystemLanguage systemLang = Application.systemLanguage;
-        
+
         switch (systemLang)
         {
             case SystemLanguage.Korean:
@@ -114,10 +110,10 @@ public class SettingsUIPanel : MonoBehaviour
         }
     }
 
-    // 현재 언어 가져오기 (다른 스크립트에서 사용)
+    // 현재 언어 이름 가져오기 (다른 스크립트에서 사용)
     public string GetCurrentLanguage()
     {
-        return languages[currentLanguageIndex];
+        return languageDisplayNames[currentLanguageIndex];
     }
 
     // 디버그용
@@ -128,6 +124,7 @@ public class SettingsUIPanel : MonoBehaviour
     }
 
     #region Policy
+
     // Privacy Policy 버튼 클릭 시
     public void OnPrivacyPolicyClick()
     {
@@ -135,12 +132,11 @@ public class SettingsUIPanel : MonoBehaviour
         Logger.Log("[SettingsUIPanel] 개인보호정책");
     }
 
-    // Terms of Policy(이용약관) 버튼 클릭 시 — 아직 페이지가 없다면 임시로 주석 처리하거나, 만드신 후 연결
+    // Terms of Service 버튼 클릭 시
     public void OnTermsOfServiceClick()
     {
-        Application.OpenURL("https://b7squirrel.com/terms.html"); // 아직 없으면 나중에 채우기
+        Application.OpenURL("https://b7squirrel.com/terms.html");
         Logger.Log("[SettingsUIPanel] 이용약관");
-
     }
 
     // Ad Consent 버튼 클릭 시
@@ -154,16 +150,15 @@ public class SettingsUIPanel : MonoBehaviour
         {
             Logger.LogError("[SettingsUIPanel] AdsManager.Instance가 null입니다.");
             Logger.Log("[SettingsUIPanel] 광고 동의");
-
         }
     }
 
     private void UpdateAdConsentButtonVisibility()
     {
         if (adConsentButton == null) return;
-
         bool isRequired = AdsManager.Instance != null && AdsManager.Instance.IsPrivacyOptionsRequired();
         adConsentButton.SetActive(isRequired);
     }
+
     #endregion
 }

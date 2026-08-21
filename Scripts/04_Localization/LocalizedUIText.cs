@@ -291,6 +291,10 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.newInifiniteModeReleased;
             case UITextKey.Clear:
                 return LocalizationManager.Game.clear;
+                case UITextKey.NewDuck:
+                return LocalizationManager.Game.newDuck;
+                case UITextKey.NewItem:
+                return LocalizationManager.Game.newItem;
             default:
                 return key.ToString();
         }
@@ -434,5 +438,7 @@ public enum UITextKey
     MaxLevelForNow,
     NewCompanionSlot,
     NewInifiniteModeReleased,
-    Clear
+    Clear,
+    NewDuck,
+    NewItem
 }
