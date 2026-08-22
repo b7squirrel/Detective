@@ -54,19 +54,16 @@ public class Spawner : MonoBehaviour
     #endregion
 
     #region 스폰
-    public void Spawn(EnemyData enemyToSpawn, int index, bool forceSpawn)
+    public void Spawn(EnemyData enemyToSpawn, int index, bool forceSpawn, int excludedQuadrant = -1)
     {
         // ⭐ 수정: forceSpawn이어도 maxEnemyInScene(하드 캡)은 절대 넘지 않도록 함.
         // forceSpawn은 이제 "이벤트 진행을 막지 않는다"는 의미만 가짐 (StageEvenetManager 참고).
         if (currentEnemyNumbers >= maxEnemyInScene)
             return;
-
         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
-        Vector2 spawnPoint = GetAvailablePoints();
+        Vector2 spawnPoint = GetAvailablePoints(excludedQuadrant);
         enemy.transform.position = new Vector2(spawnPoint.x, spawnPoint.y);
-
         enemy.GetComponent<EnemyBase>().InitEnemy(enemyToSpawn);
-
         AddEnemyNumber();
     }
 
@@ -215,12 +212,12 @@ public class Spawner : MonoBehaviour
     #endregion
 
     #region 스폰 포인트
-    Vector2 GetAvailablePoints()
+    Vector2 GetAvailablePoints(int excludedQuadrant = -1)
     {
         // 벽 안쪽에서 2 unit 더 안쪽에 스폰
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
         float spawnConst = wallManager.GetSpawnAreaConstant();
-        return equation.GetSpawnablePos(spawnConst, 2f); // Equation 재사용
+        return equation.GetSpawnablePos(spawnConst, 2f, excludedQuadrant);
     }
     #endregion
 }

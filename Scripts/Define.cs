@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 
 #region 메인 메뉴 관련
-public enum SlotType { M_Field, M_Up, M_Mat, E_FieldOri, E_FieldEquipment, E_UpEquipment, L_Field, L_Up, None};// M - Merge, E - Equip, L - Launch
+public enum SlotType { M_Field, M_Up, M_Mat, E_FieldOri, E_FieldEquipment, E_UpEquipment, L_Field, L_Up, None };// M - Merge, E - Equip, L - Launch
 public enum EquipSlotType { FieldOri, FieldEquipment, UpEquipment, None }
 public enum LaunchSlotType { Field, Up, None }
 
@@ -106,7 +106,7 @@ public class GemProperties
     {
         gemSprite = _gemSprite;
         gemSize = _gemSize;
-        gemExp = _gemExp; 
+        gemExp = _gemExp;
     }
 }
 public class GemExp
@@ -411,7 +411,21 @@ public class Equation
         return totalSlow;
     }
 
-    public Vector2 GetSpawnablePos(float spawnConst, float offset)
+    public Vector2 GetSpawnablePos(float spawnConst, float offset, int excludedQuadrant = -1)
+    {
+        Vector2 position;
+        int guard = 0;
+        do
+        {
+            position = GetSpawnablePosRaw(spawnConst, offset);
+            guard++;
+        } while (excludedQuadrant != -1 && GetQuadrant(position) == excludedQuadrant && guard < 10);
+
+        return position;
+    }
+
+    // 기존 GetSpawnablePos 로직을 그대로 옮긴 내부 함수
+    Vector2 GetSpawnablePosRaw(float spawnConst, float offset)
     {
         Vector2 position = new Vector2();
         float f = UnityEngine.Random.value > .5f ? 1f : -1f;
@@ -426,8 +440,16 @@ public class Equation
             position.y = UnityEngine.Random.Range(-spawnConst + offset, spawnConst - offset);
             position.x = f > 0 ? (spawnConst * f) - offset : (spawnConst * f) + offset;
         }
-
         return position;
+    }
+
+    // 0: x>=0,y>=0 / 1: x<0,y>=0 / 2: x<0,y<0 / 3: x>=0,y<0
+    public static int GetQuadrant(Vector2 pos)
+    {
+        if (pos.x >= 0)
+            return pos.y >= 0 ? 0 : 3;
+        else
+            return pos.y >= 0 ? 1 : 2;
     }
     public bool IsOutOfRange(Vector2 posToCheck, float _spawnConst)
     {
@@ -442,7 +464,7 @@ public class Equation
 #endregion
 
 #region 피드백 관련
-public enum EnemyColor { yellow, green, red, blue, purple, pink}
+public enum EnemyColor { yellow, green, red, blue, purple, pink }
 #endregion
 
 #region 확장 함수
@@ -454,7 +476,7 @@ public static class EnumExtensions
     public static string GetDescription(this Enum value)
     {
         if (_descriptionCache.TryGetValue(value, out string description))
-        {
+    {
             return description;
         }
 

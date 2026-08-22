@@ -1,51 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class StageEvenetManager : MonoBehaviour, ISpawnController
 {
     [SerializeField] List<StageEvent> stageEvents;
     // private const int ENEMY_NUM_FOR_NEXT_EVENT = 200; // 다음 이벤트를 시작하기 위한 최대 적 수
     [SerializeField] StageMusicType stageMusicType;
-
     ReadStageData readStageData;
     Spawner spawner;
-
     WallManager wallManager;
-
     float duration;
     bool isWaiting;
     bool onStopWatchEffect;
-
     int eventIndexer;
     bool forceSpawn;
     int forceSpawnIndex;
-
     int subBossNums;
     int subBossSpawnedCount; // 현재 스테이지에서 몇 번째 서브보스인지 추적
-
     MusicManager musicManager;
     public bool IsWinningStage { get; set; }
     Coroutine winStageCoroutine;
     bool winStageDone; // winStage 초기화가 update에서 일어나는데 반복해서 하지 않도록
-
-
     public void Init(TextAsset _stageTextData, EnemyData[] _enemyDatas, StageMusicType _stageMusicType)
     {
         stageMusicType = _stageMusicType;
-
         readStageData = GetComponent<ReadStageData>();
         readStageData.Init(_stageTextData, _enemyDatas);
-
         subBossSpawnedCount = 0;
-
         List<int> segmentsLengths = new();
         int length = 0;
         foreach (var item in readStageData.GetStageEventsList())
         {
             this.stageEvents.Add(item);
             length++;
-
             if (item.eventType == StageEventType.SpawnSubBoss)
             {
                 subBossNums++;
@@ -58,17 +45,13 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
             }
         }
         spawner = FindObjectOfType<Spawner>();
-
         IsWinningStage = false;
         winStageCoroutine = null;
-
         GameManager.instance.musicCreditManager.Init();
         GameManager.instance.progressionBar.Init(subBossNums, stageEvents.Count, segmentsLengths);
         GameManager.instance.progressionBar.UpdateProgressBar(false);
-
         wallManager = FindObjectOfType<WallManager>();
     }
-
     void Update()
     {
         if (onStopWatchEffect) return; // 스톱위치가 작동 중이면 이벤트 홀드
@@ -82,36 +65,27 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
             return;
         }
         int enemyNums = spawner.GetCurrentEnemyNums();
-
         if (eventIndexer > stageEvents.Count - 1) return; // 이벤트를 다 소진하면(보스가 등장했다면) 더 이상 아무 일도 안 함.
-
         if (stageEvents[eventIndexer].eventType == StageEventType.Incoming
             || stageEvents[eventIndexer].eventType == StageEventType.SubBossIncoming)
         {
             forceSpawn = true;
             forceSpawnIndex = 5; // 적들이 몰려옵니다 또는 보스가 옵니다 경고 이후 5개의 이벤트는 강제로 진행
         }
-
         // 적들이 몰려옵니다 이벤트가 아닐 때만 적의 수에 따라 이벤트 실행
         if (forceSpawnIndex <= 0)
         {
             // ⭐ 수정: Spawner의 하드 캡(150)과 같은 값을 참조. 두 곳에 서로 다른 숫자를 두지 않기 위함.
             if (enemyNums >= spawner.MaxEnemyInScene) return; // 적이 최대치에 가까우면 다음 이벤트 보류.
         }
-
-
         if (isWaiting) return; // 이벤트가 진행 중일 동안은 다음 이벤트를 진행하지 않고 기다림.
-
         duration = stageEvents[eventIndexer].time;
-
         // Logger.Log(stageEvents[eventIndexer].eventType.ToString() + "Force Spawn = " + forceSpawn);
-
         StartCoroutine(TriggerEvent(duration, forceSpawn));
     }
     IEnumerator TriggerEvent(float _duration, bool _forceSpawn)
     {
         isWaiting = true;
-
         float remaining = _duration;
         while (remaining > 0f)
         {
@@ -119,25 +93,27 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
                 remaining -= Time.deltaTime;
             yield return null;
         }
-
         // ⭐ 수정: IsPlayerDead 조건 제거
         isWaiting = false;
-
         bool isSubBoss = stageEvents[eventIndexer].eventType == StageEventType.SpawnSubBoss;
         GameManager.instance.progressionBar.UpdateProgressBar(isSubBoss);
-
         switch (stageEvents[eventIndexer].eventType)
         {
             case StageEventType.SpawnEnemy:
+                // ⭐ 추가: forceSpawn(Incoming 이후 강제 웨이브)일 때는 분면 제한 없이 사방에서 스폰.
+                //         그 외에는 이 웨이브 동안 고정할 플레이어 기준 분면을 한 번만 계산해서 넘김.
+                int excludedQuadrant = _forceSpawn
+                    ? -1
+                    : Equation.GetQuadrant(Player.instance.transform.position);
                 // 기존: 한 프레임에 전부 스폰
                 // for (int i = 0; i < stageEvents[eventIndexer].count; i++)
                 //     spawner.Spawn(...);
-
                 // 변경: 프레임 분산 스폰
                 StartCoroutine(SpawnOverFrames(
                     stageEvents[eventIndexer].enemyToSpawn,
                     stageEvents[eventIndexer].count,
-                    _forceSpawn));
+                    _forceSpawn,
+                    excludedQuadrant));
                 break;
             case StageEventType.SpawnEnemyGroup:
                 SpawnEnemyGroup(stageEvents[eventIndexer].count);
@@ -154,14 +130,11 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
             case StageEventType.SubBossIncoming:
                 break;
         }
-
         eventIndexer++;
         forceSpawnIndex--;
         if (forceSpawnIndex <= 0) forceSpawn = false;
-
         SendStageEventIndex(eventIndexer);
     }
-
     void WinStage()
     {
         GameManager.instance.GetComponent<WinStage>().OpenPanel();
@@ -171,37 +144,32 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         // ✅ 기존: spawner.Spawn(..., (int)SpawnItem.subBoss, ...)  → enemyPools 공유
         // ✅ 변경: SpawnSubBossEnemy() → subBossPools 사용
         spawner.SpawnSubBossEnemy(stageEvents[eventIndexer].enemyToSpawn, _forceSpawn);
-
         // ✅ 수정: EnemyData.Name 대신 Localization SO에서 접두사 포함 이름 가져오기
         string subBossName = GetLocalizedSubBossName();
         GameManager.instance.bossWarningPanel.Init(subBossName);
-
         subBossSpawnedCount++; // ✅ 추가
     }
-
     /// <summary>
     /// 여러 적을 한 프레임에 몰아서 스폰하지 않고 분산시킴.
     /// count가 3 이하면 한 번에 스폰 (분산 의미 없음)
+    /// excludedQuadrant: 이 웨이브 동안 스폰에서 제외할 분면 (-1이면 제한 없음)
     /// </summary>
-    IEnumerator SpawnOverFrames(EnemyData enemyData, int count, bool forceSpawn)
+    IEnumerator SpawnOverFrames(EnemyData enemyData, int count, bool forceSpawn, int excludedQuadrant)
     {
         const int spawnPerFrame = 3; // 한 프레임에 최대 3마리
-
         int spawned = 0;
         while (spawned < count)
         {
             int thisFrame = Mathf.Min(spawnPerFrame, count - spawned);
             for (int i = 0; i < thisFrame; i++)
             {
-                spawner.Spawn(enemyData, (int)SpawnItem.enemy, forceSpawn);
+                spawner.Spawn(enemyData, (int)SpawnItem.enemy, forceSpawn, excludedQuadrant);
             }
             spawned += thisFrame;
-
             if (spawned < count)
                 yield return null; // 다음 프레임으로 넘김
         }
     }
-
     // ✅ 추가: 현재 스테이지와 서브보스 등장 순서로 로컬라이즈된 이름 반환
     string GetLocalizedSubBossName()
     {
@@ -211,34 +179,27 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
             // fallback: EnemyData 이름 사용
             return stageEvents[eventIndexer].enemyToSpawn.Name;
         }
-
         PlayerDataManager pdm = FindObjectOfType<PlayerDataManager>();
         if (pdm == null)
             return stageEvents[eventIndexer].enemyToSpawn.Name;
-
         int stageIndex = pdm.GetCurrentStageNumber();
         int set = (stageIndex - 1) / 6;           // 세트 번호 (0, 1, 2, 3, 4)
         int nameIndex = set * 6 + subBossSpawnedCount; // 배열 인덱스
-
         string[] names = LocalizationManager.Game.stageBossName;
         if (nameIndex >= 0 && nameIndex < names.Length)
             return names[nameIndex];
-
         Debug.LogWarning($"[StageEvenetManager] stageBossName 범위 초과: {nameIndex} / {names.Length}");
         return stageEvents[eventIndexer].enemyToSpawn.Name;
     }
-
     void SpawnEnemyGroup(int number)
     {
         spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup, number);
     }
-
     // 인터페이스 구현
     public void PauseSpawn(bool pause)
     {
         onStopWatchEffect = pause;
     }
-
     // 기존 메서드 유지
     public void PasueStageEvent(bool _pause)
     {
@@ -248,15 +209,11 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
     {
         return stageMusicType;
     }
-
     #region ???源?
     void SendStageEventIndex(int _index)
     {
         DebugManager debugManager = FindObjectOfType<DebugManager>();
         debugManager.SetStageEventIndex(_index);
     }
-
-
-
     #endregion
 }
