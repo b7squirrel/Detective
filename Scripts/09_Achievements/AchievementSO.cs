@@ -20,7 +20,20 @@ public enum RewardType
     GEM,
     COIN,
     ENERGY,
-    NONE
+    NONE,
+    BADGE       // ⭐ 추가: 배지 보상
+}
+
+// ⭐ 추가: 배지 카테고리 (Character.cs 스탯 6종과 1:1 매칭)
+public enum BadgeCategory
+{
+    None,       // 배지가 아닌 업적(기존 GEM/COIN/ENERGY 보상용)에는 이 값을 씀
+    Attack,     // 공격력 (DamageBonus)
+    Armor,      // 방어력 (Armor)
+    Speed,      // 속도 (MoveSpeed)
+    Magnet,     // 자력 (MagnetSize)
+    Critical,   // 치명타 (CriticalDamageChance)
+    Knockback   // 넉백 (knockBackChance)
 }
 
 [CreateAssetMenu(fileName = "NewAchievement", menuName = "Achievement/New Achievement", order = 0)]
@@ -49,10 +62,14 @@ public class AchievementSO : ScriptableObject
     public int rewardNum;             // 보상 (보석 개수 등)
     public RewardType rewardType;     // 보상 타입
 
+    // ⭐ 추가: rewardType이 BADGE일 때만 의미 있는 필드
+    [Tooltip("rewardType이 BADGE일 때, 이 업적이 어떤 스탯 카테고리 배지인지 지정")]
+    public BadgeCategory badgeCategory = BadgeCategory.None;
+
     [Header("진행 정보")]
     public AchievementType type;      // 업적 타입
     public int targetValue;           // 목표 값
-    
+
     // 다국어 제목/설명 가져오기 (런타임에서만 사용)
     public string GetLocalizedTitle()
     {
@@ -60,7 +77,7 @@ public class AchievementSO : ScriptableObject
             return id;
         return LocalizationManager.Achievement.GetTitle(id);
     }
-    
+
     public string GetLocalizedDescription()
     {
         if (LocalizationManager.Achievement == null)

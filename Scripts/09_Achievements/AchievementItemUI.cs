@@ -21,16 +21,19 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] GameObject postItYellow;
     [SerializeField] GameObject postItPink;
     [SerializeField] GameObject postItGreen; 
+    [SerializeField] GameObject postItBlue;  // ⭐ 추가: 배지용 파란 포스트잇
 
     [Header("보상 아이콘")]
     [SerializeField] Sprite gemIcon; // 보석 아이콘
     [SerializeField] Sprite coinIcon; // 코인 아이콘
     [SerializeField] Sprite lightningIcon;  // 에너지 아이콘
+    [SerializeField] Sprite badgeIcon;  // ⭐ 추가: 배지 아이콘
 
     [Header("진행도 아이콘")]
     [SerializeField] GameObject killIcon;   // Icons/Kill
     [SerializeField] GameObject chestIcon;  // Icons/Chest (AD_DRAW)
     [SerializeField] GameObject timeIcon;   // Icons/Time (SURVIVE)
+    [SerializeField] GameObject stageIcon;  // ⭐ 추가: Icons/Stage (STAGE_REACH, STAGE_CLEAR 공용)
 
     [Header("사운드")]
     [SerializeField] AudioClip clipRewardButton;
@@ -91,6 +94,7 @@ public class AchievementItemUI : MonoBehaviour
             runtime.original.type == AchievementType.KILL ||
             runtime.original.type == AchievementType.SURVIVE ||
             runtime.original.type == AchievementType.AD_DRAW ||
+            runtime.original.type == AchievementType.STAGE_REACH ||   // ⭐ 추가
             runtime.isCompleted; ;
 
         if (progressText != null)
@@ -108,6 +112,9 @@ public class AchievementItemUI : MonoBehaviour
         if (timeIcon != null)
             timeIcon.SetActive(runtime.original.type == AchievementType.SURVIVE);
 
+        if (stageIcon != null)  // ⭐ 추가
+            stageIcon.SetActive(runtime.original.type == AchievementType.STAGE_REACH);
+
         // 보상 타입에 따라 아이콘 설정
         if (rewardIcon != null)
         {
@@ -118,18 +125,28 @@ public class AchievementItemUI : MonoBehaviour
                     postItPink.SetActive(true);
                     postItYellow.SetActive(false);
                     if (postItGreen != null) postItGreen.SetActive(false);
+                    if (postItBlue != null) postItBlue.SetActive(false); // ⭐ 추가
                     break;
                 case RewardType.COIN:
                     rewardIcon.sprite = coinIcon;
                     postItPink.SetActive(false);
                     postItYellow.SetActive(true);
                     if (postItGreen != null) postItGreen.SetActive(false);
+                    if (postItBlue != null) postItBlue.SetActive(false); // ⭐ 추가
                     break;
-                case RewardType.ENERGY: // ← 추가
+                case RewardType.ENERGY:
                     rewardIcon.sprite = lightningIcon;
                     postItPink.SetActive(false);
                     postItYellow.SetActive(false);
                     if (postItGreen != null) postItGreen.SetActive(true);
+                    if (postItBlue != null) postItBlue.SetActive(false); // ⭐ 추가
+                    break;
+                case RewardType.BADGE: // ⭐ 추가: 배지 보상
+                    rewardIcon.sprite = badgeIcon;
+                    postItPink.SetActive(false);
+                    postItYellow.SetActive(false);
+                    if (postItGreen != null) postItGreen.SetActive(false);
+                    if (postItBlue != null) postItBlue.SetActive(true);
                     break;
             }
         }

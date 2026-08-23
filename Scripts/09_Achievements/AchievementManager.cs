@@ -9,6 +9,10 @@ public class AchievementManager : MonoBehaviour
     [Header("Resources 폴더 경로 (예: Resources/Achievements)")]
     [SerializeField] private string resourcePath = "Achievements";
 
+    // ⭐ 배지 저장 관련 (업적 진행도와 완전히 별개 저장소)
+    private const string BADGE_SAVE_KEY = "EARNED_BADGES";
+    private HashSet<string> earnedBadgeIds = new HashSet<string>();
+
     // 자동 로드된 업적 리스트
     public List<AchievementSO> achievementSOList = new();
 
@@ -53,6 +57,8 @@ public class AchievementManager : MonoBehaviour
         LoadAllSO();
 
         runtimeDict.Clear();
+
+        LoadEarnedBadges(); // ⭐ 추가: 영구 저장된 배지 목록 로드
 
         foreach (var so in achievementSOList)
         {
@@ -192,6 +198,21 @@ public class AchievementManager : MonoBehaviour
         ra.Reward();
         SaveAchievement(ra);
         OnAnyRewarded?.Invoke(ra);
+
+        // ⭐ 배지 보상 처리 - 재화 지급 로직(GEM/COIN/ENERGY)을 타지 않고 여기서 끝남
+        if (rewardType == RewardType.BADGE)
+        {
+            if (ra.original.isDailyQuest || ra.original.isWeeklyQuest)
+            {
+                Logger.LogWarning($"[Reward] 일일/주간 퀘스트는 배지 보상으로 설계되지 않았습니다: {id}");
+            }
+            if (earnedBadgeIds.Add(id))
+            {
+                SaveEarnedBadges();
+                Logger.Log($"[Reward] 배지 획득: {id} (카테고리: {ra.original.badgeCategory})");
+            }
+            return;
+        }
 
         if (playerDataManager == null)
             playerDataManager = FindObjectOfType<PlayerDataManager>();
@@ -415,6 +436,69 @@ public class AchievementManager : MonoBehaviour
             SaveAchievement(ra);
         }
     }
+
+    #region 배지
+    void LoadEarnedBadges()
+    {
+        earnedBadgeIds.Clear();
+        string csv = PlayerPrefs.GetString(BADGE_SAVE_KEY, "");
+        if (string.IsNullOrEmpty(csv)) return;
+        foreach (var id in csv.Split(','))
+        {
+            if (!string.IsNullOrEmpty(id)) earnedBadgeIds.Add(id);
+        }
+    }
+
+    void SaveEarnedBadges()
+    {
+        PlayerPrefs.SetString(BADGE_SAVE_KEY, string.Join(",", earnedBadgeIds));
+        PlayerPrefs.Save();
+    }
+
+    // Character.cs의 ApplyBadgeBonus()가 스탯 계산할 때 사용
+    public int GetBadgeCount(BadgeCategory category)
+    {
+        int count = 0;
+        foreach (var id in earnedBadgeIds)
+        {
+            if (runtimeDict.TryGetValue(id, out var ra) && ra.original.badgeCategory == category)
+                count++;
+        }
+        return count;
+    }
+
+    // 로비 훈장 UI가 아이콘 나열할 때 사용
+    public List<AchievementSO> GetEarnedBadges()
+    {
+        List<AchievementSO> list = new();
+        foreach (var id in earnedBadgeIds)
+        {
+            if (runtimeDict.TryGetValue(id, out var ra))
+                list.Add(ra.original);
+        }
+        return list;
+    }
+
+    // ⭐ CloudSaveManager가 업로드할 때 사용
+    public List<string> GetEarnedBadgeIds()
+    {
+        return new List<string>(earnedBadgeIds);
+    }
+
+    // ⭐ CloudSaveManager가 다운로드 후 합집합 병합할 때 사용
+    // 배지는 절대 줄어들면 안 되므로 "덮어쓰기"가 아니라 "합치기"
+    public void MergeEarnedBadgesFromCloud(IEnumerable<string> cloudBadgeIds)
+    {
+        if (cloudBadgeIds == null) return;
+        bool changed = false;
+        foreach (var id in cloudBadgeIds)
+        {
+            if (string.IsNullOrEmpty(id)) continue;
+            if (earnedBadgeIds.Add(id)) changed = true;
+        }
+        if (changed) SaveEarnedBadges();
+    }
+    #endregion
 
     // ⭐ 모든 업적 리셋 (디버그용)
     [ContextMenu("Debug 플레이모드 : Reset All Achievements")]

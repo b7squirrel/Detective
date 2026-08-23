@@ -27,6 +27,7 @@ public class CloudSaveData
     public bool starterPackPurchased = false;  // 초보자 팩 1회 구매 기록
     public bool proPackPurchased = false;      // 전문가 팩 1회 구매 기록
     public bool tutorialGiftCompleted = false; // ⭐ 추가: 튜토리얼 보상(오리 5마리) 수령 완료 여부
+    public string earnedBadgesCsv = "";   // ⭐ 추가: 획득한 배지 ID들 (콤마 구분)
 
     // ─── 나중에 추가할 데이터는 아래에 필드만 추가하면 됩니다 ───
     // public List<string> collectedEquipmentIds = new List<string>();  // 장비 도감 (출시 후 추가 예정)
@@ -320,7 +321,15 @@ public class CloudSaveManager : MonoBehaviour
             if (!string.IsNullOrEmpty(cloudData.achievementsJson))
                 ApplyAchievements(cloudData.achievementsJson);
 
-            // 7. 팩 구매 기록 복원
+            // 7. ⭐ 추가: 배지 — 덮어쓰기 아님, 합집합 병합 (기기 간 배지는 절대 줄어들면 안 됨)
+            if (!string.IsNullOrEmpty(cloudData.earnedBadgesCsv) && AchievementManager.Instance != null)
+            {
+                string[] cloudBadgeIds = cloudData.earnedBadgesCsv.Split(',');
+                AchievementManager.Instance.MergeEarnedBadgesFromCloud(cloudBadgeIds);
+                Debug.Log($"[CloudSaveManager] 배지 병합 완료 (클라우드 {cloudBadgeIds.Length}개)");
+            }
+
+            // 8. 팩 구매 기록 복원
             PackPurchaseManager.Instance?.ApplyFromCloud(
                 cloudData.starterPackPurchased,
                 cloudData.proPackPurchased
@@ -455,11 +464,15 @@ public class CloudSaveManager : MonoBehaviour
             // 5. 영구 업적
             data.achievementsJson = BuildAchievementsJson();
 
-            // 6. 튜토리얼 보상 수령 여부
+            // 6. ⭐ 추가: 획득한 배지
+            if (AchievementManager.Instance != null)
+                data.earnedBadgesCsv = string.Join(",", AchievementManager.Instance.GetEarnedBadgeIds());
+
+            // 7. 튜토리얼 보상 수령 여부
             data.tutorialGiftCompleted = PlayerPrefs.GetInt("TutorialGiftCompleted", 0) == 1;
 
 
-            // 7. 팩 구매
+            // 8. 팩 구매
             if (PackPurchaseManager.Instance != null)
             {
                 var (starter, pro) = PackPurchaseManager.Instance.GetPurchaseStateForCloud();
@@ -467,7 +480,7 @@ public class CloudSaveManager : MonoBehaviour
                 data.proPackPurchased = pro;
             }
 
-            // 8. 저장 시각 기록 (클라우드/로컬 최신 판단용)
+            // 9. 저장 시각 기록 (클라우드/로컬 최신 판단용)
             data.savedAtTicks = DateTime.Now.Ticks;
             PlayerPrefs.SetString("CloudSavedAt", data.savedAtTicks.ToString());
             PlayerPrefs.Save();

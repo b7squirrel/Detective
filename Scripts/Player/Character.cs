@@ -28,6 +28,15 @@ public class Character : MonoBehaviour
     [field: SerializeField] public int DamageBonus { get; set; }
     [field: SerializeField] public float CriticalDamageChance { get; set; }
 
+    // ⭐ 추가: 배지(영구 업적 보상)에 따른 스탯 보너스
+    [Header("배지 스탯 보너스 (배지 1개당 %)")]
+    [SerializeField] float badgeAttackBonusPercent = 0.5f;
+    [SerializeField] float badgeArmorBonusPercent = 0.5f;
+    [SerializeField] float badgeSpeedBonusPercent = 0.5f;
+    [SerializeField] float badgeMagnetBonusPercent = 0.5f;
+    [SerializeField] float badgeCriticalBonusPercent = 0.5f;
+    [SerializeField] float badgeKnockbackBonusPercent = 0.5f;
+
     [SerializeField] StatusBar hpBar;
     [HideInInspector] public Level level;
 
@@ -159,6 +168,8 @@ public class Character : MonoBehaviour
         Logger.Log($"[Character] 동료 스탯 반영: AtkTotal={companionAtkTotal}, HpTotal={companionHpTotal} → ArmorBonus={companionArmorBonus} (적용여부={applyCompanionHpToArmor}, 최종 DamageBonus={DamageBonus}, Armor={Armor})");
 
         ApplySetBonus();
+
+        ApplyBadgeBonus(); // ⭐ 추가
     }
 
     void ApplySetBonus()
@@ -224,6 +235,46 @@ public class Character : MonoBehaviour
 
         // ← 적용 후 스탯 및 변화량 출력
         Logger.Log($"[세트 보너스 적용 후] HP:{MaxHealth}(+{MaxHealth - beforeHp}) ATK:{DamageBonus}(+{DamageBonus - beforeAtk}) Armor:{Armor}(+{Armor - beforeArmor}) Speed:{MoveSpeed:F2}(+{MoveSpeed - beforeSpeed:F2}) Cooldown:{Cooldown:F2}({Cooldown - beforeCooldown:F2}) Critical:{CriticalDamageChance:F2}(+{CriticalDamageChance - beforeCritical:F2}) HpRegen:{HpRegenerationRate:F2}(+{HpRegenerationRate - beforeHpRegen:F2}) Magnet:{MagnetSize:F2}(+{MagnetSize - beforeMagnet:F2}) KnockBack:{knockBackChance:F2}(+{knockBackChance - beforeKnockBack:F2})");
+    }
+
+    void ApplyBadgeBonus()
+    {
+        if (AchievementManager.Instance == null)
+        {
+            Logger.Log("[Character] AchievementManager 없음 - 배지 보너스 스킵");
+            return;
+        }
+
+        int attackBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Attack);
+        int armorBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Armor);
+        int speedBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Speed);
+        int magnetBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Magnet);
+        int criticalBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Critical);
+        int knockbackBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Knockback);
+
+        // ← 적용 전 스탯 저장
+        int beforeAtk = DamageBonus;
+        int beforeArmor = Armor;
+        float beforeSpeed = MoveSpeed;
+        float beforeMagnet = MagnetSize;
+        float beforeCritical = CriticalDamageChance;
+        float beforeKnockBack = knockBackChance;
+
+        if (attackBadges > 0)
+            DamageBonus += (int)(DamageBonus * (badgeAttackBonusPercent * attackBadges / 100f));
+        if (armorBadges > 0)
+            Armor += (int)(Armor * (badgeArmorBonusPercent * armorBadges / 100f));
+        if (speedBadges > 0)
+            MoveSpeed += MoveSpeed * (badgeSpeedBonusPercent * speedBadges / 100f);
+        if (magnetBadges > 0)
+            MagnetSize += MagnetSize * (badgeMagnetBonusPercent * magnetBadges / 100f);
+        if (criticalBadges > 0)
+            CriticalDamageChance += badgeCriticalBonusPercent * criticalBadges; // 치명타는 고정값 가산 (ApplySetBonus 패턴과 동일)
+        if (knockbackBadges > 0)
+            knockBackChance += knockBackChance * (badgeKnockbackBonusPercent * knockbackBadges / 100f);
+
+        Logger.Log($"[배지 보너스] 공격배지:{attackBadges} 방어배지:{armorBadges} 속도배지:{speedBadges} 자력배지:{magnetBadges} 치명타배지:{criticalBadges} 넉백배지:{knockbackBadges}");
+        Logger.Log($"[배지 보너스 적용 후] ATK:{DamageBonus}(+{DamageBonus - beforeAtk}) Armor:{Armor}(+{Armor - beforeArmor}) Speed:{MoveSpeed:F2}(+{MoveSpeed - beforeSpeed:F2}) Critical:{CriticalDamageChance:F2}(+{CriticalDamageChance - beforeCritical:F2}) Magnet:{MagnetSize:F2}(+{MagnetSize - beforeMagnet:F2}) KnockBack:{knockBackChance:F2}(+{knockBackChance - beforeKnockBack:F2})");
     }
 
     public void AddDamageBonus(int amount)
