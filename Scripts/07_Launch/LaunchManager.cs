@@ -582,22 +582,52 @@ public class LaunchManager : MonoBehaviour
 
     /// <summary>
     /// 이미 스쿼드(리드+동료)에 포함된 종(weaponData.Name)을 후보 목록에서 제외한다.
+    /// 단, 지금 편집 중인 슬롯(editingSlotIndex) 자신이 들고 있는 종은 제외하지 않는다 — 
+    /// 자기 슬롯을 다시 눌렀을 때 지금 꽂혀있는 카드와 같은 종의 다른 카드(등급 등)도 보여야 하므로.
     /// </summary>
     List<CardData> FilterOutSquadDuplicates(List<CardData> cards)
     {
-        if (startingDataContainer == null || cardsDictionary == null) return cards;
+        if (cardsDictionary == null) return cards;
 
-        HashSet<string> squadNames = startingDataContainer.GetSquadWeaponNames();
+        HashSet<string> squadNames = GetSquadWeaponNamesExcludingSlot(editingSlotIndex);
         if (squadNames == null || squadNames.Count == 0) return cards;
 
         List<CardData> filtered = new List<CardData>();
         for (int i = 0; i < cards.Count; i++)
         {
             WeaponData wd = cardsDictionary.GetWeaponItemData(cards[i]).weaponData;
-            if (wd != null && squadNames.Contains(wd.Name)) continue; // 이미 스쿼드에 있는 종은 숨김
+            if (wd != null && squadNames.Contains(wd.Name)) continue; // 다른 슬롯이 이미 가진 종은 숨김
             filtered.Add(cards[i]);
         }
         return filtered;
+    }
+
+    /// <summary>
+    /// slotIndex(0=리드, 1~4=동료)로 지정된 슬롯 자신은 빼고, 나머지 스쿼드 슬롯들이 가진 종(weaponData.Name)을 모은다.
+    /// StartingDataContainer의 companions 리스트는 빈 슬롯을 건너뛰고 압축되어 있어 슬롯 번호와 인덱스가 안 맞을 수 있으므로,
+    /// 여기서는 LaunchManager가 직접 들고 있는 companionCardData(빈 슬롯도 자리를 유지함)와 currentLead를 기준으로 계산한다.
+    /// </summary>
+    HashSet<string> GetSquadWeaponNamesExcludingSlot(int slotIndex)
+    {
+        HashSet<string> names = new HashSet<string>();
+
+        if (slotIndex != 0 && currentLead != null)
+        {
+            WeaponData leadWd = cardsDictionary.GetWeaponItemData(currentLead).weaponData;
+            if (leadWd != null) names.Add(leadWd.Name);
+        }
+
+        for (int i = 0; i < companionCardData.Length; i++)
+        {
+            int thisSlotIndex = i + 1; // companionCardData[0] = 슬롯 1번, ... companionCardData[3] = 슬롯 4번
+            if (thisSlotIndex == slotIndex) continue; // 자기 자신은 제외 대상에서 뺌
+            if (companionCardData[i] == null) continue;
+
+            WeaponData wd = cardsDictionary.GetWeaponItemData(companionCardData[i]).weaponData;
+            if (wd != null) names.Add(wd.Name);
+        }
+
+        return names;
     }
 
     #endregion

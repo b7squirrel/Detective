@@ -101189,6 +101189,7 @@ GameObject:
   - component: {fileID: 387627739}
   - component: {fileID: 387627741}
   - component: {fileID: 387627740}
+  - component: {fileID: 387627742}
   m_Layer: 5
   m_Name: Title Text (1)
   m_TagString: Untagged
@@ -101235,7 +101236,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC544\uC774\uD15C\uC774 \uC7A5\uCC29\uB41C \uCE74\uB4DC\uAC00 \uC788\uC2B5\uB2C8\uB2E4. "
+  m_text: This duck has 4 equipped items. (localized in code)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
@@ -101312,6 +101313,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 387627738}
   m_CullTransparentMesh: 1
+--- !u!114 &387627742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387627738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 0
 --- !u!1 &387663999
 GameObject:
   m_ObjectHideFlags: 0
@@ -208682,7 +208696,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC7A5\uCC29 \uC0C1\uD0DC\uC778 \uCE74\uB4DC\uAC00 \uC788\uC2B5\uB2C8\uB2E4. "
+  m_text: "1 item is currently equipped. \nUnequip and sell?\n(localized in code)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
@@ -316349,7 +316363,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 158.00002, y: -767}
-  m_SizeDelta: {x: 265.44, y: 143.04}
+  m_SizeDelta: {x: 346.7, y: 143.04}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1236617229
 MonoBehaviour:
@@ -338765,6 +338779,7 @@ GameObject:
   - component: {fileID: 1340149394}
   - component: {fileID: 1340149396}
   - component: {fileID: 1340149395}
+  - component: {fileID: 1340149397}
   m_Layer: 5
   m_Name: Title Text
   m_TagString: Untagged
@@ -338811,7 +338826,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC544\uC774\uD15C\uC774 \uC7A5\uCC29\uB41C \uCE74\uB4DC\uAC00 \uC788\uC2B5\uB2C8\uB2E4. "
+  m_text: This duck has 4 equipped items. (localized in code)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
@@ -338888,6 +338903,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340149393}
   m_CullTransparentMesh: 1
+--- !u!114 &1340149397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340149393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 0
 --- !u!1 &1340471207
 GameObject:
   m_ObjectHideFlags: 0
@@ -589078,7 +589106,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC7A5\uCC29 \uC0C1\uD0DC\uC778 \uCE74\uB4DC\uAC00 \uC788\uC2B5\uB2C8\uB2E4. "
+  m_text: "1 item is currently equipped. \nUnequip and sell?\n(localized in code)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
@@ -592194,6 +592222,7 @@ GameObject:
   - component: {fileID: 2183042964149614409}
   - component: {fileID: 2183042964149614415}
   - component: {fileID: 2183042964149614414}
+  - component: {fileID: 2183042964149614416}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -592317,6 +592346,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2183042964149614408}
   m_CullTransparentMesh: 1
+--- !u!114 &2183042964149614416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2183042964149614408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 119
 --- !u!1 &2192961069817741585
 GameObject:
   m_ObjectHideFlags: 0
@@ -605612,6 +605654,7 @@ GameObject:
   - component: {fileID: 3648828164904495482}
   - component: {fileID: 3648828164904495484}
   - component: {fileID: 3648828164904495485}
+  - component: {fileID: 3648828164904495486}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -605716,6 +605759,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3648828164904495486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3648828164904495483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 118
 --- !u!224 &3649494583652275835
 RectTransform:
   m_ObjectHideFlags: 0
