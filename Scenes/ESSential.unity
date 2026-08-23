@@ -105221,6 +105221,12 @@ MonoBehaviour:
   <knockBackChance>k__BackingField: 10
   <DamageBonus>k__BackingField: 0
   <CriticalDamageChance>k__BackingField: 0
+  badgeAttackBonusPercent: 0.5
+  badgeArmorBonusPercent: 0.5
+  badgeSpeedBonusPercent: 0.5
+  badgeMagnetBonusPercent: 0.5
+  badgeCriticalBonusPercent: 0.5
+  badgeKnockbackBonusPercent: 0.5
   hpBar: {fileID: 1316132971}
   level: {fileID: 0}
   dataContainer: {fileID: 11400000, guid: e597f829b2c0f754ebff28acc3882ed1, type: 2}
@@ -105231,6 +105237,7 @@ MonoBehaviour:
   shockWaveSound: {fileID: 8300000, guid: e3dc99d40fe964cd7a31c4a1e82bf206, type: 3}
   applyCompanionHpToArmor: 0
   companionHpToArmorDivisor: 100
+  badgeBonusConfig: {fileID: 11400000, guid: 0c31244a2eb3f42cfbac57d71257d46a, type: 2}
   OnDie:
     m_PersistentCalls:
       m_Calls:

@@ -125,6 +125,15 @@ public class GameTexts : ScriptableObject
     public string newInifiniteModeReleased = "오리 도전 모드가 열렸어요!\n나골드와 크리스탈을 모아보세요!";
     public string clear = "해제";
 
+    [Header("Badge Popup")]
+    public string badgeEarnedTitle = "새 배지 획득!";
+    public string badgeCategoryAttack = "공격력";
+    public string badgeCategoryArmor = "방어력";
+    public string badgeCategorySpeed = "이동속도";
+    public string badgeCategoryMagnet = "자력";
+    public string badgeCategoryCritical = "치명타 확률";
+    public string badgeCategoryKnockback = "넉백 확률";
+
     [Header("Equip Panel")]
     public string duck = "오리";
     public string head = "머리";

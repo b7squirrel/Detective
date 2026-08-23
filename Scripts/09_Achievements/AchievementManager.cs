@@ -13,6 +13,10 @@ public class AchievementManager : MonoBehaviour
     private const string BADGE_SAVE_KEY = "EARNED_BADGES";
     private HashSet<string> earnedBadgeIds = new HashSet<string>();
 
+    // ⭐ "배지를 이미 본 적 있는지" 기록 (로비 반짝임 애니메이션 1회 재생용, 클라우드 동기화 안 함 - 로컬 전용)
+    private const string BADGE_SEEN_KEY = "SEEN_BADGES";
+    private HashSet<string> seenBadgeIds = new HashSet<string>();
+
     // 자동 로드된 업적 리스트
     public List<AchievementSO> achievementSOList = new();
 
@@ -59,6 +63,8 @@ public class AchievementManager : MonoBehaviour
         runtimeDict.Clear();
 
         LoadEarnedBadges(); // ⭐ 추가: 영구 저장된 배지 목록 로드
+
+        LoadSeenBadges(); // ⭐ 추가
 
         foreach (var so in achievementSOList)
         {
@@ -175,20 +181,20 @@ public class AchievementManager : MonoBehaviour
 
     public void Reward(string id, RectTransform pos, RewardType rewardType)
     {
-        Logger.Log($"[Reward] 호출됨 - id: {id}");  // ⭐ 임시 추가
+        Logger.Log($"[Reward] 호출됨 - id: {id}");
 
         if (!runtimeDict.TryGetValue(id, out var ra))
         {
-            Logger.Log($"[Reward] ID를 찾을 수 없음: {id}");  // ⭐ 임시 추가
+            Logger.Log($"[Reward] ID를 찾을 수 없음: {id}");
             return;
         }
         if (ra.isRewarded)
         {
-            Logger.Log($"[Reward] 이미 수령함: {id}");  // ⭐ 임시 추가
+            Logger.Log($"[Reward] 이미 수령함: {id}");
             return;
         }
 
-        // ⭐ 추가: pos null 체크
+        // ⭐ pos null 체크
         if (pos == null)
         {
             Logger.LogError("[AchievementManager] effectStartPos가 null입니다!");
@@ -197,9 +203,9 @@ public class AchievementManager : MonoBehaviour
 
         ra.Reward();
         SaveAchievement(ra);
-        OnAnyRewarded?.Invoke(ra);
 
-        // ⭐ 배지 보상 처리 - 재화 지급 로직(GEM/COIN/ENERGY)을 타지 않고 여기서 끝남
+        // ⭐ 배지: 저장을 이벤트 발생보다 먼저 처리 (BadgeDisplayManager 등 구독자가
+        //         이벤트를 받는 시점엔 earnedBadgeIds에 이미 반영되어 있어야 함)
         if (rewardType == RewardType.BADGE)
         {
             if (ra.original.isDailyQuest || ra.original.isWeeklyQuest)
@@ -211,13 +217,17 @@ public class AchievementManager : MonoBehaviour
                 SaveEarnedBadges();
                 Logger.Log($"[Reward] 배지 획득: {id} (카테고리: {ra.original.badgeCategory})");
             }
+            OnAnyRewarded?.Invoke(ra);
             return;
         }
+
+        // ⭐ 배지가 아닌 경우(GEM/COIN/ENERGY)에도 반드시 여기서 이벤트 발생
+        OnAnyRewarded?.Invoke(ra);
 
         if (playerDataManager == null)
             playerDataManager = FindObjectOfType<PlayerDataManager>();
 
-        // ⭐ 매번 재탐색으로 변경
+        // 매번 재탐색
         if (gemCollectFX == null)
             gemCollectFX = FindObjectOfType<GemCollectFX>();
 
@@ -455,6 +465,85 @@ public class AchievementManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    // ===== #region 배지 안, LoadEarnedBadges()/SaveEarnedBadges() 근처에 추가 =====
+
+// ⭐ 디버그용: 배지 관련 모든 기록을 초기화 (받은 배지, 본 배지, 배지 업적 진행도까지 전부)
+[ContextMenu("Debug 플레이모드 : Reset All Badges")]
+public void DebugResetAllBadges()
+{
+    if (!Application.isPlaying)
+    {
+        Logger.LogWarning("[Debug] 플레이 모드에서만 실행 가능합니다.");
+        return;
+    }
+
+    // 1. 받은 배지 목록 초기화
+    earnedBadgeIds.Clear();
+    SaveEarnedBadges();
+
+    // 2. 본 배지(반짝임 재생 여부) 목록 초기화
+    seenBadgeIds.Clear();
+    SaveSeenBadges();
+
+    // 3. 배지 업적 자체의 진행도/완료/수령 상태 초기화
+    int count = 0;
+    foreach (var ra in runtimeDict.Values)
+    {
+        if (ra.original.rewardType != RewardType.BADGE) continue;
+
+        ra.progress = 0;
+        ra.isCompleted = false;
+        ra.isRewarded = false;
+        PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+        PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
+        PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
+        count++;
+    }
+    PlayerPrefs.Save();
+
+    // 4. 업적 탭 UI를 통째로 다시 그림 (기존 ResetAllAchievements()와 동일한 패턴)
+    AchievementPanel panel = FindObjectOfType<AchievementPanel>(true);
+    if (panel != null) panel.ReinitializeAll();
+
+    // 5. 로비의 배지 나열도 즉시 갱신 (지금 로비 화면이 켜져 있다면)
+    BadgeDisplayManager badgeDisplay = FindObjectOfType<BadgeDisplayManager>(true);
+    if (badgeDisplay != null) badgeDisplay.Refresh();
+
+    Logger.Log($"[Debug] 배지 {count}개 완전 초기화 완료 (받은 배지 / 본 배지 / 업적 진행도 전부 리셋).");
+}
+
+    void LoadSeenBadges()
+    {
+        seenBadgeIds.Clear();
+        string csv = PlayerPrefs.GetString(BADGE_SEEN_KEY, "");
+        if (string.IsNullOrEmpty(csv)) return;
+        foreach (var id in csv.Split(','))
+        {
+            if (!string.IsNullOrEmpty(id)) seenBadgeIds.Add(id);
+        }
+    }
+
+    void SaveSeenBadges()
+    {
+        PlayerPrefs.SetString(BADGE_SEEN_KEY, string.Join(",", seenBadgeIds));
+        PlayerPrefs.Save();
+    }
+
+    // BadgeDisplayManager가 반짝임 애니메이션을 재생할지 판단할 때 사용
+    public bool IsBadgeSeen(string badgeId)
+    {
+        return seenBadgeIds.Contains(badgeId);
+    }
+
+    // BadgeDisplayManager가 반짝임을 재생한 직후 호출 (다음부터는 idle로만 보이게)
+    public void MarkBadgeSeen(string badgeId)
+    {
+        if (seenBadgeIds.Add(badgeId))
+        {
+            SaveSeenBadges();
+        }
+    }
+
     // Character.cs의 ApplyBadgeBonus()가 스탯 계산할 때 사용
     public int GetBadgeCount(BadgeCategory category)
     {
@@ -536,6 +625,42 @@ public class AchievementManager : MonoBehaviour
         AchievementPanel panel = FindObjectOfType<AchievementPanel>(true);
         Logger.Log($"[Reset] AchievementPanel 찾음: {panel != null}");
         if (panel != null) panel.ReinitializeAll();
+    }
+
+    // ===== AchievementManager.cs 아무 곳에나 추가 (기존 ResetAllAchievements() 근처 추천) =====
+
+    // ⭐ 디버그용: 배지 업적 전부를 "완료" 상태로 만듦 (보상은 받지 않은 채로 남겨둠)
+    // 업적 탭에서 하나씩 직접 보상 버튼을 눌러 팝업/로비 애니메이션을 테스트할 수 있게 하기 위함
+    [ContextMenu("Debug 플레이모드 : Complete All Badge Achievements (미수령 상태로)")]
+    public void DebugCompleteAllBadgeAchievements()
+    {
+        if (!Application.isPlaying)
+        {
+            Logger.LogWarning("[Debug] 플레이 모드에서만 실행 가능합니다.");
+            return;
+        }
+
+        int count = 0;
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.rewardType != RewardType.BADGE) continue;
+            if (ra.isRewarded) continue;
+            if (ra.isCompleted) continue;
+
+            // ⭐ 변경: 필드 직접 대입 대신 AddProgress()를 호출해서
+            //         ra.OnCompleted / ra.OnProgressChanged 이벤트가 정상 플레이와 동일하게 발생하도록 함
+            //         (AchievementItemUI가 이 이벤트를 구독해서 체크 표시/버튼 활성화를 처리함)
+            int remaining = ra.original.targetValue - ra.progress;
+            if (remaining > 0)
+            {
+                ra.AddProgress(remaining);
+            }
+
+            SaveAchievement(ra);
+            count++;
+        }
+
+        Logger.Log($"[Debug] 배지 업적 {count}개를 완료 상태로 만들었습니다 (보상은 미수령 - 업적 탭에서 직접 받아서 테스트).");
     }
 
     // 플레이 모드에서 AchievementManager 게임오브젝트를 선택하고 Inspector 우측 상단 ⋮ → Debug: Reset AD_DRAW Progress 로 실행

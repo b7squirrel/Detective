@@ -62,6 +62,10 @@ public class Character : MonoBehaviour
     [SerializeField] bool applyCompanionHpToArmor = false; // 일시적으로 비활성화 (밸런스 조정 중)
     [SerializeField] float companionHpToArmorDivisor = 100f;
 
+    // ⭐ 변경: 개별 float 6개 대신 공용 설정 SO 하나만 참조
+    [Header("배지 스탯 보너스")]
+    [SerializeField] BadgeBonusConfig badgeBonusConfig;
+
     // public event Action OnDie;
     public UnityEvent OnDie;
     Animator anim;
@@ -88,7 +92,7 @@ public class Character : MonoBehaviour
     void Update()
     {
         if (GameManager.instance.IsPlayerDead) return;
-        
+
         HpRegenerationTimer += Time.deltaTime * HpRegenerationRate;
 
         if (HpRegenerationTimer > 1f)
@@ -244,6 +248,11 @@ public class Character : MonoBehaviour
             Logger.Log("[Character] AchievementManager 없음 - 배지 보너스 스킵");
             return;
         }
+        if (badgeBonusConfig == null)
+        {
+            Logger.LogWarning("[Character] BadgeBonusConfig가 연결되지 않았습니다 - 배지 보너스 스킵");
+            return;
+        }
 
         int attackBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Attack);
         int armorBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Armor);
@@ -252,7 +261,6 @@ public class Character : MonoBehaviour
         int criticalBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Critical);
         int knockbackBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Knockback);
 
-        // ← 적용 전 스탯 저장
         int beforeAtk = DamageBonus;
         int beforeArmor = Armor;
         float beforeSpeed = MoveSpeed;
@@ -261,17 +269,17 @@ public class Character : MonoBehaviour
         float beforeKnockBack = knockBackChance;
 
         if (attackBadges > 0)
-            DamageBonus += (int)(DamageBonus * (badgeAttackBonusPercent * attackBadges / 100f));
+            DamageBonus += (int)(DamageBonus * (badgeBonusConfig.attackPercent * attackBadges / 100f));
         if (armorBadges > 0)
-            Armor += (int)(Armor * (badgeArmorBonusPercent * armorBadges / 100f));
+            Armor += (int)(Armor * (badgeBonusConfig.armorPercent * armorBadges / 100f));
         if (speedBadges > 0)
-            MoveSpeed += MoveSpeed * (badgeSpeedBonusPercent * speedBadges / 100f);
+            MoveSpeed += MoveSpeed * (badgeBonusConfig.speedPercent * speedBadges / 100f);
         if (magnetBadges > 0)
-            MagnetSize += MagnetSize * (badgeMagnetBonusPercent * magnetBadges / 100f);
+            MagnetSize += MagnetSize * (badgeBonusConfig.magnetPercent * magnetBadges / 100f);
         if (criticalBadges > 0)
-            CriticalDamageChance += badgeCriticalBonusPercent * criticalBadges; // 치명타는 고정값 가산 (ApplySetBonus 패턴과 동일)
+            CriticalDamageChance += badgeBonusConfig.criticalPercent * criticalBadges;
         if (knockbackBadges > 0)
-            knockBackChance += knockBackChance * (badgeKnockbackBonusPercent * knockbackBadges / 100f);
+            knockBackChance += knockBackChance * (badgeBonusConfig.knockbackPercent * knockbackBadges / 100f);
 
         Logger.Log($"[배지 보너스] 공격배지:{attackBadges} 방어배지:{armorBadges} 속도배지:{speedBadges} 자력배지:{magnetBadges} 치명타배지:{criticalBadges} 넉백배지:{knockbackBadges}");
         Logger.Log($"[배지 보너스 적용 후] ATK:{DamageBonus}(+{DamageBonus - beforeAtk}) Armor:{Armor}(+{Armor - beforeArmor}) Speed:{MoveSpeed:F2}(+{MoveSpeed - beforeSpeed:F2}) Critical:{CriticalDamageChance:F2}(+{CriticalDamageChance - beforeCritical:F2}) Magnet:{MagnetSize:F2}(+{MagnetSize - beforeMagnet:F2}) KnockBack:{knockBackChance:F2}(+{knockBackChance - beforeKnockBack:F2})");
