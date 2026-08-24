@@ -8,13 +8,11 @@ public class PlayerData
 {
     public int currentStageNumber;
     public bool isNewStage;
-
     public int currentCoinNumber;       // 기존 Candy → Coin
     public int currentCristalNumber;    // 기존 HighCoin → Cristal
     public int currentLightningNumber;
     public long lastLightningUpdateTicks; // 마지막 번개 갱신 시각 (DateTime.Ticks)
     public int currentKillNumber;
-
     public int bestWave; // 무한모드 웨이브 최고 기록
     public float bestSurvivalTime; // 무한 모드 시간 최고 기록
 
@@ -67,14 +65,11 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     protected override void Init()
     {
         base.Init(); // ⭐ 반드시 base.Init() 호출하여 Instance 설정
-
         filePath = Path.Combine(Application.persistentDataPath, "playerData.json");
         LoadPlayerData();
         ApplyLightningRegen(); // ← 앱 시작 시 오프라인 동안 쌓인 회복분 반영
         IsDataLoaded = true;
-
         StartCoroutine(LightningRegenLoop()); // ← 실행 중 매초 체크
-
         stageInfo = FindObjectOfType<StageInfo>();
         if (stageInfo == null)
         {
@@ -87,7 +82,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     {
         IsDataLoaded = false;
     }
-
 
     void LoadPlayerData()
     {
@@ -122,7 +116,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             currentCoinNumber = defaultCoinNumber,
             currentCristalNumber = defaultCristalNumber
         };
-
         SavePlayerData();
     }
 
@@ -141,7 +134,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 
     void NotifyCurrencyChanged() => OnCurrencyChanged?.Invoke();
 
-
     // --- Stage ---
     public int GetCurrentStageNumber()
     {
@@ -150,15 +142,14 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             Logger.LogWarning("[PlayerDataManager] playerData is null");
             return 1;
         }
-
         return Mathf.Max(1, playerData.currentStageNumber);
     }
+
     public void SetCurrentStageNumber(int stageNumber)
     {
         playerData.currentStageNumber = stageNumber;
         SavePlayerData();
     }
-
 
     public bool IsNewStage() => playerData.isNewStage;
     public void SetIsNewStage(bool isNew)
@@ -169,7 +160,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 
     public void SetCurrentStageCleared() => isStageCleared = true;
 
-
     // --- Coin ---
     public int GetCurrentCoinNumber() => playerData.currentCoinNumber;
     public void AddCoin(int amount)
@@ -178,6 +168,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         SavePlayerData();
         NotifyCurrencyChanged();
     }
+
     public void SetCoinNumberAs(int amount)
     {
         playerData.currentCoinNumber = amount;
@@ -193,7 +184,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         // NotifyCurrencyChanged() 호출 안 함
     }
 
-
     // --- Cristal ---
     public int GetCurrentCristalNumber() => playerData.currentCristalNumber;
     public void AddCristal(int amount)
@@ -202,6 +192,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         SavePlayerData();
         NotifyCurrencyChanged();
     }
+
     public void SetCristalNumberAs(int amount)
     {
         playerData.currentCristalNumber = amount;
@@ -216,7 +207,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         SavePlayerData();
         // NotifyCurrencyChanged() 호출 안 함
     }
-
 
     // --- Lightning ---
     public int GetCurrentLightningNumber() => playerData.currentLightningNumber;
@@ -244,12 +234,10 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         }
     }
 
-
     public bool TryConsumeLightning(int amount)
     {
         ApplyLightningRegen(); // 체크 직전에 최신 상태로 갱신
         if (playerData.currentLightningNumber < amount) return false;
-
         playerData.currentLightningNumber -= amount;
         SavePlayerData();
         NotifyCurrencyChanged();
@@ -278,13 +266,11 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         SavePlayerData();
     }
 
-
     // --- 게임 종료 전 저장 ---
     // 최고 스테이지, 골드, 크리스탈 기록 저장
     public void SaveResourcesBeforeQuitting()
     {
         Logger.Log($"[PlayerDataManager] {currentGameMode} 모드 리소스 저장 시작");
-
         // ⭐ 모드별 분기
         if (currentGameMode == GameMode.Regular)
         {
@@ -295,8 +281,17 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             SaveInfiniteModeResources();
         }
     }
+
     void SaveRegularModeResources()
     {
+        // ⭐ 수정: currentStage 증가/isStageCleared 리셋 이전에
+        //          "이번 세션에 실제로 클리어했는지" 값을 먼저 고정해둔다.
+        //          (기존 코드는 currentStage++ 시점에 isStageCleared를 false로
+        //           바꿔버린 뒤 그 값으로 clearBonus 여부를 판단하고 있어서,
+        //           죽었을 때(isStageCleared == false)도 조건이 참이 되어
+        //           클리어 보너스가 잘못 지급되는 버그가 있었음)
+        bool wasCleared = isStageCleared;
+
         int currentStage = GetCurrentStageNumber();
         if (stageInfo.IsFinalStage(currentStage) == false)
         {
@@ -308,11 +303,11 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             }
         }
 
-
         // CoinManager 값 + GoldRewardManager 보상 합산
         int coinNum = FindObjectOfType<CoinManager>().GetCurrentCoins();
         int killGold = GoldRewardManager.Instance.GetKillGold();
-        int clearBonus = isStageCleared == false ? GoldRewardManager.Instance.GetClearBonus(currentStage - 1) : 0;
+        // ⭐ 수정: wasCleared 기준으로 판단 (죽었으면 0, 클리어했을 때만 지급)
+        int clearBonus = wasCleared ? GoldRewardManager.Instance.GetClearBonus(currentStage - 1) : 0;
         SetCoinNumberAs(coinNum + killGold + clearBonus);
 
         int cristalNum = FindObjectOfType<CristalManager>().GetCurrentCristals();
@@ -332,6 +327,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 
         FindObjectOfType<PauseManager>().PauseGame();
     }
+
     // 최고 웨이브 기록, 최고 생존 시간 기록, 골드, 크리스탈 기록 저장
     public void SaveInfiniteModeResources()
     {
@@ -342,6 +338,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 
         // 최고 기록 갱신 체크
         bool isNewRecord = currentTime > playerData.bestSurvivalTime;
+
         if (currentWave > playerData.bestWave) SetBestWave(currentWave);
         if (currentTime > playerData.bestSurvivalTime) SetSurvivalTime(currentTime);
 
@@ -376,7 +373,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         tracker?.OnGameEnd();
     }
 
-
     // 패배 시 생존 시간만 업적에 누적 (코인/크리스탈 저장 없음)
     public void SaveSurviveTimeOnGameOver()
     {
@@ -404,7 +400,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         }
     }
 
-
     void SaveCoinsAndCristals()
     {
         CoinManager coinManager = FindObjectOfType<CoinManager>();
@@ -430,15 +425,16 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
             pauseManager.PauseGame();
         }
     }
+
     public void SetGameMode(GameMode mode)
     {
         currentGameMode = mode;
     }
+
     public GameMode GetGameMode()
     {
         return currentGameMode;
     }
-
 
     // 경과 시간만큼 번개 회복 계산 (오프라인 회복 포함)
     void ApplyLightningRegen()
@@ -489,7 +485,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
         SavePlayerData();
     }
 
-
     public bool HasTakenDailyReward() => playerData.hasTakenDailyReward;
     public void SetHasTakenDailyReward(bool taken)
     {
@@ -521,7 +516,6 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
 
     // ⭐ 추가: 첫 번째 동료 슬롯 해금 안내
     public bool HasShownFirstCompanionSlotAnnouncement() => playerData.firstCompanionSlotAnnouncementShown;
-
     public void SetFirstCompanionSlotAnnouncementShown(bool shown)
     {
         playerData.firstCompanionSlotAnnouncementShown = shown;
@@ -540,9 +534,7 @@ public class PlayerDataManager : SingletonBehaviour<PlayerDataManager>
     {
         if (playerData.companionSlotBadgeSeen == null || playerData.companionSlotBadgeSeen.Length < 4)
             playerData.companionSlotBadgeSeen = new bool[4];
-
         if (companionIndex < 0 || companionIndex >= playerData.companionSlotBadgeSeen.Length) return;
-
         playerData.companionSlotBadgeSeen[companionIndex] = true;
         SavePlayerData();
     }
