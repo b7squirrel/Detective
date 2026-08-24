@@ -170,7 +170,9 @@ public class GearTutorialController : MonoBehaviour
         tutorialHighlight.HighlightUI(firstSlot, fg);
     }
 
-    // Present Slot Pool에서 활성화된 첫 번째 자식의 RectTransform 반환
+    // Present Slot Pool에서 활성화된 첫 번째 자식(슬롯)의 Button RectTransform 반환
+    // ✅ 수정: 슬롯 루트가 아니라 슬롯 내부 Button 컴포넌트의 RectTransform을 하이라이트 대상으로 사용
+    //          (Button 컴포넌트는 슬롯 프리팹 내에 하나뿐이라는 전제)
     RectTransform GetFirstActiveSlot()
     {
         if (presentSlotPool == null) return null;
@@ -178,8 +180,16 @@ public class GearTutorialController : MonoBehaviour
         for (int i = 0; i < presentSlotPool.childCount; i++)
         {
             Transform child = presentSlotPool.GetChild(i);
-            if (child.gameObject.activeInHierarchy)
-                return child.GetComponent<RectTransform>();
+            if (!child.gameObject.activeInHierarchy) continue;
+
+            Button slotButton = child.GetComponentInChildren<Button>(true);
+            if (slotButton == null)
+            {
+                Debug.LogWarning($"[GearTutorial] '{child.name}' 슬롯 안에서 Button 컴포넌트를 찾을 수 없습니다. 슬롯 루트로 대체합니다.");
+                return child.GetComponent<RectTransform>(); // 폴백: 슬롯 루트라도 반환
+            }
+
+            return slotButton.GetComponent<RectTransform>();
         }
         return null;
     }
