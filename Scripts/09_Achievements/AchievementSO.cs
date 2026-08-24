@@ -66,6 +66,10 @@ public class AchievementSO : ScriptableObject
     [Tooltip("rewardType이 BADGE일 때, 이 업적이 어떤 스탯 카테고리 배지인지 지정")]
     public BadgeCategory badgeCategory = BadgeCategory.None;
 
+    // ⭐ 추가: rewardType이 BADGE일 때, 이 배지가 카테고리 내에서 몇 번째 단계인지 (0=1단계, 1=2단계...)
+    [Tooltip("배지 단계 (0=1단계, 1=2단계...) - BadgeBonusConfig에서 이 인덱스로 퍼센트를 찾음. 받는 순서와 무관하게 고정값.")]
+    public int badgeTierIndex = 0;
+
     [Header("진행 정보")]
     public AchievementType type;      // 업적 타입
     public int targetValue;           // 목표 값

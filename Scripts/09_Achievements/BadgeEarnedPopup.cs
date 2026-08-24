@@ -56,7 +56,8 @@ public class BadgeEarnedPopup : MonoBehaviour
             return;
         }
 
-        float percent = badgeBonusConfig.GetPercent(badge.badgeCategory);
+        // ⭐ 변경: 순서(개수) 계산 없이, 이 배지 자신의 badgeTierIndex를 그대로 사용
+        float percent = badgeBonusConfig.GetPercentAtTier(badge.badgeCategory, badge.badgeTierIndex);
         string categoryName = GetCategoryDisplayName(badge.badgeCategory);
 
         if (titleText != null)

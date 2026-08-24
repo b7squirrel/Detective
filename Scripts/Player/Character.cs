@@ -254,12 +254,13 @@ public class Character : MonoBehaviour
             return;
         }
 
-        int attackBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Attack);
-        int armorBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Armor);
-        int speedBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Speed);
-        int magnetBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Magnet);
-        int criticalBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Critical);
-        int knockbackBadges = AchievementManager.Instance.GetBadgeCount(BadgeCategory.Knockback);
+        // ⭐ 변경: 개수 기반이 아니라, 받은 배지 각각의 고정된 badgeTierIndex로 정확한 % 합산
+        float attackPercent = GetCategoryPercent(BadgeCategory.Attack);
+        float armorPercent = GetCategoryPercent(BadgeCategory.Armor);
+        float speedPercent = GetCategoryPercent(BadgeCategory.Speed);
+        float magnetPercent = GetCategoryPercent(BadgeCategory.Magnet);
+        float criticalPercent = GetCategoryPercent(BadgeCategory.Critical);
+        float knockbackPercent = GetCategoryPercent(BadgeCategory.Knockback);
 
         int beforeAtk = DamageBonus;
         int beforeArmor = Armor;
@@ -268,21 +269,32 @@ public class Character : MonoBehaviour
         float beforeCritical = CriticalDamageChance;
         float beforeKnockBack = knockBackChance;
 
-        if (attackBadges > 0)
-            DamageBonus += (int)(DamageBonus * (badgeBonusConfig.attackPercent * attackBadges / 100f));
-        if (armorBadges > 0)
-            Armor += (int)(Armor * (badgeBonusConfig.armorPercent * armorBadges / 100f));
-        if (speedBadges > 0)
-            MoveSpeed += MoveSpeed * (badgeBonusConfig.speedPercent * speedBadges / 100f);
-        if (magnetBadges > 0)
-            MagnetSize += MagnetSize * (badgeBonusConfig.magnetPercent * magnetBadges / 100f);
-        if (criticalBadges > 0)
-            CriticalDamageChance += badgeBonusConfig.criticalPercent * criticalBadges;
-        if (knockbackBadges > 0)
-            knockBackChance += knockBackChance * (badgeBonusConfig.knockbackPercent * knockbackBadges / 100f);
+        if (attackPercent > 0)
+            DamageBonus += (int)(DamageBonus * (attackPercent / 100f));
+        if (armorPercent > 0)
+            Armor += (int)(Armor * (armorPercent / 100f));
+        if (speedPercent > 0)
+            MoveSpeed += MoveSpeed * (speedPercent / 100f);
+        if (magnetPercent > 0)
+            MagnetSize += MagnetSize * (magnetPercent / 100f);
+        if (criticalPercent > 0)
+            CriticalDamageChance += criticalPercent;
+        if (knockbackPercent > 0)
+            knockBackChance += knockBackChance * (knockbackPercent / 100f);
 
-        Logger.Log($"[배지 보너스] 공격배지:{attackBadges} 방어배지:{armorBadges} 속도배지:{speedBadges} 자력배지:{magnetBadges} 치명타배지:{criticalBadges} 넉백배지:{knockbackBadges}");
+        Logger.Log($"[배지 보너스] 공격:{attackPercent}% 방어:{armorPercent}% 속도:{speedPercent}% 자력:{magnetPercent}% 치명타:{criticalPercent}% 넉백:{knockbackPercent}%");
         Logger.Log($"[배지 보너스 적용 후] ATK:{DamageBonus}(+{DamageBonus - beforeAtk}) Armor:{Armor}(+{Armor - beforeArmor}) Speed:{MoveSpeed:F2}(+{MoveSpeed - beforeSpeed:F2}) Critical:{CriticalDamageChance:F2}(+{CriticalDamageChance - beforeCritical:F2}) Magnet:{MagnetSize:F2}(+{MagnetSize - beforeMagnet:F2}) KnockBack:{knockBackChance:F2}(+{knockBackChance - beforeKnockBack:F2})");
+    }
+
+    // ⭐ 추가: 특정 카테고리에서 받은 배지들의 badgeTierIndex를 각각 조회해서 정확히 합산
+    float GetCategoryPercent(BadgeCategory category)
+    {
+        float total = 0f;
+        foreach (var badge in AchievementManager.Instance.GetEarnedBadgesInCategory(category))
+        {
+            total += badgeBonusConfig.GetPercentAtTier(category, badge.badgeTierIndex);
+        }
+        return total;
     }
 
     public void AddDamageBonus(int amount)

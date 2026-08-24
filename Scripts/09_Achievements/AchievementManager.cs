@@ -568,6 +568,20 @@ public void DebugResetAllBadges()
         return list;
     }
 
+    // ===== #region 배지 안, GetEarnedBadges() 근처에 추가 =====
+
+    // ⭐ 추가: 특정 카테고리에서 받은 배지들만 반환 (Character.cs가 단계별 퍼센트를 정확히 합산할 때 사용)
+    public List<AchievementSO> GetEarnedBadgesInCategory(BadgeCategory category)
+    {
+        List<AchievementSO> list = new();
+        foreach (var id in earnedBadgeIds)
+        {
+            if (runtimeDict.TryGetValue(id, out var ra) && ra.original.badgeCategory == category)
+                list.Add(ra.original);
+        }
+        return list;
+    }
+
     // ⭐ CloudSaveManager가 업로드할 때 사용
     public List<string> GetEarnedBadgeIds()
     {

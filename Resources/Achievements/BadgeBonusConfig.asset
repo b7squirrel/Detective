@@ -12,9 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50f2658cf81245fe95cf62c1fe5c6cd, type: 3}
   m_Name: BadgeBonusConfig
   m_EditorClassIdentifier: 
-  attackPercent: 0.5
-  armorPercent: 0.5
-  speedPercent: 0.5
-  magnetPercent: 0.5
-  criticalPercent: 0.5
-  knockbackPercent: 0.5
+  attackPercents:
+  - 30
+  - 60
+  armorPercents:
+  - 5
+  - 10
+  speedPercents:
+  - 5
+  - 13
+  magnetPercents:
+  - 10
+  - 30
+  criticalPercents:
+  - 15
+  - 25
+  knockbackPercents:
+  - 15
+  - 25
