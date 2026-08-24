@@ -291,10 +291,20 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.newInifiniteModeReleased;
             case UITextKey.Clear:
                 return LocalizationManager.Game.clear;
-                case UITextKey.NewDuck:
+            case UITextKey.NewDuck:
                 return LocalizationManager.Game.newDuck;
-                case UITextKey.NewItem:
+            case UITextKey.NewItem:
                 return LocalizationManager.Game.newItem;
+            case UITextKey.TimeStop:
+                return LocalizationManager.Game.timeStop;
+            case UITextKey.SweetMilk:
+                return LocalizationManager.Game.sweetMilk;
+            case UITextKey.Invincible:
+                return LocalizationManager.Game.invincible;
+            case UITextKey.Magnet:
+                return LocalizationManager.Game.magnet;
+            case UITextKey.SpeedUp:
+                return LocalizationManager.Game.speedUp;
             default:
                 return key.ToString();
         }
@@ -440,5 +450,10 @@ public enum UITextKey
     NewInifiniteModeReleased,
     Clear,
     NewDuck,
-    NewItem
+    NewItem,
+    TimeStop,
+    SweetMilk,
+    Invincible,
+    Magnet,
+    SpeedUp
 }

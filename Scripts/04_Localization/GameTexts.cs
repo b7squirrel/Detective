@@ -228,6 +228,11 @@ public class GameTexts : ScriptableObject
     public string composedBy = "작곡";
     public string coinFrenzy = "코인 파티!";
     public string exp = "경험치";
+    public string timeStop = "시간 정지!";
+    public string sweetMilk = "달콤 우유!";
+    public string invincible = "무적 모드!";
+    public string magnet = "자석!";
+    public string speedUp = "빨리빨리!";
     public string enemiesIncoming = "적들이 몰려옵니다!";
 
     [Header("Upgrade Panel")]

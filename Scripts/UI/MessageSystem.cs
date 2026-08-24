@@ -19,6 +19,11 @@ public class MessageSystem : MonoBehaviour
     [SerializeField] Color damageBoostColor = Color.white;
     [SerializeField] Color doubleExpColor = new Color(0.5f, 0.8f, 1f);
     [SerializeField] Color doubleCoinColor = new Color(1f, 0.9f, 0.4f);
+    // ⭐ 추가: 4개 아이템용 색상
+    [SerializeField] Color invincibleColor = Color.white;
+    [SerializeField] Color timeStopColor = Color.white;
+    [SerializeField] Color milkColor = Color.white;
+    [SerializeField] Color magnetColor = Color.white;
 
     int count;
     int countPlayerMessage;
@@ -102,8 +107,7 @@ public class MessageSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// 버프 획득 시 플레이어 위치에 메시지 표시
-    /// FieldItemEffect.ApplyBuff()에서 호출
+    /// 버프/필드 아이템 획득 시 플레이어 위치에 메시지 표시
     /// </summary>
     public void PostBuffMessage(string text, Color color)
     {
@@ -121,16 +125,21 @@ public class MessageSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// 버프 타입에 맞는 색상 반환
+    /// 메시지 타입에 맞는 색상 반환
+    /// ⭐ 변경: FieldBuffType → FieldMessageType (메시지 전용 타입으로 분리)
     /// </summary>
-    public Color GetBuffColor(FieldBuffType buffType)
+    public Color GetBuffColor(FieldMessageType type)
     {
-        return buffType switch
+        return type switch
         {
-            FieldBuffType.SpeedBoost  => speedBoostColor,
-            FieldBuffType.DamageBoost => damageBoostColor,
-            FieldBuffType.DoubleExp   => doubleExpColor,
-            FieldBuffType.DoubleCoin  => doubleCoinColor,
+            FieldMessageType.SpeedBoost  => speedBoostColor,
+            FieldMessageType.DamageBoost => damageBoostColor,
+            FieldMessageType.DoubleExp   => doubleExpColor,
+            FieldMessageType.DoubleCoin  => doubleCoinColor,
+            FieldMessageType.Invincible  => invincibleColor,
+            FieldMessageType.TimeStop    => timeStopColor,
+            FieldMessageType.Milk        => milkColor,
+            FieldMessageType.Magnet      => magnetColor,
             _ => Color.white
         };
     }

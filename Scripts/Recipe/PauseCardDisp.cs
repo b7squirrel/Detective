@@ -10,13 +10,14 @@ public class PauseCardDisp : MonoBehaviour
     [SerializeField] GameObject synergyGroup;
     [SerializeField] GameObject[] synergytags;
     [SerializeField] GameObject synergyDoneGroup;
-    [SerializeField] GameObject newWeaponText;
-    [SerializeField] GameObject newItemText;
+    [SerializeField] ShadowedText newWeaponText;   // GameObject → ShadowedText
+    [SerializeField] ShadowedText newItemText;     // GameObject → ShadowedText
     [SerializeField] RectTransform synergyOutPoint;
     [SerializeField] RectTransform synergyInPoint;
-    SimpleUILineConnector lineConnector;
 
+    SimpleUILineConnector lineConnector;
     GameObject[] stars;
+
     public string Name { get; private set; }
 
     [Header("Synergy Icon")]
@@ -25,16 +26,15 @@ public class PauseCardDisp : MonoBehaviour
     public void InitWeaponCardDisplay(WeaponData _wd)
     {
         SetNumStar(_wd.stats.currentLevel, true);
-        newWeaponText.SetActive(_wd.stats.currentLevel == 0);
-        newItemText.SetActive(false);
+        newWeaponText.gameObject.SetActive(_wd.stats.currentLevel == 0);
+        newItemText.gameObject.SetActive(false);
 
         for (int i = 0; i < StaticValues.MaxGrade; i++)
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
-
         cardBaseContainer.GetChild(_wd.grade).gameObject.SetActive(true);
+
         Name = _wd.Name;
         synergyGroup.SetActive(false);
-
         synergyIcon.gameObject.SetActive(true);
         synergyIcon.sprite = _wd.SynergyItem.charImage;
     }
@@ -44,7 +44,6 @@ public class PauseCardDisp : MonoBehaviour
     void SetNumStar(int numStars, bool _isWeapon)
     {
         int maxStarNum = _isWeapon ? 5 : 3;
-
         if (stars == null)
         {
             stars = new GameObject[maxStarNum];
@@ -56,7 +55,6 @@ public class PauseCardDisp : MonoBehaviour
         }
         for (int i = 0; i < stars.Length; i++)
             stars[i].SetActive(false);
-
         for (int i = 0; i < numStars; i++)
             stars[i].SetActive(true);
     }
@@ -71,23 +69,22 @@ public class PauseCardDisp : MonoBehaviour
             return;
         }
         SetNumStar(_level, _isWeapon);
-        newWeaponText.SetActive(false);
-        newItemText.SetActive(false);
+        newWeaponText.gameObject.SetActive(false);
+        newItemText.gameObject.SetActive(false);
     }
 
     public void InitItemCardDisplay(Item _item)
     {
         SetNumStar(_item.stats.currentLevel, false);
-        newWeaponText.SetActive(false);
-        newItemText.SetActive(_item.stats.currentLevel == 0);
+        newWeaponText.gameObject.SetActive(false);
+        newItemText.gameObject.SetActive(_item.stats.currentLevel == 0);
 
         for (int i = 0; i < StaticValues.MaxGrade; i++)
             cardBaseContainer.GetChild(i).gameObject.SetActive(false);
-
         cardBaseContainer.GetChild(0).gameObject.SetActive(true);
+
         Name = _item.Name;
         synergyGroup.SetActive(false);
-
         synergyIcon.gameObject.SetActive(false);
         foreach (var item in synergytags)
             item.SetActive(false);

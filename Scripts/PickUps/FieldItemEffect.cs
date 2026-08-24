@@ -27,7 +27,6 @@ public class FieldItemEffect : MonoBehaviour
     [SerializeField] float indicatorDisplayTime = 0.5f;
     [SerializeField] GameObject itemDieEffect;
     ISpawnController spawnController;
-
     Coroutine coStopWatch, coInvincible;
     bool isStoppedWithStopwatch = false;
 
@@ -35,42 +34,23 @@ public class FieldItemEffect : MonoBehaviour
     // 임시 버프 시스템
     // =============================================
     const float MAX_MULTIPLIER = 4f;
-
-    // 경험치 배율 (1 = 기본, 2~최대 = 버프)
     public float ExpMultiplier { get; private set; } = 1f;
-
-    // DoubleCoin은 배율 대신 추가 드롭 방식. 활성화 여부만 관리.
     public bool IsDoubleCoin { get; private set; } = false;
-
-    // 최대 배율 도달 여부 (ChestDrop 드롭 차단용)
     public bool IsExpAtMax => ExpMultiplier >= MAX_MULTIPLIER;
-    public bool IsCoinAtMax => IsDoubleCoin; // 이미 활성화 중이면 상자에서 추가 드롭 안 함
-
-    // 경험치 버프 활성화 여부
+    public bool IsCoinAtMax => IsDoubleCoin;
     public bool IsDoubleExp => ExpMultiplier > 1f;
 
-    // SpeedBoost / DamageBoost 중첩 방지
     bool isSpeedBoostActive = false;
     bool isDamageBoostActive = false;
     float currentSpeedBoostValue = 0f;
     int currentDamageBoostValue = 0;
-
-    // 데미지 부스트 중첩 스택 (BuffIconUI에서 UP1/UP2/UP3 표시에 사용)
     public int DamageBoostStack { get; private set; } = 0;
 
-    // UI 연동 이벤트
-    public event Action<FieldBuffType, float> OnBuffApplied;  // 버프 시작/갱신 (타입, 지속시간)
-    public event Action<FieldBuffType> OnBuffExpired;          // 버프 종료 (타입)
+    public event Action<FieldBuffType, float> OnBuffApplied;
+    public event Action<FieldBuffType> OnBuffExpired;
 
     Coroutine coSpeedBoost, coDamageBoost, coDoubleExp, coDoubleCoin;
 
-    /// <summary>
-    /// 버프 아이템 픽업 시 호출.
-    /// DoubleExp / DoubleCoin: 획득할 때마다 배율 +1 중첩(최대 4배).
-    ///   타이머는 항상 마지막 획득 시점 기준으로 리셋.
-    ///   타이머가 끝나면 배율이 한 번에 1로 초기화.
-    /// SpeedBoost / DamageBoost: 수치 중첩 없이 타이머만 갱신.
-    /// </summary>
     public void ApplyBuff(FieldBuffType buffType, float duration, float value)
     {
         switch (buffType)
@@ -79,12 +59,12 @@ public class FieldItemEffect : MonoBehaviour
                 if (coSpeedBoost != null) StopCoroutine(coSpeedBoost);
                 coSpeedBoost = StartCoroutine(SpeedBoostCo(duration, value));
                 OnBuffApplied?.Invoke(buffType, duration);
-                MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.buffSpeedBoost, MessageSystem.instance.GetBuffColor(FieldBuffType.SpeedBoost));
+                // ⭐ 변경: FieldMessageType 사용
+                MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.buffSpeedBoost, MessageSystem.instance.GetBuffColor(FieldMessageType.SpeedBoost));
                 break;
             case FieldBuffType.DamageBoost:
                 if (coDamageBoost != null) StopCoroutine(coDamageBoost);
                 coDamageBoost = StartCoroutine(DamageBoostCo(duration, (int)value));
-                // 메시지는 DamageBoostCo 안에서 스택 번호와 함께 출력
                 OnBuffApplied?.Invoke(buffType, duration);
                 break;
             case FieldBuffType.DoubleExp:
@@ -95,7 +75,8 @@ public class FieldItemEffect : MonoBehaviour
                 OnBuffApplied?.Invoke(buffType, duration);
                 var g = LocalizationManager.Game;
                 string expMsg = $"{g.buffExpPrefix} {(int)ExpMultiplier}{g.buffExpSuffix}";
-                MessageSystem.instance.PostBuffMessage(expMsg, MessageSystem.instance.GetBuffColor(FieldBuffType.DoubleExp));
+                // ⭐ 변경: FieldMessageType 사용
+                MessageSystem.instance.PostBuffMessage(expMsg, MessageSystem.instance.GetBuffColor(FieldMessageType.DoubleExp));
                 Logger.Log($"[FieldBuff] 경험치 배율 → {ExpMultiplier}배, 타이머 {duration}초 리셋");
                 break;
             case FieldBuffType.DoubleCoin:
@@ -103,7 +84,8 @@ public class FieldItemEffect : MonoBehaviour
                 if (coDoubleCoin != null) StopCoroutine(coDoubleCoin);
                 coDoubleCoin = StartCoroutine(DoubleCoinCo(duration));
                 OnBuffApplied?.Invoke(buffType, duration);
-                MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.coinFrenzy, MessageSystem.instance.GetBuffColor(FieldBuffType.DoubleCoin));
+                // ⭐ 변경: FieldMessageType 사용
+                MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.coinFrenzy, MessageSystem.instance.GetBuffColor(FieldMessageType.DoubleCoin));
                 Logger.Log($"[FieldBuff] 동전 추가 드롭 버프 시작(갱신), 타이머 {duration}초 리셋");
                 break;
         }
@@ -112,7 +94,6 @@ public class FieldItemEffect : MonoBehaviour
     IEnumerator SpeedBoostCo(float duration, float value)
     {
         Character character = Player.instance.GetComponent<Character>();
-
         if (isSpeedBoostActive)
         {
             Logger.Log($"[FieldBuff] 속도 버프 타이머 리셋 ({duration}초)");
@@ -124,9 +105,7 @@ public class FieldItemEffect : MonoBehaviour
             character.MoveSpeed += value;
             Logger.Log($"[FieldBuff] 속도 버프 시작 +{value}, {duration}초");
         }
-
         yield return new WaitForSeconds(duration);
-
         character.MoveSpeed -= currentSpeedBoostValue;
         isSpeedBoostActive = false;
         currentSpeedBoostValue = 0f;
@@ -138,11 +117,8 @@ public class FieldItemEffect : MonoBehaviour
     IEnumerator DamageBoostCo(float duration, int value)
     {
         Character character = Player.instance.GetComponent<Character>();
-
         if (isDamageBoostActive)
         {
-            // 현재 DamageBonus(이미 버프된 값)의 50%를 추가 중첩
-            // 예: 기본 100 → 1스택 150 → 2스택 225 → 3스택 337...
             int additionalBoost = (int)(character.DamageBonus * 0.5f);
             currentDamageBoostValue += additionalBoost;
             character.AddDamageBonus(additionalBoost);
@@ -153,18 +129,14 @@ public class FieldItemEffect : MonoBehaviour
         {
             isDamageBoostActive = true;
             DamageBoostStack = 1;
-            // 현재 DamageBonus의 50%를 추가 (1.5배 효과)
             currentDamageBoostValue = (int)(character.DamageBonus * 0.5f);
             character.AddDamageBonus(currentDamageBoostValue);
             Logger.Log($"[FieldBuff] 데미지 버프 시작 +{currentDamageBoostValue} (현재의 1.5배), {duration}초");
         }
-
-        // "공격력 Up1", "공격력 Up2"... 출력
         string dmgMsg = $"{LocalizationManager.Game.buffDamageBoost} Up{DamageBoostStack}";
-        MessageSystem.instance.PostBuffMessage(dmgMsg, MessageSystem.instance.GetBuffColor(FieldBuffType.DamageBoost));
-
+        // ⭐ 변경: FieldMessageType 사용
+        MessageSystem.instance.PostBuffMessage(dmgMsg, MessageSystem.instance.GetBuffColor(FieldMessageType.DamageBoost));
         yield return new WaitForSeconds(duration);
-
         character.AddDamageBonus(-currentDamageBoostValue);
         isDamageBoostActive = false;
         currentDamageBoostValue = 0;
@@ -174,7 +146,6 @@ public class FieldItemEffect : MonoBehaviour
         Logger.Log("[FieldBuff] 데미지 버프 종료");
     }
 
-    // 타이머만 관리. 배율은 ApplyBuff에서 이미 올렸으므로 여기선 종료 시 1로 초기화만.
     IEnumerator DoubleExpCo(float duration)
     {
         yield return new WaitForSeconds(duration);
@@ -202,13 +173,10 @@ public class FieldItemEffect : MonoBehaviour
     void Start()
     {
         spawnController = FindObjectOfType<StageEvenetManager>() as ISpawnController;
-
         if (spawnController == null)
             spawnController = FindObjectOfType<InfiniteStageManager>() as ISpawnController;
-
         if (spawnController == null)
             Logger.LogWarning("[FieldItemEffect] No spawn controller found!");
-
         stopCounterUI.gameObject.SetActive(false);
     }
 
@@ -220,6 +188,8 @@ public class FieldItemEffect : MonoBehaviour
         if (coStopWatch != null) StopCoroutine(coStopWatch);
         coStopWatch = StartCoroutine(StopEnemiesCo(allEnemies, stopDuration));
         stopCounterUI.StartTimer(stopDuration);
+        // ⭐ 추가: 시간정지 메시지
+        MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.timeStop, MessageSystem.instance.GetBuffColor(FieldMessageType.TimeStop));
     }
 
     IEnumerator StopEnemiesCo(EnemyBase[] _allEnemies, float _stopDuration)
@@ -233,31 +203,25 @@ public class FieldItemEffect : MonoBehaviour
         {
             Logger.LogWarning("[FieldItemEffect] 어떤 종류의 Spawn Controller도 없습니다.");
         }
-
         stopCounterUI.gameObject.SetActive(true);
-
         for (int i = 0; i < _allEnemies.Length; i++)
         {
             if (_allEnemies[i] != null)
                 _allEnemies[i].PauseEnemy();
         }
-
         isStoppedWithStopwatch = true;
         yield return new WaitForSeconds(_stopDuration);
-
         if (spawnController != null)
         {
             spawnController.PauseSpawn(false);
             Logger.Log("[FieldItemEffect] Spawn resumed");
         }
-
         EnemyBase[] allCurrentEnemies = FindObjectsOfType<EnemyBase>();
         for (int i = 0; i < allCurrentEnemies.Length; i++)
         {
             if (allCurrentEnemies[i] != null && allCurrentEnemies[i].gameObject.activeSelf)
                 allCurrentEnemies[i].ResumeEnemy();
         }
-
         isStoppedWithStopwatch = false;
         stopCounterUI.gameObject.SetActive(false);
     }
@@ -270,6 +234,8 @@ public class FieldItemEffect : MonoBehaviour
     {
         if (coInvincible != null) StopCoroutine(coInvincible);
         coInvincible = StartCoroutine(PlayerInvincibleCo());
+        // ⭐ 추가: 무적 메시지
+        MessageSystem.instance.PostBuffMessage(LocalizationManager.Game.invincible, MessageSystem.instance.GetBuffColor(FieldMessageType.Invincible));
     }
 
     IEnumerator PlayerInvincibleCo()
@@ -277,11 +243,9 @@ public class FieldItemEffect : MonoBehaviour
         GameManager.instance.IsPlayerInvincible = true;
         GameManager.instance.IsPlayerItemInvincible = true;
         invincibleCounterUI.gameObject.SetActive(true);
-
         Animator counterAnim = invincibleCounterUI.GetComponent<Animator>();
         int remainingTime = Mathf.CeilToInt(invincibaleDuration);
         invincibleCounterUI.SetCountNumber(remainingTime);
-
         while (remainingTime > 0)
         {
             yield return new WaitForSeconds(1f);
@@ -289,7 +253,6 @@ public class FieldItemEffect : MonoBehaviour
             invincibleCounterUI.SetCountNumber(remainingTime);
             counterAnim.SetTrigger("Pop");
         }
-
         GameManager.instance.IsPlayerInvincible = false;
         GameManager.instance.IsPlayerItemInvincible = false;
         invincibleCounterUI.gameObject.SetActive(false);
@@ -301,18 +264,14 @@ public class FieldItemEffect : MonoBehaviour
     {
         if (damageIndicatorPrefab != null)
             StartCoroutine(ShowBombIndicator(_pos));
-
         GameObject effect = GameManager.instance.poolManager.GetMisc(bombExplosionEffect);
         effect.transform.position = _pos;
-
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(_pos, bombRadius, enemyLayer);
-
         if (enemiesInRange.Length == 0)
         {
             Logger.Log("[FieldItemEffect] 폭탄 범위 내에 적이 없습니다.");
             return;
         }
-
         int damagedEnemies = 0;
         for (int i = 0; i < enemiesInRange.Length; i++)
         {
@@ -324,7 +283,6 @@ public class FieldItemEffect : MonoBehaviour
                 damagedEnemies++;
             }
         }
-
         Logger.Log($"[FieldItemEffect] 폭탄으로 {damagedEnemies}마리의 적에게 데미지를 입혔습니다.");
     }
 
@@ -334,7 +292,6 @@ public class FieldItemEffect : MonoBehaviour
         DamageIndicator damageIndicator = indicator.GetComponent<DamageIndicator>();
         if (damageIndicator != null)
             damageIndicator.Init(bombRadius, _pos);
-
         yield return new WaitForSeconds(indicatorDisplayTime);
         indicator.SetActive(false);
     }
@@ -356,15 +313,12 @@ public class FieldItemEffect : MonoBehaviour
     #endregion
 
     #region 모든 보석/필드 아이템(버프 아이템 포함) 제거
-    // ⭐ 이름은 RemoveAllGems이지만, Collectable을 상속하는 모든 필드 픽업
-    //    (보석, StopWatch 같은 버프 아이템 등)을 전부 제거합니다.
     public void RemoveAllGems()
     {
-        Collectable[] collectables = FindObjectsOfType<Collectable>(); // ⭐ 변경: 콜라이더 비활성 상태(착지 전)도 놓치지 않도록
+        Collectable[] collectables = FindObjectsOfType<Collectable>();
         foreach (var collectable in collectables)
         {
             if (collectable == null || !collectable.gameObject.activeSelf) continue;
-
             GameObject effect = GameManager.instance.poolManager.GetMisc(itemDieEffect);
             if (effect != null) effect.transform.position = collectable.transform.position;
             collectable.gameObject.SetActive(false);
@@ -372,15 +326,13 @@ public class FieldItemEffect : MonoBehaviour
     }
     #endregion
 
-
     #region 모든 상자 제거
     public void RemoveAllChests()
     {
-        DestructableObject[] destructables = FindObjectsOfType<DestructableObject>(); // ⭐ 변경
+        DestructableObject[] destructables = FindObjectsOfType<DestructableObject>();
         foreach (var destructable in destructables)
         {
             if (destructable == null || !destructable.gameObject.activeSelf) continue;
-
             GameObject effect = GameManager.instance.poolManager.GetMisc(itemDieEffect);
             if (effect != null) effect.transform.position = destructable.transform.position;
             destructable.gameObject.SetActive(false);
