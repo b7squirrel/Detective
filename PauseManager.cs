@@ -31,9 +31,9 @@ public class PauseManager : MonoBehaviour
 
     public void UnPauseGame()
     {
-        Logger.Log($"[PauseManager] UnPauseGame 호출됨. Stack: {System.Environment.StackTrace}");
         StopTimeScaleWatchdog();
         Time.timeScale = normalTimeScale;
+        Logger.Log($"[PauseManager] UnPauseGame → Time.timeScale = {Time.timeScale} (normalTimeScale={normalTimeScale})");
         GameManager.instance.SetPauseState(false);
     }
 

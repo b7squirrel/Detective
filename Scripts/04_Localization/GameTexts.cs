@@ -124,6 +124,8 @@ public class GameTexts : ScriptableObject
     public string newCompanionSlot = "새로운 동료 슬롯 오픈!\n나만의 덱을 만들어 보세요!";
     public string newInifiniteModeReleased = "오리 도전 모드가 열렸어요!\n나골드와 크리스탈을 모아보세요!";
     public string clear = "해제";
+    public string selectDuck = "오리 선택";
+    public string noDucksAvailable = "선택할 수 있는 오리가 없어요\n상점에서 오리 카드를 구매해 보세요!";
 
     [Header("Badge Popup")]
     public string badgeEarnedTitle = "새 배지 획득!";

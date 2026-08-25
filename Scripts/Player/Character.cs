@@ -450,17 +450,22 @@ public class Character : MonoBehaviour
     IEnumerator DieCo()
     {
         GameManager.instance.pauseManager.PauseGame();
-
         // ★ 즉시 첫 번째 사운드
         if (deathSound != null)
             SoundManager.instance.Play(deathSound);
-
         // ★ 0.5초 후 두 번째 사운드 (gameOverVocalSound와 같은 타이밍)
         yield return new WaitForSecondsRealtime(0.5f);
         if (deathVocalSound != null)
             SoundManager.instance.Play(deathVocalSound);
-
         yield return new WaitForSecondsRealtime(0.3f); // 합계 0.8초
+
+        // ⭐ 무한모드에서는 부활 패널을 띄우지 않고 바로 게임오버 처리
+        if (PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
+        {
+            Logger.Log("[Character] 무한모드 - 부활 패널 스킵, 바로 게임오버");
+            ProcessDeath();
+            yield break;
+        }
 
         RevivalPanel revivalPanel = FindObjectOfType<RevivalPanel>();
         if (revivalPanel != null)
@@ -470,7 +475,6 @@ public class Character : MonoBehaviour
         else
         {
             Logger.LogWarning("[Character] RevivalPanel을 찾을 수 없습니다. 바로 게임오버.");
-            GameManager.instance.pauseManager.UnPauseGame(); // ← 이 줄 삭제
             ProcessDeath();
         }
     }

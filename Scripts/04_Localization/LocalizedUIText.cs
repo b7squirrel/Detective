@@ -305,6 +305,10 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.magnet;
             case UITextKey.SpeedUp:
                 return LocalizationManager.Game.speedUp;
+            case UITextKey.SelectDuck:
+                return LocalizationManager.Game.selectDuck;
+            case UITextKey.NoDucksAvailable:
+                return LocalizationManager.Game.noDucksAvailable;
             default:
                 return key.ToString();
         }
@@ -455,5 +459,7 @@ public enum UITextKey
     SweetMilk,
     Invincible,
     Magnet,
-    SpeedUp
+    SpeedUp,
+    SelectDuck,
+    NoDucksAvailable
 }
