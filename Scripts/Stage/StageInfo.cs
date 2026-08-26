@@ -7,6 +7,8 @@ public class Stages
     // ✅ Title 제거 - 보스 이름은 Localization SO에서만 관리
     public GameObject bossImagePrefab;
     public StageGroundType stageGroundType;
+    public EnemyData[] subBossesByLevel; // 크기 5
+    public EnemyData stageBossData;
 }
 
 public class StageInfo : MonoBehaviour

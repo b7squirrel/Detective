@@ -327,6 +327,69 @@ public class GameTexts : ScriptableObject
         "아뜨아뜨 여왕"
     };
 
+    [Header("적들의 Variant")]
+    [TextArea(2,4)] public string[] enemyVariantDescriptions = new string[]
+    {
+        "평범한 슬라임들이 몰려옵니다.",
+        "헬멧 적은 단단합니다. 더 많은 공격이 필요합니다.",
+        "눈이 빛나는 적은 공격 속도가 빠릅니다.",
+        "눈이 빛나고 헬멧까지 쓴 적은 빠르고 단단합니다!",
+        "심지가 달린 적에게 닿으면 큰 데미지를 입습니다."
+    };
+    [TextArea(2, 4)]
+    public string[] enemyColorDescriptions = new string[]
+    {
+        "연두색 슬라임은 평범합니다.",
+        "초록색 슬라임은 폭발하는 슬라임을 발사합니다!",
+        "빨간색 슬라임은 주기적으로 돌진합니다!",
+        "파란색 슬라임은 매우 단단합니다. 쓰러뜨리면 4마리로 쪼개집니다!",
+        "자주색 슬라임은 점프로 공격합니다!"
+    };
+
+    [Header("Queen Boss")]
+    [Tooltip("6, 12, 18, 24, 30스테이지 순서와 일치 (사이클 순서)")]
+    [TextArea(2, 4)]
+    public string[] queenBossDescriptions = new string[]
+{
+    "슬라임 점액을 뱉고 높이 점프해서 내리찍습니다! 착지 충격을 조심하세요.",   // 6스테이지
+    "데굴데굴 굴러와서 들이받습니다! 맞으면 느려지는 점액도 뱉어냅니다.",   // 12스테이지
+    "땅속으로 파고들어 기습합니다! 폭발하는 투사체도 뱉어내니 주의하세요.",   // 18스테이지
+    "회전하는 테슬라 레이져로 공격합니다! 시간이 지날수록 레이져가 점점 빨라집니다.",   // 24스테이지
+    "강력한 화염구를 뱉어냅니다! 엄청난 속도로 쿵쾅쿵쾅 돌진해 옵니다."    // 30스테이지
+};
+
+// enum 값과 배열의 실제 저장 순서가 다르므로 반드시 switch로 명시 매핑
+public string GetVariantDescription(EnemyVariantType variant)
+{
+    if (enemyVariantDescriptions == null || enemyVariantDescriptions.Length < 5) return "";
+    switch (variant)
+    {
+        case EnemyVariantType.Normal:        return enemyVariantDescriptions[0];
+        case EnemyVariantType.Helmet:        return enemyVariantDescriptions[1];
+        case EnemyVariantType.Madness:       return enemyVariantDescriptions[2];
+        case EnemyVariantType.MadnessHelmet: return enemyVariantDescriptions[3];
+        case EnemyVariantType.Explosive:     return enemyVariantDescriptions[4];
+        default: return "";
+        }
+    }
+
+    // lv: 1~5 (색 고정 매핑, 배열 순서와 일치하므로 그대로 인덱스 사용 가능)
+    public string GetColorDescription(int lv)
+    {
+        int index = lv - 1;
+        if (enemyColorDescriptions != null && index >= 0 && index < enemyColorDescriptions.Length)
+            return enemyColorDescriptions[index];
+        return "";
+    }
+
+    // cycleIndex: 0~4 (6, 12, 18, 24, 30스테이지 순서)
+    public string GetQueenBossDescription(int cycleIndex)
+    {
+        if (queenBossDescriptions != null && cycleIndex >= 0 && cycleIndex < queenBossDescriptions.Length)
+            return queenBossDescriptions[cycleIndex];
+        return "";
+    }
+
     [Header("Stage Ground Descriptions")]
     [Tooltip("StageGroundType enum 순서와 일치: GreenForest(0), OrangeDesert(1), GreyStone(2), BlueIce(3), GreyLava(4)")]
     [TextArea(2, 4)]

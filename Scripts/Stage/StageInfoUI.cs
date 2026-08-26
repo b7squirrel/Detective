@@ -12,6 +12,11 @@ public class StageInfoUI : MonoBehaviour
     [SerializeField] Transform stageBossImageTrns;
     [SerializeField] Image stageBG;
 
+    [Header("Stage Description Panel")]
+    [SerializeField] TMPro.TextMeshProUGUI stageDescriptionText;
+    [SerializeField] TMPro.TextMeshProUGUI enemyVariantDescriptionText;
+    [SerializeField] TMPro.TextMeshProUGUI slimeColorDescriptionText;
+
     GameObject stageBossImage;
 
     void OnEnable()
@@ -73,6 +78,9 @@ public class StageInfoUI : MonoBehaviour
             stageBossImageTrns); // 부모 설정 추가
 
         stageBG.sprite = stageInfo.GetStageBGSrpite(currentStageIndex);
+
+        // ⭐ 추가
+        UpdateStageDescriptionPanel(stageInfo, currentStageIndex);
     }
 
     // ⭐ 추가: StageViewerController에서 뷰어 인덱스로 UI 업데이트 요청 시 호출
@@ -113,5 +121,42 @@ public class StageInfoUI : MonoBehaviour
             stageBossImageTrns);
 
         stageBG.sprite = stageInfo.GetStageBGSrpite(clampedIndex);
+
+        // ⭐ 추가
+        UpdateStageDescriptionPanel(stageInfo, clampedIndex);
+    }
+
+    void UpdateStageDescriptionPanel(StageInfo stageInfo, int stageIndex)
+    {
+        Stages stage = stageInfo.GetStageInfo(stageIndex);
+
+        // 1번 칸: 지형 설명 (항상 표시)
+        stageDescriptionText.text = LocalizationManager.Game.GetStageGroundDescription(stage.stageGroundType);
+
+        int stageInCycle = ((stageIndex - 1) % 6) + 1; // 1~6
+
+        if (stageInCycle == 6) // 여왕슬라임 스테이지
+        {
+            int cycleIndex = (stageIndex - 1) / 6; // 0~4
+
+            // 2번 칸: 여왕 전용 설명
+            enemyVariantDescriptionText.gameObject.SetActive(true);
+            enemyVariantDescriptionText.text = LocalizationManager.Game.GetQueenBossDescription(cycleIndex);
+
+            // 3번 칸: 숨김
+            slimeColorDescriptionText.gameObject.SetActive(false);
+        }
+        else // 일반 스테이지
+        {
+            EnemyVariantType variant = EnemyVariantHandler.GetVariantForStage(stageIndex);
+
+            // 2번 칸: 타입(헬멧/분노 등) 설명
+            enemyVariantDescriptionText.gameObject.SetActive(true);
+            enemyVariantDescriptionText.text = LocalizationManager.Game.GetVariantDescription(variant);
+
+            // 3번 칸: 색깔(스테이지보스) 설명
+            slimeColorDescriptionText.gameObject.SetActive(true);
+            slimeColorDescriptionText.text = LocalizationManager.Game.GetColorDescription(stageInCycle);
+        }
     }
 }

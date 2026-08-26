@@ -4405,7 +4405,7 @@ GameObject:
   - component: {fileID: 19438609}
   - component: {fileID: 19438608}
   m_Layer: 5
-  m_Name: Description Text
+  m_Name: Stage Description Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -246305,6 +246305,7 @@ GameObject:
   - component: {fileID: 958746581}
   - component: {fileID: 958746580}
   - component: {fileID: 958746582}
+  - component: {fileID: 958746583}
   m_Layer: 5
   m_Name: Launch Panel Manager
   m_TagString: Untagged
@@ -246418,6 +246419,24 @@ MonoBehaviour:
   anim: {fileID: 0}
   stageBossImageTrns: {fileID: 2010918180}
   stageBG: {fileID: 764126312}
+  stageDescriptionText: {fileID: 19438608}
+  enemyVariantDescriptionText: {fileID: 1008199312}
+  slimeColorDescriptionText: {fileID: 992044218}
+--- !u!114 &958746583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958746578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee410aa055a2fef4eb64cb410ee818bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActiveOnStart:
+  - {fileID: 910738611}
+  inActiveOnStart: []
 --- !u!1 &958969351
 GameObject:
   m_ObjectHideFlags: 0
@@ -258968,7 +258987,7 @@ GameObject:
   - component: {fileID: 992044219}
   - component: {fileID: 992044218}
   m_Layer: 5
-  m_Name: Slime Description Text
+  m_Name: Slime Color Description Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -263047,7 +263066,7 @@ GameObject:
   - component: {fileID: 1008199313}
   - component: {fileID: 1008199312}
   m_Layer: 5
-  m_Name: Enemy Description Text
+  m_Name: Enemy Variant Description Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -353472,64 +353491,124 @@ MonoBehaviour:
   stages:
   - bossImagePrefab: {fileID: 5640782223467287026, guid: 9ac6c9dff821842a3a4567294c2e7191, type: 3}
     stageGroundType: 0
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 604009126397489066, guid: 46a496af952c24296bfdb15018a22775, type: 3}
     stageGroundType: 0
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 8183059776269843117, guid: 8b0786f186ca14d4cb0071da0ebb85b1, type: 3}
     stageGroundType: 0
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 437450217838261530, guid: ab828c9fde09d4bbc9a5908f73a9c397, type: 3}
     stageGroundType: 0
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 2708029559773352206, guid: 895c32eebbac5448fbd585b2f16b7233, type: 3}
     stageGroundType: 0
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 6315426361281344729, guid: d2c574983aae0405ea8d8b14d8b36a5e, type: 3}
     stageGroundType: 0
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 6471018328443649717, guid: 108849981933441c3b214f47ae7e78f7, type: 3}
     stageGroundType: 2
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 6814293922301612018, guid: 5f970cb0984eb480eaab74590c32ecfc, type: 3}
     stageGroundType: 2
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 4874160103088953340, guid: bd4be8f15f5484cf2933c8c10cbc688b, type: 3}
     stageGroundType: 2
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 2030375987628474, guid: d9063ba0d0e834562be2ddc0c36378a4, type: 3}
     stageGroundType: 2
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 3743073541094283563, guid: ac881635866bb45d59bb3c888fda320d, type: 3}
     stageGroundType: 2
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 3266052565677206975, guid: d89fd07309e43479e904972a73d9ec6e, type: 3}
     stageGroundType: 2
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 5897512924328287644, guid: bfb5a7dcb269646fb900a72f76fd028b, type: 3}
     stageGroundType: 1
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 4004804176711513684, guid: 916e41da8cd32499a9eb8fd2b1c4c2d8, type: 3}
     stageGroundType: 1
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 1253346774980166316, guid: be81af9c189634a91aad34a9f3005eb6, type: 3}
     stageGroundType: 1
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 2837779115485902918, guid: 7f13e29574d1e48e5bbe5e8ee4abf755, type: 3}
     stageGroundType: 1
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 1369362400009082144, guid: 92f5468ec0e044ae09f941e8af50d8b0, type: 3}
     stageGroundType: 1
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 2839605527356530407, guid: c65838818b2364a0ab1421f23be5b322, type: 3}
     stageGroundType: 1
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 4802327312938749104, guid: e7502a21098fa4ae486f285bdaea05d2, type: 3}
     stageGroundType: 3
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 7601911974167050912, guid: 425d5f7dc4ddb41bc9cc71fa97bcbcd2, type: 3}
     stageGroundType: 3
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 1615947744955114963, guid: 529b9f05b2bec4fcbb90a84ada554730, type: 3}
     stageGroundType: 3
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 3931981516663636195, guid: c86482f944b714673bd5f48a8a5c1dbf, type: 3}
     stageGroundType: 3
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 8418814457118496155, guid: 44b7593be6c704494aa6ee272a7effb7, type: 3}
     stageGroundType: 3
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 4124793085223218515, guid: 54a042de9c5b9463f8c0f7c35d33e514, type: 3}
     stageGroundType: 3
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 4802327312938749104, guid: 25213e6f3022a40288b36f5a6d75a004, type: 3}
     stageGroundType: 4
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 7601911974167050912, guid: a2124fa46f8974725bf02727c5b19942, type: 3}
     stageGroundType: 4
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 1615947744955114963, guid: b429c4b3803d24e60954cdc92170e935, type: 3}
     stageGroundType: 4
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 3931981516663636195, guid: b946c2d8cdb654608adcbe59a81eba7a, type: 3}
     stageGroundType: 4
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 8418814457118496155, guid: ba9950dc73df0428c82296cb6e702bc1, type: 3}
     stageGroundType: 4
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   - bossImagePrefab: {fileID: 2474573172101016936, guid: bb6c35118b44b44b2bb280ceac71fbee, type: 3}
     stageGroundType: 4
+    subBossesByLevel: []
+    stageBossData: {fileID: 0}
   LobbyStageBGs:
   - {fileID: 21300000, guid: 69c3f498ba3974bacaef5d20eae40ee5, type: 3}
   - {fileID: 21300000, guid: e8d70ffc3d93c4da894f31ea8e873b9d, type: 3}
@@ -455094,7 +455173,6 @@ MonoBehaviour:
   nextViewButton: {fileID: 2122225208}
   prevViewButton: {fileID: 929112870}
   stageDescriptionPanel: {fileID: 1638485214}
-  descriptionText: {fileID: 19438608}
   imageLock: {fileID: 898766674}
   stageInfoUI: {fileID: 1794176287}
   stageTitleRibbon: {fileID: 4108067343091073961}

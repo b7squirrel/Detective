@@ -21,7 +21,6 @@ public class StageViewerController : MonoBehaviour
 
     [Header("스테이지 설명 패널 (오버레이 열릴 때만 활성화)")]
     [SerializeField] GameObject stageDescriptionPanel;      // Stage Description Panel
-    [SerializeField] TextMeshProUGUI descriptionText;       // 설명 텍스트 컴포넌트
 
     [Header("자물쇠")]
     [SerializeField] GameObject imageLock;                  // Image Lock 오브젝트
@@ -417,15 +416,6 @@ public class StageViewerController : MonoBehaviour
 
         // StageInfoUI에 뷰어 인덱스 기준으로 UI 업데이트 요청
         stageInfoUIScript.UpdateStageInfoUIByIndex(viewingStageIndex);
-
-        // 스테이지 그라운드 타입으로 설명 텍스트 업데이트
-        // GreenForest/OrangeDesert 등 같은 타입이 여러 스테이지에 반복되므로
-        // 스테이지 번호가 아닌 그라운드 타입 기준으로 설명을 가져옴
-        if (descriptionText != null && LocalizationManager.Game != null)
-        {
-            StageGroundType groundType = stageInfo.GetStageInfo(viewingStageIndex).stageGroundType;
-            descriptionText.text = LocalizationManager.Game.GetStageGroundDescription(groundType);
-        }
 
         // 실제 저장된 현재 스테이지와 비교해 자물쇠 여부 판단
         int currentStage = playerDataManager.GetCurrentStageNumber();
