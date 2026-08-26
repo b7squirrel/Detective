@@ -461,5 +461,6 @@ public enum UITextKey
     Magnet,
     SpeedUp,
     SelectDuck,
-    NoDucksAvailable
+    NoDucksAvailable,
+    KeepTapping
 }

@@ -107,6 +107,7 @@ public class GameTexts : ScriptableObject
     public string braveDuck = "용감한 오리";
     public string superDuck = "슈퍼 오리";
     public string synergyItem = "시너지 아이템";
+    public string keepTapping = "계속 탭탭탭! 오리가 진화해요!";
 
     [Header("Revival")]
     public string getBackUp = "다시 일어나요!";

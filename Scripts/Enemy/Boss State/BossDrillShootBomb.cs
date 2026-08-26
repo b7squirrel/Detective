@@ -37,6 +37,15 @@ public class BossDrillShootBomb : MonoBehaviour
         EnemyBoss.OnState2Enter -= InitState2Enter;
         EnemyBoss.OnState2Update -= InitState2Update;
         EnemyBoss.OnState2Exit -= InitState2Exit;
+
+        // 어떤 이유로 비활성화되든(정상 상태 전이든, 죽어서든) 반드시 정지
+        StopShootingStateSound();
+
+        if (co != null)
+        {
+            StopCoroutine(co);
+            co = null;
+        }
     }
     #endregion
 

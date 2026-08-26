@@ -1,12 +1,10 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class EggPanelManager : MonoBehaviour
 {
     string currentWeaponName;
     int currentGrade;
-
     [SerializeField] GameObject eggPanel;
     [SerializeField] GameObject eggImage;
     [SerializeField] PauseManager pauseManager;
@@ -23,67 +21,52 @@ public class EggPanelManager : MonoBehaviour
     [SerializeField] GameObject eggButtonFullScreen; // 화면 전체를 클릭하면 높은 등급의 오리 확률이 올라가도록
     EggButton eggButton; // Egg Button에 접근해서 레어오리 확률을 초기화 시키기 위해
     RectTransform eggImageRecTransform; // 알 이미지를 비활성화 시키면 코루틴들이 의도하지 않게 작동하므로 위치를 화면 밖으로 이동시키기 위해
-
     [Header("Atk 표시")]
     [SerializeField] GameObject atkLabelText; // "공격력" / "ATK" - 로컬라이제이션 컴포넌트가 처리
     [SerializeField] GameObject atkValueText; // 숫자만 표시
-
     Coroutine Close;
-
     [Header("임시 오브젝트 비활성화")]
     [SerializeField]
     GameObject[] testEquipmentImages;
-
     [SerializeField] GameObject newOriContainer;
     [SerializeField] WeaponContainerAnim weaponContainerAnim;
     [SerializeField] SpriteRenderer[] EquipmentSprites;
     [SerializeField] SpriteRenderer faceExpression;
     [SerializeField] Image synergyIcon;
-
     [SerializeField] GameObject rawImage;
     [SerializeField] Animator anim; // 오리(weapon container)의 animator
     [SerializeField] Animator eggPanelAnim;
     EggButton eggbutton;
-
     [Header("Sound")]
     [SerializeField] AudioClip oriSound;
     [SerializeField] AudioClip oriNameSound;
     [SerializeField] AudioClip cheerGroup;
     [SerializeField] AudioClip jumpUp;
     [SerializeField] AudioClip breakingEgg;
-
     // 알에 아이디 부여
     [SerializeField] int eggIndex;
-
     void Init(WeaponData wd)
     {
         CloseNewKidImage();
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
-
         for (int i = 0; i < EquipmentSprites.Length; i++)
         {
             EquipmentSprites[i].sprite = null;
         }
-
         // CloseNewKidImage();
-
         // 오리의 애니메이터, 얼굴 주입
         anim.Rebind();
         anim.Update(0);
-
         anim.runtimeAnimatorController = wd.Animators.InGamePlayerAnim;
         faceExpression.sprite = wd.faceImage;
         faceExpression.gameObject.SetActive(true);
-
         // 장비칸 초기화
         weaponContainerAnim.SetEquipmentSprites(wd);
-
         // 시너지 아이콘 표시
         synergyIcon.sprite = wd.SynergyItem.charImage;
         // synergyIcon.rectTransform.localScale = 1.7f * Vector3.one;
         synergyIcon.SetNativeSize();
     }
-
     void OpenNewKidImage()
     {
         newOriContainer.SetActive(true);
@@ -99,11 +82,9 @@ public class EggPanelManager : MonoBehaviour
         rawImage.SetActive(false);
         flashEffect.SetActive(false);
     }
-
     private void Awake()
     {
         pauseManager = GetComponent<PauseManager>();
-
         EggImageUp(false);
         eggPanel.SetActive(false);
         blackBGPanel.SetActive(false);
@@ -115,9 +96,7 @@ public class EggPanelManager : MonoBehaviour
         birdFlock.SetActive(false);
         flashEffect.SetActive(false);
         twinkleStarsParticle.Stop();
-
         CloseNewKidImage();
-
         for (int i = 0; i < testEquipmentImages.Length; i++)
         {
             testEquipmentImages[i].SetActive(false);
@@ -131,18 +110,14 @@ public class EggPanelManager : MonoBehaviour
         newKidText.SetActive(true);
         blackBGPanel.SetActive(true);
     }
-
     public void EggImageUp(bool isActive)
     {
         if (eggImageRecTransform == null) eggImageRecTransform = eggImage.GetComponent<RectTransform>();
         Vector2 currentPos = eggImageRecTransform.anchoredPosition;
         float yPos = isActive ? -194f : -3000f;
         eggImageRecTransform.anchoredPosition = new Vector2(currentPos.x, yPos);
-
         eggButtonFullScreen.SetActive(isActive);
-
         // eggImage.SetActive(isActive);
-
         if (eggButton == null) eggButton = eggImage.GetComponentInChildren<EggButton>();
         if (isActive) eggButton.InitRate();
     }
@@ -154,14 +129,12 @@ public class EggPanelManager : MonoBehaviour
         oriName.SetActive(true);
         nameBar.SetActive(true);
         comicsLines.SetActive(true);
-
         eggPanelAnim.SetTrigger("KidUp");
         SoundManager.instance.Play(oriSound);
         SoundManager.instance.Play(cheerGroup);
         birdFlock.SetActive(true);
         twinkleStarsParticle.Play();
     }
-
     public void SetWeaponName(string _name)
     {
         currentWeaponName = _name;
@@ -175,29 +148,21 @@ public class EggPanelManager : MonoBehaviour
         // 뽑은 오리의 등급을 넘겨 받음
         if (eggbutton == null) eggbutton = FindObjectOfType<EggButton>();
         currentGrade = eggbutton.GetWeaponGradeIndex();
-
         // 뽑은 오리의 이름과 등급이 일치하는 Upgrade Data(Acquire) 가져오기
         UpgradeData newWd = GetAcquireData(currentWeaponName, currentGrade);
-
         // 이름 반영
         oriName.GetComponent<TMPro.TextMeshProUGUI>().text = LocalizationManager.Char.GetWeaponDisplayName(newWd.weaponData.Name);
-
         Debug.Log($"[Egg DPS Debug] weaponData={newWd.weaponData.name}, damage={newWd.weaponData.stats.damage}, numberOfAttacks={newWd.weaponData.stats.numberOfAttacks}, timeToAttack={newWd.weaponData.stats.timeToAttack}");
-
         // Atk(1타 데미지) 반영
         Character wielder = GameManager.instance.character;
         int damageBonus = wielder != null ? wielder.DamageBonus : 0;
         int effectiveDamage = newWd.weaponData.stats.damage + damageBonus;
-
         atkValueText.GetComponent<TMPro.TextMeshProUGUI>().text = effectiveDamage.ToString();
-
         // 장비 스프라이트 설정
         Init(newWd.weaponData);
-
         // 플레이어에 새로운 오리 추가하기
         GameManager.instance.character.GetComponent<Level>().GetWeapon(newWd);
         // Logger.LogError($"[EggPanelManager] 플레이어에 {newWd.weaponData.DisplayName}을 추가합니다.");
-
         // 새로운 아이 패널 띄우기, 확정된 등급 패널 애님 플레이
         KidImageUp();
         eggbutton.PlayGradePanelFixedAnim();
@@ -207,16 +172,12 @@ public class EggPanelManager : MonoBehaviour
     {
         string folderName = GetFolderName(_name);
         if (string.IsNullOrEmpty(folderName)) return null;
-
         string path = $"Weapons/Friends/{folderName}/{_name}F_{_grade}_Acquire";
         UpgradeData acquireData = Resources.Load<UpgradeData>(path);
-
         if (acquireData == null)
             Logger.LogError($"[EggPanelManager] Acquire 데이터를 찾을 수 없습니다: {path}");
-
         return acquireData;
     }
-
     string GetFolderName(string _name)
     {
         switch (_name)
@@ -243,20 +204,15 @@ public class EggPanelManager : MonoBehaviour
                 return "";
         }
     }
-
     IEnumerator CloseCo()
     {
         //whiteBGPanel.SetActive(true);
         yield return new WaitForSecondsRealtime(1.66f); // 이름 반짝 사운드 재생 지점
-
-
         SoundManager.instance.Play(oriNameSound);
         whiteBGPanel.SetActive(false);
         yield return new WaitForSecondsRealtime(.4f); //폴짝 뛰어서 게임 안으로 들어가는 지점
         SoundManager.instance.Play(jumpUp);
-
         yield return new WaitForSecondsRealtime(0.32f); // 애니메이션 종료
-
         blackBGPanel.SetActive(false);
         CloseButtonPressed();
     }
@@ -272,19 +228,16 @@ public class EggPanelManager : MonoBehaviour
         twinkleStarsParticle.Stop();
         comicsLines.SetActive(false);
         CloseNewKidImage();
-
         GameManager.instance.popupManager.IsUIDone = true;
         // 돌아가고 있는 코루틴을 멈추지 않으면 
         // 버튼을 누르지 않고 자동으로 창이 종료되었을 때 코루틴이 실행되어 정지된 시간을 풀어버림
         StopCoroutine(Close);
     }
-
     // ForceClose 메서드만 추가, 나머지는 기존과 동일
     public void ForceClose()
     {
         StopAllCoroutines();
         Close = null;
-
         EggImageUp(false);
         eggPanel.SetActive(false);
         blackBGPanel.SetActive(false);
@@ -299,7 +252,6 @@ public class EggPanelManager : MonoBehaviour
         CloseNewKidImage();
         // UnPauseGame 호출 안 함 - 부활 패널이 Pause 관리 중
     }
-
     // 알에 아이디 부여
     public void SetEggID()
     {
