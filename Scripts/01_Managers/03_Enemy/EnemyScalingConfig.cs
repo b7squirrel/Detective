@@ -22,6 +22,19 @@ public class EnemyScalingConfig : ScriptableObject
     public float damageExponent = 1.1f;
     public float experienceGrowth = 0.3f;
 
+    [Header("Stage-based Damage Only Scaling (일반 몹 데미지 전용, HP에는 영향 없음)")]
+    [Tooltip("이 스테이지부터 데미지가 소폭 강화됨")]
+    public int midGameDamageStartStage = 7;
+
+    [Range(1f, 3f)]
+    public float midGameDamageMultiplier = 1.15f;
+
+    [Tooltip("이 스테이지부터 데미지가 본격적으로 강화됨 (위 값 대신 이 값이 적용됨)")]
+    public int lateGameDamageStartStage = 13;
+
+    [Range(1f, 3f)]
+    public float lateGameDamageMultiplier = 1.4f;
+
     [Header("Base Attack Frame Interval")]
     [Tooltip("일반 모드에서 Normal/Helmet/Explosive variant 몹의 공격 프레임 간격 (낮을수록 빠름)")]
     [Range(1, 5)]
@@ -61,7 +74,7 @@ public class EnemyScalingConfig : ScriptableObject
 
     [Tooltip("폭발 때의 피드백")]
     public AudioClip explosiveDieSound;
-    public GameObject explosiveDieEffect; 
+    public GameObject explosiveDieEffect;
 
     // ⭐ 회피 확률 관련 추가
     [Header("Dodge Chance Scaling")]

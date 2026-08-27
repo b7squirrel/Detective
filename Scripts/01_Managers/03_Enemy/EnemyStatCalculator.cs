@@ -31,11 +31,12 @@ public class EnemyStatCalculator : MonoBehaviour
         float roleDamageBonus = GetRoleDamageBonus(baseData.enemyRole);
         float bossMultiplier = GetBossMultiplier(stage, baseData);
         float normalCycleMultiplier = GetNormalEnemyCycleMultiplier(stage, baseData); // ⭐ 추가
+        float tieredDamageMult = GetTieredDamageMultiplier(stage, baseData); // ⭐ 추가
 
-        stats.hp = CalculateHP(stage, baseData, roleHPBonus, bossMultiplier, normalCycleMultiplier);
+        stats.hp = CalculateHP(stage, baseData, roleHPBonus, bossMultiplier, normalCycleMultiplier); // 기존 그대로
         stats.speed = CalculateSpeed(stage, baseData);
-        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier, normalCycleMultiplier);
-        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier, normalCycleMultiplier);
+        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier, normalCycleMultiplier * tieredDamageMult); // ⭐ 곱해줌
+        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier, normalCycleMultiplier * tieredDamageMult); // ⭐ 곱해줌
         stats.experience_reward = CalculateExperience(stage, baseData, bossMultiplier);
 
         // ⭐ 회피 확률 계산 추가
@@ -250,5 +251,21 @@ public class EnemyStatCalculator : MonoBehaviour
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// 일반 몹(보스 제외) 전용 - 스테이지 구간별 데미지 전용 배율
+    /// 13스테이지 이상이면 lateGame 배율, 7~12스테이지면 midGame 배율, 그 전엔 1.0
+    /// </summary>
+    float GetTieredDamageMultiplier(int stage, EnemyData baseData)
+    {
+        if (baseData.bossType != BossType.Normal) return 1f; // 보스는 asset별로 개별 관리 중이므로 제외
+
+        if (stage >= scalingConfig.lateGameDamageStartStage)
+            return scalingConfig.lateGameDamageMultiplier;
+        if (stage >= scalingConfig.midGameDamageStartStage)
+            return scalingConfig.midGameDamageMultiplier;
+
+        return 1f;
     }
 }
