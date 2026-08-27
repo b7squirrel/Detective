@@ -89,6 +89,7 @@ public class CardDisp : MonoBehaviour, IEquipSpriteAnim
         isWeaponCard = true;
 
         needToOffset = false;
+        headMain.anchoredPosition = Vector2.zero;   // ★ 추가: 이전 카드의 오프셋 확실히 제거
 
         // 캐릭터 이미지
         charAnim.enabled = true;
