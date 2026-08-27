@@ -10,12 +10,57 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     [SerializeField] Animator charAnim;
     [SerializeField] Image[] equipmentImages;
     [SerializeField] RectTransform headMain;
+
+    // ★ 추가: 애니메이터 커브 leftover 방어용 그룹들
+    [SerializeField] RectTransform chestGroup;
+    [SerializeField] RectTransform faceGroup;
+    [SerializeField] RectTransform handGroup;
+
     [SerializeField] CanvasGroup iconCanvasGroup;
     bool needToOffset;
     WeaponData leadWeaponData;
 
     CardSpriteAnim cardSpriteAnim;
     Coroutine revealRoutine;
+
+    // ★ 추가: 각 그룹의 "정상 상태" 스냅샷
+    struct TransformSnapshot
+    {
+        public Vector2 anchoredPosition;
+        public Quaternion localRotation;
+        public Vector3 localScale;
+    }
+    RectTransform[] resetTargets;
+    TransformSnapshot[] defaultSnapshots;
+
+    void Awake()
+    {
+        // ★ 애니메이터가 아직 아무 것도 건드리기 전, 프리팹 원본 상태를 캐싱
+        resetTargets = new[] { headMain, chestGroup, faceGroup, handGroup };
+        defaultSnapshots = new TransformSnapshot[resetTargets.Length];
+        for (int i = 0; i < resetTargets.Length; i++)
+        {
+            if (resetTargets[i] == null) continue;
+            defaultSnapshots[i] = new TransformSnapshot
+            {
+                anchoredPosition = resetTargets[i].anchoredPosition,
+                localRotation = resetTargets[i].localRotation,
+                localScale = resetTargets[i].localScale
+            };
+        }
+    }
+
+    // ★ 추가: 매 카드 표시 시작 시 무조건 호출 — 이전 오리의 애니메이터 leftover 제거
+    void ResetGroupsToDefault()
+    {
+        for (int i = 0; i < resetTargets.Length; i++)
+        {
+            if (resetTargets[i] == null) continue;
+            resetTargets[i].anchoredPosition = defaultSnapshots[i].anchoredPosition;
+            resetTargets[i].localRotation = defaultSnapshots[i].localRotation;
+            resetTargets[i].localScale = defaultSnapshots[i].localScale;
+        }
+    }
 
     public void InitWeaponIcon(WeaponData wd)
     {
@@ -25,7 +70,7 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         if (revealRoutine != null) StopCoroutine(revealRoutine);
 
         needToOffset = false;
-        headMain.anchoredPosition = Vector2.zero;
+        ResetGroupsToDefault(); // ★ headMain.anchoredPosition = Vector2.zero; 를 대체
 
         if (leadWeaponData == null) leadWeaponData = GameManager.instance.startingDataContainer.GetLeadWeaponData();
 
@@ -40,13 +85,11 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             Item item = isLead ? GameManager.instance.startingDataContainer.GetItemDatas()[i] : wd.defaultItems[i];
-
             if (item == null)
             {
                 SetEquipCardDisplay(i, null, false, Vector2.zero);
                 continue;
             }
-
             SpriteRow equipmentSpriteRow = item.spriteRow;
             Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
             SetEquipCardDisplay(i, equipmentSpriteRow, item.needToOffset, offset);
