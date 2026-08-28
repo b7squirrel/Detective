@@ -319,6 +319,9 @@ public class Character : MonoBehaviour
             return;
 
         ApplyArmor(ref damage);
+        DamageTracker.instance?.RecordIncomingDamage(enemyType.ToString(), damage); // ⭐ 추가
+
+        if (anim == null) anim = GetComponentInChildren<WeaponContainerAnim>().GetComponent<Animator>();
 
         if (anim == null) anim = GetComponentInChildren<WeaponContainerAnim>().GetComponent<Animator>();
 

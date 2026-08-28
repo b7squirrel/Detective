@@ -18,12 +18,16 @@ MonoBehaviour:
   baseRangedDamage: 90
   baseExperience: 130
   hpGrowth: 0.0673
-  hpExponent: 1.8
+  hpExponent: 2
   speedGrowth: 0.05
   speedCap: 15
   damageGrowth: 0.0733
   damageExponent: 1.5
   experienceGrowth: 0.2
+  midGameDamageStartStage: 7
+  midGameDamageMultiplier: 1.15
+  lateGameDamageStartStage: 13
+  lateGameDamageMultiplier: 1.4
   normalAttackFrameInterval: 4
   infiniteAttackFrameInterval: 5
   madnessAnimSpeed: 1.5
@@ -48,8 +52,4 @@ MonoBehaviour:
   queenBossMultiplier: 80
   bossSpeedBonus: 1.5
   cycleGrowth: 0.3
-  midGameDamageStartStage: 7
-  midGameDamageMultiplier: 1.15
-  lateGameDamageStartStage: 13
-  lateGameDamageMultiplier: 1.4
   stageModifiers: []

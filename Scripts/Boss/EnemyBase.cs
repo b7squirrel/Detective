@@ -54,6 +54,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     int goldReward; // 처치 시 지급할 골드
     protected bool suppressDieEffect = false;
     protected bool isDying = false;
+    protected float spawnTime; // ⭐ 추가: TTK(처치까지 걸린 시간) 측정용
 
     // static (모든 적이 공유)
     static InfiniteStageManager infiniteStageManager;
@@ -194,6 +195,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         suppressDieEffect = false;
         isDying = false;
+        spawnTime = Time.time; // ⭐ 추가
     }
 
     /// <summary>
@@ -261,7 +263,6 @@ public class EnemyBase : MonoBehaviour, Idamageable
         // 상태 초기화
         IsSlowed = false;
 
-        // 공격 프레임 간격 설정 (모드별 분기)
         if (calculator == null)
             calculator = GameManager.instance.enemyStatCalculator;
 
@@ -292,12 +293,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
             }
         }
 
-        if (calculator == null)
-            calculator = GameManager.instance.enemyStatCalculator;
-
         if (calculator != null)
         {
             this.Stats = calculator.GetStatsForStage(currentStageNumber, _enemyToSpawn);
+            maxHealth = Stats.hp; // ⭐ 여기로 이동
         }
         else
         {
@@ -309,6 +308,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
                 rangedDamage = 10,
                 experience_reward = 50
             };
+            maxHealth = Stats.hp; // ⭐ 여기로 이동
         }
 
         // 속도 설정
@@ -721,6 +721,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
         float dodgeRoll = UnityEngine.Random.Range(0f, 1f);
         if (dodgeRoll < Stats.dodgeChance)
         {
+            DamageTracker.instance?.RecordDodged(); // ⭐ 추가
             return;
         }
 
@@ -760,24 +761,24 @@ public class EnemyBase : MonoBehaviour, Idamageable
         if (Stats.hp < 1)
         {
             Logger.Log($"[TakeDamage] Die() 호출 - {gameObject.name} / suppressDieEffect={suppressDieEffect} / variant={variantHandler?.CurrentVariant}");
+            Logger.Log($"[Die Sound Debug] {gameObject.name} / isExplosive={variantHandler != null && variantHandler.CurrentVariant == EnemyVariantType.Explosive} / dieSound={dieSound} / dies.Length={dies?.Length ?? -1} / isBoss={IsBoss} / isSubBoss={isSubBoss}");
 
             bool isExplosive = variantHandler != null &&
                                variantHandler.CurrentVariant == EnemyVariantType.Explosive;
 
-            if (isExplosive)
-            {
-                // suppressDieEffect = true;
-                Die(suppressDieEffect: false);
+            
+if (isExplosive)
+{
+    Die(suppressDieEffect: false);
             }
             else
             {
+                Die(); // ⭐ 순서 변경: StopAllSounds()가 먼저 실행되도록 사운드 재생보다 앞으로 이동
                 if (dieSound != null)
                     SoundManager.instance.PlaySoundWith(dieSound, 1f, true, .2f);
                 else
                     for (int i = 0; i < dies.Length; i++)
                         SoundManager.instance.PlaySoundWith(dies[i], 1f, true, .2f);
-
-                Die(); // ← 사운드 유무와 관계없이 항상 호출
             }
         }
         else
@@ -824,9 +825,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
         isDying = true; // ⭐ 추가
 
+        // ⭐ 추가: TTK 기록 (스폰~처치까지 걸린 시간)
+        float ttk = Time.time - spawnTime;
+        string killedName = string.IsNullOrEmpty(Name) ? gameObject.name : Name;
+        DamageTracker.instance?.RecordEnemyKill(killedName, ttk, maxHealth);
+
         // ⭐ Die()가 몇 번 호출되는지 확인
         Logger.Log($"[Die] 진입 - {gameObject.name} / suppressDieEffect={suppressDieEffect} / activeSelf={gameObject.activeSelf}");
-
 
         dropOnDestroy?.CheckDrop();
         StopAllCoroutines();
