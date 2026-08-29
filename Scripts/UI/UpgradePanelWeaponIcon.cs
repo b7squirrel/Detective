@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,20 +11,15 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     [SerializeField] Animator charAnim;
     [SerializeField] Image[] equipmentImages;
     [SerializeField] RectTransform headMain;
-
-    // ★ 추가: 애니메이터 커브 leftover 방어용 그룹들
     [SerializeField] RectTransform chestGroup;
     [SerializeField] RectTransform faceGroup;
     [SerializeField] RectTransform handGroup;
-
     [SerializeField] CanvasGroup iconCanvasGroup;
-    bool needToOffset;
-    WeaponData leadWeaponData;
 
+    WeaponData leadWeaponData;
     CardSpriteAnim cardSpriteAnim;
     Coroutine revealRoutine;
 
-    // ★ 추가: 각 그룹의 "정상 상태" 스냅샷
     struct TransformSnapshot
     {
         public Vector2 anchoredPosition;
@@ -33,9 +29,11 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     RectTransform[] resetTargets;
     TransformSnapshot[] defaultSnapshots;
 
+    // ★ 이번에 적용해야 할 offset을 "즉시 적용"하지 않고 보관해뒀다가 Rebind 이후에 적용
+    Vector2 pendingHeadOffset;
+
     void Awake()
     {
-        // ★ 애니메이터가 아직 아무 것도 건드리기 전, 프리팹 원본 상태를 캐싱
         resetTargets = new[] { headMain, chestGroup, faceGroup, handGroup };
         defaultSnapshots = new TransformSnapshot[resetTargets.Length];
         for (int i = 0; i < resetTargets.Length; i++)
@@ -50,7 +48,6 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         }
     }
 
-    // ★ 추가: 매 카드 표시 시작 시 무조건 호출 — 이전 오리의 애니메이터 leftover 제거
     void ResetGroupsToDefault()
     {
         for (int i = 0; i < resetTargets.Length; i++)
@@ -65,21 +62,17 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     public void InitWeaponIcon(WeaponData wd)
     {
         if (iconCanvasGroup != null) iconCanvasGroup.alpha = 0f;
-
-        // 이전 카드 세팅 도중이었다면 중복 실행 방지
         if (revealRoutine != null) StopCoroutine(revealRoutine);
 
-        needToOffset = false;
-        ResetGroupsToDefault(); // ★ headMain.anchoredPosition = Vector2.zero; 를 대체
+        // 화면에 안 보이는 동안이라도 일단 정상값으로 (완전한 보장은 아니지만 최악의 깜빡임 방지용)
+        ResetGroupsToDefault();
+        pendingHeadOffset = Vector2.zero;
 
         if (leadWeaponData == null) leadWeaponData = GameManager.instance.startingDataContainer.GetLeadWeaponData();
-
         bool isLead = wd.Name == leadWeaponData.Name;
         WeaponData dataToShow = isLead ? leadWeaponData : wd;
 
-        // ⭐ 컨트롤러 교체까지만 즉시 진행 (Rebind는 아직 안 함)
         SetWeaponVisualData(dataToShow);
-
         InitSpriteRow();
 
         for (int i = 0; i < 4; i++)
@@ -87,12 +80,15 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
             Item item = isLead ? GameManager.instance.startingDataContainer.GetItemDatas()[i] : wd.defaultItems[i];
             if (item == null)
             {
-                SetEquipCardDisplay(i, null, false, Vector2.zero);
+                SetEquipCardDisplay(i, null);
                 continue;
             }
-            SpriteRow equipmentSpriteRow = item.spriteRow;
-            Vector2 offset = item.needToOffset ? item.posHead : Vector2.zero;
-            SetEquipCardDisplay(i, equipmentSpriteRow, item.needToOffset, offset);
+            SetEquipCardDisplay(i, item.spriteRow);
+            // ★ 위치는 여기서 바로 적용하지 않고 나중에 몰아서 적용
+            if (item.needToOffset)
+            {
+                pendingHeadOffset += item.posHead;
+            }
         }
 
         revealRoutine = StartCoroutine(RebindThenReveal());
@@ -103,7 +99,6 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         charAnim.enabled = true;
         charAnim.gameObject.SetActive(true);
         charAnim.runtimeAnimatorController = weaponData.Animators.CardImageAnim;
-
         charFaceExpression.gameObject.SetActive(true);
         if (charFaceImage == null) charFaceImage = charFaceExpression.GetComponent<Image>();
         charFaceImage.sprite = weaponData.faceImage;
@@ -111,12 +106,14 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
 
     IEnumerator RebindThenReveal()
     {
-        yield return null; // ⭐ 카드(부모) 활성화 직후 Animator가 완전히 준비될 시간을 줌
-
+        yield return null;
         charAnim.Rebind();
         charAnim.Update(0f);
+        yield return null;
 
-        yield return null; // ⭐ Rebind 결과가 실제로 트랜스폼에 반영되고 안정될 시간
+        // ★ 권위 있는 최종 리셋: Rebind/Animator 평가가 끝난 뒤, 여기서 한 번 더 확정
+        ResetGroupsToDefault();
+        headMain.anchoredPosition += pendingHeadOffset;
 
         if (iconCanvasGroup != null) iconCanvasGroup.alpha = 1f;
         revealRoutine = null;
@@ -128,7 +125,8 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         if (cardSpriteAnim == null) cardSpriteAnim = GetComponentInChildren<CardSpriteAnim>();
         cardSpriteAnim.Init(equipmentImages);
     }
-    void SetEquipCardDisplay(int index, SpriteRow spriteRow, bool needToOffset, Vector2 offset)
+
+    void SetEquipCardDisplay(int index, SpriteRow spriteRow)
     {
         if (spriteRow == null)
         {
@@ -137,13 +135,6 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         else
         {
             equipmentImages[index].gameObject.SetActive(true);
-
-            if (needToOffset && !this.needToOffset)
-            {
-                this.needToOffset = true;
-                headMain.anchoredPosition += offset;
-            }
-
             cardSpriteAnim.StoreItemSpriteRow(index, spriteRow);
         }
     }
