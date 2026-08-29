@@ -29,7 +29,7 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
     RectTransform[] resetTargets;
     TransformSnapshot[] defaultSnapshots;
 
-    // ★ 이번에 적용해야 할 offset을 "즉시 적용"하지 않고 보관해뒀다가 Rebind 이후에 적용
+    // 이번에 적용해야 할 head offset을 모아뒀다가 Rebind 이후에 한 번에 적용
     Vector2 pendingHeadOffset;
 
     void Awake()
@@ -64,31 +64,49 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         if (iconCanvasGroup != null) iconCanvasGroup.alpha = 0f;
         if (revealRoutine != null) StopCoroutine(revealRoutine);
 
-        // 화면에 안 보이는 동안이라도 일단 정상값으로 (완전한 보장은 아니지만 최악의 깜빡임 방지용)
-        ResetGroupsToDefault();
+        ResetGroupsToDefault(); // 화면에 안 보이는 동안 우선 정상값으로 (최종 확정은 Rebind 이후)
         pendingHeadOffset = Vector2.zero;
 
         if (leadWeaponData == null) leadWeaponData = GameManager.instance.startingDataContainer.GetLeadWeaponData();
         bool isLead = wd.Name == leadWeaponData.Name;
         WeaponData dataToShow = isLead ? leadWeaponData : wd;
 
+        // ★ 동료라면 로비 스쿼드에서 실제 장착한 아이템을 이름으로 조회
+        // (같은 종 중복 편성은 GetSquadWeaponNames()로 이미 차단되어 있어 이름 매칭으로 충분)
+        List<Item> companionEquippedItems = null;
+        if (!isLead)
+        {
+            var companions = GameManager.instance.startingDataContainer.GetCompanions();
+            foreach (var companion in companions)
+            {
+                if (companion.weaponData != null && companion.weaponData.Name == wd.Name)
+                {
+                    companionEquippedItems = companion.equippedItems;
+                    break;
+                }
+            }
+        }
+
         SetWeaponVisualData(dataToShow);
         InitSpriteRow();
 
         for (int i = 0; i < 4; i++)
         {
-            Item item = isLead ? GameManager.instance.startingDataContainer.GetItemDatas()[i] : wd.defaultItems[i];
+            Item item;
+            if (isLead)
+                item = GameManager.instance.startingDataContainer.GetItemDatas()[i];
+            else if (companionEquippedItems != null && i < companionEquippedItems.Count)
+                item = companionEquippedItems[i];   // 실제 장착 아이템
+            else
+                item = wd.defaultItems[i];          // 폴백: 필드에서 얻은 일반 동료(알 등)
+
             if (item == null)
             {
                 SetEquipCardDisplay(i, null);
                 continue;
             }
             SetEquipCardDisplay(i, item.spriteRow);
-            // ★ 위치는 여기서 바로 적용하지 않고 나중에 몰아서 적용
-            if (item.needToOffset)
-            {
-                pendingHeadOffset += item.posHead;
-            }
+            if (item.needToOffset) pendingHeadOffset += item.posHead;
         }
 
         revealRoutine = StartCoroutine(RebindThenReveal());
@@ -111,7 +129,7 @@ public class UpgradePanelWeaponIcon : MonoBehaviour
         charAnim.Update(0f);
         yield return null;
 
-        // ★ 권위 있는 최종 리셋: Rebind/Animator 평가가 끝난 뒤, 여기서 한 번 더 확정
+        // 권위 있는 최종 리셋: Animator 재평가가 모두 끝난 뒤 확정
         ResetGroupsToDefault();
         headMain.anchoredPosition += pendingHeadOffset;
 

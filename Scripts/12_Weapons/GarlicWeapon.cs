@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GarlicWeapon : WeaponBase
@@ -6,16 +7,28 @@ public class GarlicWeapon : WeaponBase
     float effectRadius;
     [SerializeField] float[] effectArea = new float[4];
 
-    // ✅ 캐싱: Awake에서 한 번만 GetComponent
     HitEffects hitEffects;
 
-    // ✅ NonAlloc용 버퍼
     readonly Collider2D[] garlicHitBuffer = new Collider2D[30];
+
+    // ✅ 범위 표시용 - 오브젝트와 그 안의 스프라이트를 분리해서 참조
+    [SerializeField] Transform damageIndicator;        // On/Off, Scale 대상
+    [SerializeField] SpriteRenderer damageIndicatorSprite; // 원본 크기 계산용 (damageIndicator의 자식)
+    [SerializeField] float indicatorDuration = 0.12f;
+
+    float nativeDiameter;
+    WaitForSeconds cachedWait;
+    Coroutine indicatorCoroutine;
 
     protected override void Awake()
     {
         base.Awake();
-        hitEffects = GetComponent<HitEffects>(); // ✅ 캐싱
+        hitEffects = GetComponent<HitEffects>();
+
+        // ✅ 자식 스프라이트에서 원본 지름만 읽어옴 (부모 스케일과 무관)
+        nativeDiameter = damageIndicatorSprite.sprite.bounds.size.x;
+        cachedWait = new WaitForSeconds(indicatorDuration);
+        damageIndicator.gameObject.SetActive(false);
     }
 
     public override void Init(WeaponStats stats, bool isLead)
@@ -44,10 +57,11 @@ public class GarlicWeapon : WeaponBase
     {
         base.Attack();
 
-        // ✅ NonAlloc으로 GC 방지
+        float radius = effectArea[(int)weaponStats.sizeOfArea];
+
         int count = Physics2D.OverlapCircleNonAlloc(
             transform.position,
-            effectArea[(int)weaponStats.sizeOfArea],
+            radius,
             garlicHitBuffer);
 
         effectRadius = weaponStats.sizeOfArea;
@@ -55,12 +69,32 @@ public class GarlicWeapon : WeaponBase
         note.GetComponent<Animator>().SetTrigger((weaponStats.sizeOfArea).ToString());
         note.Play();
 
+        ShowRangeIndicator(radius);
+
         ApplyDamage(count);
+    }
+
+    // ✅ damageIndicator(부모 오브젝트)를 스케일/On-Off
+    private void ShowRangeIndicator(float radius)
+    {
+        float scaleFactor = (radius * 2f) / nativeDiameter;
+        damageIndicator.localScale = Vector3.one * scaleFactor;
+
+        if (indicatorCoroutine != null)
+            StopCoroutine(indicatorCoroutine);
+
+        indicatorCoroutine = StartCoroutine(FlashIndicator());
+    }
+
+    private IEnumerator FlashIndicator()
+    {
+        damageIndicator.gameObject.SetActive(true);
+        yield return cachedWait;
+        damageIndicator.gameObject.SetActive(false);
     }
 
     private void ApplyDamage(int count)
     {
-        // ✅ 캐싱된 hitEffects 사용
         GameObject hitEffect = hitEffects != null ? hitEffects.hitEffect : null;
 
         for (int i = 0; i < count; i++)
