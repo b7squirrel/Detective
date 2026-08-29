@@ -87,6 +87,23 @@ public class Spawner : MonoBehaviour
     }
 
     /// <summary>
+    /// 체력 분열(Divide) 기믹 전용 — 부모 근처에 같은 EnemyData로 자식을 스폰
+    /// </summary>
+    public EnemyBase SpawnDivideChild(EnemyData enemyToSpawn, Vector2 spawnPos)
+    {
+        // 분열 기믹은 필드 적 상한(maxEnemyInScene)과 무관하게 항상 강제 스폰
+        // (기존 죽을 때 분열(SpawnSplit)도 forceSpawn=true로 항상 호출되는 것과 동일한 취급)
+        GameObject enemy = GameManager.instance.poolManager.GetSubBossEnemy(0);
+        if (enemy == null) return null;
+        Vector2 offset = new Vector2(UnityEngine.Random.Range(-2f, 2f), UnityEngine.Random.Range(-2f, 2f));
+        enemy.transform.position = spawnPos + offset;
+        EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
+        enemyBase.InitEnemy(enemyToSpawn);
+        AddEnemyNumber();
+        return enemyBase;
+    }
+
+    /// <summary>
     /// 무한 모드 전용 스폰 (maxEnemyInScene 제한 무시)
     /// </summary>
     public void SpawnForInfiniteMode(EnemyData enemyToSpawn, int index, bool isBoss = false)

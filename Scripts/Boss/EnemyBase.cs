@@ -23,6 +23,21 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] int numberOfSubBossDrops;
     [SerializeField] int numberOfBossDrops;
     protected BossType bossType;
+
+    // ⭐ 추가: 체력 분열(Divide) 기믹 관련
+    protected bool hasDivideGimmick; // EnemyData에서 복사해옴
+    protected bool isOriginalBoss; // 왕관 쓴 원본인지 (분열로 생긴 자식은 false)
+    protected EnemyBase originalBossRef; // 자식이 참조하는, 진짜 원본(왕관 쓴 개체)
+    protected int divideThresholdIndex; // 지금까지 통과한 임계값 개수 (0~3)
+    static readonly float[] divideThresholds = { 0.75f, 0.5f, 0.25f }; // 3/4, 2/4, 1/4
+    protected EnemyData sourceEnemyData; // Divide()에서 자식을 스폰할 때 사용
+    [SerializeField] protected GameObject crownObject; // 왕관 오브젝트 참조 (인스펙터에서 Crown 드래그)
+    protected bool isSeparating;
+    protected Vector2 separationDir;
+    protected float separationSpeed = 12f;
+    protected float separationDuration = 0.4f;
+
+
     public bool IsGrouping { get; set; } // 그룹지어 다니는 적인지 여부
     public Vector2 GroupDir { get; set; } // spawn 할 때 spawn 포인트 값과 player위치로 결정
 
@@ -104,6 +119,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     [SerializeField] protected AudioClip subBossAlarm;
     protected AudioClip hitSound;
     protected AudioClip dieSound;
+    protected AudioClip divideSound; // ⭐ 추가
 
     [Header("HP Bar")]
     [SerializeField] GameObject HPbarPrefab;
@@ -245,6 +261,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     #region 초기화
     public virtual void InitEnemy(EnemyData _enemyToSpawn)
     {
+        sourceEnemyData = _enemyToSpawn; // ⭐ 추가
         bossType = _enemyToSpawn.bossType;
         goldReward = _enemyToSpawn.goldReward;
         isSubBoss = false;
@@ -352,8 +369,21 @@ public class EnemyBase : MonoBehaviour, Idamageable
 
         isSplited = false; // 일단 false. 스포너의 spawnSplit에서 InitSplitedEnemy 호출해서 설정
 
+        // ⭐ 추가: 체력 분열 기믹 초기화 (오브젝트 풀 재사용 대비, 매 스폰마다 리셋)
+        // ⭐ 수정: isOriginalBoss는 이제 hasDivideGimmick 여부와 무관하게 항상 기본 true
+        isOriginalBoss = true;
+        hasDivideGimmick = _enemyToSpawn.hasDivideGimmick;
+        originalBossRef = null; // ⭐ 이동: 항상 초기화 (분열 기믹 여부와 무관하게 안전하게)
+        if (hasDivideGimmick)
+        {
+            divideThresholdIndex = 0;
+            originalBossRef = null;
+            if (crownObject != null) crownObject.SetActive(true);
+        }
+
         if (_enemyToSpawn.hitSound != null) hitSound = _enemyToSpawn.hitSound;
         if (_enemyToSpawn.dieSound != null) dieSound = _enemyToSpawn.dieSound;
+        if (_enemyToSpawn.divideSound != null) divideSound = _enemyToSpawn.divideSound; // ⭐ 추가
 
         // 서브 보스 설정
         // 화이트 플래시를 한 후 원래 재질로 되돌리기 위한 initial mat 초기화
@@ -542,6 +572,13 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return;
         }
 
+        // ⭐ 추가: 분열 직후 서로 반대 방향으로 밀려나는 연출
+        if (isSeparating)
+        {
+            rb.velocity = separationSpeed * separationDir;
+            return;
+        }
+
         if (IsKnockBack)
         {
             rb.velocity = knockBackSpeed * targetDir;
@@ -557,6 +594,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         }
 
         Vector2 dirVec = Target.position - (Vector2)rb.transform.position;
+
+        // ⭐ 추가: 분열 기믹 적들은 정규화된 플레이어 방향에 형제로부터의 분리력을 더함
+        if (hasDivideGimmick)
+        {
+            dirVec = dirVec.normalized + GetDivideSeparationForce();
+        }
         if (IsGrouping)
         {
             rb.velocity = currentSpeed * GroupDir;
@@ -758,6 +801,12 @@ public class EnemyBase : MonoBehaviour, Idamageable
         finalDamage = Mathf.Max(1, finalDamage);
         Stats.hp -= finalDamage;
 
+        // ⭐ 추가: 체력 분열 기믹 체크 (죽지 않고 살아있을 때만)
+        if (Stats.hp >= 1 && hasDivideGimmick)
+        {
+            CheckDivideThreshold();
+        }
+
         if (Stats.hp < 1)
         {
             Logger.Log($"[TakeDamage] Die() 호출 - {gameObject.name} / suppressDieEffect={suppressDieEffect} / variant={variantHandler?.CurrentVariant}");
@@ -766,10 +815,10 @@ public class EnemyBase : MonoBehaviour, Idamageable
             bool isExplosive = variantHandler != null &&
                                variantHandler.CurrentVariant == EnemyVariantType.Explosive;
 
-            
-if (isExplosive)
-{
-    Die(suppressDieEffect: false);
+
+            if (isExplosive)
+            {
+                Die(suppressDieEffect: false);
             }
             else
             {
@@ -823,7 +872,12 @@ if (isExplosive)
             Logger.Log($"[Die] 이미 죽는 중 - {gameObject.name}");
             return;
         }
-        isDying = true; // ⭐ 추가
+        isDying = true;
+        // ⭐ 추가: 자식이 (원본 사망으로든, 직접 죽든) 죽을 때 원본 구독을 항상 해제 — 풀 재사용 시 잘못된 트리거 방지
+        if (originalBossRef != null)
+        {
+            originalBossRef.OnDeath -= HandleOriginalBossDied;
+        }
 
         // ⭐ 추가: TTK 기록 (스폰~처치까지 걸린 시간)
         float ttk = Time.time - spawnTime;
@@ -860,15 +914,13 @@ if (isExplosive)
         finishedSpawn = false;
         DestroyHPbar();
 
-        if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
+        if (IsBoss && isOriginalBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Regular)
         {
-            Logger.Log($"[Die] DieEvent 호출 (Regular) - {gameObject.name}, Time.timeScale={Time.timeScale}");
             BossDieManager.instance.SetIsBossDead(true);
             BossDieManager.instance.DieEvent(.5f, 1.5f);
         }
-        else if (IsBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
+        else if (IsBoss && isOriginalBoss && PlayerDataManager.Instance.GetGameMode() == GameMode.Infinite)
         {
-            Logger.Log($"[Die] DieEventInfinite 호출 (Infinite) - {gameObject.name}, Time.timeScale={Time.timeScale}");
             BossDieManager.instance.DieEventInfinite(.5f, 1.5f);
         }
 
@@ -920,6 +972,107 @@ if (isExplosive)
         Logger.Log($"[Die] SetActive(false) 직전 - {gameObject.name}");
         gameObject.SetActive(false);
     }
+
+    #region Divide 분리
+    protected void CheckDivideThreshold()
+    {
+        // 큰 데미지 한 방에 임계값을 여러 개 건너뛸 수도 있으니 while로 처리
+        // (예: 80% → 40%로 한 번에 깎이면 3/4, 2/4 둘 다 통과)
+        while (divideThresholdIndex < divideThresholds.Length)
+        {
+            float hpRatio = (float)Stats.hp / maxHealth;
+            if (hpRatio > divideThresholds[divideThresholdIndex])
+                break; // 아직 다음 임계값에 도달 안 함
+            divideThresholdIndex++;
+            Divide();
+        }
+    }
+
+    // ⭐ 실제 분열 로직은 4단계에서 구현. 지금은 트리거 확인용 스텁
+    protected virtual void Divide()
+    {
+        if (sourceEnemyData == null) return;
+        EnemyBase child = Spawner.instance.SpawnDivideChild(sourceEnemyData, transform.position);
+        if (child == null) return;
+        child.SetupAsDivideChild(this, Stats.hp);
+
+        // ⭐ 추가: 분열 사운드 재생
+        if (divideSound != null)
+        {
+            SoundManager.instance.PlaySoundWith(divideSound, 1f, true, .2f);
+        }
+
+        // ⭐ 추가: 랜덤 방향 하나를 뽑아서 부모/자식이 정확히 반대 방향으로 밀려나게 함
+        Vector2 separationDirection = UnityEngine.Random.insideUnitCircle.normalized;
+        StartSeparation(separationDirection);
+        child.StartSeparation(-separationDirection);
+    }
+
+    /// <summary>
+    /// Divide()로 생성된 자식을 초기화. 부모의 체력/임계값 진행도를 그대로 물려받고,
+    /// 왕관을 끄고, 원본(최초 부모) 참조를 직접 연결한다.
+    /// </summary>
+    public void SetupAsDivideChild(EnemyBase parent, int copiedHp)
+    {
+        isOriginalBoss = false;
+        // 손자, 증손자여도 항상 "최초 원본"을 직접 가리키도록 함 (부모가 아니라)
+        EnemyBase root = parent.isOriginalBoss ? parent : parent.originalBossRef;
+        originalBossRef = root;
+        root.OnDeath += HandleOriginalBossDied; // ⭐ 추가: 원본이 죽으면 나도 죽도록 구독
+        divideThresholdIndex = parent.divideThresholdIndex;
+        maxHealth = parent.maxHealth;
+        Stats.hp = copiedHp;
+        TriggerFinishedSpawn();
+        if (crownObject != null) crownObject.SetActive(false);
+        if (hpBar != null) hpBar.SetStatus(Stats.hp, maxHealth);
+    }
+    void HandleOriginalBossDied()
+    {
+        if (originalBossRef != null) originalBossRef.OnDeath -= HandleOriginalBossDied;
+        if (isDying || !gameObject.activeSelf) return; // 이미 죽은 상태면 무시
+        Die();
+    }
+
+    protected void StartSeparation(Vector2 dir)
+    {
+        isSeparating = true;
+        separationDir = dir;
+        StartCoroutine(SeparationDoneCo());
+    }
+
+    IEnumerator SeparationDoneCo()
+    {
+        yield return new WaitForSeconds(separationDuration);
+        isSeparating = false;
+    }
+
+    protected Vector2 GetDivideSeparationForce()
+{
+    Vector2 force = Vector2.zero;
+    float separationRadius = 30f; // 이 거리 안의 형제와는 서로 밀어냄
+    Collider2D[] nearby = Physics2D.OverlapCircleAll(transform.position, separationRadius, shockwaveEnemyLayer);
+    EnemyBase myRoot = isOriginalBoss ? this : originalBossRef;
+    if (myRoot == null) return force;
+
+    foreach (var col in nearby)
+    {
+        if (col.gameObject == gameObject) continue;
+        EnemyBase other = col.GetComponent<EnemyBase>();
+        if (other == null || !other.hasDivideGimmick) continue;
+
+        EnemyBase otherRoot = other.isOriginalBoss ? other : other.originalBossRef;
+        if (otherRoot != myRoot) continue; // 다른 계보(다른 보스)는 무시
+
+        Vector2 away = (Vector2)transform.position - (Vector2)other.transform.position;
+        float dist = away.magnitude;
+        if (dist < 0.05f) away = UnityEngine.Random.insideUnitCircle; // 완전히 겹친 경우 랜덤 방향
+        else away /= dist;
+
+        force += away * ((separationRadius - dist) / separationRadius); // 가까울수록 0~1 사이로 더 강하게
+    }
+    return force;
+}
+    #endregion
 
     // 보스가 등장할 때 적들을 모두 제거할 때 사용
     // ✅ DieOnBossEvent

@@ -83,9 +83,14 @@ public class EnemyData : ScriptableObject
     public EnemyData split;
     public int splitNum;
 
+    [Header("체력 분열 (LV4 전용 기믹)")]
+    [Tooltip("체력 3/4, 2/4, 1/4 지점을 통과할 때마다 자기 자신을 복제하는 기믹. LV4 스테이지보스 승격 에셋에만 체크.")]
+    public bool hasDivideGimmick = false;
+
     [Header("사운드")]
     public AudioClip hitSound;
     public AudioClip dieSound;
+    public AudioClip divideSound; // ⭐ 추가: 체력 분열 기믹 발동 시 재생
 
     [Header("골드 보상")]
     [Tooltip("처치 시 지급할 골드. LV1:1, LV2:1, LV3:2, LV4:2, LV5:3 / 서브보스:20, 보스:80")]
