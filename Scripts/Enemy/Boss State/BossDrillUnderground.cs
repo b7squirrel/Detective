@@ -12,6 +12,11 @@ public class BossDrillUnderground : MonoBehaviour
     [SerializeField] float timeToDropSlime; // 1000정도로 하면 이 상태에서는 점액을 흘리지 않음
     [SerializeField] float playerCheckInterval = 2f; // 플레이어 위치 체크 간격
 
+    [Header("데미지 인디케이터")]
+    // 필드 추가
+    [SerializeField] GameObject damageIndicatorPrefab; // BossDrillBomb과 동일한 "Damage Indicator" 프리팹 사용
+    [SerializeField] float landingIndicatorRadius = 10f; // LandingImpact의 Shockwave 반지름(10f)과 반드시 일치시킬 것
+
     [Header("상태 지속 시간")]
     [SerializeField] int maxDirChangeNum;
     int dirChangeCounter;
@@ -34,6 +39,8 @@ public class BossDrillUnderground : MonoBehaviour
     bool isMoving;
     Vector2 targetPos;
     Vector2 moveDirection; // 현재 이동 방향
+    Coroutine indicatorTimeoutCo;
+    Coroutine indicatorFollowCo; // ⭐ 추가
 
     // 플레이어 추적용 변수들
     Coroutine playerTrackingCoroutine;
@@ -44,13 +51,14 @@ public class BossDrillUnderground : MonoBehaviour
         EnemyBoss.OnState3Enter += InitState3Enter;
         EnemyBoss.OnState3Update += InitState3Update;
         EnemyBoss.OnState3Exit += InitState3Exit;
+        EnemyBoss.OnState3SettleEnter += ShowLandingIndicator; // ⭐ 수정: Antic이 아니라 Settle 시작 시점으로 변경
     }
-
     void OnDisable()
     {
         EnemyBoss.OnState3Enter -= InitState3Enter;
         EnemyBoss.OnState3Update -= InitState3Update;
         EnemyBoss.OnState3Exit -= InitState3Exit;
+        EnemyBoss.OnState3SettleEnter -= ShowLandingIndicator; // ⭐ 수정
     }
     #endregion
 
@@ -168,6 +176,48 @@ public class BossDrillUnderground : MonoBehaviour
             rb.velocity = Vector2.zero;
             Debug.Log("벽에 충돌 - 이동 멈춤");
         }
+    }
+    // ⭐ 추가: State3Antic(대사 나오는 예고 구간) 진입 시, dustPoint 위치에 실제 공격 범위와 동일한 인디케이터 표시
+    void ShowLandingIndicator()
+    {
+        if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
+        Transform dustPoint = enemyBoss.GetDustPoint();
+
+        GameObject indicatorObj = GameManager.instance.poolManager.GetMisc(damageIndicatorPrefab);
+        if (indicatorObj == null)
+        {
+            Debug.LogWarning("[BossDrillUnderground] Damage Indicator를 풀에서 가져오지 못했습니다.");
+            return;
+        }
+
+        DamageIndicator indicator = indicatorObj.GetComponent<DamageIndicator>();
+        indicator.Init(landingIndicatorRadius, dustPoint.position);
+        // ⭐ 수정: 부모로 붙이지 않음 (dustPoint 상위 트랜스폼의 스케일 애니메이션에 영향받지 않도록)
+        //         대신 매 프레임 위치만 따라가게 함
+
+        enemyBoss.RegisterActiveIndicator(indicator);
+
+        if (indicatorFollowCo != null) StopCoroutine(indicatorFollowCo);
+        indicatorFollowCo = StartCoroutine(FollowDustPointCo(indicatorObj.transform, dustPoint));
+
+        // 안전장치 타임아웃도 유지
+        if (indicatorTimeoutCo != null) StopCoroutine(indicatorTimeoutCo);
+        indicatorTimeoutCo = StartCoroutine(IndicatorSafetyTimeout(5f));
+    }
+    // ⭐ 추가: 인디케이터가 활성 상태인 동안 매 프레임 dustPoint의 위치만 따라감 (스케일은 상속받지 않음)
+    IEnumerator FollowDustPointCo(Transform indicatorTransform, Transform target)
+    {
+        while (indicatorTransform != null && indicatorTransform.gameObject.activeSelf)
+        {
+            indicatorTransform.position = target.position;
+            yield return null;
+        }
+    }
+
+    IEnumerator IndicatorSafetyTimeout(float maxLifetime)
+    {
+        yield return new WaitForSeconds(maxLifetime);
+        if (enemyBoss != null) enemyBoss.ClearActiveIndicator();
     }
 
     // 애니메이션 이벤트

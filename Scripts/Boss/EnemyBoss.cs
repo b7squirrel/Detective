@@ -29,8 +29,14 @@ public class EnemyBoss : EnemyBase, Idamageable
     static readonly int GrayAmountID = Shader.PropertyToID("_GrayAmount");
     MaterialPropertyBlock tintPropertyBlock;
 
+    DamageIndicator activeCustomIndicator; // ⭐ 추가: 상태별 스크립트가 등록한 예고 인디케이터 (예: State3 착지 예고)
+
     float slimeDropTimer; // 슬라임 점액을 떨어트리는 타이밍 카운터. 주기는 각 상태에서 정함
     SlimeDropManager slimeDropManager;
+    public Transform GetDustPoint()
+    {
+        return dustPoint;
+    }
 
     #region 상태 액션 이벤트 변수
     public static event Action OnState1Enter; // 첫 번째 상태 Enter
@@ -382,16 +388,30 @@ public class EnemyBoss : EnemyBase, Idamageable
     #endregion
 
     #region 상태 함수, 애니메이션 이벤트
+    // ⭐ 추가: State 스크립트가 자신이 띄운 인디케이터를 등록
+    public void RegisterActiveIndicator(DamageIndicator indicator)
+    {
+        activeCustomIndicator = indicator;
+    }
+
+    // ⭐ 추가: 등록된 인디케이터를 끔 (LandingImpact에서 자동 호출)
+    public void ClearActiveIndicator()
+    {
+        if (activeCustomIndicator != null)
+        {
+            activeCustomIndicator.DeactivateIndicator();
+            activeCustomIndicator = null;
+        }
+    }
     public void LandingImpact()
     {
+        ClearActiveIndicator(); // ⭐ 추가: 실제 공격이 나가는 순간, 등록되어 있던 예고 인디케이터를 끔
         SoundManager.instance.Play(landingSFX);
         Vector2 landingEffectPos = (Vector2)dustPoint.transform.position;
-
         if (shockwave != null)
         {
             GameObject wave = GameManager.instance.poolManager.GetMisc(shockwave);
             wave.GetComponent<Shockwave>().Init(1200, 10f, LayerMask.GetMask("Player"), landingEffectPos);
-
             DropSlimeOnLanding();
         }
     }
