@@ -41,6 +41,8 @@ public class BossDrillUnderground : MonoBehaviour
     Vector2 moveDirection; // 현재 이동 방향
     Coroutine indicatorTimeoutCo;
     Coroutine indicatorFollowCo; // ⭐ 추가
+    Vector3 dustPointLocalOffsetFromRoot; // ⭐ 추가: 라이징 코스메틱 오프셋이 0인 중립 상태에서, dustPoint가 보스 루트 기준 어디에 있는지
+    bool offsetCached; // ⭐ 추가
 
     // 플레이어 추적용 변수들
     Coroutine playerTrackingCoroutine;
@@ -51,20 +53,29 @@ public class BossDrillUnderground : MonoBehaviour
         EnemyBoss.OnState3Enter += InitState3Enter;
         EnemyBoss.OnState3Update += InitState3Update;
         EnemyBoss.OnState3Exit += InitState3Exit;
-        EnemyBoss.OnState3SettleEnter += ShowLandingIndicator; // ⭐ 수정: Antic이 아니라 Settle 시작 시점으로 변경
+        EnemyBoss.OnState3Exit += ShowLandingIndicator; // ⭐ 수정: SettleEnter가 아니라 State3 Exit(돌진 종료, 최종 위치 확정) 시점으로 변경
     }
     void OnDisable()
     {
         EnemyBoss.OnState3Enter -= InitState3Enter;
         EnemyBoss.OnState3Update -= InitState3Update;
         EnemyBoss.OnState3Exit -= InitState3Exit;
-        EnemyBoss.OnState3SettleEnter -= ShowLandingIndicator; // ⭐ 수정
+        EnemyBoss.OnState3Exit -= ShowLandingIndicator; // ⭐ 수정
     }
     #endregion
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    // ⭐ 추가: 전투 시작 전(중립 포즈, All의 라이징 오프셋이 0인 상태)에 한 번만 오프셋을 캐싱
+    void CacheDustPointOffsetIfNeeded()
+    {
+        if (offsetCached) return;
+        if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
+        dustPointLocalOffsetFromRoot = transform.InverseTransformPoint(enemyBoss.GetDustPoint().position);
+        offsetCached = true;
     }
 
     void InitState3Enter()
@@ -148,7 +159,7 @@ public class BossDrillUnderground : MonoBehaviour
                 GetComponent<Animator>().SetTrigger("Settle");
                 yield break;
             }
-        
+
             if (isMoving && playerTrns != null)
             {
                 // 새로운 목표 지점 설정
@@ -181,7 +192,11 @@ public class BossDrillUnderground : MonoBehaviour
     void ShowLandingIndicator()
     {
         if (enemyBoss == null) enemyBoss = GetComponent<EnemyBoss>();
-        Transform dustPoint = enemyBoss.GetDustPoint();
+        CacheDustPointOffsetIfNeeded();
+
+        // ⭐ 수정: 지금 라이징 중인 dustPoint의 실시간 위치가 아니라,
+        //         "보스 루트 위치 + 캐싱된 고정 오프셋"으로 계산한 최종 착지 위치를 사용
+        Vector2 finalLandingPos = transform.TransformPoint(dustPointLocalOffsetFromRoot);
 
         GameObject indicatorObj = GameManager.instance.poolManager.GetMisc(damageIndicatorPrefab);
         if (indicatorObj == null)
@@ -191,16 +206,18 @@ public class BossDrillUnderground : MonoBehaviour
         }
 
         DamageIndicator indicator = indicatorObj.GetComponent<DamageIndicator>();
-        indicator.Init(landingIndicatorRadius, dustPoint.position);
-        // ⭐ 수정: 부모로 붙이지 않음 (dustPoint 상위 트랜스폼의 스케일 애니메이션에 영향받지 않도록)
-        //         대신 매 프레임 위치만 따라가게 함
+        indicator.Init(landingIndicatorRadius, finalLandingPos);
+        indicatorObj.transform.position = finalLandingPos; // 고정 위치 — 더 이상 dustPoint를 프레임마다 따라가지 않음
 
         enemyBoss.RegisterActiveIndicator(indicator);
 
-        if (indicatorFollowCo != null) StopCoroutine(indicatorFollowCo);
-        indicatorFollowCo = StartCoroutine(FollowDustPointCo(indicatorObj.transform, dustPoint));
+        // ⭐ 수정: 보스 루트는 State3 종료 후 움직이지 않으므로 더 이상 매 프레임 추적할 필요 없음
+        if (indicatorFollowCo != null)
+        {
+            StopCoroutine(indicatorFollowCo);
+            indicatorFollowCo = null;
+        }
 
-        // 안전장치 타임아웃도 유지
         if (indicatorTimeoutCo != null) StopCoroutine(indicatorTimeoutCo);
         indicatorTimeoutCo = StartCoroutine(IndicatorSafetyTimeout(5f));
     }
