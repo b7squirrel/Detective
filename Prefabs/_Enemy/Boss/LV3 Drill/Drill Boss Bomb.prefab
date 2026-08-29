@@ -191,11 +191,11 @@ GameObject:
   - component: {fileID: 2853080841986265317}
   - component: {fileID: 2363684164618232530}
   - component: {fileID: 6049118448828226657}
-  - component: {fileID: 796035753408465331}
   - component: {fileID: 4030257125410257184}
   - component: {fileID: 3338693995322511011}
   - component: {fileID: 2498249991563905104}
-  m_Layer: 11
+  - component: {fileID: 3369117868713995498}
+  m_Layer: 0
   m_Name: Drill Boss Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bouncingNumbers: 3
   bounceCounter: 0
-  onLandingMask: Enemy
+  onLandingMask: Default
   onGroundHitEvent:
     m_PersistentCalls:
       m_Calls:
@@ -317,41 +317,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Key>k__BackingField: Drill Boss Bomb
   maxNum: 0
---- !u!58 &796035753408465331
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4996769589237571694}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.42}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!114 &4030257125410257184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,8 +329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be3e0a4f4eb0d4a98936b7d8c443227e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitingTime: 1
-  damage: 1000
+  waitingTime: 10
+  damage: 2500
   center: {fileID: 1929600888132193626}
   targetLayer:
     serializedVersion: 2
@@ -450,6 +415,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!70 &3369117868713995498
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4996769589237571694}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.000000002099739, y: 0.03522778}
+  m_Size: {x: 1.2930796, y: 1.7548201}
+  m_Direction: 1
 --- !u!1 &9161454924272620968
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,6 +645,6 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_MaskInteraction: 0
-  m_Autodestruct: 1
+  m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0

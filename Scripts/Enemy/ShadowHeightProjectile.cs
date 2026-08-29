@@ -248,4 +248,18 @@ public class ShadowHeightProjectile : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("Enemy");
         }
     }
+
+    /// <summary>
+    /// 착지 후 Kinematic으로 고정된 상태를, 다시 Dynamic으로 전환.
+    /// 착지한 오브젝트끼리 서로 물리적으로 밀어내는 반응이 필요할 때 사용.
+    /// (Bounce()의 기본 동작은 변경하지 않고, 필요한 곳에서만 별도로 호출)
+    /// </summary>
+    public void EnablePhysicsAfterLanding(RigidbodyConstraints2D constraints = RigidbodyConstraints2D.FreezeRotation, float landedMass = 3f)
+    {
+        if (rb == null) return;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.constraints = constraints;
+        rb.mass = landedMass;  // ⭐ 100은 분리력을 거의 무력화시키므로 적당한 값으로 낮춤
+        rb.WakeUp();           // ⭐ 혹시 Sleep 상태라면 강제로 깨워서 물리 연산이 실행되도록 함
+    }
 }

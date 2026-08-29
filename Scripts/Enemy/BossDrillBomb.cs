@@ -15,6 +15,7 @@ public class BossDrillBomb : MonoBehaviour
     Coroutine co;
     Animator anim;
     Action onDie; // 폭탄이 사라질 때 이벤트
+    ShadowHeightProjectile shadowProjectile; // 필드 추가
 
     [Header("사운드")]
     [SerializeField] AudioClip[] explosionSounds;
@@ -30,16 +31,27 @@ public class BossDrillBomb : MonoBehaviour
     public void Explode()
     {
         if (co != null) StopCoroutine(co);
+
+        if (shadowProjectile == null) shadowProjectile = GetComponent<ShadowHeightProjectile>();
+        shadowProjectile?.EnablePhysicsAfterLanding();
+
         co = StartCoroutine(ExplodeCo());
     }
+
     IEnumerator ExplodeCo()
     {
         if (anim == null) anim = GetComponent<Animator>();
-        anim.SetTrigger("Trigger");
-        ShowIndicator();
 
-        yield return new WaitForSeconds(waitingTime);
+        yield return new WaitForSeconds(waitingTime); // waitingTime만큼 대기
+        ShowIndicator(); 
 
+        anim.SetTrigger("Trigger"); // 대기가 끝난 후 예고 애니메이션 재생
+                                    // 폭발 로직은 CastDamage()로 이동했으므로 여기서는 더 이상 실행하지 않음
+    }
+
+    // "Drill Boss Bomb Attack Antic" 애니메이션 끝의 CastDamage 이벤트가 호출
+    public void CastDamage()
+    {
         PlayExplosionSound(); // 사운드
         CameraShake.instance.Shake(); // 카메라 쉐이크
         Collider2D playerInRange = Physics2D.OverlapCircle(center.position, radius, targetLayer); // 충돌 체크
