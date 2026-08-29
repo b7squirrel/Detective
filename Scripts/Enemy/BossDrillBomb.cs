@@ -33,7 +33,7 @@ public class BossDrillBomb : MonoBehaviour
         if (co != null) StopCoroutine(co);
 
         if (shadowProjectile == null) shadowProjectile = GetComponent<ShadowHeightProjectile>();
-        shadowProjectile?.EnablePhysicsAfterLanding();
+        shadowProjectile?.EnablePhysicsAfterLandingTemporary(duration: 0.5f, landedMass: 3f, kinematicMass: 100f);
 
         co = StartCoroutine(ExplodeCo());
     }
