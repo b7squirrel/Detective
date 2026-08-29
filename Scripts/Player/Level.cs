@@ -33,7 +33,8 @@ public class Level : MonoBehaviour
     int consecutiveLevelUpCount = 0; // 현재 연속 레벨업 횟수
 
     [Header("리드 오리 가중치")]
-    [SerializeField] float leadWeaponWeightMultiplier = 2f;
+    [SerializeField] float leadWeaponWeightMultiplier = 5f;
+    [SerializeField] float leadSynergyItemWeightMultiplier = 2f; // ⭐ 추가: 리드 오리 시너지 짝 아이템 가중치
     WeaponData leadWeaponData;
 
     [Header("Debug")]
@@ -349,12 +350,23 @@ public class Level : MonoBehaviour
     {
         float weight = 1f;
 
+        // 리드 오리 자신의 무기 업그레이드
         if (data.upgradeType == UpgradeType.WeaponUpgrade
             && data.weaponData != null
             && leadWeaponData != null
             && data.weaponData.Name == leadWeaponData.Name)
         {
             weight = leadWeaponWeightMultiplier;
+        }
+        // ⭐ 리드 오리와 시너지를 이루는 아이템 (획득/업그레이드 둘 다)
+        else if ((data.upgradeType == UpgradeType.ItemGet || data.upgradeType == UpgradeType.ItemUpgrade)
+            && data.item != null
+            && leadWeaponData != null
+            && leadWeaponData.SynergyWeapon != null
+            && data.item.SynergyWeapons != null
+            && data.item.SynergyWeapons.Contains(leadWeaponData.SynergyWeapon))
+        {
+            weight = leadSynergyItemWeightMultiplier;
         }
 
         return weight;
