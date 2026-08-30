@@ -182,11 +182,16 @@ public class GearTutorialController : MonoBehaviour
             Transform child = presentSlotPool.GetChild(i);
             if (!child.gameObject.activeInHierarchy) continue;
 
+             Transform overlayRef = child.Find("Overlay Ref");
+            if (overlayRef != null)
+                return overlayRef.GetComponent<RectTransform>();
+ 
+            Debug.LogWarning($"[GearTutorial] '{child.name}' 슬롯 안에서 'Overlay Ref'를 찾을 수 없습니다. Button으로 대체합니다.");
             Button slotButton = child.GetComponentInChildren<Button>(true);
             if (slotButton == null)
             {
-                Debug.LogWarning($"[GearTutorial] '{child.name}' 슬롯 안에서 Button 컴포넌트를 찾을 수 없습니다. 슬롯 루트로 대체합니다.");
-                return child.GetComponent<RectTransform>(); // 폴백: 슬롯 루트라도 반환
+                Debug.LogWarning($"[GearTutorial] '{child.name}' 슬롯 안에서 Button 컴포넌트도 찾을 수 없습니다. 슬롯 루트로 대체합니다.");
+                return child.GetComponent<RectTransform>(); // 최종 폴백: 슬롯 루트
             }
 
             return slotButton.GetComponent<RectTransform>();
