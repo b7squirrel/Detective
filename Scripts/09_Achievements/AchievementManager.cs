@@ -31,6 +31,9 @@ public class AchievementManager : MonoBehaviour
     [SerializeField] private GemCollectFX gemCollectFX;
     PlayerDataManager playerDataManager; // 크리스탈의 실제 값을 더해주기 위해
 
+    // 업적 인디케이터 (빨간점)
+    public enum AchievementScope { All, Permanent, Daily, Weekly }
+
     private void Awake()
     {
         if (Instance == null)
@@ -602,6 +605,35 @@ public void DebugResetAllBadges()
         if (changed) SaveEarnedBadges();
     }
     #endregion
+
+    /// <summary>
+    /// 완료했지만 아직 보상을 받지 않은 업적이 있는지 확인 (알림 빨간점용)
+    /// isInfiniteMode 업적은 탭에서 숨겨지므로 항상 제외
+    /// </summary>
+    public bool HasUnclaimedCompleted(AchievementScope scope = AchievementScope.All)
+    {
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.isInfiniteMode) continue;
+            if (!ra.isCompleted || ra.isRewarded) continue;
+
+            switch (scope)
+            {
+                case AchievementScope.Permanent:
+                    if (ra.original.isDailyQuest || ra.original.isWeeklyQuest) continue;
+                    break;
+                case AchievementScope.Daily:
+                    if (!ra.original.isDailyQuest) continue;
+                    break;
+                case AchievementScope.Weekly:
+                    if (!ra.original.isWeeklyQuest) continue;
+                    break;
+                    // AchievementScope.All 은 필터 없음
+            }
+            return true;
+        }
+        return false;
+    }
 
     // ⭐ 모든 업적 리셋 (디버그용)
     [ContextMenu("Debug 플레이모드 : Reset All Achievements")]
