@@ -150,7 +150,7 @@ public class TennisBallProjectile : ProjectileBase
         if (anim != null)
             anim.SetTrigger("Hit");
         if (hitSound != null)
-            SoundManager.instance.PlaySoundWith(hitSound, 1f, false, .034f);
+            SoundManager.instance.PlaySoundWith(hitSound, .4f, false, .034f);
     }
 
     private void OnDisable()

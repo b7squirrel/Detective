@@ -18,7 +18,7 @@ MonoBehaviour:
   enemyRole: 1
   bossType: 1
   specialAbility: 0
-  hpScalingMultiplier: 120
+  hpScalingMultiplier: 50
   speedScalingMultiplier: 0.75
   damageScalingMultiplier: 5.78
   dashCooldown: 3
@@ -41,6 +41,8 @@ MonoBehaviour:
   dialogs: []
   split: {fileID: 11400000, guid: 19555a34858664b4a940fdcf94578dc9, type: 2}
   splitNum: 3
+  hasDivideGimmick: 0
   hitSound: {fileID: 8300000, guid: 19f72bd720c051b47b34c93667c1888b, type: 3}
   dieSound: {fileID: 8300000, guid: 539d49aee15833e47ae3311f537e5a35, type: 3}
+  divideSound: {fileID: 0}
   goldReward: 20
