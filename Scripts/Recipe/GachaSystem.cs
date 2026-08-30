@@ -129,6 +129,17 @@ public class GachaSystem : MonoBehaviour
         if (tutorialFG != null) tutorialFG.SetActive(true);
     }
 
+    // ⭐ 추가: 장비/합성/업적 튜토리얼 등에서 진행이 막혀 튜토리얼을 강제 완료시킬 때,
+    // 오리 보상 지급 없이 "이미 다 받은 것"으로 표시해서 CheckPendingTutorialReward()가
+    // 다음 재시작 시 보상을 자동 지급하지 않도록 막는다.
+    public void SkipTutorialRewardGift()
+    {
+        PlayerPrefs.SetInt(GIFT_PENDING_KEY, 0);
+        PlayerPrefs.SetInt(GIFT_COMPLETED_KEY, 1);
+        PlayerPrefs.Save();
+        Logger.Log("[GachaSystem] 튜토리얼 보상을 건너뛰고 완료 처리합니다.");
+    }
+
     // ─────────────────────────────────────────────────────────
     //  등급 지정 뽑기 (내부 공통)
     // ─────────────────────────────────────────────────────────
@@ -449,11 +460,6 @@ public class GachaSystem : MonoBehaviour
     //  팩 뽑기 헬퍼 메서드들
     // ─────────────────────────────────────────────────────────
 
-    /// <summary>
-    /// 오리 카드를 뽑아 내 카드 목록에 추가하고 필수 장비를 장착합니다.
-    /// AddCardSlot은 호출하지 않습니다.
-    /// ShowGachaResult()에서 cardsPicked 순회 시 AddItemSlotOf()로 처리됩니다.
-    /// </summary>
     CardData DrawDuckCardWithRarity(int rarity)
     {
         List<CardData> filteredPool = weaponPools.FindAll(card => card.Grade == rarity);
@@ -476,18 +482,6 @@ public class GachaSystem : MonoBehaviour
         return duckCard;
     }
 
-    /// <summary>
-    /// 오리의 필수 장비 슬롯을 제외한 나머지 슬롯 중 count개를
-    /// 지정 등급(targetGrade)의 세트 장비로 채워줍니다.
-    ///
-    /// 우선순위:
-    /// 1순위 — 뽑힌 오리의 필수 장비와 같은 SetName + 지정 등급
-    /// 2순위 — 등급과 부위만 맞는 아무 비필수 장비 (폴백)
-    ///
-    /// 장비 카드는 cardsPicked/AddCardSlot에 추가하지 않습니다.
-    /// ShowGachaResult()의 AddItemSlotOf()가 오리 기준으로 장비 슬롯을 생성합니다.
-    /// 장비 장착 후 UpdateCardDisplay()로 오리 슬롯 이미지를 즉시 갱신합니다.
-    /// </summary>
     void GivePackEquipments(CardData duckCard, int count, int targetGrade)
     {
         List<string> allSlots = new List<string> { "Head", "Chest", "Face", "Hand" };
@@ -551,11 +545,6 @@ public class GachaSystem : MonoBehaviour
         cardSlotManager.UpdateCardDisplay(duckCard);
     }
 
-    /// <summary>
-    /// 오리의 필수 장비 SetName을 반환합니다.
-    /// 여러 세트가 있으면 (예: Tennis Champion / Tennis Local) 랜덤 선택.
-    /// 예: Tennis 오리 → "Tennis Local" 또는 "Tennis Champion"
-    /// </summary>
     string GetEssentialSetName(CardData duckCard)
     {
         // 이 오리의 필수 장비 후보 (같은 등급)
@@ -587,10 +576,6 @@ public class GachaSystem : MonoBehaviour
         return chosen;
     }
 
-    /// <summary>
-    /// 가챠 결과 UI 표시 공통 헬퍼
-    /// cardsPicked(오리 카드만)를 순회하며 AddItemSlotOf()로 장비 슬롯까지 생성합니다.
-    /// </summary>
     void ShowGachaResult()
     {
         gachaPanelManager.gameObject.SetActive(true);
@@ -606,9 +591,6 @@ public class GachaSystem : MonoBehaviour
         darkBG.SetActive(true);
     }
 
-    /// <summary>
-    /// List를 제자리 셔플 (Fisher-Yates)
-    /// </summary>
     void Shuffle<T>(List<T> list)
     {
         for (int i = list.Count - 1; i > 0; i--)
@@ -634,7 +616,6 @@ public class GachaSystem : MonoBehaviour
         return "Weapon";
     }
 
-    // ⭐ 광고 상자처럼 오리/아이템이 랜덤으로 섞여 나와야 하는 테이블용
     string GetRandomCardType()
     {
         return UnityEngine.Random.value < 0.5f ? "Weapon" : "Item";
@@ -873,11 +854,9 @@ public class GachaSystem : MonoBehaviour
     }
 
     // ─────────────────────────────────────────────────────────
-    //  튜토리얼 완료 보상 — 오리 5마리, 전부 Rare 등급 고정 지급
+    //  튜토리얼 완료 보상 — 오리 10마리, 전부 Rare 등급 고정 지급
     //  각 오리는 자신의 등급에 맞는 장비 4종(필수+3종)을 모두 장착한 채로 지급됨
     // ─────────────────────────────────────────────────────────
-    // 카드 생성 + 장비 장착 + 저장까지만. 연출은 호출하지 않음
-    // UnityEvent(On Click 등)에 연결하기 위한 매개변수 없는 버전
     public void PrepareTutorialReward()
     {
         PrepareTutorialReward(10, 1);
@@ -938,8 +917,6 @@ public class GachaSystem : MonoBehaviour
         ShowGachaResult(); // 이 시점에 비로소 가챠 연출 시작
     }
 
-    // 가챠 결과 패널이 닫힐 때 호출 (탭해서 계속하기 버튼에 항상 연결해두기)
-    // 튜토리얼 보상이었을 경우에만 Launch 탭(인덱스 2)으로 이동
     public void OnGachaResultClosed()
     {
         if (!IsTutorialRewardInProgress) return;
