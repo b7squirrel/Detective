@@ -62,7 +62,9 @@ public class AchievementTutorialController : MonoBehaviour
         }
         else
         {
-            HideAll();
+            // ✅ 이미 스스로 정리된 상태(phase==None)라면 fg를 다시 건드리지 않음
+            if (phase != AchievementTutorialPhase.None)
+                HideAll();
         }
     }
     // ─────────────────────────────────────────

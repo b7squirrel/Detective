@@ -46,9 +46,15 @@ public class MergeTutorialController : MonoBehaviour
     void OnStepChanged(TutorialStep step)
     {
         if (step == TutorialStep.Step3_MergeUnlocked)
+        {
             StartMergeTutorial();
+        }
         else
-            HideAll();
+        {
+            // ✅ None이거나 이미 Done(정상 종료)이면 다른 컨트롤러의 fg를 건드리지 않음
+            if (phase != MergeTutorialPhase.None && phase != MergeTutorialPhase.Done)
+                HideAll();
+        }
     }
     // ─────────────────────────────────────────
     // 튜토리얼 흐름

@@ -85,17 +85,17 @@ public class ShopTutorialController : MonoBehaviour
     {
         if (step != TutorialStep.Step1_ShopUnlocked)
         {
-            HideAll();
+            // ✅ None이거나 이미 Done(정상 종료)이면 다른 컨트롤러의 fg를 건드리지 않음
+            if (phase != ShopTutorialPhase.None && phase != ShopTutorialPhase.Done)
+                HideAll();
             return;
         }
-
         // Done 케이스 제거 - TutorialManager에서 이미 교정됨
         if (phase == ShopTutorialPhase.None)
         {
             StartShopTutorial();
             return;
         }
-
         // ✅ fg 넘겨서 동시 처리
         tutorialHighlight.HighlightUI(shopTabButton, fg);
     }

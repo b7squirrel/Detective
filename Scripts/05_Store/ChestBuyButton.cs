@@ -135,6 +135,7 @@ public class ChestBuyButton : MonoBehaviour
 
     public void OnPurchaseButtonClicked()
     {
+        Debug.Log($"[ChestBuy] 클릭 발생. isProcessing={isProcessing}, fg.activeSelf={(fg != null ? fg.activeSelf.ToString() : "NULL")}, Time.frameCount={Time.frameCount}");
         if (isProcessing) return;
 
         if (productData == null)
@@ -194,10 +195,10 @@ public class ChestBuyButton : MonoBehaviour
     public void ResetState()
     {
         isProcessing = false;
-
-        bool inShopTutorial =
-            TutorialManager.instance?.CurrentStep == TutorialStep.Step1_ShopUnlocked;
-        if (fg != null && !inShopTutorial)
+        bool tutorialInProgress =
+            TutorialManager.instance != null &&
+            TutorialManager.instance.CurrentStep != TutorialStep.Completed;
+        if (fg != null && !tutorialInProgress)
             fg.SetActive(false);
     }
 }

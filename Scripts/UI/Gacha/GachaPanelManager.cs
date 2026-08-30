@@ -88,15 +88,28 @@ public class GachaPanelManager : MonoBehaviour
     public void ActivateButtonTapToCon(bool activate)
     {
         gameObject.SetActive(activate);
-        FG.SetActive(false);
 
-        if (!activate)
+        if (activate)
         {
+            // ⭐ 리빌 화면을 열 때는 튜토리얼 여부와 상관없이 항상 FG를 꺼서
+            // "탭해서 계속하기" 상호작용이 가능하게 함
+            FG.SetActive(false);
+        }
+        else
+        {
+            // ⭐ 닫을 때만 튜토리얼이 진행 중(Completed 아님)이면 FG를 건드리지 않음
+            // — 다음 튜토리얼 컨트롤러가 이미 FG를 켜놓았을 수 있으므로 그 상태를 되돌리지 않기 위함
+            bool tutorialInProgress =
+                TutorialManager.instance != null &&
+                TutorialManager.instance.CurrentStep != TutorialStep.Completed;
+
+            if (!tutorialInProgress)
+                FG.SetActive(false);
+
             foreach (var btn in FindObjectsOfType<ChestBuyButton>())
                 btn.ResetState();
             foreach (var btn in FindObjectsOfType<PackBuyButton>())
                 btn.ResetState();
-
             pendingGemPoint = null;
             pendingGoldAmount = 0;
             pendingCards = null; // ⭐ 패널 닫힐 때 대기 중이던 카드 데이터도 초기화

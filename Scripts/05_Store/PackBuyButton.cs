@@ -235,6 +235,10 @@ public class PackBuyButton : MonoBehaviour
     public void ResetState()
     {
         isProcessing = false;
-        if (fg != null) fg.SetActive(false);
+        bool tutorialInProgress =
+            TutorialManager.instance != null &&
+            TutorialManager.instance.CurrentStep != TutorialStep.Completed;
+        if (fg != null && !tutorialInProgress)
+            fg.SetActive(false);
     }
 }
