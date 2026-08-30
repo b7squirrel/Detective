@@ -460,9 +460,25 @@ public class GachaSystem : MonoBehaviour
     //  팩 뽑기 헬퍼 메서드들
     // ─────────────────────────────────────────────────────────
 
-    CardData DrawDuckCardWithRarity(int rarity)
+    CardData DrawDuckCardWithRarity(int rarity, List<string> excludeNames = null)
     {
         List<CardData> filteredPool = weaponPools.FindAll(card => card.Grade == rarity);
+
+        // ⭐ 추가: 이미 뽑힌 오리(이름 기준)를 제외한 후보만 우선 사용
+        if (excludeNames != null && excludeNames.Count > 0)
+        {
+            List<CardData> uniquePool = filteredPool.FindAll(card => !excludeNames.Contains(card.Name));
+
+            if (uniquePool.Count > 0)
+            {
+                filteredPool = uniquePool;
+            }
+            else
+            {
+                // 해당 등급에 남은 고유 오리가 없으면 중복 허용으로 폴백
+                Logger.LogWarning($"[GachaSystem] 등급 {rarity}에서 중복 없는 오리를 더 찾을 수 없습니다. 중복 허용으로 전환합니다.");
+            }
+        }
 
         if (filteredPool.Count == 0)
         {
@@ -864,22 +880,27 @@ public class GachaSystem : MonoBehaviour
 
     public void PrepareTutorialReward(int count = 5, int guaranteedCount = 1)
     {
-        IsTutorialRewardInProgress = true; // ⭐ 추가
+        IsTutorialRewardInProgress = true;
 
-        Logger.Log($"[GachaSystem] 튜토리얼 완료 보상 시작 - {count}마리 (전부 Rare 고정)");
+        Logger.Log($"[GachaSystem] 튜토리얼 완료 보상 시작 - {count}마리 (전부 Rare 고정, 중복 없음)");
 
         cardDataManager.BeginBatchOperation();
         cardsPicked.Clear();
+
+        // ⭐ 추가: 이번 보상에서 이미 뽑힌 오리 이름 추적
+        List<string> pickedDuckNames = new List<string>();
 
         try
         {
             for (int i = 0; i < count; i++)
             {
-                CardData duckCard = DrawDuckCardWithRarity(MyGrade.Rare);
+                CardData duckCard = DrawDuckCardWithRarity(MyGrade.Rare, pickedDuckNames);
                 if (duckCard == null) continue;
 
+                pickedDuckNames.Add(duckCard.Name); // ⭐ 추가
+
                 GivePackEquipments(duckCard, 3, duckCard.Grade);
-                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{count} (Rare 고정): {duckCard.Name} (Grade {duckCard.Grade})");
+                Logger.Log($"[GachaSystem] 보상 오리 #{i + 1}/{count} (Rare 고정, 중복없음): {duckCard.Name} (Grade {duckCard.Grade})");
             }
 
             cardDataManager.EndBatchOperation();
@@ -887,7 +908,6 @@ public class GachaSystem : MonoBehaviour
             ImmediateSaveEquipmentData();
             CloudSaveManager.Instance?.SaveToCloud();
 
-            // ⭐ 추가: 카드는 이미 지급됐지만 아직 리빌(연출)을 못 본 상태를 기록
             PlayerPrefs.SetInt(GIFT_PENDING_KEY, 1);
             PlayerPrefs.Save();
 
@@ -899,8 +919,6 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.EndBatchOperation();
             throw;
         }
-
-        // ⭐ ShowGachaResult() 호출 없음 — 여기서 함수 종료
     }
 
     // 두 번째 팝업에서 "탭해서 계속하기"를 누를 때 호출
