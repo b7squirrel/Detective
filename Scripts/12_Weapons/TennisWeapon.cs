@@ -39,7 +39,7 @@ public class TennisWeapon : WeaponBase
     {
         base.Attack();
         EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
-        if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
+        if (enemyQueryBuffer.Count == 0 || EnemyFinder.IsNoTarget(enemyQueryBuffer[0]))  // ✅
             return;
         AttackCo();
     }

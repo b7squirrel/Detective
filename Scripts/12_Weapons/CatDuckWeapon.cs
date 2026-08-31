@@ -68,12 +68,9 @@ public class CatDuckWeapon : WeaponBase
     protected override void Attack()
     {
         base.Attack();
-
-        // 버퍼 재사용으로 new List 방지. GetTargetPosition에서도 같은 버퍼 사용
         EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
-        if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
+        if (enemyQueryBuffer.Count == 0 || EnemyFinder.IsNoTarget(enemyQueryBuffer[0]))  // ✅
             return;
-
         ShootLaserPointer();
     }
 
@@ -215,7 +212,7 @@ public class CatDuckWeapon : WeaponBase
     // Attack에서 채워둔 버퍼를 재사용 (중복 GetEnemies 호출 방지)
     Vector2 GetTargetPositionFromBuffer()
     {
-        if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
+        if (enemyQueryBuffer.Count == 0 || EnemyFinder.IsNoTarget(enemyQueryBuffer[0]))  // ✅
             return Vector2.zero;
 
         Vector2 enemyPos = enemyQueryBuffer[0];

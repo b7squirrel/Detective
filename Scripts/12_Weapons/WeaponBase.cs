@@ -47,6 +47,7 @@ public class WeaponBase : MonoBehaviour
     protected Vector2 dirExtra;
     protected Vector2 direction;
     protected bool flip;
+    protected bool hasTarget;   // ✅ 추가: 가장 가까운 적을 찾았는지 여부
     public bool IsDirectional { get; set; }
     #endregion
 
@@ -75,38 +76,42 @@ public class WeaponBase : MonoBehaviour
     protected virtual void Update()
     {
         if (GameManager.instance.IsPaused) return;
-
         SetAngle();
         RotateWeapon();
         RotateExtraWeapon();
-
         FlipWeaponTools();
         LockFlip();
-
         timer -= Time.deltaTime;
         if (timer < 0f)
         {
-            Attack();
-            timer = weaponStats.timeToAttack;
+            timer = weaponStats.timeToAttack;   // ✅ 쿨다운은 타겟 유무와 상관없이 정상적으로 리셋
+            if (hasTarget)
+            {
+                Attack();
+            }
         }
     }
 
     protected virtual void SetAngle()
     {
-        // 필드 버퍼 재사용으로 매 프레임 new List 방지
         EnemyFinder.instance.GetEnemies(2, angleQueryBuffer);
-
         if (angleQueryBuffer.Count == 0) return;
+
+        if (EnemyFinder.IsNoTarget(angleQueryBuffer[0]))   // ✅ == 대신 IsNoTarget
+        {
+            hasTarget = false;
+            return;
+        }
+        hasTarget = true;
 
         dir = GetDirection(angleQueryBuffer[0]);
         angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         if (angleQueryBuffer.Count > 1)
         {
-            if (angleQueryBuffer[1] == Vector2.zero)
+            if (EnemyFinder.IsNoTarget(angleQueryBuffer[1]))   // ✅
             {
-                // angleExtra = angle + 120f;
-                float offset = 15f; // 원하시면 조절 가능 (10~20 정도 추천)
+                float offset = 15f;
                 dirExtra = Quaternion.AngleAxis(offset, Vector3.forward) * dir;
                 angleExtra = angle + offset;
             }

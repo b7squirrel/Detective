@@ -5,6 +5,10 @@ public class EnemyFinder : MonoBehaviour
 {
     public static EnemyFinder instance;
 
+    // ✅ "타겟을 찾지 못함"을 나타내는 sentinel 값
+    // Vector2.zero는 실제 적이 있을 수 있는 유효 좌표라 부적합했음
+    public static readonly Vector2 NoTarget = Vector2.positiveInfinity;
+
     [SerializeField] LayerMask enemy;
     [SerializeField] LayerMask props;
     [SerializeField] float updateInterval = 0.1f;
@@ -93,20 +97,30 @@ public class EnemyFinder : MonoBehaviour
     }
 
     /// <summary>
+    /// GetEnemies()가 반환한 슬롯이 "타겟 없음"인지 확인합니다.
+    /// Vector2 == 연산자는 Infinity끼리 비교 시 내부적으로 NaN이 발생해 항상 false를 반환하므로,
+    /// 반드시 이 메서드로 비교해야 합니다.
+    /// </summary>
+    public static bool IsNoTarget(Vector2 pos)
+    {
+        return float.IsInfinity(pos.x);
+    }
+
+    /// <summary>
     /// 가장 가까운 적 위치를 외부 List에 채워줍니다.
     /// 호출부에서 List를 필드로 선언해 재사용하면 GC가 발생하지 않습니다.
+    /// 적을 찾지 못한 슬롯은 EnemyFinder.NoTarget으로 채워집니다 (호출부에서 반드시 체크할 것).
     /// </summary>
     public void GetEnemies(int numberOfEnemies, List<Vector2> result)
     {
         result.Clear();
-
         int count = Mathf.Min(numberOfEnemies, cachedEnemyPositions.Count);
         for (int i = 0; i < count; i++)
             result.Add(cachedEnemyPositions[i]);
 
-        // 부족한 개수만큼 Vector2.zero로 채움
+        // 부족한 개수만큼 NoTarget으로 채움
         while (result.Count < numberOfEnemies)
-            result.Add(Vector2.zero);
+            result.Add(NoTarget);
     }
 
     /// <summary>

@@ -107,11 +107,11 @@ public class BaseballProjectile : ProjectileBase
             TriggerHitEffects(transform.position);
             gameObject.SetActive(false);
         }
-        else if (other.CompareTag("Wall") || other.CompareTag("MainCamera"))
-        {
-            TriggerHitEffects(transform.position);
-            gameObject.SetActive(false);
-        }
+        // else if (other.CompareTag("Wall") || other.CompareTag("MainCamera"))
+        // {
+        //     TriggerHitEffects(transform.position);
+        //     gameObject.SetActive(false);
+        // }
     }
 
     private void TriggerHitEffects(Vector2 position)
@@ -120,13 +120,7 @@ public class BaseballProjectile : ProjectileBase
             anim.SetTrigger("Hit");
 
         if (hitSound != null)
-            SoundManager.instance.Play(hitSound);
-
-        if (anim != null)
-            anim.SetTrigger("Hit");
-
-        if (hitSound != null)
-            SoundManager.instance.Play(hitSound);
+            SoundManager.instance.PlaySoundWith(hitSound, .5f, false, 0);
 
         // 이펙트 스폰 추가
         if (hitEffects != null && hitEffects.hitEffect != null)

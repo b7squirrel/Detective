@@ -45,7 +45,7 @@ public class PitcherWeapon : WeaponBase
 
     protected override void Attack()
     {
-        if (dir == Vector2.zero) return;
+        if (!hasTarget) return;   // ✅ dir == Vector2.zero 체크를 hasTarget으로 교체
 
         // ⭐ 데미지/넉백 파라미터를 미리 계산해둠
         GetAttackParameters();
@@ -62,13 +62,14 @@ public class PitcherWeapon : WeaponBase
 
     public void ThrowBall()
     {
+        if (!hasTarget) return;   // ✅ 애니메이션 이벤트 시점에 다시 체크
         if (currentBallPrefab == null)
         {
             Logger.LogError("[PitcherWeapon] currentBallPrefab이 null입니다!");
             return;
         }
 
-        SoundManager.instance.Play(shoot);
+        SoundManager.instance.PlaySoundWith(shoot, .5f, false, 0);
 
         // 머즐 이펙트
         Transform muzzleEffect = GameManager.instance.poolManager.GetMisc(muzzleFlash).transform;

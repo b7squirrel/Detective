@@ -49,10 +49,13 @@ public class BombWeapon : WeaponBase
     protected override void Attack()
     {
         base.Attack();
-
         // 버퍼 재사용으로 new List 방지
         EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
-        if (enemyQueryBuffer.Count == 0) return;
+
+        // ✅ Count==0 체크는 죽은 코드였음 (항상 요청 개수만큼 채워져서 반환됨)
+        //    실제 "못 찾음"은 NoTarget sentinel로 판단해야 함
+        if (enemyQueryBuffer.Count == 0 || EnemyFinder.IsNoTarget(enemyQueryBuffer[0]))
+            return;
 
         Vector3 axisVec = Vector3.forward;
         enemyDir = (enemyQueryBuffer[0] - (Vector2)transform.position);
