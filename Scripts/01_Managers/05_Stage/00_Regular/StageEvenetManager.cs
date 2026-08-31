@@ -115,9 +115,9 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
                     _forceSpawn,
                     excludedQuadrant));
                 break;
-            case StageEventType.SpawnEnemyGroup:
-                SpawnEnemyGroup(stageEvents[eventIndexer].count);
-                break;
+            // case StageEventType.SpawnEnemyGroup:
+            //     SpawnEnemyGroup(stageEvents[eventIndexer].count);
+                // break;
             case StageEventType.SpawnSubBoss:
                 SpawnSubBoss(_forceSpawn);
                 break;
@@ -191,10 +191,10 @@ public class StageEvenetManager : MonoBehaviour, ISpawnController
         Debug.LogWarning($"[StageEvenetManager] stageBossName 범위 초과: {nameIndex} / {names.Length}");
         return stageEvents[eventIndexer].enemyToSpawn.Name;
     }
-    void SpawnEnemyGroup(int number)
-    {
-        spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup, number);
-    }
+    // void SpawnEnemyGroup(int number)
+    // {
+    //     spawner.SpawnEnemyGroup(stageEvents[eventIndexer].enemyToSpawn, (int)SpawnItem.enemyGroup, number);
+    // }
     // 인터페이스 구현
     public void PauseSpawn(bool pause)
     {

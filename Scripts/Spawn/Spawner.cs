@@ -143,29 +143,29 @@ public class Spawner : MonoBehaviour
         AddEnemyNumber();
     }
 
-    public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
-    {
-        if (currentEnemyNumbers >= maxEnemyInScene)
-            return;
+    // public void SpawnEnemyGroup(EnemyData enemyToSpawn, int index, int numberOfEnemies)
+    // {
+    //     if (currentEnemyNumbers >= maxEnemyInScene)
+    //         return;
 
-        Vector2 spawnPoint = GetAvailablePoints();
-        GameObject groupShape = Instantiate(enemyGroupShape, spawnPoint, Quaternion.identity);
-        groupShape.transform.eulerAngles = new Vector3(0, 0, Random.Range(0, 360f));
-        Vector2 groupDir = ((Vector2)Player.instance.transform.position - spawnPoint).normalized;
+    //     Vector2 spawnPoint = GetAvailablePoints();
+    //     GameObject groupShape = Instantiate(enemyGroupShape, spawnPoint, Quaternion.identity);
+    //     groupShape.transform.eulerAngles = new Vector3(0, 0, Random.Range(0, 360f));
+    //     Vector2 groupDir = ((Vector2)Player.instance.transform.position - spawnPoint).normalized;
 
-        for (int i = 0; i < numberOfEnemies; i++)
-        {
-            GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
-            Enemy enemyComp = enemy.GetComponent<Enemy>(); // GetComponent 한 번만 호출
-            enemy.transform.position = groupShape.GetComponent<EnemyGroupShape>().SpawnPoints[i].position;
-            enemyComp.InitEnemy(enemyToSpawn);
-            enemyComp.IsGrouping = true;
-            enemyComp.GroupDir = groupDir;
+    //     for (int i = 0; i < numberOfEnemies; i++)
+    //     {
+    //         GameObject enemy = GameManager.instance.poolManager.GetEnemy(index);
+    //         Enemy enemyComp = enemy.GetComponent<Enemy>(); // GetComponent 한 번만 호출
+    //         enemy.transform.position = groupShape.GetComponent<EnemyGroupShape>().SpawnPoints[i].position;
+    //         enemyComp.InitEnemy(enemyToSpawn);
+    //         enemyComp.IsGrouping = true;
+    //         enemyComp.GroupDir = groupDir;
 
-            AddEnemyNumber();
-        }
-        Destroy(groupShape);
-    }
+    //         AddEnemyNumber();
+    //     }
+    //     Destroy(groupShape);
+    // }
 
     public void SpawnEnemiesToShoot(EnemyData enemyToSpawn, int index, Vector2 start, Vector2 target)
     {
@@ -187,6 +187,9 @@ public class Spawner : MonoBehaviour
         // 보스 경고 메시지
         GameManager.instance.bossWarningPanel.Init(enemyName);
         yield return new WaitForSecondsRealtime(2f);
+
+        // 카메라 줌 아웃
+        CameraController.instance.ZoomOutForBoss();
 
         // 랜딩 이펙트
         Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0);
