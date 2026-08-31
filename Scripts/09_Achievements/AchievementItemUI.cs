@@ -34,6 +34,7 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] GameObject chestIcon;  // Icons/Chest (AD_DRAW)
     [SerializeField] GameObject timeIcon;   // Icons/Time (SURVIVE)
     [SerializeField] GameObject stageIcon;  // ⭐ 추가: Icons/Stage (STAGE_REACH, STAGE_CLEAR 공용)
+    [SerializeField] GameObject tapIcon;  // 알클릭 업적
 
     [Header("사운드")]
     [SerializeField] AudioClip clipRewardButton;
@@ -94,7 +95,8 @@ public class AchievementItemUI : MonoBehaviour
             runtime.original.type == AchievementType.KILL ||
             runtime.original.type == AchievementType.SURVIVE ||
             runtime.original.type == AchievementType.AD_DRAW ||
-            runtime.original.type == AchievementType.STAGE_REACH ||   // ⭐ 추가
+            runtime.original.type == AchievementType.STAGE_REACH ||
+            runtime.original.type == AchievementType.EGG_MAX_GRADE ||
             runtime.isCompleted; ;
 
         if (progressText != null)
@@ -112,8 +114,11 @@ public class AchievementItemUI : MonoBehaviour
         if (timeIcon != null)
             timeIcon.SetActive(runtime.original.type == AchievementType.SURVIVE);
 
-        if (stageIcon != null)  // ⭐ 추가
+        if (stageIcon != null)
             stageIcon.SetActive(runtime.original.type == AchievementType.STAGE_REACH);
+
+        if (stageIcon != null)  // ⭐ 추가
+            tapIcon.SetActive(runtime.original.type == AchievementType.EGG_MAX_GRADE);
 
         // 보상 타입에 따라 아이콘 설정
         if (rewardIcon != null)

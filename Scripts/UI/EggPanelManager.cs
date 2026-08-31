@@ -148,20 +148,37 @@ public class EggPanelManager : MonoBehaviour
         // 뽑은 오리의 등급을 넘겨 받음
         if (eggbutton == null) eggbutton = FindObjectOfType<EggButton>();
         currentGrade = eggbutton.GetWeaponGradeIndex();
+
+        // ⭐ 추가: 최고등급(정예) 알을 획득했을 때 업적 진행도 추가
+        // 하드코딩된 값 대신 MyGrade.EggGrades.Length - 1을 사용해서
+        // 나중에 등급 단계 수가 바뀌어도 자동으로 대응되도록 함
+        if (currentGrade == MyGrade.EggGrades.Length - 1)
+        {
+            if (AchievementManager.Instance != null)
+            {
+                AchievementManager.Instance.AddProgress(AchievementType.EGG_MAX_GRADE, 1);
+            }
+        }
+
         // 뽑은 오리의 이름과 등급이 일치하는 Upgrade Data(Acquire) 가져오기
         UpgradeData newWd = GetAcquireData(currentWeaponName, currentGrade);
+
         // 이름 반영
         oriName.GetComponent<TMPro.TextMeshProUGUI>().text = LocalizationManager.Char.GetWeaponDisplayName(newWd.weaponData.Name);
         Debug.Log($"[Egg DPS Debug] weaponData={newWd.weaponData.name}, damage={newWd.weaponData.stats.damage}, numberOfAttacks={newWd.weaponData.stats.numberOfAttacks}, timeToAttack={newWd.weaponData.stats.timeToAttack}");
+
         // Atk(1타 데미지) 반영
         Character wielder = GameManager.instance.character;
         int damageBonus = wielder != null ? wielder.DamageBonus : 0;
         int effectiveDamage = newWd.weaponData.stats.damage + damageBonus;
         atkValueText.GetComponent<TMPro.TextMeshProUGUI>().text = effectiveDamage.ToString();
+
         // 장비 스프라이트 설정
         Init(newWd.weaponData);
+
         // 플레이어에 새로운 오리 추가하기
         GameManager.instance.character.GetComponent<Level>().GetWeapon(newWd);
+        
         // Logger.LogError($"[EggPanelManager] 플레이어에 {newWd.weaponData.DisplayName}을 추가합니다.");
         // 새로운 아이 패널 띄우기, 확정된 등급 패널 애님 플레이
         KidImageUp();

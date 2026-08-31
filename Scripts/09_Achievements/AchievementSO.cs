@@ -9,10 +9,11 @@ public enum AchievementType
     PLAY,
     ETC,
     WAVE,
-    STAGE_CLEAR,   // ← 추가
-    STAGE_REACH,   // ← 추가
-    BOSS_DEFEAT,   // ← 추가
-    AD_DRAW        // ← 추가
+    STAGE_CLEAR, // 아무 스테이지나 클리어한 횟수
+    STAGE_REACH, // 특정 스테이지까지를 클리어
+    BOSS_DEFEAT,
+    AD_DRAW,
+    EGG_MAX_GRADE   // ← 추가: 최고등급(정예) 알 획득 횟수
 }
 
 public enum RewardType
