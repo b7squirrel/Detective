@@ -29,7 +29,7 @@ public class PausePanel : MonoBehaviour
         Debug.Log($"Is Lead = {isLead}");
         pauseDisp.EnableLeadTag(isLead);
 
-        pauseDisp.InitWeaponCardDisplay(wd);
+        pauseDisp.InitWeaponCardDisplay(wd, isLead);
 
         SetEquipSpriteRow(slot, wd, isLead, companionEquippedItems);
 

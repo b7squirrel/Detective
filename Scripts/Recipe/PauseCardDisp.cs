@@ -23,10 +23,10 @@ public class PauseCardDisp : MonoBehaviour
     [Header("Synergy Icon")]
     [SerializeField] Image synergyIcon;
 
-    public void InitWeaponCardDisplay(WeaponData _wd)
+    public void InitWeaponCardDisplay(WeaponData _wd, bool _isLead)
     {
         SetNumStar(_wd.stats.currentLevel, true);
-        newWeaponText.gameObject.SetActive(_wd.stats.currentLevel == 0);
+        newWeaponText.gameObject.SetActive(!_isLead && _wd.stats.currentLevel == 0);
         newItemText.gameObject.SetActive(false);
 
         for (int i = 0; i < StaticValues.MaxGrade; i++)
