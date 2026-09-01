@@ -321,7 +321,7 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.EndBatchOperation();
             cardDataManager.RefreshCardList();
             ImmediateSaveEquipmentData();
-            CloudSaveManager.Instance?.SaveToCloud();
+            CloudSaveManager.Instance?.ForceSaveToCloud(); // ⭐ 변경: SaveToCloud() → ForceSaveToCloud()
 
             Logger.Log("[GachaSystem] 초보자 팩 뽑기 완료");
         }
@@ -366,7 +366,7 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.EndBatchOperation();
             cardDataManager.RefreshCardList();
             ImmediateSaveEquipmentData();
-            CloudSaveManager.Instance?.SaveToCloud();
+            CloudSaveManager.Instance?.ForceSaveToCloud(); // ⭐ 변경: SaveToCloud() → ForceSaveToCloud()
 
             Logger.Log("[GachaSystem] 전문가 팩 뽑기 완료");
         }

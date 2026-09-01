@@ -476,6 +476,8 @@ public class EquipmentPanelManager : MonoBehaviour
 
         // 필드의 해당 카드도 업데이트
         UpdateCardSlotOfPool(CardOnDisplay);
+
+        CloudSaveManager.Instance?.SaveToCloud(); // ⭐ 추가
     }
     #endregion
 
@@ -518,6 +520,8 @@ public class EquipmentPanelManager : MonoBehaviour
         UpdateUpgradeCost(cardToEquip, upgradeCost);
         if (CheckIfMaxLevel(cardToEquip)) SoundManager.instance.Play(maxLevelSound); // 최고레벨이면 MaxLevel 사운드 재생
         UpdateButtonState(upgradeButton, false);
+
+        CloudSaveManager.Instance?.SaveToCloud(); // ⭐ 추가
     }
 
     /// <summary>

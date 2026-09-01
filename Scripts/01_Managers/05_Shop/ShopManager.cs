@@ -512,6 +512,11 @@ public class ShopManager : SingletonBehaviour<ShopManager>
                 ShowRewardPopup($"번개 {rewardEnergyAmount}개 획득!");
                 break;
         }
+
+        // ⭐ 추가: 실제 결제/소모성 구매가 확정된 모든 지점 이후 클라우드 저장
+        // 골드/보석 소모 구매로 얻은 상자(Box)는 GachaSystem.OpenBox() 안에서 이미 저장되므로 중복이지만,
+        // ForceSaveToCloud()는 언제 호출돼도 안전하니 여기서 한 번 더 확실히 걸어도 무해함
+        CloudSaveManager.Instance?.ForceSaveToCloud();
     }
 
     IEnumerator GiveProductRewardCo(ProductData productData, RectTransform fxStartPoint)
