@@ -211,6 +211,40 @@ public class CardDataManager : SingletonBehaviour<CardDataManager>
         Logger.Log("[CardDataManager] 배치 모드 시작");
     }
 
+    // ⭐ 추가: 클라우드 데이터 적용 후 디스크에서 메모리로 강제 재로드
+    // DontDestroyOnLoad 싱글톤이라 씬 리로드로는 Init()이 다시 안 불리므로,
+    // 파일이 외부(클라우드)에 의해 갱신됐을 때 CloudSaveManager가 명시적으로 호출해야 함
+    public void ReloadFromDisk()
+    {
+        try
+        {
+            if (!File.Exists(filePath))
+            {
+                Logger.LogWarning("[CardDataManager] ReloadFromDisk: 파일이 없습니다.");
+                return;
+            }
+
+            string jsonData = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
+            if (string.IsNullOrEmpty(jsonData))
+            {
+                Logger.LogWarning("[CardDataManager] ReloadFromDisk: 파일이 비어있습니다.");
+                return;
+            }
+
+            var serializedData = JsonUtility.FromJson<Serialization<CardData>>(jsonData);
+            MyCardsList = serializedData?.Data ?? new List<CardData>();
+
+            Logger.Log($"[CardDataManager] ReloadFromDisk 완료: {MyCardsList.Count}개");
+
+            // CardList(런타임 오브젝트) 갱신 — 이미 씬이 초기화된 상태라면 여기서 반영
+            RefreshCardList();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[CardDataManager] ReloadFromDisk 오류: {e.Message}");
+        }
+    }
+
     // ⭐ 배치 모드 종료 및 저장
     public void EndBatchOperation()
     {

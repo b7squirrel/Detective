@@ -215,17 +215,21 @@ public class AchievementManager : MonoBehaviour
             {
                 Logger.LogWarning($"[Reward] 일일/주간 퀘스트는 배지 보상으로 설계되지 않았습니다: {id}");
             }
+
             if (earnedBadgeIds.Add(id))
             {
                 SaveEarnedBadges();
                 Logger.Log($"[Reward] 배지 획득: {id} (카테고리: {ra.original.badgeCategory})");
             }
+
             OnAnyRewarded?.Invoke(ra);
+            CloudSaveManager.Instance?.ForceSaveToCloud(); // ⭐ 추가
             return;
         }
 
         // ⭐ 배지가 아닌 경우(GEM/COIN/ENERGY)에도 반드시 여기서 이벤트 발생
         OnAnyRewarded?.Invoke(ra);
+        CloudSaveManager.Instance?.ForceSaveToCloud(); // ⭐ 추가
 
         if (playerDataManager == null)
             playerDataManager = FindObjectOfType<PlayerDataManager>();
@@ -450,6 +454,41 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
+    // ⭐ CloudSaveManager가 다운로드한 업적 진행도를 적용할 때 사용
+    // PlayerPrefs뿐 아니라 runtimeDict(메모리)도 직접 갱신해야
+    // DontDestroyOnLoad 싱글톤이라 씬 리로드로 재초기화되지 않는 문제를 피할 수 있음
+    public void ApplyCloudAchievements(string achievementsJson)
+    {
+        if (string.IsNullOrEmpty(achievementsJson)) return;
+
+        try
+        {
+            AchievementSaveList saveList = JsonUtility.FromJson<AchievementSaveList>(achievementsJson);
+            if (saveList?.entries == null) return;
+
+            foreach (var entry in saveList.entries)
+            {
+                if (!runtimeDict.TryGetValue(entry.id, out var ra)) continue;
+
+                if (entry.progress > ra.progress)
+                {
+                    ra.progress = entry.progress;
+                    ra.isCompleted = entry.isCompleted;
+                    ra.isRewarded = entry.isRewarded;
+
+                    SaveAchievement(ra); // PlayerPrefs 갱신
+                    OnAnyProgressChanged?.Invoke(ra); // UI 갱신
+                }
+            }
+
+            Logger.Log("[AchievementManager] 클라우드 업적 진행도 적용 완료");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[AchievementManager] 클라우드 업적 적용 오류: {e.Message}");
+        }
+    }
+
     #region 배지
     void LoadEarnedBadges()
     {
@@ -470,15 +509,15 @@ public class AchievementManager : MonoBehaviour
 
     // ===== #region 배지 안, LoadEarnedBadges()/SaveEarnedBadges() 근처에 추가 =====
 
-// ⭐ 디버그용: 배지 관련 모든 기록을 초기화 (받은 배지, 본 배지, 배지 업적 진행도까지 전부)
-[ContextMenu("Debug 플레이모드 : Reset All Badges")]
-public void DebugResetAllBadges()
-{
-    if (!Application.isPlaying)
+    // ⭐ 디버그용: 배지 관련 모든 기록을 초기화 (받은 배지, 본 배지, 배지 업적 진행도까지 전부)
+    [ContextMenu("Debug 플레이모드 : Reset All Badges")]
+    public void DebugResetAllBadges()
     {
-        Logger.LogWarning("[Debug] 플레이 모드에서만 실행 가능합니다.");
-        return;
-    }
+        if (!Application.isPlaying)
+        {
+            Logger.LogWarning("[Debug] 플레이 모드에서만 실행 가능합니다.");
+            return;
+        }
 
     // 1. 받은 배지 목록 초기화
     earnedBadgeIds.Clear();

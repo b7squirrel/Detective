@@ -81,6 +81,7 @@ public class CloudSaveManager : MonoBehaviour
     // 마지막 저장 시각 (너무 자주 저장하지 않도록)
     private DateTime lastSaveTime = DateTime.MinValue;
     private const float MIN_SAVE_INTERVAL_SECONDS = 30f;
+    private bool pendingSaveScheduled = false; // ⭐ 추가
 
     // ─────────────────────────────────────────────────────────
     // 초기화
@@ -290,6 +291,10 @@ public class CloudSaveManager : MonoBehaviour
                 System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
                 System.IO.File.WriteAllText(path, cloudData.myCardsJson, Encoding.UTF8);
                 Debug.Log("[CloudSaveManager] 카드 데이터 적용 완료");
+
+                // DontDestroyOnLoad이므로 메모리도 즉시 갱신
+                if (CardDataManager.Instance != null)
+                    CardDataManager.Instance.ReloadFromDisk();
             }
 
             // 3. 장비 데이터
@@ -300,6 +305,10 @@ public class CloudSaveManager : MonoBehaviour
                 System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
                 System.IO.File.WriteAllText(path, cloudData.myEquipmentsJson, Encoding.UTF8);
                 Debug.Log("[CloudSaveManager] 장비 데이터 적용 완료");
+
+                // DontDestroyOnLoad이므로 메모리도 즉시 갱신
+                if (EquipmentDataManager.Instance != null)
+                    EquipmentDataManager.Instance.ReloadFromDisk();
             }
 
             // 4. 튜토리얼 단계
@@ -319,7 +328,12 @@ public class CloudSaveManager : MonoBehaviour
 
             // 6. 영구 업적
             if (!string.IsNullOrEmpty(cloudData.achievementsJson))
-                ApplyAchievements(cloudData.achievementsJson);
+            {
+                if (AchievementManager.Instance != null)
+                    AchievementManager.Instance.ApplyCloudAchievements(cloudData.achievementsJson);
+                else
+                    ApplyAchievements(cloudData.achievementsJson); // 폴백: 인스턴스가 아직 없으면 기존 방식(PlayerPrefs만)
+            }
 
             // 7. ⭐ 추가: 배지 — 덮어쓰기 아님, 합집합 병합 (기기 간 배지는 절대 줄어들면 안 됨)
             if (!string.IsNullOrEmpty(cloudData.earnedBadgesCsv) && AchievementManager.Instance != null)
@@ -561,14 +575,28 @@ public class CloudSaveManager : MonoBehaviour
             return;
         }
 
-        if ((DateTime.Now - lastSaveTime).TotalSeconds < MIN_SAVE_INTERVAL_SECONDS)
+        double elapsed = (DateTime.Now - lastSaveTime).TotalSeconds;
+        if (elapsed >= MIN_SAVE_INTERVAL_SECONDS)
         {
-            Debug.Log("[CloudSaveManager] 저장 인터벌 미충족. 건너뜀.");
-            return;
+            StartCoroutine(UploadToCloud());
         }
-
-        StartCoroutine(UploadToCloud());
+        else if (!pendingSaveScheduled)
+        {
+            // ⭐ 변경: 그냥 건너뛰지 않고, 인터벌이 끝나는 시점에 한 번 더 저장을 예약
+            pendingSaveScheduled = true;
+            float waitTime = MIN_SAVE_INTERVAL_SECONDS - (float)elapsed;
+            Debug.Log($"[CloudSaveManager] 저장 인터벌 미충족. {waitTime:F1}초 후 자동 재시도 예약.");
+            StartCoroutine(RunPendingSaveAfter(waitTime));
+        }
+        // else: 이미 예약된 저장이 대기 중이므로 추가 예약 불필요
 #endif
+    }
+
+    private IEnumerator RunPendingSaveAfter(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        pendingSaveScheduled = false;
+        yield return StartCoroutine(UploadToCloud());
     }
 
     // 인터벌 무시하고 강제 저장 (게임 종료 시 등)

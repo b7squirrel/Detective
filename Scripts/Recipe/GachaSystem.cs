@@ -445,6 +445,7 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.EndBatchOperation();
             cardDataManager.RefreshCardList();
             ImmediateSaveEquipmentData();
+            CloudSaveManager.Instance?.SaveToCloud();   // ⭐ 추가: 다른 OpenBox 계열과 일관성 맞춤
         }
         catch (Exception e)
         {
@@ -906,8 +907,7 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.EndBatchOperation();
             cardDataManager.RefreshCardList();
             ImmediateSaveEquipmentData();
-            CloudSaveManager.Instance?.SaveToCloud();
-
+            CloudSaveManager.Instance?.ForceSaveToCloud();   // ⭐ 변경: SaveToCloud() → ForceSaveToCloud()
             PlayerPrefs.SetInt(GIFT_PENDING_KEY, 1);
             PlayerPrefs.Save();
 
@@ -924,15 +924,16 @@ public class GachaSystem : MonoBehaviour
     // 두 번째 팝업에서 "탭해서 계속하기"를 누를 때 호출
     public void RevealTutorialReward()
     {
-        // ⭐ 추가: 이제 연출을 실제로 보여줬으니 플래그 해제
         PlayerPrefs.SetInt(GIFT_PENDING_KEY, 0);
-        PlayerPrefs.SetInt(GIFT_COMPLETED_KEY, 1); // ⭐ 추가: 이제 완전히 끝났음을 기록
+        PlayerPrefs.SetInt(GIFT_COMPLETED_KEY, 1);
         PlayerPrefs.Save();
 
         mainMenuManager.SetActiveTopTabs(false);
         mainMenuManager.SetActiveBottomTabs(false);
+        ShowGachaResult();
 
-        ShowGachaResult(); // 이 시점에 비로소 가챠 연출 시작
+        // ⭐ 추가: 튜토리얼 완전 종료 시점 - 확실하게 클라우드 반영
+        CloudSaveManager.Instance?.ForceSaveToCloud();
     }
 
     public void OnGachaResultClosed()

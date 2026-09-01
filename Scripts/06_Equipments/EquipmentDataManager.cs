@@ -128,6 +128,35 @@ public class EquipmentDataManager : SingletonBehaviour<EquipmentDataManager>
         // ⭐ InitializeCardList() 호출 제거 - GameInitializer가 순서를 보장한 뒤 명시적으로 호출함
     }
 
+    // ⭐ 추가: 클라우드 데이터 적용 후 디스크에서 메모리로 강제 재로드
+    public void ReloadFromDisk()
+    {
+        try
+        {
+            if (!File.Exists(filePath))
+            {
+                Logger.LogWarning("[EquipmentDataManager] ReloadFromDisk: 파일이 없습니다.");
+                return;
+            }
+
+            string jsonData = File.ReadAllText(filePath, System.Text.Encoding.UTF8);
+            if (string.IsNullOrEmpty(jsonData))
+            {
+                Logger.LogWarning("[EquipmentDataManager] ReloadFromDisk: 파일이 비어있습니다.");
+                return;
+            }
+
+            var serializedData = JsonUtility.FromJson<Serialization<CardEquipmentData>>(jsonData);
+            MyEquipmentsList = serializedData?.Data ?? new List<CardEquipmentData>();
+
+            Logger.Log($"[EquipmentDataManager] ReloadFromDisk 완료: {MyEquipmentsList.Count}개");
+        }
+        catch (Exception e)
+        {
+            Logger.LogError($"[EquipmentDataManager] ReloadFromDisk 오류: {e.Message}");
+        }
+    }
+
     protected override void OnDestroy()
     {
         bool wasRealInstance = (Instance == this);

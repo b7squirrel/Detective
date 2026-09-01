@@ -85,12 +85,13 @@ public class TutorialManager : MonoBehaviour
         Debug.Log($"[Tutorial] Step Advanced → {CurrentStep}");
         OnStepChanged?.Invoke(CurrentStep);
 
-        // ⭐ 추가: 도달한 스텝 번호 기록
         FirebaseManager.LogEvent("tutorial_step_reached", "step_number", (long)CurrentStep);
 
         if (CurrentStep == TutorialStep.Completed)
         {
             FirebaseManager.LogEvent("tutorial_complete");
+            // ⭐ 추가: 튜토리얼 완료는 절대 놓치면 안 되는 이벤트 - 즉시 강제 클라우드 저장
+            CloudSaveManager.Instance?.ForceSaveToCloud();
         }
     }
 
