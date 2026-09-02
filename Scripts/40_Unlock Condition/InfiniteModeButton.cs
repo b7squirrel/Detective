@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // 추가
+using TMPro;
+
 public class InfiniteModeButton : MonoBehaviour
 {
     [Header("버튼")]
@@ -30,8 +31,25 @@ public class InfiniteModeButton : MonoBehaviour
     // ⭐ 추가: 말풍선/설명 팝업 (Overlay Popup > Infinite Mode Popup)
     [Header("말풍선 안내")]
     [SerializeField] GameObject infiniteModePopup;
+    [SerializeField] Vector2 infiniteModePopupOffset = Vector2.zero; // ⭐ 추가: 필요시 인스펙터에서 미세 조정
 
     const string KEY_BADGE_SEEN = "InfiniteMode_BadgeSeen";
+
+    // ⭐ 추가: 팝업 위치 계산용 캐시
+    RectTransform _popupRect;
+    RectTransform _popupParent;
+    Canvas _popupCanvas;
+
+    void Awake()
+    {
+        // ⭐ 추가: infiniteModePopup이 다른 부모 아래에 있으므로 위치 계산용 캐시를 미리 준비
+        if (infiniteModePopup != null)
+        {
+            _popupRect = infiniteModePopup.GetComponent<RectTransform>();
+            _popupParent = _popupRect.parent as RectTransform;
+            _popupCanvas = infiniteModePopup.GetComponentInParent<Canvas>(true); // includeInactive
+        }
+    }
 
     void OnEnable()
     {
@@ -50,7 +68,6 @@ public class InfiniteModeButton : MonoBehaviour
             labelText.color = unlocked ? labelUnlockedColor : labelLockedColor;
 
         bool shouldShowHint = false;
-
         if (badge != null)
         {
             bool badgeSeen = PlayerPrefs.GetInt(KEY_BADGE_SEEN, 0) == 1;
@@ -71,10 +88,32 @@ public class InfiniteModeButton : MonoBehaviour
             }
         }
 
-        // ⭐ 추가: 말풍선도 같은 조건으로 동기화
+        // ⭐ 변경: 말풍선도 같은 조건으로 동기화 + buttonImage 위치에 맞춤
         if (infiniteModePopup != null)
         {
-            infiniteModePopup.SetActive(shouldShowHint);
+            if (shouldShowHint)
+            {
+                PositionPopupAt(buttonImage != null ? buttonImage.rectTransform : null);
+                infiniteModePopup.SetActive(true);
+            }
+            else
+            {
+                infiniteModePopup.SetActive(false);
+            }
+        }
+    }
+
+    // ⭐ 추가: infiniteModePopup을 target(buttonImage) 위치에 맞춤
+    void PositionPopupAt(RectTransform target)
+    {
+        if (target == null || _popupRect == null || _popupParent == null || _popupCanvas == null) return;
+
+        Camera cam = (_popupCanvas.renderMode == RenderMode.ScreenSpaceOverlay) ? null : _popupCanvas.worldCamera;
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, target.position);
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_popupParent, screenPoint, cam, out Vector2 localPoint))
+        {
+            _popupRect.anchoredPosition = localPoint + infiniteModePopupOffset;
         }
     }
 
@@ -101,9 +140,7 @@ public class InfiniteModeButton : MonoBehaviour
         PlayerPrefs.Save();
 
         if (badge != null) badge.SetActive(false);
-
         if (tutorialHighlight != null) tutorialHighlight.Hide();
-
         // ⭐ 추가: 클릭 시 말풍선도 같이 해제
         if (infiniteModePopup != null) infiniteModePopup.SetActive(false);
     }

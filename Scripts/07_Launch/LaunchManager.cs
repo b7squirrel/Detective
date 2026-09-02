@@ -72,8 +72,14 @@ public class LaunchManager : MonoBehaviour
     // ⭐ 추가: 동료 슬롯 첫 해금 안내 팝업이 뜰 때, Companion Slot 1의 Empty Slot 1을 하이라이트하기 위한 참조
     [Header("동료 슬롯 첫 해금 안내 - 하이라이트")]
     [SerializeField] TutorialHighlight tutorialHighlight;
-    [SerializeField] RectTransform companionSlot1EmptySlotRect; // Companion Slot 1 > Empty Slot 1의 RectTransform
-    [SerializeField] GameObject companionSlotHighlightFg; // 하이라이트 중 클릭 차단용 오버레이 (없으면 비워둬도 됨)
+    [SerializeField] RectTransform companionSlot1EmptySlotRect;
+    [SerializeField] GameObject companionSlotHighlightFg;
+    [SerializeField] Vector2 companionSlotAnnouncementOffset = Vector2.zero; // ⭐ 추가: 필요시 인스펙터에서 미세 조정
+
+    // ⭐ 추가: 팝업 위치 계산용 캐시
+    RectTransform _announcementRect;
+    RectTransform _announcementParent;
+    Canvas _announcementCanvas;
 
     // ⭐ 추가: 레이아웃 그룹이 걸려있는 상위 오브젝트(예: "Companion Slots"). SetActive 직후 이 레이아웃이
     //          아직 재배치되지 않은 상태일 수 있어, 하이라이트 좌표 계산 전에 이 대상을 강제로 리빌드한다.
@@ -85,6 +91,14 @@ public class LaunchManager : MonoBehaviour
 
     void Awake()
     {
+        // ⭐ 추가: 첫 해금 안내 팝업 위치 계산용 캐시
+        if (companionSlotUnlockAnnouncement != null)
+        {
+            _announcementRect = companionSlotUnlockAnnouncement.GetComponent<RectTransform>();
+            _announcementParent = _announcementRect.parent as RectTransform;
+            _announcementCanvas = companionSlotUnlockAnnouncement.GetComponentInParent<Canvas>(true); // includeInactive
+        }
+
         // ⭐ 추가: 시작 시 동료 슬롯을 모두 빈 상태로 초기화
         for (int i = 0; i < companionSlots.Length; i++)
         {
@@ -626,11 +640,22 @@ public class LaunchManager : MonoBehaviour
     {
         if (companionSlotUnlockAnnouncement == null) return;
 
+        // ⭐ 변경: 레이아웃 리빌드를 먼저 실행 (위치 계산이 이 결과에 의존하므로)
+        Canvas.ForceUpdateCanvases();
+        if (companionSlotsLayoutRoot != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(companionSlotsLayoutRoot);
+        else
+            Debug.LogWarning("[LaunchManager] companionSlotsLayoutRoot가 비어있습니다. 레이아웃이 아직 재배치되지 않았을 수 있습니다.");
+
+        // ⭐ 추가: 리빌드된 좌표를 기준으로 팝업 위치를 먼저 맞춘 뒤 등장시킴
+        if (companionSlot1EmptySlotRect != null)
+            PositionAnnouncementAt(companionSlot1EmptySlotRect);
+
         PanelTween tween = companionSlotUnlockAnnouncement.GetComponent<PanelTween>();
         if (tween != null)
             tween.ShowWithScale();
         else
-            companionSlotUnlockAnnouncement.SetActive(true); // PanelTween이 없을 때를 대비한 폴백
+            companionSlotUnlockAnnouncement.SetActive(true); // 폴백
 
         if (tutorialHighlight == null)
         {
@@ -642,26 +667,14 @@ public class LaunchManager : MonoBehaviour
         }
         else
         {
-            // ✅ 추가: 방금 SetActive(true)된 Companion Slot Wrapper 때문에 "Companion Slots"의
-            //          레이아웃 그룹이 아직 재배치되지 않았을 수 있으므로, 좌표 계산 전에 강제로 즉시 갱신
-            Canvas.ForceUpdateCanvases();
-            if (companionSlotsLayoutRoot != null)
-                LayoutRebuilder.ForceRebuildLayoutImmediate(companionSlotsLayoutRoot);
-            else
-                Debug.LogWarning("[LaunchManager] companionSlotsLayoutRoot가 비어있습니다. 레이아웃이 아직 재배치되지 않았을 수 있습니다.");
-
-            // ⭐ 디버그: 실제로 호출되는지, Empty Slot 1이 활성 상태인지, 좌표가 정상인지 확인
             Debug.Log($"[LaunchManager] 하이라이트 시도. target={companionSlot1EmptySlotRect.name}, " +
                       $"activeInHierarchy={companionSlot1EmptySlotRect.gameObject.activeInHierarchy}, " +
                       $"position={companionSlot1EmptySlotRect.position}, " +
                       $"sizeDelta={companionSlot1EmptySlotRect.sizeDelta}");
-
             tutorialHighlight.HighlightUI(companionSlot1EmptySlotRect, companionSlotHighlightFg);
-
             Debug.Log($"[LaunchManager] HighlightUI 호출 완료. tutorialHighlight.gameObject.activeSelf={tutorialHighlight.gameObject.activeSelf}");
         }
     }
-
     #endregion
 
     void RefreshCompanionsInContainer()
@@ -747,5 +760,18 @@ public class LaunchManager : MonoBehaviour
         }
     }
 
+    // ⭐ 추가: companionSlotUnlockAnnouncement를 target(companionSlot1EmptySlotRect) 위치에 맞춤
+    void PositionAnnouncementAt(RectTransform target)
+    {
+        if (target == null || _announcementRect == null || _announcementParent == null || _announcementCanvas == null) return;
+
+        Camera cam = (_announcementCanvas.renderMode == RenderMode.ScreenSpaceOverlay) ? null : _announcementCanvas.worldCamera;
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, target.position);
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_announcementParent, screenPoint, cam, out Vector2 localPoint))
+        {
+            _announcementRect.anchoredPosition = localPoint + companionSlotAnnouncementOffset;
+        }
+    }
     #endregion
 }
