@@ -413,7 +413,7 @@ public class Level : MonoBehaviour
         // 5단계: 아이템 업그레이드 (시너지 조건과 무관, 스탯 강화 목적)
         ApplyAllUpgradesByType(UpgradeType.ItemUpgrade);
 
-        Logger.Log("[FullAutoUpgrade] 전체 자동 업그레이드 완료");
+        Debug.Log("[FullAutoUpgrade] 전체 자동 업그레이드 완료");
     }
 
     /// <summary>
@@ -435,7 +435,7 @@ public class Level : MonoBehaviour
 
             ApplyUpdatedLevel();
 
-            Logger.Log($"[FullAutoUpgrade] 적용됨: [{type}] {upgradeData.name}");
+            Debug.Log($"[FullAutoUpgrade] 적용됨: [{type}] {upgradeData.name}");
         }
     }
 
@@ -461,7 +461,7 @@ public class Level : MonoBehaviour
 
             ApplyUpdatedLevel();
 
-            Logger.Log($"[FullAutoUpgrade] 시너지 적용됨: {synergy.name}");
+            Debug.Log($"[FullAutoUpgrade] 시너지 적용됨: {synergy.name}");
             count++;
         }
     }

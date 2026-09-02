@@ -16,7 +16,7 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager instance;
 
-    [Header("⚠️ 테스트용 - 튜토리얼 강제 스킵")]
+    [Header("테스트용 - 튜토리얼 강제 스킵")]
     [SerializeField] bool forceSkipTutorial = false;   // ⭐ 추가: 인스펙터에서 체크 한 번으로 on/off
 
 

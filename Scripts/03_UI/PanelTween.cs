@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 public class PanelTween : MonoBehaviour
@@ -34,6 +35,18 @@ public class PanelTween : MonoBehaviour
         panelTrns.DOScale(Vector3.one, animationDuration)
             .SetEase(popupEase)
             .SetUpdate(true);
+    }
+    public void ShowWithScaleDelayed(float delayedTime)
+    {
+        gameObject.SetActive(true);        // 먼저 켜서 코루틴을 이 오브젝트 위에서 돌릴 수 있게 함
+        panelTrns.localScale = Vector3.zero; // 즉시 투명(스케일 0) 상태로 만들어 시각적으로는 안 보이게
+        StartCoroutine(ShowWithScaleDelayedCo(delayedTime));
+    }
+
+    IEnumerator ShowWithScaleDelayedCo(float delayedTime)
+    {
+        yield return new WaitForSeconds(delayedTime);
+        ShowWithScale(); // 내부에서 다시 SetActive(true) + DOScale 처리 (SetActive는 중복 호출이라 무해함)
     }
     public void HidePanel()
     {

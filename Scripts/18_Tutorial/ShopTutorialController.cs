@@ -23,6 +23,11 @@ public class ShopTutorialController : MonoBehaviour
 
     [Header("최고레벨 카드 안내 말풍선")]
     [SerializeField] GameObject topCardHintBubble;
+    [SerializeField] Vector2 hintOffset = Vector2.zero; // 필요시 인스펙터에서 미세 조정
+
+    Canvas _canvas;
+    RectTransform _hintRect;
+    RectTransform _hintParent;
 
     [Header("보석 지급량")]
     [SerializeField] int crystalAmount = 1650;
@@ -46,12 +51,13 @@ public class ShopTutorialController : MonoBehaviour
         HighlightItemCard,  // 아이템카드 뽑기 유도
         Done                // 상점 튜토리얼 완료
     }
-    ShopTutorialPhase phase = ShopTutorialPhase.None;
 
+    ShopTutorialPhase phase = ShopTutorialPhase.None;
     ChestType pendingChestType = ChestType.Other;
 
     const string CRYSTAL_GIVEN_KEY = "TutorialCrystalGiven";
     const string SHOP_PHASE_KEY = "TutorialShopPhase";
+
     Coroutine _activeScrollCoroutine = null;
 
     // ─────────────────────────────────────────
@@ -66,6 +72,10 @@ public class ShopTutorialController : MonoBehaviour
             phase = (ShopTutorialPhase)PlayerPrefs.GetInt(SHOP_PHASE_KEY, 0);
         }
         Debug.Log($"[ShopTutorial] Awake - phase 복원: {phase}");
+
+        _hintRect = topCardHintBubble.GetComponent<RectTransform>();
+        _hintParent = _hintRect.parent as RectTransform;
+        _canvas = topCardHintBubble.GetComponentInParent<Canvas>(true); // includeInactive: true
     }
 
     void OnEnable()
@@ -90,12 +100,14 @@ public class ShopTutorialController : MonoBehaviour
                 HideAll();
             return;
         }
+
         // Done 케이스 제거 - TutorialManager에서 이미 교정됨
         if (phase == ShopTutorialPhase.None)
         {
             StartShopTutorial();
             return;
         }
+
         // ✅ fg 넘겨서 동시 처리
         tutorialHighlight.HighlightUI(shopTabButton, fg);
     }
@@ -125,9 +137,8 @@ public class ShopTutorialController : MonoBehaviour
     public void OnShopTabEntered()
     {
         Debug.Log($"[ShopTutorial] OnShopTabEntered - phase: {phase}");
-
         tutorialHighlight.Hide();
-        HideTopCardHint();   // ⭐ 추가
+        HideTopCardHint();
         if (fg != null) fg.SetActive(true);
 
         switch (phase)
@@ -170,11 +181,10 @@ public class ShopTutorialController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         yield return StartCoroutine(ScrollToPosition(scrollToDuckCardPosY));
         SetPhase(ShopTutorialPhase.HighlightDuckCard);
-
         // ✅ 하이라이트 표시 후 스크롤 잠금
         LockScroll();
         tutorialHighlight.HighlightUI(duckCardButton, fg);
-        ShowTopCardHint();   // ⭐ 추가
+        ShowTopCardHint(); // ⭐ 오리카드 하이라이트와 함께 표시
     }
 
     IEnumerator ScrollThenHighlightItem()
@@ -230,12 +240,14 @@ public class ShopTutorialController : MonoBehaviour
             elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / scrollDuration);
             t = t * t * (3f - 2f * t);
+
             content.anchoredPosition = new Vector2(
                 content.anchoredPosition.x,
                 Mathf.Lerp(startPosY, targetPosY, t)
             );
             yield return null;
         }
+
         content.anchoredPosition = new Vector2(content.anchoredPosition.x, targetPosY);
     }
 
@@ -245,7 +257,7 @@ public class ShopTutorialController : MonoBehaviour
     public void OnGachaOpened(ChestType chestType)
     {
         tutorialHighlight.Hide();
-        HideTopCardHint();   // ⭐ 추가
+        HideTopCardHint();
         if (fg != null) fg.SetActive(true);
 
         // ✅ 가챠 화면 열릴 때 스크롤 복구
@@ -309,6 +321,7 @@ public class ShopTutorialController : MonoBehaviour
         if (PlayerPrefs.GetInt(CRYSTAL_GIVEN_KEY, 0) == 1) return;
 
         PlayerDataManager.Instance.AddCristal(crystalAmount);
+
         if (crystalGivenText != null)
         {
             string coloredAmount = $"<color=#FFE600>{crystalAmount}</color>";
@@ -319,9 +332,12 @@ public class ShopTutorialController : MonoBehaviour
             string coloredAmount = $"<color=#000000>{crystalAmount}</color>";
             crystalGivenTextShd.text = string.Format(LocalizationManager.Game.crystalGiven, coloredAmount);
         }
+
         ShowPopup(crystalGivenPopup);
+
         PlayerPrefs.SetInt(CRYSTAL_GIVEN_KEY, 1);
         PlayerPrefs.Save();
+
         Debug.Log($"[ShopTutorial] 보석 {crystalAmount}개 지급");
     }
 
@@ -346,40 +362,54 @@ public class ShopTutorialController : MonoBehaviour
         _activeScrollCoroutine = null; // 레퍼런스 초기화
         StopAllCoroutines();
         tutorialHighlight?.Hide();
-        HideTopCardHint();   // ⭐ 추가
+        HideTopCardHint();
         if (fg != null) fg.SetActive(false);
         UnlockScroll();
         phase = ShopTutorialPhase.None;
         Debug.Log("[ShopTutorial] HideAll 호출됨 - 호출 스택 확인 필요");
     }
 
+    // ─────────────────────────────────────────
+    // 최고레벨 카드 안내 말풍선
+    // ─────────────────────────────────────────
     void ShowTopCardHint()
     {
         if (topCardHintBubble == null) return;
+        StartCoroutine(ShowTopCardHintCo());
+    }
 
-        PanelTween tween = topCardHintBubble.GetComponent<PanelTween>();
-        if (tween != null)
+    IEnumerator ShowTopCardHintCo()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        PositionHintBubbleAt(duckCardButton);
+        topCardHintBubble.SetActive(true);
+    }
+
+    // shop open popup의 close button에서 호출
+    public void TriggerTopCardHintBubbleAnim()
+    {
+        topCardHintBubble.GetComponentInChildren<Animator>().SetTrigger("Init");
+        
+    }
+
+    void PositionHintBubbleAt(RectTransform target)
+    {
+        if (target == null || _hintRect == null || _hintParent == null || _canvas == null) return;
+
+        // Screen Space - Overlay면 카메라는 null, Camera 모드면 canvas.worldCamera 사용
+        Camera cam = (_canvas.renderMode == RenderMode.ScreenSpaceOverlay) ? null : _canvas.worldCamera;
+
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(cam, target.position);
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_hintParent, screenPoint, cam, out Vector2 localPoint))
         {
-            tween.ShowWithScale();
-        }
-        else
-        {
-            topCardHintBubble.SetActive(true);
+            _hintRect.anchoredPosition = localPoint + hintOffset;
         }
     }
 
     void HideTopCardHint()
     {
         if (topCardHintBubble == null || !topCardHintBubble.activeSelf) return;
-
-        PanelTween tween = topCardHintBubble.GetComponent<PanelTween>();
-        if (tween != null)
-        {
-            tween.HideWithScale();
-        }
-        else
-        {
-            topCardHintBubble.SetActive(false);
-        }
+        topCardHintBubble.SetActive(false);
     }
 }

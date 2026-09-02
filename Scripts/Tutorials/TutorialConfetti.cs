@@ -15,6 +15,15 @@ public class TutorialConfetti : MonoBehaviour
             StartCoroutine(DeactivateAfterPlay(confettiEffect));
         }
     }
+    public void PlayConfettiWithDelay(float delayedTime)
+    {
+        StartCoroutine(PlayConfettiWithDelayCo(delayedTime));
+    }
+    IEnumerator PlayConfettiWithDelayCo(float delayedTime)
+    {
+        yield return new WaitForSecondsRealtime(delayedTime);
+        PlayConfetti();
+    }
     IEnumerator DeactivateAfterPlay(ParticleSystem ps)
     {
         yield return new WaitForSeconds(ps.main.duration);
