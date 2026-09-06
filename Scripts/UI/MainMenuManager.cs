@@ -45,8 +45,14 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] RuntimeAnimatorController defaultTabSlideHandleCon;
     [SerializeField] RuntimeAnimatorController darkTabSlideHandleCon;
     [SerializeField] Animator tabSliderHandleAnim;
+
     [Header("튜토리얼 - 자물쇠 아이콘")]
     [SerializeField] GameObject[] lockIcons; // 각 탭 버튼의 자물쇠 오브젝트 (5개)
+
+    [Header("사이드 메뉴 튜토리얼 잠금")]
+    [SerializeField] Animator leftSideButtonsAnim;
+    [SerializeField] Animator rightSideButtonsAnim;
+    bool tutorialTopTabsLocked = false; // ⭐ 추가
 
     bool slotSwapFinished;
 
@@ -316,9 +322,13 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-
     public void SetActiveTopTabs(bool active)
     {
+        if (active && tutorialTopTabsLocked)
+        {
+            // ⭐ 추가: 튜토리얼이 안 끝났으면 다른 곳에서 열려고 해도 무시
+            return;
+        }
         if (active)
         {
             upperTabs.DOAnchorPosY(0f, 0.5f);
@@ -413,6 +423,8 @@ public class MainMenuManager : MonoBehaviour
     {
         // ✅ Completed도 SetTabsByStep으로 처리 (button.interactable 복구 포함)
         SetTabsByStep(step); // ← 수정된 메서드 호출
+        UpdateSideButtonsVisibility(step); // ⭐ 추가
+        UpdateTopTabsVisibilityByTutorial(step); // ⭐ 추가
     }
     // ✅ 현재 단계에서 몇 번 탭까지 활성화할지 결정
     private int GetUnlockedTabCount(TutorialStep step)
@@ -477,6 +489,24 @@ public class MainMenuManager : MonoBehaviour
             default:
                 return new bool[] { true, true, true, true, true };
         }
+    }
+
+    void UpdateTopTabsVisibilityByTutorial(TutorialStep step)
+    {
+        tutorialTopTabsLocked = step != TutorialStep.Completed;
+        SetActiveTopTabs(!tutorialTopTabsLocked); // ⭐ 잠금이면 즉시 숨기고, 해제되면 즉시 보여줌
+    }
+    void UpdateSideButtonsVisibility(TutorialStep step)
+    {
+        bool completed = step == TutorialStep.Completed;
+        Debug.Log($"[MainMenu] UpdateSideButtonsVisibility - completed={completed}, left={leftSideButtonsAnim?.gameObject.name}, right={rightSideButtonsAnim?.gameObject.name}");
+        leftSideButtonsAnim.SetBool("TutorialCompleted", completed);
+        rightSideButtonsAnim.SetBool("TutorialCompleted", completed);
+    }
+    public void ReapplySideButtonsVisibility()
+    {
+        if (TutorialManager.instance == null) return;
+        UpdateSideButtonsVisibility(TutorialManager.instance.CurrentStep);
     }
     #endregion
 }

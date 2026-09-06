@@ -117,6 +117,7 @@ public class ShopTutorialController : MonoBehaviour
     {
         yield return new WaitUntil(() => GameInitializer.IsInitialized); // ⭐ 추가
         yield return new WaitForSeconds(0.5f); // ⭐ 추가 — 레이아웃 안정화 대기
+        if (target == null) { ForceCompleteTutorial(); yield break; } // ⭐ 추가
         Canvas.ForceUpdateCanvases();
         if (fg != null) fg.SetActive(true);
         tutorialHighlight.HighlightUI(target, fg);
@@ -135,6 +136,7 @@ public class ShopTutorialController : MonoBehaviour
     IEnumerator HighlightShopTabAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
+        if (shopTabButton == null) { ForceCompleteTutorial(); yield break; } // ⭐ 추가
         SetPhase(ShopTutorialPhase.HighlightShopTab);
         // ✅ fg 넘겨서 동시 처리
         tutorialHighlight.HighlightUI(shopTabButton, fg);
@@ -190,6 +192,7 @@ public class ShopTutorialController : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         yield return StartCoroutine(ScrollToPosition(scrollToDuckCardPosY));
+        if (duckCardButton == null) { ForceCompleteTutorial(); yield break; } // ⭐ 추가
         SetPhase(ShopTutorialPhase.HighlightDuckCard);
         // ✅ 하이라이트 표시 후 스크롤 잠금
         LockScroll();
@@ -230,9 +233,10 @@ public class ShopTutorialController : MonoBehaviour
         if (TutorialManager.instance?.CurrentStep != TutorialStep.Step1_ShopUnlocked)
         {
             Debug.LogWarning("[ShopTutorial] 대기 중 Step이 변경됨! 아이템카드 하이라이트 취소");
-            yield break;
+            yield break; // ⭐ 이 경우는 Step이 정상적으로 넘어간 것일 수도 있으니 강제종료 X, 그대로 둠
         }
 
+        if (itemCardButton == null) { ForceCompleteTutorial(); yield break; } // ⭐ 추가
         yield return StartCoroutine(ScrollToPosition(scrollToDuckCardPosY));
         LockScroll();
         tutorialHighlight.HighlightUI(itemCardButton, fg);
@@ -321,6 +325,18 @@ public class ShopTutorialController : MonoBehaviour
     void UnlockScroll()
     {
         if (shopScrollRect != null) shopScrollRect.enabled = true;
+    }
+
+    // ─────────────────────────────────────────
+    // 강제 완료 (안전장치)
+    // ─────────────────────────────────────────
+    void ForceCompleteTutorial()
+    {
+        Debug.LogWarning("[ShopTutorial] 진행 불가 상태 감지 - 튜토리얼 강제 완료 처리");
+        HideAll();
+        GachaSystem gachaSys = FindObjectOfType<GachaSystem>();
+        gachaSys?.SkipTutorialRewardGift(); // 오리 보상 자동 지급 막기
+        TutorialManager.instance?.SetStep(TutorialStep.Completed);
     }
 
     // ─────────────────────────────────────────

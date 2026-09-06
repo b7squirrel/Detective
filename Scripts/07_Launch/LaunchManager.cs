@@ -154,7 +154,13 @@ public class LaunchManager : MonoBehaviour
         // ⭐ 추가: 튜토리얼 단계 구독 및 현재 상태 즉시 반영
         TutorialManager.OnStepChanged += OnTutorialStepChanged;
         if (TutorialManager.instance != null)
+        {
             UpdateLeadOriMessageVisibility(TutorialManager.instance.CurrentStep);
+            // ⭐ 추가: 사이드 버튼도 이 탭에 진입할 때마다 최신 상태로 재적용
+            MainMenuManager mainMenuManager = FindObjectOfType<MainMenuManager>();
+            mainMenuManager?.ReapplySideButtonsVisibility();
+        }
+
     }
 
     void OnDisable()

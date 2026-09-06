@@ -89,6 +89,7 @@ public class TutorialManager : MonoBehaviour
 
         if (CurrentStep == TutorialStep.Completed)
         {
+            ForceRestoreTabsVisibility(); // ⭐ 추가
             FirebaseManager.LogEvent("tutorial_complete");
             // ⭐ 추가: 튜토리얼 완료는 절대 놓치면 안 되는 이벤트 - 즉시 강제 클라우드 저장
             CloudSaveManager.Instance?.ForceSaveToCloud();
@@ -245,6 +246,21 @@ public class TutorialManager : MonoBehaviour
         CurrentStep = step;
         SaveTutorialState();
         OnStepChanged?.Invoke(CurrentStep);
+        if (step == TutorialStep.Completed)
+        {
+            ForceRestoreTabsVisibility(); // ⭐ 추가
+        }
         Debug.Log($"[Tutorial] 강제 설정 → {CurrentStep}");
+    }
+
+    // ⭐ 추가
+    void ForceRestoreTabsVisibility()
+    {
+        MainMenuManager mainMenuManager = FindObjectOfType<MainMenuManager>();
+        if (mainMenuManager != null)
+        {
+            mainMenuManager.SetActiveBottomTabs(true);
+            mainMenuManager.SetActiveTopTabs(true);
+        }
     }
 }
