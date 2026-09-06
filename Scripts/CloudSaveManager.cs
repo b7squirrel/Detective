@@ -28,6 +28,8 @@ public class CloudSaveData
     public bool proPackPurchased = false;      // 전문가 팩 1회 구매 기록
     public bool tutorialGiftCompleted = false; // ⭐ 추가: 튜토리얼 보상(오리 5마리) 수령 완료 여부
     public string earnedBadgesCsv = "";   // ⭐ 추가: 획득한 배지 ID들 (콤마 구분)
+    public int tutorialDuckCardID = -1;
+    public int tutorialItemCardID = -1;
 
     // ─── 나중에 추가할 데이터는 아래에 필드만 추가하면 됩니다 ───
     // public List<string> collectedEquipmentIds = new List<string>();  // 장비 도감 (출시 후 추가 예정)
@@ -64,6 +66,8 @@ public class CloudSaveManager : MonoBehaviour
     // 초기화 및 로그인 상태
     public static bool IsInitialized { get; private set; } = false;
     public static bool PendingSceneReload { get; private set; } = false;
+
+
 
     public bool IsAuthenticated
     {
@@ -278,7 +282,6 @@ public class CloudSaveManager : MonoBehaviour
                 System.IO.File.WriteAllText(path, cloudData.playerDataJson, Encoding.UTF8);
                 Debug.Log("[CloudSaveManager] PlayerData 적용 완료");
 
-                // DontDestroyOnLoad이므로 메모리도 즉시 갱신
                 if (PlayerDataManager.Instance != null)
                     PlayerDataManager.Instance.ReloadFromDisk();
             }
@@ -292,7 +295,6 @@ public class CloudSaveManager : MonoBehaviour
                 System.IO.File.WriteAllText(path, cloudData.myCardsJson, Encoding.UTF8);
                 Debug.Log("[CloudSaveManager] 카드 데이터 적용 완료");
 
-                // DontDestroyOnLoad이므로 메모리도 즉시 갱신
                 if (CardDataManager.Instance != null)
                     CardDataManager.Instance.ReloadFromDisk();
             }
@@ -306,7 +308,6 @@ public class CloudSaveManager : MonoBehaviour
                 System.IO.File.WriteAllText(path, cloudData.myEquipmentsJson, Encoding.UTF8);
                 Debug.Log("[CloudSaveManager] 장비 데이터 적용 완료");
 
-                // DontDestroyOnLoad이므로 메모리도 즉시 갱신
                 if (EquipmentDataManager.Instance != null)
                     EquipmentDataManager.Instance.ReloadFromDisk();
             }
@@ -318,6 +319,12 @@ public class CloudSaveManager : MonoBehaviour
                 PlayerPrefs.SetInt("TutorialStep", cloudData.tutorialStep);
                 Debug.Log($"[CloudSaveManager] 튜토리얼 단계 적용: {cloudData.tutorialStep}");
             }
+
+            // ⭐ 추가: 튜토리얼 오리/아이템 카드 ID 적용
+            // GachaSystem이 이미 Awake()에서 PlayerPrefs를 읽어버렸을 수 있으므로,
+            // static 값 자체를 직접 갱신하는 GachaSystem.SetTutorialCardIDs()를 통해 반영
+            GachaSystem.SetTutorialCardIDs(cloudData.tutorialDuckCardID, cloudData.tutorialItemCardID);
+            Debug.Log($"[CloudSaveManager] 튜토리얼 카드 ID 적용: Duck={cloudData.tutorialDuckCardID}, Item={cloudData.tutorialItemCardID}");
 
             // 5. 튜토리얼 보상 수령 여부 적용 (한번 true가 됐으면 계속 true로 유지)
             if (cloudData.tutorialGiftCompleted)
@@ -332,10 +339,10 @@ public class CloudSaveManager : MonoBehaviour
                 if (AchievementManager.Instance != null)
                     AchievementManager.Instance.ApplyCloudAchievements(cloudData.achievementsJson);
                 else
-                    ApplyAchievements(cloudData.achievementsJson); // 폴백: 인스턴스가 아직 없으면 기존 방식(PlayerPrefs만)
+                    ApplyAchievements(cloudData.achievementsJson);
             }
 
-            // 7. ⭐ 추가: 배지 — 덮어쓰기 아님, 합집합 병합 (기기 간 배지는 절대 줄어들면 안 됨)
+            // 7. 배지 — 덮어쓰기 아님, 합집합 병합
             if (!string.IsNullOrEmpty(cloudData.earnedBadgesCsv) && AchievementManager.Instance != null)
             {
                 string[] cloudBadgeIds = cloudData.earnedBadgesCsv.Split(',');
@@ -352,7 +359,6 @@ public class CloudSaveManager : MonoBehaviour
             PlayerPrefs.Save();
             Debug.Log("[CloudSaveManager] 모든 클라우드 데이터 적용 완료 - 리로드 필요 플래그 설정");
 
-            // ⭐ 변경: 여기서 직접 SceneManager.LoadScene() 호출하지 않음
             PendingSceneReload = true;
         }
         catch (Exception e)
@@ -360,7 +366,6 @@ public class CloudSaveManager : MonoBehaviour
             Debug.LogError($"[CloudSaveManager] 로컬 적용 오류: {e.Message}");
         }
     }
-
     // ⭐ 추가: GameInitializer가 리로드를 소비한 후 호출
     public static void ClearPendingSceneReload()
     {
@@ -451,7 +456,6 @@ public class CloudSaveManager : MonoBehaviour
     private CloudSaveData BuildSaveData()
     {
         CloudSaveData data = new CloudSaveData();
-
         try
         {
             // 1. PlayerData
@@ -475,16 +479,19 @@ public class CloudSaveManager : MonoBehaviour
             // 4. 튜토리얼 단계
             data.tutorialStep = PlayerPrefs.GetInt("TutorialStep", 0);
 
+            // ⭐ 추가: 튜토리얼 오리/아이템 카드 ID (재설치 후 클라우드 복원 시 튜토리얼이 강제 종료되는 것 방지)
+            data.tutorialDuckCardID = PlayerPrefs.GetInt("TutorialDuckCardID", -1);
+            data.tutorialItemCardID = PlayerPrefs.GetInt("TutorialItemCardID", -1);
+
             // 5. 영구 업적
             data.achievementsJson = BuildAchievementsJson();
 
-            // 6. ⭐ 추가: 획득한 배지
+            // 6. 획득한 배지
             if (AchievementManager.Instance != null)
                 data.earnedBadgesCsv = string.Join(",", AchievementManager.Instance.GetEarnedBadgeIds());
 
             // 7. 튜토리얼 보상 수령 여부
             data.tutorialGiftCompleted = PlayerPrefs.GetInt("TutorialGiftCompleted", 0) == 1;
-
 
             // 8. 팩 구매
             if (PackPurchaseManager.Instance != null)
@@ -505,7 +512,6 @@ public class CloudSaveManager : MonoBehaviour
         {
             Debug.LogError($"[CloudSaveManager] SaveData 빌드 오류: {e.Message}");
         }
-
         return data;
     }
 

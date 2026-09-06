@@ -15,6 +15,7 @@ public class MergeTutorialController : MonoBehaviour
     [SerializeField] GameObject fg;
     [Header("팝업")]
     [SerializeField] GameObject mergeOpenPopup;
+    [SerializeField] ScrollRect presentFieldScrollRect; // 인스펙터에 "Present Field" 드래그
     // ─────────────────────────────────────────
     // 내부 상태
     // ─────────────────────────────────────────
@@ -161,4 +162,35 @@ public class MergeTutorialController : MonoBehaviour
         PanelTween tween = popup.GetComponent<PanelTween>();
         if (tween != null) tween.ShowWithScale();
     }
+
+    RectTransform GetSlotRectForCardID(int targetId)
+{
+    if (targetId < 0 || CardSlotManager.instance == null) return null;
+    CardSlot slot = CardSlotManager.instance.GetSlotByID(targetId);
+    if (slot == null || !slot.gameObject.activeInHierarchy) return null; // 지금 필드에 안 보이는 카드
+    Transform overlayRef = slot.transform.Find("Overlay Ref");
+    return overlayRef != null ? overlayRef.GetComponent<RectTransform>() : slot.GetComponent<RectTransform>();
+}
+
+void ScrollToTarget(RectTransform target)
+{
+    Canvas.ForceUpdateCanvases();
+    LayoutRebuilder.ForceRebuildLayoutImmediate(presentFieldScrollRect.content);
+    Vector2 viewportLocal = presentFieldScrollRect.viewport.InverseTransformPoint(presentFieldScrollRect.content.position);
+    Vector2 targetLocal = presentFieldScrollRect.viewport.InverseTransformPoint(target.position);
+    float deltaY = targetLocal.y - viewportLocal.y;
+    Vector2 newPos = presentFieldScrollRect.content.anchoredPosition;
+    newPos.y -= deltaY;
+    float maxY = Mathf.Max(0, presentFieldScrollRect.content.rect.height - presentFieldScrollRect.viewport.rect.height);
+    newPos.y = Mathf.Clamp(newPos.y, 0, maxY);
+    presentFieldScrollRect.content.anchoredPosition = newPos;
+}
+
+int GetStartingDuckCardID()
+{
+    var cdm = CardDataManager.Instance;
+    if (cdm == null) return -1;
+    CardData lead = cdm.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
+    return lead != null ? lead.ID : -1;
+}
 }

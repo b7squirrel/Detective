@@ -108,8 +108,18 @@ public class ShopTutorialController : MonoBehaviour
             return;
         }
 
-        // ✅ fg 넘겨서 동시 처리
-        tutorialHighlight.HighlightUI(shopTabButton, fg);
+        // ⭐ 재개 분기만 코루틴으로 감싸기
+        ShowPopup(shopOpenPopup);
+        StartCoroutine(HighlightAfterFrame(shopTabButton));
+    }
+
+    IEnumerator HighlightAfterFrame(RectTransform target)
+    {
+        yield return new WaitUntil(() => GameInitializer.IsInitialized); // ⭐ 추가
+        yield return new WaitForSeconds(0.5f); // ⭐ 추가 — 레이아웃 안정화 대기
+        Canvas.ForceUpdateCanvases();
+        if (fg != null) fg.SetActive(true);
+        tutorialHighlight.HighlightUI(target, fg);
     }
 
     // ─────────────────────────────────────────

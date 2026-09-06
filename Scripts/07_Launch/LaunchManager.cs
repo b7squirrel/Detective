@@ -183,23 +183,32 @@ public class LaunchManager : MonoBehaviour
     IEnumerator InitLead()
     {
         startButton.SetActive(false);
-        
+
         // GameInitializer가 모든 초기화를 완료할 때까지 대기
         Logger.Log("[LaunchManager] 게임 초기화 대기 중...");
         yield return new WaitUntil(() => GameInitializer.IsInitialized);
         Logger.Log("[LaunchManager] 게임 초기화 완료, 리드 설정 시작");
-        
+
+        // ⭐ 추가: 튜토리얼 완료 보상(오리 10마리) 리빌이 아직 안 끝났다면 대기
+        // (재시작 시 GachaSystem이 카드를 생성하고 팝업을 다시 띄우는 동안
+        //  Panel Launch가 먼저 활성화되면서 Start 버튼이 그 아래에서 보여버리는 것 방지)
+        if (TutorialManager.instance != null &&
+            TutorialManager.instance.CurrentStep == TutorialStep.Completed)
+        {
+            yield return new WaitUntil(() => !GachaSystem.IsTutorialGiftIncomplete && !GachaSystem.IsTutorialRewardInProgress);
+        }
+
         // 리드 오리 찾기
         CardData lead = cardDataManager.GetMyCardList().Find(
             x => x.StartingMember == StartingMember.Zero.ToString()
         );
-        
+
         if (lead == null)
         {
             Logger.LogError("[LaunchManager] 리드 오리를 찾을 수 없습니다!");
             yield break;
         }
-        
+
         SetLead(lead);
 
         // ⭐ 추가: 저장된 동료 오리들도 함께 복원 (StartingMember.First~Forth 플래그로 카드 재조회)

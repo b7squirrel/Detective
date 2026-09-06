@@ -20,6 +20,7 @@ public class GearTutorialController : MonoBehaviour
     [Header("상점 스크롤 잠금")]
     // Gear 튜토리얼 중 상점 스크롤이 되지 않도록
     [SerializeField] ScrollRect shopScrollRect;
+    [SerializeField] ScrollRect presentFieldScrollRect; // 인스펙터에 "Present Field" 드래그
     // ─────────────────────────────────────────
     // 내부 상태
     // ─────────────────────────────────────────
@@ -88,11 +89,9 @@ public class GearTutorialController : MonoBehaviour
     public void OnGearPanelEntered()
     {
         if (phase != GearTutorialPhase.HighlightGearTab) return;
-        // ✅ 추가: Gear 패널 진입 시 상점 스크롤 복구 (더 이상 상점이 보이지 않으므로)
-        if (shopScrollRect != null) shopScrollRect.enabled = true;
         tutorialHighlight.Hide();
         if (fg != null) fg.SetActive(true);
-        StartCoroutine(HighlightFirstSlotAfterDelay(GearTutorialPhase.HighlightDuckCard, 0.3f));
+        StartCoroutine(HighlightCardAfterDelay(GetStartingDuckCardID(), GearTutorialPhase.HighlightDuckCard, 0.3f));
     }
     // [3단계] 오리 카드 클릭 → 아이템 카드 하이라이트
     // EquipmentPanelManager.InitDisplay()에서 호출
@@ -101,8 +100,7 @@ public class GearTutorialController : MonoBehaviour
         if (phase != GearTutorialPhase.HighlightDuckCard) return;
         tutorialHighlight.Hide();
         if (fg != null) fg.SetActive(true);
-        // 필드가 아이템으로 전환되고 슬롯이 생성될 때까지 대기
-        StartCoroutine(HighlightFirstSlotAfterDelay(GearTutorialPhase.HighlightItemCard, 0.5f));
+        StartCoroutine(HighlightCardAfterDelay(GachaSystem.TutorialItemCardID, GearTutorialPhase.HighlightItemCard, 0.5f));
     }
     // [4단계] 아이템 카드 클릭 → 장착 버튼 하이라이트
     // EquipmentPanelManager.ActivateEquipInfoPanel()에서 호출
@@ -127,19 +125,19 @@ public class GearTutorialController : MonoBehaviour
         tutorialHighlight.HighlightUI(target, fg);
     }
     // 지연 후 Present Slot Pool의 첫 번째 활성 슬롯 하이라이트 (오리 카드, 아이템 카드)
-    IEnumerator HighlightFirstSlotAfterDelay(GearTutorialPhase nextPhase, float delay)
+    IEnumerator HighlightCardAfterDelay(int targetCardId, GearTutorialPhase nextPhase, float delay)
     {
         yield return new WaitForSeconds(delay);
-        yield return null;
-        RectTransform firstSlot = GetFirstActiveSlot();
-        if (firstSlot == null)
+        RectTransform targetRect = GetSlotRectForCardID(targetCardId);
+        if (targetRect == null)
         {
-            Debug.LogWarning("[GearTutorial] 첫 번째 슬롯을 찾을 수 없습니다. 튜토리얼을 강제 완료 처리합니다.");
+            Debug.LogWarning($"[GearTutorial] 대상 카드(ID:{targetCardId})를 찾을 수 없습니다. 강제 완료 처리합니다.");
             ForceCompleteTutorial();
             yield break;
         }
         phase = nextPhase;
-        tutorialHighlight.HighlightUI(firstSlot, fg);
+        ScrollToTarget(targetRect);
+        tutorialHighlight.HighlightUI(targetRect, fg);
     }
     // Present Slot Pool에서 활성화된 첫 번째 자식(슬롯)의 Button RectTransform 반환
     RectTransform GetFirstActiveSlot()
@@ -149,10 +147,10 @@ public class GearTutorialController : MonoBehaviour
         {
             Transform child = presentSlotPool.GetChild(i);
             if (!child.gameObject.activeInHierarchy) continue;
-             Transform overlayRef = child.Find("Overlay Ref");
+            Transform overlayRef = child.Find("Overlay Ref");
             if (overlayRef != null)
                 return overlayRef.GetComponent<RectTransform>();
- 
+
             Debug.LogWarning($"[GearTutorial] '{child.name}' 슬롯 안에서 'Overlay Ref'를 찾을 수 없습니다. Button으로 대체합니다.");
             Button slotButton = child.GetComponentInChildren<Button>(true);
             if (slotButton == null)
@@ -187,5 +185,36 @@ public class GearTutorialController : MonoBehaviour
         popup.SetActive(true);
         PanelTween tween = popup.GetComponent<PanelTween>();
         if (tween != null) tween.ShowWithScale();
+    }
+
+    RectTransform GetSlotRectForCardID(int targetId)
+    {
+        if (targetId < 0 || CardSlotManager.instance == null) return null;
+        CardSlot slot = CardSlotManager.instance.GetSlotByID(targetId);
+        if (slot == null || !slot.gameObject.activeInHierarchy) return null; // 지금 필드에 안 보이는 카드
+        Transform overlayRef = slot.transform.Find("Overlay Ref");
+        return overlayRef != null ? overlayRef.GetComponent<RectTransform>() : slot.GetComponent<RectTransform>();
+    }
+
+    void ScrollToTarget(RectTransform target)
+    {
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(presentFieldScrollRect.content);
+        Vector2 viewportLocal = presentFieldScrollRect.viewport.InverseTransformPoint(presentFieldScrollRect.content.position);
+        Vector2 targetLocal = presentFieldScrollRect.viewport.InverseTransformPoint(target.position);
+        float deltaY = targetLocal.y - viewportLocal.y;
+        Vector2 newPos = presentFieldScrollRect.content.anchoredPosition;
+        newPos.y -= deltaY;
+        float maxY = Mathf.Max(0, presentFieldScrollRect.content.rect.height - presentFieldScrollRect.viewport.rect.height);
+        newPos.y = Mathf.Clamp(newPos.y, 0, maxY);
+        presentFieldScrollRect.content.anchoredPosition = newPos;
+    }
+
+    int GetStartingDuckCardID()
+    {
+        var cdm = CardDataManager.Instance;
+        if (cdm == null) return -1;
+        CardData lead = cdm.GetMyCardList().Find(x => x.StartingMember == StartingMember.Zero.ToString());
+        return lead != null ? lead.ID : -1;
     }
 }

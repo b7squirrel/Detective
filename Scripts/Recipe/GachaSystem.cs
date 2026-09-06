@@ -22,8 +22,16 @@ public class GachaSystem : MonoBehaviour
     [Header("튜토리얼 카드 풀")]
     [SerializeField] TextAsset tutorialDuckPoolDatabase;
     [SerializeField] TextAsset tutorialItemPoolDatabase;
+    private const string TUTORIAL_DUCK_ID_KEY = "TutorialDuckCardID";
+    private const string TUTORIAL_ITEM_ID_KEY = "TutorialItemCardID";
+    private const string TUTORIAL_REWARD_CARD_IDS_KEY = "TutorialRewardCardIDs";
+    public static int TutorialDuckCardID { get; private set; } = -1;
+    public static int TutorialItemCardID { get; private set; } = -1;
+    public static bool IsTutorialGiftIncomplete =>
+    PlayerPrefs.GetInt(GIFT_COMPLETED_KEY, 0) == 0;
+
     // 튜토리얼 보상 뽑기 중인지 여부 (탭 이동 등 후속 처리 분기용)
-    public bool IsTutorialRewardInProgress { get; private set; } = false;
+    public static bool IsTutorialRewardInProgress { get; private set; } = false;
     private const string GIFT_PENDING_KEY = "TutorialGiftPending";       // 카드는 생성됨, 아직 리빌 연출 못 봄
     private const string GIFT_COMPLETED_KEY = "TutorialGiftCompleted";   // 리빌 연출까지 완전히 끝남
 
@@ -65,6 +73,24 @@ public class GachaSystem : MonoBehaviour
         mainMenuManager = FindObjectOfType<MainMenuManager>();
 
         statManager = GetComponent<StatManager>();  // 이것도 같은 오브젝트에 옮겨야 함
+
+        // ⭐ 추가: 재시작 시 이전 세션에서 저장해둔 ID 복원
+        TutorialDuckCardID = PlayerPrefs.GetInt(TUTORIAL_DUCK_ID_KEY, -1);
+        TutorialItemCardID = PlayerPrefs.GetInt(TUTORIAL_ITEM_ID_KEY, -1);
+    }
+
+    public static void SetTutorialCardIDs(int duckId, int itemId)
+    {
+        if (duckId != -1)
+        {
+            TutorialDuckCardID = duckId;
+            PlayerPrefs.SetInt(TUTORIAL_DUCK_ID_KEY, duckId);
+        }
+        if (itemId != -1)
+        {
+            TutorialItemCardID = itemId;
+            PlayerPrefs.SetInt(TUTORIAL_ITEM_ID_KEY, itemId);
+        }
     }
 
     void Start()
@@ -103,6 +129,8 @@ public class GachaSystem : MonoBehaviour
         if (TutorialManager.instance == null || TutorialManager.instance.CurrentStep != TutorialStep.Completed)
             return;
 
+        IsTutorialRewardInProgress = true; // ⭐ 추가 — 카드 재생성 여부와 무관하게 항상 여기서 세팅
+
         Logger.Log($"[GachaSystem] Completed 상태이나 보상 미완료 감지. GIFT_PENDING={PlayerPrefs.GetInt(GIFT_PENDING_KEY, 0)}");
 
         // 카드가 아직 생성 안 됐다면 (버튼을 아예 안 눌렀던 경우) 지금 생성부터 진행
@@ -110,6 +138,11 @@ public class GachaSystem : MonoBehaviour
         {
             Logger.Log("[GachaSystem] 카드 미생성 상태 - 지금 생성합니다");
             PrepareTutorialReward(10, 1);
+        }
+        else
+        {
+            // ⭐ 추가: 이미 지급된 카드들을 ID로 복원해서 리빌 연출에 사용할 수 있게 함
+            RestoreTutorialRewardCardsPicked();
         }
 
         // 카드는 이미 있든 방금 생성했든, 이제 선물 팝업을 띄움
@@ -127,6 +160,27 @@ public class GachaSystem : MonoBehaviour
         }
 
         if (tutorialFG != null) tutorialFG.SetActive(true);
+    }
+
+    // ⭐ 추가
+    void RestoreTutorialRewardCardsPicked()
+    {
+        string idsCsv = PlayerPrefs.GetString(TUTORIAL_REWARD_CARD_IDS_KEY, "");
+        if (string.IsNullOrEmpty(idsCsv))
+        {
+            Logger.LogWarning("[GachaSystem] 저장된 튜토리얼 보상 카드 ID가 없습니다.");
+            return;
+        }
+        cardsPicked.Clear();
+        var myCardList = cardDataManager.GetMyCardList();
+        string[] idStrings = idsCsv.Split(',');
+        foreach (var idStr in idStrings)
+        {
+            if (!int.TryParse(idStr, out int id)) continue;
+            CardData card = myCardList.Find(c => c.ID == id);
+            if (card != null) cardsPicked.Add(card);
+        }
+        Logger.Log($"[GachaSystem] 튜토리얼 보상 카드 {cardsPicked.Count}개 복원 완료");
     }
 
     // ⭐ 추가: 장비/합성/업적 튜토리얼 등에서 진행이 막혀 튜토리얼을 강제 완료시킬 때,
@@ -410,6 +464,9 @@ public class GachaSystem : MonoBehaviour
                 }
 
                 cardDataManager.AddNewCardToMyCardsList(tutorialCard);
+                TutorialDuckCardID = tutorialCard.ID; // ⭐ 오리 쪽
+                PlayerPrefs.SetInt(TUTORIAL_DUCK_ID_KEY, TutorialDuckCardID); // ⭐ 추가
+                PlayerPrefs.Save(); // ⭐ 추가
                 AddEssentialEquip(tutorialCard);
                 cardsPicked.Add(tutorialCard);
                 AddCardSlot(tutorialCard);
@@ -429,6 +486,9 @@ public class GachaSystem : MonoBehaviour
                 }
 
                 cardDataManager.AddNewCardToMyCardsList(tutorialCard);
+                TutorialItemCardID = tutorialCard.ID; // ⭐ 아이템 쪽
+                PlayerPrefs.SetInt(TUTORIAL_ITEM_ID_KEY, TutorialItemCardID); // ⭐ 추가
+                PlayerPrefs.Save(); // ⭐ 추가
                 cardsPicked.Add(tutorialCard);
                 AddCardSlot(tutorialCard);
 
@@ -908,6 +968,11 @@ public class GachaSystem : MonoBehaviour
             cardDataManager.RefreshCardList();
             ImmediateSaveEquipmentData();
             CloudSaveManager.Instance?.ForceSaveToCloud();   // ⭐ 변경: SaveToCloud() → ForceSaveToCloud()
+
+            // ⭐ 추가: 이번에 뽑힌 카드 ID들을 저장해서 재시작 후에도 리빌 연출에 사용
+            string idsCsv = string.Join(",", cardsPicked.ConvertAll(c => c.ID));
+            PlayerPrefs.SetString(TUTORIAL_REWARD_CARD_IDS_KEY, idsCsv);
+
             PlayerPrefs.SetInt(GIFT_PENDING_KEY, 1);
             PlayerPrefs.Save();
 
