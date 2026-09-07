@@ -127,6 +127,7 @@ public class GameTexts : ScriptableObject
     public string clear = "해제";
     public string selectDuck = "오리 선택";
     public string noDucksAvailable = "선택할 수 있는 오리가 없어요\n상점에서 오리 카드를 구매해 보세요!";
+    public string changeLeadOriPopup = "슬롯을 터치하면\n출동할 오리를 바꿀 수 있어요!";
 
     [Header("Badge Popup")]
     public string badgeEarnedTitle = "새 배지 획득!";

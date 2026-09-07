@@ -309,6 +309,8 @@ public class LocalizedUIText : MonoBehaviour
                 return LocalizationManager.Game.selectDuck;
             case UITextKey.NoDucksAvailable:
                 return LocalizationManager.Game.noDucksAvailable;
+            case UITextKey.ChangeLeadOriPopup:
+                return LocalizationManager.Game.changeLeadOriPopup;
             default:
                 return key.ToString();
         }
@@ -462,5 +464,6 @@ public enum UITextKey
     SpeedUp,
     SelectDuck,
     NoDucksAvailable,
-    KeepTapping
+    KeepTapping,
+    ChangeLeadOriPopup
 }
