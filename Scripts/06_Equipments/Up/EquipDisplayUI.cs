@@ -26,6 +26,7 @@ public class EquipDisplayUI : MonoBehaviour
     [SerializeField] GameObject charButton;
     [SerializeField] GameObject backButton;
     [SerializeField] GameObject charUpgradeButton; // 디스플레이되는 오리카드 업그레이드 버튼
+    [SerializeField] Vector3 defaultCharImageScale = new Vector3(1.2f, 1.2f, 1f);
 
     [SerializeField] CanvasGroup charWarningLackCanvasGroup;
 
@@ -47,7 +48,7 @@ public class EquipDisplayUI : MonoBehaviour
     // SetActive로 껐다 켜도 재실행되지 않아 원본 값을 안전하게 보존합니다.
     void Awake()
     {
-        initCharImageScale = charImage.localScale;
+        initCharImageScale = defaultCharImageScale;
     }
 
     public void SetWeaponDisplay(CardData charCardData, OriAttribute currentAttr, string dispName)
