@@ -558,6 +558,21 @@ public class AdsManager : SingletonBehaviour<AdsManager>
     }
     #endregion
 
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (Instance != this) return; // ⭐ 중복 인스턴스 방어
+        if (!pauseStatus) // false = 포그라운드로 복귀
+        {
+            Debug.Log($"[AdsManager] OnApplicationPause(false) - 포그라운드 복귀. IsRewardedAdReady={IsRewardedAdReady}, IsLoading={m_IsRewardedAdLoading}");
+
+            if (!IsRewardedAdReady)
+            {
+                Debug.Log("[AdsManager] 포그라운드 복귀 시 보상형 광고 미준비 - 재요청 시도");
+                AttemptRewardedAdReload(resetRetryCountIfExhausted: true);
+            }
+        }
+    }
+
     protected override void Dispose()
     {
         if (m_RewardedAdRetryCoroutine != null)

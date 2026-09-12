@@ -373,6 +373,7 @@ public class ShopManager : SingletonBehaviour<ShopManager>
     void ShowAdLoadingPopup()
     {
         Logger.Log("[ShopManager] 광고 로딩 중... 잠시만 기다려주세요.");
+        AdsManager.Instance?.RequestRewardedAdLoad(); // public 메서드라 바로 호출 가능
     }
 
     bool PurchaseWithCristal(ProductData productData)
