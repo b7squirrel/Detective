@@ -80,6 +80,34 @@ public class GameInitializer : MonoBehaviour
         hasShownDailyRewardThisSession = false;
     }
 
+    // ⭐ 추가: 백그라운드→포그라운드 복귀 시 일일 리셋 재확인
+    // (프로세스가 살아있는 채로 하루가 지나면 Awake()가 재실행되지 않아
+    //  DailyResetManager.CheckDailyReset()과 일일 보상 체크가 다시 일어나지 않는 문제 대응)
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (!isRunning) return; // 이 인스턴스가 활성 인스턴스가 아니면 무시
+
+        if (!pauseStatus) // 포그라운드로 복귀
+        {
+            Debug.Log("[GameInitializer] 포그라운드 복귀 - 일일 리셋 재확인");
+
+            if (!IsInitialized) return; // 초기화 도중의 pause/resume은 무시
+
+            if (DailyResetManager.Instance != null)
+            {
+                DailyResetManager.Instance.CheckDailyReset();
+            }
+
+            PlayerDataManager pdm = PlayerDataManager.Instance;
+            if (pdm != null && !pdm.HasTakenDailyReward())
+            {
+                hasShownDailyRewardThisSession = false;
+                CheckAndShowDailyReward();
+                hasShownDailyRewardThisSession = true;
+            }
+        }
+    }
+
     IEnumerator InitializeGame()
     {
         Log("=== 게임 초기화 시작 ===");
