@@ -476,7 +476,7 @@ public static class EnumExtensions
     public static string GetDescription(this Enum value)
     {
         if (_descriptionCache.TryGetValue(value, out string description))
-    {
+        {
             return description;
         }
 
@@ -485,6 +485,29 @@ public static class EnumExtensions
         description = attribute == null ? value.ToString() : attribute.Description;
         _descriptionCache[value] = description;
         return description;
+    }
+}
+
+public static class NumberFormatUtil
+{
+    public static string ToShortString(long num)
+    {
+        if (num < 1000)
+            return num.ToString();
+        if (num < 1_000_000)
+            return FormatUnit(num, 1000, "K");
+        if (num < 1_000_000_000)
+            return FormatUnit(num, 1_000_000, "M");
+        return FormatUnit(num, 1_000_000_000, "B");
+    }
+
+    static string FormatUnit(long num, long unit, string suffix)
+    {
+        double value = (double)num / unit;
+        // 소수점 첫째 자리가 0이면 정수로, 아니면 소수점 1자리
+        if (value == Math.Floor(value))
+            return $"{(long)value}{suffix}";
+        return $"{value:0.#}{suffix}";
     }
 }
 #endregion

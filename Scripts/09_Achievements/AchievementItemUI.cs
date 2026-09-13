@@ -20,14 +20,27 @@ public class AchievementItemUI : MonoBehaviour
     [SerializeField] RectTransform effectStartPos; // 보상 이펙트가 나올 위치
     [SerializeField] GameObject postItYellow;
     [SerializeField] GameObject postItPink;
-    [SerializeField] GameObject postItGreen; 
+    [SerializeField] GameObject postItGreen;
     [SerializeField] GameObject postItBlue;  // ⭐ 추가: 배지용 파란 포스트잇
+
+    [Header("보상 텍스트 색상")]
+    [SerializeField] Color gemTextColor = new Color(0.6f, 0.2f, 0.6f);   // 핑크 포스트잇용
+    [SerializeField] Color coinTextColor = new Color(0.7f, 0.5f, 0f);    // 옐로우 포스트잇용
+    [SerializeField] Color energyTextColor = new Color(0.1f, 0.5f, 0.2f); // 그린 포스트잇용
+    [SerializeField] Color badgeTextColor = new Color(0.1f, 0.3f, 0.6f);  // 블루 포스트잇용
+
+    [Header("설명 텍스트 색상")]   // 추가
+    [SerializeField] Color gemDescColor = new Color(0.6f, 0.2f, 0.6f);
+    [SerializeField] Color coinDescColor = new Color(0.7f, 0.5f, 0f);
+    [SerializeField] Color energyDescColor = new Color(0.1f, 0.5f, 0.2f);
+    [SerializeField] Color badgeDescColor = new Color(0.1f, 0.3f, 0.6f);
 
     [Header("보상 아이콘")]
     [SerializeField] Sprite gemIcon; // 보석 아이콘
     [SerializeField] Sprite coinIcon; // 코인 아이콘
     [SerializeField] Sprite lightningIcon;  // 에너지 아이콘
     [SerializeField] Sprite badgeIcon;  // ⭐ 추가: 배지 아이콘
+    
 
     [Header("진행도 아이콘")]
     [SerializeField] GameObject killIcon;   // Icons/Kill
@@ -88,7 +101,7 @@ public class AchievementItemUI : MonoBehaviour
         UpdateText();
 
         progressSlider.maxValue = runtime.original.targetValue;
-        rewardText.text = runtime.original.rewardNum.ToString();
+        rewardText.text = NumberFormatUtil.ToShortString(runtime.original.rewardNum);
 
         // KILL, SURVIVE 광고 뽑기 타입일 때 progressText 표시
         bool showProgress =
@@ -127,27 +140,35 @@ public class AchievementItemUI : MonoBehaviour
             {
                 case RewardType.GEM:
                     rewardIcon.sprite = gemIcon;
+                    rewardText.color = gemTextColor;
+                    if (descriptionText != null) descriptionText.color = gemDescColor;   // 추가
                     postItPink.SetActive(true);
                     postItYellow.SetActive(false);
                     if (postItGreen != null) postItGreen.SetActive(false);
-                    if (postItBlue != null) postItBlue.SetActive(false); // ⭐ 추가
+                    if (postItBlue != null) postItBlue.SetActive(false);
                     break;
                 case RewardType.COIN:
                     rewardIcon.sprite = coinIcon;
+                    rewardText.color = coinTextColor;
+                    if (descriptionText != null) descriptionText.color = coinDescColor;  // 추가
                     postItPink.SetActive(false);
                     postItYellow.SetActive(true);
                     if (postItGreen != null) postItGreen.SetActive(false);
-                    if (postItBlue != null) postItBlue.SetActive(false); // ⭐ 추가
+                    if (postItBlue != null) postItBlue.SetActive(false);
                     break;
                 case RewardType.ENERGY:
                     rewardIcon.sprite = lightningIcon;
+                    rewardText.color = energyTextColor;
+                    if (descriptionText != null) descriptionText.color = energyDescColor; // 추가
                     postItPink.SetActive(false);
                     postItYellow.SetActive(false);
                     if (postItGreen != null) postItGreen.SetActive(true);
-                    if (postItBlue != null) postItBlue.SetActive(false); // ⭐ 추가
+                    if (postItBlue != null) postItBlue.SetActive(false);
                     break;
-                case RewardType.BADGE: // ⭐ 추가: 배지 보상
+                case RewardType.BADGE:
                     rewardIcon.sprite = badgeIcon;
+                    rewardText.color = badgeTextColor;
+                    if (descriptionText != null) descriptionText.color = badgeDescColor;  // 추가
                     postItPink.SetActive(false);
                     postItYellow.SetActive(false);
                     if (postItGreen != null) postItGreen.SetActive(false);
