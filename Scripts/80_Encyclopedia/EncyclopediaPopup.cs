@@ -175,54 +175,56 @@ public class EncyclopediaPopup : MonoBehaviour
                     return item.itemSO.setDisplayName;
             }
         }
- 
+
         // 최종 fallback
         return info.setName;
     }
- 
+
     // ── 5줄 보너스 텍스트 ────────────────────────────────────
     static string BuildBonusText(SetBonusDefinition bonus)
     {
         var sb = new StringBuilder();
- 
+        var texts = LocalizationManager.Game;
+
         for (int g = 0; g < StaticValues.MaxGrade; g++)
         {
-            Color  col  = MyGrade.GradeColors[g];
-            string hex  = ColorUtility.ToHtmlStringRGB(col);
-            string name = MyGrade.mGrades[g];
- 
+            Color col = MyGrade.GradeColors[g];   // 색상은 static 그대로 사용 OK
+            string hex = ColorUtility.ToHtmlStringRGB(col);
+            string name = texts.gradeNames[g];      // ← MyGrade.mGrades[g] 대신 이걸로 교체
+
             string statLine = CollectStats(bonus, g);
             if (string.IsNullOrEmpty(statLine)) statLine = "-";
- 
+
             sb.Append($"<color=#{hex}>[{name}]</color>  {statLine}");
- 
+
             if (g < StaticValues.MaxGrade - 1)
                 sb.AppendLine();
         }
- 
+
         return sb.ToString();
     }
- 
+
     static string CollectStats(SetBonusDefinition b, int g)
     {
         var parts = new List<string>();
- 
+        var texts = LocalizationManager.Game;
+
         // 퍼센트 스탯
-        TryAdd(parts, "이동속도",    b.moveSpeedBonus[g],      true);
-        TryAdd(parts, "공격력",      b.attackBonus[g],         true);
-        TryAdd(parts, "최대 HP",     b.maxHpBonus[g],          true);
-        TryAdd(parts, "HP 회복",     b.hpRegenBonus[g],        true);
-        TryAdd(parts, "자석 범위",   b.magnetSizeBonus[g],     true);
-        TryAdd(parts, "넉백",        b.knockBackBonus[g],      true);
- 
+        TryAdd(parts, texts.statMoveSpeed, b.moveSpeedBonus[g], true);
+        TryAdd(parts, texts.statAttack, b.attackBonus[g], true);
+        TryAdd(parts, texts.statMaxHp, b.maxHpBonus[g], true);
+        TryAdd(parts, texts.statHpRegen, b.hpRegenBonus[g], true);
+        TryAdd(parts, texts.statMagnetSize, b.magnetSizeBonus[g], true);
+        TryAdd(parts, texts.statKnockback, b.knockBackBonus[g], true);
+
         // 고정값 스탯
-        TryAdd(parts, "방어력",      b.armorBonus[g],          false);
-        TryAdd(parts, "쿨타임 감소", b.cooldownBonus[g],       false);
-        TryAdd(parts, "치명타",      b.criticalChanceBonus[g], false);
- 
+        TryAdd(parts, texts.statArmor, b.armorBonus[g], false);
+        TryAdd(parts, texts.statCooldownReduction, b.cooldownBonus[g], false);
+        TryAdd(parts, texts.statCritChance, b.criticalChanceBonus[g], false);
+
         return string.Join(", ", parts);
     }
- 
+
     static void TryAdd(List<string> parts, string label, float value, bool isPercent)
     {
         if (value == 0f) return;

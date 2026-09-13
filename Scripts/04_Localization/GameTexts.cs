@@ -72,7 +72,7 @@ public class GameTexts : ScriptableObject
     public string weAreReady = "준비 완료!";
     public string crystalGiven = "보석 {0}개를 지급했습니다!";
     public string firstPurchase = "첫 구매 2배!";
-    
+
     [Header("Pack Description")]
     // 오리 카드 라인: {0} = 등급명(들)
     public string packDuckCardLine = "{0} 오리 카드";
@@ -147,7 +147,7 @@ public class GameTexts : ScriptableObject
     public string equipped = "장착 중";
     public string maxLevel = "최고 레벨";
     public string noItemsToEquip = "장착할 아이템이 없어요!";
-    public string ability ="특기";
+    public string ability = "특기";
     public string tabToCheckGear = "카드를 선택해서 장비를 확인해 보세요!";
 
     [Header("Merge Panel")]
@@ -215,6 +215,18 @@ public class GameTexts : ScriptableObject
 
     [Header("Encyclopedia")]
     public string encyclopedia = "카드 도감";
+
+    [Header("Encyclopedia Bonus Stats")]
+    public string noBonusDefined = "세트 효과가 아직 정의되지 않았습니다.";
+    public string statMoveSpeed = "이동속도";
+    public string statAttack = "공격력";
+    public string statMaxHp = "최대 HP";
+    public string statHpRegen = "HP 회복";
+    public string statMagnetSize = "자석 범위";
+    public string statKnockback = "넉백";
+    public string statArmor = "방어력";
+    public string statCooldownReduction = "쿨타임 감소";
+    public string statCritChance = "치명타";
 
     [Header("무한 모드")]
     public string duckChallenge = "도전 오리!!";
@@ -330,7 +342,8 @@ public class GameTexts : ScriptableObject
     };
 
     [Header("적들의 Variant")]
-    [TextArea(2,4)] public string[] enemyVariantDescriptions = new string[]
+    [TextArea(2, 4)]
+    public string[] enemyVariantDescriptions = new string[]
     {
         "평범한 슬라임들이 몰려옵니다.",
         "헬멧 적은 단단합니다. 더 많은 공격이 필요합니다.",
@@ -360,18 +373,18 @@ public class GameTexts : ScriptableObject
     "강력한 화염구를 뱉어냅니다! 엄청난 속도로 쿵쾅쿵쾅 돌진해 옵니다."    // 30스테이지
 };
 
-// enum 값과 배열의 실제 저장 순서가 다르므로 반드시 switch로 명시 매핑
-public string GetVariantDescription(EnemyVariantType variant)
-{
-    if (enemyVariantDescriptions == null || enemyVariantDescriptions.Length < 5) return "";
-    switch (variant)
+    // enum 값과 배열의 실제 저장 순서가 다르므로 반드시 switch로 명시 매핑
+    public string GetVariantDescription(EnemyVariantType variant)
     {
-        case EnemyVariantType.Normal:        return enemyVariantDescriptions[0];
-        case EnemyVariantType.Helmet:        return enemyVariantDescriptions[1];
-        case EnemyVariantType.Madness:       return enemyVariantDescriptions[2];
-        case EnemyVariantType.MadnessHelmet: return enemyVariantDescriptions[3];
-        case EnemyVariantType.Explosive:     return enemyVariantDescriptions[4];
-        default: return "";
+        if (enemyVariantDescriptions == null || enemyVariantDescriptions.Length < 5) return "";
+        switch (variant)
+        {
+            case EnemyVariantType.Normal: return enemyVariantDescriptions[0];
+            case EnemyVariantType.Helmet: return enemyVariantDescriptions[1];
+            case EnemyVariantType.Madness: return enemyVariantDescriptions[2];
+            case EnemyVariantType.MadnessHelmet: return enemyVariantDescriptions[3];
+            case EnemyVariantType.Explosive: return enemyVariantDescriptions[4];
+            default: return "";
         }
     }
 
