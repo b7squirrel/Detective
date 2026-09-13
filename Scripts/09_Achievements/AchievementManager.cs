@@ -32,7 +32,7 @@ public class AchievementManager : MonoBehaviour
     PlayerDataManager playerDataManager; // 크리스탈의 실제 값을 더해주기 위해
 
     // 업적 인디케이터 (빨간점)
-    public enum AchievementScope { All, Permanent, Daily, Weekly }
+    public enum AchievementScope { All, Permanent, Daily, Weekly, InfiniteDaily, InfiniteWeekly, InfiniteChallenge }
 
     private void Awake()
     {
@@ -519,40 +519,40 @@ public class AchievementManager : MonoBehaviour
             return;
         }
 
-    // 1. 받은 배지 목록 초기화
-    earnedBadgeIds.Clear();
-    SaveEarnedBadges();
+        // 1. 받은 배지 목록 초기화
+        earnedBadgeIds.Clear();
+        SaveEarnedBadges();
 
-    // 2. 본 배지(반짝임 재생 여부) 목록 초기화
-    seenBadgeIds.Clear();
-    SaveSeenBadges();
+        // 2. 본 배지(반짝임 재생 여부) 목록 초기화
+        seenBadgeIds.Clear();
+        SaveSeenBadges();
 
-    // 3. 배지 업적 자체의 진행도/완료/수령 상태 초기화
-    int count = 0;
-    foreach (var ra in runtimeDict.Values)
-    {
-        if (ra.original.rewardType != RewardType.BADGE) continue;
+        // 3. 배지 업적 자체의 진행도/완료/수령 상태 초기화
+        int count = 0;
+        foreach (var ra in runtimeDict.Values)
+        {
+            if (ra.original.rewardType != RewardType.BADGE) continue;
 
-        ra.progress = 0;
-        ra.isCompleted = false;
-        ra.isRewarded = false;
-        PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
-        PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
-        PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
-        count++;
+            ra.progress = 0;
+            ra.isCompleted = false;
+            ra.isRewarded = false;
+            PlayerPrefs.SetInt(ra.GetProgressKey(), 0);
+            PlayerPrefs.SetInt(ra.GetCompleteKey(), 0);
+            PlayerPrefs.SetInt(ra.GetRewardKey(), 0);
+            count++;
+        }
+        PlayerPrefs.Save();
+
+        // 4. 업적 탭 UI를 통째로 다시 그림 (기존 ResetAllAchievements()와 동일한 패턴)
+        AchievementPanel panel = FindObjectOfType<AchievementPanel>(true);
+        if (panel != null) panel.ReinitializeAll();
+
+        // 5. 로비의 배지 나열도 즉시 갱신 (지금 로비 화면이 켜져 있다면)
+        BadgeDisplayManager badgeDisplay = FindObjectOfType<BadgeDisplayManager>(true);
+        if (badgeDisplay != null) badgeDisplay.Refresh();
+
+        Logger.Log($"[Debug] 배지 {count}개 완전 초기화 완료 (받은 배지 / 본 배지 / 업적 진행도 전부 리셋).");
     }
-    PlayerPrefs.Save();
-
-    // 4. 업적 탭 UI를 통째로 다시 그림 (기존 ResetAllAchievements()와 동일한 패턴)
-    AchievementPanel panel = FindObjectOfType<AchievementPanel>(true);
-    if (panel != null) panel.ReinitializeAll();
-
-    // 5. 로비의 배지 나열도 즉시 갱신 (지금 로비 화면이 켜져 있다면)
-    BadgeDisplayManager badgeDisplay = FindObjectOfType<BadgeDisplayManager>(true);
-    if (badgeDisplay != null) badgeDisplay.Refresh();
-
-    Logger.Log($"[Debug] 배지 {count}개 완전 초기화 완료 (받은 배지 / 본 배지 / 업적 진행도 전부 리셋).");
-}
 
     void LoadSeenBadges()
     {
@@ -653,21 +653,37 @@ public class AchievementManager : MonoBehaviour
     {
         foreach (var ra in runtimeDict.Values)
         {
-            if (ra.original.isInfiniteMode) continue;
             if (!ra.isCompleted || ra.isRewarded) continue;
 
             switch (scope)
             {
+                case AchievementScope.All:
+                    if (ra.original.isInfiniteMode) continue;
+                    break;
                 case AchievementScope.Permanent:
+                    if (ra.original.isInfiniteMode) continue;
                     if (ra.original.isDailyQuest || ra.original.isWeeklyQuest) continue;
                     break;
                 case AchievementScope.Daily:
+                    if (ra.original.isInfiniteMode) continue;
                     if (!ra.original.isDailyQuest) continue;
                     break;
                 case AchievementScope.Weekly:
+                    if (ra.original.isInfiniteMode) continue;
                     if (!ra.original.isWeeklyQuest) continue;
                     break;
-                    // AchievementScope.All 은 필터 없음
+                case AchievementScope.InfiniteDaily:
+                    if (!ra.original.isInfiniteMode) continue;
+                    if (!ra.original.isDailyQuest) continue;
+                    break;
+                case AchievementScope.InfiniteWeekly:
+                    if (!ra.original.isInfiniteMode) continue;
+                    if (!ra.original.isWeeklyQuest) continue;
+                    break;
+                case AchievementScope.InfiniteChallenge: // ⭐ 추가: 오리 도전 버튼용 - 일일/주간 무한 업적 통합
+                    if (!ra.original.isInfiniteMode) continue;
+                    if (!ra.original.isDailyQuest && !ra.original.isWeeklyQuest) continue;
+                    break;
             }
             return true;
         }

@@ -313,12 +313,24 @@ MonoBehaviour:
   postItYellow: {fileID: 8706858416001246012}
   postItPink: {fileID: 5439251229241109454}
   postItGreen: {fileID: 0}
+  postItBlue: {fileID: 0}
+  gemTextColor: {r: 1, g: 1, b: 1, a: 1}
+  coinTextColor: {r: 1, g: 1, b: 1, a: 1}
+  energyTextColor: {r: 1, g: 1, b: 1, a: 1}
+  badgeTextColor: {r: 1, g: 1, b: 1, a: 1}
+  gemDescColor: {r: 0, g: 0, b: 0, a: 1}
+  coinDescColor: {r: 0, g: 0, b: 0, a: 1}
+  energyDescColor: {r: 1, g: 1, b: 1, a: 1}
+  badgeDescColor: {r: 1, g: 1, b: 1, a: 1}
   gemIcon: {fileID: 21300000, guid: 6803184bcc108416483e481771695427, type: 3}
   coinIcon: {fileID: 21300000, guid: 520f1b9aa4cb6d24aa8de0320688e44b, type: 3}
   lightningIcon: {fileID: 0}
+  badgeIcon: {fileID: 0}
   killIcon: {fileID: 0}
   chestIcon: {fileID: 0}
   timeIcon: {fileID: 0}
+  stageIcon: {fileID: 0}
+  tapIcon: {fileID: 0}
   clipRewardButton: {fileID: 8300000, guid: 6a6f3459903ac7d4d875d1d7d176e4f7, type: 3}
 --- !u!95 &339469877819255327
 Animator:
@@ -858,8 +870,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 100
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 605433b68313d491a8ab88bc03a41651, type: 2}
-  m_sharedMaterial: {fileID: 2830636965969884548, guid: 605433b68313d491a8ab88bc03a41651, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
+  m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1067,15 +1079,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC6E8\uC774\uBE0C 100\uD074\uB9AC\uC5B4"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d7c89de468158443fab526faf0a78384, type: 2}
-  m_sharedMaterial: {fileID: 6326655851112959001, guid: d7c89de468158443fab526faf0a78384, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a4f764a7db9a7457f93a47178c308043, type: 2}
+  m_sharedMaterial: {fileID: 1895388158987429389, guid: a4f764a7db9a7457f93a47178c308043, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1092,8 +1104,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
