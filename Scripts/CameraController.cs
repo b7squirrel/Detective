@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] GameObject dot;
     [SerializeField] float offset;
     [SerializeField] float offsetUpperWall;
+    [SerializeField] float offsetSide; // ⭐ 추가: 좌우 여유값 (인스펙터에서 조정)
 
     [Header("Zoom In-Out")]
     [SerializeField] float startSize = 15f;
@@ -105,10 +106,32 @@ public class CameraController : MonoBehaviour
 
         if (player != null)
         {
-            transform.position = new Vector3(
-                Mathf.Clamp(player.transform.position.x, boxCol.bounds.min.x, boxCol.bounds.max.x),
-                Mathf.Clamp(player.transform.position.y, boxCol.bounds.min.y + offset, boxCol.bounds.max.y - offsetUpperWall),
-                transform.position.z);
+            float minX = boxCol.bounds.min.x + halfWidth - offsetSide; // ⭐ 변경
+            float maxX = boxCol.bounds.max.x - halfWidth + offsetSide; // ⭐ 변경
+            float targetX;
+            if (minX <= maxX) // ⭐ 정상 케이스: 기존처럼 clamp
+            {
+                targetX = Mathf.Clamp(player.transform.position.x, minX, maxX);
+            }
+            else // ⭐ 역전 케이스: boxCol이 화면보다 작음 → 중앙 고정
+            {
+                targetX = boxCol.bounds.center.x;
+            }
+
+            float minY = boxCol.bounds.min.y + halfHeight - offset;         // ⭐ 변경
+            float maxY = boxCol.bounds.max.y - halfHeight + offsetUpperWall; // ⭐ 변경
+            float targetY;
+            if (minY <= maxY)
+            {
+                targetY = Mathf.Clamp(player.transform.position.y, minY, maxY);
+            }
+            else
+            {
+                targetY = boxCol.bounds.center.y;
+                Debug.Log($"[Camera] Y축 역전 상태 - center 고정 중. minY={minY}, maxY={maxY}"); // ⭐ 임시 로그
+            }
+
+            transform.position = new Vector3(targetX, targetY, transform.position.z);
         }
     }
 
