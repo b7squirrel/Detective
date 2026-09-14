@@ -236,9 +236,10 @@ public class Collectable : MonoBehaviour
     bool IsOutOfRange()
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnConst = wallManager.GetSpawnAreaConstant();
+        float spawnConstX = wallManager.GetSpawnAreaConstant();   // ⭐ 변경
+        float spawnConstY = wallManager.GetSpawnAreaConstantY();  // ⭐ 추가
 
-        return new Equation().IsOutOfRange(transform.position, spawnConst);
+        return new Equation().IsOutOfRange(transform.position, spawnConstX, spawnConstY); // ⭐ 변경
     }
     #endregion
 }

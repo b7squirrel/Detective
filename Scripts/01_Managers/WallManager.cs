@@ -88,4 +88,9 @@ public class WallManager : MonoBehaviour
     {
         return walls[1].position.x;
     }
+
+    public float GetSpawnAreaConstantY() // ⭐ 추가: Y축, Up 벽 기준
+    {
+        return walls[2].position.y;
+    }
 }

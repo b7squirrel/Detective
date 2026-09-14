@@ -234,10 +234,10 @@ public class Spawner : MonoBehaviour
     #region 스폰 포인트
     Vector2 GetAvailablePoints(int excludedQuadrant = -1)
     {
-        // 벽 안쪽에서 2 unit 더 안쪽에 스폰
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnConst = wallManager.GetSpawnAreaConstant();
-        return equation.GetSpawnablePos(spawnConst, 2f, excludedQuadrant);
+        float spawnConstX = wallManager.GetSpawnAreaConstant();   // ⭐ 변경
+        float spawnConstY = wallManager.GetSpawnAreaConstantY();  // ⭐ 추가
+        return equation.GetSpawnablePos(spawnConstX, spawnConstY, 2f, excludedQuadrant); // ⭐ 변경
     }
     #endregion
 }

@@ -411,13 +411,13 @@ public class Equation
         return totalSlow;
     }
 
-    public Vector2 GetSpawnablePos(float spawnConst, float offset, int excludedQuadrant = -1)
+    public Vector2 GetSpawnablePos(float spawnConstX, float spawnConstY, float offset, int excludedQuadrant = -1) // ⭐ 변경
     {
         Vector2 position;
         int guard = 0;
         do
         {
-            position = GetSpawnablePosRaw(spawnConst, offset);
+            position = GetSpawnablePosRaw(spawnConstX, spawnConstY, offset); // ⭐ 변경
             guard++;
         } while (excludedQuadrant != -1 && GetQuadrant(position) == excludedQuadrant && guard < 10);
 
@@ -425,20 +425,22 @@ public class Equation
     }
 
     // 기존 GetSpawnablePos 로직을 그대로 옮긴 내부 함수
-    Vector2 GetSpawnablePosRaw(float spawnConst, float offset)
+    Vector2 GetSpawnablePosRaw(float spawnConstX, float spawnConstY, float offset) // ⭐ 변경
     {
         Vector2 position = new Vector2();
         float f = UnityEngine.Random.value > .5f ? 1f : -1f;
 
         if (UnityEngine.Random.value > .5f)
         {
-            position.x = UnityEngine.Random.Range(-spawnConst + offset, spawnConst - offset);
-            position.y = f > 0 ? (spawnConst * f) - offset : (spawnConst * f) + offset;
+            // 위/아래 벽에 붙는 경우: x는 자유, y는 벽에 고정
+            position.x = UnityEngine.Random.Range(-spawnConstX + offset, spawnConstX - offset); // ⭐ 변경
+            position.y = f > 0 ? (spawnConstY * f) - offset : (spawnConstY * f) + offset;        // ⭐ 변경
         }
         else
         {
-            position.y = UnityEngine.Random.Range(-spawnConst + offset, spawnConst - offset);
-            position.x = f > 0 ? (spawnConst * f) - offset : (spawnConst * f) + offset;
+            // 좌/우 벽에 붙는 경우: y는 자유, x는 벽에 고정
+            position.y = UnityEngine.Random.Range(-spawnConstY + offset, spawnConstY - offset); // ⭐ 변경
+            position.x = f > 0 ? (spawnConstX * f) - offset : (spawnConstX * f) + offset;        // ⭐ 변경
         }
         return position;
     }
@@ -451,14 +453,20 @@ public class Equation
         else
             return pos.y >= 0 ? 1 : 2;
     }
-    public bool IsOutOfRange(Vector2 posToCheck, float _spawnConst)
+    // 기존 시그니처는 유지하고 오버로드 추가 (호출부가 많아 점진적으로 옮기기 위함)
+    public bool IsOutOfRange(Vector2 posToCheck, float _spawnConstX, float _spawnConstY) // ⭐ 추가
     {
-        if (posToCheck.x > _spawnConst || posToCheck.x < -_spawnConst
-            || posToCheck.y > _spawnConst || posToCheck.y < -_spawnConst)
+        if (posToCheck.x > _spawnConstX || posToCheck.x < -_spawnConstX
+            || posToCheck.y > _spawnConstY || posToCheck.y < -_spawnConstY)
         {
             return true;
         }
         return false;
+    }
+
+    public bool IsOutOfRange(Vector2 posToCheck, float _spawnConst) // 기존 유지 (혹시 다른 곳에서 쓸 경우 대비)
+    {
+        return IsOutOfRange(posToCheck, _spawnConst, _spawnConst);
     }
 }
 #endregion

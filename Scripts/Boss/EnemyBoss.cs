@@ -453,20 +453,22 @@ public class EnemyBoss : EnemyBase, Idamageable
     bool IsOutOfRange()
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnConst = wallManager.GetSpawnAreaConstant();
+        float spawnConstX = wallManager.GetSpawnAreaConstant();   // ⭐ 변경
+        float spawnConstY = wallManager.GetSpawnAreaConstantY();  // ⭐ 추가
 
-        return new Equation().IsOutOfRange(transform.position, spawnConst);
+        return new Equation().IsOutOfRange(transform.position, spawnConstX, spawnConstY); // ⭐ 변경
     }
 
     public Vector2 ClampTargetPos(Vector2 rawTarget)
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnConst = wallManager.GetSpawnAreaConstant();
-        float margin = 3f; // 벽 두께/보스 크기 고려한 여유값
+        float spawnConstX = wallManager.GetSpawnAreaConstant();   // ⭐ 변경
+        float spawnConstY = wallManager.GetSpawnAreaConstantY();  // ⭐ 추가
+        float margin = 3f;
 
         return new Vector2(
-            Mathf.Clamp(rawTarget.x, -spawnConst + margin, spawnConst - margin),
-            Mathf.Clamp(rawTarget.y, -spawnConst + margin, spawnConst - margin)
+            Mathf.Clamp(rawTarget.x, -spawnConstX + margin, spawnConstX - margin), // ⭐ 변경
+            Mathf.Clamp(rawTarget.y, -spawnConstY + margin, spawnConstY - margin)  // ⭐ 변경
         );
     }
 

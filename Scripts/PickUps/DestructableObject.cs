@@ -84,7 +84,8 @@ public class DestructableObject : MonoBehaviour, Idamageable
     bool IsOutOfRange()
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnConst = wallManager.GetSpawnAreaConstant();
-        return new Equation().IsOutOfRange(transform.position, spawnConst);
+        float spawnConstX = wallManager.GetSpawnAreaConstant();   // ⭐ 변경
+        float spawnConstY = wallManager.GetSpawnAreaConstantY();  // ⭐ 추가
+        return new Equation().IsOutOfRange(transform.position, spawnConstX, spawnConstY); // ⭐ 변경
     }
 }

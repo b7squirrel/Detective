@@ -132,12 +132,13 @@ public class FieldItemSpawner : MonoBehaviour
     Vector2 GetRandomSpawnPoint()
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        float spawnConst = wallManager.GetSpawnAreaConstant();
+        float spawnConstX = wallManager.GetSpawnAreaConstant();   // ⭐ 변경
+        float spawnConstY = wallManager.GetSpawnAreaConstantY();  // ⭐ 추가
         float offset = 2f;
 
         Vector2 spawnArea =
-            new Vector2(Random.Range(-spawnConst + offset, spawnConst - offset),
-                        Random.Range(-spawnConst + offset, spawnConst - offset));
+            new Vector2(Random.Range(-spawnConstX + offset, spawnConstX - offset),  // ⭐ 변경
+                        Random.Range(-spawnConstY + offset, spawnConstY - offset)); // ⭐ 변경
 
         return spawnArea;
     }

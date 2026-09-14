@@ -23,6 +23,10 @@ public class CameraController : MonoBehaviour
     [Header("Boss Zoom Out")] // ⭐ 추가
     [SerializeField] float bossZoomSize = 35f; // ⭐ 추가: 보스 등장 시 목표 카메라 크기
 
+    [Header("Bounds Buffer")]
+    [SerializeField] float boundsBufferX = 0.8f; // ⭐ 추가: 기존 .8f를 X축 전용으로 분리
+    [SerializeField] float boundsBufferY = 1.5f; // ⭐ 추가: Y축은 더 크게 시작 (테스트하며 조정)
+
     WallManager wallManager;
     float spawnConst;
 
@@ -100,26 +104,30 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         if (wallManager == null) wallManager = FindObjectOfType<WallManager>();
-        spawnConst = wallManager.GetSpawnAreaConstant();
-        spawnConst += .8f * spawnConst;
-        boxCol.transform.localScale = Vector3.one * spawnConst;
+
+        float spawnConstX = wallManager.GetSpawnAreaConstant();   // ⭐ 변경: 기존 spawnConst → X축 전용
+        float spawnConstY = wallManager.GetSpawnAreaConstantY();  // ⭐ 추가: Y축 전용
+
+        float scaleX = spawnConstX + boundsBufferX * spawnConstX; // ⭐ 변경
+        float scaleY = spawnConstY + boundsBufferY * spawnConstY; // ⭐ 추가
+        boxCol.transform.localScale = new Vector3(scaleX, scaleY, 1f); // ⭐ 변경: X/Y 따로 적용
 
         if (player != null)
         {
-            float minX = boxCol.bounds.min.x + halfWidth - offsetSide; // ⭐ 변경
-            float maxX = boxCol.bounds.max.x - halfWidth + offsetSide; // ⭐ 변경
+            float minX = boxCol.bounds.min.x + halfWidth - offsetSide;
+            float maxX = boxCol.bounds.max.x - halfWidth + offsetSide;
             float targetX;
-            if (minX <= maxX) // ⭐ 정상 케이스: 기존처럼 clamp
+            if (minX <= maxX)
             {
                 targetX = Mathf.Clamp(player.transform.position.x, minX, maxX);
             }
-            else // ⭐ 역전 케이스: boxCol이 화면보다 작음 → 중앙 고정
+            else
             {
                 targetX = boxCol.bounds.center.x;
             }
 
-            float minY = boxCol.bounds.min.y + halfHeight - offset;         // ⭐ 변경
-            float maxY = boxCol.bounds.max.y - halfHeight + offsetUpperWall; // ⭐ 변경
+            float minY = boxCol.bounds.min.y + halfHeight - offset;         // ⭐ 앞서 합의한 형태 유지
+            float maxY = boxCol.bounds.max.y - halfHeight + offsetUpperWall; // ⭐ 앞서 합의한 형태 유지
             float targetY;
             if (minY <= maxY)
             {
@@ -128,7 +136,6 @@ public class CameraController : MonoBehaviour
             else
             {
                 targetY = boxCol.bounds.center.y;
-                Debug.Log($"[Camera] Y축 역전 상태 - center 고정 중. minY={minY}, maxY={maxY}"); // ⭐ 임시 로그
             }
 
             transform.position = new Vector3(targetX, targetY, transform.position.z);
