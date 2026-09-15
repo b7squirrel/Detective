@@ -152,7 +152,7 @@ public class MyGrade
 
     public static Color[] GradeColors = new Color[]
     {
-    new Color(.6f,.6f,.6f), // common white #999999
+    new Color(.85f,.85f,.85f), // common white #999999
     new Color(0.5f,1,0), // rare green #80FF00
     new Color(0,0.8f,1), // epic blue #00CCFF
     new Color(1,0.8f,0) // mythic yellow #FFCC00

@@ -59501,6 +59501,7 @@ GameObject:
   - component: {fileID: 209232925}
   - component: {fileID: 209232927}
   - component: {fileID: 209232926}
+  - component: {fileID: 209232928}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -59549,8 +59550,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uD0ED\uD574\uC11C \uACC4\uC18D\uD558\uAE30"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4a51a74299954d54baeff59891d0ae39, type: 2}
-  m_sharedMaterial: {fileID: -6850796683487025641, guid: 4a51a74299954d54baeff59891d0ae39, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
+  m_sharedMaterial: {fileID: -2877164335541141152, guid: 8d328e0adcdea4813bbbf68ad816412f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -59624,6 +59625,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 209232924}
   m_CullTransparentMesh: 1
+--- !u!114 &209232928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209232924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77630c936ba24c9c8c894dace8fc057, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textKey: 22
 --- !u!1 &210152908
 GameObject:
   m_ObjectHideFlags: 0
@@ -135726,7 +135740,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 56, y: 0}
-  m_SizeDelta: {x: -112, y: 0}
+  m_SizeDelta: {x: -112, y: 20}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &541986548
 MonoBehaviour:
@@ -349061,7 +349075,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1374848466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -463765,9 +463779,9 @@ Animator:
   m_GameObject: {fileID: 1822394351}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 805e19793a05c4ed1a15d2d0c070ac2f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 59ae29eb5c5a649b781bb33e209ea476, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -537268,7 +537282,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 56, y: 0}
-  m_SizeDelta: {x: -112, y: 0}
+  m_SizeDelta: {x: -112, y: 20}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2090377969
 MonoBehaviour:
