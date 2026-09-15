@@ -69,11 +69,18 @@ public class DailyRewardPanel : MonoBehaviour
             Debug.Log("[DailyRewardPanel] 이벤트 구독 완료");
         }
 
-        // ⭐ 이미 초기화되었다면 바로 UpdateUI
-        if (GameInitializer.IsInitialized && !hasGameInitialized)
+        // ⭐ 수정: hasGameInitialized 여부와 무관하게, 이미 초기화되어 있다면
+        // 매번 재활성화될 때마다 최신 데이터로 UI를 갱신한다.
+        if (GameInitializer.IsInitialized)
         {
-            Debug.Log("[DailyRewardPanel] GameInitializer 이미 초기화됨, 바로 UpdateUI 호출");
-            OnGameReady();
+            if (!hasGameInitialized)
+            {
+                OnGameReady(); // 최초 1회: manager 연결 + UpdateUI
+            }
+            else
+            {
+                UpdateUI(); // 이후 재활성화: manager는 이미 연결되어 있으므로 UI만 갱신
+            }
         }
 
         if (clipPanelUp != null)
