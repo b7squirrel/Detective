@@ -97,23 +97,25 @@ public class EncyclopediaPopup : MonoBehaviour
                     ? acquiredCardSprite
                     : unacquiredCardSprite;
             }
- 
+
             // 아이템 이미지
             Sprite spr = first?.itemSO?.charImage;
             if (hasDef && spr != null)
             {
                 popupSlotImages[i].sprite = spr;
-                popupSlotImages[i].color  = acquired
+                popupSlotImages[i].color = acquired
                     ? ITEM_ACQUIRED
                     : ITEM_UNACQUIRED;
+                popupSlotImages[i].SetNativeSize();
             }
             else
             {
                 popupSlotImages[i].sprite = emptySlotSprite;
-                popupSlotImages[i].color  = ITEM_EMPTY;
+                popupSlotImages[i].color = ITEM_EMPTY;
+                popupSlotImages[i].SetNativeSize();
             }
         }
- 
+
         // 팝업 배경색
         if (popupBackground != null)
         {
