@@ -19,6 +19,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
     public bool IsSlowed { get; set; } // 슬로우 스킬을 
     public bool IsBoss { get; set; }
     [SerializeField] protected bool isSubBoss;
+    public bool IsSubBoss => isSubBoss; // ⭐ 추가: EnemyDrop 등 외부 컴포넌트에서 읽기 위해
     [SerializeField] protected bool isBoss;
     [SerializeField] int numberOfSubBossDrops;
     [SerializeField] int numberOfBossDrops;

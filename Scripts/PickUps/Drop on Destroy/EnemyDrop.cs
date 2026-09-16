@@ -14,9 +14,24 @@ public class EnemyDrop : DropOnDestroy
     [SerializeField] int bonusCoinMin = 3;
     [SerializeField] int bonusCoinMax = 5;
 
+    // ⭐ 추가: 서브보스 확정 드롭
+    [Header("서브보스 확정 드롭")]
+    [Tooltip("서브보스일 때 기존 랜덤 드롭과 별개로 항상 추가로 드롭할 경험치 보석")]
+    [SerializeField] GameObject subBossExpGemPrefab;
+
+    EnemyBase enemyBase; // ⭐ 추가: 매번 GetComponent 하지 않도록 캐싱
+
+    void Awake()
+    {
+        enemyBase = GetComponent<EnemyBase>();
+    }
+
     public override void CheckDrop()
     {
         if (IsDropListEmpty()) return;
+
+        // ⭐ 추가: 서브보스면 기존 랜덤 드롭과 무관하게 항상 경험치 보석 하나를 추가로 드롭
+        SpawnSubBossExpGem();
 
         // dropAllItemList가 true면 모든 아이템을 드롭
         if (dropAllItemList)
@@ -95,6 +110,20 @@ public class EnemyDrop : DropOnDestroy
     }
 
     /// <summary>
+    /// 서브보스라면 기존 랜덤 드롭 로직과 무관하게 확정으로 경험치 보석 하나를 추가 드롭
+    /// </summary>
+    void SpawnSubBossExpGem()
+    {
+        if (subBossExpGemPrefab == null) return;
+        if (enemyBase == null || !enemyBase.IsSubBoss) return;
+
+        int itemExp = GetExperienceAmount(subBossExpGemPrefab);
+        PickupSpawner.Instance.SpawnPickup(transform.position, subBossExpGemPrefab, true, itemExp);
+
+        Logger.Log($"[EnemyDrop] 서브보스 확정 경험치 보석 드롭 - exp: {itemExp}");
+    }
+
+    /// <summary>
     /// DoubleCoin 버프 활성화 중일 때 추가 동전 스폰
     /// </summary>
     void SpawnBonusCoins()
@@ -106,7 +135,6 @@ public class EnemyDrop : DropOnDestroy
         int count = Random.Range(bonusCoinMin, bonusCoinMax + 1);
         for (int i = 0; i < count; i++)
         {
-            // 살짝 랜덤한 위치에 드롭해서 겹치지 않도록
             Vector2 offset = Random.insideUnitCircle * 0.5f;
             PickupSpawner.Instance.SpawnPickup(
                 transform.position + (Vector3)offset,

@@ -8,38 +8,40 @@ public class EnemyStatCalculator : MonoBehaviour
     static InfiniteStageManager infiniteStageManager;
     static bool isInfiniteMode = false;
 
+    // ⭐ 경험치 계산 전용 참조 스테이지. 실제 stage와 무관하게 이 값으로 고정.
+    const int ExperienceReferenceStage = 6;
+
     public EnemyStats GetStatsForStage(int stage, EnemyData baseData)
     {
         if (scalingConfig == null)
         {
             Debug.LogError("EnemyScalingConfig가 할당되지 않았습니다!");
-            return CreateDefaultStats(); // 기본 스탯 생성
+            return CreateDefaultStats();
         }
 
-        // 무한 모드 체크
         if (infiniteStageManager == null)
         {
             infiniteStageManager = FindObjectOfType<InfiniteStageManager>();
             isInfiniteMode = (infiniteStageManager != null);
         }
 
-
-        // ⭐ 새로 생성 (복사 안 함)
         EnemyStats stats = new EnemyStats();
 
         float roleHPBonus = GetRoleHPBonus(baseData.enemyRole);
         float roleDamageBonus = GetRoleDamageBonus(baseData.enemyRole);
-        float bossMultiplier = GetBossMultiplier(stage, baseData);
-        float normalCycleMultiplier = GetNormalEnemyCycleMultiplier(stage, baseData); // ⭐ 추가
-        float tieredDamageMult = GetTieredDamageMultiplier(stage, baseData); // ⭐ 추가
+        float bossMultiplier = GetBossMultiplier(stage, baseData); // HP/데미지용 - 실제 stage 기준, 사이클마다 계속 강해짐
+        float normalCycleMultiplier = GetNormalEnemyCycleMultiplier(stage, baseData);
+        float tieredDamageMult = GetTieredDamageMultiplier(stage, baseData);
 
-        stats.hp = CalculateHP(stage, baseData, roleHPBonus, bossMultiplier, normalCycleMultiplier); // 기존 그대로
+        // ⭐ 경험치 전용 보스 배율 - 항상 스테이지 6 기준으로 고정 (HP/데미지에는 영향 없음)
+        float bossMultiplierForExp = GetBossMultiplier(ExperienceReferenceStage, baseData);
+
+        stats.hp = CalculateHP(stage, baseData, roleHPBonus, bossMultiplier, normalCycleMultiplier);
         stats.speed = CalculateSpeed(stage, baseData);
-        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier, normalCycleMultiplier * tieredDamageMult); // ⭐ 곱해줌
-        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier, normalCycleMultiplier * tieredDamageMult); // ⭐ 곱해줌
-        stats.experience_reward = CalculateExperience(stage, baseData, bossMultiplier);
+        stats.damage = CalculateDamage(stage, baseData, roleDamageBonus, true, bossMultiplier, normalCycleMultiplier * tieredDamageMult);
+        stats.rangedDamage = CalculateDamage(stage, baseData, roleDamageBonus, false, bossMultiplier, normalCycleMultiplier * tieredDamageMult);
+        stats.experience_reward = CalculateExperience(baseData, bossMultiplierForExp); // ⭐ stage 대신 고정 배율 전달
 
-        // ⭐ 회피 확률 계산 추가
         stats.dodgeChance = CalculateDodgeChance(stage, baseData);
 
         ApplyManualOverrides(stage, ref stats, baseData);
@@ -209,14 +211,14 @@ public class EnemyStatCalculator : MonoBehaviour
         return finalDamage;
     }
 
-    int CalculateExperience(int stage, EnemyData baseData, float bossMultiplier)
+    int CalculateExperience(EnemyData baseData, float bossMultiplier)
     {
         float difficultyMultiplier =
             (baseData.hpScalingMultiplier + baseData.damageScalingMultiplier) / 2f;
 
         int exp = Mathf.RoundToInt(
             scalingConfig.baseExperience *
-            (1 + scalingConfig.experienceGrowth * stage) *
+            (1 + scalingConfig.experienceGrowth * ExperienceReferenceStage) *
             difficultyMultiplier *
             bossMultiplier
         );
