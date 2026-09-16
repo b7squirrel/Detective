@@ -556,14 +556,14 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
 
     #region Apply Movement
-    public virtual void ApplyMovement()
+    public virtual void ApplyMovement(int frameMultiplier = 1)
     {
         if (finishedSpawn == false) return;
 
         // 대시 중이면 일반 이동하지 않음
         if (dashAbility != null && dashAbility.IsDashing())
         {
-            return; // 대시 컴포넌트가 움직임을 처리함
+            return;
         }
 
         // 레이져 발사 중이면 이동하지 않음
@@ -606,7 +606,7 @@ public class EnemyBase : MonoBehaviour, Idamageable
             return;
         }
         Vector2 nextVec = currentSpeed * EarthquakeManager.EnemySpeedMultiplier
-    * Time.fixedDeltaTime * dirVec.normalized;
+            * Time.fixedDeltaTime * frameMultiplier * dirVec.normalized;
         rb.MovePosition((Vector2)rb.transform.position + nextVec);
         rb.velocity = Vector2.zero;
     }
@@ -1047,31 +1047,31 @@ public class EnemyBase : MonoBehaviour, Idamageable
     }
 
     protected Vector2 GetDivideSeparationForce()
-{
-    Vector2 force = Vector2.zero;
-    float separationRadius = 30f; // 이 거리 안의 형제와는 서로 밀어냄
-    Collider2D[] nearby = Physics2D.OverlapCircleAll(transform.position, separationRadius, shockwaveEnemyLayer);
-    EnemyBase myRoot = isOriginalBoss ? this : originalBossRef;
-    if (myRoot == null) return force;
-
-    foreach (var col in nearby)
     {
-        if (col.gameObject == gameObject) continue;
-        EnemyBase other = col.GetComponent<EnemyBase>();
-        if (other == null || !other.hasDivideGimmick) continue;
+        Vector2 force = Vector2.zero;
+        float separationRadius = 30f; // 이 거리 안의 형제와는 서로 밀어냄
+        Collider2D[] nearby = Physics2D.OverlapCircleAll(transform.position, separationRadius, shockwaveEnemyLayer);
+        EnemyBase myRoot = isOriginalBoss ? this : originalBossRef;
+        if (myRoot == null) return force;
 
-        EnemyBase otherRoot = other.isOriginalBoss ? other : other.originalBossRef;
-        if (otherRoot != myRoot) continue; // 다른 계보(다른 보스)는 무시
+        foreach (var col in nearby)
+        {
+            if (col.gameObject == gameObject) continue;
+            EnemyBase other = col.GetComponent<EnemyBase>();
+            if (other == null || !other.hasDivideGimmick) continue;
 
-        Vector2 away = (Vector2)transform.position - (Vector2)other.transform.position;
-        float dist = away.magnitude;
-        if (dist < 0.05f) away = UnityEngine.Random.insideUnitCircle; // 완전히 겹친 경우 랜덤 방향
-        else away /= dist;
+            EnemyBase otherRoot = other.isOriginalBoss ? other : other.originalBossRef;
+            if (otherRoot != myRoot) continue; // 다른 계보(다른 보스)는 무시
 
-        force += away * ((separationRadius - dist) / separationRadius); // 가까울수록 0~1 사이로 더 강하게
+            Vector2 away = (Vector2)transform.position - (Vector2)other.transform.position;
+            float dist = away.magnitude;
+            if (dist < 0.05f) away = UnityEngine.Random.insideUnitCircle; // 완전히 겹친 경우 랜덤 방향
+            else away /= dist;
+
+            force += away * ((separationRadius - dist) / separationRadius); // 가까울수록 0~1 사이로 더 강하게
+        }
+        return force;
     }
-    return force;
-}
     #endregion
 
     // 보스가 등장할 때 적들을 모두 제거할 때 사용

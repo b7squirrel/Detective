@@ -55,19 +55,20 @@ public class Enemy : EnemyBase
         if (GameManager.instance.player == null) return;
 
         float sqrDist = ((Vector2)transform.position - Target.position).sqrMagnitude;
+        int frameMultiplier = 1;
 
-        if (sqrDist > 900f)      // 50유닛 이상: 3프레임에 1번 (완전히 화면 밖)
+        if (sqrDist > 900f)
         {
+            frameMultiplier = 3;
             if (Time.frameCount % 3 != updateOffset) return;
         }
-        else if (sqrDist > 400f) // 35~50유닛: 2프레임에 1번 (화면 밖 근처)
+        else if (sqrDist > 400f)
         {
-            // ✅ 수정: updateOffset % 2로 변환 (0,1,2 → 0,1,0)
+            frameMultiplier = 2;
             if (Time.frameCount % 2 != updateOffset % 2) return;
         }
-        // 35유닛 이내: 매 프레임 (화면 안 또는 화면 근처)
 
-        ApplyMovement();
+        ApplyMovement(frameMultiplier);
     }
 
     private void LateUpdate()
@@ -177,10 +178,11 @@ public class Enemy : EnemyBase
     }
     #endregion
 
-    public override void ApplyMovement()
+    public override void ApplyMovement(int frameMultiplier = 1)
     {
         if (IsFlying)
         {
+            // Flying은 스로틀링 대상이 아니라 Time.deltaTime 기반이므로 보정 불필요
             transform.position = Vector2.MoveTowards(transform.position, LandingTarget, flyingSpeed * Time.deltaTime);
             if (Vector2.Distance((Vector2)transform.position, LandingTarget) < 1f)
             {
@@ -195,13 +197,13 @@ public class Enemy : EnemyBase
             // 시간 정지 중이 아닐 때만 수평 이동
             if (!isTimeStopped())
             {
-                rb.MovePosition((Vector2)rb.transform.position + shadowHeightEnemy.GetJumpHorizontalVelocity());
+                rb.MovePosition((Vector2)rb.transform.position + shadowHeightEnemy.GetJumpHorizontalVelocity() * frameMultiplier);
                 rb.velocity = Vector2.zero;
             }
             return;
         }
 
-        base.ApplyMovement();
+        base.ApplyMovement(frameMultiplier);
     }
 
     #region 공격
