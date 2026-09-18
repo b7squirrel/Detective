@@ -53,10 +53,18 @@ public class PlaneWeapon : WeaponBase
 
     void GenProjectile()
     {
-        // 버퍼 재사용으로 new List 방지
         EnemyFinder.instance.GetEnemies(1, enemyQueryBuffer);
         if (enemyQueryBuffer.Count == 0 || enemyQueryBuffer[0] == Vector2.zero)
             return;
+
+        // ✅ 적 위치 자체가 이미 오염됐다면 이번 발사는 스킵
+        Vector2 enemyPos = enemyQueryBuffer[0];
+        if (float.IsNaN(enemyPos.x) || float.IsNaN(enemyPos.y)
+            || float.IsInfinity(enemyPos.x) || float.IsInfinity(enemyPos.y))
+        {
+            Debug.LogWarning($"[PlaneWeapon] 비정상적인 적 좌표 감지, 발사 스킵: {enemyPos}");
+            return;
+        }
 
         GameObject plane = GameManager.instance.poolManager.GetMisc(planePrefab);
         plane.transform.position = transform.position;

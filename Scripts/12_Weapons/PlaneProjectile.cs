@@ -44,17 +44,26 @@ public class PlaneProjectile : ProjectileBase
 
     protected override void ApplyMovement()
     {
-        Vector3 directionToTarget = (target - transform.position).normalized;
-        Vector3 currentDirection = transform.up;
+        Vector2 toTarget2D = (Vector2)target - (Vector2)transform.position;
 
-        float angle = Vector3.SignedAngle(currentDirection, directionToTarget, Vector3.forward);
+        if (!IsFinite(toTarget2D) || toTarget2D.sqrMagnitude < 0.0001f)
+        {
+            CastDamage();
+            DieProjectile();
+            return;
+        }
+
+        Vector2 directionToTarget = toTarget2D.normalized;
+        Vector2 currentDirection = transform.up;
+
+        float angle = Vector2.SignedAngle(currentDirection, directionToTarget);
         float maxRotationThisFrame = rotateSpeed * Time.deltaTime;
         float rotationAmount = Mathf.Clamp(angle, -maxRotationThisFrame, maxRotationThisFrame);
 
         transform.Rotate(0, 0, rotationAmount);
         transform.position += transform.up * speed * Time.deltaTime;
 
-        if (Vector3.Distance(transform.position, target) < 1f)
+        if (toTarget2D.magnitude < 1f)
         {
             CastDamage();
             DieProjectile();
@@ -63,14 +72,33 @@ public class PlaneProjectile : ProjectileBase
 
     public void Init(Vector3 _target, int damage, PlaneWeapon _owner)
     {
-        target = _target;
-        owner = _owner; // ✅ 추가
+        owner = _owner;
+
+        Vector2 toTarget2D = (Vector2)_target - (Vector2)transform.position;
+
+        // ✅ NaN/Infinity를 직접 검사 (sqrMagnitude 임계값보다 확실함)
+        bool isValid = IsFinite(toTarget2D) && toTarget2D.sqrMagnitude > 0.0001f;
+        target = isValid ? _target : (Vector3)((Vector2)transform.position + Vector2.up);
+
+        Vector2 baseDirection2D = isValid ? toTarget2D.normalized : Vector2.up;
+
         float randomAngle = UnityEngine.Random.Range(-70f, 70f);
-        offsetDirection = Quaternion.Euler(0, 0, randomAngle) * (target - transform.position).normalized;
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, offsetDirection);
+        Vector2 offsetDirection2D = Quaternion.Euler(0, 0, randomAngle) * baseDirection2D;
+        offsetDirection = offsetDirection2D;
+
+        float startAngle = Mathf.Atan2(offsetDirection2D.y, offsetDirection2D.x) * Mathf.Rad2Deg - 90f;
+        transform.rotation = Quaternion.Euler(0, 0, startAngle);
+
         transform.SetParent(null);
         transform.localScale = 0.5f * Vector3.one;
         Damage = damage;
+    }
+
+    // ✅ 벡터에 NaN이나 Infinity가 섞여 있는지 검사하는 헬퍼
+    static bool IsFinite(Vector2 v)
+    {
+        return !float.IsNaN(v.x) && !float.IsNaN(v.y)
+            && !float.IsInfinity(v.x) && !float.IsInfinity(v.y);
     }
 
     protected override void AttackCoolTimer()
