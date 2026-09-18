@@ -82,6 +82,7 @@ public class WeaponBase : MonoBehaviour
         FlipWeaponTools();
         LockFlip();
         timer -= Time.deltaTime;
+
         if (timer < 0f)
         {
             timer = weaponStats.timeToAttack;   // ✅ 쿨다운은 타겟 유무와 상관없이 정상적으로 리셋

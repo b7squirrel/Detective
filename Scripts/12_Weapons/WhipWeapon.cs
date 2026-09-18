@@ -94,7 +94,10 @@ public class WhipWeapon : WeaponBase
     protected override void SetAngle()
     {
         if (InitialWeapon)
+        {
             angle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
+            hasTarget = true;
+        }
         else
             base.SetAngle();
     }

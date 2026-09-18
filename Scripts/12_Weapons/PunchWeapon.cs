@@ -71,6 +71,7 @@ public class PunchWeapon : WeaponBase
     protected override void SetAngle()
     {
         angle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
+        hasTarget = true; // ✅ WhipWeapon과 동일한 문제 — SetAngle을 완전히 오버라이드하면서 hasTarget 세팅이 빠짐
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
