@@ -54,11 +54,25 @@ public class AchievementPanel : MonoBehaviour
         LocalizationManager.OnLanguageChanged += RefreshAllText;
 
         if (cardSlotManager == null) cardSlotManager = FindObjectOfType<CardSlotManager>();
-        // cardSlotManager?.SettrigerAnim("Off");
 
-        foreach (var ra in pendingRemoveList.ToList())
+        // ⭐ 수정: 패널이 열릴 때마다 기존 아이템을 전부 파괴하고 최신 데이터로 다시 생성
+        //         (일일/주간 리셋으로 isRewarded가 false로 되돌아간 항목이
+        //          itemDict에서 이미 제거된 채 남아있어 다시 나타나지 않는 문제 해결)
+        foreach (var ui in itemDict.Values)
         {
-            FinishRemove(ra);
+            if (ui != null) Destroy(ui.gameObject);
+        }
+        itemDict.Clear();
+        pendingRemoveList.Clear();
+
+        foreach (var ra in AchievementManager.Instance.GetAll())
+        {
+            if (ra.isRewarded) continue;
+
+            var go = Instantiate(achievementItemPrefab, content);
+            var ui = go.GetComponent<AchievementItemUI>();
+            ui.Bind(ra);
+            itemDict.Add(ra.original.id, ui);
         }
 
         // ✅ 수정: 튜토리얼 Step4일 때는 영구 업적 탭으로 시작
@@ -66,6 +80,8 @@ public class AchievementPanel : MonoBehaviour
             SwitchTab(TabType.Permanent);
         else
             SwitchTab(TabType.Daily);
+
+        RebuildContentLayout(); // ⭐ 추가: 재생성 직후 레이아웃 강제 재계산
     }
 
     private void OnDisable()
@@ -78,14 +94,14 @@ public class AchievementPanel : MonoBehaviour
         }
 
         LocalizationManager.OnLanguageChanged -= RefreshAllText;
-        isInitialized = false; // ⭐ 패널 닫힐 때 리셋
+        isInitialized = false;
     }
 
     private void Start()
     {
         if (AchievementManager.Instance == null) return;
 
-        // ⭐ 탭 버튼 이벤트 연결
+        // ⭐ 탭 버튼 이벤트 연결 (아이템 생성은 OnEnable로 이동했으므로 여기선 버튼 연결만)
         if (tabPermanentButton != null)
             tabPermanentButton.onClick.AddListener(() => SwitchTab(TabType.Permanent));
 
@@ -95,19 +111,8 @@ public class AchievementPanel : MonoBehaviour
         if (tabWeeklyButton != null)
             tabWeeklyButton.onClick.AddListener(() => SwitchTab(TabType.Weekly));
 
-        // 모든 업적 생성 (표시는 RefreshUI에서 제어)
-        foreach (var ra in AchievementManager.Instance.GetAll())
-        {
-            if (ra.isRewarded) continue; // 영구 업적, 일일 퀘스트 모두 동일하게 처리
-
-            var go = Instantiate(achievementItemPrefab, content);
-            var ui = go.GetComponent<AchievementItemUI>();
-            ui.Bind(ra);
-            itemDict.Add(ra.original.id, ui);
-        }
-
-        RefreshUI();
-        RebuildContentLayout(); // ⭐ 추가: 아이템 생성 완료 후 다시 한 번 강제 재계산
+        // ⭐ 참고: RefreshUI()/RebuildContentLayout() 호출은 제거
+        //         → OnEnable이 Start보다 먼저 실행되므로, 아이템 생성과 화면 갱신은 이제 OnEnable이 전담
     }
 
     // ⭐ 탭 전환
